@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="app_backgroud">#f8f9f9</color>
+    <color name="plan_start_end">#B2B2B2</color>
+    <color name="main_color">#08dca8</color>
+    <color name="main_color_second">#22B599</color>
+    <color name="home_title_color">#08dca7</color>
+    <color name="has_add_view">#F20D0D</color>
+    <color name="route_desc_num_color">#F5AE43</color>
+    <color name="avatar_border">#FFFFFF</color>
+
+    <color name="base_color_white">#ffffff</color>
+    <color name="base_color_black">#000000</color>
+    <color name="base_color_red">#ff0000</color>
+
+    <color name="base_content_color">#22b59a</color>
+    <color name="route_price_color">#E9625F</color>
+    <color name="base_menu_color">#767E86</color>
+
+    <color name="base_text_color_title">#515151</color>
+    <color name="base_text_color_subtitle">#666666</color>
+    <color name="base_text_color_text_hint">#999999</color>
+
+    <color name="base_divider_color">#ebebeb</color>
+
+
+    <drawable name="list_cell_item">#ffffff</drawable>
+    <drawable name="list_cell_item_clicked">#eeeeee</drawable>
+
+    <drawable name="sub_list_cell_item">#f8f9f9</drawable>
+    <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>
+</resources>
