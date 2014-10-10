@@ -1,1 +1,2 @@
 include ':app', ':core'
+include ':social_sdk_library_project'

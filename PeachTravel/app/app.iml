@@ -81,6 +81,7 @@
     <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
+    <orderEntry type="module" module-name="social_sdk_library_project" exported="" />
     <orderEntry type="module" module-name="core" exported="" />
   </component>
 </module>

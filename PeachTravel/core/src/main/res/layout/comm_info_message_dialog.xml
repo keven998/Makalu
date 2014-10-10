@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 信息提示框  单个按钮-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shap_writebg_withcorners"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ScrollView style="@style/scrollview_fill">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_mention_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="@string/shortmessage"
+                    android:textColor="@color/black"
+                    android:textSize="19dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_mention_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="@string/shortmessage"
+                    android:textColor="#7d7d7d"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+        </ScrollView>
+
+        <TextView style="@style/divider_virtal" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_confirm_on_dialog"
+                style="@style/button_on_dialog"
+                android:layout_margin="10dp"
+                android:text="@string/confirm"
+                android:textColor="#7D7D7D"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/divider_on_dialog"
+                style="@style/divider_horizontal"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_cancle_on_dialog"
+                style="@style/button_on_dialog"
+                android:text="@string/cancle"
+                android:textColor="@color/yellow"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/main_color" />
+
+    
+    <ListView android:id="@+id/base_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_backgroud"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="false" 
+        android:cacheColorHint="#00000000"/>
+    
+</LinearLayout>
