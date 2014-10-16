@@ -3,8 +3,6 @@ package com.aizou.core.exception;
 /**
  * @ClassName: CrashConfig
  * @Description: 配置信息
- * @author luql
- * @date 2014-1-8 上午09:54:14
  */
 public class CrashConfig {
 

@@ -5,9 +5,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * @ClassName: ChangeCharset
  * @Description: 字符转码
- * @author luql
- * @date 2014-1-3 下午03:32:04
- * 
+ *
  */
 public class ChangeCharset {
 	/** 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块 */

@@ -21,7 +21,6 @@ import java.util.Date;
 
 /**
  * 日期的处理工具类
- * @author xyl
  *
  */
 public class DateUtil {

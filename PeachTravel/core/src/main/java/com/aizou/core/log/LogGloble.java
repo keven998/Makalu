@@ -1,18 +1,14 @@
 /**
  * 文件名	：LOG.java
  * 
- * 创建日期	：2013-03-18
- * 
- * Copyright (c) 2003-2012 北京联龙博通
-
- * All rights reserved.
  */
 
 package com.aizou.core.log;
 
 import android.util.Log;
 
-import com.aizou.core.constant.SystemConfig;
+import com.aizou.core.BuildConfig;
+import com.aizou.core.constant.LibConfig;
 
 
 /**
@@ -33,7 +29,7 @@ public class LogGloble {
 	 */
 	public static void v(String TAG, String msg, Throwable t) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.v(TAG, msg, t);
 			}
 		}
@@ -49,7 +45,7 @@ public class LogGloble {
 	 */
 	public static void v(String TAG, String msg) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.v(TAG, msg);
 			}
 		}
@@ -66,7 +62,7 @@ public class LogGloble {
 	 */
 	public static void d(String TAG, String msg, Throwable t) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.d(TAG, msg, t);
 			}
 		}
@@ -74,15 +70,15 @@ public class LogGloble {
 
 	/**
 	 * 根据打印日志标识，判断是否打印日志</p>
-	 * 
+	 *
 	 * 级别：debug
-	 * 
+	 *
 	 * @param TAG
 	 * @param msg
 	 */
 	public static void d(String TAG, String msg) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.d(TAG, msg);
 			}
 		}
@@ -98,7 +94,7 @@ public class LogGloble {
 	 */
 	public static void i(String TAG, String msg) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.i(TAG, msg);
 			}
 		}
@@ -115,7 +111,7 @@ public class LogGloble {
 	 */
 	public static void i(String TAG, String msg, Throwable t) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.i(TAG, msg, t);
 			}
 		}
@@ -131,7 +127,7 @@ public class LogGloble {
 	 */
 	public static void w(String TAG, String msg) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.w(TAG, msg);
 			}
 		}
@@ -148,7 +144,7 @@ public class LogGloble {
 	 */
 	public static void w(String TAG, String msg, Throwable t) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.w(TAG, msg, t);
 			}
 		}
@@ -164,7 +160,7 @@ public class LogGloble {
 	 */
 	public static void e(String TAG, String msg) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.e(TAG, msg);
 			}
 		}
@@ -181,7 +177,7 @@ public class LogGloble {
 	 */
 	public static void e(String TAG, String msg, Throwable t) {
 		if (msg != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				Log.e(TAG, msg, t);
 			}
 		}
@@ -195,11 +191,13 @@ public class LogGloble {
 	 */
 	public static void exceptionPrint( Exception e) {
 		if (e != null) {
-			if (SystemConfig.LOGFLAG) {
+			if (LibConfig.LOG) {
 				 LogGloble.e(COMMCATCH, "Exception>>  "+e.getMessage(), e);
 			}
 		}
 	}
+
+
 	
 	
 

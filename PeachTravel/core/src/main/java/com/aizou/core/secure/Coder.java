@@ -13,10 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 /** 
  * 基础加密组件 
  *  
- * @author 梁栋 
- * @version 1.0 
- * @since 1.0 
- */  
+ */
 public abstract class Coder {  
     public static final String KEY_SHA = "SHA";
     public static final String KEY_MD5 = "MD5";

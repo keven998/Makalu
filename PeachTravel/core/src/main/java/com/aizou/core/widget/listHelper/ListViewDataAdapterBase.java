@@ -40,7 +40,6 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
         if (mEnableCreateViewForMeasure && convertView == null) {
 
         }
-            Log.d(LOG_TAG, String.format("getView %s", position));
         ItemDataType itemData = getItem(position);
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());

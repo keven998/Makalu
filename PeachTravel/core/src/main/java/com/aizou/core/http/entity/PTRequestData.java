@@ -1,8 +1,6 @@
 package com.aizou.core.http.entity;
 
 
-import com.aizou.core.base.BaseApplication;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -28,7 +26,6 @@ public class PTRequestData implements Serializable {
     List<NameValuePair> bodyParams = new ArrayList<NameValuePair>();
     List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
     HttpEntity bodyEntity;
-    String TOKENCODE = BaseApplication.getContext().getTokenCode();
 
     public void addHeader(String name, String value) {
 
@@ -68,14 +65,6 @@ public class PTRequestData implements Serializable {
     public void putBodyParams(String key, String value) {
         NameValuePair pair = new BasicNameValuePair(key,value);
         bodyParams.add(pair);
-    }
-
-    public String getTOKENCODE() {
-        return TOKENCODE;
-    }
-
-    public void setTOKENCODE(String TOKENCODE) {
-        this.TOKENCODE = TOKENCODE;
     }
 
     public List<NameValuePair> getUrlParams() {

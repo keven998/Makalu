@@ -3,12 +3,14 @@ package com.aizou.peachtravel.common.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
 import com.umeng.socialize.exception.SocializeException;
@@ -24,6 +26,9 @@ import com.umeng.socialize.utils.OauthHelper;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
+
+import java.util.Map;
+import java.util.Set;
 
 public class ShareUtils {
 //	public static UMSocialService shareRoute(final SHARE_MEDIA platform,
@@ -429,22 +434,27 @@ public class ShareUtils {
 //	}
 	
 	public static void configPlatforms(Activity act){
-		String appId = "wx59f2c267bbe88727";
-		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(act, appId);
-		wxHandler.setToCircle(true);
-		wxHandler.addToSocialSDK();
-		
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, "1102120105",
-				"TjDERbD4yEfq3S8s");
+        String appId = "wx26b58c7173483529";
+        String appSecret = "28daa05c021ebebe6d3cf06645b0c5ac";
+// 添加微信平台
+        UMWXHandler wxHandler = new UMWXHandler(act,appId,appSecret);
+        wxHandler.addToSocialSDK();
+// 添加微信朋友圈
+        UMWXHandler wxCircleHandler = new UMWXHandler(act,appId,appSecret);
+        wxCircleHandler.setToCircle(true);
+        wxCircleHandler.addToSocialSDK();
+
+		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, "1103275581",
+				"VW1VnrywTEnK3vgw");
 		qqSsoHandler.addToSocialSDK();
 		
 		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
-				"1102120105", "TjDERbD4yEfq3S8s");
+				"1103275581", "VW1VnrywTEnK3vgw");
 		qZoneSsoHandler.addToSocialSDK();
 		
 		SmsHandler smsHandler = new SmsHandler();
 		smsHandler.addToSocialSDK();
 		
 	}
+
 }

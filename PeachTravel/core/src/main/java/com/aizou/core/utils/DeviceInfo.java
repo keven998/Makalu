@@ -20,16 +20,6 @@ import java.util.Enumeration;
 /**
  * @ClassName：DeviceInfo
  * @Description: 设备相关信息
- * @author xbybaoying
- * @data：2013-12-21上午11:12:00
- * Copyright (c) 2013-2016 北京联龙博通
- * 修改记录：
- * 2.修改时间：
- *   修改人：
- *   修改内容：
- * 1.修改时间：
- *   修改人：
- *   修改内容：
  */
 public class DeviceInfo {
 	public static String IMEI = null;

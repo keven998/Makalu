@@ -1,0 +1,86 @@
+package com.aizou.peachtravel.module.my;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.RegexUtils;
+import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.ValidationBean;
+import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.tencent.stat.common.User;
+
+/**
+ * Created by Rjm on 2014/10/13.
+ */
+public class RegActivity extends PeachBaseActivity implements View.OnClickListener {
+    @ViewInject(R.id.et_phone)
+    private EditText phoneEt;
+    @ViewInject(R.id.et_password)
+    private EditText pwdEt;
+
+    @ViewInject(R.id.btn_reg)
+    private Button regBtn;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reg);
+        ViewUtils.inject(this);
+        regBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_reg:
+                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+                    ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
+                    return;
+                }
+                if(!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())){
+                    ToastUtil.getInstance(this).showToast("请正确输入6-12位密码");
+                    return;
+                }
+                if(!CommonUtils.isNetWorkConnected(mContext)){
+                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    return;
+                }
+                DialogManager.getInstance().showProgressDialog(mContext);
+                UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE, new HttpCallBack<String>() {
+                    @Override
+                    public void doSucess(String result, String method) {
+                        DialogManager.getInstance().dissMissProgressDialog();
+                        CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
+                        if (validationResult.code == 0) {
+                            Intent intent = new Intent(mContext, VerifyPhoneActivity.class);
+                            intent.putExtra("tel", phoneEt.getText().toString().trim());
+                            intent.putExtra("pwd", pwdEt.getText().toString().trim());
+                            intent.putExtra("actionCode", UserApi.ValidationCode.REG_CODE);
+                            startActivity(intent);
+                        } else {
+                            ToastUtil.getInstance(mContext).showToast(validationResult.err.msg);
+                        }
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissProgressDialog();
+                    }
+                });
+
+                break;
+        }
+    }
+}

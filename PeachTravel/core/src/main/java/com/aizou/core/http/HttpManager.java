@@ -8,12 +8,12 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.aizou.core.base.BaseApplication;
-import com.aizou.core.constant.Constant;
-import com.aizou.core.constant.SystemConfig;
+import com.aizou.core.constant.LibConfig;
 import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.http.parser.IReponseParser;
 import com.aizou.core.log.LogGloble;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SDcardLogUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -25,6 +25,8 @@ import com.lidroid.xutils.http.client.HttpRequest;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,45 +81,30 @@ public class HttpManager {
             if (httpUtils == null) {
                 httpUtils = new HttpUtils();
             }
+            if(request.getRequest().readUrl().startsWith("https")){
+                httpUtils.configSSLSocketFactory(SSLSocketFactory.getSocketFactory());
+            }
             RequestParams requestParams = new RequestParams();
-            LogGloble.d(TAG, "requestUrl = " + url);
-//          LogGloble.d(TAG, "请求数据=" + requestStr);
+            LogUtil.d(TAG, "requestUrl = " + url);
             List<NameValuePair> list = new ArrayList<NameValuePair>();
-            requestParams.addHeaders(request.getHeader().headers);
-            requestParams.setHeaders(request.getHeader().overwirdeHeaders);
+            requestParams.addHeaders(request.getPTHeader().headers);
+            requestParams.setHeaders(request.getPTHeader().overwirdeHeaders);
             requestParams.addQueryStringParameter(request.getRequest().getUrlParams());
             requestParams.addBodyParameter(request.getRequest().getBodyParams());
             HttpEntity entity = request.getRequest().getBodyEntity();
             if (entity != null) {
                 requestParams.setBodyEntity(entity);
             }
-            requestParams.setBodyEntity(entity);
-
-//			if (SystemConfig.READ_SDCARD) {
-//				String sdResponse = SDcardLogUtil
-//						.readLog(url);
-//				LogGloble.d(TAG, "  SD Response = " + "\n " + "   " + sdResponse);
-//				if (!"".equals(sdResponse)) {
-//					if (callBack != null) {
-//						if (!callBack.httpCallBackPreFilter(sdResponse,
-//								url)) {// 拦截过滤
-//                            Map<String,Object> result = MyJSON.parseObject(sdResponse);
-//							callBack.doSucess(result,url);
-//						}
-//					}
-//				}
-//				return;
-//			}
 
             RequestCallBack<String> ajaxCallBack = new RequestCallBack<String>() {
 
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     String result = responseInfo.result;
-                    LogGloble.d(TAG, "返回结果数据=" + result);
+                    LogUtil.d(TAG, "返回结果数据=" + result);
                     IReponseParser parser = request.getParser();
                     try {
-                        if (SystemConfig.LOGSAVE_SDCARD) {// 保存日志到sd卡
+                        if (LibConfig.LOGSAVE_SDCARD) {// 保存日志到sd卡
                             SDcardLogUtil.saveLog(result,
                                     url);
                         }
@@ -146,6 +133,13 @@ public class HttpManager {
                     }
                 }
 
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    if (callBack != null) {
+                       callBack.onStart();
+                    }
+                }
             };
 
             HttpRequest.HttpMethod httpMethod = HttpRequest.HttpMethod.GET;
@@ -181,21 +175,6 @@ public class HttpManager {
         return null;
     }
 
-    public static String getSavePath() {
-        String sdCardPath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath();
-        return sdCardPath
-                + File.separator + Constant.DOWNLOADFILENAME
-                + File.separator;
-    }
-
-    public static String getSavePath(final String savePath) {
-        String sdCardPath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath();
-        return sdCardPath
-                + File.separator + Constant.DOWNLOADFILENAME
-                + File.separator + savePath;
-    }
 
     /**
      * 描述:下载文件
@@ -208,8 +187,7 @@ public class HttpManager {
                                     final String savePath, final HttpCallBack callBack) {
         String sdCardPath = Environment.getExternalStorageDirectory()
                 .getAbsolutePath();
-        File file = new File(sdCardPath + File.separator
-                + Constant.DOWNLOADFILENAME);
+        File file = new File(savePath);
         if (!file.exists()) {
             try {
                 file.mkdirs();
@@ -219,14 +197,14 @@ public class HttpManager {
         }
         HttpUtils httpUtils = new HttpUtils();
         try {
-            HttpHandler handler = httpUtils.download(url, getSavePath(savePath), true, // 如果目标文件存在，接着未完成的部分继续下载。
+            HttpHandler handler = httpUtils.download(url, savePath, true, // 如果目标文件存在，接着未完成的部分继续下载。
                     false, // 如果从请求返回信息中获取到文件名，下载完成后自动重命名。
                     new RequestCallBack<File>() {
 
                         @Override
                         public void onSuccess(ResponseInfo<File> responseInfo) {
                             if (callBack != null)
-                                callBack.onStart();
+                                callBack.doSucess(responseInfo.result,url);
                         }
 
                         @Override

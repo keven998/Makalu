@@ -4,7 +4,15 @@ package com.aizou.core.http.entity;
 
 import com.aizou.core.http.parser.IReponseParser;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ITL 请求
@@ -27,7 +35,7 @@ public class PTRequest implements Serializable {
     /**
      * 包头
      */
-    PTHeader header = new PTHeader();
+    PTHeader mPTheader = new PTHeader();
     /**
      * 请求包
      */
@@ -50,12 +58,12 @@ public class PTRequest implements Serializable {
         this.parser = parser;
     }
 
-    public PTHeader getHeader() {
-        return header;
+    public PTHeader getPTHeader() {
+        return mPTheader;
     }
 
-    public void setHeader(PTHeader header) {
-        this.header = header;
+    public void setPTHeader(PTHeader header) {
+        this.mPTheader = header;
     }
 
     public PTRequestData getRequest() {
@@ -64,6 +72,108 @@ public class PTRequest implements Serializable {
 
     public void setRequest(PTRequestData request) {
         this.request = request;
+    }
+
+
+    public void addHeader(String key,String value) {
+        if (this.mPTheader.headers == null) {
+            this.mPTheader.headers = new ArrayList<Header>();
+        }
+        this.mPTheader.headers.add(new BasicHeader(key,value));
+    }
+
+    public void setHeader(String key,String value) {
+        if (this.mPTheader.headers == null) {
+            this.mPTheader.headers = new ArrayList<Header>();
+        }
+        this.mPTheader.overwirdeHeaders.add(new BasicHeader(key,value));
+    }
+
+    public void setBodyEntity(HttpEntity bodyEntity) {
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+       request.setBodyEntity(bodyEntity);
+    }
+
+    public HttpEntity getBodyEntity(){
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        return request.getBodyEntity();
+    }
+
+
+
+    public List<NameValuePair> getBodyParams() {
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        return request.getBodyParams();
+    }
+
+    public void setBodyParams( List<NameValuePair> bodyParams) {
+
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        request.setBodyParams(bodyParams);
+    }
+
+    public void setUrl(String url) {
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        request.setUrl(url);
+
+    }
+
+    public String readUrl() {
+
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        return request.readUrl();
+    }
+
+    public void putBodyParams(String key, String value) {
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+       request.putBodyParams(key,value);
+    }
+
+    public List<NameValuePair> getUrlParams() {
+
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        return request.getUrlParams();
+    }
+
+    public void putUrlParams(String key, String value) {
+
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        request.putBodyParams(key,value);
+    }
+
+    public void setUrlParams(List<NameValuePair> urlParams) {
+        if(request==null){
+            request = new PTRequestData();
+
+        }
+        request.setUrlParams(urlParams);
     }
 
 

@@ -125,19 +125,19 @@ public class DialogManager {
     /**
      * 描述: 普通信息消息框（两个按钮  自定义）
      *  @param context         上下文
-     * @param s
-     * @param string
+     * @param comfirmStr
+     * @param cancleStr
      * @param title           标题
      * @param message         要展示的信息
      * @param onclickListener 按钮监听事件 无事件传null
      */
-    public void showMessageDialogWithDoubleButtonSelf(Context context, String s, String string, String title,
+    public void showMessageDialogWithDoubleButtonSelf(Context context, String comfirmStr, String cancleStr, String title,
                                                       String message, OnClickListener onclickListener) {
         if (mCustomDialog != null && mCustomDialog.isShowing()) {
             mCustomDialog.dismiss();
         }
         mCustomDialog = new CustomDialog(context, R.style.Theme_Dialog);
-        View contentView = initDialogWithDoubleButtonView(context, title, message,
+        View contentView = initDialogWithDoubleButtonViewSelf(context, comfirmStr,cancleStr,title, message,
                 onclickListener);
         mCustomDialog.setCancelable(false);
         mCustomDialog.setContentView(contentView);
@@ -265,8 +265,8 @@ public class DialogManager {
         return contentView;
 
     }
-    public View initDialogWithDoubleButtonViewSelf(Context context, String title, String message,
-                                                   String confirmText,String cancelText,
+    public View initDialogWithDoubleButtonViewSelf(Context context,
+                                                   String confirmText,String cancelText,String title, String message,
                                                final OnClickListener onclickListener) {
         View contentView = LayoutInflater.from(context).inflate(
                 R.layout.comm_info_message_dialog, null);
@@ -343,8 +343,17 @@ public class DialogManager {
      *
      * @param context 上下文
      */
+    public void showProgressDialog(Context context,String message) {
+        mProgressDialog = createProgressDialog(context,message,null);
+    }
+
+    /**
+     * 描述:显示通信框
+     *
+     * @param context 上下文
+     */
     public void showProgressDialog(Context context) {
-        mProgressDialog = createProgressDialog(context,null);
+        mProgressDialog = createProgressDialog(context,null,null);
     }
 
     /**
@@ -360,7 +369,7 @@ public class DialogManager {
     /**
      * 通讯提示框
      */
-    public CustomDialog createProgressDialog(final Context con,OnClickListener cancleListener) {
+    public CustomDialog createProgressDialog(final Context con,String message,OnCancelListener cancleListener) {
         CustomDialog dlg = new CustomDialog(con, R.style.Theme_Dialog);
         dlg.show();
         dlg.setCancelable(true);
@@ -371,6 +380,10 @@ public class DialogManager {
         LayoutInflater factory = LayoutInflater.from(con);
         // 加载progress_dialog为对话框的布局xml
         View view = factory.inflate(R.layout.progress_dialog, null);
+        TextView messageTv = (TextView) view.findViewById(R.id.tvmessage);
+        if(!TextUtils.isEmpty(message)){
+            messageTv.setText(message);
+        }
 //		Button btn = (Button) view.findViewById(R.id.btnClose);
 //		btn.setOnClickListener(new android.view.View.OnClickListener() {
 //
@@ -385,12 +398,7 @@ public class DialogManager {
 //			}
 //		});
 
-        dlg.setOnCancelListener(new OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface arg0) {
-            }
-        });
+        dlg.setOnCancelListener(cancleListener);
         dlg.getWindow().setContentView(view);
         WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
         lp.width = LayoutValue.SCREEN_WIDTH * 2 / 4;

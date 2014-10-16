@@ -2,10 +2,12 @@ package com.aizou.core.log;
 
 import android.util.Log;
 
-public class LogUtil {
-	private static boolean sIsLogEnabled = true;// 是否打开LOG
+import com.aizou.core.BuildConfig;
+import com.aizou.core.constant.LibConfig;
 
-	private static String sApplicationTag = "LXP";// LOG默认TAG
+public class LogUtil {
+
+	private static String sApplicationTag = "PeachTravel";// LOG默认TAG
 
 	private static final String TAG_CONTENT_PRINT = "%s:%s.%s:%d";
 
@@ -16,7 +18,7 @@ public class LogUtil {
 
 	//打印LOG
 	public static void trace() {
-		if (sIsLogEnabled) {
+		if (LibConfig.LOG) {
 			Log.d(sApplicationTag,
 					getContent(getCurrentStackTraceElement()));
 		}
@@ -30,7 +32,7 @@ public class LogUtil {
 	}
 	//打印默认TAG的LOG
 	public static void traceStack() {
-		if (sIsLogEnabled) {
+		if (LibConfig.LOG) {
 			traceStack(sApplicationTag, Log.ERROR);
 		}
 	}
@@ -38,7 +40,7 @@ public class LogUtil {
 	// 打印Log当前调用栈信息
 	public static void traceStack(String tag, int priority) {
 
-		if (sIsLogEnabled) {
+		if (LibConfig.LOG) {
 			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 //			android.util.Log.println(priority, tag, stackTrace[4].toString());
 			StringBuilder str = new StringBuilder();
@@ -64,13 +66,13 @@ public class LogUtil {
 	}
 	//指定TAG和指定内容的方法
 	public static void d(String tag, String msg) {
-		if (sIsLogEnabled) {
+		if (LibConfig.LOG) {
 			Log.d(tag, getContent(getCurrentStackTraceElement())+">"+msg);
 		}
 	}
 	//默认TAG和制定内容的方法
 	public static void d(String msg) {
-		if (sIsLogEnabled) {
+		if (LibConfig.LOG) {
 			Log.d(sApplicationTag, getContent(getCurrentStackTraceElement())+">"+msg);
 		}
 	}

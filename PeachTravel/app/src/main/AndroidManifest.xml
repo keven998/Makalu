@@ -40,6 +40,110 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".module.my.ShareAccountActivity"
+            android:label="@string/app_name">
+
+        </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+
+        </activity>
+        <activity
+            android:name=".module.my.SettingActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.AboutActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.FeedbackActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.LoginActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ForgetPwdActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.VerifyPhoneActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ResetPwdActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.RegActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.AccountActvity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ModifyNicknameActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ModifySignActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ModifyGenderActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.ModifyPwdActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".module.my.PhoneBindActivity"
+            android:label="@string/app_name">
+        </activity>
+
+        <!-- ###################注册SDK使用的Activity###################### -->
+        <!--分享编辑页-->
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDialog"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+
+        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID-->
+                <data android:scheme="tencent1103275581" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.tencent.connect.common.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- ###################添加UmengAppkey###################### -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="54376b1bfd98c554cf025d0c" >
+        </meta-data>
+
     </application>
 
 </manifest>

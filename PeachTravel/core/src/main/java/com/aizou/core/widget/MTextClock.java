@@ -95,9 +95,9 @@ public class MTextClock extends TextView {
 	}
 
 	private void createTime() {
-			mTime = BaseApplication.getContext().getSystemCalendar();
+			mTime =Calendar.getInstance();
 	}
-	
+
 	public void setTime(long milliseconds){
 		mTime.setTimeInMillis(milliseconds);
 		onTimeChanged();

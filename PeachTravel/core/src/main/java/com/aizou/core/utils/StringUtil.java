@@ -2,10 +2,6 @@ package com.aizou.core.utils;
 
 /**
  * 文件名	：StringUtil.java
- * 创建日期	：2012-10-15
- * Copyright (c) 2003-2012 北京联龙博通
-
- * All rights reserved.
  */
 
 

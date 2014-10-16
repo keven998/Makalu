@@ -15,8 +15,6 @@ import javax.crypto.spec.PBEParameterSpec;
 /**
  * PBE安全编码组件
  * 
- * @version 1.0
- * @since 1.0
  */
 public abstract class PBECoder extends Coder {
 

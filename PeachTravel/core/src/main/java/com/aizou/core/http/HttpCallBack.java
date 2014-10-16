@@ -8,14 +8,14 @@ import java.util.Map;
  * @author  xby
  *
  */
-public abstract class HttpCallBack {
+public abstract class HttpCallBack<T> {
 	/**
 	 * 描述：通信成功的回调
 	 * @param result 回调数据
 	 * @param method 请求标示
 	 * @return
 	 */
-	public abstract void doSucess(Object result, String method);
+	public abstract void doSucess(T result, String method);
 	
 	/**
 	 * 描述：通信异常的回调

@@ -5,8 +5,6 @@ import android.util.Log;
 /**
  * @ClassName: CLog
  * @Description: Crash日志
- * @author luql
- * @date 2014-1-8 上午11:14:01
  */
 class CLog {
 	public static final String COMMCATCH = "catch";

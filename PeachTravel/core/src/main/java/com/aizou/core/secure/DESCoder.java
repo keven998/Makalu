@@ -26,8 +26,6 @@ import javax.crypto.spec.DESKeySpec;
  * 具体内容 需要关注 JDK Document http://.../docs/technotes/guides/security/SunProviders.html
  * </pre>
  * 
- * @version 1.0
- * @since 1.0
  */
 public abstract class DESCoder extends Coder {
 

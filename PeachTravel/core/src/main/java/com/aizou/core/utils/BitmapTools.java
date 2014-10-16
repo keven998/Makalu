@@ -30,9 +30,6 @@ import java.util.Map;
 /**
  * 位图工具类，该类提供根据不同的资源获取指定尺寸要求的图片
  * 
- * @author xby
- * 
- *         2013-3-26上午10:00:28
  */
 public class BitmapTools {
 	/**

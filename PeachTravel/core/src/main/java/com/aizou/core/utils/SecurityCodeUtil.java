@@ -13,10 +13,7 @@ import java.util.Random;
  * 
  * description: 动态验证码生成<br/>
  * 
- * author: xby <br/>
- * 
- * date: 2013-10-16 <br/>
- * 
+ *
  */
 public class SecurityCodeUtil {
 

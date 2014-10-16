@@ -40,7 +40,7 @@ public class CommonJson4List<T> implements Serializable {
 	
 	public CommonJson4List() {
 		super();
-		this.type = (Class<T>) getClass();
+        this.type = (Class<T>) getClass();
 	}
 
 	public List<T> result;

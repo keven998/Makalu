@@ -9,7 +9,7 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        android:background="@android:color/transparent"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="7dp"
@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:textSize="18dp" 
             android:layout_marginLeft="10dp"
-            android:textColor="@color/black"/>
+            android:textColor="@android:color/black"/>
     </LinearLayout>
 
 

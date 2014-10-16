@@ -28,7 +28,7 @@
                     android:gravity="center"
                     android:padding="15dp"
                     android:text="@string/shortmessage"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/black"
                     android:textSize="19dp"
                     android:visibility="gone" />
 
@@ -70,7 +70,7 @@
                 android:id="@+id/btn_cancle_on_dialog"
                 style="@style/button_on_dialog"
                 android:text="@string/cancle"
-                android:textColor="@color/yellow"
+                android:textColor="#7D7D7D"
                 android:visibility="gone" />
 
         </LinearLayout>
