@@ -51,12 +51,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -191,6 +193,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 	private VoiceRecorder voiceRecorder;
 	private MessageAdapter adapter;
     private ListViewDataAdapter<IMUser> memberAdapter;
+    private MemberAdapter baseMemeberAdapter;
     private ArrayList<IMUser> groupMembers;
 	private File cameraFile;
 	static int resendPos;
@@ -356,11 +359,13 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                 return viewHolder;
             }
         });
-        memberGv.setAdapter(memberAdapter);
+        groupMembers = new ArrayList<IMUser>();
+        baseMemeberAdapter = new MemberAdapter();
+        memberGv.setAdapter(baseMemeberAdapter);
         List<String> members=group.getMembers();
         List<String> unkownMembers= new ArrayList<String>();
         final HashMap<String,IMUser> imMembers = new HashMap<String, IMUser>();
-        groupMembers = new ArrayList<IMUser>();
+
         for(String username : members){
             IMUser user = IMUserRepository.getContactByUserName(mContext,username);
             if(user==null){
@@ -384,15 +389,16 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                             imUser.setGender(user.gender);
                             imUser.setAvatar(user.avatar);
                             imUser.setSignature(user.signature);
-                            IMUserRepository.saveContact(mContext,imUser);
-                            imMembers.put(imUser.getUsername(),imUser);
+                            IMUserRepository.saveContact(mContext, imUser);
+                            imMembers.put(imUser.getUsername(), imUser);
 
                         }
                         groupMembers.clear();
                         groupMembers.addAll(new ArrayList<IMUser>(imMembers.values()));
                         memberAdapter.getDataList().clear();
                         memberAdapter.getDataList().addAll(groupMembers);
-                        memberAdapter.notifyDataSetChanged();
+//                        memberAdapter.notifyDataSetChanged();
+                        baseMemeberAdapter.notifyDataSetChanged();
                     }
                 }
 
@@ -405,7 +411,8 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 
         groupMembers.addAll(new ArrayList<IMUser>(imMembers.values()));
         memberAdapter.getDataList().addAll(groupMembers);
-        memberAdapter.notifyDataSetChanged();
+//        memberAdapter.notifyDataSetChanged();
+        baseMemeberAdapter.notifyDataSetChanged();
         addIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -415,21 +422,23 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                         REQUEST_CODE_ADD_USER);
             }
         });
-        memberGv.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                viewHolder.isInDeleteMode=false;
-                memberAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });
+//        memberGv.setOnTouchListener(new OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                viewHolder.isInDeleteMode=false;
+//                memberAdapter.notifyDataSetChanged();
+//                return false;
+//            }
+//        });
         if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
             deleteIv.setVisibility(View.VISIBLE);
             deleteIv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     viewHolder.isInDeleteMode=true;
-                    memberAdapter.notifyDataSetChanged();
+                    baseMemeberAdapter.isInDeleteMode=true;
+//                    memberAdapter.notifyDataSetChanged();
+                    baseMemeberAdapter.notifyDataSetChanged();
                 }
             });
         }else{
@@ -437,12 +446,52 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
         }
 
     }
+    private class MemberAdapter extends BaseAdapter{
+
+        public boolean isInDeleteMode=false;
+
+
+        @Override
+        public int getCount() {
+            return groupMembers.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView = View.inflate(mContext,R.layout.grid,null);
+            }
+            ImageView avatarIv = (ImageView) convertView.findViewById(R.id.iv_avatar);
+            ImageView removeIv = (ImageView) convertView.findViewById(R.id.badge_delete);
+//            ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
+            if(isInDeleteMode){
+                removeIv.setVisibility(View.VISIBLE);
+//                addIv.setVisibility(View.INVISIBLE);
+//                deleteIv.setVisibility(View.INVISIBLE);
+            }else{
+                removeIv.setVisibility(View.INVISIBLE);
+//                addIv.setVisibility(View.VISIBLE);
+//                deleteIv.setVisibility(View.VISIBLE);
+            }
+            return convertView;
+        }
+    }
 
 
     private class MemberViewHolder extends ViewHolderBase<IMUser> {
         private View contentView;
         private ImageView avatarIv,removeIv;
-        public boolean isInDeleteMode;
+        public boolean isInDeleteMode=false;
 
 
         @Override
@@ -458,18 +507,18 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
             ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
             if(isInDeleteMode){
                 removeIv.setVisibility(View.VISIBLE);
-                addIv.setVisibility(View.INVISIBLE);
-                deleteIv.setVisibility(View.INVISIBLE);
-//                contentView.setOnClickListener(new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        deleteMembersFromGroup(itemData);
-//                    }
-//                });
+//                addIv.setVisibility(View.INVISIBLE);
+//                deleteIv.setVisibility(View.INVISIBLE);
+                contentView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteMembersFromGroup(itemData);
+                    }
+                });
             }else{
                 removeIv.setVisibility(View.INVISIBLE);
-                addIv.setVisibility(View.VISIBLE);
-                deleteIv.setVisibility(View.VISIBLE);
+//                addIv.setVisibility(View.VISIBLE);
+//                deleteIv.setVisibility(View.VISIBLE);
             }
         }
 
