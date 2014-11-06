@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="cancle">取消</string>
     <string name="confirm">确定</string>
-    <string name="password_digest">1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
+    <string name="phone_digest">1234567890</string>
     <string name="shortmessage">信息</string>
+
 </resources>

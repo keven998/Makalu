@@ -18,11 +18,12 @@ public class PathUtils {
         return  instance;
     }
 
-    public File getLocalImageCacheFile(){
+    public String getLocalImageCachePath(){
         String sdcardpath = android.os.Environment
                 .getExternalStorageDirectory()  + File.separator + SystemConfig.LOCAL_IMAGE_CACHE_DIR;
-        return new File(sdcardpath);
+        return sdcardpath;
     }
+
 
 
 }

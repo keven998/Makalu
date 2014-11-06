@@ -236,7 +236,7 @@ public class BitmapTools {
 	 *            所要保存的图片
 	 * @throws java.io.IOException
 	 */
-	public static void saveBitmap(String path, Bitmap bitmap)
+	public static File saveBitmap(String path, Bitmap bitmap)
 			throws IOException {
 		if (path != null && bitmap != null) {
 			File file = new File(path);
@@ -252,7 +252,9 @@ public class BitmapTools {
 			} else {
 				bitmap.compress(CompressFormat.JPEG, 100, stream);
 			}
+            return file;
 		}
+        return null;
 
 	}
 

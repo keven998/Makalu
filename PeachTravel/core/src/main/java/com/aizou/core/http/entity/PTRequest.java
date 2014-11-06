@@ -165,7 +165,7 @@ public class PTRequest implements Serializable {
             request = new PTRequestData();
 
         }
-        request.putBodyParams(key,value);
+        request.putUrlParams(key,value);
     }
 
     public void setUrlParams(List<NameValuePair> urlParams) {

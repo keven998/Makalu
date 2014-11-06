@@ -2,8 +2,10 @@ package com.aizou.peachtravel.module.my;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -11,14 +13,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.utils.BitmapTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.upload.UploadControl;
+import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -26,7 +32,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -45,16 +53,23 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView idTv;
     @ViewInject(R.id.tv_sign)
     private TextView signTv;
+    @ViewInject(R.id.ll_modify_pwd)
+    private LinearLayout modifPwdLl;
     @ViewInject(R.id.btn_logout)
     private Button logoutBtn;
+    @ViewInject(R.id.tv_bind_phone)
+    private TextView bindPhoneTv;
+    @ViewInject(R.id.tv_phone)
+    private TextView phoneTv;
     private File cameraFile;
+    private PeachUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         initView();
-        initData();
+
     }
 
     private void initView() {
@@ -70,8 +85,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initData() {
-        PeachUser user = AccountManager.getInstance().getLoginAccountFromPref(this);
+        user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
@@ -83,8 +104,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .build();
         ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
                 options);
-        idTv.setText(user.userId);
+        idTv.setText(user.userId+"");
         signTv.setText(user.signature);
+        if(TextUtils.isEmpty(user.tel)){
+            modifPwdLl.setVisibility(View.GONE);
+            bindPhoneTv.setText("绑定手机");
+        }else{
+            modifPwdLl.setVisibility(View.VISIBLE);
+            bindPhoneTv.setText("更改手机");
+            phoneTv.setText(user.tel);
+        }
     }
 
     @Override
@@ -112,6 +141,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_bind_phone:
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivity(bindPhoneIntent);
+                break;
 
             case R.id.btn_logout:
                 AccountManager.getInstance().logout(this);
@@ -190,7 +220,21 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 }
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
-            Toast.makeText(mContext, "上传图片", Toast.LENGTH_SHORT).show();
+            Bundle extras = data.getExtras();
+            if (extras != null){
+                Bitmap photo = extras.getParcelable("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
+                String fileName = PathUtils.getInstance().getLocalImageCachePath()+"/"+user.userId+"_avatar.jpg";
+                try {
+                    File imageFile = BitmapTools.saveBitmap(fileName,photo);
+                    UploadControl.getInstance().uploadImage(mContext,imageFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(mContext, "上传图片", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 }

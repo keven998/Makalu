@@ -57,7 +57,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        PeachUser user = AccountManager.getInstance().getLoginAccountFromPref(getActivity());
+        PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         if(user==null){
             userInfoRl.setVisibility(View.GONE);
             loginRl.setVisibility(View.VISIBLE);
@@ -75,7 +75,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .build();
             ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
                     options);
-            idTv.setText(user.userId);
+            idTv.setText(user.userId+"");
             signTv.setText(user.signature);
         }
 

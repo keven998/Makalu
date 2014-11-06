@@ -1,21 +1,17 @@
 package com.aizou.peachtravel.module;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.module.dest.DestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.travel.TravelFragment;
-
-import java.util.List;
 
 
 public class MainActivity extends PeachBaseActivity {
@@ -38,7 +34,6 @@ public class MainActivity extends PeachBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initView();
 
 

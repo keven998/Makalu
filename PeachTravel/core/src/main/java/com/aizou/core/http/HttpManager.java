@@ -42,7 +42,6 @@ import java.util.Map.Entry;
  */
 public class HttpManager {
     private static final String TAG = "httplog";
-    private static HttpUtils httpUtils;
     private static HashMap<String, HttpHandler> downloadsMap = new HashMap<String, HttpHandler>();
 
 
@@ -78,9 +77,7 @@ public class HttpManager {
                                                final HttpCallBack callBack) {
         try {
             final String url = request.getRequest().readUrl();
-            if (httpUtils == null) {
-                httpUtils = new HttpUtils();
-            }
+            HttpUtils httpUtils = new HttpUtils();
             if(request.getRequest().readUrl().startsWith("https")){
                 httpUtils.configSSLSocketFactory(SSLSocketFactory.getSocketFactory());
             }
@@ -164,6 +161,7 @@ public class HttpManager {
             } else if (request.getHttpMethod().equals(PTRequest.TRACE)) {
                 httpMethod = HttpRequest.HttpMethod.TRACE;
             }
+            httpUtils.configCurrentHttpCacheExpiry(1000 * 1);
             HttpHandler handler = httpUtils.send(httpMethod, url, requestParams,
                     ajaxCallBack);
             PTRequestHandler ptHandler = new PTRequestHandler();

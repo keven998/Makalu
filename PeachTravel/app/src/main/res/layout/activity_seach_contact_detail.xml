@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/main_color" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_user_info"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="20dp"
+            android:visibility="visible">
+
+            <FrameLayout
+                android:id="@+id/fl_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_below="@id/fl_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="昵称"
+                 />
+
+            <TextView
+                android:id="@+id/tv_sign"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_nickname"
+                android:text="签名"
+
+                />
+
+        </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/btn_add_contact"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="加为旅行圈好友"/>
+    </LinearLayout>
+
+</LinearLayout>

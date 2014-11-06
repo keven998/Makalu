@@ -28,7 +28,7 @@ public class CommonJson4List<T> implements Serializable {
 	public ErrBean err;
 
 	public class ErrBean {
-		public String msg;
+		public String message;
 		public String extro;
 	}
 

@@ -33,6 +33,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="请输入手机号"
+                android:digits="@string/phone_digest"
                 android:inputType="phone"/>
 
             </LinearLayout>
@@ -46,7 +47,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/login_pwd_hint"
-                android:digits="@string/password_digest"
                 android:inputType="textPassword"/>
 
         </LinearLayout>

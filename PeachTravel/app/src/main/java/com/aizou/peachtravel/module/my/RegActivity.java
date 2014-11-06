@@ -18,12 +18,13 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.tencent.stat.common.User;
 
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class RegActivity extends PeachBaseActivity implements View.OnClickListener {
+    public static final int REQUEST_CODE_CHECH_VALICATION=201;
+
     @ViewInject(R.id.et_phone)
     private EditText phoneEt;
     @ViewInject(R.id.et_password)
@@ -57,7 +58,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     return;
                 }
                 DialogManager.getInstance().showProgressDialog(mContext);
-                UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE, new HttpCallBack<String>() {
+                UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE,null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
@@ -66,10 +67,11 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                             Intent intent = new Intent(mContext, VerifyPhoneActivity.class);
                             intent.putExtra("tel", phoneEt.getText().toString().trim());
                             intent.putExtra("pwd", pwdEt.getText().toString().trim());
+                            intent.putExtra("countDown", validationResult.result.coolDown);
                             intent.putExtra("actionCode", UserApi.ValidationCode.REG_CODE);
-                            startActivity(intent);
+                            startActivityForResult(intent,REQUEST_CODE_CHECH_VALICATION);
                         } else {
-                            ToastUtil.getInstance(mContext).showToast(validationResult.err.msg);
+                            ToastUtil.getInstance(mContext).showToast(validationResult.err.message);
                         }
 
                     }
@@ -81,6 +83,15 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                 });
 
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_CHECH_VALICATION){
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }

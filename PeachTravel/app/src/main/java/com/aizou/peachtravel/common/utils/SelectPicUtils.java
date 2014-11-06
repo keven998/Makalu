@@ -78,7 +78,7 @@ public class SelectPicUtils {
             return null;
         }
 
-        cameraFile = new File(PathUtils.getInstance().getLocalImageCacheFile(), System.currentTimeMillis() + ".jpg");
+        cameraFile = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
         cameraFile.getParentFile().mkdirs();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile));
         activity.startActivityForResult(intent,

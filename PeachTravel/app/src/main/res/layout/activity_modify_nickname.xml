@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
-            android:text="昵称不能超过30个汉字或20个英文字符，\n支持中英文、数字、下划线" />
+            android:text="昵称不能超过16个字符，\n支持中英文、数字、下划线" />
     </LinearLayout>
 
 

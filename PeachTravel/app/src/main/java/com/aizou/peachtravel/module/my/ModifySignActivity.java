@@ -85,7 +85,7 @@ public class ModifySignActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void initData() {
-        user = AccountManager.getInstance().getLoginAccountFromPref(this);
+        user = AccountManager.getInstance().getLoginAccount(this);
         signEt.setText(user.signature);
         CharSequence text = signEt.getText();
         //Debug.asserts(text instanceof Spannable);

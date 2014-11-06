@@ -28,6 +28,21 @@ public class RegexUtils {
         return m.matches();
     }
 
+    public static boolean checkNickName(String nickname){
+//        只支持中英文、数字和下划线
+//        用户名唯一
+//        16位一下
+        Pattern p = Pattern.compile("^[\\u4E00-\\u9FA5|0-9a-zA-Z|_]{1,16}$");
+        Matcher m = p.matcher(nickname);
+        return m.matches();
+    }
+    public static boolean checkSignatrue(String sign){
+//        150位一下
+        Pattern p = Pattern.compile("^{1,150}$");
+        Matcher m = p.matcher(sign);
+        return m.matches();
+    }
+
     /**
      * 验证输入的邮箱格式是否符合
      * @param email

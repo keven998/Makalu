@@ -1,9 +1,11 @@
 package com.aizou.peachtravel.bean;
 
-public class PeachUser {
+import java.io.Serializable;
+
+public class PeachUser implements Serializable{
     public static final String M="M";
     public static final String F="F";
-	public String userId ="";
+	public long userId;
 	public String nickName="";
 	public String avatar;
     public String gender;
@@ -12,6 +14,10 @@ public class PeachUser {
     public String secToken;
     public String countryCode;
     public String email;
+    public String easemobUser;
+    public String easemobPwd;
+    public String memo;
+
 
 
 }

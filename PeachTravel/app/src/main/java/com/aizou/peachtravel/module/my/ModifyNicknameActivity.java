@@ -3,7 +3,6 @@ package com.aizou.peachtravel.module.my;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.RegexUtils;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ModifyResult;
@@ -19,6 +19,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.InputCheckUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -46,8 +47,11 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(nickEt.getText())){
-                    ToastUtil.getInstance(mContext).showToast("请输入昵称");
+                if(!RegexUtils.checkNickName(nickEt.getText().toString().trim())){
+                    ToastUtil.getInstance(mContext).showToast("请输入正确格式昵称");
+                    return;
+                }else if(InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())){
+                    ToastUtil.getInstance(mContext).showToast("昵称不能为连续超过6位数字");
                     return;
                 }
                 if(!CommonUtils.isNetWorkConnected(mContext)){
@@ -66,6 +70,8 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
                             user.nickName = nickEt.getText().toString().trim();
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                             finish();
+                        }else{
+                            ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
                         }
                     }
 
@@ -87,7 +93,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
     }
 
     private void initData() {
-        user = AccountManager.getInstance().getLoginAccountFromPref(this);
+        user = AccountManager.getInstance().getLoginAccount(this);
         nickEt.setText(user.nickName);
         CharSequence text = nickEt.getText();
         //Debug.asserts(text instanceof Spannable);

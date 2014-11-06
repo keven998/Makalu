@@ -281,6 +281,7 @@
                     >
 
                     <TextView
+                        android:id="@+id/tv_bind_phone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -290,6 +291,14 @@
                         android:text="手机绑定"
                         android:textColor="@color/base_text_color_title"
                         android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical" />
 
                     <ImageView
                         android:layout_width="wrap_content"

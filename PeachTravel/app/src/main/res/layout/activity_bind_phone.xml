@@ -29,13 +29,34 @@
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/et_user"
-                android:layout_width="fill_parent"
+                android:id="@+id/et_phone"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_user_hint"
+                android:hint="手机号"
                 android:inputType="text"/>
+            <Button
+                android:id="@+id/btn_time_down"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="验证"/>
 
             </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_sms"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="请输入短信验证码"
+                android:inputType="text"/>
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -45,7 +66,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_reg"
+                android:id="@+id/btn_next"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

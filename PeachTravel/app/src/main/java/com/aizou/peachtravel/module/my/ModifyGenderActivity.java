@@ -7,7 +7,6 @@ import android.widget.RadioGroup;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.NetworkStatusManager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ModifyResult;
@@ -88,7 +87,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
     }
 
     private void initData(){
-        user = AccountManager.getInstance().getLoginAccountFromPref(this);
+        user = AccountManager.getInstance().getLoginAccount(this);
         gender = user.gender;
         if(gender.equals(PeachUser.M)){
             genderRg.check(R.id.rb_men);
