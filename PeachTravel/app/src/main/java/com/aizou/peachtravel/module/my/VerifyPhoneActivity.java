@@ -17,10 +17,10 @@ import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.ValidationBean;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.account.UserUtils;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -195,7 +195,9 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                     user.setNick(peachUser.nickName);
                                     user.setUsername(peachUser.easemobUser);
                                     user.setIsMyFriends(true);
-                                    UserUtils.setUserHead(user);
+                                    user.setAvatar(peachUser.avatar);
+                                    user.setSignature(peachUser.signature);
+                                    IMUtils.setUserHead(user);
                                     userlist.put(peachUser.easemobUser, user);
                                 }
                                 // 存入内存

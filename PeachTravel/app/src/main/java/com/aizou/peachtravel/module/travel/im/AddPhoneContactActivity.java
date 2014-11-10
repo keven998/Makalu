@@ -14,7 +14,9 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.bean.PhoneContactBean;
+import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.utils.PhoneContactUtils;
 import com.aizou.peachtravel.common.utils.SearchEngine;
 
@@ -27,8 +29,8 @@ import java.util.HashMap;
 public class AddPhoneContactActivity extends BaseChatActivity {
 
     private ListView mListView;
-    ArrayList<PhoneContactBean> contactListInMobile ;
-    ListViewDataAdapter<PhoneContactBean> contactAdapter;
+    ArrayList<AddressBookbean> contactListInMobile ;
+    ListViewDataAdapter<AddressBookbean> contactAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +50,9 @@ public class AddPhoneContactActivity extends BaseChatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        contactAdapter = new ListViewDataAdapter<PhoneContactBean>(new ViewHolderCreator<PhoneContactBean>() {
+                        contactAdapter = new ListViewDataAdapter<AddressBookbean>(new ViewHolderCreator<AddressBookbean>() {
                             @Override
-                            public ViewHolderBase<PhoneContactBean> createViewHolder() {
+                            public ViewHolderBase<AddressBookbean> createViewHolder() {
                                 return new PhoneContactViewHolder();
                             }
                         });
@@ -67,10 +69,15 @@ public class AddPhoneContactActivity extends BaseChatActivity {
 
     }
 
+    private void uploadAddressBook(){
+
+//        UserApi.searchByAddressBook()
 
 
+    }
 
-    public class PhoneContactViewHolder extends ViewHolderBase<PhoneContactBean>{
+
+    public class PhoneContactViewHolder extends ViewHolderBase<AddressBookbean>{
 
         private TextView name,phone;
         private Button actionButton;
@@ -85,9 +92,9 @@ public class AddPhoneContactActivity extends BaseChatActivity {
         }
 
         @Override
-        public void showData(int position, PhoneContactBean itemData) {
+        public void showData(int position, AddressBookbean itemData) {
             name.setText(itemData.name);
-            phone.setText(itemData.phone);
+            phone.setText(itemData.tel.get(0));
         }
     }
 }

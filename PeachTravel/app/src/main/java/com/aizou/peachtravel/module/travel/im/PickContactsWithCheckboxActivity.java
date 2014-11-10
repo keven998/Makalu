@@ -91,7 +91,7 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
 
         // String groupName = getIntent().getStringExtra("groupName");
         request = getIntent().getIntExtra("request", 0);
-        String groupId = getIntent().getStringExtra("groupId");
+        groupId = getIntent().getStringExtra("groupId");
         if (groupId == null) {// 创建群组
             isCreatingNewGroup = true;
         } else {
@@ -111,7 +111,7 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
         Collections.sort(alluserList, new Comparator<IMUser>() {
             @Override
             public int compare(IMUser lhs, IMUser rhs) {
-                return (lhs.getUsername().compareTo(rhs.getUsername()));
+                return (lhs.getHeader().compareTo(rhs.getHeader()));
 
             }
         });
@@ -258,6 +258,8 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
                             //一般成员调用invite方法
                             EMGroupManager.getInstance().inviteUser(groupId, members.toArray(new String[0]), null);
                         }
+//                        group = EMGroupManager.getInstance().getGroupFromServer(groupId);
+//                        EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

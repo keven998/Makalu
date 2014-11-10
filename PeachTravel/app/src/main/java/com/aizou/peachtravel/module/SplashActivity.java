@@ -44,7 +44,7 @@ public class SplashActivity extends PeachBaseActivity {
 					SplashActivity.this.finish();
 				} else {
 					Intent mainIntent = new Intent(SplashActivity.this,
-							MainActivity.class);
+							StoryActivity.class);
 					SplashActivity.this.startActivity(mainIntent);
 					// overridePendingTransition(R.anim.zoom_in,
 					// R.anim.zoom_out);

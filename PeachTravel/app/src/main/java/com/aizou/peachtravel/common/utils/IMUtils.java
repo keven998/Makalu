@@ -11,6 +11,7 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.easemob.chat.EMMessage;
+import com.easemob.util.HanziToPinyin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +20,28 @@ import org.json.JSONObject;
  * Created by Rjm on 2014/11/5.
  */
 public class IMUtils {
+    public static IMUser setUserHead(IMUser user) {
+        String username=user.getUsername();
+        String headerName = null;
+        if (!TextUtils.isEmpty(user.getNick())) {
+            headerName = user.getNick();
+        } else {
+            headerName = user.getUsername();
+        }
+        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+            user.setHeader("");
+        } else if (Character.isDigit(headerName.charAt(0))) {
+            user.setHeader("#");
+        } else {
+            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                    0, 1).toUpperCase());
+            char header = user.getHeader().toLowerCase().charAt(0);
+            if (header < 'a' || header > 'z') {
+                user.setHeader("#");
+            }
+        }
+        return user;
+    }
     public static void setMessageWithTaoziUserInfo(Context context,EMMessage message){
         //组装个人信息json
         PeachUser myUser = AccountManager.getInstance().getLoginAccount(context);
@@ -59,5 +82,6 @@ public class IMUtils {
         }
         return null;
     }
+
 
 }

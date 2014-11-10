@@ -109,6 +109,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         } else {
             if(imUser!=null){
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
+                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, UILUtils.getDefaultOption());
                 if (username.equals(Constant.GROUP_USERNAME)) {
                     holder.name.setText("群聊");

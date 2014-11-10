@@ -41,9 +41,10 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
 
         }
         ItemDataType itemData = getItem(position);
+        ViewHolderBase<ItemDataType> holderBase;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            ViewHolderBase<ItemDataType> holderBase = mViewHolderCreator.createViewHolder();
+            holderBase = mViewHolderCreator.createViewHolder();
 
             if (holderBase != null) {
                 convertView = holderBase.createView(inflater);
@@ -52,7 +53,7 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
                 }
             }
         }
-            ViewHolderBase<ItemDataType> holderBase = (ViewHolderBase<ItemDataType>) convertView.getTag();
+            holderBase = (ViewHolderBase<ItemDataType>) convertView.getTag();
             if (holderBase != null) {
                 holderBase.setItemData(position);
                 holderBase.showData(position, itemData);

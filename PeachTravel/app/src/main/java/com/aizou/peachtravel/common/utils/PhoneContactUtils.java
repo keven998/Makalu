@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.bean.PhoneContactBean;
 
 import java.util.ArrayList;
@@ -13,13 +14,13 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/10/28.
  */
 public class PhoneContactUtils {
-    public static ArrayList<PhoneContactBean> getPhoneContact(Context context){
-        ArrayList<PhoneContactBean> contactList = new ArrayList<PhoneContactBean>();
+    public static ArrayList<AddressBookbean> getPhoneContact(Context context){
+        ArrayList<AddressBookbean> contactList = new ArrayList<AddressBookbean>();
         int nameIndex=-1;
         ContentResolver cr=context.getContentResolver();
         Cursor cur=cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,null);
         String name;
-        PhoneContactBean bean = null;
+        AddressBookbean bean = null;
         while(cur.moveToNext()){
             //得到名字
             name="";
@@ -33,11 +34,11 @@ public class PhoneContactUtils {
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = "
                             + contactId, null, null);
             while (phoneCursor.moveToNext()) {
-                bean =new PhoneContactBean();
+                bean =new AddressBookbean();
                 String strPhoneNumber = phoneCursor.getString(
                         phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)); // 手机号码字段联系人可能不止一个
                 bean.name = name;
-                bean.phone = strPhoneNumber;
+                bean.tel.add(strPhoneNumber);
                 contactList.add(bean);
 
             }

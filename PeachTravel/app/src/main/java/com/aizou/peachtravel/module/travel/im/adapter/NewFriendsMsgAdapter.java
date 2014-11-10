@@ -32,7 +32,6 @@ import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.account.UserUtils;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
@@ -153,7 +152,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 imUser.setAvatar(msg.getAvatar());
                 imUser.setIsMyFriends(true);
                 imUser.setGender(msg.getGender());
-                UserUtils.setUserHead(imUser);
+                IMUtils.setUserHead(imUser);
                 IMUserRepository.saveContact(context, imUser);
                 AccountManager.getInstance().getContactList(context).put(imUser.getUsername(),imUser);
                 EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);

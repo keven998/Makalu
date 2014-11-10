@@ -38,6 +38,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -109,15 +110,17 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
                                 imUser.setAvatar(user.avatar);
                                 imUser.setSignature(user.signature);
                                 imUser.setMemo(user.memo);
+                                imUser.setGender(user.gender);
+                                IMUtils.setUserHead(imUser);
                                 AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(),imUser);
                                 IMUserRepository.saveContact(mContext,imUser);
                                 Intent intent = new Intent(mContext, ContactDetailActivity.class);
-
-                                intent.putExtra("user", user);
+                                intent.putExtra("userId", user.userId);
                                 startActivity(intent);
                                 return;
                             }
                             Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
+                            intent.putExtra("isSeach",true);
                             intent.putExtra("user", seachResult.result.get(0));
                             startActivity(intent);
                         }

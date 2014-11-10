@@ -141,7 +141,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 				nameTextview.setText(user.getNick());
 				if(unreadMsgView != null)
 					unreadMsgView.setVisibility(View.INVISIBLE);
-				avatar.setImageResource(R.drawable.default_avatar);
+				avatar.setBackgroundResource(R.drawable.default_avatar);
                 ImageLoader.getInstance().displayImage(user.getAvatar(),avatar, UILUtils.getDefaultOption());
 			}
 

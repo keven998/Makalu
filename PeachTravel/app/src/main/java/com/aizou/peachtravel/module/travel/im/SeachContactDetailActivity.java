@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.travel.im;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -9,10 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseChatActivity;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
@@ -25,6 +29,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/10/29.
@@ -49,16 +56,42 @@ public class SeachContactDetailActivity extends BaseChatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
+        boolean isSeach = getIntent().getBooleanExtra("isSeach",false);
         user = (PeachUser) getIntent().getSerializableExtra("user");
-        ImageLoader.getInstance().displayImage(user.avatar,avatarIv, UILUtils.getDefaultOption());
-        nickNameTv.setText(user.nickName);
-        signTv.setText(user.signature);
+        if(isSeach){
+            bindView();
+        }else{
+            if(!TextUtils.isEmpty(user.nickName)){
+                bindView();
+            }
+            List<String> hxList = new ArrayList<String>();
+            hxList.add(user.easemobUser);
+            UserApi.getContactByHx(hxList,new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result,PeachUser.class);
+                    if(userResult.code==0){
+                        if(userResult.result.size()>0){
+                            user = userResult.result.get(0);
+                            bindView();
+                        }
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+            });
+        }
+
+
 
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
-//目前只支持单聊
+                //目前只支持单聊
                 String action="taozi_cmd";//action可以自定义，在广播接收时可以收到
                 CmdMessageBody cmdBody=new CmdMessageBody(action);
                 String toUsername=user.easemobUser;//发送给某个人
@@ -112,32 +145,16 @@ public class SeachContactDetailActivity extends BaseChatActivity{
                     e.printStackTrace();
                 }
 
-//                DialogManager.getInstance().showProgressDialog(mContext);
-//                new Thread(new Runnable() {
-//                    public void run() {
-//
-//                        try {
-//                            //demo写死了个reason，实际应该让用户手动填入
-//                            EMContactManager.getInstance().addContact(user.easemobUser, "加个好友呗");
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    DialogManager.getInstance().dissMissProgressDialog();
-//                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-//                                    finish();
-//                                }
-//                            });
-//                        } catch (final Exception e) {
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    DialogManager.getInstance().dissMissProgressDialog();
-//                                    Toast.makeText(getApplicationContext(), "请求添加好友失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
-//                    }
-//                }).start();
-
             }
         });
+
     }
+
+    private void bindView(){
+        ImageLoader.getInstance().displayImage(user.avatar,avatarIv, UILUtils.getDefaultOption());
+        nickNameTv.setText(user.nickName);
+        signTv.setText(user.signature);
+    }
+
+
 }

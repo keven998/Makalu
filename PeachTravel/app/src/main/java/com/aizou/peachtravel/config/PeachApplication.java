@@ -228,7 +228,7 @@ public class PeachApplication extends BaseApplication {
     private void refreshUserInfo(){
         final PeachUser user = AccountManager.getInstance().getLoginAccount(this);
         if(user!=null){
-            UserApi.getUserInfo(user,new HttpCallBack<String>() {
+            UserApi.getUserInfo(user.userId+"",new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
                     CommonJson<PeachUser> userResult = CommonJson.fromJson(result,PeachUser.class);

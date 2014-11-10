@@ -69,6 +69,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -93,6 +94,7 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.travel.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.travel.im.adapter.ExpressionPagerAdapter;
 import com.aizou.peachtravel.module.travel.im.adapter.MessageAdapter;
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
@@ -113,6 +115,7 @@ import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.jivesoftware.smack.ChatManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -193,8 +196,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 	private VoiceRecorder voiceRecorder;
 	private MessageAdapter adapter;
     private ListViewDataAdapter<IMUser> memberAdapter;
-    private MemberAdapter baseMemeberAdapter;
-    private ArrayList<IMUser> groupMembers;
+    private boolean isInDeleteMode;
 	private File cameraFile;
 	static int resendPos;
 
@@ -335,8 +337,37 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 
 	}
 
+    protected void updateGroup() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    group = EMGroupManager.getInstance().getGroupFromServer(group.getGroupId());
+                    //更新本地数据
+                    EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            setUpGroupMember();
+
+                        }
+                    });
+
+                } catch (Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
     private void setUpGroupMember(){
-        expandIv.setVisibility(View.VISIBLE);
+        if(membersLl.getVisibility()==View.VISIBLE){
+            expandIv.setVisibility(View.GONE);
+        }else{
+            expandIv.setVisibility(View.VISIBLE);
+        }
         expandIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,28 +383,31 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                 expandIv.setVisibility(View.VISIBLE);
             }
         });
-        final MemberViewHolder viewHolder =new MemberViewHolder();
         memberAdapter = new ListViewDataAdapter<IMUser>(new ViewHolderCreator<IMUser>() {
             @Override
             public ViewHolderBase<IMUser> createViewHolder() {
-                return viewHolder;
+                return new MemberViewHolder();
             }
         });
-        groupMembers = new ArrayList<IMUser>();
-        baseMemeberAdapter = new MemberAdapter();
-        memberGv.setAdapter(baseMemeberAdapter);
-        List<String> members=group.getMembers();
-        List<String> unkownMembers= new ArrayList<String>();
-        final HashMap<String,IMUser> imMembers = new HashMap<String, IMUser>();
+        memberGv.setAdapter(memberAdapter);
+        group = EMGroupManager.getInstance().getGroup(toChatUsername);
+        final List<String> members=group.getMembers();
+        final List<String> unkownMembers= new ArrayList<String>();
 
         for(String username : members){
             IMUser user = IMUserRepository.getContactByUserName(mContext,username);
             if(user==null){
                 unkownMembers.add(username);
                 user = new IMUser();
+                user.setUsername(username);
             }
-            imMembers.put(username,user);
+            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                memberAdapter.getDataList().add(user);
+            }
+
         }
+        ((TextView) findViewById(R.id.name)).setText("群聊(" + group.getMembers().size() + "人)");
+        memberAdapter.notifyDataSetChanged();
         if(unkownMembers.size()>0){
             UserApi.getContactByHx(unkownMembers,new HttpCallBack<String>() {
                 @Override
@@ -390,15 +424,20 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                             imUser.setAvatar(user.avatar);
                             imUser.setSignature(user.signature);
                             IMUserRepository.saveContact(mContext, imUser);
-                            imMembers.put(imUser.getUsername(), imUser);
-
                         }
-                        groupMembers.clear();
-                        groupMembers.addAll(new ArrayList<IMUser>(imMembers.values()));
+                        unkownMembers.clear();
                         memberAdapter.getDataList().clear();
-                        memberAdapter.getDataList().addAll(groupMembers);
-//                        memberAdapter.notifyDataSetChanged();
-                        baseMemeberAdapter.notifyDataSetChanged();
+                        for(String username : members){
+                            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
+                            if(user==null){
+                                unkownMembers.add(username);
+                                user = new IMUser();
+                                user.setUsername(username);
+                            }
+                            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                                memberAdapter.getDataList().add(user);
+                            }
+                        }
                     }
                 }
 
@@ -409,10 +448,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
             });
         }
 
-        groupMembers.addAll(new ArrayList<IMUser>(imMembers.values()));
-        memberAdapter.getDataList().addAll(groupMembers);
-//        memberAdapter.notifyDataSetChanged();
-        baseMemeberAdapter.notifyDataSetChanged();
+//        baseMemeberAdapter.notifyDataSetChanged();
         addIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -422,23 +458,42 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                         REQUEST_CODE_ADD_USER);
             }
         });
-//        memberGv.setOnTouchListener(new OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                viewHolder.isInDeleteMode=false;
-//                memberAdapter.notifyDataSetChanged();
-//                return false;
-//            }
-//        });
+        membersLl.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(isInDeleteMode){
+                    isInDeleteMode=false;
+                    addIv.setVisibility(View.VISIBLE);
+                    deleteIv.setVisibility(View.VISIBLE);
+                    memberAdapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
+        memberGv.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(isInDeleteMode){
+                    isInDeleteMode=false;
+                    addIv.setVisibility(View.VISIBLE);
+                    deleteIv.setVisibility(View.VISIBLE);
+                    memberAdapter.notifyDataSetChanged();
+                }else{
+
+                }
+                return false;
+            }
+        });
         if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
             deleteIv.setVisibility(View.VISIBLE);
             deleteIv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    viewHolder.isInDeleteMode=true;
-                    baseMemeberAdapter.isInDeleteMode=true;
-//                    memberAdapter.notifyDataSetChanged();
-                    baseMemeberAdapter.notifyDataSetChanged();
+                    isInDeleteMode=true;
+                    addIv.setVisibility(View.INVISIBLE);
+                    deleteIv.setVisibility(View.INVISIBLE);
+                    memberAdapter.notifyDataSetChanged();
+//                    baseMemeberAdapter.notifyDataSetChanged();
                 }
             });
         }else{
@@ -446,52 +501,12 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
         }
 
     }
-    private class MemberAdapter extends BaseAdapter{
-
-        public boolean isInDeleteMode=false;
-
-
-        @Override
-        public int getCount() {
-            return groupMembers.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView==null){
-                convertView = View.inflate(mContext,R.layout.grid,null);
-            }
-            ImageView avatarIv = (ImageView) convertView.findViewById(R.id.iv_avatar);
-            ImageView removeIv = (ImageView) convertView.findViewById(R.id.badge_delete);
-//            ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
-            if(isInDeleteMode){
-                removeIv.setVisibility(View.VISIBLE);
-//                addIv.setVisibility(View.INVISIBLE);
-//                deleteIv.setVisibility(View.INVISIBLE);
-            }else{
-                removeIv.setVisibility(View.INVISIBLE);
-//                addIv.setVisibility(View.VISIBLE);
-//                deleteIv.setVisibility(View.VISIBLE);
-            }
-            return convertView;
-        }
-    }
 
 
     private class MemberViewHolder extends ViewHolderBase<IMUser> {
         private View contentView;
         private ImageView avatarIv,removeIv;
-        public boolean isInDeleteMode=false;
+
 
 
         @Override
@@ -504,22 +519,45 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 
         @Override
         public void showData(int position, final IMUser itemData) {
+            avatarIv.setImageResource(R.drawable.default_avatar);
             ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
-            if(isInDeleteMode){
-                removeIv.setVisibility(View.VISIBLE);
-//                addIv.setVisibility(View.INVISIBLE);
-//                deleteIv.setVisibility(View.INVISIBLE);
+            if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
+                if(isInDeleteMode){
+                    removeIv.setVisibility(View.VISIBLE);
+                    contentView.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteMembersFromGroup(itemData);
+                        }
+                    });
+                }else{
+                    removeIv.setVisibility(View.INVISIBLE);
+                }
+            }else{
                 contentView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteMembersFromGroup(itemData);
+                        if(IMUserRepository.isMyFriend(mContext,itemData.getUsername())){
+                            Intent intent = new Intent(mContext, ContactDetailActivity.class);
+                            intent.putExtra("userId", itemData.getUserId());
+                            startActivity(intent);
+                        }else{
+                            PeachUser user = new PeachUser();
+                            user.nickName = itemData.getNick();
+                            user.userId = itemData.getUserId();
+                            user.easemobUser = itemData.getUsername();
+                            user.avatar = itemData.getAvatar();
+                            user.signature = itemData.getSignature();
+                            user.gender = itemData.getGender();
+                            user.memo = itemData.getMemo();
+                            Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        }
                     }
                 });
-            }else{
-                removeIv.setVisibility(View.INVISIBLE);
-//                addIv.setVisibility(View.VISIBLE);
-//                deleteIv.setVisibility(View.VISIBLE);
             }
+
         }
 
         /**
@@ -527,6 +565,10 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
          * @param imUser
          */
         protected void deleteMembersFromGroup(final IMUser imUser) {
+            if(imUser.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                ToastUtil.getInstance(mContext).showToast("不能删除自己");
+                return;
+            }
             final ProgressDialog deleteDialog = new ProgressDialog(mContext);
             deleteDialog.setMessage("正在移除...");
             deleteDialog.setCanceledOnTouchOutside(false);
@@ -537,15 +579,48 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
                 public void run() {
                     try {
                         // 删除被选中的成员
+
                         EMGroupManager.getInstance().removeUserFromGroup(group.getGroupId(), imUser.getUsername());
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
                                 deleteDialog.dismiss();
-                                groupMembers.remove(imUser);
+                                memberAdapter.getDataList().remove(imUser);
                                 memberAdapter.notifyDataSetChanged();
-                                ((TextView) findViewById(R.id.group_name)).setText("群聊" + "(" + group.getAffiliationsCount() + "人)");
+                                // 被邀请
+                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+                                msg.setChatType(EMMessage.ChatType.GroupChat);
+                                msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                                msg.setReceipt(group.getGroupId());
+                                IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+                                String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
+                                IMUtils.setMessageWithExtTips(mContext,msg,content);
+                                msg.addBody(new TextMessageBody(content));
+                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.refresh();
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onError(int i, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(int i, String s) {
+
+                                    }
+                                });
                             }
                         });
                     } catch (final Exception e) {
@@ -587,8 +662,8 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			findViewById(R.id.container_remove).setVisibility(View.GONE);
 			findViewById(R.id.container_voice_call).setVisibility(View.GONE);
 			toChatUsername = getIntent().getStringExtra("groupId");
-			group = EMGroupManager.getInstance().getGroup(toChatUsername);
-			((TextView) findViewById(R.id.name)).setText(group.getGroupName());
+            setUpGroupMember();
+            updateGroup();
 
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,true);
@@ -645,7 +720,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			// 显示发送要转发的消息
 			forwardMessage(forward_msg_id);
 		}
-        setUpGroupMember();
+
 
 	}
 
@@ -725,6 +800,9 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			}
 		}
 		if (resultCode == RESULT_OK) { // 清空消息
+            if(requestCode==REQUEST_CODE_ADD_USER){
+                setUpGroupMember();
+            }
 			if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
 				// 清空会话
 				EMChatManager.getInstance().clearConversation(toChatUsername);
@@ -825,9 +903,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 				setResult(RESULT_OK);
 			} else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
 				adapter.refresh();
-			}else if(requestCode==REQUEST_CODE_ADD_USER){
-                setUpGroupMember();
-            }
+			}
 		}
 	}
 
@@ -847,7 +923,6 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
             // 点击我的攻略图标
             JSONObject contentJson = new JSONObject();
             try {
-
                 contentJson.put("id","1");
                 contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
                 contentJson.put("name","我的攻略");

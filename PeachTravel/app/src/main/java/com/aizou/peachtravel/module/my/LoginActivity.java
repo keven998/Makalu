@@ -25,13 +25,13 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.account.UserUtils;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.thirdpart.SnsAccountsUtils;
 import com.aizou.peachtravel.common.thirdpart.weiboapi.User;
 import com.aizou.peachtravel.common.thirdpart.weiboapi.WeiboUsersAPI;
 import com.aizou.peachtravel.common.thirdpart.weixin.WeixinApi;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
@@ -206,8 +206,11 @@ public class LoginActivity extends PeachBaseActivity {
                                     user.setNick(peachUser.nickName);
                                     user.setUsername(peachUser.easemobUser);
                                     user.setUnreadMsgCount(0);
+                                    user.setAvatar(peachUser.avatar);
+                                    user.setSignature(peachUser.signature);
                                     user.setIsMyFriends(true);
-                                    UserUtils.setUserHead(user);
+                                    user.setGender(peachUser.gender);
+                                    IMUtils.setUserHead(user);
                                     userlist.put(peachUser.easemobUser, user);
                                 }
                                 // 存入内存

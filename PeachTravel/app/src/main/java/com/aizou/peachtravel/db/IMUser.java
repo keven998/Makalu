@@ -132,4 +132,27 @@ public class IMUser extends EMContact implements Serializable {
         this.isMyFriends = isMyFriends;
     }
 
+
+
+    public boolean equals(Object other){       //重写equals方法，后面最好重写hashCode方法
+
+        if(this == other)                                      //先检查是否其自反性，后比较other是否为空。这样效率高
+            return true;
+        if(other == null)
+            return false;
+        if( !(other instanceof IMUser))
+            return false;
+
+        final IMUser user = (IMUser)other;
+        if( !getUsername().equals(user.getUsername()))
+            return false;
+        return true;
+    }
+
+    public int hashCode(){                 //hashCode主要是用来提高hash系统的查询效率。当hashCode中不进行任何操作时，可以直接让其返回 一常数，或者不进行重写。
+        int result = getUsername().hashCode();
+        return result;
+        //return 0;
+    }
+
 }

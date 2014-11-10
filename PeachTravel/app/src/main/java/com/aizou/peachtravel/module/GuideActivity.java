@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.DotView;
+import com.aizou.core.widget.pagetransformer.ZoomOutTranformer;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
@@ -74,7 +75,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 							SharePrefUtil.saveBoolean(mContext, "hasLoad_"
                                     + UpdateUtil.getVerName(mContext), true);
 							Intent mainIntent = new Intent(GuideActivity.this,
-									MainActivity.class);
+                                    StoryActivity.class);
 							GuideActivity.this.startActivity(mainIntent);
 							// overridePendingTransition(R.anim.zoom_in,
 							// R.anim.zoom_out);
@@ -101,7 +102,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 		vp.setAdapter(vpAdapter);
 		// 绑定回调
 		vp.setOnPageChangeListener(this);
-
+        vp.setPageTransformer(true,new ZoomOutTranformer());
 		// 初始化底部小点
 		initDots();
 
@@ -149,7 +150,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 				SharePrefUtil.saveBoolean(mContext, "hasLoad_"
 						+ UpdateUtil.getVerName(mContext), true);
 				Intent mainIntent = new Intent(GuideActivity.this,
-						MainActivity.class);
+                        StoryActivity.class);
 				GuideActivity.this.startActivity(mainIntent);
 				// overridePendingTransition(R.anim.zoom_in,
 				// R.anim.zoom_out);

@@ -10,11 +10,14 @@ import com.aizou.core.http.entity.PTRequestData;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.config.SystemConfig;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +29,7 @@ import java.util.List;
  */
 public class UserApi extends BaseApi {
     public static class ValidationCode {
-        //        1：注册
+//        1：注册
 //        2：找回密码
 //        3：绑定手机号
         public final static String REG_CODE = "1";
@@ -58,8 +61,10 @@ public class UserApi extends BaseApi {
     public final static String CONTACTS = "/users/contacts";
     //搜索联系人
     public final static String SEACH_CONTACT="/users/search";
-
+    //根据环信ID获取用户信息
     public final static String GET_CONTACT_BY_HX="/users/easemob";
+    //通讯录匹配
+    public final static String SEARCH_BY_ADDRESSBOOK="/users/search-by-address-book";
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -269,10 +274,10 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getUserInfo(PeachUser user, HttpCallBack callback) {
+    public static PTRequestHandler getUserInfo(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + user.userId);
+        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -419,7 +424,11 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("easemob", GsonTools.createGsonString(users));
+            JSONArray jsonArray = new JSONArray();
+            for(String user:users){
+                jsonArray.put(user);
+            }
+            jsonObject.put("easemob",jsonArray );
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -430,6 +439,30 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 根据通讯录获取联系人
+     * @param addressBookList
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler searchByAddressBook(List<AddressBookbean> addressBookList,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + SEARCH_BY_ADDRESSBOOK);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        String addressList =GsonTools.createGsonString(addressBookList);
+        try {
+            StringEntity entity = new StringEntity(addressList);
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(addressList);
         return HttpManager.request(request, callback);
     }
 

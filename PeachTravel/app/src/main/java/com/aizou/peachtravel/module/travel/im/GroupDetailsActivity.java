@@ -15,7 +15,6 @@ package com.aizou.peachtravel.module.travel.im;
 
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -35,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseChatActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
@@ -67,8 +67,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 //	private GridAdapter adapter;
 	private int referenceWidth;
 	private int referenceHeight;
-	private ProgressDialog progressDialog;
-	
+
 	private RelativeLayout rl_switch_block_groupmsg;
     private LinearLayout rl_groupName;
     private TextView groupNameTv;
@@ -171,16 +170,16 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 
 				break;
 			case REQUEST_CODE_EXIT: // 退出群
-				progressDialog.setMessage("正在退出群聊...");
+                DialogManager.getInstance().showProgressDialog(mContext,"正在退出群聊");
 				exitGrop();
 				break;
 			case REQUEST_CODE_EXIT_DELETE: // 解散群
-				progressDialog.setMessage("正在解散群聊...");
+                DialogManager.getInstance().showProgressDialog(mContext,"正在解散群聊...");
 				deleteGrop();
 				break;
 			case REQUEST_CODE_CLEAR_ALL_HISTORY:
 				//清空此群聊的聊天记录
-				progressDialog.setMessage("正在清空群消息...");
+                DialogManager.getInstance().showProgressDialog(mContext,"正在清空群消息...");
 				clearGroupHistory();
 				break;
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
@@ -224,7 +223,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 		
 		
 		EMChatManager.getInstance().clearConversation(group.getGroupId());
-		progressDialog.dismiss();
+        DialogManager.getInstance().dissMissProgressDialog();
 //		adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 		
 		
@@ -259,7 +258,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
                             }
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    progressDialog.dismiss();
+                                    DialogManager.getInstance().dissMissProgressDialog();
                                     setResult(RESULT_OK);
                                     finish();
                                     ChatActivity.activityInstance.finish();
@@ -281,7 +280,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-							progressDialog.dismiss();
+                            DialogManager.getInstance().dissMissProgressDialog();
 							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -301,7 +300,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 					EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
 					runOnUiThread(new Runnable() {
 						public void run() {
-							progressDialog.dismiss();
+                            DialogManager.getInstance().dissMissProgressDialog();
 							setResult(RESULT_OK);
 							finish();
 							ChatActivity.activityInstance.finish();
@@ -310,7 +309,7 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-							progressDialog.dismiss();
+                            DialogManager.getInstance().dissMissProgressDialog();
 							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -340,13 +339,13 @@ public class GroupDetailsActivity extends BaseChatActivity implements OnClickLis
 						public void run() {
 //							adapter.notifyDataSetChanged();
 							((TextView) findViewById(R.id.group_name)).setText(group.getGroupName()+"("+group.getAffiliationsCount()+"人)");
-							progressDialog.dismiss();
+                            DialogManager.getInstance().dissMissProgressDialog();
 						}
 					});
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-							progressDialog.dismiss();
+                            DialogManager.getInstance().dissMissProgressDialog();
 							Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
