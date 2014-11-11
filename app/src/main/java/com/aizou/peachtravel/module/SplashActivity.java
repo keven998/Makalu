@@ -4,6 +4,7 @@ import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
+import com.igexin.sdk.PushManager;
 
 import android.app.Notification;
 import android.content.Intent;
@@ -27,6 +28,8 @@ public class SplashActivity extends PeachBaseActivity {
 	}
 
 	protected void initData() {
+
+        PushManager.getInstance().initialize(this.getApplicationContext());
 
 		// 延长2秒后进入主界面
 		new Handler().postDelayed(new Runnable() {
