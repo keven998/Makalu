@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.module.travel.im.adapter.ContactAdapter;
+import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.util.DensityUtil;
 
 public class Sidebar extends View{

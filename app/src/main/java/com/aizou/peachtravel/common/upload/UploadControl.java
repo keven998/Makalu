@@ -24,12 +24,9 @@ import java.util.List;
  */
 public class UploadControl {
 
-    public static String uptoken = "anEC5u_72gw1kZPSy3Dsq1lo_DPXyvuPDaj4ePkN:zmaikrTu1lgLb8DTvKQbuFZ5ai0=:eyJzY29wZSI6ImFuZHJvaWRzZGsiLCJyZXR1cm5Cb2R5Ijoie1wiaGFzaFwiOlwiJChldGFnKVwiLFwia2V5XCI6XCIkKGtleSlcIixcImZuYW1lXCI6XCIgJChmbmFtZSkgXCIsXCJmc2l6ZVwiOlwiJChmc2l6ZSlcIixcIm1pbWVUeXBlXCI6XCIkKG1pbWVUeXBlKVwiLFwieDphXCI6XCIkKHg6YSlcIn0iLCJkZWFkbGluZSI6MTQ2NjIyMjcwMX0=";
-    // upToken 这里需要自行获取. SDK 将不实现获取过程. 隔一段时间到业务服务器重新获取一次
+//    public static String uptoken = "anEC5u_72gw1kZPSy3Dsq1lo_DPXyvuPDaj4ePkN:zmaikrTu1lgLb8DTvKQbuFZ5ai0=:eyJzY29wZSI6ImFuZHJvaWRzZGsiLCJyZXR1cm5Cb2R5Ijoie1wiaGFzaFwiOlwiJChldGFnKVwiLFwia2V5XCI6XCIkKGtleSlcIixcImZuYW1lXCI6XCIgJChmbmFtZSkgXCIsXCJmc2l6ZVwiOlwiJChmc2l6ZSlcIixcIm1pbWVUeXBlXCI6XCIkKG1pbWVUeXBlKVwiLFwieDphXCI6XCIkKHg6YSlcIn0iLCJkZWFkbGluZSI6MTQ2NjIyMjcwMX0=";
+//    // upToken 这里需要自行获取. SDK 将不实现获取过程. 隔一段时间到业务服务器重新获取一次
     public static Authorizer auth = new Authorizer();
-    {
-        auth.setUploadToken(uptoken);
-    }
     private static UploadControl instance;
     public static UploadControl getInstance(){
         if(instance==null){
@@ -39,7 +36,7 @@ public class UploadControl {
     }
 
     // 在七牛绑定的对应bucket的域名. 更换 uptoken 时同时更换为对应的空间名，
-    public static String bucketName = "androidsdk";
+    public static String bucketName = "taozi-uploads";
 
     private void clean(){
         executor = null;
@@ -48,7 +45,8 @@ public class UploadControl {
     volatile boolean uploading = false;
     UploadTaskExecutor executor;
     PutExtra mExtra = new PutExtra();
-    public  void uploadImage(Context context,File imageFile){
+    public  void uploadImage(Context context,String uploadToken,File imageFile){
+       auth.setUploadToken(uploadToken);
        doResumableUpload(context,imageFile,mExtra);
     }
     public void doResumableUpload(Context context,final File file, PutExtra extra) {

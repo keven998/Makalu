@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
-import com.aizou.peachtravel.module.travel.im.ShowVideoActivity;
+import com.aizou.peachtravel.module.toolbox.im.ShowVideoActivity;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.VideoMessageBody;

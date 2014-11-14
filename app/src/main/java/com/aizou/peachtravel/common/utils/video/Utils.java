@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
-import com.aizou.peachtravel.module.travel.im.ImageGridActivity;
+import com.aizou.peachtravel.module.toolbox.im.ImageGridActivity;
 
 
 public class Utils {

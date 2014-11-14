@@ -12,9 +12,8 @@ import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.module.travel.im.adapter.ContactAdapter;
+import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 
 /**
  * Created by Rjm on 2014/10/29.

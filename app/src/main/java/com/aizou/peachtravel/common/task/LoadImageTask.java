@@ -25,7 +25,7 @@ import android.widget.ImageView;
 
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
-import com.aizou.peachtravel.module.travel.im.ShowBigImage;
+import com.aizou.peachtravel.module.toolbox.im.ShowBigImage;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;

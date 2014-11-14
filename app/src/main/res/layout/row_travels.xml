@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_travels"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:layout_toRightOf="@id/iv_travels"
+            android:id="@+id/tv_travels_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_travels_desc"
+            android:layout_toRightOf="@id/iv_travels"
+            android:layout_below="@id/tv_travels_name"
+            android:layout_width="fill_parent"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_arr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/dash"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:layout_toRightOf="@id/iv_avatar"
+            android:id="@+id/tv_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_from"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:layout_below="@id/tv_username"
+            android:layout_width="100dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/tv_from"
+            android:layout_below="@id/tv_username"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

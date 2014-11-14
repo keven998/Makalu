@@ -13,7 +13,12 @@ import com.aizou.peachtravel.config.SystemConfig;
  */
 public class OtherApi extends BaseApi {
 
+    public static class Scenario{
+         public final static String PORTRAIT="portrait";
+    }
+
     public final static String COVER_STORY="/misc/cover-stories";
+    public final static String UPLOAD_TOKEN="/misc/put-policy/";
 
 
     /**
@@ -31,4 +36,29 @@ public class OtherApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+
+    /**
+     * 获取上传图片token
+     * @param callback
+     * @param scenario
+     * @return
+     */
+    public static PTRequestHandler getUploadToken(String scenario,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + UPLOAD_TOKEN+scenario);
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 获取头像上传图片token
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getAvatarUploadToken(HttpCallBack callback) {
+       return getUploadToken(Scenario.PORTRAIT,callback);
+    }
+
+
 }

@@ -7,4 +7,5 @@ public class CityBean {
     public String id;
     public String name;
     public String image;
+    public String desc;
 }

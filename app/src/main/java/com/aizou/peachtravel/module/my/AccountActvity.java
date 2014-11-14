@@ -17,12 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.BitmapTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.bean.UploadTokenBean;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.upload.UploadControl;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
@@ -227,8 +231,22 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
                 String fileName = PathUtils.getInstance().getLocalImageCachePath()+"/"+user.userId+"_avatar.jpg";
                 try {
-                    File imageFile = BitmapTools.saveBitmap(fileName,photo);
-                    UploadControl.getInstance().uploadImage(mContext,imageFile);
+                    final File imageFile = BitmapTools.saveBitmap(fileName,photo);
+                    OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result,UploadTokenBean.class);
+                            if(tokenResult.code==0){
+                                UploadControl.getInstance().uploadImage(mContext,tokenResult.result.uploadToken,imageFile);
+                            }
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+
+                        }
+                    });
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

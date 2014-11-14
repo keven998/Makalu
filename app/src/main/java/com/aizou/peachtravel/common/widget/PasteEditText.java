@@ -22,8 +22,8 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import com.aizou.peachtravel.module.travel.im.AlertDialog;
-import com.aizou.peachtravel.module.travel.im.ChatActivity;
+import com.aizou.peachtravel.module.toolbox.im.AlertDialog;
+import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 
 
 /**

@@ -1,0 +1,60 @@
+[
+    {
+        "type":{
+                    "id":"5464446d5b28a3854c24e8c1",
+                    "name":"人气城市"
+                },
+        "localities":
+                [
+                    {
+                        "id":"5464446d5b28a3854c24e8c1",
+                        "zhName":"城南",
+                        "enName":"ChengNan",
+                        "desc":"城南位于韩国南部...",
+                        "linkType" : 1,
+                        "linkUrl":"",
+                        "cover":"http://img0.bdstatic.com/img/image/shouye/lymedff037.jpg",
+                        "weight":1
+                    },
+                    {
+                        "id":"5464446d5b28a3854c24e8c1",
+                        "zhName":"首尔",
+                        "enName":"ChengNan",
+                        "desc":"城南位于韩国南部...",
+                        "linkType" : 2,
+                        "linkUrl":"http://...",
+                        "cover":"http://img0.bdstatic.com/img/image/shouye/lymedff037.jpg",
+                        "weight":2
+                    }
+                ]
+    },
+    {
+            "type":{
+                        "id":"5464446d5b28a3854c24e8c1",
+                        "name":"人气城市"
+                    },
+            "localities":
+                    [
+                        {
+                            "id":"5464446d5b28a3854c24e8c1",
+                            "zhName":"城南",
+                            "enName":"ChengNan",
+                            "desc":"城南位于韩国南部...",
+                            "linkType" : 1,
+                            "linkUrl":"",
+                            "cover":"http://img0.bdstatic.com/img/image/shouye/lymedff037.jpg",
+                            "weight":1
+                        },
+                        {
+                            "id":"5464446d5b28a3854c24e8c1",
+                            "zhName":"首尔",
+                            "enName":"ChengNan",
+                            "desc":"城南位于韩国南部...",
+                            "linkType" : 2,
+                            "linkUrl":"http://...",
+                            "cover":"http://img0.bdstatic.com/img/image/shouye/lymedff037.jpg",
+                            "weight":2
+                        }
+                    ]
+        }
+]

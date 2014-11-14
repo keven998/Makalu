@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.module.dest.DestFragment;
+import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
-import com.aizou.peachtravel.module.travel.TravelFragment;
+import com.aizou.peachtravel.module.toolbox.TravelFragment;
 
 
 public class MainActivity extends PeachBaseActivity {
@@ -22,7 +22,7 @@ public class MainActivity extends PeachBaseActivity {
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {DestFragment.class,TravelFragment.class,MyFragment.class,};
+    private Class fragmentArray[] = {RecDestFragment.class,TravelFragment.class,MyFragment.class,};
 
     //定义数组来存放按钮图片
 //    private int mImageViewArray[] = {R.drawable.tab_home_btn,R.drawable.tab_message_btn,R.drawable.tab_selfinfo_btn,
