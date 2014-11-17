@@ -7,21 +7,14 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_section"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <com.aizou.core.widget.FixedGridView
-        android:id="@+id/gv_city_list"
+    <com.aizou.peachtravel.common.widget.FlowLayout
+        android:id="@+id/fl_city_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="3"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:cacheColorHint="@android:color/transparent"
-        android:fadingEdge="none"
-        android:listSelector="@android:color/transparent">
+        android:layout_height="wrap_content"/>
 
-    </com.aizou.core.widget.FixedGridView>
 
 </LinearLayout>

@@ -30,6 +30,7 @@ import com.aizou.peachtravel.bean.CityBean;
 import com.aizou.peachtravel.bean.InCityBean;
 import com.aizou.peachtravel.bean.OutCountryBean;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class SelectDestFragment extends PeachBaseActivity {
+public class SelectDestActivity extends PeachBaseActivity {
     private ListView mInListView,mOutCountryListView;
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
@@ -47,12 +48,10 @@ public class SelectDestFragment extends PeachBaseActivity {
     private List<OutCountryBean> outCountryList;
     private List<CityBean> allAddCityList = new ArrayList<CityBean>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = View.inflate(mContext,R.layout.fragment_dest, null);
-        setContentView(rootView);
+        View rootView = View.inflate(mContext,R.layout.activity_select_dest, null);
         mInListView = (ListView) rootView.findViewById(R.id.lv_in_city);
         mOutCountryListView = (ListView) rootView.findViewById(R.id.lv_out_country);
         inOutRg = (RadioGroup) rootView.findViewById(R.id.in_out_rg);
@@ -84,20 +83,19 @@ public class SelectDestFragment extends PeachBaseActivity {
 //        ImageLoader.getInstance().displayImage("http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg",(ImageView)rootView.findViewById(R.id.iv_test));
         initData();
     }
-
-
+    public String sections[]={"A","B","C","D"};
     private void initData() {
 
         incityList = new ArrayList<InCityBean>();
         outCountryList = new ArrayList<OutCountryBean>();
         for (int i = 0; i < 4; i++) {
             InCityBean inCity = new InCityBean();
-            inCity.descStr = "文艺路线";
+            inCity.section = sections[i];
             ArrayList<CityBean> cityBeans = new ArrayList<CityBean>();
             inCity.cityList = cityBeans;
             for (int j = 0; j < 5; j++) {
                 CityBean city = new CityBean();
-                city.name = "云南";
+                city.zhName = "云南";
                 city.image = "http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg";
                 cityBeans.add(city);
             }
@@ -132,30 +130,22 @@ public class SelectDestFragment extends PeachBaseActivity {
 
 
     private class InCityViewHolder extends ViewHolderBase<InCityBean> {
-        private TextView nameTv;
-        private FixedGridView cityListGv;
+        private TextView sectionTv;
+        private FlowLayout cityListFl;
 
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View contentView = layoutInflater.inflate(R.layout.dest_in_item, null);
-            nameTv = (TextView) contentView.findViewById(R.id.tv_name);
-            cityListGv = (FixedGridView) contentView.findViewById(R.id.gv_city_list);
+            sectionTv = (TextView) contentView.findViewById(R.id.tv_section);
+            cityListFl = (FlowLayout) contentView.findViewById(R.id.fl_city_list);
             return contentView;
         }
 
         @Override
         public void showData(int position, InCityBean itemData) {
-            nameTv.setText(itemData.descStr);
-            ListViewDataAdapter<CityBean> adapter = new ListViewDataAdapter<CityBean>(new ViewHolderCreator<CityBean>() {
-                @Override
-                public ViewHolderBase<CityBean> createViewHolder() {
-                    return new CityListViewHoder();
-                }
-            });
-            cityListGv.setAdapter(adapter);
-            adapter.getDataList().addAll(itemData.cityList);
-            adapter.notifyDataSetChanged();
+            sectionTv.setText(itemData.section);
+            View cityView = View.inflate(mContext,R.layout.dest_in_item,null);
 
         }
     }
@@ -213,7 +203,7 @@ public class SelectDestFragment extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CityBean itemData) {
-            cityNameTv.setText(itemData.name);
+            cityNameTv.setText(itemData.zhName);
             ImageLoader.getInstance().displayImage(itemData.image, cityIv, UILUtils.getDefaultOption());
             addIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,7 +214,7 @@ public class SelectDestFragment extends PeachBaseActivity {
                     TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
                     ImageView cityIv = (ImageView) cityView.findViewById(R.id.iv_add_city);
                     ImageView removeIv = (ImageView) cityView.findViewById(R.id.iv_remove);
-                    cityNameTv.setText(itemData.name);
+                    cityNameTv.setText(itemData.zhName);
                     ImageLoader.getInstance().displayImage(itemData.image, cityIv, UILUtils.getDefaultOption());
                     removeIv.setOnClickListener(new View.OnClickListener() {
                         @Override

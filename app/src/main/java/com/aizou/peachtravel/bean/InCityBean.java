@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Rjm on 2014/10/9.
  */
 public class InCityBean {
-    public String descStr;
+    public String section;
     public List<CityBean> cityList;
 
 }
