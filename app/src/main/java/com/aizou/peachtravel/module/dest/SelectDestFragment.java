@@ -24,6 +24,7 @@ import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.CityBean;
 import com.aizou.peachtravel.bean.InCityBean;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class MakeTravelFragment extends PeachBaseFragment {
+public class SelectDestFragment extends PeachBaseActivity {
     private ListView mInListView,mOutCountryListView;
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
@@ -47,10 +48,11 @@ public class MakeTravelFragment extends PeachBaseFragment {
     private List<CityBean> allAddCityList = new ArrayList<CityBean>();
 
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dest, null);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View rootView = View.inflate(mContext,R.layout.fragment_dest, null);
+        setContentView(rootView);
         mInListView = (ListView) rootView.findViewById(R.id.lv_in_city);
         mOutCountryListView = (ListView) rootView.findViewById(R.id.lv_out_country);
         inOutRg = (RadioGroup) rootView.findViewById(R.id.in_out_rg);
@@ -81,8 +83,8 @@ public class MakeTravelFragment extends PeachBaseFragment {
         });
 //        ImageLoader.getInstance().displayImage("http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg",(ImageView)rootView.findViewById(R.id.iv_test));
         initData();
-        return rootView;
     }
+
 
     private void initData() {
 
@@ -216,7 +218,7 @@ public class MakeTravelFragment extends PeachBaseFragment {
             addIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    View cityView = View.inflate(getActivity(), R.layout.dest_add_item, null);
+                    View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
                     citysLl.addView(cityView);
                     allAddCityList.add(itemData);
                     TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);

@@ -46,6 +46,7 @@ public class CityDetailActivity extends PeachBaseActivity {
 
     private void initData() {
         String id = getIntent().getStringExtra("id");
+        id="53aa9a6410114e3fd47833bd";
         getCityDetailData(id);
     }
 
@@ -61,6 +62,7 @@ public class CityDetailActivity extends PeachBaseActivity {
         mCityDescTv = (TextView) headerView.findViewById(R.id.tv_city_desc);
         mCostTimeTv = (TextView) headerView.findViewById(R.id.tv_cost_time);
         bestMonthTv = (TextView) headerView.findViewById(R.id.tv_best_month);
+
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -96,6 +98,7 @@ public class CityDetailActivity extends PeachBaseActivity {
         mCostTimeTv.setText(detailBean.timeCost+"天");
         bestMonthTv.setText(detailBean.travelMonth);
         travelAdapter.getDataList().addAll(detailBean.travelNote);
+        travelAdapter.notifyDataSetChanged();
 
     }
 

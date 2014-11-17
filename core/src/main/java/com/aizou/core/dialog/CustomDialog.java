@@ -7,7 +7,6 @@ import android.view.WindowManager;
 import android.view.WindowManager.BadTokenException;
 
 import com.aizou.core.R;
-import com.aizou.core.log.LogGloble;
 
 
 /**
@@ -52,11 +51,10 @@ public class CustomDialog extends Dialog {
 
 	@Override
 	public void dismiss() {
-		LogGloble.d(TAG, "custom dialog dismiss!");
 		try {
 			super.dismiss();
 		} catch (BadTokenException e) {
-			LogGloble.w(TAG, "custom dialog dismiss error", e);
+            e.printStackTrace();
 		}
 
 	}
@@ -74,7 +72,7 @@ public class CustomDialog extends Dialog {
 		try {
 			super.show();
 		} catch (Exception e) {
-			LogGloble.w(TAG, "custom dialog show error", e);
+            e.printStackTrace();
 		}
 
 	}

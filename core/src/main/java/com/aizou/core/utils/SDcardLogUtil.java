@@ -4,9 +4,6 @@ import android.os.Environment;
 import android.util.Log;
 
 
-import com.aizou.core.base.BaseApplication;
-import com.aizou.core.log.LogGloble;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,7 +35,7 @@ public class SDcardLogUtil {
 			}
 			writeToFile(log, file);
 		} catch (final Exception e) {
-			LogGloble.exceptionPrint(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -62,7 +59,7 @@ public class SDcardLogUtil {
 			}
 			writeToFile(log, file);
 		} catch (final Exception e) {
-			LogGloble.exceptionPrint(e);
+            e.printStackTrace();
 		}
 	}
 
@@ -87,7 +84,7 @@ public class SDcardLogUtil {
 			Log.d("httplog", "读取的本地 " + requestMethod + "  json ==  " + json);
 			return json;
 		} catch (final Exception e) {
-			LogGloble.exceptionPrint(e);
+			e.printStackTrace();
 		}
 		return "";
 	}

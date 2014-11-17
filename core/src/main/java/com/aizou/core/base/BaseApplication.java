@@ -13,20 +13,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 
 import com.aizou.core.constant.LayoutValue;
-import com.aizou.core.exception.CrashHandler;
-import com.aizou.core.log.LogGloble;
-import com.aizou.core.log.LogManager;
-import com.aizou.core.utils.FileUtils;
 import com.aizou.core.utils.LengthUtils;
 import com.aizou.core.utils.LocalDisplay;
-import com.lidroid.xutils.DbUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,8 +85,8 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mBaseApplication = this;
-        LogGloble.i(TAG, "BaseApplicationon onCreate...");
-        LogManager.init(this);
+//        LogGloble.i(TAG, "BaseApplicationon onCreate...");
+//        LogManager.init(this);
         init();
 
 //        CrashHandler crashHandler = CrashHandler.getInstance();
@@ -108,10 +102,6 @@ public class BaseApplication extends Application {
             LayoutValue.SCREEN_HEIGHT = dm.widthPixels;
         }
         LocalDisplay.init(dm);
-        LogGloble.d("info", "LayoutValue.SCREEN_WIDTH-- "
-                + LayoutValue.SCREEN_WIDTH);
-        LogGloble.d("info", "LayoutValue.SCREEN_HEIGHT-- "
-                + LayoutValue.SCREEN_HEIGHT);
 //		try {
 //			String db_path = Environment.getExternalStorageDirectory()
 //					.getAbsolutePath();
@@ -134,7 +124,7 @@ public class BaseApplication extends Application {
 
     @Override
     public void onTerminate() {
-        LogGloble.i(TAG, "BaseApplicationon onTerminate...");
+//        LogGloble.i(TAG, "BaseApplicationon onTerminate...");
         super.onTerminate();
     }
 
@@ -165,7 +155,6 @@ public class BaseApplication extends Application {
         try {
             final PackageInfo pi = pm.getPackageInfo(getPackageName(), 0);
             APP_NAME = getString(pi.applicationInfo.labelRes);
-            LogGloble.d("info", "APP_NAME == " + APP_NAME);
             APP_VERSION_CODE
                     = pi.versionCode;
             APP_VERSION_NAME =
@@ -176,46 +165,7 @@ public class BaseApplication extends Application {
                     Environment.getExternalStorageDirectory();
             APP_STORAGE =
                     getAppStorage(APP_PACKAGE);
-            LogGloble.i(APP_NAME, APP_NAME + " (" + APP_PACKAGE + ")" + " "
-                    + APP_VERSION_NAME + "(" + pi.versionCode + ")");
-            LogGloble.i(APP_NAME,
-                    "Root             dir: " + Environment.getRootDirectory());
-            LogGloble.i(APP_NAME,
-                    "Data             dir: " + Environment.getDataDirectory());
-            LogGloble.i(APP_NAME, "External storage dir: " + EXT_STORAGE);
-            LogGloble.i(APP_NAME, "App      storage dir: " + APP_STORAGE);
-            LogGloble.i(
-                    APP_NAME,
-                    "Files            dir: "
-                            + FileUtils.getAbsolutePath(getFilesDir()));
-            LogGloble.i(
-                    APP_NAME,
-                    "Cache            dir: "
-                            + FileUtils.getAbsolutePath(getCacheDir()));
-            LogGloble.i(APP_NAME, "System locale       : " + defLocale);
-            LogGloble.i(APP_NAME, "BOARD       : " + Build.BOARD);
-            LogGloble.i(APP_NAME, "BRAND       : " + Build.BRAND);
-            LogGloble.i(
-                    APP_NAME,
-                    "CPU_ABI     : "
-                            + BUILD_PROPS.getProperty("ro.product.cpu.abi"));
-            LogGloble.i(
-                    APP_NAME,
-                    "CPU_ABI2    : "
-                            + BUILD_PROPS.getProperty("ro.product.cpu.abi2"));
-            LogGloble.i(APP_NAME, "DEVICE      : " + Build.DEVICE);
-            LogGloble.i(APP_NAME, "DISPLAY     : " + Build.DISPLAY);
-            LogGloble.i(APP_NAME, "FINGERPRINT : " + Build.FINGERPRINT);
-            LogGloble.i(APP_NAME, "ID          : " + Build.ID);
-            LogGloble.i(
-                    APP_NAME,
-                    "MANUFACTURER: "
-                            + BUILD_PROPS
-                            .getProperty("ro.product.manufacturer"));
-            LogGloble.i(APP_NAME, "MODEL       : " + Build.MODEL);
-            LogGloble.i(APP_NAME, "PRODUCT     : " + Build.PRODUCT);
         } catch (final NameNotFoundException e) {
-            LogGloble.w(TAG, "init NameNotFoundException", e);
         }
     }
 
@@ -259,7 +209,6 @@ public class BaseApplication extends Application {
             context.getResources().updateConfiguration(config,
                     context.getResources().getDisplayMetrics());
         }
-        LogGloble.i(APP_NAME, "UI Locale: " + appLocale);
     }
 
 

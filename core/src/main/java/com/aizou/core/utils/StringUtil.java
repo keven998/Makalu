@@ -5,7 +5,7 @@ package com.aizou.core.utils;
  */
 
 
-import com.aizou.core.log.LogGloble;
+import com.aizou.core.log.LogUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
@@ -998,7 +998,7 @@ public class StringUtil {
 			if (chars[i] >= '0' && chars[i] <= '9' || chars[i] >= 'A'
 					&& chars[i] <= 'Z' || chars[i] >= 'a' && chars[i] <= 'z'
 					|| chars[i] == '+' || chars[i] == '/' || chars[i] == '=') {
-				LogGloble.d(TAG, "isBase64 true");
+				LogUtil.d(TAG, "isBase64 true");
 			} else {
 				return false;
 			}

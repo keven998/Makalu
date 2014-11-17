@@ -12,7 +12,6 @@ import com.aizou.core.constant.LibConfig;
 import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.http.parser.IReponseParser;
-import com.aizou.core.log.LogGloble;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SDcardLogUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -26,7 +25,6 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,7 +110,7 @@ public class HttpManager {
                             }
                         }
                     } catch (Exception e) {
-                        LogGloble.e(TAG, e.toString());
+                        e.printStackTrace();
 //							DialogManager.getInstance()
 //									.dissMissProgressDialog();
                     }
@@ -122,7 +120,7 @@ public class HttpManager {
                 @Override
                 public void onFailure(HttpException error, String msg) {
 //					DialogManager.getInstance().dissMissProgressDialog();
-                    LogGloble.e(TAG, "error Code = " + error.getExceptionCode()
+                    LogUtil.e(TAG, "error Code = " + error.getExceptionCode()
                             + "error msg= " + msg);
                     if (callBack != null) {
                         callBack.doFailure(error, msg,
@@ -168,7 +166,7 @@ public class HttpManager {
             ptHandler.setHandler(handler);
             return ptHandler;
         } catch (Exception e) {
-            LogGloble.exceptionPrint(e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -222,7 +220,7 @@ public class HttpManager {
                     });
             downloadsMap.put(url, handler);
         } catch (Exception e) {
-            LogGloble.exceptionPrint(e);
+            e.printStackTrace();
         }
     }
 

@@ -12,8 +12,6 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 
-import com.aizou.core.log.LogGloble;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -263,7 +261,7 @@ public class DateUtil {
 		try {
 			return getCalendarWithDate(sdf.parse(dateStr.substring(0, 10)));
 		} catch (Exception e) {
-			LogGloble.e(TAG, "checkDate1(dateStr,c) 格式转换错误");
+			e.printStackTrace();
 			return Calendar.getInstance();
 		}
 	}

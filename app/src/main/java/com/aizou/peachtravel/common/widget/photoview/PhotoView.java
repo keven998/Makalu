@@ -185,5 +185,10 @@ public class PhotoView extends ImageView implements IPhotoView {
 		mAttacher.cleanup();
 		super.onDetachedFromWindow();
 	}
+    public void clearZoom() {
+        if (mAttacher.getScale() > PhotoViewAttacher.DEFAULT_MIN_SCALE) {
+            mAttacher.zoomTo(PhotoViewAttacher.DEFAULT_MIN_SCALE, getWidth()/2, getHeight()/2);
+        }
+    }
 
 }

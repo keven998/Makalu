@@ -5,4 +5,5 @@ package com.aizou.peachtravel.bean;
  */
 public class UploadTokenBean {
     public String uploadToken;
+    public String key;
 }

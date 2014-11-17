@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.BitmapTools;
 import com.aizou.core.utils.LocalDisplay;
@@ -67,6 +68,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView phoneTv;
     private File cameraFile;
     private PeachUser user;
+    DisplayImageOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
+       options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -237,7 +239,26 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         public void doSucess(String result, String method) {
                             CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result,UploadTokenBean.class);
                             if(tokenResult.code==0){
-                                UploadControl.getInstance().uploadImage(mContext,tokenResult.result.uploadToken,imageFile);
+                                UploadControl.getInstance().uploadImage(mContext,tokenResult.result.uploadToken,tokenResult.result.key,imageFile,new UploadControl.UploadCallback() {
+                                    @Override
+                                    public void onSuccess(String url) {
+                                        user.avatar = url;
+                                        AccountManager.getInstance().saveLoginAccount(mContext,user);
+                                        ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
+                                                options);
+                                    }
+
+                                    @Override
+                                    public void onProcess(long current, long total) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(String failture) {
+                                        ToastUtil.getInstance(mContext).showToast("上传失败");
+
+                                    }
+                                });
                             }
                         }
 

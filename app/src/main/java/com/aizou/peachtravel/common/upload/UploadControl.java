@@ -24,55 +24,69 @@ import java.util.List;
  */
 public class UploadControl {
 
-//    public static String uptoken = "anEC5u_72gw1kZPSy3Dsq1lo_DPXyvuPDaj4ePkN:zmaikrTu1lgLb8DTvKQbuFZ5ai0=:eyJzY29wZSI6ImFuZHJvaWRzZGsiLCJyZXR1cm5Cb2R5Ijoie1wiaGFzaFwiOlwiJChldGFnKVwiLFwia2V5XCI6XCIkKGtleSlcIixcImZuYW1lXCI6XCIgJChmbmFtZSkgXCIsXCJmc2l6ZVwiOlwiJChmc2l6ZSlcIixcIm1pbWVUeXBlXCI6XCIkKG1pbWVUeXBlKVwiLFwieDphXCI6XCIkKHg6YSlcIn0iLCJkZWFkbGluZSI6MTQ2NjIyMjcwMX0=";
+    //    public static String uptoken = "anEC5u_72gw1kZPSy3Dsq1lo_DPXyvuPDaj4ePkN:zmaikrTu1lgLb8DTvKQbuFZ5ai0=:eyJzY29wZSI6ImFuZHJvaWRzZGsiLCJyZXR1cm5Cb2R5Ijoie1wiaGFzaFwiOlwiJChldGFnKVwiLFwia2V5XCI6XCIkKGtleSlcIixcImZuYW1lXCI6XCIgJChmbmFtZSkgXCIsXCJmc2l6ZVwiOlwiJChmc2l6ZSlcIixcIm1pbWVUeXBlXCI6XCIkKG1pbWVUeXBlKVwiLFwieDphXCI6XCIkKHg6YSlcIn0iLCJkZWFkbGluZSI6MTQ2NjIyMjcwMX0=";
 //    // upToken 这里需要自行获取. SDK 将不实现获取过程. 隔一段时间到业务服务器重新获取一次
     public static Authorizer auth = new Authorizer();
     private static UploadControl instance;
-    public static UploadControl getInstance(){
-        if(instance==null){
+
+    public static UploadControl getInstance() {
+        if (instance == null) {
             instance = new UploadControl();
         }
         return instance;
     }
 
+   public interface UploadCallback {
+        void onSuccess(String url);
+
+        void onProcess(long current, long total);
+
+        void onFailure(String failture);
+    }
+
     // 在七牛绑定的对应bucket的域名. 更换 uptoken 时同时更换为对应的空间名，
     public static String bucketName = "taozi-uploads";
 
-    private void clean(){
+    private void clean() {
         executor = null;
     }
 
     volatile boolean uploading = false;
     UploadTaskExecutor executor;
     PutExtra mExtra = new PutExtra();
-    public  void uploadImage(Context context,String uploadToken,File imageFile){
-       auth.setUploadToken(uploadToken);
-       doResumableUpload(context,imageFile,mExtra);
+
+    public void uploadImage(Context context, String uploadToken, String key, File imageFile,UploadCallback callback) {
+        auth.setUploadToken(uploadToken);
+        doResumableUpload(context, key, imageFile, mExtra,callback);
     }
-    public void doResumableUpload(Context context,final File file, PutExtra extra) {
+
+    public void doResumableUpload(Context context, String fileKey, final File file, PutExtra extra, final UploadCallback callback) {
         final MyBlockRecord record = MyBlockRecord.genFromUri(context, file);
 
-        String key = null;
-        if(extra != null){
+        final String key = fileKey;
+        if (extra != null) {
             extra.params = new HashMap<String, String>();
             extra.params.put("x:a", "bb");
         }
         List<SliceUploadTask.Block> blks = record.loadBlocks();
         String s = "blks.size(): " + blks.size() + " ==> ";
-        for(SliceUploadTask.Block blk : blks ){
+        for (SliceUploadTask.Block blk : blks) {
             s += blk.getIdx() + ", ";
         }
         final String pre = s + "\r\n";
         uploading = true;
 
-        executor = ResumableIO.putFile( auth, key, file, extra, blks, new CallBack() {
+        executor = ResumableIO.putFile(auth, key, file, extra, blks, new CallBack() {
             @Override
             public void onSuccess(UploadCallRet ret) {
                 uploading = false;
-                String key = ret.getKey();
+
                 String redirect = "http://" + bucketName + ".qiniudn.com/" + key;
+
                 String redirect2 = "http://" + bucketName + ".u.qiniudn.com/" + key;
-                LogUtil.d("success---"+ret.getResponse());
+                if(callback!=null)
+                    callback.onSuccess(redirect);
+                LogUtil.d("success---" + ret.getResponse());
                 record.removeBlocks();
                 clean();
             }
@@ -80,7 +94,9 @@ public class UploadControl {
             @Override
             public void onProcess(long current, long total) {
                 int percent = (int) (current * 100 / total);
-                LogUtil.d("process---"+percent);
+                if(callback!=null)
+                    callback.onProcess(current, total);
+                LogUtil.d("process---" + percent);
                 //int i = 3/0;
             }
 
@@ -91,31 +107,34 @@ public class UploadControl {
 
             @Override
             public void onFailure(CallRet ret) {
-                LogUtil.d("failure---"+ret.getResponse());
+                LogUtil.d("failure---" + ret.getResponse());
+                if(callback!=null)
+                    callback.onFailure(ret.getResponse());
                 uploading = false;
                 clean();
             }
         });
     }
 
-    static class MyBlockRecord{
+    static class MyBlockRecord {
         private static HashMap<String, List<SliceUploadTask.Block>> records = new HashMap<String, List<SliceUploadTask.Block>>();
 
-        public static MyBlockRecord genFromUri(Context context, File file){
+        public static MyBlockRecord genFromUri(Context context, File file) {
             String id = file.getPath() + context.toString();
             return new MyBlockRecord(id);
         }
 
         private final String id;
         private List<SliceUploadTask.Block> lastUploadBlocks;
-        public MyBlockRecord(String id){
+
+        public MyBlockRecord(String id) {
             this.id = id;
         }
 
         public List<SliceUploadTask.Block> loadBlocks() {
-            if(lastUploadBlocks == null){
+            if (lastUploadBlocks == null) {
                 List<SliceUploadTask.Block> t = records.get(id);
-                if(t == null){
+                if (t == null) {
                     t = new ArrayList<SliceUploadTask.Block>();
                     records.put(id, t);
                 }
@@ -127,13 +146,13 @@ public class UploadControl {
         /**
          * @param blk 断点记录， 以4M为一个断点单元
          */
-        public void saveBlock(SliceUploadTask.Block blk){
-            if(lastUploadBlocks != null){
+        public void saveBlock(SliceUploadTask.Block blk) {
+            if (lastUploadBlocks != null) {
                 lastUploadBlocks.add(blk);
             }
         }
 
-        public void removeBlocks(){
+        public void removeBlocks() {
             records.remove(id);
         }
     }

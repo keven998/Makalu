@@ -1,7 +1,9 @@
 package com.aizou.core.secure;
 
 
-import com.aizou.core.log.LogGloble;
+import android.util.Log;
+
+import com.aizou.core.log.LogUtil;
 
 import java.security.Key;
 import java.util.Random;
@@ -158,20 +160,20 @@ public abstract class PBECoder extends Coder {
 		String key;
 		try {
 			key = DESCoder.DEFAULT_KEY;
-			LogGloble.i(TAG, "原文:\t" + inputStr);
+			LogUtil.i(TAG, "原文:\t" + inputStr);
 
-			LogGloble.i(TAG, "密钥:\t" + key);
+            LogUtil.i(TAG, "密钥:\t" + key);
 
 			String inputData = PBECoder.encrypt(inputStr,"123","salt");
 
-			LogGloble.i(TAG, "加密后:\t" + inputData);
+			LogUtil.i(TAG, "加密后:\t" + inputData);
 
 			String outputData = PBECoder.decrypt(inputData,"123","salt");
 
-			LogGloble.i(TAG, "解密后:\t" + outputData);
+            LogUtil.i(TAG, "解密后:\t" + outputData);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			LogGloble.exceptionPrint(e);
+			e.printStackTrace();
 		}
 
 	}

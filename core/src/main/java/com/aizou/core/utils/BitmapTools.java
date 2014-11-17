@@ -15,8 +15,6 @@ import android.os.Environment;
 import android.util.Base64;
 
 
-import com.aizou.core.log.LogGloble;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -135,7 +133,7 @@ public class BitmapTools {
 		try {
 			saveBitmap(file.getAbsolutePath(), saveBitmap);
 		} catch (IOException e) {
-			LogGloble.exceptionPrint(e);
+			e.printStackTrace();
 		}
 		saveBitmap = null;
 
@@ -298,14 +296,14 @@ public class BitmapTools {
 					.getContentResolver()
 					.openAssetFileDescriptor(selectedImage, "r");
 		} catch (FileNotFoundException e) {
-			LogGloble.exceptionPrint(e);
+			e.printStackTrace();
 		} finally {
 			try {
 				bm = BitmapFactory.decodeFileDescriptor(
                         fileDescriptor.getFileDescriptor(), null, options);
 				fileDescriptor.close();
 			} catch (IOException e) {
-				LogGloble.exceptionPrint(e);
+				e.printStackTrace();
 			}
 		}
 		return bm;
