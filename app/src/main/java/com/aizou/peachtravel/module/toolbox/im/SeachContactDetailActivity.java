@@ -107,7 +107,7 @@ public class SeachContactDetailActivity extends BaseChatActivity{
                     jsonObject.put("easemobUser",myUser.easemobUser);
                     jsonObject.put("attachMsg","加个好友呗 桃子");
                     cmdMsg.setAttribute("content",jsonObject.toString());
-                    DialogManager.getInstance().showProgressDialog(mContext);
+                    DialogManager.getInstance().showProgressDialog(SeachContactDetailActivity.this);
                     EMChatManager.getInstance().sendMessage(cmdMsg, new EMCallBack() {
                         @Override
                         public void onSuccess() {

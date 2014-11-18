@@ -16,6 +16,7 @@ import com.aizou.peachtravel.bean.ValidationBean;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -39,6 +40,9 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_reg);
         ViewUtils.inject(this);
         regBtn.setOnClickListener(this);
+
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("注册");
     }
 
     @Override
@@ -57,7 +61,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(RegActivity.this);
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE,null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
@@ -94,4 +98,5 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
             finish();
         }
     }
+
 }

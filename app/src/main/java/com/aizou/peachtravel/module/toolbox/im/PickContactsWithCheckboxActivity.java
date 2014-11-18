@@ -238,7 +238,7 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
 
 
         } else if(groupId!=null){
-            DialogManager.getInstance().showProgressDialog(mContext);
+            DialogManager.getInstance().showProgressDialog(PickContactsWithCheckboxActivity.this);
             new Thread(new Runnable() {
 
                 public void run() {

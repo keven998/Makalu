@@ -16,6 +16,7 @@ package com.aizou.peachtravel.module.toolbox.im.adapter;
 import java.util.List;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
@@ -134,7 +135,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	 * @param msg
 	 */
 	private void acceptInvitation(final Button button, final InviteMessage msg) {
-        DialogManager.getInstance().showProgressDialog(context);
+        DialogManager.getInstance().showProgressDialog((Activity)context);
         UserApi.addContact(msg.getUserId()+"",new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {

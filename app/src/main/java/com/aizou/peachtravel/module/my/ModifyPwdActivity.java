@@ -60,7 +60,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                         return;
                     }
-                    DialogManager.getInstance().showProgressDialog(mContext);
+                    DialogManager.getInstance().showProgressDialog(ModifyPwdActivity.this);
                     UserApi.modifyPwd(oldPwdEt.getText().toString().trim(),newPwdEt.getText().toString().trim(),user.userId+"",new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {

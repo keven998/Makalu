@@ -1,5 +1,6 @@
 package com.aizou.core.dialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -352,7 +353,7 @@ public class DialogManager {
      *
      * @param context 上下文
      */
-    public void showProgressDialog(Context context) {
+    public void showProgressDialog(Activity context) {
         mProgressDialog = createProgressDialog(context,null,null);
     }
 

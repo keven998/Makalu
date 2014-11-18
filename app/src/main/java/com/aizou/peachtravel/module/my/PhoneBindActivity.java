@@ -79,7 +79,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(PhoneBindActivity.this);
 
                 String uid=null ;
                 if(user!=null){
@@ -119,7 +119,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(PhoneBindActivity.this);
                 UserApi.checkValidation(phoneEt.getText().toString().trim(),smsEt.getText().toString(),UserApi.ValidationCode.BIND_PHONE,user.userId+"",new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {

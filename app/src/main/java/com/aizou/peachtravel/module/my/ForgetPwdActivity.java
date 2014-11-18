@@ -22,6 +22,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -37,6 +38,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     private Button nextBtn;
     @ViewInject(R.id.btn_time_down)
     private Button downTimeBtn;
+    private TitleHeaderBar titleBar;
     private CountDownTimer countDownTimer;
     private int countDown;
     private String sendSuccessPhone;
@@ -44,6 +46,8 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
+        titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("找回密码");
         ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
@@ -77,7 +81,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(ForgetPwdActivity.this);
 
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
                     @Override
@@ -114,7 +118,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(ForgetPwdActivity.this);
                 UserApi.checkValidation(phoneEt.getText().toString().trim(),smsEt.getText().toString(),UserApi.ValidationCode.FIND_PWD,null,new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {

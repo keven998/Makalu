@@ -101,7 +101,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         return;
                     }
                     if(actionCode.equals(UserApi.ValidationCode.REG_CODE)){
-                        DialogManager.getInstance().showProgressDialog(mContext);
+                        DialogManager.getInstance().showProgressDialog(VerifyPhoneActivity.this);
                         UserApi.signUp(tel,pwd,smsEt.getText().toString().trim(),new HttpCallBack<String>() {
                             @Override
                             public void doSucess(String result, String method) {
@@ -130,7 +130,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext);
+                DialogManager.getInstance().showProgressDialog(VerifyPhoneActivity.this);
 
                 String uid=null ;
                 if(user!=null){
