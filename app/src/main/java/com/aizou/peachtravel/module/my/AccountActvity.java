@@ -31,12 +31,8 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
-<<<<<<< Updated upstream
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-=======
-import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.config.Constant;
->>>>>>> Stashed changes
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

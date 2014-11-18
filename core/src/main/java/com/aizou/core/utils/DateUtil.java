@@ -29,6 +29,7 @@ public class DateUtil {
 	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	public static SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
 	public static SimpleDateFormat sdf4= new SimpleDateFormat("HH-mm-ss");
+    public static SimpleDateFormat sdf5= new SimpleDateFormat("MM月dd日");
 	/**
 	 * 获取当前时间并格式化成 yyyy-mm-dd hh-mm-ss格式
 	 * 
@@ -55,6 +56,15 @@ public class DateUtil {
 	public static final String getCurrentFormateTime3() {
 		return sdf3.format(new Date());
 	}
+
+    /**
+     * 获取当前时间并格式化成 MM月dd日 格式
+     *
+     * @return
+     */
+    public static final String getCurrentMonthDay() {
+        return sdf5.format(new Date());
+    }
 
 	/**
 	 * 格式化成 yyyy-mm-dd hh-mm格式

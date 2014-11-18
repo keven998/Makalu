@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sns">
+        <item>QQ空间</item>
+        <item>新浪微博</item>
+        <item>腾讯微博</item>
+        <item>豆瓣</item>
+        <item>人人</item>
+    </string-array>
+    <string-array name="sns_icons">
+        <item>@drawable/ic_share_qzone</item>
+        <item>@drawable/ic_share_sina</item>
+        <item>@drawable/ic_share_tecent_weibo</item>
+        <item>@drawable/ic_share_douban</item>
+        <item>@drawable/ic_share_renren</item>
+    </string-array>
+    <string-array name="weather">
+        <item>龙卷风</item>
+        <item>热带风暴</item>
+        <item>暴风</item>
+        <item>大雷雨</item>
+        <item>雷阵雨</item>
+        <item>雨夹雪</item>
+        <item>雨夹雹</item>
+        <item>雪夹雹</item>
+        <item>冻雾雨</item>
+        <item>细雨</item>
+        <item>冻雨</item>
+        <item>阵雨</item>
+        <item>阵雨</item>
+        <item>阵雪</item>
+        <item>小阵雪</item>
+        <item>高吹雪</item>
+        <item>雪</item>
+        <item>冰雹</item>
+        <item>雨淞</item>
+        <item>粉尘</item>
+        <item>雾</item>
+        <item>薄雾</item>
+        <item>烟雾</item>
+        <item>大风</item>
+        <item>风</item>
+        <item>冷</item>
+        <item>阴</item>
+        <item>多云</item>
+        <item>多云</item>
+        <item>局部多云</item>
+        <item>局部多云</item>
+        <item>晴</item>
+        <item>晴</item>
+        <item>转晴</item>
+        <item>转晴</item>
+        <item>雨夹冰雹</item>
+        <item>热</item>
+        <item>局部雷雨</item>
+        <item>偶有雷雨</item>
+        <item>偶有雷雨</item>
+        <item>偶有阵雨</item>
+        <item>大雪</item>
+        <item>零星阵雪</item>
+        <item>大雪</item>
+        <item>局部多云</item>
+        <item>雷阵雨</item>
+        <item>阵雪</item>
+        <item>局部雷阵雨</item>
+        <item>水深火热</item>
+    </string-array>
+</resources>
