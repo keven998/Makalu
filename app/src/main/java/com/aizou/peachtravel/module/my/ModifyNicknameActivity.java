@@ -27,11 +27,10 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 /**
  * Created by Rjm on 2014/10/11.
  */
-public class ModifyNicknameActivity extends PeachBaseActivity implements View.OnClickListener {
+public class ModifyNicknameActivity extends PeachBaseActivity {
     @ViewInject(R.id.et_nickname)
     private EditText nickEt;
-    @ViewInject(R.id.iv_delete)
-    private ImageView deleteIv;
+
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
 
@@ -42,11 +41,13 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_nickname);
         ViewUtils.inject(this);
-        deleteIv.setOnClickListener(this);
-        titleHeaderBar.getRightTextView().setText("保存");
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.title_bar);
+        titleBar.getTitleTextView().setText("修改昵称");
+
+        findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if(!RegexUtils.checkNickName(nickEt.getText().toString().trim())){
                     ToastUtil.getInstance(mContext).showToast("请输入正确格式昵称");
                     return;
@@ -83,11 +84,12 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
 
                     @Override
                     public void onStart() {
+
                     }
                 });
-
             }
         });
+
         initData();
 
     }
@@ -103,13 +105,4 @@ public class ModifyNicknameActivity extends PeachBaseActivity implements View.On
         }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_delete:
-                nickEt.setText("");
-                break;
-        }
-    }
 }

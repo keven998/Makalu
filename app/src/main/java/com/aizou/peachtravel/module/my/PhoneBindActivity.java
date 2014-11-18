@@ -22,6 +22,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -50,7 +51,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
+
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("绑定手机");
     }
+
     private void startCountDownTime(){
         downTimeBtn.setClickable(false);
         countDownTimer= new CountDownTimer(countDown*1000, 1000) {

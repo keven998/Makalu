@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
@@ -21,6 +22,7 @@ import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -60,8 +62,11 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         initData();
         startCountDownTime();
 
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("注册验证");
 
-
+        TextView tips = (TextView)findViewById(R.id.tips);
+        tips.setText(String.format("已发送短信验证码至 %s\n网络有延迟,请稍后", tel));
     }
     private void initData(){
         tel = getIntent().getStringExtra("tel");
@@ -70,8 +75,6 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         actionCode = getIntent().getStringExtra("actionCode");
         user = AccountManager.getInstance().getLoginAccount(this);
     }
-
-
 
     private void startCountDownTime(){
         downTimeBtn.setClickable(false);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -125,23 +126,19 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissProgressDialog();
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
                         if(chechResult.code==0){
-
                                 Intent intent = new Intent(mContext,ResetPwdActivity.class);
                                 intent.putExtra("token",chechResult.result.token);
                                 intent.putExtra("phone",phoneEt.getText().toString().trim());
                                 startActivity(intent);
-
                         } else {
-
                             ToastUtil.getInstance(mContext).showToast(chechResult.err.message);
                         }
-
                     }
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
-
+                        Log.e("http", "error = " + msg);
                     }
                 });
 

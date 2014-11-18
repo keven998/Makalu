@@ -8,73 +8,87 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="请确保你的手机畅通，接收短信验证码"
+        android:layout_marginTop="20dp"
+        android:textSize="13sp"
+        android:textColor="@color/base_text_color_text_hint"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_width="fill_parent"
         android:layout_marginTop="10dp"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/editor_with_border"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_phone_24dp"
+            android:drawablePadding="6dp"
+            android:textSize="15sp"
+            android:textColor="@color/base_text_color_title"
+            android:hint="手机号"
+            android:inputType="phone"/>
 
-        <TextView
+        <Button
+            android:id="@+id/btn_time_down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="请确保你的手机畅通，接收短信验证码"/>
+            android:layout_height="34dp"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:textSize="12sp"
+            android:textColor="@color/base_text_color_text_hint"
+            android:text="获取验证码"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_marginTop="20dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/et_phone"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="手机号"
-                android:inputType="text"/>
-            <Button
-                android:id="@+id/btn_time_down"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="验证"/>
-
-            </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/et_sms"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="请输入短信验证码"
-                android:inputType="text"/>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_next"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="下一步"/>
-
-            </LinearLayout>
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/et_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editor_with_border"
+        android:layout_marginTop="7dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/ic_phone_24dp"
+        android:drawablePadding="6dp"
+        android:textSize="15sp"
+        android:textColor="@color/base_text_color_title"
+        android:hint="请输入短信验证码"
+        android:inputType="phone"/>
 
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="确定"
+        android:textSize="15sp"
+        android:textColor="@color/base_color_white"
+        android:background="@drawable/tl_btn_highlight_selector"/>
 
 </LinearLayout>

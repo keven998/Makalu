@@ -26,11 +26,9 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 /**
  * Created by Rjm on 2014/10/11.
  */
-public class ModifySignActivity extends PeachBaseActivity implements View.OnClickListener {
+public class ModifySignActivity extends PeachBaseActivity {
     @ViewInject(R.id.et_sign)
     private EditText signEt;
-    @ViewInject(R.id.iv_delete)
-    private ImageView deleteIv;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
     private PeachUser user;
@@ -38,49 +36,54 @@ public class ModifySignActivity extends PeachBaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
+
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.title_bar);
+        titleBar.getTitleTextView().setText("修改签名");
+
         ViewUtils.inject(this);
-        ViewUtils.inject(this);
-        deleteIv.setOnClickListener(this);
-        titleHeaderBar.getRightTextView().setText("保存");
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(TextUtils.isEmpty(signEt.getText())){
-                    ToastUtil.getInstance(mContext).showToast("请输入签名");
-                    return;
-                }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
-                    ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
-                    return;
-                }
-                DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
-                UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
+
+        findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+                                                           @Override
+                                                           public void onClick(View view) {
+                                                               if(TextUtils.isEmpty(signEt.getText())){
+                                                                   ToastUtil.getInstance(mContext).showToast("请输入签名");
+                                                                   return;
+                                                               }
+                                                               if(!CommonUtils.isNetWorkConnected(mContext)){
+                                                                   ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+                                                                   return;
+                                                               }
+                                                               DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
+                                                               UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
 
 
-                    @Override
-                    public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
-                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
-                        if (modifyResult.code == 0) {
-                            user.signature = signEt.getText().toString().trim();
-                            AccountManager.getInstance().saveLoginAccount(mContext, user);
-                            finish();
-                        }
-                    }
+                                                                   @Override
+                                                                   public void doSucess(String result, String method) {
+                                                                       DialogManager.getInstance().dissMissProgressDialog();
+                                                                       CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+                                                                       if (modifyResult.code == 0) {
+                                                                           user.signature = signEt.getText().toString().trim();
+                                                                           AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                                                           finish();
+                                                                       }
+                                                                   }
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                                                                   @Override
+                                                                   public void doFailure(Exception error, String msg, String method) {
+                                                                       DialogManager.getInstance().dissMissProgressDialog();
 
-                    }
+                                                                   }
 
-                    @Override
-                    public void onStart() {
-                    }
-                });
-                finish();
-            }
-        });
+                                                                   @Override
+                                                                   public void onStart() {
+                                                                   }
+                                                               });
+                                                               finish();
+
+                                                           }
+
+                                                       });
+
         initData();
     }
 
@@ -95,12 +98,4 @@ public class ModifySignActivity extends PeachBaseActivity implements View.OnClic
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_delete:
-                signEt.setText("");
-                break;
-        }
-    }
 }

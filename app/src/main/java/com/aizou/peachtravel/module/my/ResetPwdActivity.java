@@ -17,6 +17,7 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -26,8 +27,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
     @ViewInject(R.id.et_new_password)
     private EditText newPwdEt;
-    @ViewInject(R.id.et_re_password)
-    private EditText rePwdEt;
 
     String mToken;
     String mPhone;
@@ -43,6 +42,8 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
         mPhone = getIntent().getStringExtra("phone");
         user = AccountManager.getInstance().getLoginAccount(this);
 
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("设置密码");
     }
 
     @Override
@@ -50,12 +51,8 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.btn_ok:
                 if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())){
-                    ToastUtil.getInstance(this).showToast("请正确输入6-12位新密码");
-                }else if(!RegexUtils.isPwdOk(rePwdEt.getText().toString().trim())){
-                    ToastUtil.getInstance(this).showToast("请正确输入6-12位确认密码");
-                }else if(!newPwdEt.getText().toString().trim().equals(rePwdEt.getText().toString().trim())){
-                    ToastUtil.getInstance(this).showToast("确认密码不一致");
-                }else{
+                    ToastUtil.getInstance(this).showToast("请正确输入6-16位新密码");
+                } else {
                     DialogManager.getInstance().showProgressDialog(this);
                     UserApi.resetPwd(mPhone,newPwdEt.getText().toString().trim(),mToken,new HttpCallBack<String>() {
                         @Override

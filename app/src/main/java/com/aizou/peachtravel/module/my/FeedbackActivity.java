@@ -17,12 +17,13 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 
 public class FeedbackActivity extends PeachBaseActivity {
 //	private View mTitlebar;
 
-	private EditText contentEt, emailEt, phoneEt;
+    private EditText contentEt;
 	private Button okBtn;
 
 	@Override
@@ -35,8 +36,8 @@ public class FeedbackActivity extends PeachBaseActivity {
 		setContentView(R.layout.activity_feedback);
 		initTitlebar();
 		contentEt = (EditText) findViewById(R.id.et_content);
-		emailEt = (EditText) findViewById(R.id.et_email);
-		phoneEt = (EditText) findViewById(R.id.et_phone);
+//		emailEt = (EditText) findViewById(R.id.et_email);
+//		phoneEt = (EditText) findViewById(R.id.et_phone);
 		okBtn = (Button) findViewById(R.id.btn_ok);
 		okBtn.setOnClickListener(new OnClickListener() {
 
@@ -55,7 +56,8 @@ public class FeedbackActivity extends PeachBaseActivity {
 
 	private void initTitlebar() {
 //		mTitlebar = findViewById(R.id.title_bar);
-
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("找回密码");
 	}
 	
 	@Override
@@ -68,11 +70,11 @@ public class FeedbackActivity extends PeachBaseActivity {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("body", contentEt.getText().toString());
-			jsonObject.put("title", "test");
-			JSONObject contactJson = new JSONObject();
-			contactJson.put("tel", phoneEt.getText().toString());
-			contactJson.put("email", emailEt.getText().toString());
-			jsonObject.put("contact", contactJson);
+//			jsonObject.put("title", "test");
+//			JSONObject contactJson = new JSONObject();
+//			contactJson.put("tel", phoneEt.getText().toString());
+//			contactJson.put("email", emailEt.getText().toString());
+//			jsonObject.put("contact", contactJson);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

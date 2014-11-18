@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.upload.UploadControl;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -59,7 +60,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @ViewInject(R.id.tv_sign)
     private TextView signTv;
     @ViewInject(R.id.ll_modify_pwd)
-    private LinearLayout modifPwdLl;
+    private TextView modifPwdLl;
     @ViewInject(R.id.btn_logout)
     private Button logoutBtn;
     @ViewInject(R.id.tv_bind_phone)
@@ -89,6 +90,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
 
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("个人信息");
     }
 
     @Override
@@ -101,6 +104,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
        options = new DisplayImageOptions.Builder()
+               .showImageForEmptyUri(R.drawable.default_avatar)
+               .showImageOnFail(R.drawable.default_avatar)
+               .showImageOnLoading(R.drawable.default_avatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -203,8 +209,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-
-
     }
 
 
