@@ -22,6 +22,8 @@ public class Constant {
     public static final String MSG_CONTENT="content";
     public static final String FROM_USER="fromUser";
 
+    public static final String QINIU_BUKETNAME="taozi-uploads";
+
     public static class ExtType{
         public static final int GUIDE=1;
         public static final int CITY=2;

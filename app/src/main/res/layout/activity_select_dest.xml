@@ -4,11 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/main_color" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color">
+        android:background="@color/base_color_white">
 
 
         <RadioGroup
@@ -49,25 +54,18 @@
         </RadioGroup>
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_search"
-        android:drawableLeft="@drawable/ic_search"
-        android:drawablePadding="5dp"
-        android:hint="@string/please_input_city_name"
-        android:inputType="text"
-        android:paddingLeft="10dp"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textColorHint="@color/base_text_color_text_hint"
-        android:textSize="14sp" />
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
+        <com.aizou.peachtravel.common.widget.TopSectionBar
+            android:id="@+id/section_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_color"
+            android:clickable="true" />
 
 
         <ListView
@@ -77,6 +75,7 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
+            android:layout_below="@id/section_bar"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"
             android:visibility="visible" />
@@ -91,7 +90,7 @@
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"
             android:visibility="gone" />
-    </FrameLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"

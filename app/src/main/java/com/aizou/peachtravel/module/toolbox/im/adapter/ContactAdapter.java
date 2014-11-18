@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.config.Constant;
@@ -156,13 +157,14 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 
     @Override
     public Object[] getSections() {
-        return new Object[0];
+        LogUtil.d("getSections------------------------");
+        return sections.toArray();
     }
-
+    @Override
     public int getPositionForSection(int section) {
 		return positionOfSection.get(section);
 	}
-
+    @Override
 	public int getSectionForPosition(int position) {
 		return sectionOfPosition.get(position);
 	}

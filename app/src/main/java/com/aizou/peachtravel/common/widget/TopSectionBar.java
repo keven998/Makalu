@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ListView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
@@ -21,7 +22,7 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 public class TopSectionBar extends Gallery {
     private ListView mListView;
     private SectionAdapter mSectionAdapter;
-    private ContactAdapter mContatctAdapter;
+    private SectionIndexer indexer;
     private boolean isGalleryFocus;
     private int curIndex;
 
@@ -35,7 +36,7 @@ public class TopSectionBar extends Gallery {
 
     public void setListView(ListView listView) {
         mListView = listView;
-        mContatctAdapter = (ContactAdapter) mListView.getAdapter();
+        indexer = (SectionIndexer) mListView.getAdapter();
         mListView.setOnScrollListener(new SectionScrollListener());
         mListView.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -67,8 +68,8 @@ public class TopSectionBar extends Gallery {
             if(isGalleryFocus)
                 return;
             int pos = view.getFirstVisiblePosition();
-            if(curIndex!=mContatctAdapter.getSectionForPosition(pos)){
-                curIndex=mContatctAdapter.getSectionForPosition(pos);
+            if(curIndex!=indexer.getSectionForPosition(pos)){
+                curIndex=indexer.getSectionForPosition(pos);
                 int i=curIndex-1;
                 if(i>=0){
                     setSelection(i);
@@ -87,8 +88,8 @@ public class TopSectionBar extends Gallery {
             if(mListView==null)
                 return;
             int i=position+1;
-            if(i<=mContatctAdapter.getSectionList().size()){
-                mListView.setSelection(mContatctAdapter.getPositionForSection(i));
+            if(i<=indexer.getSections().length){
+                mListView.setSelection(indexer.getPositionForSection(i));
             }
 
         }
@@ -105,7 +106,7 @@ public class TopSectionBar extends Gallery {
 
         @Override
         public int getCount() {
-            return mContatctAdapter.getSectionList().size();
+            return indexer.getSections().length;
         }
 
         @Override
@@ -125,7 +126,7 @@ public class TopSectionBar extends Gallery {
                 convertView = View.inflate(getContext(), R.layout.item_section, null);
             }
             sectionTv = (TextView) convertView.findViewById(R.id.tv_section);
-            sectionTv.setText(mContatctAdapter.getSectionList().get(position));
+            sectionTv.setText((CharSequence) indexer.getSections()[position]);
             return convertView;
         }
     }

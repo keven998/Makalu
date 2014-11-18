@@ -1,213 +1,626 @@
 package com.aizou.peachtravel.common.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FlowLayout extends ViewGroup
-{
+import com.aizou.peachtravel.R;
 
-	private static final String TAG = "FlowLayout";
+import java.util.ArrayList;
+import java.util.List;
+
+public class FlowLayout extends ViewGroup {
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+
+    private static final int FILL_LINES_NONE = 0;
+    private static final int FILL_LINES_EXCEPT_LAST = 1;
+    private static final int FILL_LINES_ALL = 2;
+
+    private int horizontalSpacing = 0;
+    private int verticalSpacing = 0;
+    private int orientation = 0;
+    private boolean debugDraw = false;
+    private float weightSum;
+    private float weightDefault;
+    private int gravity = Gravity.LEFT | Gravity.TOP;
+    private FillLines fillLines = FillLines.NONE;
+    private boolean centerJustified = false;
+
+    public FlowLayout(Context context) {
+        super(context);
+
+        this.readStyleParameters(context, null);
+    }
+
+    public FlowLayout(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+
+        this.readStyleParameters(context, attributeSet);
+    }
+
+    public FlowLayout(Context context, AttributeSet attributeSet, int defStyle) {
+        super(context, attributeSet, defStyle);
+
+        this.readStyleParameters(context, attributeSet);
+    }
 
 
-	public FlowLayout(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
 
-	@Override
-	protected LayoutParams generateLayoutParams(
-			LayoutParams p)
-	{
-		return new MarginLayoutParams(p);
-	}
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.getPaddingRight() - this.getPaddingLeft();
+        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - this.getPaddingTop() - this.getPaddingBottom();
 
-	@Override
-	public LayoutParams generateLayoutParams(AttributeSet attrs)
-	{
-		return new MarginLayoutParams(getContext(), attrs);
-	}
+        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-	@Override
-	protected LayoutParams generateDefaultLayoutParams()
-	{
-		return new MarginLayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
-	}
+        int size;
+        int mode;
 
-	/**
-	 * 负责设置子控件的测量模式和大小 根据所有子控件设置自己的宽和高
-	 */
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-	{
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		// 获得它的父容器为它设置的测量模式和大小
-		int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-		int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
-		int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
-		int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
+        if (orientation == HORIZONTAL) {
+            size = sizeWidth;
+            mode = modeWidth;
+        } else {
+            size = sizeHeight;
+            mode = modeHeight;
+        }
 
-		Log.e(TAG, sizeWidth + "," + sizeHeight);
+        int lineThicknessWithSpacing = 0;
+        int lineThickness = 0;
+        int lineLengthWithSpacing = 0;
+        int lineLength;
 
-		// 如果是warp_content情况下，记录宽和高
-		int width = 0;
-		int height = 0;
-		/**
-		 * 记录每一行的宽度，width不断取最大宽度
-		 */
-		int lineWidth = 0;
-		/**
-		 * 每一行的高度，累加至height
-		 */
-		int lineHeight = 0;
+        int prevLinePosition = 0;
+        int prevLineLength = 0;
 
-		int cCount = getChildCount();
+        int controlMaxLength = 0;
+        int controlMaxThickness = 0;
 
-		// 遍历每个子元素
-		for (int i = 0; i < cCount; i++)
-		{
-			View child = getChildAt(i);
-			// 测量每一个child的宽和高
-			measureChild(child, widthMeasureSpec, heightMeasureSpec);
-			// 得到child的lp
-			MarginLayoutParams lp = (MarginLayoutParams) child
-					.getLayoutParams();
-			// 当前子空间实际占据的宽度
-			int childWidth = child.getMeasuredWidth() + lp.leftMargin
-					+ lp.rightMargin;
-			// 当前子空间实际占据的高度
-			int childHeight = child.getMeasuredHeight() + lp.topMargin
-					+ lp.bottomMargin;
-			/**
-			 * 如果加入当前child，则超出最大宽度，则的到目前最大宽度给width，类加height 然后开启新行
-			 */
-			if (lineWidth + childWidth > sizeWidth)
-			{
-				width = Math.max(lineWidth, childWidth);// 取最大的
-				lineWidth = childWidth; // 重新开启新行，开始记录
-				// 叠加当前高度，
-				height += lineHeight;
-				// 开启记录下一行的高度
-				lineHeight = childHeight;
-			} else
-			// 否则累加值lineWidth,lineHeight取最大高度
-			{
-				lineWidth += childWidth;
-				lineHeight = Math.max(lineHeight, childHeight);
-			}
-			// 如果是最后一个，则将当前记录的最大宽度和当前lineWidth做比较
-			if (i == cCount - 1)
-			{
-				width = Math.max(width, lineWidth);
-				height += lineHeight;
-			}
+        List<View> row = new ArrayList<View>();
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() == GONE) {
+                continue;
+            }
 
-		}
-		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth
-				: width, (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
-				: height);
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-	}
-	/**
-	 * 存储所有的View，按行记录
-	 */
-	private List<List<View>> mAllViews = new ArrayList<List<View>>();
-	/**
-	 * 记录每一行的最大高度
-	 */
-	private List<Integer> mLineHeight = new ArrayList<Integer>();
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b)
-	{
-		mAllViews.clear();
-		mLineHeight.clear();
+            child.measure(
+                    getChildMeasureSpec(widthMeasureSpec, this.getPaddingLeft() + this.getPaddingRight(), lp.width),
+                    getChildMeasureSpec(heightMeasureSpec, this.getPaddingTop() + this.getPaddingBottom(), lp.height)
+            );
 
-		int width = getWidth();
+            int hSpacing = this.getHorizontalSpacing(lp);
+            int vSpacing = this.getVerticalSpacing(lp);
 
-		int lineWidth = 0;
-		int lineHeight = 0;
-		// 存储每一行所有的childView
-		List<View> lineViews = new ArrayList<View>();
-		int cCount = getChildCount();
-		// 遍历所有的孩子
-		for (int i = 0; i < cCount; i++)
-		{
-			View child = getChildAt(i);
-			MarginLayoutParams lp = (MarginLayoutParams) child
-					.getLayoutParams();
-			int childWidth = child.getMeasuredWidth();
-			int childHeight = child.getMeasuredHeight();
+            int childWidth = child.getMeasuredWidth();
+            int childHeight = child.getMeasuredHeight();
 
-			// 如果已经需要换行
-			if (childWidth + lp.leftMargin + lp.rightMargin + lineWidth > width)
-			{
-				// 记录这一行所有的View以及最大高度
-				mLineHeight.add(lineHeight);
-				// 将当前行的childView保存，然后开启新的ArrayList保存下一行的childView
-				mAllViews.add(lineViews);
-				lineWidth = 0;// 重置行宽
-				lineViews = new ArrayList<View>();
-			}
-			/**
-			 * 如果不需要换行，则累加
-			 */
-			lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
-			lineHeight = Math.max(lineHeight, childHeight + lp.topMargin
-					+ lp.bottomMargin);
-			lineViews.add(child);
-		}
-		// 记录最后一行
-		mLineHeight.add(lineHeight);
-		mAllViews.add(lineViews);
+            int childLength;
+            int childThickness;
+            int spacingLength;
+            int spacingThickness;
 
-		int left = 0;
-		int top = 0;
-		// 得到总行数
-		int lineNums = mAllViews.size();
-		for (int i = 0; i < lineNums; i++)
-		{
-			// 每一行的所有的views
-			lineViews = mAllViews.get(i);
-			// 当前行的最大高度
-			lineHeight = mLineHeight.get(i);
+            if (orientation == HORIZONTAL) {
+                childLength = childWidth;
+                childThickness = childHeight;
+                spacingLength = hSpacing;
+                spacingThickness = vSpacing;
+            } else {
+                childLength = childHeight;
+                childThickness = childWidth;
+                spacingLength = vSpacing;
+                spacingThickness = hSpacing;
+            }
 
-			Log.e(TAG, "第" + i + "行 ：" + lineViews.size() + " , " + lineViews);
-			Log.e(TAG, "第" + i + "行， ：" + lineHeight);
+            lineLength = lineLengthWithSpacing + childLength;
+            lineLengthWithSpacing = lineLength + spacingLength;
 
-			// 遍历当前行所有的View
-			for (int j = 0; j < lineViews.size(); j++)
-			{
-				View child = lineViews.get(j);
-				if (child.getVisibility() == View.GONE)
-				{
-					continue;
-				}
-				MarginLayoutParams lp = (MarginLayoutParams) child
-						.getLayoutParams();
+            boolean newLine = lp.newLine || (mode != MeasureSpec.UNSPECIFIED && lineLength > size);
+            if (newLine) {
+                if (fillLines != FillLines.NONE) {
+                    fillLine(row, size, prevLineLength, lineThickness);
+                }
 
-				//计算childView的left,top,right,bottom
-				int lc = left + lp.leftMargin;
-				int tc = top + lp.topMargin;
-				int rc =lc + child.getMeasuredWidth();
-				int bc = tc + child.getMeasuredHeight();
+                prevLinePosition = prevLinePosition + lineThicknessWithSpacing;
 
-				Log.e(TAG, child + " , l = " + lc + " , t = " + t + " , r ="
-						+ rc + " , b = " + bc);
+                lineThickness = childThickness;
+                lineLength = childLength;
+                lineThicknessWithSpacing = childThickness + spacingThickness;
+                lineLengthWithSpacing = lineLength + spacingLength;
+            }
 
-				child.layout(lc, tc, rc, bc);
-				
-				left += child.getMeasuredWidth() + lp.rightMargin
-						+ lp.leftMargin;
-			}
-			left = 0;
-			top += lineHeight;
-		}
+            prevLineLength = lineLength;
+            lineThicknessWithSpacing = Math.max(lineThicknessWithSpacing, childThickness + spacingThickness);
+            lineThickness = Math.max(lineThickness, childThickness);
 
-	}
+            int posX;
+            int posY;
+            if (orientation == HORIZONTAL) {
+                posX = getPaddingLeft() + lineLength - childLength;
+                posY = getPaddingTop() + prevLinePosition;
+            } else {
+                posX = getPaddingLeft() + prevLinePosition;
+                posY = getPaddingTop() + lineLength - childHeight;
+            }
+            lp.setPosition(posX, posY);
+
+            controlMaxLength = Math.max(controlMaxLength, lineLength);
+            controlMaxThickness = prevLinePosition + lineThickness;
+
+            row.add(child);
+        }
+        if (fillLines == FillLines.ALL) {
+            fillLine(row, size, prevLineLength, lineThickness);
+        }
+
+        /* need to take paddings into account */
+        if (orientation == HORIZONTAL) {
+            controlMaxLength += getPaddingLeft() + getPaddingRight();
+            controlMaxThickness += getPaddingBottom() + getPaddingTop();
+        } else {
+            controlMaxLength += getPaddingBottom() + getPaddingTop();
+            controlMaxThickness += getPaddingLeft() + getPaddingRight();
+        }
+
+        if (orientation == HORIZONTAL) {
+            this.setMeasuredDimension(resolveSize(controlMaxLength, widthMeasureSpec), resolveSize(controlMaxThickness, heightMeasureSpec));
+        } else {
+            this.setMeasuredDimension(resolveSize(controlMaxThickness, widthMeasureSpec), resolveSize(controlMaxLength, heightMeasureSpec));
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            child.layout(lp.x, lp.y, lp.x + child.getMeasuredWidth(), lp.y + child.getMeasuredHeight());
+        }
+    }
+
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean more = super.drawChild(canvas, child, drawingTime);
+        this.drawDebugInfo(canvas, child);
+        return more;
+    }
+
+    @Override
+    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+        return p instanceof LayoutParams;
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attributeSet) {
+        return new LayoutParams(getContext(), attributeSet);
+    }
+
+    @Override
+    protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+        return new LayoutParams(p);
+    }
+
+
+
+    private void fillLine(List<View> row, int size, int prevLineLength, int prevLineThickness) {
+        int lineCount = row.size();
+        float totalWeight = 0;
+        if (lineCount > 0) {
+            if (weightSum > 0) {
+                totalWeight = weightSum;
+            } else {
+                for (View prev : row) {
+                    LayoutParams plp = (LayoutParams) prev.getLayoutParams();
+                    float weight = plp.weight < 0.0f ? weightDefault : plp.weight;
+                    totalWeight += weight;
+                }
+            }
+            if (totalWeight > 0) {
+                int excess = size - prevLineLength;
+                int accOffsetX = 0, accOffsetY = 0;
+                for (View prev : row) {
+                    int offsetX = 0, offsetY = 0;
+                    LayoutParams plp = (LayoutParams) prev.getLayoutParams();
+
+                    float weight = plp.weight < 0.0f ? weightDefault : plp.weight;
+                    int extraPrimary = Math.round(excess * weight / totalWeight);
+                    totalWeight -= weight;
+                    excess -= extraPrimary;
+
+                    int gravity = plp.gravity == Gravity.NO_GRAVITY ? this.gravity : plp.gravity;
+                    boolean scalePrimary = false, scaleSecondary = false;
+                    int movePrimary = 0, moveSecondary = 0;
+                    if (orientation == HORIZONTAL) {
+                        if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) != Gravity.LEFT) {
+                            if ((gravity & (Gravity.FILL_HORIZONTAL ^ Gravity.RIGHT)) != 0) {
+                                scalePrimary = true;
+                            } else if ((gravity & (Gravity.RIGHT ^ Gravity.CENTER_HORIZONTAL)) != 0) {
+                                movePrimary = 2;
+                            } else if ((gravity & Gravity.CENTER_HORIZONTAL) != 0) {
+                                movePrimary = 1;
+                            }
+                        }
+                        if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) != Gravity.TOP) {
+                            if ((gravity & (Gravity.FILL_VERTICAL ^ Gravity.BOTTOM)) != 0) {
+                                scaleSecondary = true;
+                            } else if ((gravity & (Gravity.BOTTOM ^ Gravity.CENTER_VERTICAL)) != 0) {
+                                moveSecondary = 2;
+                            } else if ((gravity & Gravity.CENTER_VERTICAL) != 0) {
+                                moveSecondary = 1;
+                            }
+                        }
+                    } else {
+                        if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) != Gravity.LEFT) {
+                            if ((gravity & (Gravity.FILL_HORIZONTAL ^ Gravity.RIGHT)) != 0) {
+                                scaleSecondary = true;
+                            } else if ((gravity & (Gravity.RIGHT ^ Gravity.CENTER_HORIZONTAL)) != 0) {
+                                moveSecondary = 2;
+                            } else if ((gravity & Gravity.CENTER_HORIZONTAL) != 0) {
+                                moveSecondary = 1;
+                            }
+                        }
+                        if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) != Gravity.TOP) {
+                            if ((gravity & (Gravity.FILL_VERTICAL ^ Gravity.BOTTOM)) != 0) {
+                                scalePrimary = true;
+                            } else if ((gravity & (Gravity.BOTTOM ^ Gravity.CENTER_VERTICAL)) != 0) {
+                                movePrimary = 2;
+                            } else if ((gravity & Gravity.CENTER_VERTICAL) != 0) {
+                                movePrimary = 1;
+                            }
+                        }
+                    }
+                    int extraSecondary;
+                    if (orientation == HORIZONTAL) {
+                        extraSecondary = prevLineThickness - prev.getMeasuredHeight();
+                    } else {
+                        extraSecondary = prevLineThickness - prev.getMeasuredWidth();
+                    }
+                    int fillX = 0, fillY = 0;
+                    if (orientation == HORIZONTAL) {
+                        offsetX += (extraPrimary * movePrimary) / 2;
+                    } else {
+                        offsetY += (extraPrimary * movePrimary) / 2;
+                    }
+                    if (orientation == HORIZONTAL) {
+                        offsetY += (extraSecondary * moveSecondary) / 2;
+                    } else {
+                        offsetX += (extraSecondary * moveSecondary) / 2;
+                    }
+                    if (!centerJustified){
+                        plp.setPosition(plp.x + accOffsetX + offsetX, plp.y + accOffsetY + offsetY);
+                    }
+                    if (scalePrimary) {
+                        if (orientation == HORIZONTAL) {
+                            fillX += extraPrimary;
+                        } else {
+                            fillY += extraPrimary;
+                        }
+                    }
+                    if (scaleSecondary) {
+                        if (orientation == HORIZONTAL) {
+                            fillY += extraSecondary;
+                        } else {
+                            fillX += extraSecondary;
+                        }
+                    }
+                    if (fillX != 0 || fillY != 0) {
+                        prev.measure(
+                                MeasureSpec.makeMeasureSpec(prev.getMeasuredWidth() + fillX, MeasureSpec.EXACTLY),
+                                MeasureSpec.makeMeasureSpec(prev.getMeasuredHeight() + fillY, MeasureSpec.EXACTLY)
+                        );
+                    }
+                    if (orientation == HORIZONTAL) {
+                        accOffsetX += extraPrimary;
+                    } else {
+                        accOffsetY += extraPrimary;
+                    }
+                }
+                if(centerJustified) {
+                    for (View prev : row) {
+                        LayoutParams plp = (LayoutParams) prev.getLayoutParams();
+                        plp.setPosition(plp.x + accOffsetX / 2, plp.y + accOffsetY / 2);
+                    }
+                }
+            }
+            row.clear();
+        }
+    }
+
+    private int getVerticalSpacing(LayoutParams lp) {
+        int vSpacing;
+        if (lp.verticalSpacingSpecified()) {
+            vSpacing = lp.verticalSpacing;
+        } else {
+            vSpacing = this.verticalSpacing;
+        }
+        return vSpacing;
+    }
+
+    private int getHorizontalSpacing(LayoutParams lp) {
+        int hSpacing;
+        if (lp.horizontalSpacingSpecified()) {
+            hSpacing = lp.horizontalSpacing;
+        } else {
+            hSpacing = this.horizontalSpacing;
+        }
+        return hSpacing;
+    }
+
+    private void readStyleParameters(Context context, AttributeSet attributeSet) {
+        TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout);
+        try {
+            this.horizontalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_horizontalSpacing, 0);
+            this.verticalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_verticalSpacing, 0);
+            this.orientation = a.getInteger(R.styleable.FlowLayout_orientation, HORIZONTAL);
+            this.debugDraw = a.getBoolean(R.styleable.FlowLayout_debugDraw, false);
+            this.weightSum = a.getFloat(R.styleable.FlowLayout_weightSum, 0.0f);
+            this.weightDefault = a.getFloat(R.styleable.FlowLayout_weightDefault, 0.0f);
+            this.centerJustified = a.getBoolean(R.styleable.FlowLayout_centerJustified, false);
+
+            int gravityIndex = a.getInt(R.styleable.FlowLayout_android_gravity, -1);
+            if (gravityIndex >= 0) {
+                setGravity(gravityIndex);
+            }
+            int fillLinesIndex = a.getInt(R.styleable.FlowLayout_fillLines, -1);
+            if (fillLinesIndex >= 0) {
+                setFillLines(FillLines.from(fillLinesIndex));
+            }
+        } finally {
+            a.recycle();
+        }
+    }
+
+    private void drawDebugInfo(Canvas canvas, View child) {
+        if (!debugDraw) {
+            return;
+        }
+
+        Paint childPaint = this.createPaint(0xffffff00);
+        Paint layoutPaint = this.createPaint(0xff00ff00);
+        Paint newLinePaint = this.createPaint(0xffff0000);
+
+        LayoutParams lp = (LayoutParams) child.getLayoutParams();
+
+        if (lp.horizontalSpacing > 0) {
+            float x = child.getRight();
+            float y = child.getTop() + child.getHeight() / 2.0f;
+            canvas.drawLine(x, y, x + lp.horizontalSpacing, y, childPaint);
+            canvas.drawLine(x + lp.horizontalSpacing - 4.0f, y - 4.0f, x + lp.horizontalSpacing, y, childPaint);
+            canvas.drawLine(x + lp.horizontalSpacing - 4.0f, y + 4.0f, x + lp.horizontalSpacing, y, childPaint);
+        } else if (this.horizontalSpacing > 0) {
+            float x = child.getRight();
+            float y = child.getTop() + child.getHeight() / 2.0f;
+            canvas.drawLine(x, y, x + this.horizontalSpacing, y, layoutPaint);
+            canvas.drawLine(x + this.horizontalSpacing - 4.0f, y - 4.0f, x + this.horizontalSpacing, y, layoutPaint);
+            canvas.drawLine(x + this.horizontalSpacing - 4.0f, y + 4.0f, x + this.horizontalSpacing, y, layoutPaint);
+        }
+
+        if (lp.verticalSpacing > 0) {
+            float x = child.getLeft() + child.getWidth() / 2.0f;
+            float y = child.getBottom();
+            canvas.drawLine(x, y, x, y + lp.verticalSpacing, childPaint);
+            canvas.drawLine(x - 4.0f, y + lp.verticalSpacing - 4.0f, x, y + lp.verticalSpacing, childPaint);
+            canvas.drawLine(x + 4.0f, y + lp.verticalSpacing - 4.0f, x, y + lp.verticalSpacing, childPaint);
+        } else if (this.verticalSpacing > 0) {
+            float x = child.getLeft() + child.getWidth() / 2.0f;
+            float y = child.getBottom();
+            canvas.drawLine(x, y, x, y + this.verticalSpacing, layoutPaint);
+            canvas.drawLine(x - 4.0f, y + this.verticalSpacing - 4.0f, x, y + this.verticalSpacing, layoutPaint);
+            canvas.drawLine(x + 4.0f, y + this.verticalSpacing - 4.0f, x, y + this.verticalSpacing, layoutPaint);
+        }
+
+        if (lp.newLine) {
+            if (orientation == HORIZONTAL) {
+                float x = child.getLeft();
+                float y = child.getTop() + child.getHeight() / 2.0f;
+                canvas.drawLine(x, y - 6.0f, x, y + 6.0f, newLinePaint);
+            } else {
+                float x = child.getLeft() + child.getWidth() / 2.0f;
+                float y = child.getTop();
+                canvas.drawLine(x - 6.0f, y, x + 6.0f, y, newLinePaint);
+            }
+        }
+    }
+
+    private Paint createPaint(int color) {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        paint.setStrokeWidth(2.0f);
+        return paint;
+    }
+
+
+
+    public int getHorizontalSpacing() {
+        return this.horizontalSpacing;
+    }
+    
+    public void setHorizontalSpacing(int horizontalSpacing) {
+        this.horizontalSpacing = horizontalSpacing;
+        requestLayout();
+    }
+
+    public int getVerticalSpacing() {
+        return this.verticalSpacing;
+    }
+
+    public void setVerticalSpacing(int verticalSpacing) {
+        this.verticalSpacing = verticalSpacing;
+        requestLayout();
+    }
+
+    public int getOrientation() {
+        return this.orientation;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+        requestLayout();
+    }
+
+    public boolean isDebugDraw() {
+        return this.debugDraw;
+    }
+
+    public void setDebugDraw(boolean debugDraw) {
+        this.debugDraw = debugDraw;
+        requestLayout();
+    }
+
+    public float getWeightSum() {
+        return weightSum;
+    }
+
+    public void setWeightSum(float weightSum) {
+        this.weightSum = Math.max(0, weightSum);
+        requestLayout();
+    }
+
+    public float getWeightDefault() {
+        return weightDefault;
+    }
+
+    public void setWeightDefault(float weightDefault) {
+        this.weightDefault = Math.max(0, weightDefault);
+        requestLayout();
+    }
+
+    public boolean isCenterJustified() {
+        return centerJustified;
+    }
+
+    public void setCenterJustified(boolean centerJustified) {
+        this.centerJustified = centerJustified;
+        requestLayout();
+    }
+
+    public int getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(int gravity) {
+        if (this.gravity == gravity) {
+            return;
+        }
+
+        if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == 0) {
+            gravity |= Gravity.LEFT;
+        }
+
+        if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == 0) {
+            gravity |= Gravity.TOP;
+        }
+
+        this.gravity = gravity;
+        requestLayout();
+    }
+
+    public FillLines getFillLines() {
+        return fillLines;
+    }
+
+    public void setFillLines(FillLines fillLines) {
+        this.fillLines = fillLines != null ? fillLines : FillLines.NONE;
+        requestLayout();
+    }
+
+
+
+    public enum FillLines {
+        NONE(FILL_LINES_NONE),
+        EXCEPT_LAST(FILL_LINES_EXCEPT_LAST),
+        ALL(FILL_LINES_ALL);
+
+        private final int mIntValue;
+
+        FillLines(int intValue) {
+            mIntValue = intValue;
+        }
+
+        public static FillLines from(int intValue) {
+            if (intValue == EXCEPT_LAST.getIntValue()) {
+                return EXCEPT_LAST;
+            } else if (intValue == ALL.getIntValue()) {
+                return ALL;
+            } else {
+                return NONE;
+            }
+        }
+
+        public int getIntValue() {
+            return mIntValue;
+        }
+    }
+
+    public static class LayoutParams extends ViewGroup.LayoutParams {
+        private static final int NO_SPACING = -1;
+        @android.view.ViewDebug.ExportedProperty(category = "layout")
+        public int x;
+        @android.view.ViewDebug.ExportedProperty(category = "layout")
+        public int y;
+        @android.view.ViewDebug.ExportedProperty(category = "layout", mapping = {@android.view.ViewDebug.IntToString(from = NO_SPACING, to = "NO_SPACING")})
+        public int horizontalSpacing = NO_SPACING;
+        @android.view.ViewDebug.ExportedProperty(category = "layout", mapping = {@android.view.ViewDebug.IntToString(from = NO_SPACING, to = "NO_SPACING")})
+        public int verticalSpacing = NO_SPACING;
+
+        public int gravity = Gravity.NO_GRAVITY;
+        public float weight = -1.0f;
+        public boolean newLine = false;
+        public boolean centerJustified;
+
+        public LayoutParams(Context context, AttributeSet attributeSet) {
+            super(context, attributeSet);
+            this.readStyleParameters(context, attributeSet);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(ViewGroup.LayoutParams layoutParams) {
+            super(layoutParams);
+        }
+
+        public boolean horizontalSpacingSpecified() {
+            return this.horizontalSpacing != NO_SPACING;
+        }
+
+        public boolean verticalSpacingSpecified() {
+            return this.verticalSpacing != NO_SPACING;
+        }
+
+        public void setPosition(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        private void readStyleParameters(Context context, AttributeSet attributeSet) {
+            TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout_LayoutParams);
+            try {
+                this.horizontalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_LayoutParams_layout_horizontalSpacing, NO_SPACING);
+                this.verticalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_LayoutParams_layout_verticalSpacing, NO_SPACING);
+                this.newLine = a.getBoolean(R.styleable.FlowLayout_LayoutParams_layout_newLine, false);
+                this.gravity = a.getInt(R.styleable.FlowLayout_LayoutParams_android_layout_gravity, gravity);
+                this.weight = a.getFloat(R.styleable.FlowLayout_LayoutParams_layout_weight, weight);
+                this.centerJustified = a.getBoolean(R.styleable.FlowLayout_LayoutParams_layout_centerJustified, false);
+            } finally {
+                a.recycle();
+            }
+        }
+    }
 }

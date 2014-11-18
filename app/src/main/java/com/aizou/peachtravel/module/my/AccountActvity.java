@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -28,15 +29,24 @@ import com.aizou.peachtravel.bean.UploadTokenBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.upload.UploadControl;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
+<<<<<<< Updated upstream
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+=======
+import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.config.Constant;
+>>>>>>> Stashed changes
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -243,26 +253,22 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         public void doSucess(String result, String method) {
                             CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result,UploadTokenBean.class);
                             if(tokenResult.code==0){
-                                UploadControl.getInstance().uploadImage(mContext,tokenResult.result.uploadToken,tokenResult.result.key,imageFile,new UploadControl.UploadCallback() {
-                                    @Override
-                                    public void onSuccess(String url) {
-                                        user.avatar = url;
-                                        AccountManager.getInstance().saveLoginAccount(mContext,user);
-                                        ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
-                                                options);
-                                    }
+                                String token = tokenResult.result.uploadToken;
+                                String key = tokenResult.result.key;
+                                UploadManager uploadManager = new UploadManager();
+                                uploadManager.put(imageFile, key, token,
+                                        new UpCompletionHandler() {
+                                            @Override
+                                            public void complete(String key, ResponseInfo info, JSONObject response) {
+                                                String redirect = "http://" + Constant.QINIU_BUKETNAME + ".qiniudn.com/" + key;
+                                                String redirect2 = "http://" + Constant.QINIU_BUKETNAME + ".u.qiniudn.com/" + key;
+                                                user.avatar = redirect;
+                                                AccountManager.getInstance().saveLoginAccount(mContext,user);
+                                                ImageLoader.getInstance().displayImage(user.avatar,avatarIv, options);
 
-                                    @Override
-                                    public void onProcess(long current, long total) {
 
-                                    }
-
-                                    @Override
-                                    public void onFailure(String failture) {
-                                        ToastUtil.getInstance(mContext).showToast("上传失败");
-
-                                    }
-                                });
+                                            }
+                                        }, null);
                             }
                         }
 

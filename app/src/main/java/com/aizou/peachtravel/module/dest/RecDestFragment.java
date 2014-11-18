@@ -40,6 +40,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.ExpandGridView;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -61,6 +62,15 @@ public class RecDestFragment extends PeachBaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
         recDestLv = (ListView) rootView.findViewById(R.id.lv_rec_dest);
+        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
+        titleHeaderBar.getRightTextView().setText("做攻略");
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),SelectDestActivity.class);
+                startActivity(intent);
+            }
+        });
         initData();
         return rootView;
     }
