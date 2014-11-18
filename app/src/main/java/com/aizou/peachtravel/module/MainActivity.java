@@ -22,21 +22,19 @@ public class MainActivity extends PeachBaseActivity {
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {RecDestFragment.class,TravelFragment.class,MyFragment.class,};
+    private Class fragmentArray[] = {TravelFragment.class, RecDestFragment.class, MyFragment.class,};
 
     //定义数组来存放按钮图片
 //    private int mImageViewArray[] = {R.drawable.tab_home_btn,R.drawable.tab_message_btn,R.drawable.tab_selfinfo_btn,
 //            R.drawable.tab_square_btn,R.drawable.tab_more_btn};
 
     //Tab选项卡的文字
-    private String mTextviewArray[] = {"目的地", "旅游", "我的"};
+    private String mTextviewArray[] = {"首页", "目的地", "我的"};
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
-
     }
 
     /**

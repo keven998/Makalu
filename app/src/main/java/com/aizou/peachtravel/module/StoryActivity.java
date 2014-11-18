@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class StoryActivity extends PeachBaseActivity {
     private ImageView storyIv;
     private TextView startTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +39,13 @@ public class StoryActivity extends PeachBaseActivity {
         startTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,MainActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
+
     private void initData(){
         String storyImageUrl = SharePrefUtil.getString(mContext,"story_image","");
         if(!TextUtils.isEmpty(storyImageUrl)){
@@ -56,7 +59,6 @@ public class StoryActivity extends PeachBaseActivity {
                     SharePrefUtil.saveString(mContext,"story_image",storyResult.result.image);
                     ImageLoader.getInstance().displayImage(storyResult.result.image,storyIv, UILUtils.getDefaultOption());
                 }
-
             }
 
             @Override

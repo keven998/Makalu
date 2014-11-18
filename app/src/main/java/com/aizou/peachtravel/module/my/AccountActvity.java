@@ -169,7 +169,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                cameraFile = SelectPicUtils.getInstance().selectPicFromCamera(mContext);
+                cameraFile = SelectPicUtils.getInstance().selectPicFromCamera(AccountActvity.this);
                 dialog.dismiss();
 
             }
@@ -178,7 +178,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                SelectPicUtils.getInstance().selectPicFromLocal(mContext);
+                SelectPicUtils.getInstance().selectPicFromLocal(AccountActvity.this);
                 dialog.dismiss();
 
             }

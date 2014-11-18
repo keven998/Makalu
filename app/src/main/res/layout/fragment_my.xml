@@ -7,24 +7,22 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height" />
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/app_backgroud">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/base_color_white"
             android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/fl_header"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@color/base_divider_color">
+                android:layout_height="160dp">
 
                 <RelativeLayout
                     android:id="@+id/account_lyt"
@@ -76,7 +74,6 @@
                             android:textColor="@android:color/white"
                             android:textSize="18sp" />
                     </LinearLayout>
-
 
                 </RelativeLayout>
 
@@ -135,185 +132,103 @@
                         android:layout_centerVertical="true"
                         android:background="@color/main_color" />
 
-
                 </RelativeLayout>
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/base_color_black"
+                android:background="@color/base_divider_color"
                 android:padding="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/ll_share_account"
+                <TextView android:id="@+id/ll_share_account"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/option_cell_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:drawableLeft="@drawable/ic_launcher"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/ic_list_item_extender"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
+                    android:text="分享设置"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:gravity="center_vertical"
-                        android:text="分享设置"
-                        android:textColor="@color/base_text_color_title"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="10dp" />
-                </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/base_divider_color" />
-
-
-                <LinearLayout
+                <TextView
                     android:id="@+id/ll_message_center"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/option_cell_selector"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:drawablePadding="5dp"
+                    android:layout_marginTop="1dp"
+                    android:drawableLeft="@drawable/ic_launcher"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                   >
+                    android:background="@drawable/option_cell_selector"
+                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:text="消息中心"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:gravity="center_vertical"
-                        android:text="消息中心"
-                        android:textColor="@color/base_text_color_title"
-                        android:textSize="17sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="10dp" />
-                </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/base_divider_color" />
-
-                <LinearLayout
+                <TextView
                     android:id="@+id/ll_push_friends"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/option_cell_selector"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:drawablePadding="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:text="推送给好友"
-                        android:textColor="@color/base_text_color_title"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="10dp" />
-                </LinearLayout>
-
+                    android:layout_marginTop="1dp"
+                    android:drawableLeft="@drawable/ic_launcher"
+                    android:background="@drawable/option_cell_selector"
+                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:text="推荐给微信好友"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/base_color_black"
+                android:background="@color/base_divider_color"
                 android:padding="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:id="@+id/ll_setting"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/option_cell_selector"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:drawablePadding="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                   >
+                    android:drawableLeft="@drawable/ic_launcher"
+                    android:background="@drawable/option_cell_selector"
+                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:text="设置"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:gravity="center_vertical"
-                        android:text="设置"
-                        android:textColor="@color/base_text_color_title"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="10dp" />
-                </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/base_divider_color" />
-
-                <LinearLayout
+                <TextView
                     android:id="@+id/ll_about"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/option_cell_selector"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:drawablePadding="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:gravity="center_vertical"
-                        android:text="关于桃子旅行"
-                        android:textColor="@color/base_text_color_title"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="10dp" />
-                </LinearLayout>
+                    android:layout_marginTop="1dp"
+                    android:drawableLeft="@drawable/ic_launcher"
+                    android:background="@drawable/option_cell_selector"
+                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:text="关于桃子旅行"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </LinearLayout>

@@ -15,6 +15,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -51,6 +52,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.btn_login).setOnClickListener(this);
         rootView.findViewById(R.id.btn_reg).setOnClickListener(this);
         userInfoRl.setOnClickListener(this);
+
+        TitleHeaderBar thb = (TitleHeaderBar)rootView.findViewById(R.id.ly_header_bar_title_wrap);
+        thb.getTitleTextView().setText("我");
+
         return rootView;
     }
 
@@ -61,7 +66,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if(user==null){
             userInfoRl.setVisibility(View.GONE);
             loginRl.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             userInfoRl.setVisibility(View.VISIBLE);
             loginRl.setVisibility(View.GONE);
             nickNameTv.setText(user.nickName);
@@ -81,7 +86,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     }
 
-    private void initData(){
+    private void initData() {
 
     }
 
@@ -93,22 +98,27 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 Intent accountIntent = new Intent(getActivity(),AccountActvity.class);
                 startActivity(accountIntent);
                 break;
+
             case R.id.ll_share_account:
                 Intent intent = new Intent(getActivity(),ShareAccountActivity.class);
                 startActivity(intent);
                 break;
+
             case R.id.ll_about:
                 Intent aboutIntent = new Intent(getActivity(),AboutActivity.class);
                 startActivity(aboutIntent);
                 break;
+
             case R.id.ll_setting:
                 Intent settingIntent = new Intent(getActivity(),SettingActivity.class);
                 startActivity(settingIntent);
                 break;
+
             case R.id.btn_login:
                 Intent loginintent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(loginintent);
                 break;
+
             case R.id.btn_reg:
                 Intent regintent = new Intent(getActivity(),RegActivity.class);
                 startActivity(regintent);
