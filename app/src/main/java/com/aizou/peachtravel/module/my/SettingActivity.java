@@ -7,17 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.UpdateResult;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
 	// private View mTitlebar;
-	private LinearLayout versionUpdateLl, feedbackLl, xtLl;
+	private TextView versionUpdateLl, feedbackLl, xtLl;
 	private UpdateResult mUpdateResult;
 
 	@Override
@@ -29,16 +31,17 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 	private void initView() {
 		setContentView(R.layout.activity_setting);
 		initTitlebar();
-		versionUpdateLl = (LinearLayout) findViewById(R.id.ll_version_update);
-		feedbackLl = (LinearLayout) findViewById(R.id.ll_feedback);
-		xtLl = (LinearLayout) findViewById(R.id.ll_xt);
+		versionUpdateLl = (TextView) findViewById(R.id.ll_version_update);
+		feedbackLl = (TextView) findViewById(R.id.ll_feedback);
+		xtLl = (TextView) findViewById(R.id.ll_xt);
 		versionUpdateLl.setOnClickListener(this);
 		feedbackLl.setOnClickListener(this);
 		xtLl.setOnClickListener(this);
 	}
 
 	private void initTitlebar() {
-		// mTitlebar = findViewById(R.id.title_bar);
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thb.getTitleTextView().setText("设置");
 	}
 
 	@Override
@@ -51,14 +54,13 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.ll_version_update:
-			DialogManager.getInstance().showProgressDialog(mContext, "正在检查更新");
+			DialogManager.getInstance().showProgressDialog(SettingActivity.this, "正在检查更新");
 			update();
 			break;
 
 		case R.id.ll_feedback:
 			Intent feedback = new Intent(mContext, FeedbackActivity.class);
 			startActivity(feedback);
-
 			break;
 
 		case R.id.ll_xt:

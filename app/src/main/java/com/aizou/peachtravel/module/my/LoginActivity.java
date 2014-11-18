@@ -73,7 +73,7 @@ public class LoginActivity extends PeachBaseActivity {
     private Button loginBtn;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleBar;
-    private TextView weixinBtn, qqBtn, weiboBtn;
+    private TextView weixinBtn;
     //	private View mTitlebar;
     // sina weibo sso handler
     private SsoHandler mWeiboSsoHandler;
@@ -94,8 +94,6 @@ public class LoginActivity extends PeachBaseActivity {
         ViewUtils.inject(this);
         initTitlebar();
         weixinBtn = (TextView) findViewById(R.id.btn_weixin_login);
-        qqBtn = (TextView) findViewById(R.id.btn_qq_login);
-        weiboBtn = (TextView) findViewById(R.id.btn_weibo_login);
         weixinBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,25 +110,6 @@ public class LoginActivity extends PeachBaseActivity {
 //
 //                    }
 //                });
-            }
-        });
-        qqBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                uploadJson = new JSONObject();
-                qqLogin(true);
-
-            }
-        });
-        weiboBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
-                uploadJson = new JSONObject();
-                weiboLogin(true);
             }
         });
         loginBtn.setOnClickListener(new OnClickListener() {
@@ -159,6 +138,8 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
+
+        titleBar.getTitleTextView().setText("登录");
 
     }
 

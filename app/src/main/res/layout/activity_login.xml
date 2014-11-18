@@ -14,122 +14,110 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/et_user"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_user_hint"
-                android:inputType="text"/>
-
-            </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_pwd_hint"
-                android:inputType="textPassword"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
+        <EditText
+            android:id="@+id/et_user"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:hint="@string/login_user_hint"
+            android:inputType="phone"
+            android:imeOptions="actionNext"
+            android:textSize="15sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawableLeft="@drawable/ic_phone_24dp"
+            android:drawablePadding="6dp"
+            android:background="@drawable/editor_with_border"/>
 
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/login"/>
-            </LinearLayout>
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_pwd_hint"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="15sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="-1dp"
+            android:drawableLeft="@drawable/ic_phone_24dp"
+            android:drawablePadding="6dp"
+            android:background="@drawable/editor_with_border"/>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="38dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/base_color_white"
+            android:background="@drawable/tl_btn_highlight_selector"
+            android:text="@string/login"/>
+
         <TextView
             android:id="@+id/tv_forget_pwd"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/forget_password"
+            android:textSize="13sp"
+            android:textColor="@color/base_text_color_text_hint"
             android:layout_gravity="right"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="35dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/base_divider_color"
+                ></View>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="@color/app_backgroud"
+                android:text="使用第三方账号登录"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="16sp" />
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/btn_weixin_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="使用第三方账号登录"
-            android:textColor="@color/base_color_black"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="15dp"
+            android:drawableTop="@drawable/btn_weixin_login_selector"
+            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" >
+            android:text="微信登录"
+            android:textColor="#56BAE3"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/btn_weixin_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
-                android:drawableTop="@drawable/btn_weixin_login_selector"
-                android:gravity="center_horizontal"
-                android:text="微信登录"
-                android:visibility="visible"
-                android:textColor="#56BAE3"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/btn_qq_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
-                android:drawableTop="@drawable/btn_qq_login_selector"
-                android:gravity="center_horizontal"
-                android:text="QQ登录"
-                android:visibility="gone"
-                android:textColor="#56BAE3"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/btn_weibo_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:drawablePadding="8dp"
-                android:visibility="gone"
-                android:drawableTop="@drawable/btn_weibo_login_selector"
-                android:gravity="center_horizontal"
-                android:text="微博登录"
-                android:textColor="#D83F53"
-                android:textSize="14sp" />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
