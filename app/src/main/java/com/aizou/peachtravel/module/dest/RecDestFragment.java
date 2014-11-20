@@ -144,7 +144,7 @@ public class RecDestFragment extends PeachBaseFragment {
             cityListGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(),SpotDetailActivity.class);
+                    Intent intent = new Intent(getActivity(),CityDetailActivity.class);
                     intent.putExtra("id",adapter.getItem(position).id);
                     startActivity(intent);
                 }

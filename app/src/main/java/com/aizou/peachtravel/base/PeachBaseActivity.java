@@ -15,7 +15,7 @@ public class PeachBaseActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        mContext = this.getApplicationContext();
+        mContext = this;
 
     }
 }

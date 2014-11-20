@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.aizou.peachtravel.common.widget.photoview.PhotoView
+    <com.aizou.peachtravel.common.widget.SmoothPhotoView
         android:id="@+id/pv_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

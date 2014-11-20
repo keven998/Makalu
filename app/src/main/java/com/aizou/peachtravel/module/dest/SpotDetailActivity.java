@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.RecyclingPagerAdapter;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -25,6 +26,7 @@ import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.SpotDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.module.ImageViewPagerActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,9 +40,13 @@ import java.util.List;
 public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
     private AutoScrollViewPager mSpotImagesVp;
+    private HackyViewPager mZoomImagesVp;
+    private View zoomContainer;
     private ExpandableTextView mSpotIntroTv;
     private TextView mSpotNameTv,mPriceDescTv,mBestMonthTv,mOpenTimeTv,mTimeCostTv,mAddressTv;
     private LinearLayout mOtherLl;
+    private View containView;
+    private ImageZoomAnimator2 zoomAnimator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +57,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
+        containView = findViewById(R.id.container);
         mSpotImagesVp = (AutoScrollViewPager) findViewById(R.id.vp_spot_images);
+        zoomContainer = findViewById(R.id.zoom_container);
+        mZoomImagesVp = (HackyViewPager) findViewById(R.id.vp_zoom_pic);
         mSpotIntroTv = (ExpandableTextView) findViewById(R.id.expand_text_view);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
@@ -134,6 +143,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         }
+        zoomAnimator = new ImageZoomAnimator2(mContext,mSpotImagesVp,zoomContainer,result.images);
 
 
     }
@@ -171,29 +181,23 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
         @Override
         public View getView(final int position, View view, ViewGroup container) {
-            ViewHolder holder;
-            if (view == null) {
-                holder = new ViewHolder();
-                view = holder.imageView = new ImageView(context);
-                holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                view.setTag(holder);
-            } else {
-                holder = (ViewHolder) view.getTag();
-            }
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                ImageView imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+               imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
+                      zoomAnimator.transformIn(position);
 
-                    Intent i = new Intent(mContext, ImageViewPagerActivity.class);
-                    i.putExtra("pos", position);
-                    i.putParcelableArrayListExtra("imageUrlList", imageUrlList);
-
-                    Rect rect = new Rect();
-                    view.getGlobalVisibleRect(rect);
-                    i.putExtra("rect", rect);
-                    startActivity(i);
-                    overridePendingTransition(0,0);
+//                    Intent i = new Intent(mContext, ImageViewPagerActivity.class);
+//                    i.putExtra("pos", position);
+//                    i.putParcelableArrayListExtra("imageUrlList", imageUrlList);
+//
+//                    Rect rect = new Rect();
+//                    view.getGlobalVisibleRect(rect);
+//                    i.putExtra("rect", rect);
+//                    startActivity(i);
+//                    overridePendingTransition(0,0);
 //                    Bundle b = null;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 //                        //b = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(),
@@ -207,9 +211,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
 
             ImageLoader.getInstance().displayImage(
-                    imageUrlList.get(position).url, holder.imageView,
+                    imageUrlList.get(position).url, imageView,
                     UILUtils.getDefaultOption());
-            return view;
+            imageView.setTag(position);
+            return imageView;
         }
 
         private class ViewHolder {

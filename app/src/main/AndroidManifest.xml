@@ -86,6 +86,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.dest.CityPictureActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.SpotDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

@@ -31,6 +31,8 @@ import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
+import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
+import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -40,7 +42,8 @@ import java.util.List;
  * Created by Rjm on 2014/10/9.
  */
 public class SelectDestActivity extends PeachBaseActivity {
-    private ListView mInListView,mOutCountryListView;
+    private ListView mInListView;
+    private ExpandableLayoutListView mOutCountryListView;
     private TopSectionBar mTopSectiionBar;
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
@@ -55,7 +58,7 @@ public class SelectDestActivity extends PeachBaseActivity {
         View rootView = View.inflate(mContext,R.layout.activity_select_dest, null);
         setContentView(rootView);
         mInListView = (ListView) rootView.findViewById(R.id.lv_in_city);
-        mOutCountryListView = (ListView) rootView.findViewById(R.id.lv_out_country);
+        mOutCountryListView = (ExpandableLayoutListView) rootView.findViewById(R.id.lv_out_country);
         mTopSectiionBar = (TopSectionBar) rootView.findViewById(R.id.section_bar);
         inOutRg = (RadioGroup) rootView.findViewById(R.id.in_out_rg);
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
@@ -260,7 +263,7 @@ public class SelectDestActivity extends PeachBaseActivity {
     }
 
     private class OutCountryViewHolder extends ViewHolderBase<OutCountryBean> {
-        private TextView nameTv;
+        private TextView nameTv,descTv;
         private ImageView imageIv;
         private FlowLayout cityListFl;
         private View contentView;
@@ -269,9 +272,13 @@ public class SelectDestActivity extends PeachBaseActivity {
         @Override
         public View createView(LayoutInflater layoutInflater) {
             contentView = layoutInflater.inflate(R.layout.dest_out_country, null);
-            nameTv = (TextView) contentView.findViewById(R.id.tv_country);
-            imageIv = (ImageView) contentView.findViewById(R.id.iv_country);
-            cityListFl = (FlowLayout) contentView.findViewById(R.id.fl_city_list);
+            ExpandableLayoutItem itemView = (ExpandableLayoutItem) contentView.findViewById(R.id.row_country);
+            RelativeLayout headRl = itemView.getHeaderRelativeLayout();
+            RelativeLayout contentRl=itemView.getContentRelativeLayout();
+            nameTv = (TextView) headRl.findViewById(R.id.tv_country_name);
+            descTv = (TextView) headRl.findViewById(R.id.tv_country_desc);
+            imageIv = (ImageView) headRl.findViewById(R.id.iv_country);
+            cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
             int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
             int height = width * 220 / 600;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
@@ -282,16 +289,16 @@ public class SelectDestActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final OutCountryBean itemData) {
-            contentView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(cityListFl.getVisibility()==View.VISIBLE){
-                        cityListFl.setVisibility(View.GONE);
-                    }else{
-                        cityListFl.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
+//            contentView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(cityListFl.getVisibility()==View.VISIBLE){
+//                        cityListFl.setVisibility(View.GONE);
+//                    }else{
+//                        cityListFl.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            });
             nameTv.setText("");
             nameTv.setText(itemData.name);
             SpannableString impress = new SpannableString("|"+itemData.desc);

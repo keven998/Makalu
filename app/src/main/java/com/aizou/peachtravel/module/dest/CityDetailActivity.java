@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,14 @@ public class CityDetailActivity extends PeachBaseActivity {
 
     private void bindView(CityDetailBean detailBean){
         ImageLoader.getInstance().displayImage(detailBean.cover,mCityIv,UILUtils.getDefaultOption());
+        mCityIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,CityPictureActivity.class);
+                startActivity(intent);
+
+            }
+        });
         mPicNumTv.setText(detailBean.imageCount+"");
         mCityNameTv.setText(detailBean.name);
         mCityDescTv.setText(detailBean.desc);

@@ -364,7 +364,10 @@ public class DialogManager {
         if (mProgressDialog != null) {
             if (mProgressDialog.isShowing())
                 mProgressDialog.dismiss();
+
         }
+        mProgressDialog=null;
+
     }
 
     /**

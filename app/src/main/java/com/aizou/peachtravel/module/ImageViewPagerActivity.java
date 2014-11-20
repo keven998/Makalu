@@ -61,7 +61,7 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
 		if (savedInstanceState != null) {
 		}
         mBackground = new ColorDrawable(Color.BLACK);
-        mViewPager.setBackgroundDrawable(mBackground);
+        contentView.setBackgroundDrawable(mBackground);
         fromBounds = getIntent().getParcelableExtra("rect");
         ViewTreeObserver observer = contentView.getViewTreeObserver();
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -78,7 +78,7 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         startBounds = fromBounds;
         final Rect finalBounds = new Rect();
         final Point globalOffset = new Point();
-        contentView.getGlobalVisibleRect(finalBounds, globalOffset);
+        mViewPager.getGlobalVisibleRect(finalBounds, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
         finalBounds.offset(-globalOffset.x, -globalOffset.y);
         // Adjust the start bounds to be the same aspect ratio as the final
@@ -106,9 +106,9 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         }
         AnimatorSet animSet = new AnimatorSet();
         animSet.setDuration(1);
-        animSet.play(ObjectAnimator.ofFloat(contentView, "pivotX", 0f))
-                .with(ObjectAnimator.ofFloat(contentView, "pivotY", 0f))
-                .with(ObjectAnimator.ofFloat(contentView, "alpha", 1.0f));
+        animSet.play(ObjectAnimator.ofFloat(mViewPager, "pivotX", 0f))
+                .with(ObjectAnimator.ofFloat(mViewPager, "pivotY", 0f))
+                .with(ObjectAnimator.ofFloat(mViewPager, "alpha", 1.0f));
 //                .with(ObjectAnimator.ofFloat(mBackground,"alpha"));
         animSet.start();
 
@@ -118,10 +118,10 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         // (X, Y, SCALE_X, and SCALE_Y).
         AnimatorSet set = new AnimatorSet();
         ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(startBounds, "alpha", 1.0f, 0.f);
-        ObjectAnimator animatorX = ObjectAnimator.ofFloat(contentView, "x", startBounds.left, finalBounds.left);
-        ObjectAnimator animatorY = ObjectAnimator.ofFloat(contentView, "y", startBounds.top, finalBounds.top);
-        ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(contentView, "scaleX", startScale, 1f);
-        ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(contentView, "scaleY", startScale, 1f);
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(mViewPager, "x", startBounds.left, finalBounds.left);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(mViewPager, "y", startBounds.top, finalBounds.top);
+        ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(mViewPager, "scaleX", startScale, 1f);
+        ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(mViewPager, "scaleY", startScale, 1f);
 
         set.play(alphaAnimator).with(animatorX).with(animatorY).with(animatorScaleX).with(animatorScaleY);
         set.setDuration(mShortAnimationDuration);
@@ -150,7 +150,7 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         final Rect finalBounds = new Rect();
         final Point globalOffset = new Point();
 
-        contentView.getGlobalVisibleRect(finalBounds, globalOffset);
+        mViewPager.getGlobalVisibleRect(finalBounds, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
         finalBounds.offset(-globalOffset.x, -globalOffset.y);
 
@@ -176,19 +176,19 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
     private void zoomExitAnimation(final Runnable listener) {
         mBackground.setAlpha(0);
         AnimatorSet as = new AnimatorSet();
-        ObjectAnimator containAlphaAnimator = ObjectAnimator.ofFloat(contentView, "alpha", 1.f, 1f);
+        ObjectAnimator containAlphaAnimator = ObjectAnimator.ofFloat(mBackground, "alpha", 1.f, 0.f);
         boolean scaleResult = getScaleFinalBounds();
         if (scaleResult) {
-            ObjectAnimator animatorX = ObjectAnimator.ofFloat(contentView, "x", startBounds.left);
-            ObjectAnimator animatorY = ObjectAnimator.ofFloat(contentView, "y",  startBounds.top);
-            ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(contentView, "scaleX", startScaleFinal);
-            ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(contentView, "scaleY", startScaleFinal);
+            ObjectAnimator animatorX = ObjectAnimator.ofFloat(mViewPager, "x", startBounds.left);
+            ObjectAnimator animatorY = ObjectAnimator.ofFloat(mViewPager, "y",  startBounds.top);
+            ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(mViewPager, "scaleX", startScaleFinal);
+            ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(mViewPager, "scaleY", startScaleFinal);
 
             as.play(containAlphaAnimator).with(animatorX).with(animatorY).with(animatorScaleX).with(animatorScaleY);
         }else {
             //the selected photoview is beyond the mobile screen display
             //so it just fade out
-            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(contentView, "alpha", 0.1f);
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mViewPager, "alpha", 0.1f);
             as.play(alphaAnimator).with(containAlphaAnimator);
         }
         as.setDuration(mShortAnimationDuration);
@@ -291,7 +291,7 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
                             finish();
                         }
                     });
-					
+
 				}
 			});
 			return contentView;

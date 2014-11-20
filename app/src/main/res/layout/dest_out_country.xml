@@ -1,43 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandable="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="10dp">
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_country"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/tv_country"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="15sp" />
-    </RelativeLayout>
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/dash"
-        />
-
-    <com.aizou.peachtravel.common.widget.FlowLayout
-        android:id="@+id/fl_city_list"
-        android:layout_width="fill_parent"
+    <com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem
+        android:id="@+id/row_country"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        expandable:headerLayout="@layout/view_out_country_header"
+        expandable:contentLayout="@layout/view_out_country_content"
+        android:background="#e74c3c"/>
 
-</LinearLayout>
+</RelativeLayout>

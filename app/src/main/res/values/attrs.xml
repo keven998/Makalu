@@ -25,4 +25,9 @@
         <attr name="layout_centerJustified" format="boolean" />
         <attr name="android:layout_gravity"/>
     </declare-styleable>
+    <declare-styleable name="ExpandableLayout">
+        <attr name="headerLayout" format="reference"/>
+        <attr name="contentLayout" format="reference" />
+        <attr name="duration" format="integer" />
+    </declare-styleable>
 </resources>

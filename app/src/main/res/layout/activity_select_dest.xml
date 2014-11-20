@@ -80,7 +80,7 @@
             android:listSelector="@android:color/transparent"
             android:visibility="visible" />
 
-        <ListView
+        <com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView
             android:id="@+id/lv_out_country"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
