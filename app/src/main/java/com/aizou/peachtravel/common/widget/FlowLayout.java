@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 
 import java.util.ArrayList;
@@ -54,7 +55,8 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.getPaddingRight() - this.getPaddingLeft();
+//        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.getPaddingRight() - this.getPaddingLeft();
+        int sizeWidth = LocalDisplay.SCREEN_WIDTH_PIXELS - this.getPaddingRight() - this.getPaddingLeft();
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - this.getPaddingTop() - this.getPaddingBottom();
 
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
@@ -449,7 +451,7 @@ public class FlowLayout extends ViewGroup {
     public int getHorizontalSpacing() {
         return this.horizontalSpacing;
     }
-    
+
     public void setHorizontalSpacing(int horizontalSpacing) {
         this.horizontalSpacing = horizontalSpacing;
         requestLayout();

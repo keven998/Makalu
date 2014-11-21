@@ -44,6 +44,8 @@ import org.xml.sax.SAXException;
 
 import android.content.Context;
 
+import com.aizou.core.log.LogUtil;
+
 class WOEIDUtils {
 	
 	public static final String WOEID_NOT_FOUND = "WOEID_NOT_FOUND"; 
@@ -128,7 +130,7 @@ class WOEIDUtils {
 		
 		yahooAPIsQuery = yahooAPIsQuery.replace(" ", "%20");
 		
-		YahooWeatherLog.d("Query WOEID: " + yahooAPIsQuery);
+		LogUtil.d("Query WOEID: " + yahooAPIsQuery);
 		String woeidString = fetchWOEIDxmlString(context, yahooAPIsQuery);
 		Document woeidDoc = convertStringToDocument(context, woeidString);
 		if (woeidDoc == null) {

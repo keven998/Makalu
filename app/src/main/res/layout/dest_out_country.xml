@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:expandable="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    card_view:contentPadding="2dp"
+    card_view:cardBackgroundColor="@color/base_color_white"
+    card_view:cardCornerRadius="3dp">
     <com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem
         android:id="@+id/row_country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         expandable:headerLayout="@layout/view_out_country_header"
         expandable:contentLayout="@layout/view_out_country_content"
-        android:background="#e74c3c"/>
-
-</RelativeLayout>
+        />
+</android.support.v7.widget.CardView>

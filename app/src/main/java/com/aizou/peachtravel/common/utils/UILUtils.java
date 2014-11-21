@@ -2,9 +2,11 @@ package com.aizou.peachtravel.common.utils;
 
 import android.graphics.Bitmap;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class UILUtils {
 	public static final String QINIU_URL_FORMART="?imageView/1/w/%1$d/h/%2$d/q/70/format/jpg/interlace/1";
@@ -14,11 +16,23 @@ public class UILUtils {
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.resetViewBeforeLoading(true)
 //				.decodingOptions(D)
-				.displayer(new FadeInBitmapDisplayer(500, true, true, false))
+				.displayer(new FadeInBitmapDisplayer(300, true, true, false))
 				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 				
 		return picOptions;
 	}
+    public static DisplayImageOptions getRadiusOption() {
+        DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                .resetViewBeforeLoading(true)
+//				.decodingOptions(D)
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(3)))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
+        return picOptions;
+    }
+
 	
 	
 	public static String formartQiNiuUrl(String imageUrl,int width,int height){

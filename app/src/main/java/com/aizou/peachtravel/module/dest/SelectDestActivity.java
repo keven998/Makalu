@@ -127,7 +127,7 @@ public class SelectDestActivity extends PeachBaseActivity {
             outCountry.image="http://hiphotos.baidu.com/lvpics/pic/item/1c950a7b02087bf45139aa41f2d3572c10dfcf45.jpg";
             ArrayList<CityBean> cityBeans = new ArrayList<CityBean>();
             outCountry.cityList = cityBeans;
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 15; j++) {
                 CityBean city = new CityBean();
                 city.zhName = "云南";
                 city.image = "http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg";
@@ -309,8 +309,9 @@ public class SelectDestActivity extends PeachBaseActivity {
 
             impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             nameTv.append(impress);
-            ImageLoader.getInstance().displayImage(itemData.image, imageIv, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(itemData.image, imageIv, UILUtils.getRadiusOption());
             cityListFl.removeAllViews();
+            int i=0;
             for(final CityBean bean:itemData.cityList){
                 View view = View.inflate(mContext,R.layout.dest_select_city,null);
                 TextView cityNameTv = (TextView) view.findViewById(R.id.tv_city_name);
@@ -336,8 +337,11 @@ public class SelectDestActivity extends PeachBaseActivity {
                         });
                     }
                 });
+
                 cityListFl.addView(view);
+                i++;
             }
+            cityListFl.requestLayout();
 
         }
     }

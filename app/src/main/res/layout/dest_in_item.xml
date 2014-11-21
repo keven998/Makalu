@@ -12,6 +12,7 @@
         android:layout_height="wrap_content" />
 
     <com.aizou.peachtravel.common.widget.FlowLayout
+        xmlns:f="http://schemas.android.com/apk/res/auto"
         android:id="@+id/fl_city_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>

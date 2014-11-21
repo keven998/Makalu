@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -162,15 +163,16 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            View contentView = layoutInflater.inflate(R.layout.row_rec_dest_item, null);
+            CardView contentView = (CardView) layoutInflater.inflate(R.layout.row_rec_dest_item, null);
             nameTv = (TextView) contentView.findViewById(R.id.tv_dest_name);
             descTv = (TextView) contentView.findViewById(R.id.tv_dest_desc);
             imageIv = (ImageView) contentView.findViewById(R.id.iv_dest_pic);
-            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(28))/2;
+            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(38))/2;
             int height = width * 3 / 4;
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                     width, height);
             imageIv.setLayoutParams(lp);
+            contentView.setShadowPadding(1,0,1,2);
             return contentView;
         }
 
@@ -178,7 +180,7 @@ public class RecDestFragment extends PeachBaseFragment {
         public void showData(int position, RecDestBean.RecDestItem itemData) {
             nameTv.setText(TextUtils.isEmpty(itemData.zhName) ? itemData.enName : itemData.zhName);
             descTv.setText(itemData.desc);
-            ImageLoader.getInstance().displayImage(itemData.cover, imageIv, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(itemData.cover, imageIv, UILUtils.getRadiusOption());
 
         }
     }

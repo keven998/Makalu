@@ -38,6 +38,8 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.RelativeLayout;
 
+import com.aizou.core.log.LogUtil;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 
 public class ExpandableLayoutItem extends RelativeLayout
@@ -108,8 +110,10 @@ public class ExpandableLayoutItem extends RelativeLayout
     private void expand(final View v)
     {
         isOpened = true;
+//        this.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
+        LogUtil.d("animation-targetHeight---------"+targetHeight);
         v.getLayoutParams().height = 0;
         v.setVisibility(VISIBLE);
 
@@ -119,6 +123,7 @@ public class ExpandableLayoutItem extends RelativeLayout
             protected void applyTransformation(float interpolatedTime, Transformation t)
             {
                 v.getLayoutParams().height = (interpolatedTime == 1) ? LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
+                LogUtil.d("animation-height---------"+v.getHeight());
                 v.requestLayout();
             }
 
