@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Bitmap;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +29,16 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -50,12 +54,25 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
     private SparseIntArray positionOfSection;
 	private SparseIntArray sectionOfPosition;
 	private int res;
+    private DisplayImageOptions picOptions;
 
 	public ContactAdapter(Context context, int resource, List<IMUser> objects) {
 		super(context, resource, objects);
 		this.res = resource;
 		layoutInflater = LayoutInflater.from(context);
         initSections();
+
+        picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.default_avatar)
+                .showImageOnLoading(R.drawable.default_avatar)
+                .showImageForEmptyUri(R.drawable.default_avatar)
+//				.decodingOptions(D)
+//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 	}
 	
 
@@ -101,49 +118,70 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //				});
 //			}
 //		}else{
+        ViewHolder vh;
 			if(convertView == null){
 				convertView = layoutInflater.inflate(res, null);
-			}
-			
-			ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
-			TextView unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
-			TextView nameTextview = (TextView) convertView.findViewById(R.id.name);
-			TextView tvHeader = (TextView) convertView.findViewById(R.id.header);
+                vh = new ViewHolder();
+                vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
+                vh.nickView = (TextView) convertView.findViewById(R.id.name);
+                vh.phoneView = (TextView) convertView.findViewById(R.id.phone);
+                vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
+                vh.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
+                vh.headerDivider = (View)convertView.findViewById(R.id.header_divider);
+                convertView.setTag(vh);
+			} else {
+                vh = (ViewHolder)convertView.getTag();
+            }
+
 			IMUser user = getItem(position);
-			if(user == null)
-				Log.d("ContactAdapter", position + "");
 			String username = user.getUsername();
 			String header = user.getHeader();
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
-					tvHeader.setVisibility(View.GONE);
+                    vh.sectionHeader.setVisibility(View.GONE);
+                    vh.headerDivider.setVisibility(View.GONE);
 				} else {
-					tvHeader.setVisibility(View.VISIBLE);
-					tvHeader.setText(header);
+                    vh.sectionHeader.setVisibility(View.VISIBLE);
+                    vh.sectionHeader.setText(header);
+                    vh.headerDivider.setVisibility(View.VISIBLE);
 				}
 			} else {
-				tvHeader.setVisibility(View.GONE);
+                vh.sectionHeader.setVisibility(View.GONE);
+                vh.headerDivider.setVisibility(View.GONE);
 			}
+
 			//显示申请与通知item
-			if(username.equals(Constant.NEW_FRIENDS_USERNAME)){
-				nameTextview.setText(user.getNick());
-				avatar.setImageResource(R.drawable.new_friends_icon);
+			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+                vh.nickView.setText("好友请求");
+                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_list_item_extender, 0);
+//                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
+                vh.phoneView.setVisibility(View.GONE);
 				if(user.getUnreadMsgCount() > 0){
-					unreadMsgView.setVisibility(View.VISIBLE);
-					unreadMsgView.setText(user.getUnreadMsgCount()+"");
+					vh.unreadMsgView.setVisibility(View.VISIBLE);
+//					unreadMsgView.setText(user.getUnreadMsgCount()+"");
 				}else{
-					unreadMsgView.setVisibility(View.INVISIBLE);
+                    vh.unreadMsgView.setVisibility(View.GONE);
 				}
-			}else if(username.equals(Constant.GROUP_USERNAME)){
+//                vh.avatarView.setVisibility(View.GONE);
+			} else if (username.equals(Constant.GROUP_USERNAME)){
 				//群聊item
-				nameTextview.setText(user.getNick());
-				avatar.setImageResource(R.drawable.groups_icon);
-			}else{
-				nameTextview.setText(user.getNick());
-				if(unreadMsgView != null)
-					unreadMsgView.setVisibility(View.INVISIBLE);
-				avatar.setBackgroundResource(R.drawable.default_avatar);
-                ImageLoader.getInstance().displayImage(user.getAvatar(),avatar, UILUtils.getDefaultOption());
+                vh.nickView.setText(user.getNick());
+                vh.avatarView.setImageResource(R.drawable.groups_icon);
+                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                vh.phoneView.setVisibility(View.GONE);
+                vh.unreadMsgView.setVisibility(View.GONE);
+//                vh.avatarView.setVisibility(View.VISIBLE);
+			} else {
+//                vh.avatarView.setVisibility(View.VISIBLE);
+                vh.nickView.setText(user.getNick());
+//				if(unreadMsgView != null)
+//					unreadMsgView.setVisibility(View.INVISIBLE);
+//                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
+                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
+                vh.phoneView.setVisibility(View.VISIBLE);
+                vh.phoneView.setText(user.getTel());
+                vh.unreadMsgView.setVisibility(View.GONE);
 			}
 
 
@@ -157,13 +195,14 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 
     @Override
     public Object[] getSections() {
-        LogUtil.d("getSections------------------------");
         return sections.toArray();
     }
+
     @Override
     public int getPositionForSection(int section) {
 		return positionOfSection.get(section);
 	}
+
     @Override
 	public int getSectionForPosition(int position) {
 		return sectionOfPosition.get(position);
@@ -199,7 +238,16 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
     }
 
 	public List<String> getSectionList() {
-		return sections;
+        return sections;
 	}
+
+    class ViewHolder {
+        public View headerDivider;
+        public TextView sectionHeader;
+        public ImageView avatarView;
+        public TextView nickView;
+        public TextView phoneView;
+        public TextView unreadMsgView;
+    }
 
 }

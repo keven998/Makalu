@@ -101,7 +101,6 @@ public class TopSectionBar extends Gallery {
     }
 
 
-
     private class SectionAdapter extends BaseAdapter {
 
         @Override

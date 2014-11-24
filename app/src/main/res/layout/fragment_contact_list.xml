@@ -1,76 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
+    android:background="@color/app_backgroud"
     android:orientation="vertical" >
 
 
-    <FrameLayout
+    <FrameLayout android:id="@+id/indexer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content">
+        <com.aizou.peachtravel.common.widget.TopSectionBar
+            android:id="@+id/section_bar"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/base_color_white"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:unselectedAlpha="0.8"
+            android:overScrollMode="always"
+            android:clickable="true" />
 
-        <RelativeLayout
-            android:id="@+id/rl_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <LinearLayout
-                android:id="@+id/ll_loading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical"
-                android:visibility="gone" >
-
-                <ProgressBar
-                    android:layout_width="28dp"
-                    android:layout_height="28dp" />
-
-                <TextView
-                    android:id="@+id/tv_loaing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:text="正在刷新联系人..." />
-            </LinearLayout>
-            <com.aizou.peachtravel.common.widget.TopSectionBar
-                android:id="@+id/section_bar"
-                android:layout_below="@id/ll_loading"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/main_color"
-                android:clickable="true" />
-
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/section_bar"
-                android:background="@android:color/transparent"
-                android:cacheColorHint="#00000000"
-                android:descendantFocusability="afterDescendants"
-                android:divider="@color/divider_list"
-                android:dividerHeight="1px"
-                android:focusable="true"
-                android:fastScrollEnabled="false" />
-
-
-            <TextView
-                android:id="@+id/floating_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/show_head_toast_bg"
-                android:gravity="center"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
-                android:visibility="invisible" />
-
-        </RelativeLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_tab_indicator"
+            android:layout_gravity="bottom|center_horizontal"/>
     </FrameLayout>
 
-</LinearLayout>
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/indexer"
+        android:background="@color/app_backgroud"
+        android:cacheColorHint="#00000000"
+        android:layout_marginTop="10dp"
+        android:descendantFocusability="afterDescendants"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:focusable="true"
+        android:fastScrollEnabled="false" />
+
+    <include layout="@layout/fragment_contact_list_empty"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/indexer"
+        android:layout_marginTop="72dp"
+        android:id="@+id/empty_view"></include>
+
+</RelativeLayout>

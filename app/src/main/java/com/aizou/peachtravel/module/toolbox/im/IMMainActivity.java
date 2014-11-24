@@ -148,6 +148,7 @@ public class IMMainActivity extends BaseChatActivity {
             chatHistoryFragment.refresh();
         }
     }
+
     public void refreshContactListFragment(){
         if(contactListFragment!=null){
             contactListFragment.refresh();
@@ -164,7 +165,7 @@ public class IMMainActivity extends BaseChatActivity {
 		mTabs = new Button[3];
 		mTabs[0] = (Button) findViewById(R.id.btn_conversation);
 		mTabs[1] = (Button) findViewById(R.id.btn_address_list);
-		mTabs[2] = (Button) findViewById(R.id.btn_setting);
+//		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 		// 把第一个tab设为选中状态
 		mTabs[0].setSelected(true);
 
@@ -215,9 +216,9 @@ public class IMMainActivity extends BaseChatActivity {
 		case R.id.btn_address_list:
 			index = 1;
 			break;
-		case R.id.btn_setting:
-			index = 2;
-			break;
+//		case R.id.btn_setting:
+//			index = 2;
+//			break;
 		}
 		if (currentTabIndex != index) {
 			FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
