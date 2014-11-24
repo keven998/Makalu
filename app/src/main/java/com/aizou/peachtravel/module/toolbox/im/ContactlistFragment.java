@@ -125,7 +125,7 @@ public class ContactlistFragment extends Fragment {
 //			}
 //		});
 
-		registerForContextMenu(listView);
+//		registerForContextMenu(listView);
 
 	}
 
