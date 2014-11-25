@@ -81,12 +81,22 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.dest.StrategyActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.CityDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".module.dest.CityPictureActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".module.dest.PoiDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
@@ -371,6 +381,12 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
+        <activity
+            android:name=".module.toolbox.NearbyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
+
 
         <!-- 开机自启动服务 -->
         <receiver android:name="com.easemob.chat.StartServiceReceiver" >

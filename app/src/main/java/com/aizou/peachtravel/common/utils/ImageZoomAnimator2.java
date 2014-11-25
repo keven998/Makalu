@@ -2,36 +2,22 @@ package com.aizou.peachtravel.common.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.aizou.core.widget.HackyViewPager;
-import com.aizou.core.widget.RecyclingPagerAdapter;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
+import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ImageBean;
-import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.SmoothPhotoView;
 import com.aizou.peachtravel.common.widget.photoview.PhotoViewAttacher;
-import com.aizou.peachtravel.module.GuideActivity;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

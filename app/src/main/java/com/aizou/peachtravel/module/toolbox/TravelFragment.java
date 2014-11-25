@@ -39,6 +39,8 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
     ImageView weatherIv;
     @ViewInject(R.id.tv_weather)
     TextView weatherTv;
+    @ViewInject(R.id.tv_nearby)
+    TextView nearbyTv;
     private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
@@ -47,6 +49,7 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
         View rootView =inflater.inflate(R.layout.fragment_travel,null);
         ViewUtils.inject(this, rootView);
         lxqBtn.setOnClickListener(this);
+        nearbyTv.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         weatherArray = getResources().getStringArray(R.array.weather);
         getWeather(116.402544,39.93242);
@@ -78,6 +81,10 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
                     startActivityForResult(intent,IM_LOGIN);
                 }
 
+                break;
+            case R.id.tv_nearby:
+                Intent intent = new Intent(getActivity(),NearbyActivity.class);
+                startActivity(intent);
                 break;
         }
     }
