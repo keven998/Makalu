@@ -70,7 +70,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.time = (TextView) convertView.findViewById(R.id.time);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
-            holder.msgState = convertView.findViewById(R.id.msg_state);
+//            holder.msgState = convertView.findViewById(R.id.msg_state);
             holder.list_item_layout = (RelativeLayout) convertView.findViewById(R.id.list_item_layout);
             convertView.setTag(holder);
         }
@@ -103,7 +103,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         } else {
             if(imUser!=null){
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
-                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
+//                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, UILUtils.getDefaultOption());
                 if (username.equals(Constant.GROUP_USERNAME)) {
                     holder.name.setText("群聊");
@@ -124,24 +124,25 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
         if (conversation.getUnreadMsgCount() > 0) {
             // 显示与此用户的消息未读数
-            holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
+//            holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
             holder.unreadLabel.setVisibility(View.VISIBLE);
         } else {
-            holder.unreadLabel.setVisibility(View.INVISIBLE);
+            holder.unreadLabel.setVisibility(View.GONE);
         }
 
         if (conversation.getMsgCount() != 0) {
             // 把最后一条消息的内容作为item的message内容
             EMMessage lastMessage = conversation.getLastMessage();
-            holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()),isGroup)),
-                    BufferType.SPANNABLE);
-
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.FAIL) {
-                holder.msgState.setVisibility(View.VISIBLE);
+//                holder.msgState.setVisibility(View.VISIBLE);
+                holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.msg_state_fail_resend, 0);
             } else {
-                holder.msgState.setVisibility(View.GONE);
+//                holder.msgState.setVisibility(View.GONE);
+                holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
+            holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()), isGroup)),
+                    BufferType.SPANNABLE);
         }
 
         return convertView;
@@ -245,7 +246,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         /**
          * 最后一条消息的发送状态
          */
-        View msgState;
+//        View msgState;
         /**
          * 整个list中每一行总布局
          */

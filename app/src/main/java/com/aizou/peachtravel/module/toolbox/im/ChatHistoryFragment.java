@@ -68,10 +68,10 @@ public class ChatHistoryFragment extends Fragment {
 	private ListView listView;
 	private Map<String, IMUser> contactList;
 	private ChatHistoryAdapter adapter;
-	private EditText query;
-	private ImageButton clearSearch;
-	public RelativeLayout errorItem;
-	public TextView errorText;
+//	private EditText query;
+//	private ImageButton clearSearch;
+//	public RelativeLayout errorItem;
+//	public TextView errorText;
 	private boolean hidden;
 
 	@Override
@@ -83,8 +83,8 @@ public class ChatHistoryFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
-		errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
+//		errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
+//		errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
 		// contact list
 		contactList = AccountManager.getInstance().getContactList(getActivity());
 		listView = (ListView) getView().findViewById(R.id.list);
@@ -130,33 +130,33 @@ public class ChatHistoryFragment extends Fragment {
 			}
 		});
 		// 搜索框
-		query = (EditText) getView().findViewById(R.id.query);
-		// 搜索框中清除button
-		clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
-		query.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				
-				adapter.getFilter().filter(s);
-				if (s.length() > 0) {
-					clearSearch.setVisibility(View.VISIBLE);
-				} else {
-					clearSearch.setVisibility(View.INVISIBLE);
-				}
-			}
-
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			public void afterTextChanged(Editable s) {
-			}
-		});
-		clearSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				query.getText().clear();
-
-			}
-		});
+//		query = (EditText) getView().findViewById(R.id.query);
+//		// 搜索框中清除button
+//		clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
+//		query.addTextChangedListener(new TextWatcher() {
+//			public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//				adapter.getFilter().filter(s);
+//				if (s.length() > 0) {
+//					clearSearch.setVisibility(View.VISIBLE);
+//				} else {
+//					clearSearch.setVisibility(View.INVISIBLE);
+//				}
+//			}
+//
+//			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//			}
+//
+//			public void afterTextChanged(Editable s) {
+//			}
+//		});
+//		clearSearch.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				query.getText().clear();
+//
+//			}
+//		});
 
 	}
 

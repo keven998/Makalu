@@ -2,23 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     android:background="@color/common_bg"
     android:orientation="vertical" >
 
-    <include layout="@layout/search_bar" />
-
-    <include
-        android:id="@+id/rl_error_item"
-        layout="@layout/chat_neterror_item"
-        android:visibility="gone" />
+    <!--<include-->
+        <!--android:id="@+id/rl_error_item"-->
+        <!--layout="@layout/chat_neterror_item"-->
+        <!--android:visibility="gone" />-->
 
     
       <ListView
-         android:cacheColorHint="#00000000"
+        android:cacheColorHint="#00000000"
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
+        android:background="@color/app_backgroud"
+          android:layout_marginTop="10dp"
+          android:layout_marginBottom="10dp"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="10dp"
         android:divider="@null"
         />
+
+    <LinearLayout android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="72dp"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/base_text_color_text_hint"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:text="想去哪里疯一下\n快和大家来八一八吧"/>
+
+        <Button android:id="@+id/start_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:background="@color/app_theme_color"
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:layout_marginTop="24dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="去聊聊"/>
+
+    </LinearLayout>
+
 </LinearLayout>

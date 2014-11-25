@@ -58,10 +58,10 @@ public class ChatAllHistoryFragment extends Fragment {
     private ListView listView;
     private Map<String, IMUser> contactList;
     private ChatAllHistoryAdapter adapter;
-    private EditText query;
-    private ImageButton clearSearch;
-    public RelativeLayout errorItem;
-    public TextView errorText;
+//    private EditText query;
+//    private ImageButton clearSearch;
+//    public RelativeLayout errorItem;
+//    public TextView errorText;
     private boolean hidden;
     private List<EMGroup> groups;
 
@@ -74,13 +74,12 @@ public class ChatAllHistoryFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
-        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
+//        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
+//        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         // contact list
         contactList = AccountManager.getInstance().getContactList(getActivity());
         listView = (ListView) getView().findViewById(R.id.list);
         adapter = new ChatAllHistoryAdapter(getActivity(), 1, loadConversationsWithRecentChat());
-
         groups = EMGroupManager.getInstance().getAllGroups();
 
         // 设置adapter
@@ -132,35 +131,41 @@ public class ChatAllHistoryFragment extends Fragment {
                 return false;
             }
         });
-        // 搜索框
-        query = (EditText) getView().findViewById(R.id.query);
-        // 搜索框中清除button
-        clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
-        query.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        // 搜索框
+//        query = (EditText) getView().findViewById(R.id.query);
+//        // 搜索框中清除button
+//        clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
+//        query.addTextChangedListener(new TextWatcher() {
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                adapter.getFilter().filter(s);
+//                if (s.length() > 0) {
+//                    clearSearch.setVisibility(View.VISIBLE);
+//                } else {
+//                    clearSearch.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
+//        clearSearch.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                query.getText().clear();
+//
+//            }
+//        });
 
-                adapter.getFilter().filter(s);
-                if (s.length() > 0) {
-                    clearSearch.setVisibility(View.VISIBLE);
-                } else {
-                    clearSearch.setVisibility(View.INVISIBLE);
-                }
-            }
+    }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        clearSearch.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                query.getText().clear();
-
-            }
-        });
-
+    private void setEmptyView() {
+//        listView.setEmptyView();
+        View emptyView = getActivity().findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
     }
 
     @Override
@@ -184,6 +189,9 @@ public class ChatAllHistoryFragment extends Fragment {
 
             // 更新消息未读数
 //			((MainActivity) getActivity()).updateUnreadLabel();
+            if (adapter.getCount() <= 0) {
+                setEmptyView();
+            }
 
             return true;
         }
@@ -264,6 +272,9 @@ public class ChatAllHistoryFragment extends Fragment {
         super.onResume();
         if (!hidden) {
             refresh();
+        }
+        if (listView.getAdapter().getCount() <= 0) {
+            setEmptyView();
         }
     }
 

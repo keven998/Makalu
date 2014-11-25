@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ public class ContactlistFragment extends Fragment {
 	private boolean hidden;
 	private TopSectionBar sectionBar;
 	private InputMethodManager inputMethodManager;
+    private View emptyView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public class ContactlistFragment extends Fragment {
 		getContactList();
 		// 设置adapter
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
-		listView.setAdapter(adapter);
+        listView.setAdapter(adapter);
         sectionBar.setListView(listView);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -107,6 +109,8 @@ public class ContactlistFragment extends Fragment {
 				}
 			}
 		});
+
+
 //		listView.setOnTouchListener(new OnTouchListener() {
 //
 //			@Override
@@ -121,7 +125,7 @@ public class ContactlistFragment extends Fragment {
 //			}
 //		});
 
-		registerForContextMenu(listView);
+//		registerForContextMenu(listView);
 
 	}
 
@@ -129,9 +133,9 @@ public class ContactlistFragment extends Fragment {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		// 长按前两个不弹menu
-		if (((AdapterContextMenuInfo) menuInfo).position > 0) {
-			getActivity().getMenuInflater().inflate(R.menu.context_contact_list, menu);
-		}
+//		if (((AdapterContextMenuInfo) menuInfo).position > 0) {
+//			getActivity().getMenuInflater().inflate(R.menu.context_contact_list, menu);
+//		}
 	}
 
 	@Override
@@ -166,6 +170,21 @@ public class ContactlistFragment extends Fragment {
 		if (!hidden) {
 			refresh();
 		}
+        if (contactList.size() <= 1 && emptyView == null) {
+            emptyView = getActivity().findViewById(R.id.empty_view);
+            emptyView.setVisibility(View.VISIBLE);
+            emptyView.findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo
+                }
+            });
+        } else if (contactList.size() > 1) {
+            if (emptyView != null) {
+                emptyView.setVisibility(View.GONE);
+                emptyView = null;
+            }
+        }
 	}
 
 	/**
@@ -292,8 +311,9 @@ public class ContactlistFragment extends Fragment {
 		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Map.Entry<String, IMUser> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
-				contactList.add(entry.getValue());
+			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+                contactList.add(entry.getValue());
+            }
 		}
 //        for(int i=0;i<24;i++){
 //            IMUser user = new IMUser();

@@ -99,6 +99,10 @@ public class IMMainActivity extends BaseChatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_im_main);
 		initView();
+
+        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thbar.getTitleTextView().setText("旅行圈");
+
 		//这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
 		//显示所有人消息记录的fragment
@@ -148,6 +152,7 @@ public class IMMainActivity extends BaseChatActivity {
             chatHistoryFragment.refresh();
         }
     }
+
     public void refreshContactListFragment(){
         if(contactListFragment!=null){
             contactListFragment.refresh();
@@ -164,7 +169,7 @@ public class IMMainActivity extends BaseChatActivity {
 		mTabs = new Button[3];
 		mTabs[0] = (Button) findViewById(R.id.btn_conversation);
 		mTabs[1] = (Button) findViewById(R.id.btn_address_list);
-		mTabs[2] = (Button) findViewById(R.id.btn_setting);
+//		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 		// 把第一个tab设为选中状态
 		mTabs[0].setSelected(true);
 
@@ -215,9 +220,9 @@ public class IMMainActivity extends BaseChatActivity {
 		case R.id.btn_address_list:
 			index = 1;
 			break;
-		case R.id.btn_setting:
-			index = 2;
-			break;
+//		case R.id.btn_setting:
+//			index = 2;
+//			break;
 		}
 		if (currentTabIndex != index) {
 			FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
@@ -634,7 +639,7 @@ public class IMMainActivity extends BaseChatActivity {
 
 		@Override
 		public void onConnected() {
-			chatHistoryFragment.errorItem.setVisibility(View.GONE);
+//			chatHistoryFragment.errorItem.setVisibility(View.GONE);
 		}
 
 		@Override
@@ -643,18 +648,18 @@ public class IMMainActivity extends BaseChatActivity {
 				// 显示帐号在其他设备登陆dialog
 				showConflictDialog();
 			} else {
-				chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
-				if(NetUtils.hasNetwork(IMMainActivity.this))
-					chatHistoryFragment.errorText.setText("连接不到聊天服务器");
-				else
-					chatHistoryFragment.errorText.setText("当前网络不可用，请检查网络设置");
+//				chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
+//				if(NetUtils.hasNetwork(IMMainActivity.this))
+//					chatHistoryFragment.errorText.setText("连接不到聊天服务器");
+//				else
+//					chatHistoryFragment.errorText.setText("当前网络不可用，请检查网络设置");
 					
 			}
 		}
 
 		@Override
 		public void onReConnected() {
-			chatHistoryFragment.errorItem.setVisibility(View.GONE);
+//			chatHistoryFragment.errorItem.setVisibility(View.GONE);
 		}
 
 		@Override
