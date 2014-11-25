@@ -3,14 +3,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
     <com.aizou.peachtravel.common.widget.dslv.DragSortListView
         xmlns:dslv="http://schemas.android.com/apk/res-auto"
         android:id="@+id/edit_dslv"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="fill_parent"
         android:dividerHeight="0dp"
+        android:divider="@android:color/transparent"
         android:fastScrollEnabled="true"
         dslv:collapsed_height="2dp"
         dslv:drag_enabled="true"
@@ -24,5 +27,15 @@
         dslv:sort_enabled="true"
         dslv:track_drag_sort="false"
         dslv:use_default_controller="true" />
+
+        <Button
+            android:id="@+id/edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="编辑"/>
+    </FrameLayout>
 
 </LinearLayout>

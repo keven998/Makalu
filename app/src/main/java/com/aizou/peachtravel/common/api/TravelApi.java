@@ -63,10 +63,12 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getRESTList(String id,HttpCallBack callback) {
+    public static PTRequestHandler getRESTList(String id,int page,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + REST_LIST+id);
+        request.putUrlParams("page",page+"");
+        request.putUrlParams("pageSize","10");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

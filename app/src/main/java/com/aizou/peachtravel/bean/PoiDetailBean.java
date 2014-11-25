@@ -6,6 +6,8 @@ import java.util.List;
  * Created by Rjm on 2014/11/22.
  */
 public class PoiDetailBean {
+    public final static String RESTAURANT="restaurant";
+    public final static String SHOPPING="shopping";
     public String type;
     public String id;
     public String zhName;
