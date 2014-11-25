@@ -31,7 +31,10 @@
         <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
     </style>
 
-
+    <style name="TransparentDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
 
 </resources>
