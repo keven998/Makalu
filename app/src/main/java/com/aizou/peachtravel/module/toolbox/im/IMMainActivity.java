@@ -633,6 +633,7 @@ public class IMMainActivity extends BaseChatActivity {
 		if (currentTabIndex == 1)
 			contactListFragment.refresh();
 	}
+
 	/**
 	 * 保存邀请等msg
 	 * @param msg
@@ -646,8 +647,6 @@ public class IMMainActivity extends BaseChatActivity {
         IMUserRepository.saveContact(mContext,user);
 
 	}
-
-	
 
 
 	/**
@@ -921,6 +920,7 @@ public class IMMainActivity extends BaseChatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE));
+                    dismiss();
                 }
             });
 
@@ -928,6 +928,7 @@ public class IMMainActivity extends BaseChatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getActivity(), AddContactActivity.class));
+                    dismiss();
                 }
             });
             return connectionDialog;
