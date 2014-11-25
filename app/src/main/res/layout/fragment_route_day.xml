@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.aizou.peachtravel.common.widget.dslv.DragSortListView
-        xmlns:dslv="http://schemas.android.com/apk/res/com.aizou.lvxingpai"
+        xmlns:dslv="http://schemas.android.com/apk/res-auto"
         android:id="@+id/edit_dslv"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
