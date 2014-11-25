@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +26,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +50,8 @@ import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
@@ -99,9 +104,6 @@ public class IMMainActivity extends BaseChatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_im_main);
 		initView();
-
-        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("旅行圈");
 
 		//这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
@@ -181,9 +183,26 @@ public class IMMainActivity extends BaseChatActivity {
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMoreMenu(titleHeaderBar.getRightTextView());
+//                showMoreMenu(titleHeaderBar.getRightTextView());
+                BlurMenu fragment = new BlurMenu();
+                Bundle args = new Bundle();
+
+                args.putInt(
+                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+                        5
+                );
+                args.putFloat(
+                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+                        2
+                );
+
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "blur_menu");
             }
         });
+
+        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thbar.getTitleTextView().setText("旅行圈");
 
     }
 
@@ -880,4 +899,39 @@ public class IMMainActivity extends BaseChatActivity {
         }
 
     }
+
+    public static class BlurMenu extends BlurDialogFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
+            View customView = getActivity().getLayoutInflater().inflate(R.layout.im_main_dialog_menu, null);
+            connectionDialog.setContentView(customView);
+//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    dismiss();
+//                }
+//            });
+            customView.findViewById(R.id.new_talk).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE));
+                }
+            });
+
+            customView.findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(), AddContactActivity.class));
+                }
+            });
+            return connectionDialog;
+        }
+    }
+
 }
