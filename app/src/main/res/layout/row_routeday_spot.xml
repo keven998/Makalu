@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="18dp"
+        android:paddingRight="15dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:src="@drawable/ic_line_edit_delete" />
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/spot_image_iv"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:id="@+id/spot_name_tv"
+            android:layout_width="fill_parent"
+            android:layout_toRightOf="@id/spot_image_iv"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/time_cost_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spot_name_tv"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/spot_image_iv"
+            />
+        </RelativeLayout>
+    <TextView
+        android:id="@+id/nearby_tv"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="周边"/>
+
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="10dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:src="@drawable/ic_line_edit_drag" />
+
+</LinearLayout>

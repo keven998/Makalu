@@ -1,12 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,9 +11,9 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.HackyViewPager;
-import com.aizou.core.widget.RecyclingPagerAdapter;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
+import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
@@ -28,11 +22,9 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.module.ImageViewPagerActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/17.

@@ -3,29 +3,18 @@ package com.aizou.peachtravel.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.aizou.core.constant.LayoutValue;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.AssetUtils;
-import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.FixedGridView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -33,22 +22,12 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
-import com.aizou.peachtravel.bean.CityBean;
-import com.aizou.peachtravel.bean.InCityBean;
-import com.aizou.peachtravel.bean.OutCountryBean;
 import com.aizou.peachtravel.bean.RecDestBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.common.widget.ExpandGridView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Rjm on 2014/10/9.
@@ -145,7 +124,7 @@ public class RecDestFragment extends PeachBaseFragment {
             cityListGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(),CityDetailActivity.class);
+                    Intent intent = new Intent(getActivity(),PoiDetailActivity.class);
                     intent.putExtra("id",adapter.getItem(position).id);
                     startActivity(intent);
                 }

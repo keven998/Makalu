@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -66,7 +67,8 @@ public class SelectDestActivity extends PeachBaseActivity {
         startTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(mContext,StrategyActivity.class);
+                startActivity(intent);
             }
         });
         inOutRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

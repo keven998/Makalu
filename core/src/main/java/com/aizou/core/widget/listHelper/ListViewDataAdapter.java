@@ -19,6 +19,8 @@ public class ListViewDataAdapter<ItemDataType> extends ListViewDataAdapterBase<I
         super(viewHolderCreator);
     }
 
+
+
     public ArrayList<ItemDataType> getDataList() {
         return mItemDataList;
     }

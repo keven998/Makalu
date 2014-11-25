@@ -113,7 +113,6 @@ public class ExpandableLayoutItem extends RelativeLayout
 //        this.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
-        LogUtil.d("animation-targetHeight---------"+targetHeight);
         v.getLayoutParams().height = 0;
         v.setVisibility(VISIBLE);
 
@@ -123,7 +122,6 @@ public class ExpandableLayoutItem extends RelativeLayout
             protected void applyTransformation(float interpolatedTime, Transformation t)
             {
                 v.getLayoutParams().height = (interpolatedTime == 1) ? LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
-                LogUtil.d("animation-height---------"+v.getHeight());
                 v.requestLayout();
             }
 
