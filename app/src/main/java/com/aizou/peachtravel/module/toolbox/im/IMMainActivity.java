@@ -189,11 +189,11 @@ public class IMMainActivity extends BaseChatActivity {
 
                 args.putInt(
                         SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                        5
+                        4
                 );
                 args.putFloat(
                         SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                        2
+                        5
                 );
 
                 fragment.setArguments(args);

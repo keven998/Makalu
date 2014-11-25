@@ -1,8 +1,10 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +17,15 @@ import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.FastBlurHelper;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 /**
  * Created by Rjm on 2014/10/29.
@@ -43,6 +49,7 @@ public class ContactDetailActivity extends BaseChatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
+        initTitleBar();
         ViewUtils.inject(this);
         userId = getIntent().getLongExtra("userId", 0);
         imUser = IMUserRepository.getContactByUserId(mContext, userId);
@@ -68,10 +75,7 @@ public class ContactDetailActivity extends BaseChatActivity {
                         IMUserRepository.saveContact(mContext, imUser);
                         bindView();
                     }
-
-
                 }
-
             }
 
             @Override
@@ -79,19 +83,73 @@ public class ContactDetailActivity extends BaseChatActivity {
 
             }
         });
+    }
 
+    private void initTitleBar() {
+        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thbar.getTitleTextView().setText("旅友信息");
     }
 
     private void bindView() {
-        ImageLoader.getInstance().displayImage(imUser.getAvatar(), avatarIv, UILUtils.getDefaultOption());
-        nickNameTv.setText(imUser.getNick());
-        idTv.setText(imUser.getUserId() + "");
-        signTv.setText(imUser.getSignature());
+        ImageLoader.getInstance().displayImage(imUser.getAvatar(), avatarIv, UILUtils.getDefaultOption(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                final ImageView bigHeader = (ImageView)findViewById(R.id.big_avatar);
+                bigHeader.setImageBitmap(bitmap);
+
+                bigHeader.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        bigHeader.getViewTreeObserver().removeOnPreDrawListener(this);
+                        bigHeader.buildDrawingCache();
+
+                        Bitmap bmp = bigHeader.getDrawingCache();
+                        blur(bmp, bigHeader);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        });
+        nickNameTv.setText("昵称：" + imUser.getNick());
+        idTv.setText("桃号：" + imUser.getUserId());
+        signTv.setText("签名：" + imUser.getSignature());
     }
 
     public void startChat(View view) {
         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
 
+    }
+
+    private void blur(Bitmap bkg, ImageView iv) {
+        long startMs = System.currentTimeMillis();
+        float scaleFactor = 1;
+        float radius = 20;
+
+        Bitmap overlay = FastBlurHelper.doBlur(bkg, (int) radius, true);
+        iv.setImageBitmap(overlay);
     }
 }
