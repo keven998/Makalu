@@ -1,6 +1,8 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,15 +16,21 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RouteDayDragBean;
+import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -32,9 +40,12 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class RouteDayFragment extends PeachBaseFragment {
+    private ArrayList<StrategyBean.IndexPoi> itinerary;
+    private int day;
+    private HashMap<Integer, List<PoiDetailBean>> routeDayMap;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
-    DragAdapter mDragAdpater;
+    RouteDayAdapter mRouteDayAdpater;
     @InjectView(R.id.edit_btn)
     Button mEditBtn;
     View addDayFooter;
@@ -56,26 +67,42 @@ public class RouteDayFragment extends PeachBaseFragment {
         return rootView;
 
     }
+    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary){
+        routeDayMap = new HashMap<Integer, List<PoiDetailBean>>();
+        for(int i=0;i< day;i++){
+            routeDayMap.put(i,new ArrayList<PoiDetailBean>());
+        }
+
+        for(StrategyBean.IndexPoi indexPoi:itinerary){
+            routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
+        }
+
+    }
 
     private void initData() {
-        mDragAdpater = new DragAdapter(getActivity());
-        mEditDslv.setDropListener(mDragAdpater);
+        itinerary =getArguments().getParcelableArrayList("itinerary");
+        day = getArguments().getInt("day");
+        resizeData(itinerary);
+        mRouteDayAdpater = new RouteDayAdapter();
+        mEditDslv.setDropListener(mRouteDayAdpater);
 
         // make and set controller on dslv
-        SectionController c = new SectionController(mEditDslv, mDragAdpater);
+        SectionController c = new SectionController(mEditDslv, mRouteDayAdpater);
         mEditDslv.setFloatViewManager(c);
         mEditDslv.setOnTouchListener(c);
-        mEditDslv.setAdapter(mDragAdpater);
+        mEditDslv.setAdapter(mRouteDayAdpater);
         mEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDragAdpater.isEditableMode =!mDragAdpater.isEditableMode;
-                if(mDragAdpater.isEditableMode){
+                mRouteDayAdpater.isEditableMode =!mRouteDayAdpater.isEditableMode;
+                if(mRouteDayAdpater.isEditableMode){
                     lineLl.setVisibility(View.GONE);
+                    addDayFooter.setVisibility(View.VISIBLE);
                 }else{
-                    lineLl.setVisibility(View.VISIBLE);
+                    lineLl.setVisibility(View.GONE);
+                    addDayFooter.setVisibility(View.INVISIBLE);
                 }
-                mDragAdpater.notifyDataSetChanged();
+                mRouteDayAdpater.notifyDataSetChanged();
             }
         });
         addDayBtn.setOnClickListener(new View.OnClickListener() {
@@ -87,13 +114,13 @@ public class RouteDayFragment extends PeachBaseFragment {
     }
 
     private class SectionController extends DragSortController {
-
+        public boolean isEditableMode;
         private int mPos;
-        private DragAdapter mAdapter;
+        private RouteDayAdapter mAdapter;
         DragSortListView mDslv;
 
         public SectionController(DragSortListView dslv,
-                                 DragAdapter adapter) {
+                                 RouteDayAdapter adapter) {
             super(dslv, R.id.drag_handle, DragSortController.ON_DOWN, 0);
             setRemoveEnabled(false);
             mDslv = dslv;
@@ -142,6 +169,246 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
 
     }
+    public class RouteDayAdapter extends BaseSectionAdapter implements
+            DragSortListView.DropListener{
+        public static final int SPOT=1;
+        public static final int POI=2;
+        public boolean isEditableMode;
+        public RouteDayAdapter(){
+            super();
+        }
+
+        @Override
+        public int getItemViewType(int section, int position) {
+            String type =routeDayMap.get(section).get(position).type;
+            if(type.equals(TravelApi.PoiType.SPOT)){
+                return SPOT ;
+            }else{
+                return POI ;
+            }
+
+        }
+
+        @Override
+        public int getHeaderItemViewType(int section) {
+            return 0;
+        }
+
+        @Override
+        public int getItemViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public int getHeaderViewTypeCount() {
+            return 1;
+        }
+
+        @Override
+        public Object getItem(int section, int position) {
+            return routeDayMap.get(section).get(position);
+        }
+
+        @Override
+        public long getItemId(int section, int position) {
+            return getGlobalPositionForItem(section,position);
+        }
+
+        @Override
+        public View getView(int section, int position, View convertView, ViewGroup parent) {
+            int type = getItemViewType(section,position);
+            ItemViewHolder holder = null;
+            if (convertView == null) {
+                holder = new ItemViewHolder();
+                switch (type) {
+                    case SPOT:
+                        convertView = View.inflate(getActivity(), R.layout.row_routeday_spot, null);
+                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
+                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
+                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
+                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
+                        holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
+                        holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
+                        break;
+                    case POI:
+                        convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
+                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
+                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
+                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
+                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
+                        holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
+                        holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
+                        holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
+                        holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
+                        break;
+                }
+                convertView.setTag(holder);
+            } else {
+                holder = (ItemViewHolder) convertView.getTag();
+            }
+            PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
+            switch (type){
+                case SPOT:
+                    ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
+                    holder.spotNameTv.setText(poiDetailBean.zhName);
+                    holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
+                    if (isEditableMode) {
+                        holder.deleteIv.setVisibility(View.VISIBLE);
+                        holder.nearByTv.setVisibility(View.GONE);
+                        holder.dragHandleIv.setVisibility(View.VISIBLE);
+                        holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    } else {
+                        holder.deleteIv.setVisibility(View.GONE);
+                        holder.nearByTv.setVisibility(View.VISIBLE);
+                        holder.dragHandleIv.setVisibility(View.GONE);
+                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    }
+
+
+                    break;
+                case RouteDayDragBean.POI:
+                    ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+                    holder.poiNameTv.setText(poiDetailBean.zhName);
+                    holder.poiAddressTv.setText(poiDetailBean.address);
+                    holder.poiRating.setRating(poiDetailBean.rating);
+                    holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+                    if (isEditableMode) {
+                        holder.deleteIv.setVisibility(View.VISIBLE);
+                        holder.nearByTv.setVisibility(View.GONE);
+                        holder.dragHandleIv.setVisibility(View.VISIBLE);
+                        holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    } else {
+                        holder.deleteIv.setVisibility(View.GONE);
+                        holder.nearByTv.setVisibility(View.VISIBLE);
+                        holder.dragHandleIv.setVisibility(View.GONE);
+                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    }
+                    break;
+            }
+            return convertView;
+        }
+
+        @Override
+        public View getHeaderView(int section, View convertView, ViewGroup parent) {
+            HeaderViewHolder holder=null;
+            if(convertView==null){
+                holder = new HeaderViewHolder();
+                convertView = View.inflate(getActivity(), R.layout.row_drag_div, null);
+                holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
+                holder.topLineVw = convertView.findViewById(R.id.line_top);
+                holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
+                holder.menuIv = (ImageView) convertView.findViewById(R.id.iv_menu);
+                convertView.setTag(holder);
+            }else{
+                holder = (HeaderViewHolder) convertView.getTag();
+            }
+            if(section==0){
+                holder.topLineVw.setVisibility(View.INVISIBLE);
+            }else{
+                holder.topLineVw.setVisibility(View.VISIBLE);
+            }
+            List<PoiDetailBean> poiList = routeDayMap.get(section);
+            holder.dayTv.setText("");
+            holder.menuIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            return convertView;
+        }
+
+        @Override
+        public int getSectionCount() {
+            return routeDayMap.size();
+        }
+
+        @Override
+        public int getCountInSection(int section) {
+            return routeDayMap.get(section).size();
+        }
+
+        @Override
+        public boolean doesSectionHaveHeader(int section) {
+            return true;
+        }
+
+        @Override
+        public boolean shouldListHeaderFloat(int headerIndex) {
+            if (headerIndex == 1) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void drop(int from, int to) {
+            int fromSection = getSection(from);
+            int fromPostion = getPositionInSection(from);
+            int toSection = getSection(to);
+            int toPostion = getPositionInSection(to);
+            List<PoiDetailBean> fromList = routeDayMap.get(fromSection);
+            List<PoiDetailBean> toList = routeDayMap.get(toSection);
+            PoiDetailBean bean = fromList.get(fromPostion);
+            fromList.remove(bean);
+            toList.add(toPostion,bean);
+            notifyDataSetChanged();
+
+        }
+        @Override
+        public boolean isEnabled(int position) {
+
+            if (isHeader(position)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        private class ItemViewHolder {
+            public LinearLayout lineLl;
+            public ImageView deleteIv, dragHandleIv;
+            public TextView nearByTv;
+            public ImageView poiImageIv, spotImageIv;
+            public TextView poiNameTv, spotNameTv;
+            public TextView poiAddressTv, spotCostTimeTv;
+            public TextView poiPriceTv;
+            public RatingBar poiRating;
+
+
+        }
+        private class HeaderViewHolder{
+            public LinearLayout lineLl;
+            public View topLineVw;
+            public TextView dayTv;
+            public ImageView menuIv;
+        }
+    }
+
+
+
 
     public class DragAdapter extends BaseAdapter implements
             DragSortListView.DropListener {
@@ -419,6 +686,39 @@ public class RouteDayFragment extends PeachBaseFragment {
             } else {
                 return true;
             }
+        }
+    }
+
+    public static class RouteDayMenu extends BlurDialogFragment {
+        public int dayIndex;
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
+            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_route_day, null);
+            connectionDialog.setContentView(customView);
+//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    dismiss();
+//                }
+//            });
+            customView.findViewById(R.id.add_view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+
+            customView.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+            return connectionDialog;
         }
     }
 }

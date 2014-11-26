@@ -42,12 +42,10 @@ import java.util.List;
  * Created by Rjm on 2014/10/9.
  */
 public class PeachApplication extends BaseApplication {
-    private static PeachApplication instance;
     public DaoSession daoSession;
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
         initPeachConfig();
         initImageLoader();
 //        refreshUserInfo();
@@ -65,9 +63,6 @@ public class PeachApplication extends BaseApplication {
 
     public DaoSession getDaoSession() {
         return daoSession;
-    }
-    public static PeachApplication getInstance() {
-        return instance;
     }
 
     private void initIM(){

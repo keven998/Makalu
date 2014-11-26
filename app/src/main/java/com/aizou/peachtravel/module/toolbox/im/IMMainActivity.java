@@ -186,7 +186,6 @@ public class IMMainActivity extends BaseChatActivity {
 //                showMoreMenu(titleHeaderBar.getRightTextView());
                 BlurMenu fragment = new BlurMenu();
                 Bundle args = new Bundle();
-
                 args.putInt(
                         SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
                         4

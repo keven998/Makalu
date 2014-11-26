@@ -8,6 +8,20 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@color/main_color" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="我的目的地"
+        android:padding="10dp"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/loc_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:background="#FF0000"
+        android:visibility="gone"
+        android:scrollbars="none" />
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/strategy_viewpager"
