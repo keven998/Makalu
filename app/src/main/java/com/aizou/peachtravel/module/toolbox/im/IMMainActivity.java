@@ -857,9 +857,9 @@ public class IMMainActivity extends BaseChatActivity {
 			try {
 				if (conflictBuilder == null)
 					conflictBuilder = new android.app.AlertDialog.Builder(IMMainActivity.this);
-				conflictBuilder.setTitle("下线通知");
-				conflictBuilder.setMessage(R.string.connect_conflict);
-				conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				    conflictBuilder.setTitle("下线通知");
+				    conflictBuilder.setMessage(R.string.connect_conflict);
+				    conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {

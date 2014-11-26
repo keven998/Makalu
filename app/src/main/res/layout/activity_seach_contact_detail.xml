@@ -1,72 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
     android:orientation="vertical">
 
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/base_color_white"
+        android:layout_margin="10dp">
 
-        <RelativeLayout
-            android:id="@+id/rl_user_info"
-            android:layout_width="fill_parent"
+        <FrameLayout android:id="@+id/avatar_frame"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:background="@color/app_theme_color">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="83dp"
+                android:layout_height="83dp"
+                android:padding="3dp"
+                android:layout_gravity="center"
+                android:background="@color/base_color_white"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:scaleType="fitCenter"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_toRightOf="@id/avatar_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="20dp"
-            android:visibility="visible">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="17sp"/>
 
-            <FrameLayout
-                android:id="@+id/fl_avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
+        <TextView
+            android:id="@+id/tv_sign"
+            android:layout_toRightOf="@id/avatar_frame"
+            android:layout_below="@id/tv_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/base_text_color_subtitle"
+            android:textSize="14sp"/>
 
-                <ImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
+    </RelativeLayout>
 
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tv_nickname"
-                android:layout_below="@id/fl_avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="昵称"
-                 />
-
-            <TextView
-                android:id="@+id/tv_sign"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_nickname"
-                android:text="签名"
-
-                />
-
-        </RelativeLayout>
-
-
-
-        <Button
-            android:id="@+id/btn_add_contact"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="加为旅行圈好友"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/btn_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:text="加为旅行圈好友"
+        android:textSize="15sp"
+        android:textColor="@color/base_color_white"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@color/app_theme_color"/>
 
 </LinearLayout>

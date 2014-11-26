@@ -36,16 +36,17 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 
 public class AddContactActivity extends BaseChatActivity implements View.OnClickListener {
     private EditText editText;
-    private LinearLayout searchedUserLayout;
+//    private LinearLayout searchedUserLayout;
     private TextView nameText;
-    private Button searchBtn;
-    private ImageView avatar;
-    private InputMethodManager inputMethodManager;
+//    private Button searchBtn;
+//    private ImageView avatar;
+//    private InputMethodManager inputMethodManager;
     private String toAddUsername;
     private ProgressDialog progressDialog;
 
@@ -54,16 +55,32 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
 
+        initTitleBar();
+
         editText = (EditText) findViewById(R.id.edit_note);
-        searchedUserLayout = (LinearLayout) findViewById(R.id.ll_user);
-        nameText = (TextView) findViewById(R.id.name);
-        searchBtn = (Button) findViewById(R.id.search);
-        avatar = (ImageView) findViewById(R.id.avatar);
-        findViewById(R.id.ll_phone_contact).setOnClickListener(this);
-        findViewById(R.id.ll_weixin).setOnClickListener(this);
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        searchedUserLayout = (LinearLayout) findViewById(R.id.ll_user);
+//        nameText = (TextView) findViewById(R.id.name);
+//        searchBtn = (Button) findViewById(R.id.search);
+//        avatar = (ImageView) findViewById(R.id.avatar);
+        findViewById(R.id.tv_phone_contact).setOnClickListener(this);
+        findViewById(R.id.tv_weixin_contacts).setOnClickListener(this);
+//        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
+    private void initTitleBar(){
+        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+//        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+        titleHeaderBar.getRightTextView().setText(getString(R.string.button_search));
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchContact(v);
+            }
+        });
+
+        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thbar.getTitleTextView().setText("添加旅友");
+    }
 
     /**
      * 查找contact
@@ -72,9 +89,9 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
      */
     public void searchContact(View v) {
         final String name = editText.getText().toString();
-        String saveText = searchBtn.getText().toString();
+//        String saveText = searchBtn.getText().toString();
 
-        if (getString(R.string.button_search).equals(saveText)) {
+//        if (getString(R.string.button_search).equals(saveText)) {
             toAddUsername = name;
             if (TextUtils.isEmpty(name)) {
                 startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "请输入用户名"));
@@ -134,7 +151,7 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
                 }
             });
 
-        }
+//        }
     }
 
     public void back(View v) {
@@ -144,11 +161,12 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_phone_contact:
+            case R.id.tv_phone_contact:
                 Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                 startActivity(phoneIntent);
                 break;
-            case R.id.ll_weixin:
+
+            case R.id.tv_weixin_contacts:
                 break;
         }
     }

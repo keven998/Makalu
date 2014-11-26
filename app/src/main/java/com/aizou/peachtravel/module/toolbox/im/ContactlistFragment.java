@@ -173,7 +173,7 @@ public class ContactlistFragment extends Fragment {
         if (contactList.size() <= 1 && emptyView == null) {
             emptyView = getActivity().findViewById(R.id.empty_view);
             emptyView.setVisibility(View.VISIBLE);
-            emptyView.findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
+            getActivity().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //todo

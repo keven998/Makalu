@@ -175,7 +175,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
     private GridView memberGv;
     private ImageView addIv,deleteIv;
     private ImageView closeIv,expandIv;
-	private ImageView locationImgview;
+//	private ImageView locationImgview;
 	private View more;
 	private int position;
 	private ClipboardManager clipboard;
@@ -205,7 +205,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 	private boolean isloading;
 	private final int pagesize = 20;
 	private boolean haveMoreData = true;
-	private Button btnMore;
+	private ImageView btnMore;
 	public String playMsgId;
     private String myUserInfoJson;
 	
@@ -244,15 +244,15 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 		expressionViewpager = (ViewPager) findViewById(R.id.vPager);
 		expressionContainer = (LinearLayout) findViewById(R.id.ll_face_container);
 		btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
-		locationImgview = (ImageView) findViewById(R.id.btn_location);
+//		locationImgview = (ImageView) findViewById(R.id.btn_location);
 		iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
 		iv_emoticons_checked = (ImageView) findViewById(R.id.iv_emoticons_checked);
 		loadmorePB = (ProgressBar) findViewById(R.id.pb_load_more);
-		btnMore = (Button) findViewById(R.id.btn_more);
+		btnMore = (ImageView) findViewById(R.id.btn_more);
 		iv_emoticons_normal.setVisibility(View.VISIBLE);
 		iv_emoticons_checked.setVisibility(View.INVISIBLE);
 		more = findViewById(R.id.more);
-		edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
+//		edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
 
 		// 动画资源文件,用于录制语音时
 		micImages = new Drawable[] { getResources().getDrawable(R.drawable.record_animate_01),
@@ -275,23 +275,23 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 		edittext_layout.requestFocus();
 		voiceRecorder = new VoiceRecorder(micImageHandler);
 		buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
-		mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener() {
-
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) {
-					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
-				} else {
-					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
-				}
-
-			}
-		});
+//		mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener() {
+//
+//			@Override
+//			public void onFocusChange(View v, boolean hasFocus) {
+//				if (hasFocus) {
+//					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
+//				} else {
+//					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
+//				}
+//
+//			}
+//		});
 		mEditTextContent.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
+//				edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
 				more.setVisibility(View.GONE);
 				iv_emoticons_normal.setVisibility(View.VISIBLE);
 				iv_emoticons_checked.setVisibility(View.INVISIBLE);
@@ -656,7 +656,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			// 群聊
 			findViewById(R.id.container_to_group).setVisibility(View.VISIBLE);
 			findViewById(R.id.container_remove).setVisibility(View.GONE);
-			findViewById(R.id.container_voice_call).setVisibility(View.GONE);
+//			findViewById(R.id.container_voice_call).setVisibility(View.GONE);
 			toChatUsername = getIntent().getStringExtra("groupId");
             setUpGroupMember();
             updateGroup();
@@ -967,8 +967,8 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			selectPicFromCamera();// 点击照相图标
 		} else if (id == R.id.btn_picture) {
 			selectPicFromLocal(); // 点击图片图标
-		} else if (id == R.id.btn_location) { // 位置
-			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
+//		} else if (id == R.id.btn_location) { // 位置
+//			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
 		} else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
 			more.setVisibility(View.VISIBLE);
 			iv_emoticons_normal.setVisibility(View.INVISIBLE);
@@ -983,19 +983,19 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 			expressionContainer.setVisibility(View.GONE);
 			more.setVisibility(View.GONE);
 
-		} else if (id == R.id.btn_video) {
-			// 点击摄像图标
-			Intent intent = new Intent(ChatActivity.this, ImageGridActivity.class);
-			startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
-		} else if (id == R.id.btn_file) { // 点击文件图标
-			selectFileFromLocal();
-		} else if (id == R.id.btn_voice_call) { //点击语音电话图标
-			if(!EMChatManager.getInstance().isConnected())
-				Toast.makeText(this, "尚未连接至服务器，请稍后重试", Toast.LENGTH_SHORT).show();
-			else
-				startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class).
-						putExtra("username", toChatUsername).
-						putExtra("isComingCall", false));
+//		} else if (id == R.id.btn_video) {
+//			// 点击摄像图标
+//			Intent intent = new Intent(ChatActivity.this, ImageGridActivity.class);
+//			startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+//		} else if (id == R.id.btn_file) { // 点击文件图标
+//			selectFileFromLocal();
+//		} else if (id == R.id.btn_voice_call) { //点击语音电话图标
+//			if(!EMChatManager.getInstance().isConnected())
+//				Toast.makeText(this, "尚未连接至服务器，请稍后重试", Toast.LENGTH_SHORT).show();
+//			else
+//				startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class).
+//						putExtra("username", toChatUsername).
+//						putExtra("isComingCall", false));
 		}
 	}
 

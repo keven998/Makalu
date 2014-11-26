@@ -18,6 +18,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
@@ -55,22 +56,22 @@ public class SeachContactDetailActivity extends BaseChatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
-        boolean isSeach = getIntent().getBooleanExtra("isSeach",false);
+        boolean isSeach = getIntent().getBooleanExtra("isSeach", false);
         user = (PeachUser) getIntent().getSerializableExtra("user");
-        if(isSeach){
+        if (isSeach) {
             bindView();
-        }else{
-            if(!TextUtils.isEmpty(user.nickName)){
+        } else {
+            if (!TextUtils.isEmpty(user.nickName)) {
                 bindView();
             }
             List<String> hxList = new ArrayList<String>();
             hxList.add(user.easemobUser);
-            UserApi.getContactByHx(hxList,new HttpCallBack<String>() {
+            UserApi.getContactByHx(hxList, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result,PeachUser.class);
-                    if(userResult.code==0){
-                        if(userResult.result.size()>0){
+                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result, PeachUser.class);
+                    if (userResult.code == 0) {
+                        if (userResult.result.size() > 0) {
                             user = userResult.result.get(0);
                             bindView();
                         }
@@ -83,8 +84,6 @@ public class SeachContactDetailActivity extends BaseChatActivity{
                 }
             });
         }
-
-
 
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +146,12 @@ public class SeachContactDetailActivity extends BaseChatActivity{
             }
         });
 
+    }
+
+    private void initTitleBar(){
+        TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thbar.getTitleTextView().setText("搜索结果");
     }
 
     private void bindView(){
