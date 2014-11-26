@@ -170,13 +170,14 @@ public class ContactlistFragment extends Fragment {
 		if (!hidden) {
 			refresh();
 		}
+
         if (contactList.size() <= 1 && emptyView == null) {
-            emptyView = getActivity().findViewById(R.id.empty_view);
+            emptyView = getView().findViewById(R.id.empty_view);
             emptyView.setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
+            getView().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //todo
+                    startActivity(new Intent(getActivity(), AddContactActivity.class));
                 }
             });
         } else if (contactList.size() > 1) {

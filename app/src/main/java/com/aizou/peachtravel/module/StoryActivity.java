@@ -47,7 +47,7 @@ public class StoryActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MainActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left);
                 finish();
             }
         });

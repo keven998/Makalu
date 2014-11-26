@@ -74,18 +74,15 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 					@Override
 					public void onClick(View v) {
 						if (TextUtils.isEmpty(type)) {
-							SharePrefUtil.saveBoolean(mContext, "hasLoad_"
-                                    + UpdateUtil.getVerName(mContext), true);
-							Intent mainIntent = new Intent(GuideActivity.this,
-                                    StoryActivity.class);
-							GuideActivity.this.startActivity(mainIntent);
-							// overridePendingTransition(R.anim.zoom_in,
-							// R.anim.zoom_out);
-
+							SharePrefUtil.saveBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), true);
+                            Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
+                            startActivity(mainActivity);
+                            Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
+                            startActivity(storyIntent);
 						} else if (type.equals("setting")) {
-						}
-						GuideActivity.this.finish();
 
+						}
+						finish();
 					}
 				});
 				views.add(view);
@@ -152,17 +149,15 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 		if (arg0 == this.views.size() - 1 && arg1 == 0
 				&& arg2 == 0 && isScrolling) {
 			if (TextUtils.isEmpty(type)) {
-				SharePrefUtil.saveBoolean(mContext, "hasLoad_"
-						+ UpdateUtil.getVerName(mContext), true);
-				Intent mainIntent = new Intent(GuideActivity.this,
-                        StoryActivity.class);
-				GuideActivity.this.startActivity(mainIntent);
-				// overridePendingTransition(R.anim.zoom_in,
-				// R.anim.zoom_out);
-
+				SharePrefUtil.saveBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), true);
+                Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(mainActivity);
+                Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
+                startActivity(storyIntent);
 			} else if (type.equals("setting")) {
+
 			}
-			GuideActivity.this.finish();
+			finish();
 		}
 
 	}

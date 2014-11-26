@@ -164,6 +164,7 @@ public class PeachApplication extends BaseApplication {
     }
 
     class MyConnectionListener implements ConnectionListener {
+
         @Override
         public void onReConnecting() {
         }
@@ -175,10 +176,10 @@ public class PeachApplication extends BaseApplication {
         @Override
         public void onDisConnected(String errorString) {
             if (errorString != null && errorString.contains("conflict")) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("conflict", true);
-                startActivity(intent);
+//                Intent intent = new Intent(context, MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra("conflict", true);
+//                startActivity(intent);
             }
 
         }
