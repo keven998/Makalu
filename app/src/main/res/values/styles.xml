@@ -40,5 +40,8 @@
         <item name="android:windowFrame">@null</item>
     </style>
 
+    <declare-styleable name="ShimmerView">
+        <attr name="reflectionColor" format="color"/>
+    </declare-styleable>
 
 </resources>

@@ -17,7 +17,7 @@ import android.view.WindowManager;
  * 欢迎页，等待2秒，进入主界面
  */
 public class SplashActivity extends PeachBaseActivity {
-	private final int SPLASH_DISPLAY_LENGHT = 2000; // 延迟三秒
+	private final int SPLASH_DISPLAY_LENGHT = 1800; // 延迟三秒
 	private boolean showSplash = true;
 
 	@Override

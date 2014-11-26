@@ -12,6 +12,7 @@ import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -39,7 +40,8 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 	private int currentIndex;
 
 	// 引导图片资源
-	private static final int[] pics = { R.drawable.guide_1, R.drawable.guide_2,
+	private static final int[] pics = {
+            R.drawable.guide_1, R.drawable.guide_2,
 			R.drawable.guide_3, R.drawable.guide_4 };
 
 	// private static final int[] backgrouds = { R.drawable.guide_1_bg,
@@ -96,13 +98,16 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 			}
 
 		}
+
 		vp = (ViewPager) findViewById(R.id.viewpager);
 		// 初始化Adapter
 		vpAdapter = new ViewPagerAdapter(views);
 		vp.setAdapter(vpAdapter);
 		// 绑定回调
 		vp.setOnPageChangeListener(this);
-        vp.setPageTransformer(true,new ZoomOutTranformer());
+        if (Build.VERSION.SDK_INT >= 11) {
+            vp.setPageTransformer(true, new ZoomOutPageTransformer());
+        }
 		// 初始化底部小点
 		initDots();
 
@@ -236,4 +241,43 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 
 	}
 
+}
+
+class ZoomOutPageTransformer implements ViewPager.PageTransformer {
+    private static final float MIN_SCALE = 0.85f;
+    private static final float MIN_ALPHA = 0.85f;
+
+    public void transformPage(View view, float position) {
+        int pageWidth = view.getWidth();
+        int pageHeight = view.getHeight();
+
+        if (position < -1) { // [-Infinity,-1)
+            // This page is way off-screen to the left.
+            view.setAlpha(0.0f);
+
+        } else if (position <= 1) { // [-1,1]
+            // Modify the default slide transition to shrink the page as well
+            float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+            float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+            float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+            if (position < 0) {
+                view.setTranslationX(horzMargin - vertMargin / 2);
+            } else {
+                view.setTranslationX(-horzMargin + vertMargin / 2);
+            }
+
+            // Scale the page down (between MIN_SCALE and 1)
+            view.setScaleX(scaleFactor);
+            view.setScaleY(scaleFactor);
+
+            // Fade the page relative to its size.
+            view.setAlpha(MIN_ALPHA +
+                    (scaleFactor - MIN_SCALE) /
+                            (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+        } else { // (1,+Infinity]
+            // This page is way off-screen to the right.
+            view.setAlpha(0.0f);
+        }
+    }
 }
