@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,12 +65,17 @@ public class StrategyActivity extends PeachBaseActivity {
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(0);
+        //设置布局管理器
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mLocListRv.setLayoutManager(linearLayoutManager);
     }
     private void initData() {
         id =getIntent().getStringExtra("id");
         cityIdList = getIntent().getStringArrayListExtra("cityIdList");
         cityIdList = new ArrayList<String>();
         cityIdList.add("54756008d17491193832582d");
+        cityIdList.add("5475b938d174911938325835");
         createStrategyByCityIds(cityIdList);
 
 
@@ -114,6 +120,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private void bindView(StrategyBean result) {
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(),result));
+        mLocListRv.setAdapter(new LocAdapter(mContext,result.destinations));
     }
 
 

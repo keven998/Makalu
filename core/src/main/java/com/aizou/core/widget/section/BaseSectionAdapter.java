@@ -26,7 +26,7 @@ abstract public class BaseSectionAdapter extends BaseAdapter implements SectionA
         globalCountCache = sectionCountCache = COUNT_CACHE_INVALID_TOMBSTONE;
     }
 
-    abstract public int getItemViewType(int section, int position);
+    abstract public int getContentItemViewType(int section, int position);
 
     abstract public int getHeaderItemViewType(int section);
 
@@ -38,7 +38,7 @@ abstract public class BaseSectionAdapter extends BaseAdapter implements SectionA
 
     abstract public long getItemId(int section, int position);
 
-    abstract public View getView(int section, int position, View convertView, ViewGroup parent);
+    abstract public View getItemView(int section, int position, View convertView, ViewGroup parent);
 
     abstract public View getHeaderView(int section, View convertView, ViewGroup parent);
 
@@ -88,10 +88,11 @@ abstract public class BaseSectionAdapter extends BaseAdapter implements SectionA
 
     @Override
     public View getView(int globalPosition, View convertView, ViewGroup parent) {
+        getItemViewType(globalPosition);
         if (isHeader(globalPosition)) {
             return getHeaderView(getSection(globalPosition), convertView, parent);
         } else {
-            return getView(getSection(globalPosition), getPositionInSection(globalPosition), convertView, parent);
+            return getItemView(getSection(globalPosition), getPositionInSection(globalPosition), convertView, parent);
         }
     }
 
@@ -101,7 +102,7 @@ abstract public class BaseSectionAdapter extends BaseAdapter implements SectionA
             // Avoids collision
             return getItemViewTypeCount() + getHeaderItemViewType(getSection(globalPosition));
         } else {
-            return getItemViewType(getSection(globalPosition), getPositionInSection(globalPosition));
+            return getContentItemViewType(getSection(globalPosition), getPositionInSection(globalPosition));
         }
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 public class StrategyBean {
     public String id;
     public String title;
+    public ArrayList<CityDetailBean> destinations;
     public ArrayList<IndexPoi> itinerary;
     public ArrayList<PoiDetailBean> shopping;
     public ArrayList<PoiDetailBean> restaurants;
