@@ -19,6 +19,8 @@ import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.shimmer.Shimmer;
 import com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView;
+import com.aizou.peachtravel.common.widget.swipebacklayout.SwipeBackLayout;
+import com.aizou.peachtravel.common.widget.swipebacklayout.app.SwipeBackActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -27,7 +29,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 /**
  * Created by Rjm on 2014/11/10.
  */
-public class StoryActivity extends PeachBaseActivity {
+public class StoryActivity extends SwipeBackActivity {
     private ImageView storyIv;
     private ShimmerTextView start;
 
@@ -45,15 +47,19 @@ public class StoryActivity extends PeachBaseActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MainActivity.class);
+                Intent intent = new Intent(StoryActivity.this, MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left);
-                finish();
             }
         });
         Shimmer shimmer = new Shimmer();
         shimmer.setDuration(1500);
         shimmer.start(start);
+
+        SwipeBackLayout swipeBackLayout;
+        swipeBackLayout = getSwipeBackLayout();
+        swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_RIGHT);
+
     }
 
     private void initData(){
@@ -68,7 +74,7 @@ public class StoryActivity extends PeachBaseActivity {
                 .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
-        String storyImageUrl = SharePrefUtil.getString(mContext, "story_image", "");
+        String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
 //        if(!TextUtils.isEmpty(storyImageUrl)){
 //
 //        }
@@ -78,7 +84,7 @@ public class StoryActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result,CoverStoryBean.class);
                 if(storyResult.code == 0) {
-                    SharePrefUtil.saveString(mContext, "story_image", storyResult.result.image);
+                    SharePrefUtil.saveString(StoryActivity.this, "story_image", storyResult.result.image);
                     ImageLoader.getInstance().displayImage(storyResult.result.image,storyIv, picOptions);
                 }
             }

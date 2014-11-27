@@ -44,4 +44,8 @@
         <attr name="reflectionColor" format="color"/>
     </declare-styleable>
 
+    <style name="TranslucentThem" parent="android:Theme.Light">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>
