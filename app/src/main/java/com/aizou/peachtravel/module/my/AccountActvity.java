@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
+import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.lidroid.xutils.ViewUtils;
@@ -162,10 +163,33 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.btn_logout:
-                AccountManager.getInstance().logout(this);
-                finish();
+                warnLogout();
                 break;
         }
+    }
+
+    private void warnLogout() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(null)
+                .setContentText("确定退出已登陆账号")
+                .setCancelText("取消")
+                .setConfirmText("确定")
+                .showCancelButton(true)
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        // reuse previous dialog instance, keep widget user state, reset them if you need
+                        sDialog.dismiss();
+                    }
+                })
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        AccountManager.getInstance().logout(AccountActvity.this);
+                        finish();
+                    }
+                })
+                .show();
     }
 
 

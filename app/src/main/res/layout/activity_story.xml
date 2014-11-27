@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud">
     <ImageView
         android:id="@+id/iv_story"
         android:layout_width="fill_parent"
         android:scaleType="centerCrop"
         android:layout_height="fill_parent" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/main_color">
-
-        <TextView
-            android:id="@+id/tv_start"
+        android:background="@color/app_theme_color">
+        <com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView
+            android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:text="进入桃子旅行"/>
+            android:layout_gravity="right"
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp"
+            android:paddingRight="12dp"
+            android:paddingLeft="30dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="17sp"
+            app:reflectionColor="#BFEFFF"
+            android:text="开启旅行>>">
+        </com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView>
 
-        </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

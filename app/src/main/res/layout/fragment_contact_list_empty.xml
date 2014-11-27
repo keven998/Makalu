@@ -26,12 +26,10 @@
 
     <Button android:id="@+id/add_friend"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_gravity="center_horizontal"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
         android:layout_marginTop="25dp"
         android:textColor="@color/base_color_white"
         android:background="@color/app_theme_color"

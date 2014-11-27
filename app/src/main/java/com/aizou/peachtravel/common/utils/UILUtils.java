@@ -21,6 +21,7 @@ public class UILUtils {
 				
 		return picOptions;
 	}
+
     public static DisplayImageOptions getRadiusOption() {
         DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

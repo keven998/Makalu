@@ -17,7 +17,7 @@ import android.view.WindowManager;
  * 欢迎页，等待2秒，进入主界面
  */
 public class SplashActivity extends PeachBaseActivity {
-	private final int SPLASH_DISPLAY_LENGHT = 2000; // 延迟三秒
+	private final int SPLASH_DISPLAY_LENGHT = 1800; // 延迟三秒
 	private boolean showSplash = true;
 
 	@Override
@@ -36,22 +36,17 @@ public class SplashActivity extends PeachBaseActivity {
 
 			@Override
 			public void run() {
-				boolean hasLoad = SharePrefUtil.getBoolean(mContext, "hasLoad_"
-                        + UpdateUtil.getVerName(mContext), false);
+				boolean hasLoad = SharePrefUtil.getBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), false);
 				if (showSplash && !hasLoad) {
-					Intent mainIntent = new Intent(SplashActivity.this,
-							GuideActivity.class);
-					SplashActivity.this.startActivity(mainIntent);
-					// overridePendingTransition(R.anim.zoom_in,
-					// R.anim.zoom_out);
-					SplashActivity.this.finish();
+					Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
+					startActivity(mainIntent);
+					finish();
 				} else {
-					Intent storyIntent = new Intent(SplashActivity.this,
-							StoryActivity.class);
-					SplashActivity.this.startActivity(storyIntent);
-					// overridePendingTransition(R.anim.zoom_in,
-					// R.anim.zoom_out);
-					SplashActivity.this.finish();
+                    Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(mainActivity);
+                    Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
+                    startActivity(storyIntent);
+                    finish();
 				}
 
 			}
