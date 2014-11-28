@@ -69,7 +69,7 @@ public class PoiListActivity extends PeachBaseActivity {
         mPoiListLv.setPullRefreshEnabled(false);
         mPoiListLv.setScrollLoadEnabled(true);
         ButterKnife.inject(this);
-        mPoiAdapter = new PoiAdapter(mContext);
+        mPoiAdapter = new PoiAdapter(this, true);
         mPoiListLv.getRefreshableView().setAdapter(mPoiAdapter);
         mPoiListLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
