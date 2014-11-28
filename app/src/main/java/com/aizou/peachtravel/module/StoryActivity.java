@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class StoryActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         initView();
         initData();
@@ -69,7 +71,6 @@ public class StoryActivity extends SwipeBackActivity {
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_launcher)
                 .showImageForEmptyUri(R.drawable.ic_launcher)
-                .showImageOnLoading(R.drawable.ic_launcher)
 //				.decodingOptions(D)
                 .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();

@@ -103,7 +103,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             case R.id.rl_user_info:
                 PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) return;
-                Intent accountIntent = new Intent(getActivity(),AccountActvity.class);
+                Intent accountIntent = new Intent(getActivity(), AccountActvity.class);
                 startActivity(accountIntent);
                 break;
 
@@ -132,5 +132,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 startActivity(regintent);
                 break;
         }
+        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 }

@@ -111,9 +111,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
        options = new DisplayImageOptions.Builder()
-               .showImageForEmptyUri(R.drawable.default_avatar)
-               .showImageOnFail(R.drawable.default_avatar)
-               .showImageOnLoading(R.drawable.default_avatar)
+               .showImageForEmptyUri(R.drawable.avatar_placeholder)
+               .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -305,5 +304,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
 
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 }

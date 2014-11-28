@@ -18,35 +18,41 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/app_backgroud"
             android:orientation="vertical">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll_avatar"
-            android:background="@drawable/option_cell_selector"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:id="@+id/ll_avatar"
+                android:background="@drawable/option_cell_selector"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_launcher"
-                android:textColor="@color/base_text_color_title"
-                android:gravity="center_vertical"
-                android:textSize="15sp"
-                android:drawablePadding="6dp"
-                android:padding="10dp"
-                android:text="头像"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_setting_avatar"
+                    android:textColor="@color/base_text_color_title"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:drawablePadding="15dp"
+                    android:text="头像"/>
 
                 <ImageView android:id="@+id/iv_avatar"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_weight="0"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
                     android:scaleType="fitCenter"
+                    android:layout_marginRight="10dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/default_avatar"
+                    android:src="@drawable/avatar_placeholder"
                     />
 
                 <ImageView
@@ -54,194 +60,208 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:scaleType="center"
-                    android:src="@drawable/ic_list_item_extender"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ll_id"
-                android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="-1dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_launcher"
-                    android:textColor="@color/base_text_color_title"
-                    android:gravity="center_vertical"
-                    android:textSize="15sp"
-                    android:drawablePadding="6dp"
-                    android:padding="10dp"
-                    android:text="ID"/>
-
-                <TextView android:id="@+id/tv_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:drawableRight="@drawable/ic_list_item_extender"
-                    android:textColor="@color/base_text_color_subtitle"
-                    android:gravity="center_vertical|right"
-                    android:textSize="14sp"
-                    android:drawablePadding="0dp"
-                    android:padding="6dp" />
+                    android:src="@drawable/cell_accessory"
+                    android:layout_marginRight="18dp"/>
 
             </LinearLayout>
 
             <LinearLayout android:id="@+id/ll_nickname"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="49dp"
                 android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="-1dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_launcher"
+                    android:drawableLeft="@drawable/ic_setting_nick"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:drawablePadding="6dp"
-                    android:padding="10dp"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:drawablePadding="15dp"
                     android:text="昵称"/>
 
                 <TextView android:id="@+id/tv_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
-                    android:drawablePadding="0dp"
-                    android:padding="6dp" />
+                    android:drawablePadding="10dp"
+                    android:layout_marginRight="18dp"/>
 
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/ll_gender"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="49dp"
+                android:id="@+id/ll_id"
                 android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="-1dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_launcher"
+                    android:drawableLeft="@drawable/ic_setting_nick"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:drawablePadding="6dp"
-                    android:padding="10dp"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:drawablePadding="15dp"
+                    android:text="ID"/>
+
+                <TextView android:id="@+id/tv_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:drawableRight="@drawable/cell_accessory"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:gravity="center_vertical|right"
+                    android:textSize="14sp"
+                    android:drawablePadding="10dp"
+                    android:layout_marginRight="18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/ll_gender"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/option_cell_selector"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_setting_nick"
+                    android:textColor="@color/base_text_color_title"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:drawablePadding="15dp"
                     android:text="性别"/>
 
                 <TextView android:id="@+id/tv_sign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
-                    android:drawablePadding="0dp"
-                    android:padding="6dp" />
+                    android:drawablePadding="10dp"
+                    android:layout_marginRight="18dp" />
 
             </LinearLayout>
 
             <LinearLayout android:id="@+id/ll_sign"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="49dp"
                 android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="-1dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_launcher"
+                    android:drawableLeft="@drawable/ic_setting_memo"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:drawablePadding="6dp"
-                    android:padding="10dp"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:drawablePadding="15dp"
                     android:text="个性签名"/>
 
                 <TextView android:id="@+id/tv_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
-                    android:drawablePadding="0dp"
-                    android:padding="6dp" />
+                    android:drawablePadding="10dp"
+                    android:layout_marginRight="18dp" />
 
             </LinearLayout>
 
             <TextView android:id="@+id/ll_modify_pwd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="17dp"
+                android:paddingRight="18dp"
                 android:background="@drawable/option_cell_selector"
-                android:drawableLeft="@drawable/ic_launcher"
-                android:drawableRight="@drawable/ic_list_item_extender"
+                android:drawableLeft="@drawable/ic_setting_password"
+                android:drawableRight="@drawable/cell_accessory"
                 android:textColor="@color/base_text_color_title"
                 android:gravity="center_vertical"
                 android:textSize="15sp"
-                android:drawablePadding="6dp"
-                android:padding="10dp"
+                android:drawablePadding="15dp"
                 android:text="修改密码"/>
 
             <LinearLayout android:id="@+id/ll_bind_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="49dp"
                 android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="-1dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView android:id="@+id/tv_bind_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_launcher"
+                    android:drawableLeft="@drawable/ic_setting_bindphone"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:drawablePadding="6dp"
-                    android:padding="10dp"
+                    android:layout_marginLeft="17dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:drawablePadding="15dp"
                     android:text="绑定手机"/>
 
                 <TextView android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableRight="@drawable/ic_list_item_extender"
+                    android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
-                    android:drawablePadding="0dp"
-                    android:padding="6dp" />
+                    android:drawablePadding="10dp"
+                    android:layout_marginRight="18dp" />
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_marginTop="20dp"
                 android:text="退出当前账号"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textSize="15sp"
                 android:textColor="@color/base_color_white"
-                android:background="@drawable/tl_btn_highlight_selector"/>
+                android:background="@drawable/theme_button_selctor"/>
 
         </LinearLayout>
     </ScrollView>
