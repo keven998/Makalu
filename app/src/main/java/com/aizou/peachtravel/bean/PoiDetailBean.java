@@ -11,6 +11,7 @@ import java.util.List;
 public class PoiDetailBean implements Parcelable {
     public final static String RESTAURANT="restaurant";
     public final static String SHOPPING="shopping";
+    public boolean hasAdded=false;
     public String type;
     public String id;
     public String zhName;
@@ -22,7 +23,7 @@ public class PoiDetailBean implements Parcelable {
     public int commentCnt;
     public LocationBean loction;
     public List<ImageBean> images;
-    public List<CityDetailBean> locList;
+    public List<LocBean> locList;
     public String address;
     public String telephone;
     public List<RecommendBean> recommends;
@@ -68,7 +69,7 @@ public class PoiDetailBean implements Parcelable {
         this.commentCnt = in.readInt();
         this.loction = in.readParcelable(LocationBean.class.getClassLoader());
         in.readTypedList(images, ImageBean.CREATOR);
-        in.readTypedList(locList, CityDetailBean.CREATOR);
+        in.readTypedList(locList, LocBean.CREATOR);
         this.address = in.readString();
         this.telephone = in.readString();
         in.readTypedList(recommends, RecommendBean.CREATOR);

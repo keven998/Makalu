@@ -88,6 +88,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.dest.AddPoiActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.CityDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

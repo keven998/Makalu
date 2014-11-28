@@ -27,6 +27,7 @@ public class TravelApi extends BaseApi{
         public final static String SPOT="vs";
         public final static String RESTAURANTS="restaurants";
         public final static String SHOPPING="shopping";
+        public final static String HOTEL="hotel";
     }
 
     //目的地推荐
@@ -62,7 +63,7 @@ public class TravelApi extends BaseApi{
     }
 
     /**
-     * 获取城市详情
+     * 获取目的地详情
      * @param callback
      * @return
      */
@@ -97,7 +98,7 @@ public class TravelApi extends BaseApi{
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC,type)+id);
         request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize","10");
+        request.putUrlParams("pageSize",PAGE_SIZE+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

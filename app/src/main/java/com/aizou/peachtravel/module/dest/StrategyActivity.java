@@ -18,15 +18,12 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CityDetailBean;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,9 +127,9 @@ public class StrategyActivity extends PeachBaseActivity {
             RecyclerView.Adapter<LocAdapter.ViewHolder> {
 
         private LayoutInflater mInflater;
-        private List<CityDetailBean> mDatas;
+        private List<LocBean> mDatas;
 
-        public LocAdapter(Context context, List<CityDetailBean> datas) {
+        public LocAdapter(Context context, List<LocBean> datas) {
             mInflater = LayoutInflater.from(context);
             mDatas = datas;
         }
@@ -171,8 +168,8 @@ public class StrategyActivity extends PeachBaseActivity {
          */
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-            CityDetailBean cityDetailBean = mDatas.get(i);
-            viewHolder.mTxt.setText(cityDetailBean.zhName);
+            LocBean locBean = mDatas.get(i);
+            viewHolder.mTxt.setText(locBean.zhName);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -215,7 +212,8 @@ public class StrategyActivity extends PeachBaseActivity {
             RouteDayFragment mainFragment = new RouteDayFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
-            bundle.putInt("day",3);
+            bundle.putInt("day",strategyBean.itineraryDays);
+            bundle.putParcelableArrayList("locList",strategyBean.destinations);
             mainFragment.setArguments(bundle);
             return mainFragment;
         }

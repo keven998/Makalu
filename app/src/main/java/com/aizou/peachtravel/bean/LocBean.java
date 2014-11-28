@@ -3,13 +3,13 @@ package com.aizou.peachtravel.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class CityDetailBean implements Parcelable {
-    public String _id;
+public class LocBean implements Parcelable {
+    public String id;
     public String zhName;
     public String enName;
     public double lat;
@@ -19,7 +19,7 @@ public class CityDetailBean implements Parcelable {
     public String travelMonth;
     public String cover;
     public int imageCount;
-    public List<TravelNoteBean> travelNote;
+    public ArrayList<TravelNoteBean> travelNote = new ArrayList<TravelNoteBean>();
 
     @Override
     public int describeContents() {
@@ -28,7 +28,7 @@ public class CityDetailBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this._id);
+        dest.writeString(this.id);
         dest.writeString(this.zhName);
         dest.writeString(this.enName);
         dest.writeDouble(this.lat);
@@ -41,11 +41,11 @@ public class CityDetailBean implements Parcelable {
         dest.writeTypedList(travelNote);
     }
 
-    public CityDetailBean() {
+    public LocBean() {
     }
 
-    private CityDetailBean(Parcel in) {
-        this._id = in.readString();
+    private LocBean(Parcel in) {
+        this.id = in.readString();
         this.zhName = in.readString();
         this.enName = in.readString();
         this.lat = in.readDouble();
@@ -58,13 +58,28 @@ public class CityDetailBean implements Parcelable {
         in.readTypedList(travelNote, TravelNoteBean.CREATOR);
     }
 
-    public static final Parcelable.Creator<CityDetailBean> CREATOR = new Parcelable.Creator<CityDetailBean>() {
-        public CityDetailBean createFromParcel(Parcel source) {
-            return new CityDetailBean(source);
+    public static final Parcelable.Creator<LocBean> CREATOR = new Parcelable.Creator<LocBean>() {
+        public LocBean createFromParcel(Parcel source) {
+            return new LocBean(source);
         }
 
-        public CityDetailBean[] newArray(int size) {
-            return new CityDetailBean[size];
+        public LocBean[] newArray(int size) {
+            return new LocBean[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof LocBean){
+            return id.equals(((LocBean)o).id);
+        }else{
+            return false;
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

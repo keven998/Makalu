@@ -80,7 +80,17 @@ public class HttpManager {
                 httpUtils.configSSLSocketFactory(SSLSocketFactory.getSocketFactory());
             }
             RequestParams requestParams = new RequestParams();
-            LogUtil.d(TAG, "requestUrl = " + url);
+            StringBuffer sb = new StringBuffer();
+            sb.append(url);
+            int i=0;
+            for(NameValuePair nv:request.getUrlParams()){
+                if(i==0){
+                    sb.append("?"+nv.getName()+"="+nv.getValue());
+                }else{
+                    sb.append("&"+nv.getName()+"="+nv.getValue());
+                }
+            }
+            LogUtil.d(TAG, "requestUrl = " + sb.toString());
             List<NameValuePair> list = new ArrayList<NameValuePair>();
             requestParams.addHeaders(request.getPTHeader().headers);
             requestParams.setHeaders(request.getPTHeader().overwirdeHeaders);

@@ -12,6 +12,8 @@ import com.aizou.peachtravel.config.PeachApplication;
  * Created by Rjm on 2014/10/16.
  */
 public class BaseApi {
+    public final static int PAGE_SIZE =15;
+
     public static void testHttps(){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

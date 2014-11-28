@@ -23,8 +23,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.+'
-    compile files('libs/xUtils-2.6.11.jar')
     compile files('libs/gson-2.2.4.jar')
     compile files('libs/universal-image-loader-1.9.3-with-sources.jar')
     compile files('libs/NineOldAndroid-2.4.0.jar')
+    compile files('libs/xUtils-2.6.14.jar')
 }

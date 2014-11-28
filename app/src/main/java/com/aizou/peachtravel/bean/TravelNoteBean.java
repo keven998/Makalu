@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Rjm on 2014/11/14.
  */
 public class TravelNoteBean implements Parcelable {
-    public String _id;
+    public String id;
     public String title;
     public String desc;
     public String cover;
@@ -24,7 +24,7 @@ public class TravelNoteBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this._id);
+        dest.writeString(this.id);
         dest.writeString(this.title);
         dest.writeString(this.desc);
         dest.writeString(this.cover);
@@ -39,7 +39,7 @@ public class TravelNoteBean implements Parcelable {
     }
 
     private TravelNoteBean(Parcel in) {
-        this._id = in.readString();
+        this.id = in.readString();
         this.title = in.readString();
         this.desc = in.readString();
         this.cover = in.readString();

@@ -14,7 +14,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CityDetailBean;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
@@ -77,7 +77,7 @@ public class CityDetailActivity extends PeachBaseActivity {
         TravelApi.getCityDetail(id,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson<CityDetailBean> detailResult = CommonJson.fromJson(result,CityDetailBean.class);
+                CommonJson<LocBean> detailResult = CommonJson.fromJson(result,LocBean.class);
                 if(detailResult.code==0){
                     bindView(detailResult.result);
                 }
@@ -91,7 +91,7 @@ public class CityDetailActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindView(CityDetailBean detailBean){
+    private void bindView(LocBean detailBean){
         ImageLoader.getInstance().displayImage(detailBean.cover,mCityIv,UILUtils.getDefaultOption());
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
