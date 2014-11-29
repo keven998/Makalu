@@ -60,7 +60,11 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
         YahooWeather.getInstance().queryYahooWeatherByLatLon(getActivity(),lat+"",lon+"",new YahooWeatherInfoListener() {
             @Override
             public void gotWeatherInfo(WeatherInfo weatherInfo) {
-                LogUtil.d(weatherInfo.getCurrentText());
+
+//                LogUtil.d(weatherInfo.getCurrentText());
+                if(weatherInfo==null){
+                    return;
+                }
                 weatherStr = DateUtil.getCurrentMonthDay()+" 北京 "+weatherArray[weatherInfo.getCurrentCode()];
                 ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(),weatherIv, UILUtils.getDefaultOption());
                 weatherTv.setText(weatherStr);

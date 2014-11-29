@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Point;
@@ -25,6 +26,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
+import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
@@ -32,7 +34,7 @@ import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -43,14 +45,14 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class RouteDayFragment extends PeachBaseFragment {
-    public static final int ADD_POI_REQUEST_CODE=100;
+    public static final int ADD_POI_REQUEST_CODE=101;
     private ArrayList<StrategyBean.IndexPoi> itinerary;
     private int day;
-    private HashMap<Integer, ArrayList<PoiDetailBean>> routeDayMap;
+    private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private ArrayList<LocBean> locList;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
-    RouteDayAdapter mRouteDayAdpater;
+    RouteDayAdapter routeDayAdpater;
     @InjectView(R.id.edit_btn)
     Button mEditBtn;
     View addDayFooter;
@@ -62,7 +64,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_route_day, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
         addDayFooter = View.inflate(getActivity(),R.layout.footer_route_day_add_day,null);
         addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
         lineLl = addDayFooter.findViewById(R.id.ll_line);
@@ -73,9 +75,9 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     }
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary){
-        routeDayMap = new HashMap<Integer, ArrayList<PoiDetailBean>>();
+        routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for(int i=0;i< day;i++){
-            routeDayMap.put(i,new ArrayList<PoiDetailBean>());
+            routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
         for(StrategyBean.IndexPoi indexPoi:itinerary){
@@ -89,34 +91,47 @@ public class RouteDayFragment extends PeachBaseFragment {
         locList = getArguments().getParcelableArrayList("locList");
         day = getArguments().getInt("day");
         resizeData(itinerary);
-        mRouteDayAdpater = new RouteDayAdapter();
-        mEditDslv.setDropListener(mRouteDayAdpater);
+        routeDayAdpater = new RouteDayAdapter();
+        mEditDslv.setDropListener(routeDayAdpater);
 
         // make and set controller on dslv
-        SectionController c = new SectionController(mEditDslv, mRouteDayAdpater);
+        SectionController c = new SectionController(mEditDslv, routeDayAdpater);
         mEditDslv.setFloatViewManager(c);
         mEditDslv.setOnTouchListener(c);
-        mEditDslv.setAdapter(mRouteDayAdpater);
+        mEditDslv.setAdapter(routeDayAdpater);
         mEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRouteDayAdpater.isEditableMode =!mRouteDayAdpater.isEditableMode;
-                if(mRouteDayAdpater.isEditableMode){
+                routeDayAdpater.isEditableMode =!routeDayAdpater.isEditableMode;
+                if(routeDayAdpater.isEditableMode){
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.VISIBLE);
                 }else{
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.INVISIBLE);
                 }
-                mRouteDayAdpater.notifyDataSetChanged();
+                routeDayAdpater.notifyDataSetChanged();
             }
         });
         addDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                routeDayMap.add(new ArrayList<PoiDetailBean>());
+                routeDayAdpater.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode== Activity.RESULT_OK){
+            if(requestCode==ADD_POI_REQUEST_CODE){
+               ArrayList<PoiDetailBean> poiList= data.getParcelableArrayListExtra("poiList");
+               int dayIndex = data.getIntExtra("dayIndex",-1);
+               routeDayMap.set(dayIndex, poiList);
+                routeDayAdpater.notifyDataSetChanged();
+            }
+        }
     }
 
     private class SectionController extends DragSortController {
@@ -220,7 +235,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
 
         @Override
-        public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+        public View getItemView(final int section, int position, View convertView, ViewGroup parent) {
             int type = getContentItemViewType(section, position);
             LogUtils.d("item---section:"+section+"--postion:"+position+"--globle_postion"+getGlobalPositionForItem(section,position));
             ItemViewHolder holder = null;
@@ -229,9 +244,25 @@ public class RouteDayFragment extends PeachBaseFragment {
                 switch (type) {
                     case SPOT:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_spot, null);
+                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
+                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
+                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
+                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
+                        holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
+                        holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
                         break;
                     case POI:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
+                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
+                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
+                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
+                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
+                        holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
+                        holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
+                        holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
+                        holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                         break;
                 }
                 convertView.setTag(holder);
@@ -239,16 +270,10 @@ public class RouteDayFragment extends PeachBaseFragment {
             else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
-            PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
+            final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
             switch (type){
                 case SPOT:
-                    holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-                    holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
-                    holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                    holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
-                    holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
-                    holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
-                    holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
+
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
@@ -259,6 +284,29 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText(null)
+                                        .setContentText("确定删除嘛？")
+                                        .setCancelText("取消")
+                                        .setConfirmText("确定")
+                                        .showCancelButton(true)
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                // reuse previous dialog instance, keep widget user state, reset them if you need
+
+                                                sDialog.dismiss();
+                                            }
+                                        })
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                routeDayMap.get(section).remove(poiDetailBean);
+                                                notifyDataSetChanged();
+                                                sDialog.dismiss();
+                                            }
+                                        })
+                                        .show();
 
                             }
                         });
@@ -269,7 +317,6 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                             }
                         });
                     }
@@ -277,15 +324,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
                     break;
                 case POI:
-                    holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-                    holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
-                    holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                    holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
-                    holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
-                    holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
-                    holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
-                    holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
-                    holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
+
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
@@ -298,7 +337,29 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText(null)
+                                        .setContentText("确定删除嘛？")
+                                        .setCancelText("取消")
+                                        .setConfirmText("确定")
+                                        .showCancelButton(true)
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                // reuse previous dialog instance, keep widget user state, reset them if you need
 
+                                                sDialog.dismiss();
+                                            }
+                                        })
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                routeDayMap.get(section).remove(poiDetailBean);
+                                                notifyDataSetChanged();
+                                                sDialog.dismiss();
+                                            }
+                                        })
+                                        .show();
                             }
                         });
                     } else {
@@ -369,27 +430,37 @@ public class RouteDayFragment extends PeachBaseFragment {
                 }
 
             }
+            if(isEditableMode){
+                holder.menuIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RouteDayMenu fragment = new RouteDayMenu();
+                        fragment.setRouteDay(routeDayMap, routeDayAdpater);
+                        Bundle args = new Bundle();
+                        args.putInt(
+                                SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+                                4
+                        );
+                        args.putFloat(
+                                SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+                                5
+                        );
+                        args.putInt("dayIndex", section);
+                        args.putParcelableArrayList("locList", locList);
 
-            holder.menuIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RouteDayMenu fragment = new RouteDayMenu();
-                    Bundle args = new Bundle();
-                    args.putInt(
-                            SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                            4
-                    );
-                    args.putFloat(
-                            SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                            5
-                    );
-                    args.putInt("dayIndex", section);
-                    args.putParcelableArrayList("locList",locList);
-                    args.putParcelableArrayList("poiList",routeDayMap.get(section));
-                    fragment.setArguments(args);
-                    fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
-                }
-            });
+                        fragment.setArguments(args);
+                        fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
+                    }
+                });
+            }else{
+                holder.menuIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
+            }
+
+
             return convertView;
         }
 
@@ -400,6 +471,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
         @Override
         public int getCountInSection(int section) {
+
             return routeDayMap.get(section).size();
         }
 
@@ -455,8 +527,6 @@ public class RouteDayFragment extends PeachBaseFragment {
             public TextView poiAddressTv, spotCostTimeTv;
             public TextView poiPriceTv;
             public RatingBar poiRating;
-
-
         }
         private class HeaderViewHolder{
             public LinearLayout lineLl;
@@ -466,15 +536,27 @@ public class RouteDayFragment extends PeachBaseFragment {
             public ImageView menuIv;
         }
     }
+
     public static class RouteDayMenu extends BlurDialogFragment {
         public int dayIndex;
         private ArrayList<LocBean> locList;
         private ArrayList<PoiDetailBean> poiList;
+        private ArrayList< ArrayList<PoiDetailBean>> mRouteDayMap;
+        private RouteDayAdapter mRouteDayAdapter;
+        public RouteDayMenu(){
+            super();
+        }
+        public void setRouteDay(ArrayList< ArrayList<PoiDetailBean>> RouteDayMap,RouteDayAdapter routeDayAdapter){
+            mRouteDayMap =RouteDayMap;
+            mRouteDayAdapter = routeDayAdapter;
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             dayIndex = getArguments().getInt("dayIndex");
             locList = getArguments().getParcelableArrayList("locList");
+            poiList= getArguments().getParcelableArrayList("poiList");
             LogUtil.d(locList.toString());
         }
 
@@ -494,9 +576,9 @@ public class RouteDayFragment extends PeachBaseFragment {
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), AddPoiActivity.class);
                     intent.putParcelableArrayListExtra("locList",locList);
-                    intent.putExtra("dayIndex",dayIndex);
-                    intent.putParcelableArrayListExtra("poiList",poiList);
-                    startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
+                    intent.putExtra("dayIndex", dayIndex);
+                    intent.putParcelableArrayListExtra("poiList", mRouteDayMap.get(dayIndex));
+                    getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
                     dismiss();
 
                 }
@@ -505,6 +587,29 @@ public class RouteDayFragment extends PeachBaseFragment {
             customView.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText(null)
+                            .setContentText("确定删除这天嘛？")
+                            .setCancelText("取消")
+                            .setConfirmText("确定")
+                            .showCancelButton(true)
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    // reuse previous dialog instance, keep widget user state, reset them if you need
+
+                                    sDialog.dismiss();
+                                }
+                            })
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    mRouteDayMap.remove(dayIndex);
+                                    mRouteDayAdapter.notifyDataSetChanged();
+                                    sDialog.dismiss();
+                                }
+                            })
+                            .show();
                     dismiss();
                 }
             });
@@ -794,5 +899,5 @@ public class RouteDayFragment extends PeachBaseFragment {
 //        }
 //    }
 
-
 }
+

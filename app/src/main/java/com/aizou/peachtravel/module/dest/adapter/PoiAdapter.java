@@ -122,14 +122,15 @@ public class PoiAdapter extends BaseAdapter {
                         if(poiDetailBean.hasAdded){
                             poiDetailBean.hasAdded=false;
                             if(mOnPoiActionListener!=null){
-                                mOnPoiActionListener.onPoiAdded(poiDetailBean);
+                                mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         }else{
                             poiDetailBean.hasAdded=true;
                             if(mOnPoiActionListener!=null){
-                                mOnPoiActionListener.onPoiRemoved(poiDetailBean);
+                                mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
                         }
+                        notifyDataSetChanged();
                     }
                 });
             }else{

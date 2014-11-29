@@ -14,7 +14,7 @@ public class StrategyBean {
     public ArrayList<LocBean> destinations;
     public ArrayList<IndexPoi> itinerary;
     public ArrayList<PoiDetailBean> shopping;
-    public ArrayList<PoiDetailBean> restaurants;
+    public ArrayList<PoiDetailBean> restaurant;
     public String userId;
     public int itineraryDays;
 

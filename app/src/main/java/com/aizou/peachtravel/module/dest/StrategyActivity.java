@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 
 import java.util.ArrayList;
@@ -209,14 +211,37 @@ public class StrategyActivity extends PeachBaseActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            RouteDayFragment mainFragment = new RouteDayFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
-            bundle.putInt("day",strategyBean.itineraryDays);
-            bundle.putParcelableArrayList("locList",strategyBean.destinations);
-            mainFragment.setArguments(bundle);
-            return mainFragment;
+            if(position==0){
+                RouteDayFragment routeDayFragment = new RouteDayFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
+                bundle.putInt("day",strategyBean.itineraryDays);
+                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                routeDayFragment.setArguments(bundle);
+                return routeDayFragment;
+            }else if(position==1){
+                RestaurantFragment routeDayFragment = new RestaurantFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("restaurant",strategyBean.restaurant);
+                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                routeDayFragment.setArguments(bundle);
+                return routeDayFragment;
+            }
+            return null;
+
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==RESULT_OK){
+            for(Fragment fragment:getSupportFragmentManager().getFragments()){
+                if(fragment!=null){
+                    fragment.onActivityResult(requestCode,resultCode,data);
+                }
+
+            }
+        }
+
+    }
 }
