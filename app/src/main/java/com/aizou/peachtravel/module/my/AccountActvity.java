@@ -127,14 +127,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 options);
         idTv.setText(user.userId+"");
         signTv.setText(user.signature);
-        if(TextUtils.isEmpty(user.tel)){
-            modifPwdLl.setVisibility(View.GONE);
-            bindPhoneTv.setText("绑定手机");
-        }else{
-            modifPwdLl.setVisibility(View.VISIBLE);
-            bindPhoneTv.setText("更改手机");
-            phoneTv.setText(user.tel);
-        }
+        phoneTv.setText(user.tel);
+
+//        if(TextUtils.isEmpty(user.tel)){
+//            modifPwdLl.setVisibility(View.GONE);
+//            bindPhoneTv.setText("绑定手机");
+//        }else{
+//            modifPwdLl.setVisibility(View.VISIBLE);
+//            bindPhoneTv.setText("更改手机");
+//            phoneTv.setText(user.tel);
+//        }
     }
 
     @Override
