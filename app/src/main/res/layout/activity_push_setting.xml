@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
 
     <LinearLayout
         android:id="@+id/ll_lxq"

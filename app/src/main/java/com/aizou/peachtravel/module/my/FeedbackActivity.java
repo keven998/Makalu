@@ -57,7 +57,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 	private void initTitlebar() {
 //		mTitlebar = findViewById(R.id.title_bar);
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("找回密码");
+        titleBar.getTitleTextView().setText("吐槽");
 	}
 	
 	@Override

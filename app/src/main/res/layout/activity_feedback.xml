@@ -13,38 +13,37 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/base_text_color_subtitle"
-        android:text="欢迎亲们来吐槽"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/base_text_color_text_hint"
+        android:text="亲你这么吐槽真的好么"
         android:textSize="14sp" />
 
     <EditText
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/editor_with_border"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="6dp"
+        android:background="@color/base_color_white"
+        android:layout_marginTop="10dp"
         android:padding="8dp"
-        android:lines="5"
-        android:minLines="5"
+        android:lines="4"
+        android:minLines="4"
+        android:hint="吐槽区"
+        android:textColorHint="#aaaaaa"
         android:gravity="left|top"
         android:textSize="15sp"
         android:textColor="@color/base_text_color_title"/>
 
-
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="发送"
         android:textSize="15sp"
         android:textColor="@color/base_color_white"
-        android:background="@drawable/tl_btn_highlight_selector"/>
+        android:background="@drawable/theme_button_selctor"/>
 
 </LinearLayout>

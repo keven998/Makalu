@@ -37,6 +37,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 		versionUpdateLl.setOnClickListener(this);
 		feedbackLl.setOnClickListener(this);
 		xtLl.setOnClickListener(this);
+        findViewById(R.id.ll_clear_cache).setOnClickListener(this);
 	}
 
 	private void initTitlebar() {
@@ -67,6 +68,9 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 			Intent pushIntent = new Intent(mContext, PushSettingActivity.class);
 			startActivity(pushIntent);
 			break;
+
+        case R.id.ll_clear_cache:
+            break;
 
 		default:
 			break;

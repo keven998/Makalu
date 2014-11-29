@@ -10,91 +10,76 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/ll_version_update"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_divider_color"
-        android:padding="1dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="18dp"
+        android:drawablePadding="15dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:drawableLeft="@drawable/ic_check_version"
+        android:gravity="center_vertical"
+        android:background="@drawable/option_cell_selector"
+        android:drawableRight="@drawable/cell_accessory"
+        android:text="检查新版本"
+        android:textColor="@color/base_text_color_title"
+        android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/ll_version_update"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:background="@drawable/option_cell_selector"
-            android:drawableRight="@drawable/ic_list_item_extender"
-            android:text="检查新版本"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/ll_clear_cache"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:layout_marginTop="1dp"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:background="@drawable/option_cell_selector"
-            android:drawableRight="@drawable/ic_list_item_extender"
-            android:text="清除缓存"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/ll_clear_cache"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_divider_color"
-        android:padding="1dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="18dp"
+        android:drawablePadding="15dp"
+        android:layout_marginTop="0.8dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:drawableLeft="@drawable/ic_clear_cache"
+        android:gravity="center_vertical"
+        android:background="@drawable/option_cell_selector"
+        android:drawableRight="@drawable/cell_accessory"
+        android:text="清除缓存"
+        android:textColor="@color/base_text_color_title"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/ll_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="17dp"
+        android:paddingRight="18dp"
+        android:drawablePadding="15dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:drawableLeft="@drawable/ic_feedback"
+        android:gravity="center_vertical"
+        android:background="@drawable/option_cell_selector"
+        android:drawableRight="@drawable/cell_accessory"
+        android:text="我有意见"
+        android:textColor="@color/base_text_color_title"
+        android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/ll_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:background="@drawable/option_cell_selector"
-            android:drawableRight="@drawable/ic_list_item_extender"
-            android:text="我有意见"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/ll_xt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:layout_marginTop="1dp"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:background="@drawable/option_cell_selector"
-            android:drawableRight="@drawable/ic_list_item_extender"
-            android:text="消息和提醒"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/ll_xt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="17dp"
+        android:paddingRight="18dp"
+        android:drawablePadding="15dp"
+        android:layout_marginTop="0.8dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:drawableLeft="@drawable/ic_setting_notify"
+        android:gravity="center_vertical"
+        android:background="@drawable/option_cell_selector"
+        android:drawableRight="@drawable/cell_accessory"
+        android:text="消息和提醒"
+        android:textColor="@color/base_text_color_title"
+        android:textSize="15sp" />
 
 </LinearLayout>
