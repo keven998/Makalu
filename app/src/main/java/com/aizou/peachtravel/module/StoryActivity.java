@@ -69,8 +69,8 @@ public class StoryActivity extends SwipeBackActivity {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.ic_launcher)
-                .showImageForEmptyUri(R.drawable.ic_launcher)
+//                .showImageOnFail(R.drawable.ic_launcher)
+//                .showImageForEmptyUri(R.drawable.ic_launcher)
 //				.decodingOptions(D)
                 .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();

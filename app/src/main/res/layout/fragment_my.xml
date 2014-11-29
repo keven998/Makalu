@@ -44,6 +44,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/iv_avatar"
                         android:layout_alignBottom="@id/iv_avatar"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp"
                         android:visibility="gone"
                         android:scaleType="fitCenter"/>
 

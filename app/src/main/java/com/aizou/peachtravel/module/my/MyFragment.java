@@ -77,6 +77,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             getView().findViewById(R.id.indicator).setVisibility(View.VISIBLE);
             getView().findViewById(R.id.btn_login).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_reg).setVisibility(View.GONE);
+            genderIv.setImageResource(R.drawable.ic_gender_lady);
             nickNameTv.setText(user.nickName);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
