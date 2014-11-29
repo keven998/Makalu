@@ -21,18 +21,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="当前密码"
-            android:inputType="phone"
+            android:inputType="textPassword"
             android:imeOptions="actionNext"
+            android:background="@color/base_color_white"
             android:textSize="15sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="23dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:drawableLeft="@drawable/ic_phone_24dp"
-            android:drawablePadding="6dp"
-            android:background="@drawable/editor_with_border"/>
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
 
         <EditText
             android:id="@+id/et_new_password"
@@ -41,17 +37,13 @@
             android:hint="新密码"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:background="@color/base_color_white"
             android:textSize="15sp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="23dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginTop="-1dp"
-            android:drawableLeft="@drawable/ic_phone_24dp"
-            android:drawablePadding="6dp"
-            android:background="@drawable/editor_with_border"/>
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginTop="0.8dp"/>
 
         <EditText
             android:id="@+id/et_re_password"
@@ -60,30 +52,25 @@
             android:hint="确认新密码"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:background="@color/base_color_white"
             android:textSize="15sp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="23dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginTop="-1dp"
-            android:drawableLeft="@drawable/ic_phone_24dp"
-            android:drawablePadding="6dp"
-            android:background="@drawable/editor_with_border"/>
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginTop="0.8dp"/>
 
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="38dp"
+            android:layout_height="35dp"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/base_color_white"
-            android:background="@drawable/tl_btn_highlight_selector"
-            android:text="确认"/>
+            android:background="@drawable/theme_button_selctor"
+            android:text="确定"/>
 
     </LinearLayout>
 

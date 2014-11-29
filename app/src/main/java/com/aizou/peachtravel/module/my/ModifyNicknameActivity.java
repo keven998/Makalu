@@ -51,7 +51,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                 if(!RegexUtils.checkNickName(nickEt.getText().toString().trim())){
                     ToastUtil.getInstance(mContext).showToast("请输入正确格式昵称");
                     return;
-                }else if(InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())){
+                } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())){
                     ToastUtil.getInstance(mContext).showToast("昵称不能为连续超过6位数字");
                     return;
                 }
@@ -59,10 +59,9 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
+
                 DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
                 UserApi.editUserNickName(user, nickEt.getText().toString().trim(), new HttpCallBack<String>() {
-
-
                     @Override
                     public void doSucess(String result, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();

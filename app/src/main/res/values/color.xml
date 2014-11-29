@@ -28,7 +28,7 @@
     <color name="base_text_color_subtitle">#666666</color>
     <color name="base_text_color_text_hint">#999999</color>
 
-    <color name="base_divider_color">#ebebeb</color>
+    <color name="base_divider_color">#dcdcdc</color>
 
 
     <drawable name="list_cell_item">#ffffff</drawable>
