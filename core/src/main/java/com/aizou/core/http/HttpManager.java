@@ -89,6 +89,7 @@ public class HttpManager {
                 }else{
                     sb.append("&"+nv.getName()+"="+nv.getValue());
                 }
+                i++;
             }
             LogUtil.d(TAG, "requestUrl = " + sb.toString());
             List<NameValuePair> list = new ArrayList<NameValuePair>();

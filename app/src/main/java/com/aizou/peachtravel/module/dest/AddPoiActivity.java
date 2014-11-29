@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.View;
@@ -74,10 +75,12 @@ public class AddPoiActivity extends PeachBaseActivity {
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
             public void onPoiAdded(PoiDetailBean poi) {
+                hasAddList.add(poi);
             }
 
             @Override
             public void onPoiRemoved(PoiDetailBean poi) {
+                hasAddList.remove(poi);
 
             }
         });
@@ -92,6 +95,16 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 getPoiListByLoc(mType, curLoc.id);
+            }
+        });
+        mBtnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("poiList",hasAddList);
+                intent.putExtra("dayIndex",dayIndex);
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
     }
@@ -172,6 +185,13 @@ public class AddPoiActivity extends PeachBaseActivity {
     private void bindView(List<PoiDetailBean> result) {
         if (page == 0) {
             mPoiAdapter.getDataList().clear();
+        }
+        for(PoiDetailBean detailBean:result){
+            if(hasAddList.contains(detailBean)){
+                detailBean.hasAdded=true;
+            }else{
+                detailBean.hasAdded=false;
+            }
         }
         mPoiAdapter.getDataList().addAll(result);
         mPoiAdapter.notifyDataSetChanged();

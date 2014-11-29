@@ -3,6 +3,7 @@ package com.aizou.peachtravel.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +23,12 @@ public class PoiDetailBean implements Parcelable {
     public float rating;
     public int commentCnt;
     public LocationBean loction;
-    public List<ImageBean> images;
-    public List<LocBean> locList;
+    public List<ImageBean> images = new ArrayList<ImageBean>();
+    public List<LocBean> locList = new ArrayList<LocBean>();
     public String address;
     public String telephone;
-    public List<RecommendBean> recommends;
-    public List<CommentBean> comments;
+    public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
+    public List<CommentBean> comments= new ArrayList<CommentBean>();
 
     public PoiDetailBean() {
     }

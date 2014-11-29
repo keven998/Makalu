@@ -33,9 +33,12 @@ public class TravelApi extends BaseApi{
     //目的地推荐
     public final static String REC_DEST="/recommend";
     public final static String CITY_DETAIL="/geo/localities/";
-    public final static String SPOT_DETAIL="/poi/vs/";
+
 
     //poi相关
+    //景点
+    public final static String SPOT_DETAIL="/poi/vs/";
+    //其他
     public final static String POI_DETAIL="/poi/%1$s/";
     public final static String POI_LIST_BY_LOC="/poi/%1$s/localities/";
     //组装

@@ -29,7 +29,7 @@ import butterknife.InjectView;
 public class PoiListActivity extends PeachBaseActivity {
     private PullToRefreshListView mPoiListLv;
     private String type;
-    private List<LocBean> cityList;
+    private List<LocBean> locList;
     private int page = 0;
     private LocBean curCity;
     @InjectView(R.id.ly_header_bar_title_wrap)
@@ -52,8 +52,8 @@ public class PoiListActivity extends PeachBaseActivity {
 
     private void initData() {
         type = getIntent().getStringExtra("type");
-        cityList = getIntent().getParcelableArrayListExtra("cityList");
-        curCity = cityList.get(0);
+        locList = getIntent().getParcelableArrayListExtra("locList");
+        curCity = locList.get(0);
 //        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
 //        mTvCityName.setText(result.zhName);
 //        mTvCityPoiDesc.setText(result.desc);
