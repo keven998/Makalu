@@ -77,6 +77,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private File cameraFile;
     private PeachUser user;
     DisplayImageOptions options;
+    private TextView tvGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initView() {
         setContentView(R.layout.activity_account);
         ViewUtils.inject(this);
+        tvGender = (TextView)findViewById(R.id.tv_gender);
         findViewById(R.id.ll_avatar).setOnClickListener(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_sign).setOnClickListener(this);
@@ -110,10 +112,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
+        tvGender.setText(user.gender);
        options = new DisplayImageOptions.Builder()
-               .showImageForEmptyUri(R.drawable.default_avatar)
-               .showImageOnFail(R.drawable.default_avatar)
-               .showImageOnLoading(R.drawable.default_avatar)
+               .showImageForEmptyUri(R.drawable.avatar_placeholder)
+               .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -125,14 +127,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 options);
         idTv.setText(user.userId+"");
         signTv.setText(user.signature);
-        if(TextUtils.isEmpty(user.tel)){
-            modifPwdLl.setVisibility(View.GONE);
-            bindPhoneTv.setText("绑定手机");
-        }else{
-            modifPwdLl.setVisibility(View.VISIBLE);
-            bindPhoneTv.setText("更改手机");
-            phoneTv.setText(user.tel);
-        }
+        phoneTv.setText(user.tel);
+
+//        if(TextUtils.isEmpty(user.tel)){
+//            modifPwdLl.setVisibility(View.GONE);
+//            bindPhoneTv.setText("绑定手机");
+//        }else{
+//            modifPwdLl.setVisibility(View.VISIBLE);
+//            bindPhoneTv.setText("更改手机");
+//            phoneTv.setText(user.tel);
+//        }
     }
 
     @Override
@@ -142,21 +146,25 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
                 startActivity(nickNameIntent);
                 break;
+
             case R.id.ll_sign:
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
                 startActivity(signIntent);
                 break;
+
             case R.id.ll_gender:
-                Intent genderIntent = new Intent(mContext, ModifyGenderActivity.class);
-                startActivity(genderIntent);
+                showSelectGenderDialog();
                 break;
+
             case R.id.ll_avatar:
                 showSelectPicDialog();
                 break;
+
             case R.id.ll_modify_pwd:
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
                 startActivity(modifyPwdIntent);
                 break;
+
             case R.id.ll_bind_phone:
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivity(bindPhoneIntent);
@@ -241,6 +249,59 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
+    private void showSelectGenderDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View contentView = View.inflate(this, R.layout.dialog_select_gender, null);
+        Button ladyBtn = (Button) contentView.findViewById(R.id.gender_lady);
+        Button manBtn = (Button) contentView.findViewById(R.id.gender_man);
+        Button unknown = (Button) contentView.findViewById(R.id.gender_unknown);
+        Button cancel = (Button) contentView.findViewById(R.id.btn_cancle);
+        ladyBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                tvGender.setText(((Button)v).getText());
+                dialog.dismiss();
+            }
+        });
+        manBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                tvGender.setText(((Button)v).getText());
+                dialog.dismiss();
+
+            }
+        });
+        unknown.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                tvGender.setText(((Button)v).getText());
+                dialog.dismiss();
+
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -305,5 +366,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
 
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 }

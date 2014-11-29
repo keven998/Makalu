@@ -61,7 +61,6 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
             @Override
             public void gotWeatherInfo(WeatherInfo weatherInfo) {
 
-//                LogUtil.d(weatherInfo.getCurrentText());
                 if(weatherInfo==null){
                     return;
                 }
