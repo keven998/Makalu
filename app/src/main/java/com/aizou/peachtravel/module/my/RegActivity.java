@@ -24,7 +24,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
  * Created by Rjm on 2014/10/13.
  */
 public class RegActivity extends PeachBaseActivity implements View.OnClickListener {
-    public static final int REQUEST_CODE_CHECH_VALICATION=201;
+    public static final int REQUEST_CODE_CHECH_VALICATION = 201;
 
     @ViewInject(R.id.et_phone)
     private EditText phoneEt;

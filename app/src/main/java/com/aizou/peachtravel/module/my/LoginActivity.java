@@ -73,7 +73,6 @@ public class LoginActivity extends PeachBaseActivity {
     private Button loginBtn;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleBar;
-    private TextView weixinBtn;
     //	private View mTitlebar;
     // sina weibo sso handler
     private SsoHandler mWeiboSsoHandler;
@@ -93,8 +92,7 @@ public class LoginActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-        weixinBtn = (TextView) findViewById(R.id.btn_weixin_login);
-        weixinBtn.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
