@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CoreLib</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">桃子旅行</string>
     <string name="cancle">取消</string>
     <string name="confirm">确定</string>
     <string name="phone_digest">1234567890</string>

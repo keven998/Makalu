@@ -321,6 +321,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 }
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
+            if (data == null) return;
             Bundle extras = data.getExtras();
             if (extras != null){
                 Bitmap photo = extras.getParcelable("data");
@@ -346,8 +347,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                                 user.avatar = redirect;
                                                 AccountManager.getInstance().saveLoginAccount(mContext,user);
                                                 ImageLoader.getInstance().displayImage(user.avatar,avatarIv, options);
-
-
                                             }
                                         }, null);
                             }

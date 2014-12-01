@@ -10,81 +10,98 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
+    <TextView android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="请确保你的手机畅通，接收短信验证码"
+        android:textSize="13sp"
+        android:textColor="@color/base_text_color_text_hint"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="49dp"
+        android:gravity="center_vertical"
+        android:background="@color/base_color_white"
         android:layout_marginTop="10dp"
-        android:orientation="vertical" >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="请确保你的手机畅通，接收短信验证码"
-            android:textSize="13sp"
-            android:textColor="@color/base_text_color_text_hint"/>
+            android:paddingLeft="23dp"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="15sp"
+            android:text="手机: "/>
 
         <EditText
             android:id="@+id/et_phone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/login_user_hint"
-            android:inputType="phone"
-            android:imeOptions="actionNext"
-            android:layout_marginTop="10dp"
-            android:textSize="15sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:drawableLeft="@drawable/ic_phone_24dp"
-            android:drawablePadding="6dp"
-            android:background="@drawable/editor_with_border"/>
-
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/login_pwd_hint"
-            android:inputType="textPassword"
-            android:imeOptions="actionDone"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="15sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginTop="-1dp"
-            android:drawableLeft="@drawable/ic_phone_24dp"
-            android:drawablePadding="6dp"
-            android:background="@drawable/editor_with_border"/>
-
-        <Button
-            android:id="@+id/btn_reg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="38dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/base_color_white"
-            android:background="@drawable/tl_btn_highlight_selector"
-            android:text="@string/register"/>
+            android:layout_height="49dp"
+            android:inputType="numberSigned"
+            android:imeOptions="actionNext"
+            android:background="@null"
+            android:paddingLeft="6dp"
+            android:textSize="14sp"
+            android:textColor="@color/base_text_color_title"
+            android:hint="请输入有效手机号"
+            android:textColorHint="#aaaaaa"
+            android:paddingRight="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:gravity="center_vertical"
+        android:background="@color/base_color_white"
+        android:layout_marginTop="0.8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:text="点击“注册”表明你已阅读并同意 桃子旅行用户协议"
-            android:textSize="13sp"
-            android:textColor="@color/base_text_color_text_hint"/>
+            android:paddingLeft="23dp"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="15sp"
+            android:text="密码: "/>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"
+            android:background="@null"
+            android:paddingLeft="6dp"
+            android:textSize="14sp"
+            android:hint="输入6~16位数字、字母"
+            android:textColorHint="#aaaaaa"
+            android:textColor="@color/base_text_color_title"
+            android:paddingRight="10dp"/>
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_reg"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/base_color_white"
+        android:background="@drawable/theme_button_selctor"
+        android:text="@string/register"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dp"
+        android:text="点击“注册”表明你已阅读并同意 桃子旅行用户协议"
+        android:textSize="13sp"
+        android:textColor="@color/base_text_color_text_hint"/>
 
 
 </LinearLayout>

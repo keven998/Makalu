@@ -108,6 +108,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.my.MessageContents"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.PoiDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
