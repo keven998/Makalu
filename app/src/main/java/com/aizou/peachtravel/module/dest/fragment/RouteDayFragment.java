@@ -107,6 +107,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.VISIBLE);
                 }else{
+                    //todo:保存路线
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.INVISIBLE);
                 }
@@ -129,7 +130,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                ArrayList<PoiDetailBean> poiList= data.getParcelableArrayListExtra("poiList");
                int dayIndex = data.getIntExtra("dayIndex",-1);
                routeDayMap.set(dayIndex, poiList);
-                routeDayAdpater.notifyDataSetChanged();
+               routeDayAdpater.notifyDataSetChanged();
             }
         }
     }

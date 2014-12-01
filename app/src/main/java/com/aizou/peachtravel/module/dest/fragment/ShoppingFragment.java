@@ -23,7 +23,6 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
-import com.aizou.peachtravel.module.dest.AddPoiActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,7 +35,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/29.
  */
-public class RestaurantFragment extends PeachBaseFragment {
+public class ShoppingFragment extends PeachBaseFragment {
 
     public final static int ADD_REST_REQUEST_CODE=102;
 
@@ -50,7 +49,7 @@ public class RestaurantFragment extends PeachBaseFragment {
     RestAdapter mRestAdapter;
     String id;
     String title;
-    ArrayList<PoiDetailBean> restaurantList;
+    ArrayList<PoiDetailBean> shoppingList;
     ArrayList<LocBean> locList;
 
     @Override
@@ -58,7 +57,7 @@ public class RestaurantFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
-        addBtn.setText("添加美食");
+        addBtn.setText("添加购物");
         lineLl = addFooter.findViewById(R.id.ll_line);
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addFooter);
@@ -69,7 +68,7 @@ public class RestaurantFragment extends PeachBaseFragment {
     private void initData() {
         id = getArguments().getString("id");
         title = getArguments().getString("title");
-        restaurantList = getArguments().getParcelableArrayList("restaurant");
+        shoppingList = getArguments().getParcelableArrayList("shopping");
         locList = getArguments().getParcelableArrayList("locList");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
@@ -113,7 +112,7 @@ public class RestaurantFragment extends PeachBaseFragment {
                 intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", locList);
-                intent.putParcelableArrayListExtra("poiList",restaurantList);
+                intent.putParcelableArrayListExtra("poiList",shoppingList);
                 getActivity().startActivityForResult(intent, ADD_REST_REQUEST_CODE);
             }
         });
@@ -126,7 +125,7 @@ public class RestaurantFragment extends PeachBaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK){
             if(requestCode==ADD_REST_REQUEST_CODE){
-                restaurantList = data.getParcelableArrayListExtra("poiList");
+                shoppingList = data.getParcelableArrayListExtra("poiList");
                 mRestAdapter.notifyDataSetChanged();
             }
         }
@@ -138,12 +137,12 @@ public class RestaurantFragment extends PeachBaseFragment {
 
         @Override
         public int getCount() {
-            return restaurantList.size();
+            return shoppingList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return restaurantList.get(position);
+            return shoppingList.get(position);
         }
 
         @Override
@@ -153,7 +152,7 @@ public class RestaurantFragment extends PeachBaseFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final PoiDetailBean poiDetailBean = restaurantList.get(position);
+            final PoiDetailBean poiDetailBean = shoppingList.get(position);
             ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
@@ -182,7 +181,7 @@ public class RestaurantFragment extends PeachBaseFragment {
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restaurantList.remove(poiDetailBean);
+                        shoppingList.remove(poiDetailBean);
                         notifyDataSetChanged();
                     }
                 });
@@ -213,8 +212,8 @@ public class RestaurantFragment extends PeachBaseFragment {
         public void drop(int from, int to) {
             if (from != to) {
                 PoiDetailBean item = (PoiDetailBean) getItem(from);
-                restaurantList.remove(item);
-                restaurantList.add(to, item);
+                shoppingList.remove(item);
+                shoppingList.add(to, item);
                 notifyDataSetChanged();
             }
         }

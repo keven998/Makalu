@@ -86,4 +86,19 @@ public class PoiDetailBean implements Parcelable {
             return new PoiDetailBean[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof PoiDetailBean){
+            return id.equals(((PoiDetailBean)o).id);
+        }else{
+            return false;
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

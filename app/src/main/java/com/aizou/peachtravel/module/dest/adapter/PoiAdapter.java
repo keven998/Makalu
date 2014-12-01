@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +16,8 @@ import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.module.dest.PoiDetailActivity;
+import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -136,6 +139,14 @@ public class PoiAdapter extends BaseAdapter {
             }else{
                 spotViewHolder.mBtnAdd.setVisibility(View.GONE);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, SpotDetailActivity.class);
+                    intent.putExtra("id",poiDetailBean.id);
+                    mContext.startActivity(intent);
+                }
+            });
 
 
         }else {
@@ -154,14 +165,15 @@ public class PoiAdapter extends BaseAdapter {
                         if(poiDetailBean.hasAdded){
                             poiDetailBean.hasAdded=false;
                             if(mOnPoiActionListener!=null){
-                                mOnPoiActionListener.onPoiAdded(poiDetailBean);
+                                mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         }else{
                             poiDetailBean.hasAdded=true;
                             if(mOnPoiActionListener!=null){
-                                mOnPoiActionListener.onPoiRemoved(poiDetailBean);
+                                mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
                         }
+                        notifyDataSetChanged();
                     }
                 });
             }else{
@@ -181,6 +193,16 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder.mTvCommentNum.setText(poiDetailBean.commentCnt+"");
                 poiViewHolder.mTvCommentContent.setText(commentBean.commentDetails);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PoiDetailActivity.class);
+                    intent.putExtra("id",poiDetailBean.id);
+                    intent.putExtra("type",poiDetailBean.type);
+                    mContext.startActivity(intent);
+                }
+            });
+
         }
         return convertView;
     }

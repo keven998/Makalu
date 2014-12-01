@@ -24,6 +24,7 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
+import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,7 +144,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
         poiTypeArray = getResources().getStringArray(R.array.poi_type);
         poiTypeValueArray = getResources().getStringArray(R.array.poi_type_value);
-        mTypeSpinnerAdapter = new StringSpinnerAdapter(Arrays.asList(poiTypeArray));
+        mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext,Arrays.asList(poiTypeArray));
         mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
         locList = getIntent().getParcelableArrayListExtra("locList");
         List<String> cityStrList = new ArrayList<String>();
@@ -151,7 +152,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             locBean.id="53aa9a6410114e3fd47833bd";
             cityStrList.add(locBean.zhName);
         }
-        mLocSpinnerAdapter = new StringSpinnerAdapter(cityStrList);
+        mLocSpinnerAdapter = new StringSpinnerAdapter(mContext,cityStrList);
         mLocSpinner.setAdapter(mLocSpinnerAdapter);
         mTypeSpinner.setSelection(0, true);
         mLocSpinner.setSelection(0,true);
@@ -209,74 +210,5 @@ public class AddPoiActivity extends PeachBaseActivity {
         }
     }
 
-    private class StringSpinnerAdapter implements SpinnerAdapter {
-        private List<String> mStrList;
-        public StringSpinnerAdapter(List<String> strList){
-            mStrList = strList;
-        }
-        @Override
-        public View getDropDownView(int position, View view, ViewGroup parent) {
-            if (view == null || !view.getTag().toString().equals("DROPDOWN")) {
-                view = getLayoutInflater().inflate(R.layout.spinner_item_dropdown, parent, false);
-                view.setTag("DROPDOWN");
-            }
-            ((TextView) view).setText(getItem(position).toString());
-            return view;
-        }
 
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            if (view == null || !view.getTag().toString().equals("NON_DROPDOWN")) {
-                view = getLayoutInflater().inflate(R.layout.spinner_item_actionbar, parent, false);
-                view.setTag("NON_DROPDOWN");
-            }
-            ((TextView) view).setText(getItem(position).toString());
-            return view;
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver dataSetObserver) {
-
-        }
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-
-        }
-
-        @Override
-        public int getCount() {
-            return mStrList.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return mStrList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        @Override
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-    }
 }

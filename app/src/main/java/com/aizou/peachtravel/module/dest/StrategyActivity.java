@@ -26,6 +26,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
+import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +141,6 @@ public class StrategyActivity extends PeachBaseActivity {
             public ViewHolder(View arg0) {
                 super(arg0);
             }
-
             ImageView mImg;
             TextView mTxt;
         }
@@ -154,12 +154,20 @@ public class StrategyActivity extends PeachBaseActivity {
          * 创建ViewHolder
          */
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
             View view = mInflater.inflate(R.layout.item_guide_loc,
                     viewGroup, false);
             ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.mTxt = (TextView) view
                     .findViewById(R.id.tv_nickname);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,CityDetailActivity.class);
+                    intent.putExtra("id",mDatas.get(i).id);
+                    startActivity(intent);
+                }
+            });
 
             return viewHolder;
         }
@@ -214,20 +222,32 @@ public class StrategyActivity extends PeachBaseActivity {
             if(position==0){
                 RouteDayFragment routeDayFragment = new RouteDayFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString("id",strategyBean.id);
+                bundle.putString("title",strategyBean.title);
                 bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
                 bundle.putInt("day",strategyBean.itineraryDays);
                 bundle.putParcelableArrayList("locList",strategyBean.destinations);
                 routeDayFragment.setArguments(bundle);
                 return routeDayFragment;
             }else if(position==1){
-                RestaurantFragment routeDayFragment = new RestaurantFragment();
+                RestaurantFragment restFragment = new RestaurantFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString("id",strategyBean.id);
+                bundle.putString("title",strategyBean.title);
                 bundle.putParcelableArrayList("restaurant",strategyBean.restaurant);
                 bundle.putParcelableArrayList("locList",strategyBean.destinations);
-                routeDayFragment.setArguments(bundle);
-                return routeDayFragment;
+                restFragment.setArguments(bundle);
+                return restFragment;
+            }else{
+                ShoppingFragment shoppingFragment = new ShoppingFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id",strategyBean.id);
+                bundle.putString("title",strategyBean.title);
+                bundle.putParcelableArrayList("restaurant",strategyBean.shopping);
+                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                shoppingFragment.setArguments(bundle);
+                return shoppingFragment;
             }
-            return null;
 
         }
     }

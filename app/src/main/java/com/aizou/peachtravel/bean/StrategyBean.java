@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/12/26.
@@ -11,6 +12,10 @@ import java.util.ArrayList;
 public class StrategyBean {
     public String id;
     public String title;
+    public String summary;
+    public long updateTime;
+    public int dayCnt;
+    public List<ImageBean> images;
     public ArrayList<LocBean> destinations;
     public ArrayList<IndexPoi> itinerary;
     public ArrayList<PoiDetailBean> shopping;
