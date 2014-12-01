@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.SettingConfig;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -49,6 +50,9 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
                 SettingConfig.getInstance().setAdPushSetting(PushSettingActivity.this, b);
             }
         });
+
+        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.title_bar);
+        titleBar.getTitleTextView().setText("消息和提醒");
     }
 
     private void initData() {

@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.ShareUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -75,13 +77,14 @@ public class ShareAccountActivity extends PeachBaseActivity {
 				account.platform = SHARE_MEDIA.DOUBAN;
 			} else if (account.title.equals("QQ空间")) {
 				account.platform = SHARE_MEDIA.QZONE;
-			} else if (account.title.equals("腾讯微博")) {
-				account.platform = SHARE_MEDIA.TENCENT;
-			} else if (account.title.equals("人人")) {
-				account.platform = SHARE_MEDIA.RENREN;
 			} else if (account.title.equals("微信")) {
-				account.platform = SHARE_MEDIA.WEIXIN;
-			}
+                account.platform = SHARE_MEDIA.WEIXIN;
+            }
+//            else if (account.title.equals("腾讯微博")) {
+//				account.platform = SHARE_MEDIA.TENCENT;
+//			} else if (account.title.equals("人人")) {
+//				account.platform = SHARE_MEDIA.RENREN;
+//			}
 			lists.add(account);
 		}
 		typedArray.recycle();
@@ -91,6 +94,8 @@ public class ShareAccountActivity extends PeachBaseActivity {
 	}
 
 	private void initTitlebar() {
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thb.getTitleTextView().setText("分享账户管理");
 	}
 
 	@Override
@@ -133,20 +138,18 @@ public class ShareAccountActivity extends PeachBaseActivity {
 
 		@Override
 		public View getView(int positon, View convertView, ViewGroup vg) {
-			LogUtil.d("getView-----------------");
 			View view = convertView;
 			if (view == null) {
 				view = View.inflate(ShareAccountActivity.this,
-						R.layout.sns_account_list_item, null);
+                        R.layout.sns_account_list_item, null);
 			}
+
 			final ShareAccount account = lists.get(positon);
-			ImageView switchBtn = (ImageView) view
-					.findViewById(R.id.bind_status);
+            CheckBox switchBtn = (CheckBox) view.findViewById(R.id.bind_status);
 			TextView textView = (TextView) view.findViewById(R.id.title);
 			if (TextUtils.isEmpty(account.screen_name)) {
 				textView.setText(account.title);
-				if(OauthHelper
-						.isAuthenticated(mContext, account.platform)){
+				if(OauthHelper.isAuthenticated(mContext, account.platform)){
 						mController.getPlatformInfo(mContext, account.platform,
 								new UMDataListener() {
 									@Override
@@ -157,8 +160,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 									public void onComplete(int status,
 											Map<String, Object> info) {
 										if (status == 200 && info != null) {
-											account.screen_name = (String) info
-													.get("screen_name");
+											account.screen_name = (String) info.get("screen_name");
 											notifyDataSetChanged();
 											LogUtil.d("获取信息-----------------");
 										} else {
@@ -168,20 +170,20 @@ public class ShareAccountActivity extends PeachBaseActivity {
 								});
 					}
 			} else {
-				textView.setText(account.title + "(" + account.screen_name
-						+ ")");
-				
-				
+				textView.setText(account.title + "(" + account.screen_name + ")");
 			}
 
 			ImageView logoView = (ImageView) view.findViewById(R.id.logo);
 			logoView.setImageResource(account.iconId);
-			if (OauthHelper
-					.isAuthenticated(mContext, account.platform)) {
-				switchBtn.setBackgroundResource(R.drawable.cb_on_bind);
+
+			if (OauthHelper.isAuthenticated(mContext, account.platform)) {
+//				switchBtn.setBackgroundResource(R.drawable.cb_on_bind);
+                switchBtn.setChecked(true);
 			} else {
-				switchBtn.setBackgroundResource(R.drawable.cb_off_bind);
+//				switchBtn.setBackgroundResource(R.drawable.cb_off_bind);
+                switchBtn.setChecked(false);
 			}
+
 			view.setTag(positon);
 			view.setOnClickListener(new OnClickListener() {
 

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 
 public class AboutActivity extends PeachBaseActivity {
@@ -24,8 +25,10 @@ public class AboutActivity extends PeachBaseActivity {
 		TextView verTv = (TextView) findViewById(R.id.tv_ver);
 		verTv.setText("version "+ UpdateUtil.getVerName(mContext));
 	}
-	private void initTitlebar() {
 
+	private void initTitlebar() {
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thb.getTitleTextView().setText("关于桃子旅行");
 	}
 	
 	@Override

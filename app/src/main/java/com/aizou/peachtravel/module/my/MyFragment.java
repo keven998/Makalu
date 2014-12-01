@@ -132,6 +132,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 Intent regintent = new Intent(getActivity(),RegActivity.class);
                 startActivity(regintent);
                 break;
+
+            case R.id.ll_message_center:
+                Intent msgIntent = new Intent(getActivity(), MessageContents.class);
+                startActivity(msgIntent);
+                break;
+
+            case R.id.ll_push_friends:
+
+                break;
+
+            default:
+                break;
         }
         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
