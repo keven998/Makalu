@@ -91,6 +91,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
+        mLyHeaderBarTitleWrap.getRightTextView().setText("聊天");
+        mLyHeaderBarTitleWrap.getRightTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
     }

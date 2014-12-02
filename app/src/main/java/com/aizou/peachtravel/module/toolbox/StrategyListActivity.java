@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module.toolbox;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -22,9 +20,11 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -197,15 +197,39 @@ public class StrategyListActivity extends PeachBaseActivity {
                         new MaterialDialog.Builder(StrategyListActivity.this)
 
                                 .title(null)
-                                .content("确定删除")
-                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
+                                .content("确定删除吗？")
                                 .positiveText("确定")
                                 .negativeText("取消")
+                                .autoDismiss(false)
+                                .positiveColor(getResources().getColor(R.color.app_theme_color))
+                                .negativeColor(getResources().getColor(R.color.app_theme_color))
                                 .callback(new MaterialDialog.Callback() {
                                     @Override
-                                    public void onPositive(MaterialDialog dialog) {
+                                    public void onPositive(final MaterialDialog dialog) {
+                                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                                        dialog.setContentView(progressView);
 
-                                        dialog.dismiss();
+                                        TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                                            @Override
+                                            public void doSucess(String result, String method) {
+                                                dialog.dismiss();
+                                                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                                                if(deleteResult.code==0){
+                                                    mStrategyListAdapter.getDataList().remove(itemData);
+                                                    mStrategyListAdapter.notifyDataSetChanged();
+                                                    ToastUtil.getInstance(mContext).showToast("删除成功");
+
+                                                }else{
+                                                    ToastUtil.getInstance(mContext).showToast("删除失败");
+                                                }
+                                            }
+
+                                            @Override
+                                            public void doFailure(Exception error, String msg, String method) {
+                                                ToastUtil.getInstance(mContext).showToast("删除失败");
+                                            }
+                                        });
+
                                     }
 
                                     @Override

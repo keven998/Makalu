@@ -224,7 +224,6 @@ public class ChatAllHistoryFragment extends Fragment {
                 if(!TextUtils.isEmpty(conversation.getUserName())){
                     IMUser user = IMUserRepository.getContactByUserName(getActivity(), conversation.getUserName());
                     peachConversation.imUser = user;
-
                 }
                 conversationList.add(peachConversation);
             }

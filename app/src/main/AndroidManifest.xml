@@ -562,6 +562,12 @@
             android:process=":pushservice"
             android:authorities="downloads.com.aizou.peachtravel"/><!--替换为downloads.第三方包名-->
         <!--===========================================================================-->
+
+        <!-- 高德地图-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="c8959c4a38e5cf5e8b7b5d8e7b8f1566" />
+
     </application>
 
 </manifest>

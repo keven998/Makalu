@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.toolbox;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,6 +25,10 @@ import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.LocationManagerProxy;
+import com.amap.api.location.LocationProviderProxy;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,7 +39,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class TravelFragment extends PeachBaseFragment implements View.OnClickListener {
+public class TravelFragment extends PeachBaseFragment implements View.OnClickListener, AMapLocationListener {
     public final static int IM_LOGIN = 100;
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
@@ -55,6 +60,11 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
     private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
+    private String city;
+    private Double geoLat;
+    private Double geoLng;
+
+    private LocationManagerProxy mLocationManagerProxy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,11 +76,14 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
         rootView.findViewById(R.id.tv_fav).setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         weatherArray = getResources().getStringArray(R.array.weather);
-        getWeather(116.402544, 39.93242);
+        mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
+        mLocationManagerProxy.requestLocationData(
+                LocationProviderProxy.AMapNetwork, -1, 15, this);
+        mLocationManagerProxy.setGpsEnable(false);
         return rootView;
     }
 
-    private void getWeather(double lat, double lon) {
+    private void getYahooWeather(double lat, double lon) {
         YahooWeather.getInstance().queryYahooWeatherByLatLon(getActivity(), lat + "", lon + "", new YahooWeatherInfoListener() {
             @Override
             public void gotWeatherInfo(WeatherInfo weatherInfo) {
@@ -78,12 +91,13 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
                 if (weatherInfo == null) {
                     return;
                 }
-                weatherStr = DateUtil.getCurrentMonthDay() + " 北京 " + weatherArray[weatherInfo.getCurrentCode()];
+                weatherStr = DateUtil.getCurrentMonthDay() + "   "+city+"   " + weatherArray[weatherInfo.getCurrentCode()];
                 ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
                 mTvWeather.setText(weatherStr);
 
             }
         });
+
     }
 
     @Override
@@ -133,5 +147,37 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
+            //获取位置信息
+             geoLat = aMapLocation.getLatitude();
+             geoLng = aMapLocation.getLongitude();
+             city=aMapLocation.getCity();
+            getYahooWeather(geoLat,geoLng);
+        }
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

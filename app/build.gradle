@@ -41,4 +41,5 @@ dependencies {
     compile files('libs/android-async-http-1.4.6.jar')
     compile files('libs/easemobchat_2.1.2.jar')
     compile project(':MaterialDialoglibrary')
+    compile files('libs/Android_Location_V1.3.0.jar')
 }

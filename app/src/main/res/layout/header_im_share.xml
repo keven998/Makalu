@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/create_new_talk"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:text="创建新的聊天"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:text="最近聊天"/>
+
+</LinearLayout>
