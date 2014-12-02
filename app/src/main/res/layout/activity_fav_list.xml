@@ -7,35 +7,32 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:layout_weight="1">
-
+        android:layout_height="match_parent"
+        android:background="@color/app_backgroud">
 
         <com.aizou.core.widget.prv.PullToRefreshListView
             android:id="@+id/fav_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent"
+            android:divider="@null"
             android:dividerHeight="0dp"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
+            android:fadingEdge="none" />
 
         <Button
             android:id="@+id/edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="编辑"/>
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="48dp"
+            android:background="#66000000"
+            android:text="编辑"
+            android:textSize="14sp"/>
 
     </FrameLayout>
 
