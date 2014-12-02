@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
@@ -25,7 +27,6 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -193,45 +194,23 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mDeleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
-                                .setTitleText(null)
-                                .setContentText("确定删除嘛？")
-                                .setCancelText("取消")
-                                .setConfirmText("确定")
-                                .showCancelButton(true)
-                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        // reuse previous dialog instance, keep widget user state, reset them if you need
+                        new MaterialDialog.Builder(StrategyListActivity.this)
 
-                                        sDialog.dismiss();
-                                    }
-                                })
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                .title(null)
+                                .content("确定删除")
+                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
+                                .positiveText("确定")
+                                .negativeText("取消")
+                                .callback(new MaterialDialog.Callback() {
                                     @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        sDialog
-                                                .setTitleText("Deleted!")
-                                                .setContentText("Your imaginary file has been deleted!")
-                                                .setConfirmText("OK")
-                                                .setConfirmClickListener(null)
-                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-//                                        //todo:删除攻略
-//                                        DialogManager.getInstance().showProgressDialog((Activity)mContext);
-//                                        TravelApi.deleteStrategy(itemData.id,new HttpCallBack<String>() {
-//                                            @Override
-//                                            public void doSucess(String result, String method) {
-//                                                DialogManager.getInstance().showProgressDialog((Activity)mContext);
-//                                            }
-//
-//                                            @Override
-//                                            public void doFailure(Exception error, String msg, String method) {
-//                                                DialogManager.getInstance().showProgressDialog((Activity)mContext);
-//                                            }
-//                                        });
-//                                        mStrategyListAdapter.getDataList().remove(itemData);
-//                                        mStrategyListAdapter.notifyDataSetChanged();
-//                                        sDialog.dismiss();
+                                    public void onPositive(MaterialDialog dialog) {
+
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        dialog.dismiss();
                                     }
                                 })
                                 .show();

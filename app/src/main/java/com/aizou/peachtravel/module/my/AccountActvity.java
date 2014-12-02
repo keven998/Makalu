@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.BitmapTools;
@@ -31,7 +33,6 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
-import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.lidroid.xutils.ViewUtils;
@@ -177,24 +178,24 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void warnLogout() {
-        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText(null)
-                .setContentText("确定退出已登陆账号")
-                .setCancelText("取消")
-                .setConfirmText("确定")
-                .showCancelButton(true)
-                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        new MaterialDialog.Builder(this)
+
+                .title(null)
+                .content("确定退出已登陆账号")
+                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
+                .positiveText("确定")
+                .negativeText("取消")
+                .callback(new MaterialDialog.Callback() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        // reuse previous dialog instance, keep widget user state, reset them if you need
-                        sDialog.dismiss();
-                    }
-                })
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
+                    public void onPositive(MaterialDialog dialog) {
                         AccountManager.getInstance().logout(AccountActvity.this);
+                        dialog.dismiss();
                         finish();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dialog.dismiss();
                     }
                 })
                 .show();

@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
@@ -21,7 +23,6 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
@@ -182,26 +183,24 @@ public class ShoppingFragment extends PeachBaseFragment {
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                .setTitleText(null)
-                                .setContentText("确定删除嘛？")
-                                .setCancelText("取消")
-                                .setConfirmText("确定")
-                                .showCancelButton(true)
-                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        // reuse previous dialog instance, keep widget user state, reset them if you need
+                        new MaterialDialog.Builder(getActivity())
 
-                                        sDialog.dismiss();
-                                    }
-                                })
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                .title(null)
+                                .content("确定删除")
+                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
+                                .positiveText("确定")
+                                .negativeText("取消")
+                                .callback(new MaterialDialog.Callback() {
                                     @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
+                                    public void onPositive(MaterialDialog dialog) {
                                         shoppingList.remove(poiDetailBean);
                                         notifyDataSetChanged();
-                                        sDialog.dismiss();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        dialog.dismiss();
                                     }
                                 })
                                 .show();
