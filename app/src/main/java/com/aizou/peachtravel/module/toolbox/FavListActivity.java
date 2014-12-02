@@ -27,11 +27,15 @@ public class FavListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
+
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        thb.getTitleTextView().setText("收藏夹");
     }
 
     private void initView() {
         setContentView(R.layout.activity_fav_list);
         ButterKnife.inject(this);
+
     }
 
     private void initData() {

@@ -63,6 +63,7 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
         mBtnLxq.setOnClickListener(this);
         mTvNearby.setOnClickListener(this);
         mTvMyGuide.setOnClickListener(this);
+        rootView.findViewById(R.id.tv_fav).setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         weatherArray = getResources().getStringArray(R.array.weather);
         getWeather(116.402544, 39.93242);
@@ -96,15 +97,21 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(intent, IM_LOGIN);
                 }
-
                 break;
+
             case R.id.tv_nearby:
                 Intent intent = new Intent(getActivity(), NearbyActivity.class);
                 startActivity(intent);
                 break;
+
             case R.id.tv_my_guide:
                 Intent strategyIntent = new Intent(getActivity(), StrategyListActivity.class);
                 startActivity(strategyIntent);
+                break;
+
+            case R.id.tv_fav:
+                Intent fIntent = new Intent(getActivity(), FavListActivity.class);
+                startActivity(fIntent);
                 break;
         }
     }
