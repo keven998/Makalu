@@ -58,7 +58,7 @@
             android:layout_height="28dp"
             android:layout_marginRight="6dp"
             android:layout_gravity="center_vertical"
-            android:background="@color/gray_btn_bg_color"
+            android:background="@color/gray_normal"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:paddingLeft="6dp"
