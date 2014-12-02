@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,8 @@ import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
+import com.aizou.peachtravel.module.dest.PoiDetailActivity;
+import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -114,6 +117,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                 routeDayAdpater.notifyDataSetChanged();
             }
         });
+
         addDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,6 +325,14 @@ public class RouteDayFragment extends PeachBaseFragment {
                             }
                         });
                     }
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), SpotDetailActivity.class);
+                            intent.putExtra("id",poiDetailBean.id);
+                            startActivity(intent);
+                        }
+                    });
 
 
                     break;
@@ -374,6 +386,15 @@ public class RouteDayFragment extends PeachBaseFragment {
                             }
                         });
                     }
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
+                            intent.putExtra("id",poiDetailBean.id);
+                            intent.putExtra("type",poiDetailBean.type);
+                            startActivity(intent);
+                        }
+                    });
                     break;
             }
             if(isEditableMode){

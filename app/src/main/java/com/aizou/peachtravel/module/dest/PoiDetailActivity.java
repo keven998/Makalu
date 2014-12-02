@@ -109,41 +109,21 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     private void getDetailData() {
-        if("restaurant".equals(type)){
-            TravelApi.getRESTDetail(id, new HttpCallBack<String>() {
-                @Override
-                public void doSucess(String result, String method) {
-                    CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
-                    if (detailBean.code == 0) {
-                        poiDetailBean = detailBean.result;
-                        bindView(detailBean.result);
-                    }
-
+        TravelApi.getPoiDetail(type,id,new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
+                if (detailBean.code == 0) {
+                    poiDetailBean = detailBean.result;
+                    bindView(detailBean.result);
                 }
+            }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
 
-                }
-            });
-        }else if("shopping".equals(type)){
-            TravelApi.getShoppingDetail(id, new HttpCallBack<String>() {
-                @Override
-                public void doSucess(String result, String method) {
-                    CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
-                    if (detailBean.code == 0) {
-                        poiDetailBean = detailBean.result;
-                        bindView(detailBean.result);
-                    }
-
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-            });
-        }
+            }
+        });
 
     }
 

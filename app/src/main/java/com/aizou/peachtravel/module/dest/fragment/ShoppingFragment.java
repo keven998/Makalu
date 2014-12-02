@@ -21,6 +21,7 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.SweetAlertDialog.SweetAlertDialog;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
@@ -37,7 +38,7 @@ import butterknife.InjectView;
  */
 public class ShoppingFragment extends PeachBaseFragment {
 
-    public final static int ADD_REST_REQUEST_CODE=102;
+    public final static int ADD_SHOPPING_REQUEST_CODE=103;
 
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
@@ -109,11 +110,11 @@ public class ShoppingFragment extends PeachBaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
-                intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
+                intent.putExtra("type", TravelApi.PoiType.SHOPPING);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", locList);
                 intent.putParcelableArrayListExtra("poiList",shoppingList);
-                getActivity().startActivityForResult(intent, ADD_REST_REQUEST_CODE);
+                getActivity().startActivityForResult(intent, ADD_SHOPPING_REQUEST_CODE);
             }
         });
 
@@ -124,7 +125,7 @@ public class ShoppingFragment extends PeachBaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK){
-            if(requestCode==ADD_REST_REQUEST_CODE){
+            if(requestCode==ADD_SHOPPING_REQUEST_CODE){
                 shoppingList = data.getParcelableArrayListExtra("poiList");
                 mRestAdapter.notifyDataSetChanged();
             }
@@ -181,8 +182,30 @@ public class ShoppingFragment extends PeachBaseFragment {
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        shoppingList.remove(poiDetailBean);
-                        notifyDataSetChanged();
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText(null)
+                                .setContentText("确定删除嘛？")
+                                .setCancelText("取消")
+                                .setConfirmText("确定")
+                                .showCancelButton(true)
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        // reuse previous dialog instance, keep widget user state, reset them if you need
+
+                                        sDialog.dismiss();
+                                    }
+                                })
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        shoppingList.remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        sDialog.dismiss();
+                                    }
+                                })
+                                .show();
+
                     }
                 });
             } else {

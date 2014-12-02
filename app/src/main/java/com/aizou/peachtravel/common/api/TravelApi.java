@@ -40,19 +40,17 @@ public class TravelApi extends BaseApi{
     //poi相关
     //景点
     public final static String SPOT_DETAIL="/poi/vs/";
-    //其他
+    //POI详情
     public final static String POI_DETAIL="/poi/%1$s/";
     //POI列表
     public final static String POI_LIST_BY_LOC="/poi/%1$s/localities/";
-    //组装
-    public final static String REST_DETAIL="/poi/restaurants/";
-    public final static String SHOPPING_DETAIL="/poi/shopping/";
     //根据ID获取攻略
     public final static String GUIDEBYID="/guides/locality/";
     //根据目的地ID创建攻略
     public final static String CREATE_GUIDE="/create-guide";
+    //攻略
+    public final static String GUIDE="/guides";
 
-    public final static String SAVE_GUIDE="/guides";
 
 
 
@@ -136,32 +134,6 @@ public class TravelApi extends BaseApi{
     }
 
 
-
-    /**
-     * 获取美食详情
-     * @param callback
-     * @return
-     */
-    public static PTRequestHandler getRESTDetail(String id,HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + REST_DETAIL+id);
-        setDefaultParams(request);
-        return HttpManager.request(request, callback);
-    }
-    /**
-     * 获取购物详情
-     * @param callback
-     * @return
-     */
-    public static PTRequestHandler getShoppingDetail(String id,HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + SHOPPING_DETAIL+id);
-        setDefaultParams(request);
-        return HttpManager.request(request, callback);
-    }
-
     /**
      * 根据攻略ID获取攻略详情
      * @param callback
@@ -175,6 +147,12 @@ public class TravelApi extends BaseApi{
         return HttpManager.request(request, callback);
     }
 
+    /**
+     * 新建攻略
+     * @param locList
+     * @param callback
+     * @return
+     */
     public static PTRequestHandler createGuide
             (List<String> locList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -204,11 +182,17 @@ public class TravelApi extends BaseApi{
         return HttpManager.request(request, callback);
     }
 
+    /**
+     * 保存攻略
+     * @param guideJson
+     * @param callback
+     * @return
+     */
     public static PTRequestHandler saveGUide
             (String guideJson, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + SAVE_GUIDE);
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.BASE_URL + GUIDE);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         try {
@@ -219,6 +203,29 @@ public class TravelApi extends BaseApi{
         }
         LogUtil.d(guideJson);
         return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 获取攻略列表
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getStrategyList(int page,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + GUIDE);
+        request.putUrlParams("page",page+"");
+        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    public static PTRequestHandler deleteStrategy(String id,HttpCallBack callBack){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.BASE_URL + GUIDE+"/"+id);
+        setDefaultParams(request);
+        return HttpManager.request(request, callBack);
     }
 
 }

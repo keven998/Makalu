@@ -403,6 +403,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
+        <activity
+            android:name=".module.toolbox.StrategyListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
 
 
         <!-- 开机自启动服务 -->

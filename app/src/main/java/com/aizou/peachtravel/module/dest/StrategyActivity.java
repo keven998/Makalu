@@ -243,7 +243,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("id",strategyBean.id);
                 bundle.putString("title",strategyBean.title);
-                bundle.putParcelableArrayList("restaurant",strategyBean.shopping);
+                bundle.putParcelableArrayList("shopping",strategyBean.shopping);
                 bundle.putParcelableArrayList("locList",strategyBean.destinations);
                 shoppingFragment.setArguments(bundle);
                 return shoppingFragment;

@@ -35,6 +35,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.jakewharton:butterknife:6.0.0'
     compile "com.daimajia.swipelayout:library:1.1.7@aar"
+    compile 'com.afollestad:material-dialogs:0.3.1'
     compile files('libs/GetuiSdk2.3.0.0.jar')
     compile files('libs/GetuiExt-2.0.3.jar')
     compile files('libs/qiniu-android-sdk-7.0.1.jar')

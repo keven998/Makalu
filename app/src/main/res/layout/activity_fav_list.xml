@@ -18,7 +18,7 @@
 
 
         <com.aizou.core.widget.prv.PullToRefreshListView
-            android:id="@+id/my_strategy_lv"
+            android:id="@+id/fav_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
