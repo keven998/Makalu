@@ -34,12 +34,16 @@ public class PoiAdapter extends BaseAdapter {
     public final static int POI = 1;
     private Context mContext;
     private boolean mIsCanAdd;
-    private List<PoiDetailBean> mPoiList =new ArrayList<PoiDetailBean>();
+    private List<PoiDetailBean> mPoiList = new ArrayList<PoiDetailBean>();
     private OnPoiActionListener mOnPoiActionListener;
 
     public PoiAdapter(Context context,boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
+    }
+
+    public void setData(List<PoiDetailBean> ds) {
+        mPoiList.addAll(ds);
     }
 
     public void setOnPoiActionListener(OnPoiActionListener onPoiActionListener){
@@ -99,7 +103,7 @@ public class PoiAdapter extends BaseAdapter {
         }else{
             if(type==SPOT){
                spotViewHolder = (SpotViewHolder) convertView.getTag();
-            }else{
+            } else {
                poiViewHolder = (PoiViewHolder) convertView.getTag();
             }
         }

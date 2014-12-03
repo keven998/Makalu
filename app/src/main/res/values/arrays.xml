@@ -19,6 +19,12 @@
         <item>豆瓣</item>
         <item>人人</item>
     </string-array>
+    <string-array name="local_type">
+        <item>游玩美景</item>
+        <item>风味美食</item>
+        <item>最佳Shopping</item>
+        <item>酒店青旅</item>
+    </string-array>
     <string-array name="sns_icons">
         <item>@drawable/ic_share_qzone</item>
         <item>@drawable/ic_share_sina</item>
