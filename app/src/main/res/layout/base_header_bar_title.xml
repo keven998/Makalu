@@ -4,23 +4,20 @@
     android:layout_height="@dimen/title_bar_height"
     android:background="@drawable/mm_listitem_simple" >
 
-    <RelativeLayout
-        android:id="@+id/ly_title_bar_left"
+    <TextView
+        android:id="@+id/tv_title_bar_left"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:gravity="center_vertical"
-        android:paddingLeft="12dp"
-        android:paddingRight="35dp" >
-
-        <TextView
-            android:id="@+id/tv_title_bar_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:textSize="16sp" />
-    </RelativeLayout>
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="28dp"
+        android:drawableLeft="@drawable/ic_navigation_back"
+        android:text="返回"
+        android:gravity="center"
+        android:textColor="@color/base_text_color_text_hint"
+        android:drawablePadding="3dp"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_center"

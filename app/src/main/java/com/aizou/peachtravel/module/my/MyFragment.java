@@ -54,6 +54,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
         TitleHeaderBar thb = (TitleHeaderBar)rootView.findViewById(R.id.ly_header_bar_title_wrap);
         thb.getTitleTextView().setText("我");
+        thb.enableBackKey(false);
 
         return rootView;
     }

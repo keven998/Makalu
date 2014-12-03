@@ -54,6 +54,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("绑定手机");
+        titleBar.enableBackKey(true);
     }
 
     private void startCountDownTime(){

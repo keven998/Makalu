@@ -45,6 +45,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("修改密码");
+        titleBar.enableBackKey(true);
     }
 
     @Override

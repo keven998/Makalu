@@ -200,9 +200,8 @@ public class IMMainActivity extends BaseChatActivity {
             }
         });
 
-        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("旅行圈");
-
+        titleHeaderBar.getTitleTextView().setText("旅行圈");
+        titleHeaderBar.enableBackKey(true);
     }
 
     private void showMoreMenu(View view){

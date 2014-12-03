@@ -53,6 +53,7 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.title_bar);
         titleBar.getTitleTextView().setText("消息和提醒");
+        titleBar.enableBackKey(true);
     }
 
     private void initData() {

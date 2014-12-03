@@ -35,8 +35,8 @@ public class FavListActivity extends PeachBaseActivity {
         initView();
         initData();
 
-        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.title_bar);
-        thb.getTitleTextView().setText("收藏夹");
+        mTitleBar.getTitleTextView().setText("收藏夹");
+        mTitleBar.enableBackKey(true);
 
         mFavLv.getRefreshableView().setAdapter(new CustomAdapter());
     }

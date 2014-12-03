@@ -95,8 +95,8 @@ public class ContactDetailActivity extends BaseChatActivity {
             }
         });
 
-        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("旅友信息");
+        titleHeaderBar.getTitleTextView().setText("旅友信息");
+        titleHeaderBar.enableBackKey(true);
     }
 
     private void bindView() {

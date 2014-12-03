@@ -64,6 +64,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("注册验证");
+        titleBar.enableBackKey(true);
 
         TextView tips = (TextView)findViewById(R.id.tips);
         tips.setText(String.format("已发送短信验证码至 %s\n网络有延迟,请稍后", tel));

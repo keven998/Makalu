@@ -51,6 +51,7 @@ public class RecDestFragment extends PeachBaseFragment {
                 startActivity(intent);
             }
         });
+        titleHeaderBar.enableBackKey(false);
         initData();
         return rootView;
     }

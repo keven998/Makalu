@@ -43,6 +43,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 	private void initTitlebar() {
         TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         thb.getTitleTextView().setText("设置");
+        thb.enableBackKey(true);
 	}
 
 	@Override

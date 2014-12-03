@@ -78,8 +78,8 @@ public class AddContactActivity extends BaseChatActivity implements View.OnClick
             }
         });
 
-        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("添加旅友");
+        titleHeaderBar.getTitleTextView().setText("添加旅友");
+        titleHeaderBar.enableBackKey(true);
     }
 
     /**

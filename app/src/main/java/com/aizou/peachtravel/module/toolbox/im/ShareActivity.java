@@ -33,7 +33,7 @@ public class ShareActivity extends PeachBaseActivity {
         mImShareLv = (ListView) findViewById(R.id.im_share_lv);
         View headerView = View.inflate(mContext, R.layout.header_im_share, null);
         mImShareLv.addHeaderView(headerView);
-
+        mTitleBar.enableBackKey(true);
     }
 
     private void initData() {

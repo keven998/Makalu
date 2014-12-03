@@ -52,8 +52,8 @@ public class NearbyActivity extends PeachBaseActivity {
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
 
-        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.title_bar);
-        thb.getTitleTextView().setText("我的身边");
+        mTitleBar.getTitleTextView().setText("我的身边");
+        mTitleBar.enableBackKey(true);
     }
 
     private class NearbyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {

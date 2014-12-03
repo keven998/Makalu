@@ -27,8 +27,9 @@ public class AboutActivity extends PeachBaseActivity {
 	}
 
 	private void initTitlebar() {
-        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.title_bar);
         thb.getTitleTextView().setText("关于桃子旅行");
+        thb.enableBackKey(true);
 	}
 	
 	@Override

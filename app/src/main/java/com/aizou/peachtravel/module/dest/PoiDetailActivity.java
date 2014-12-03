@@ -98,7 +98,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
             }
         });
-
+        mLyHeaderBarTitleWrap.enableBackKey(true);
 
     }
 

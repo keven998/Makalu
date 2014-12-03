@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.common.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -80,6 +81,19 @@ public class TitleHeaderBar extends HeaderBarBase {
         Drawable drawable= getResources().getDrawable(res);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mRightTextView.setCompoundDrawables(drawable,null,null,null);
+    }
+
+    public void enableBackKey(boolean enable) {
+        if (enable) {
+            mReturnImageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((Activity)getContext()).finish();
+                }
+            });
+        } else {
+            mReturnImageView.setVisibility(GONE);
+        }
     }
 
 }
