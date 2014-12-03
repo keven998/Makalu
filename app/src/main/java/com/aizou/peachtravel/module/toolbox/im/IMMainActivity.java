@@ -896,6 +896,25 @@ public class IMMainActivity extends BaseChatActivity {
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case NEW_CHAT_REQUEST_CODE:
+                    int chatType = data.getIntExtra("chatType",0);
+                    String groupId = data.getStringExtra("groupId");
+                    String userId = data.getStringExtra("userId");
+                    if(chatType==ChatActivity.CHATTYPE_GROUP){
+                        //进入群聊
+                        Intent intent = new Intent(mContext, ChatActivity.class);
+                        // it is group chat
+                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+                        intent.putExtra("groupId", groupId);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(mContext, ChatActivity.class);
+                        // it is single chat
+                        intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+
+
 
             }
         }
@@ -922,7 +941,7 @@ public class IMMainActivity extends BaseChatActivity {
             customView.findViewById(R.id.new_talk).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE));
+                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE),NEW_CHAT_REQUEST_CODE);
                     dismiss();
                 }
             });

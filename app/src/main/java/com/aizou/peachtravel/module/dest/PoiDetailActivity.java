@@ -1,12 +1,16 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -18,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -27,12 +32,22 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RecommendBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.module.my.LoginActivity;
+import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
+import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
+import com.aizou.peachtravel.module.toolbox.im.IMShareActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -91,11 +106,23 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
-        mLyHeaderBarTitleWrap.getRightTextView().setText("聊天");
+        mLyHeaderBarTitleWrap.getRightTextView().setText("更多");
         mLyHeaderBarTitleWrap.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PoiMoreMenu fragment = new PoiMoreMenu();
+                Bundle args = new Bundle();
+                args.putInt(
+                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+                        4
+                );
+                args.putFloat(
+                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+                        5
+                );
 
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "more_menu");
             }
         });
         mLyHeaderBarTitleWrap.enableBackKey(true);
@@ -164,6 +191,51 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IMUtils.onShareLogin(mContext,requestCode,resultCode,data);
+        if(resultCode== Activity.RESULT_OK){
+            if(requestCode==IMUtils.IM_SHARE_REQUEST_CODE){
+                final int chatType = data.getIntExtra("chatType",0);
+                final String groupId = data.getStringExtra("groupId");
+                final String userId = data.getStringExtra("userId");
+                IMUtils.showImSharePoiDialog(mContext, poiDetailBean, new MaterialDialog.Callback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+
+                    }
+
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        Intent intent = new Intent(mContext, ChatActivity.class);
+                        if(poiDetailBean.type.equals(TravelApi.PoiType.RESTAURANTS)){
+                            intent.putExtra("extType", Constant.ExtType.FOOD);
+                        }else if(poiDetailBean.type.equals(TravelApi.PoiType.HOTEL)){
+                            intent.putExtra("extType", Constant.ExtType.HOTEL);
+                        }
+                        else if(poiDetailBean.type.equals(TravelApi.PoiType.SHOPPING)){
+                            intent.putExtra("extType", Constant.ExtType.SHOPPING);
+                        }
+                        intent.putExtra("content",IMUtils.createExtMessageContentForPoi(poiDetailBean));
+
+                        if(chatType==ChatActivity.CHATTYPE_GROUP){
+                            //进入群聊
+                            // it is group chat
+                            intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+                            intent.putExtra("groupId", groupId);
+                        }else{
+                            // it is single chat
+                            intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                            intent.putExtra("userId", userId);
+                        }
+                        startActivity(intent);
+                    }
+                });
+
+            }
+        }
+    }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
         @InjectView(R.id.tv_username)
@@ -262,6 +334,42 @@ public class PoiDetailActivity extends PeachBaseActivity {
         @Override
         public int getItemCount() {
             return mDatas.size();
+        }
+    }
+
+    public static class PoiMoreMenu extends BlurDialogFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
+            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_poi_more, null);
+            connectionDialog.setContentView(customView);
+//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    dismiss();
+//                }
+//            });
+            customView.findViewById(R.id.add_fav).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo:添加收藏
+                    dismiss();
+                }
+            });
+
+            customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    IMUtils.onClickImShare(getActivity());
+                    dismiss();
+                }
+            });
+            return connectionDialog;
         }
     }
 

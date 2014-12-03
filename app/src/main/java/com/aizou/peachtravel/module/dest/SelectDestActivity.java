@@ -18,26 +18,31 @@ import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CityBean;
-import com.aizou.peachtravel.bean.InCityBean;
-import com.aizou.peachtravel.bean.OutCountryBean;
+import com.aizou.peachtravel.bean.CountryBean;
+import com.aizou.peachtravel.bean.InDestBean;
+import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
+import com.easemob.util.HanziToPinyin;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Rjm on 2014/10/9.
@@ -49,9 +54,10 @@ public class SelectDestActivity extends PeachBaseActivity {
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
     private TextView startTv;
-    private List<InCityBean> incityList;
-    private List<OutCountryBean> outCountryList;
-    private List<CityBean> allAddCityList = new ArrayList<CityBean>();
+    private List<InDestBean> incityList =new ArrayList<InDestBean>();
+    private List<LocBean> allAddCityList = new ArrayList<LocBean>();
+    InCityAdapter inCityAdapter;
+    ListViewDataAdapter<CountryBean> outCountryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,21 @@ public class SelectDestActivity extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
+        inCityAdapter = new InCityAdapter(new ViewHolderCreator<InDestBean>() {
+            @Override
+            public ViewHolderBase<InDestBean> createViewHolder() {
+                return new InCityViewHolder();
+            }
+        });
+        mInListView.setAdapter(inCityAdapter);
+        mTopSectiionBar.setListView(mInListView);
+        outCountryAdapter = new ListViewDataAdapter<CountryBean>(new ViewHolderCreator<CountryBean>() {
+            @Override
+            public ViewHolderBase<CountryBean> createViewHolder() {
+                return new OutCountryViewHolder();
+            }
+        });
+        mOutCountryListView.setAdapter(outCountryAdapter);
         inOutRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -105,61 +126,92 @@ public class SelectDestActivity extends PeachBaseActivity {
 
     }
 
-    public String sections[]={"A","B","C","D"};
-    private void initData() {
+    private void getInLocList(){
+        TravelApi.getDestList(0,new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result,LocBean.class);
+                if(locListResult.code==0){
+                    bindInView(locListResult.result);
+                }
 
-        incityList = new ArrayList<InCityBean>();
-        outCountryList = new ArrayList<OutCountryBean>();
-        for (int i = 0; i < 4; i++) {
-            InCityBean inCity = new InCityBean();
-            inCity.section = sections[i];
-            ArrayList<CityBean> cityBeans = new ArrayList<CityBean>();
-            inCity.cityList = cityBeans;
-            for (int j = 0; j < 5; j++) {
-                CityBean city = new CityBean();
-                city.zhName = "云南";
-                city.image = "http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg";
-                cityBeans.add(city);
             }
-            incityList.add(inCity);
-        }
-        for(int i=0;i<5;i++){
-            OutCountryBean outCountry = new OutCountryBean();
-            outCountry.name ="韩国";
-            outCountry.desc ="Korea";
-            outCountry.image="http://hiphotos.baidu.com/lvpics/pic/item/1c950a7b02087bf45139aa41f2d3572c10dfcf45.jpg";
-            ArrayList<CityBean> cityBeans = new ArrayList<CityBean>();
-            outCountry.cityList = cityBeans;
-            for (int j = 0; j < 15; j++) {
-                CityBean city = new CityBean();
-                city.zhName = "云南";
-                city.image = "http://d.hiphotos.baidu.com/super/whfpf%3D425%2C260%2C50/sign=70ecd7664c4a20a4314b6f87f66fac10/d01373f082025aaf97f5f1bff8edab64024f1afa.jpg";
-                cityBeans.add(city);
-            }
-            outCountryList.add(outCountry);
-        }
-        InCityAdapter inCityAdapter = new InCityAdapter(new ViewHolderCreator<InCityBean>() {
+
             @Override
-            public ViewHolderBase<InCityBean> createViewHolder() {
-                return new InCityViewHolder();
+            public void doFailure(Exception error, String msg, String method) {
+
             }
         });
-        ListViewDataAdapter<OutCountryBean> outCountryAdapter = new ListViewDataAdapter<OutCountryBean>(new ViewHolderCreator<OutCountryBean>() {
+    }
+
+    private void getOutCountryList(){
+        TravelApi.getDestList(1,new HttpCallBack<String>() {
             @Override
-            public ViewHolderBase<OutCountryBean> createViewHolder() {
-                return new OutCountryViewHolder();
+            public void doSucess(String result, String method) {
+                CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result,CountryBean.class);
+                if(countryListResult.code==0){
+                    bindOutView(countryListResult.result);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
             }
         });
-        mInListView.setAdapter(inCityAdapter);
-        inCityAdapter.getDataList().addAll(incityList);
-        inCityAdapter.notifyDataSetChanged();
-        mTopSectiionBar.setListView(mInListView);
-        mOutCountryListView.setAdapter(outCountryAdapter);
-        outCountryAdapter.getDataList().addAll(outCountryList);
+    }
+
+    private void bindOutView(List<CountryBean> result) {
+        outCountryAdapter.getDataList().addAll(result);
         outCountryAdapter.notifyDataSetChanged();
     }
 
-    private class  InCityAdapter  extends  ListViewDataAdapter<InCityBean> implements SectionIndexer{
+    private void bindInView(List<LocBean> result) {
+        HashMap<String,List<LocBean>> locMap = new HashMap<String, List<LocBean>>();
+        for(LocBean locBean:result){
+            if (Character.isDigit(locBean.zhName.charAt(0))) {
+                locBean.header="#";
+            } else {
+                locBean.header=HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
+                        0, 1).toUpperCase();
+                char header =locBean.header.toLowerCase().charAt(0);
+                if (header < 'a' || header > 'z') {
+                    locBean.header="#";
+                }
+            }
+            if(locMap.get(locBean.header)!=null){
+                locMap.get(locBean.header).add(locBean);
+            }else{
+                List<LocBean> locList = new ArrayList<LocBean>();
+                locList.add(locBean);
+                locMap.put(locBean.header,locList);
+            }
+        }
+        for(Map.Entry<String, List<LocBean>> entry: locMap.entrySet()){
+            InDestBean inDestBean = new InDestBean();
+            inDestBean.section = entry.getKey();
+            inDestBean.locList =entry.getValue();
+            incityList.add(inDestBean);
+        }
+        inCityAdapter.getDataList().addAll(incityList);
+        inCityAdapter.notifyDataSetChanged();
+
+    }
+
+
+    private void initData() {
+
+
+
+
+
+
+
+
+    }
+
+    private class  InCityAdapter  extends  ListViewDataAdapter<InDestBean> implements SectionIndexer{
         private List<String> sections;
         private SparseIntArray positionOfSection;
         private SparseIntArray sectionOfPosition;
@@ -210,12 +262,16 @@ public class SelectDestActivity extends PeachBaseActivity {
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
             initSections();
+            if(mTopSectiionBar!=null){
+                mTopSectiionBar.notifyDataSetChanged();
+            }
+
         }
 
     }
 
 
-    private class InCityViewHolder extends ViewHolderBase<InCityBean> {
+    private class InCityViewHolder extends ViewHolderBase<InDestBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
 
@@ -229,10 +285,10 @@ public class SelectDestActivity extends PeachBaseActivity {
         }
 
         @Override
-        public void showData(int position, final InCityBean itemData) {
+        public void showData(int position, final InDestBean itemData) {
             sectionTv.setText(itemData.section);
             cityListFl.removeAllViews();
-            for(final CityBean bean:itemData.cityList){
+            for(final LocBean bean:itemData.locList){
                 View contentView = View.inflate(mContext,R.layout.dest_select_city,null);
                 TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_city_name);
                 cityNameTv.setText(bean.zhName);
@@ -265,7 +321,7 @@ public class SelectDestActivity extends PeachBaseActivity {
         }
     }
 
-    private class OutCountryViewHolder extends ViewHolderBase<OutCountryBean> {
+    private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
         private TextView nameTv,descTv;
         private ImageView imageIv;
         private FlowLayout cityListFl;
@@ -291,7 +347,7 @@ public class SelectDestActivity extends PeachBaseActivity {
         }
 
         @Override
-        public void showData(int position, final OutCountryBean itemData) {
+        public void showData(int position, final CountryBean itemData) {
 //            contentView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -303,7 +359,7 @@ public class SelectDestActivity extends PeachBaseActivity {
 //                }
 //            });
             nameTv.setText("");
-            nameTv.setText(itemData.name);
+            nameTv.setText(itemData.zhName);
             SpannableString impress = new SpannableString("|"+itemData.desc);
             impress.setSpan(
                     new ForegroundColorSpan(getResources().getColor(
@@ -312,10 +368,10 @@ public class SelectDestActivity extends PeachBaseActivity {
 
             impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             nameTv.append(impress);
-            ImageLoader.getInstance().displayImage(itemData.image, imageIv, UILUtils.getRadiusOption());
+            ImageLoader.getInstance().displayImage(itemData.image.get(0).url, imageIv, UILUtils.getRadiusOption());
             cityListFl.removeAllViews();
             int i=0;
-            for(final CityBean bean:itemData.cityList){
+            for(final LocBean bean:itemData.destinations){
                 View view = View.inflate(mContext,R.layout.dest_select_city,null);
                 TextView cityNameTv = (TextView) view.findViewById(R.id.tv_city_name);
                 cityNameTv.setText(bean.zhName);

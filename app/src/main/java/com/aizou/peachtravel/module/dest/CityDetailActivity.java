@@ -92,7 +92,8 @@ public class CityDetailActivity extends PeachBaseActivity {
     }
 
     private void bindView(LocBean detailBean){
-        ImageLoader.getInstance().displayImage(detailBean.cover,mCityIv,UILUtils.getDefaultOption());
+        if(detailBean.images!=null&&detailBean.images.size()>0)
+        ImageLoader.getInstance().displayImage(detailBean.images.get(0).url,mCityIv,UILUtils.getDefaultOption());
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

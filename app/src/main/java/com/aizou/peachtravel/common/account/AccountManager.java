@@ -85,10 +85,5 @@ public class AccountManager {
         this.contactList = contactList;
     }
 
-    public void setStrangerList(Map<String, IMUser> List) {
-
-    }
-
-
 
 }

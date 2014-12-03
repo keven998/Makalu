@@ -32,11 +32,12 @@ public class TravelApi extends BaseApi{
 
     //目的地推荐
     public final static String REC_DEST="/recommend";
+    //目的地列表
+    public final static String DESTINATIONS="/destinations";
+    //目的地详情
     public final static String CITY_DETAIL="/geo/localities/";
     //目的地美食、购物介绍
     public final static String LOC_POI_GUIDE="/guides/destination/%1$s/%2$s";
-
-
     //poi相关
     //景点
     public final static String SPOT_DETAIL="/poi/vs/";
@@ -50,6 +51,8 @@ public class TravelApi extends BaseApi{
     public final static String CREATE_GUIDE="/create-guide";
     //攻略
     public final static String GUIDE="/guides";
+    //收藏
+    public final static String FAV="/misc/favorites";
 
 
 
@@ -63,6 +66,20 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + REC_DEST);
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 获取目的地列表
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getDestList(int abroad,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + DESTINATIONS);
+        request.putUrlParams("abroad",abroad+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -220,10 +237,33 @@ public class TravelApi extends BaseApi{
         return HttpManager.request(request, callback);
     }
 
+    /**
+     * 删除攻略
+     * @param id
+     * @param callBack
+     * @return
+     */
     public static PTRequestHandler deleteStrategy(String id,HttpCallBack callBack){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.BASE_URL + GUIDE+"/"+id);
+        setDefaultParams(request);
+        return HttpManager.request(request, callBack);
+    }
+
+    public static PTRequestHandler getFavist(int page,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + FAV);
+        request.putUrlParams("page",page+"");
+        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+    public static PTRequestHandler deleteFav(String id,HttpCallBack callBack){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.BASE_URL + FAV+"/"+id);
         setDefaultParams(request);
         return HttpManager.request(request, callBack);
     }
