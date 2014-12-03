@@ -102,7 +102,7 @@ public class CityDetailActivity extends PeachBaseActivity {
 
             }
         });
-        mPicNumTv.setText(detailBean.imageCount+"");
+        mPicNumTv.setText(detailBean.imageCnt+"");
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
         mCostTimeTv.setText(detailBean.timeCost+"天");
