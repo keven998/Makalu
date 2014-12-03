@@ -10,88 +10,17 @@
         android:layout_height="44dp"
         android:background="@color/main_color" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white">
-
-
-        <RadioGroup
-            android:id="@+id/in_out_rg"
-            android:layout_width="140dp"
-            android:layout_height="32dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/bg_top_tab"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="2dp">
-
-            <RadioButton
-                android:id="@+id/rb_in"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:background="@drawable/top_tab_bg_left"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="国内"
-                android:textColor="@drawable/top_tab_textcolor"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/rb_out"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:background="@drawable/top_tab_bg_right"
-                android:button="@null"
-                android:checked="false"
-                android:gravity="center"
-                android:text="境外"
-                android:textColor="@drawable/top_tab_textcolor"
-                android:textSize="16sp" />
-        </RadioGroup>
-    </RelativeLayout>
-
-
-    <RelativeLayout
+    <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+        android:id="@+id/in_out_indicator"
         android:layout_width="fill_parent"
+        android:layout_height="50dp"/>
+
+
+    <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
+        android:id="@+id/select_dest_viewPager"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <com.aizou.peachtravel.common.widget.TopSectionBar
-            android:id="@+id/section_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main_color"
-            android:clickable="true" />
-
-
-        <ListView
-            android:id="@+id/lv_in_city"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="10dp"
-            android:layout_below="@id/section_bar"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
-
-        <com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView
-            android:id="@+id/lv_out_country"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="gone" />
-    </RelativeLayout>
-
+        android:layout_weight="1"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="70dp"

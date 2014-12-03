@@ -47,7 +47,7 @@ public class CityDetailActivity extends PeachBaseActivity {
 
     private void initData() {
         String id = getIntent().getStringExtra("id");
-        id="53aa9a6410114e3fd47833bd";
+        id="5473ccd7b8ce043a64108c46";
         getCityDetailData(id);
     }
 
