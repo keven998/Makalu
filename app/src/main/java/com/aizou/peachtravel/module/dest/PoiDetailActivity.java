@@ -125,7 +125,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 fragment.show(getSupportFragmentManager(), "more_menu");
             }
         });
-
+        mLyHeaderBarTitleWrap.enableBackKey(true);
 
     }
 

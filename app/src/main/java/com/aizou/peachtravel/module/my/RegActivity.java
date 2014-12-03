@@ -43,6 +43,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("注册");
+        titleBar.enableBackKey(true);
     }
 
     @Override

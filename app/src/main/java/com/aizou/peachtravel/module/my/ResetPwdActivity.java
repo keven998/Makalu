@@ -44,6 +44,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("设置密码");
+        titleBar.enableBackKey(true);
     }
 
     @Override

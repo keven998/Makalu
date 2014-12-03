@@ -42,8 +42,8 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_modify_nickname);
         ViewUtils.inject(this);
 
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.title_bar);
-        titleBar.getTitleTextView().setText("修改昵称");
+        titleHeaderBar.getTitleTextView().setText("修改昵称");
+        titleHeaderBar.enableBackKey(true);
 
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override

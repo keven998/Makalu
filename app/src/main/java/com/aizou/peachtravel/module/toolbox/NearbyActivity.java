@@ -33,9 +33,14 @@ public class NearbyActivity extends PeachBaseActivity {
     FixedViewPager mNearbyViewPager;
     private IndicatorViewPager indicatorViewPager;
 
+    private String[] types;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        types = getResources().getStringArray(R.array.local_type);
+
         initView();
     }
 
@@ -47,6 +52,8 @@ public class NearbyActivity extends PeachBaseActivity {
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
 
+        mTitleBar.getTitleTextView().setText("我的身边");
+        mTitleBar.enableBackKey(true);
     }
 
     private class NearbyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
@@ -57,17 +64,16 @@ public class NearbyActivity extends PeachBaseActivity {
 
         @Override
         public int getCount() {
-            return 10;
+            return types.length;
         }
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
             if (convertView == null) {
-                convertView = View.inflate(mContext,R.layout.tab_top, null);
+                convertView = View.inflate(mContext, R.layout.tab_top, null);
             }
-            TextView textView = (TextView) convertView;
-            textView.setText("tab" + position);
-            textView.setPadding(30, 0, 30, 0);
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
+            textView.setText(types[position]);
             return convertView;
         }
 

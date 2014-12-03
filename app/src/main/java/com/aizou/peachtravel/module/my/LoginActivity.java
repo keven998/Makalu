@@ -138,7 +138,7 @@ public class LoginActivity extends PeachBaseActivity {
         });
 
         titleBar.getTitleTextView().setText("登录");
-
+        titleBar.enableBackKey(true);
     }
 
     @Override

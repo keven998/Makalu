@@ -56,6 +56,7 @@ public class SeachContactDetailActivity extends BaseChatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
+        initTitleBar();
         boolean isSeach = getIntent().getBooleanExtra("isSeach", false);
         user = (PeachUser) getIntent().getSerializableExtra("user");
         if (isSeach) {
@@ -149,9 +150,9 @@ public class SeachContactDetailActivity extends BaseChatActivity{
     }
 
     private void initTitleBar(){
-        TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         thbar.getTitleTextView().setText("搜索结果");
+        thbar.enableBackKey(true);
     }
 
     private void bindView(){

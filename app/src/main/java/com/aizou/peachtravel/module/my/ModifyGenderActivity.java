@@ -49,6 +49,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
             }
         });
         titleHeaderBar.getRightTextView().setText("保存");
+        titleHeaderBar.enableBackKey(true);
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

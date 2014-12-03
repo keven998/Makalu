@@ -56,6 +56,7 @@ public class StrategyActivity extends PeachBaseActivity {
         initView();
         initData();
     }
+
     private void initView() {
         setContentView(R.layout.activity_strategy);
         ButterKnife.inject(this);
@@ -69,7 +70,10 @@ public class StrategyActivity extends PeachBaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
+
+        mTitleBar.enableBackKey(true);
     }
+
     private void initData() {
         id =getIntent().getStringExtra("id");
         cityIdList = getIntent().getStringArrayListExtra("cityIdList");

@@ -99,6 +99,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
 
+        mTitleBar.enableBackKey(true);
     }
 
     private void initData() {

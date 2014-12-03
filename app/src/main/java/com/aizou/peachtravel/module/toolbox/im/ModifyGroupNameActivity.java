@@ -40,6 +40,7 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
         ViewUtils.inject(this);
         deleteIv.setOnClickListener(this);
         titleHeaderBar.getRightTextView().setText("保存");
+        titleHeaderBar.enableBackKey(true);
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -102,6 +102,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("个人信息");
+        titleBar.enableBackKey(true);
     }
 
     @Override

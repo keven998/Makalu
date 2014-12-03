@@ -49,6 +49,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         setContentView(R.layout.activity_forget_pwd);
         titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("找回密码");
+        titleBar.enableBackKey(true);
         ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);

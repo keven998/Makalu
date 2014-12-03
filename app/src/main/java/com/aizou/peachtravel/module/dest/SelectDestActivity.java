@@ -122,6 +122,7 @@ public class SelectDestActivity extends PeachBaseActivity {
             public void onClick(View v) {
             }
         });
+        titleHeaderBar.enableBackKey(true);
 
     }
 

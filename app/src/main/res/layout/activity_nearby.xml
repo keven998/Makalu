@@ -6,12 +6,12 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
     <com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView
         android:id="@+id/nearby_indicator"
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="wrap_content"
+        android:background="@color/base_color_white"/>
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/nearby_viewPager"

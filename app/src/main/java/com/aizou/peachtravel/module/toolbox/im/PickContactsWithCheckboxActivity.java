@@ -154,9 +154,8 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
             }
         });
 
-        TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("选择联系人");
-
+        titleHeaderBar.getTitleTextView().setText("选择联系人");
+        titleHeaderBar.enableBackKey(true);
     }
 
     /**
