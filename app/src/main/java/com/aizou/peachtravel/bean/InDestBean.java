@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class InCityBean {
+public class InDestBean {
     public String section;
-    public List<CityBean> cityList;
+    public List<LocBean> locList;
 
 }

@@ -57,6 +57,11 @@ public class TopSectionBar extends Gallery {
         });
     }
 
+    public void notifyDataSetChanged(){
+        if(mSectionAdapter!=null)
+        mSectionAdapter.notifyDataSetChanged();
+    }
+
     private class SectionScrollListener implements AbsListView.OnScrollListener {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -99,6 +104,8 @@ public class TopSectionBar extends Gallery {
 
         }
     }
+
+
 
 
     private class SectionAdapter extends BaseAdapter {

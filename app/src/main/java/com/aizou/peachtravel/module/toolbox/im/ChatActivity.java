@@ -225,9 +225,18 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 		setContentView(R.layout.activity_chat);
 		initView();
 		setUpView();
+        sendShareMessage();
 	}
 
-	/**
+    private void sendShareMessage() {
+        int extType = getIntent().getIntExtra("extType",-1);
+        String content = getIntent().getStringExtra("content");
+        if(extType>=0){
+            sendText(content,extType);
+        }
+    }
+
+    /**
 	 * initView
 	 */
 	protected void initView() {

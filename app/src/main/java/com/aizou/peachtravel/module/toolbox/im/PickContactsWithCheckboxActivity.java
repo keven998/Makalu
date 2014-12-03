@@ -202,41 +202,39 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
                         try {
                             //创建不公开群
                             final EMGroup group = EMGroupManager.getInstance().createPrivateGroup(groupName.toString(), desc, members.toArray(new String[0]), true,50);
+                            EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+                            msg.setChatType(EMMessage.ChatType.GroupChat);
+                            msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                            msg.setReceipt(group.getGroupId());
+                            IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+                            String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+                            String content = String.format(mContext.getResources().getString(R.string.invate_to_group),myNickmae,membersStr.toString());
+                            IMUtils.setMessageWithExtTips(mContext,msg,content);
+                            msg.addBody(new TextMessageBody(content));
+                            EMChatManager.getInstance().sendGroupMessage(msg,new EMCallBack() {
+                                @Override
+                                public void onSuccess() {
+                                }
+
+                                @Override
+                                public void onError(int i, String s) {
+
+                                }
+
+                                @Override
+                                public void onProgress(int i, String s) {
+
+                                }
+                            });
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     DialogManager.getInstance().dissMissProgressDialog();
                                     // 被邀请
-                                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                                    msg.setChatType(EMMessage.ChatType.GroupChat);
-                                    msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
-                                    msg.setReceipt(group.getGroupId());
-                                    IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                                    String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
-                                    String content = String.format(mContext.getResources().getString(R.string.invate_to_group),myNickmae,membersStr.toString());
-                                    IMUtils.setMessageWithExtTips(mContext,msg,content);
-                                    msg.addBody(new TextMessageBody(content));
-                                    EMChatManager.getInstance().sendGroupMessage(msg,new EMCallBack() {
-                                        @Override
-                                        public void onSuccess() {
-
-                                        }
-
-                                        @Override
-                                        public void onError(int i, String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onProgress(int i, String s) {
-
-                                        }
-                                    });
-                                    //进入群聊
-                                    Intent intent = new Intent(mContext, ChatActivity.class);
+                                    Intent intent = new Intent();
                                     // it is group chat
                                     intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
                                     intent.putExtra("groupId", group.getGroupId());
-                                    startActivity(intent);
+                                    setResult(RESULT_OK,intent);
                                     finish();
 
                                 }
@@ -252,7 +250,11 @@ public class PickContactsWithCheckboxActivity extends BaseChatActivity {
                     }
                 }).start();
             } else if (toBeAddContacts.size() == 1) {
-                startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", toBeAddContacts.get(0).getUsername()));
+                Intent intent = new Intent();
+                // it is group chat
+                intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                intent.putExtra("userId", toBeAddContacts.get(0).getUsername());
+                setResult(RESULT_OK,intent);
                 finish();
             }
         } else if(groupId!=null){

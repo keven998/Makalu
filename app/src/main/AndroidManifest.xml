@@ -231,6 +231,12 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name=".module.toolbox.im.IMShareActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+             >
+        </activity>
         <!-- 聊天页面 -->
         <activity
             android:name=".module.toolbox.im.ChatActivity"

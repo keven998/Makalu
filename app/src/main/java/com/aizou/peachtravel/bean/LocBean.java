@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/14.
  */
 public class LocBean implements Parcelable {
+    public String header;
     public String id;
     public String zhName;
     public String enName;
@@ -17,9 +18,10 @@ public class LocBean implements Parcelable {
     public String desc;
     public float timeCost;
     public String travelMonth;
-    public String cover;
+    public ArrayList<ImageBean> images =new ArrayList<ImageBean>();
     public int imageCount;
     public ArrayList<TravelNoteBean> travelNote = new ArrayList<TravelNoteBean>();
+
 
     @Override
     public int describeContents() {
@@ -36,9 +38,9 @@ public class LocBean implements Parcelable {
         dest.writeString(this.desc);
         dest.writeFloat(this.timeCost);
         dest.writeString(this.travelMonth);
-        dest.writeString(this.cover);
+        dest.writeSerializable(this.images);
         dest.writeInt(this.imageCount);
-        dest.writeTypedList(travelNote);
+        dest.writeSerializable(this.travelNote);
     }
 
     public LocBean() {
@@ -53,9 +55,9 @@ public class LocBean implements Parcelable {
         this.desc = in.readString();
         this.timeCost = in.readFloat();
         this.travelMonth = in.readString();
-        this.cover = in.readString();
+        this.images = (ArrayList<ImageBean>) in.readSerializable();
         this.imageCount = in.readInt();
-        in.readTypedList(travelNote, TravelNoteBean.CREATOR);
+        this.travelNote = (ArrayList<TravelNoteBean>) in.readSerializable();
     }
 
     public static final Parcelable.Creator<LocBean> CREATOR = new Parcelable.Creator<LocBean>() {
@@ -67,19 +69,4 @@ public class LocBean implements Parcelable {
             return new LocBean[size];
         }
     };
-
-    @Override
-    public boolean equals(Object o) {
-        if(o instanceof LocBean){
-            return id.equals(((LocBean)o).id);
-        }else{
-            return false;
-        }
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }
