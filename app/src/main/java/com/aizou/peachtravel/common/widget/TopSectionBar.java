@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
@@ -127,11 +128,11 @@ public class TopSectionBar extends Gallery {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            TextView sectionTv;
+            CheckedTextView sectionTv;
             if (convertView == null) {
                 convertView = View.inflate(getContext(), R.layout.item_section, null);
             }
-            sectionTv = (TextView) convertView.findViewById(R.id.tv_section);
+            sectionTv = (CheckedTextView) convertView.findViewById(R.id.tv_section);
             sectionTv.setText((CharSequence) indexer.getSections()[position]);
             return convertView;
         }

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <TextView
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <CheckedTextView
         android:id="@+id/tv_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
         android:gravity="center"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="16sp"
-        android:text="A"/>
+        android:layout_gravity="center"
+        android:textColor="@color/base_color_white"
+        android:background="@drawable/alpha_index_selector"
+        android:textSize="11sp"/>
 
-</LinearLayout>
+</FrameLayout>

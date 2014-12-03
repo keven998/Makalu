@@ -182,7 +182,7 @@ public class ContactlistFragment extends Fragment {
             });
         } else if (contactList.size() > 1) {
             if (emptyView != null) {
-                emptyView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
                 emptyView = null;
             }
         }
@@ -203,9 +203,9 @@ public class ContactlistFragment extends Fragment {
             @Override
             public void doSucess(Object result, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
-                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result,ModifyResult.class);
+                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if(deleteResult.code==0){
-                    IMUserRepository.deleteContact(getActivity(),tobeDeleteUser.getUsername());
+                    IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
                     // 删除此会话
                     EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername());
                     AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());

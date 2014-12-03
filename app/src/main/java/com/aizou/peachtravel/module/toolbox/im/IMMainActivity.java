@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,9 +82,9 @@ public class IMMainActivity extends BaseChatActivity {
 
 	protected static final String TAG = "MainActivity";
 	// 未读消息textview
-	private TextView unreadLabel;
+	private ImageView unreadLabel;
 	// 未读通讯录textview
-	private TextView unreadAddressLable;
+	private ImageView unreadAddressLable;
 
 	private Button[] mTabs;
 	private ContactlistFragment contactListFragment;
@@ -98,6 +99,9 @@ public class IMMainActivity extends BaseChatActivity {
 	private NewMessageBroadcastReceiver msgReceiver;
 	// 账号在别处登录
 	private boolean isConflict = false;
+
+    private View tab1Selected;
+    private View tab2Selected;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -166,41 +170,48 @@ public class IMMainActivity extends BaseChatActivity {
 	 */
 	private void initView() {
         initTitleBar();
-		unreadLabel = (TextView) findViewById(R.id.unread_msg_number);
-		unreadAddressLable = (TextView) findViewById(R.id.unread_address_number);
-		mTabs = new Button[3];
+        unreadLabel = (ImageView) findViewById(R.id.unread_msg_notify);
+		unreadAddressLable = (ImageView) findViewById(R.id.unread_address_number);
+		mTabs = new Button[2];
 		mTabs[0] = (Button) findViewById(R.id.btn_conversation);
 		mTabs[1] = (Button) findViewById(R.id.btn_address_list);
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 		// 把第一个tab设为选中状态
+        tab1Selected = findViewById(R.id.tab1);
+        tab2Selected = findViewById(R.id.tab2);
 		mTabs[0].setSelected(true);
-
+        tab1Selected.setVisibility(View.VISIBLE);
+        tab2Selected.setVisibility(View.GONE);
 	}
 
     private void initTitleBar(){
-        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                BlurMenu fragment = new BlurMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
+//                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "blur_menu");
+//            }
+//        });
+
+        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-//                showMoreMenu(titleHeaderBar.getRightTextView());
+            public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
                 Bundle args = new Bundle();
-                args.putInt(
-                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                        4
-                );
-                args.putFloat(
-                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                        5
-                );
-
+                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
+                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
                 fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "blur_menu");
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("旅行圈");
+        titleHeaderBar.getTitleTextView().setText("桃·Talk");
         titleHeaderBar.enableBackKey(true);
     }
 
@@ -214,6 +225,7 @@ public class IMMainActivity extends BaseChatActivity {
                     case R.id.menu_add_friends:
                         startActivity(new Intent(mContext, AddContactActivity.class));
                         break;
+
                     case R.id.menu_new_message:
                         startActivity(new Intent(mContext, PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE));
                         break;
@@ -233,9 +245,14 @@ public class IMMainActivity extends BaseChatActivity {
 		switch (view.getId()) {
 		case R.id.btn_conversation:
 			index = 0;
+            tab1Selected.setVisibility(View.VISIBLE);
+            tab2Selected.setVisibility(View.GONE);
 			break;
+
 		case R.id.btn_address_list:
 			index = 1;
+            tab1Selected.setVisibility(View.GONE);
+            tab2Selected.setVisibility(View.VISIBLE);
 			break;
 //		case R.id.btn_setting:
 //			index = 2;
@@ -285,10 +302,9 @@ public class IMMainActivity extends BaseChatActivity {
 	public void updateUnreadLabel() {
 		int count = getUnreadMsgCountTotal();
 		if (count > 0) {
-			unreadLabel.setText(String.valueOf(count));
 			unreadLabel.setVisibility(View.VISIBLE);
 		} else {
-			unreadLabel.setVisibility(View.INVISIBLE);
+			unreadLabel.setVisibility(View.GONE);
 		}
 	}
 
@@ -300,10 +316,10 @@ public class IMMainActivity extends BaseChatActivity {
 			public void run() {
 				int count = getUnreadAddressCountTotal();
 				if (count > 0) {
-					unreadAddressLable.setText(String.valueOf(count));
+//					unreadAddressLable.setText(String.valueOf(count));
 					unreadAddressLable.setVisibility(View.VISIBLE);
 				} else {
-					unreadAddressLable.setVisibility(View.INVISIBLE);
+					unreadAddressLable.setVisibility(View.GONE);
 				}
 			}
 		});

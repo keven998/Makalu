@@ -88,14 +88,14 @@ public class ContactDetailActivity extends BaseChatActivity {
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("旅友信息");
+        titleHeaderBar.getTitleTextView().setText("好友信息");
         titleHeaderBar.enableBackKey(true);
     }
 
