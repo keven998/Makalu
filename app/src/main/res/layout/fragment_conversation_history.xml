@@ -42,26 +42,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="想去哪里疯一下\n快和大家来八一八吧"
+            android:text="想去哪里疯一下\n快约大家来桃·TalkTalk吧"
             android:textColor="@color/base_text_color_text_hint"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/start_chat"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="34dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:background="@color/app_theme_color"
-            android:paddingBottom="5dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="5dp"
-            android:text="去聊聊"
+            android:background="@drawable/app_theme_button_selector"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
+            android:text="新建Talk"
             android:textColor="@color/base_color_white"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

@@ -164,8 +164,10 @@ public class ChatAllHistoryFragment extends Fragment {
 
     private void setEmptyView() {
 //        listView.setEmptyView();
-        View emptyView = getActivity().findViewById(R.id.empty_view);
-        listView.setEmptyView(emptyView);
+        if (listView.getEmptyView() == null) {
+            View emptyView = getActivity().findViewById(R.id.empty_view);
+            listView.setEmptyView(emptyView);
+        }
     }
 
     @Override
