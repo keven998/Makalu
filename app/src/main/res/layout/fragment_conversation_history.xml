@@ -44,7 +44,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="想去哪里疯一下\n快约大家来桃·TalkTalk吧"
+            android:text="想去哪里Happy\n先和好友们TalkTalk"
             android:textColor="@color/base_text_color_text_hint"
             android:textSize="15sp" />
 

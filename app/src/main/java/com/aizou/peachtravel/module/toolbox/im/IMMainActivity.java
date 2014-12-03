@@ -185,12 +185,23 @@ public class IMMainActivity extends BaseChatActivity {
 	}
 
     private void initTitleBar(){
-        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                BlurMenu fragment = new BlurMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
+//                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "blur_menu");
+//            }
+//        });
+
+        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-//                showMoreMenu(titleHeaderBar.getRightTextView());
+            public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
                 Bundle args = new Bundle();
                 args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
@@ -200,7 +211,7 @@ public class IMMainActivity extends BaseChatActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("旅行圈");
+        titleHeaderBar.getTitleTextView().setText("桃·Talk");
         titleHeaderBar.enableBackKey(true);
     }
 

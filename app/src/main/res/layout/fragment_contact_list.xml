@@ -12,14 +12,12 @@
         android:layout_marginTop="10dp">
         <com.aizou.peachtravel.common.widget.TopSectionBar
             android:id="@+id/section_bar"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:background="@color/base_color_white"
-            android:scaleX="1.2"
-            android:scaleY="1.2"
-            android:unselectedAlpha="0.8"
+            android:spacing="10dp"
+            android:scaleX="2.0"
+            android:scaleY="2.0"
             android:overScrollMode="always"
             android:clickable="true" />
 

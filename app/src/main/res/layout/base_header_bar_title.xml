@@ -4,20 +4,28 @@
     android:layout_height="@dimen/title_bar_height"
     android:background="@drawable/mm_listitem_simple" >
 
-    <TextView
-        android:id="@+id/tv_title_bar_left"
+    <RelativeLayout
+        android:id="@+id/ly_title_bar_left"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:paddingLeft="10dp"
-        android:paddingRight="28dp"
-        android:drawableLeft="@drawable/ic_navigation_back"
-        android:text="返回"
-        android:gravity="center"
-        android:textColor="@color/base_text_color_text_hint"
-        android:drawablePadding="3dp"
-        android:textSize="16sp" />
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="28dp"
+            android:drawableLeft="@drawable/ic_navigation_back"
+            android:text="返回"
+            android:gravity="center"
+            android:textColor="@color/base_text_color_text_hint"
+            android:drawablePadding="3dp"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_center"
@@ -38,9 +46,7 @@
         android:id="@+id/ly_title_bar_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:paddingLeft="30dp"
-        android:paddingRight="12dp" >
+        android:layout_alignParentRight="true">
 
         <TextView
             android:id="@+id/tv_title_bar_right"
@@ -48,7 +54,10 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/base_menu_color"
+            android:textColor="@color/app_theme_color"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="12dp"
             android:textSize="16sp" />
 
     </RelativeLayout>
