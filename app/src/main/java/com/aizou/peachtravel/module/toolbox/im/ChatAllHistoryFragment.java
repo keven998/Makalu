@@ -53,6 +53,7 @@ import com.easemob.chat.EMMessage;
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
  */
 public class ChatAllHistoryFragment extends Fragment {
+    public static final int NEW_CHAT_REQUEST_CODE=101;
 
     private InputMethodManager inputMethodManager;
     private ListView listView;
@@ -167,6 +168,12 @@ public class ChatAllHistoryFragment extends Fragment {
         if (listView.getEmptyView() == null) {
             View emptyView = getActivity().findViewById(R.id.empty_view);
             listView.setEmptyView(emptyView);
+            getActivity().findViewById(R.id.start_chat).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                }
+            });
         }
     }
 

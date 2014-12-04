@@ -864,7 +864,7 @@ public class IMMainActivity extends ChatBaseActivity {
             customView.findViewById(R.id.new_talk).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE),NEW_CHAT_REQUEST_CODE);
+                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                     dismiss();
                 }
             });

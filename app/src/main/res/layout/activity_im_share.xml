@@ -48,7 +48,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="想去哪里Happy\n快和大家来八一八吧"
+                android:text="想去哪旅行\n先和大家来Talk交换意见吧"
                 android:textColor="@color/base_text_color_text_hint"
                 android:textSize="14sp" />
 
