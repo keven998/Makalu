@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachConversation;
@@ -43,7 +44,9 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.util.DateUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 /**
  * 显示所有聊天记录adpater
@@ -51,10 +54,19 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
     private LayoutInflater inflater;
+    DisplayImageOptions options;
 
     public ChatAllHistoryAdapter(Context context, int textViewResourceId, List<PeachConversation> objects) {
         super(context, textViewResourceId, objects);
         inflater = LayoutInflater.from(context);
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .cacheOnDisc(true)
+                        // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                .build();
     }
 
     @Override
@@ -71,14 +83,14 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             holder.time = (TextView) convertView.findViewById(R.id.time);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
 //            holder.msgState = convertView.findViewById(R.id.msg_state);
-            holder.list_item_layout = (RelativeLayout) convertView.findViewById(R.id.list_item_layout);
+//            holder.list_item_layout = (RelativeLayout) convertView.findViewById(R.id.list_item_layout);
             convertView.setTag(holder);
         }
-        if (position % 2 == 0) {
-            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
-        } else {
-            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem_grey);
-        }
+//        if (position % 2 == 0) {
+//            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
+//        } else {
+//            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem_grey);
+//        }
 
         // 获取与此用户/群组的会话
         EMConversation conversation = getItem(position).emConversation;
@@ -101,16 +113,16 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             holder.avatar.setImageResource(R.drawable.group_icon);
             holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
         } else {
-            if(imUser!=null){
+            if(imUser != null){
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
-                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, UILUtils.getDefaultOption());
-                if (username.equals(Constant.GROUP_USERNAME)) {
-                    holder.name.setText("群聊");
-
-                } else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-                    holder.name.setText("申请与通知");
-                }
+                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, options);
+//                if (username.equals(Constant.GROUP_USERNAME)) {
+//                    holder.name.setText("群聊");
+//
+//                } else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+//                    holder.name.setText("申请与通知");
+//                }
                 if (TextUtils.isEmpty(imUser.getMemo())) {
                     holder.name.setText(imUser.getNick());
                 } else {
@@ -250,7 +262,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         /**
          * 整个list中每一行总布局
          */
-        RelativeLayout list_item_layout;
+//        RelativeLayout list_item_layout;
 
     }
 
