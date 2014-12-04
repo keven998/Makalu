@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/default_avatar" />
+            android:src="@drawable/avatar_placeholder" />
 
         <TextView
             android:id="@+id/unread_msg_number"

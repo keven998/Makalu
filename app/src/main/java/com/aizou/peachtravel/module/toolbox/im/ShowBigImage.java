@@ -50,7 +50,7 @@ public class ShowBigImage extends BaseChatActivity {
 
 	private ProgressDialog pd;
 	private PhotoView image;
-	private int default_res = R.drawable.default_avatar;
+	private int default_res = R.drawable.avatar_placeholder;
 	// flag to indicate if need to delete image on server after download
 	private boolean deleteAfterDownload;
 	private boolean showAvator;
@@ -69,7 +69,7 @@ public class ShowBigImage extends BaseChatActivity {
 		image = (PhotoView) findViewById(R.id.image);
 		loadLocalPb = (ProgressBar) findViewById(R.id.pb_load_local);
 
-		default_res = getIntent().getIntExtra("default_image", R.drawable.default_avatar);
+		default_res = getIntent().getIntExtra("default_image", R.drawable.avatar_placeholder);
 		showAvator = getIntent().getBooleanExtra("showAvator", false);
 		username = getIntent().getStringExtra("username");
 		deleteAfterDownload = getIntent().getBooleanExtra("delete", false);

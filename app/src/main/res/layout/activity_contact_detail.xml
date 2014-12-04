@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:layout_marginTop="113dp"
-            android:background="@color/base_color_white"
+            android:background="@drawable/shape_white_bar"
             ></View>
         
         <ImageView android:id="@+id/iv_avatar"
@@ -56,17 +56,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/base_color_white"
+        android:background="@drawable/shape_white_bar"
         android:padding="15dp"
         android:textSize="14sp"
         android:textColor="@color/base_text_color_subtitle"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/base_divider_color"></View>
 
     <TextView
         android:id="@+id/tv_id"
@@ -74,17 +67,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/base_color_white"
+        android:background="@drawable/shape_white_bar"
         android:padding="15dp"
         android:textSize="14sp"
         android:textColor="@color/base_text_color_subtitle"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/base_divider_color"></View>
 
     <TextView
         android:id="@+id/tv_sign"
@@ -92,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/base_color_white"
+        android:background="@drawable/shape_white_bar"
         android:padding="15dp"
         android:textSize="14sp"
         android:textColor="@color/base_text_color_subtitle"/>

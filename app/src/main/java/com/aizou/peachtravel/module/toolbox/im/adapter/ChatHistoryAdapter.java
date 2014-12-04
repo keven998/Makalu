@@ -81,7 +81,7 @@ public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
 			//群聊消息，显示群聊头像
 			holder.avatar.setImageResource(R.drawable.group_icon);
 		}else{
-			holder.avatar.setImageResource(R.drawable.default_avatar);
+			holder.avatar.setImageResource(R.drawable.avatar_placeholder);
 		}
 		
 		String username = user.getUsername();

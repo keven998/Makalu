@@ -22,7 +22,7 @@
                 android:layout_height="@dimen/height_row_weixin"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
-                android:src="@drawable/default_avatar" />
+                android:src="@drawable/avatar_placeholder" />
         </RelativeLayout>
 
         <TextView

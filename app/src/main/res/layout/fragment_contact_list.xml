@@ -9,7 +9,8 @@
     <FrameLayout android:id="@+id/indexer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:visibility="gone">
         <com.aizou.peachtravel.common.widget.TopSectionBar
             android:id="@+id/section_bar"
             android:layout_width="fill_parent"
@@ -38,7 +39,7 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:focusable="true"
-        android:fastScrollEnabled="false" />
+        android:fastScrollEnabled="true" />
 
     <include layout="@layout/fragment_contact_list_empty"
         android:visibility="gone"

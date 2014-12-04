@@ -524,7 +524,7 @@ public class ChatActivity extends BaseChatActivity implements OnClickListener {
 
         @Override
         public void showData(int position, final IMUser itemData) {
-            avatarIv.setImageResource(R.drawable.default_avatar);
+            avatarIv.setImageResource(R.drawable.avatar_placeholder);
             ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
             if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
                 if(isInDeleteMode){
