@@ -20,9 +20,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 
-public class ExitGroupDialog extends BaseChatActivity {
+public class ExitGroupDialog extends ChatBaseActivity {
     private TextView text;
     private Button exitBtn;
 

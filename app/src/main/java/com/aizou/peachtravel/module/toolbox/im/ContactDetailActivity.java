@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
@@ -30,7 +30,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 /**
  * Created by Rjm on 2014/10/29.
  */
-public class ContactDetailActivity extends BaseChatActivity {
+public class ContactDetailActivity extends ChatBaseActivity {
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
     @ViewInject(R.id.iv_gender)

@@ -32,6 +32,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
     private TitleHeaderBar titleHeaderBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_gender);
         ViewUtils.inject(this);

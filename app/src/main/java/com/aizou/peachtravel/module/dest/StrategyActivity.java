@@ -52,6 +52,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
         initData();

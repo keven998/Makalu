@@ -19,10 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMMessage;
 
-public class ContextMenu extends BaseChatActivity {
+public class ContextMenu extends ChatBaseActivity {
 
 	private int position;
 	

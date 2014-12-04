@@ -29,14 +29,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.widget.Sidebar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 
-public class PickContactNoCheckboxActivity extends BaseChatActivity {
+public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 
 	private ListView listView;
 	private Sidebar sidebar;

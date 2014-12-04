@@ -12,7 +12,7 @@ import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.common.utils.PhoneContactUtils;
 import com.aizou.peachtravel.common.utils.SearchEngine;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by Rjm on 2014/10/28.
  */
-public class AddPhoneContactActivity extends BaseChatActivity {
+public class AddPhoneContactActivity extends ChatBaseActivity {
 
     private ListView mListView;
     ArrayList<AddressBookbean> contactListInMobile ;

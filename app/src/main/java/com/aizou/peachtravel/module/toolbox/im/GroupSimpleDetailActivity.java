@@ -23,14 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.exceptions.EaseMobException;
 
-public class GroupSimpleDetailActivity extends BaseChatActivity {
+public class GroupSimpleDetailActivity extends ChatBaseActivity {
 	private Button btn_add_group;
 	private TextView tv_admin;
 	private TextView tv_name;

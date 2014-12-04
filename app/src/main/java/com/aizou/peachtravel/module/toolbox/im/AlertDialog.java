@@ -26,12 +26,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.task.DownloadImageTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.easemob.util.ImageUtils;
 
-public class AlertDialog extends BaseChatActivity {
+public class AlertDialog extends ChatBaseActivity {
 	private TextView mTextView;
 	private Button mButton;
 	private int position;

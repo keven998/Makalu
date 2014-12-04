@@ -31,7 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.task.LoadLocalBigImgTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.widget.photoview.PhotoView;
@@ -46,7 +46,7 @@ import com.easemob.util.PathUtil;
  * 下载显示大图
  * 
  */
-public class ShowBigImage extends BaseChatActivity {
+public class ShowBigImage extends ChatBaseActivity {
 
 	private ProgressDialog pd;
 	private PhotoView image;

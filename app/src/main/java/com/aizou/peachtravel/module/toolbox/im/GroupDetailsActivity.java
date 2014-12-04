@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.easemob.EMCallBack;
@@ -39,7 +39,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 
-public class GroupDetailsActivity extends BaseChatActivity implements OnClickListener {
+public class GroupDetailsActivity extends ChatBaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
 	private static final int REQUEST_CODE_ADD_USER = 0;
 	private static final int REQUEST_CODE_EXIT = 1;

@@ -59,9 +59,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void refresh(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         if(user == null){
             idTv.setVisibility(View.GONE);
@@ -70,6 +68,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             getView().findViewById(R.id.indicator).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
             getView().findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
+            avatarIv.setImageResource(R.drawable.avatar_placeholder);
             nickNameTv.setText("未登录");
         } else {
             idTv.setVisibility(View.VISIBLE);
@@ -96,6 +95,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 signTv.setText(user.signature);
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+
 
     }
 

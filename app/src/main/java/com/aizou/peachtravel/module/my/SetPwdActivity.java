@@ -37,6 +37,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_pwd);
         ViewUtils.inject(this);

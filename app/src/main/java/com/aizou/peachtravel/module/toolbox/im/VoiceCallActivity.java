@@ -39,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.config.Constant;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
@@ -51,7 +51,7 @@ import com.easemob.exceptions.EMServiceNotReadyException;
  * 语音通话页面
  *
  */
-public class VoiceCallActivity extends BaseChatActivity implements OnClickListener {
+public class VoiceCallActivity extends ChatBaseActivity implements OnClickListener {
 	private LinearLayout comingBtnContainer;
 	private Button hangupBtn;
 	private Button refuseBtn;

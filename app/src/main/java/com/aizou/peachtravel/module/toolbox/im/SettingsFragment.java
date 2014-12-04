@@ -254,7 +254,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			}
 			break;
 		case R.id.btn_logout:
-			AccountManager.getInstance().logout(getActivity());
 			// 重新显示登陆页面
                     ((IMMainActivity) getActivity()).finish();
 			startActivity(new Intent(getActivity(), LoginActivity.class));

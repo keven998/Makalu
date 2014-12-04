@@ -47,12 +47,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.utils.video.Utils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
-public class RecorderVideoActivity extends BaseChatActivity implements OnClickListener, Callback, OnErrorListener, OnInfoListener {
+public class RecorderVideoActivity extends ChatBaseActivity implements OnClickListener, Callback, OnErrorListener, OnInfoListener {
 
 	private final static String CLASS_LABEL = "RecordActivity";
 	private PowerManager.WakeLock mWakeLock;

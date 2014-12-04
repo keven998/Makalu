@@ -37,6 +37,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_pwd);
         ViewUtils.inject(this);

@@ -1,17 +1,20 @@
 package com.aizou.peachtravel.module;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
-import com.aizou.peachtravel.module.toolbox.TravelFragment;
+import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
 
 
 public class MainActivity extends PeachBaseActivity {
@@ -22,7 +25,7 @@ public class MainActivity extends PeachBaseActivity {
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TravelFragment.class, RecDestFragment.class, MyFragment.class,};
+    private Class fragmentArray[] = {ToolboxFragment.class, RecDestFragment.class, MyFragment.class,};
 
     //定义数组来存放按钮图片
 //    private int mImageViewArray[] = {R.drawable.tab_home_btn,R.drawable.tab_message_btn,R.drawable.tab_selfinfo_btn,
@@ -30,6 +33,8 @@ public class MainActivity extends PeachBaseActivity {
 
     //Tab选项卡的文字
     private String mTextviewArray[] = {"首页", "目的地", "我的"};
+    //Tab选项Tag
+    private String mTagArray[] = {"Home", "Loc", "My"};
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +58,7 @@ public class MainActivity extends PeachBaseActivity {
 
         for(int i = 0; i < count; i++){
             //为每一个Tab按钮设置图标、文字和内容
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(getTabItemView(i));
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
             //设置Tab按钮的背景
@@ -74,5 +79,44 @@ public class MainActivity extends PeachBaseActivity {
         textView.setText(mTextviewArray[index]);
         return view;
     }
+    @Override
+    protected void showConflictDialog(){
+        AccountManager.getInstance().logout(this,null);
+        try {
+            if (conflictBuilder == null)
+                conflictBuilder = new MaterialDialog.Builder(this);
+            conflictBuilder.title("下线通知");
+            conflictBuilder.content(R.string.connect_conflict);
+            conflictBuilder.positiveText(R.string.ok);
+            conflictBuilder.callback(new MaterialDialog.Callback() {
+                @Override
+                public void onNegative(MaterialDialog dialog) {
+
+
+                }
+
+                @Override
+                public void onPositive(MaterialDialog dialog) {
+                    dialog.dismiss();
+                    conflictBuilder = null;
+                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    if(myFragment!=null){
+                        myFragment.refresh();
+                    }
+
+                }
+            });
+            conflictBuilder.cancelable(false);
+            conflictBuilder.show();
+            isConflict = true;
+        } catch (Exception e) {
+            Log.e("###", "---------color conflictBuilder error" + e.getMessage());
+        }
+
+    }
+
+
+
+
 
 }

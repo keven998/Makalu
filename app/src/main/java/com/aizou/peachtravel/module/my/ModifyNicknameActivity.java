@@ -21,6 +21,8 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.InputCheckUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.easemob.chat.EMChatManager;
+import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -38,6 +40,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_nickname);
         ViewUtils.inject(this);
@@ -69,6 +72,10 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         if (modifyResult.code == 0) {
                             user.nickName = nickEt.getText().toString().trim();
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
+                            boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                            if (!updatenick) {
+                                EMLog.e("ModifyNicknameActivity", "update current user nick fail");
+                            }
                             finish();
                         }else{
                             ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);

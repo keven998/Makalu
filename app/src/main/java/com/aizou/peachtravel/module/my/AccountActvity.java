@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.my;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.BitmapTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -35,6 +37,8 @@ import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
+import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -44,6 +48,7 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -82,7 +87,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
 
@@ -115,7 +120,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
         tvGender.setText(user.gender);
-       options = new DisplayImageOptions.Builder()
+        options = new DisplayImageOptions.Builder()
                .showImageForEmptyUri(R.drawable.avatar_placeholder)
                .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
@@ -188,10 +193,30 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .negativeText("取消")
                 .callback(new MaterialDialog.Callback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        AccountManager.getInstance().logout(AccountActvity.this);
-                        dialog.dismiss();
-                        finish();
+                    public void onPositive(final MaterialDialog dialog) {
+                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                        dialog.setContentView(progressView);
+                        AccountManager.getInstance().logout(mContext, new EMCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                dialog.dismiss();
+                                finish();
+
+                            }
+
+                            @Override
+                            public void onError(int i, String s) {
+                                ToastUtil.getInstance(AccountActvity.this).showToast("退出失败，请重试");
+                                dialog.dismiss();
+
+                            }
+
+                            @Override
+                            public void onProgress(int i, String s) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -344,11 +369,19 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                         new UpCompletionHandler() {
                                             @Override
                                             public void complete(String key, ResponseInfo info, JSONObject response) {
-                                                String redirect = "http://" + Constant.QINIU_BUKETNAME + ".qiniudn.com/" + key;
-                                                String redirect2 = "http://" + Constant.QINIU_BUKETNAME + ".u.qiniudn.com/" + key;
-                                                user.avatar = redirect;
-                                                AccountManager.getInstance().saveLoginAccount(mContext,user);
-                                                ImageLoader.getInstance().displayImage(user.avatar,avatarIv, options);
+                                                if(info.isOK()){
+                                                    LogUtil.d(response.toString());
+                                                    try {
+                                                        String imageUrl = response.getString("url");
+                                                        user.avatar = imageUrl;
+                                                        AccountManager.getInstance().saveLoginAccount(mContext,user);
+                                                        ImageLoader.getInstance().displayImage(user.avatar,avatarIv, options);
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                }
+
                                             }
                                         }, null);
                             }
