@@ -5,5 +5,5 @@
     <dimen name="alpha_indexing_size_normal">22dp</dimen>
     <dimen name="alpha_indexing_size_selected">32dp</dimen>
     <dimen name="alpha_indexing_text_size_normal">12dp</dimen>
-    <dimen name="alpha_indexing_text_size_selected">16dp</dimen>
+    <dimen name="alpha_indexing_text_size_selected">18dp</dimen>
 </resources>

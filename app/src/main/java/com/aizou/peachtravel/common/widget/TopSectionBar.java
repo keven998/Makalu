@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
@@ -34,6 +34,8 @@ public class TopSectionBar extends Gallery {
     private ViewGroup mTempView;
     private int lytNormalSize;
     private int lytSelectSize;
+    private float textNormalSize;
+    private float textSelectSize;
 
     public TopSectionBar(Context context) {
         super(context);
@@ -44,6 +46,8 @@ public class TopSectionBar extends Gallery {
         Resources res = getResources();
         lytNormalSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_normal);
         lytSelectSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_selected);
+        textNormalSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_text_size_normal);
+        textSelectSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_text_size_selected);
     }
 
     public void setListView(ListView listView) {
@@ -105,24 +109,28 @@ public class TopSectionBar extends Gallery {
 //            }
             ViewGroup ctView = (ViewGroup)view;
             if (mTempView != null && mTempView != ctView) {
-                CheckedTextView textView = new AutoResizeTextView(getContext());
+                AutoResizeTextView textView = new AutoResizeTextView(getContext());
                 textView.setGravity(Gravity.CENTER);
                 textView.setMaxLines(1);
-                textView.setBackgroundResource(R.drawable.alpha_index_selector);
+                textView.setTextSize(textNormalSize);
+                textView.setEnableSizeCache(false);
                 textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+                textView.setBackgroundResource(R.drawable.alpha_index_selector);
                 textView.setTextColor(Color.WHITE);
-                textView.setText(((CheckedTextView)mTempView.getChildAt(0)).getText());
+                textView.setText(((AutoResizeTextView)mTempView.getChildAt(0)).getText());
                 mTempView.removeAllViews();
                 mTempView.addView(textView);
             }
             mTempView = ctView;
-            CheckedTextView textView = new AutoResizeTextView(getContext());
+            AutoResizeTextView textView = new AutoResizeTextView(getContext());
             textView.setGravity(Gravity.CENTER);
             textView.setMaxLines(1);
-            textView.setBackgroundResource(R.drawable.alpha_index_selector);
+            textView.setTextSize(textSelectSize);
+            textView.setEnableSizeCache(false);
             textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
+            textView.setBackgroundResource(R.drawable.alpha_index_selector);
             textView.setTextColor(Color.WHITE);
-            textView.setText(((CheckedTextView) ctView.getChildAt(0)).getText());
+            textView.setText(((AutoResizeTextView) ctView.getChildAt(0)).getText());
             textView.setChecked(true);
             ctView.removeAllViews();
             ctView.addView(textView);
@@ -171,6 +179,8 @@ public class TopSectionBar extends Gallery {
                 textView.setBackgroundResource(R.drawable.alpha_index_selector);
                 textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
                 textView.setTextColor(Color.WHITE);
+                textView.setTextSize(textNormalSize);
+                textView.setEnableSizeCache(false);
                 ((ViewGroup) convertView).addView(textView);
             } else {
                 textView = (AutoResizeTextView)sectionTv.getChildAt(0);
