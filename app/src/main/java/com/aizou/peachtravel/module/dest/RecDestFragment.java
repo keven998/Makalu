@@ -113,7 +113,7 @@ public class RecDestFragment extends PeachBaseFragment {
         }
 
         @Override
-        public void showData(int position, RecDestBean itemData) {
+        public void showData(int position, final RecDestBean itemData) {
             nameTv.setText(itemData.type.name);
             final ListViewDataAdapter<RecDestBean.RecDestItem> adapter = new ListViewDataAdapter<RecDestBean.RecDestItem>(new ViewHolderCreator<RecDestBean.RecDestItem>() {
                 @Override
@@ -125,9 +125,13 @@ public class RecDestFragment extends PeachBaseFragment {
             cityListGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(),PoiDetailActivity.class);
-                    intent.putExtra("id",adapter.getItem(position).id);
-                    startActivity(intent);
+                    RecDestBean.RecDestItem destItem = adapter.getItem(position);
+                    if(destItem.linkType==1){
+                        Intent intent = new Intent(getActivity(),CityDetailActivity.class);
+                        intent.putExtra("id",destItem.id);
+                        startActivity(intent);
+                    }
+
                 }
             });
             adapter.getDataList().addAll(itemData.localities);

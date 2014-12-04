@@ -47,7 +47,7 @@ public class CityDetailActivity extends PeachBaseActivity {
 
     private void initData() {
         String id = getIntent().getStringExtra("id");
-        id="53aa9a6410114e3fd47833bd";
+        id="5473ccd7b8ce043a64108c46";
         getCityDetailData(id);
     }
 
@@ -102,7 +102,7 @@ public class CityDetailActivity extends PeachBaseActivity {
 
             }
         });
-        mPicNumTv.setText(detailBean.imageCount+"");
+        mPicNumTv.setText(detailBean.imageCnt+"");
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
         mCostTimeTv.setText(detailBean.timeCost+"天");
