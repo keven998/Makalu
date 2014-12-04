@@ -75,6 +75,9 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         countDown = getIntent().getIntExtra("countDown",60);
         actionCode = getIntent().getStringExtra("actionCode");
         user = AccountManager.getInstance().getLoginAccount(this);
+        if(user!=null){
+            setAccountAbout(true);
+        }
     }
 
     private void startCountDownTime(){
@@ -168,6 +171,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
             @Override
             public void onSuccess() {
+                DialogManager.getInstance().dissMissProgressDialog();
                 // 登陆成功，保存用户名密码
                 try {
                     // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
@@ -229,7 +233,6 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                DialogManager.getInstance().dissMissProgressDialog();
                 boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
                 if (!updatenick) {
                     EMLog.e("LoginActivity", "update current user nick fail");

@@ -41,11 +41,10 @@ import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
@@ -62,7 +61,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
-public class PickContactsWithCheckboxActivity extends BaseChatActivity {
+public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private ListView listView;
     private RecyclerView toBeAddContactsRv;
     private List<IMUser> toBeAddContacts;

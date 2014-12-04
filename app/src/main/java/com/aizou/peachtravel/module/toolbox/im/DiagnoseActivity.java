@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.util.EMLog;
@@ -34,7 +34,7 @@ import com.easemob.util.EMLog;
  * @author lyuzhao
  * 
  */
-public class DiagnoseActivity extends BaseChatActivity implements OnClickListener {
+public class DiagnoseActivity extends ChatBaseActivity implements OnClickListener {
 	private TextView currentVersion;
 	private Button uploadLog;
 

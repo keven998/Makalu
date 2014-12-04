@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
@@ -34,7 +34,7 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.NewFriendsMsgAdapter;
  * 申请与通知
  *
  */
-public class NewFriendsMsgActivity extends BaseChatActivity {
+public class NewFriendsMsgActivity extends ChatBaseActivity {
 	private ListView listView;
 
 	@Override

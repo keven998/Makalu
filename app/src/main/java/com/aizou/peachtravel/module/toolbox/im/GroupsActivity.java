@@ -28,12 +28,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.GroupAdapter;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 
-public class GroupsActivity extends BaseChatActivity {
+public class GroupsActivity extends ChatBaseActivity {
 	private ListView groupListView;
 	protected List<EMGroup> grouplist;
 	private GroupAdapter groupAdapter;

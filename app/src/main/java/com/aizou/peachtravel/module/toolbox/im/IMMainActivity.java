@@ -20,28 +20,24 @@ import java.util.UUID;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.popupmenu.PopupMenuCompat;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.CmdAgreeBean;
 import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.CmdInvateBean;
@@ -60,12 +56,11 @@ import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
-import com.aizou.peachtravel.module.my.LoginActivity;
 import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.ConnectionListener;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
+import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
@@ -75,9 +70,8 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.NetUtils;
 
-public class IMMainActivity extends BaseChatActivity {
+public class IMMainActivity extends ChatBaseActivity {
     public static final int NEW_CHAT_REQUEST_CODE=101;
 
 	protected static final String TAG = "MainActivity";
@@ -144,9 +138,7 @@ public class IMMainActivity extends BaseChatActivity {
 //		registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
 		
 //		// setContactListener监听联系人的变化等
-//		EMContactManager.getInstance().setContactListener(new MyContactListener());
-		// 注册一个监听连接状态的listener
-		EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+		EMContactManager.getInstance().setContactListener(new MyContactListener());
 		// 注册群聊相关的listener
 		EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
 		// 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
@@ -663,46 +655,6 @@ public class IMMainActivity extends BaseChatActivity {
 	}
 
 
-	/**
-	 * 连接监听listener
-	 * 
-	 */
-	private class MyConnectionListener implements ConnectionListener {
-
-		@Override
-		public void onConnected() {
-//			chatHistoryFragment.errorItem.setVisibility(View.GONE);
-		}
-
-		@Override
-		public void onDisConnected(String errorString) {
-			if (errorString != null && errorString.contains("conflict")) {
-				// 显示帐号在其他设备登陆dialog
-				showConflictDialog();
-			} else {
-//				chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
-//				if(NetUtils.hasNetwork(IMMainActivity.this))
-//					chatHistoryFragment.errorText.setText("连接不到聊天服务器");
-//				else
-//					chatHistoryFragment.errorText.setText("当前网络不可用，请检查网络设置");
-					
-			}
-		}
-
-		@Override
-		public void onReConnected() {
-//			chatHistoryFragment.errorItem.setVisibility(View.GONE);
-		}
-
-		@Override
-		public void onReConnecting() {
-		}
-
-		@Override
-		public void onConnecting(String progress) {
-		}
-
-	}
 
 	/**
 	 * MyGroupChangeListener
@@ -859,47 +811,7 @@ public class IMMainActivity extends BaseChatActivity {
 	private android.app.AlertDialog.Builder conflictBuilder;
 	private boolean isConflictDialogShow;
 
-	/**
-	 * 显示帐号在别处登录dialog
-	 */
-	private void showConflictDialog() {
-		isConflictDialogShow = true;
-        AccountManager.getInstance().logout(this);
 
-		if (!IMMainActivity.this.isFinishing()) {
-			// clear up global variables
-			try {
-				if (conflictBuilder == null)
-					conflictBuilder = new android.app.AlertDialog.Builder(IMMainActivity.this);
-				    conflictBuilder.setTitle("下线通知");
-				    conflictBuilder.setMessage(R.string.connect_conflict);
-				    conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						conflictBuilder = null;
-						finish();
-						startActivity(new Intent(IMMainActivity.this, LoginActivity.class));
-					}
-				});
-				conflictBuilder.setCancelable(false);
-				conflictBuilder.create().show();
-				isConflict = true;
-			} catch (Exception e) {
-				Log.e("###", "---------color conflictBuilder error" + e.getMessage());
-			}
-
-		}
-
-	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		if(getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow)
-			showConflictDialog();
-	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

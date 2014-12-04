@@ -39,7 +39,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class TravelFragment extends PeachBaseFragment implements View.OnClickListener, AMapLocationListener {
+public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener, AMapLocationListener {
     public final static int IM_LOGIN = 100;
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
@@ -122,13 +122,24 @@ public class TravelFragment extends PeachBaseFragment implements View.OnClickLis
                 break;
 
             case R.id.tv_my_guide:
-                Intent strategyIntent = new Intent(getActivity(), StrategyListActivity.class);
-                startActivity(strategyIntent);
+                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    Intent strategyIntent = new Intent(getActivity(), StrategyListActivity.class);
+                    startActivity(strategyIntent);
+                } else {
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(loginIntent, IM_LOGIN);
+                }
                 break;
 
             case R.id.tv_fav:
-                Intent fIntent = new Intent(getActivity(), FavListActivity.class);
-                startActivity(fIntent);
+                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    Intent fIntent = new Intent(getActivity(), FavListActivity.class);
+                    startActivity(fIntent);
+                } else {
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(loginIntent, IM_LOGIN);
+                }
+
                 break;
         }
     }

@@ -43,4 +43,5 @@ dependencies {
     compile files('libs/easemobchat_2.1.2.jar')
     compile project(':MaterialDialoglibrary')
     compile files('libs/Android_Location_V1.3.0.jar')
+    compile files('libs/easemobchat_2.1.3.jar')
 }

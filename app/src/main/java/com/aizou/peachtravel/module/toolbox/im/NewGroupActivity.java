@@ -26,11 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 
-public class NewGroupActivity extends BaseChatActivity {
+public class NewGroupActivity extends ChatBaseActivity {
 	private EditText groupNameEditText;
 	private ProgressDialog progressDialog;
 	private EditText introductionEditText;

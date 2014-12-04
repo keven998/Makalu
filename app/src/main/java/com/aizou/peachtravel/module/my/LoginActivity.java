@@ -38,7 +38,9 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.easemob.EMCallBack;
+import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
@@ -151,6 +153,7 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void onSuccess() {
+                DialogManager.getInstance().dissMissProgressDialog();
                 // 登陆成功，保存用户名密码
                 try {
                     // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
@@ -173,6 +176,26 @@ public class LoginActivity extends PeachBaseActivity {
 //                    userlist.put(Constant.GROUP_USERNAME, groupUser);
                     // 存入内存
                     AccountManager.getInstance().setContactList(userlist);
+                    List <IMUser> users = new ArrayList<IMUser>(userlist.values());
+                    IMUserRepository.saveContactList(mContext,users);
+                    // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
+                    boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                    if (!updatenick) {
+                        EMLog.e("LoginActivity", "update current user nick fail");
+                    }
+                    // 进入主页面
+                    setResult(RESULT_OK);
+                    finish();
+                    EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+                        @Override
+                        public void onSuccess(List<EMGroup> emGroups) {
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+                    });
                     UserApi.getContact(new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -206,23 +229,12 @@ public class LoginActivity extends PeachBaseActivity {
 
                         }
                     });
-                    List <IMUser> users = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext,users);
-                    // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                    EMGroupManager.getInstance().getGroupsFromServer();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                DialogManager.getInstance().dissMissProgressDialog();
-                boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                if (!updatenick) {
-                    EMLog.e("LoginActivity", "update current user nick fail");
-                }
-                // 进入主页面
-                setResult(RESULT_OK);
-                finish();
             }
 
             @Override
@@ -265,6 +277,7 @@ public class LoginActivity extends PeachBaseActivity {
 //                    userResult.result.easemobUser="rjm4413";
 //                    userResult.result.easemobPwd="123456";
                     imLogin(userResult.result);
+
 //                    imLogin("rjm4413","123456","小明");
                 } else {
                     DialogManager.getInstance().dissMissProgressDialog();

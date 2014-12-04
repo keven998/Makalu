@@ -34,6 +34,7 @@ public class ModifySignActivity extends PeachBaseActivity {
     private PeachUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
 

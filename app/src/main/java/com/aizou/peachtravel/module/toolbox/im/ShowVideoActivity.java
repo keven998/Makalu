@@ -18,7 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.EMChatManager;
 import com.easemob.cloud.CloudOperationCallback;
@@ -31,7 +31,7 @@ import com.easemob.util.PathUtil;
  * @author Administrator
  * 
  */
-public class ShowVideoActivity extends BaseChatActivity implements OnTouchListener {
+public class ShowVideoActivity extends ChatBaseActivity implements OnTouchListener {
 
 	private RelativeLayout loadingLayout;
 	private ProgressBar progressBar;

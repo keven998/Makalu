@@ -14,23 +14,18 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
@@ -40,7 +35,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 
-public class AddContactActivity extends BaseChatActivity implements View.OnClickListener {
+public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {
     private EditText editText;
 //    private LinearLayout searchedUserLayout;
     private TextView nameText;

@@ -35,12 +35,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.exceptions.EaseMobException;
 
-public class PublicGroupsActivity extends BaseChatActivity {
+public class PublicGroupsActivity extends ChatBaseActivity {
 	private ProgressBar pb;
 	private ListView listView;
 	private EditText query;

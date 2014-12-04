@@ -1,24 +1,30 @@
 package com.aizou.peachtravel.common.account;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.config.PeachApplication;
+import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AccountManager {
+    public static final String ACCOUNT_LOGOUT_ACTION="com.aizou.peathtravel.ACTION_LOGOUT";
 	public static final String LOGIN_USER_PREF = "login_user";
     public static PeachUser user;
     private Map<String, IMUser> contactList;
+
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
      */
@@ -45,13 +51,36 @@ public class AccountManager {
 		return user;
 	}
 
-	public  void logout(Context context) {
-		SharePrefUtil.saveString(context, LOGIN_USER_PREF, "");
-        // 先调用sdk logout，在清理app中自己的数据
-        EMChatManager.getInstance().logout();
+	public  void logout(final Context context,final EMCallBack callBack) {
+        PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
+                AccountManager.getInstance().setContactList(null);
+                Intent intent = new Intent();
+                intent.setAction(ACCOUNT_LOGOUT_ACTION);
+                context.sendBroadcast(intent);
+                if(callBack!=null){
+                    callBack.onSuccess();
+                }
+            }
 
+            @Override
+            public void onError(int i, String s) {
+                if(callBack!=null){
+                    callBack.onError(i,s);
+                }
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+                if(callBack!=null){
+                    callBack.onProgress(i,s);
+                }
+            }
+        });
         // reset password to null
-        setContactList(null);
+
 	}
 	
     public  void saveLoginAccount(Context context,PeachUser user) {
@@ -83,6 +112,11 @@ public class AccountManager {
      */
     public void setContactList(Map<String, IMUser> contactList) {
         this.contactList = contactList;
+    }
+
+    public interface OnAccountChangeListener{
+        public void onAccountLogin(PeachUser user);
+        public void onAccountLogout();
     }
 
 

@@ -45,6 +45,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     private String sendSuccessPhone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
         titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);

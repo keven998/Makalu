@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.FileMessageBody;
@@ -18,7 +18,7 @@ import com.easemob.cloud.CloudOperationCallback;
 import com.easemob.cloud.HttpFileManager;
 import com.easemob.util.FileUtils;
 
-public class ShowNormalFileActivity extends BaseChatActivity {
+public class ShowNormalFileActivity extends ChatBaseActivity {
 	private ProgressBar progressBar;
 	private File file;
 

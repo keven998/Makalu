@@ -29,7 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseChatActivity;
+import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.BDNotifyListener;
@@ -48,7 +48,7 @@ import com.baidu.mapapi.utils.CoordinateConvert;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.easemob.util.EMLog;
 
-public class BaiduMapActivity extends BaseChatActivity {
+public class BaiduMapActivity extends ChatBaseActivity {
 
 	private final static String TAG = "map";
 	static MapView mMapView = null;
