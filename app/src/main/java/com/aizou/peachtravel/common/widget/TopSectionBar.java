@@ -1,7 +1,11 @@
 package com.aizou.peachtravel.common.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 
 /**
@@ -26,6 +31,9 @@ public class TopSectionBar extends Gallery {
     private SectionIndexer indexer;
     private boolean isGalleryFocus;
     private int curIndex;
+    private ViewGroup mTempView;
+    private int lytNormalSize;
+    private int lytSelectSize;
 
     public TopSectionBar(Context context) {
         super(context);
@@ -33,6 +41,9 @@ public class TopSectionBar extends Gallery {
 
     public TopSectionBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Resources res = getResources();
+        lytNormalSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_normal);
+        lytSelectSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_selected);
     }
 
     public void setListView(ListView listView) {
@@ -89,15 +100,40 @@ public class TopSectionBar extends Gallery {
     private class SectionOnItemSelectedListener implements OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(!isGalleryFocus)
+//            if(!isGalleryFocus) {
+//                return;
+//            }
+            ViewGroup ctView = (ViewGroup)view;
+            if (mTempView != null && mTempView != ctView) {
+                CheckedTextView textView = new AutoResizeTextView(getContext());
+                textView.setGravity(Gravity.CENTER);
+                textView.setMaxLines(1);
+                textView.setBackgroundResource(R.drawable.alpha_index_selector);
+                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+                textView.setTextColor(Color.WHITE);
+                textView.setText(((CheckedTextView)mTempView.getChildAt(0)).getText());
+                mTempView.removeAllViews();
+                mTempView.addView(textView);
+            }
+            mTempView = ctView;
+            CheckedTextView textView = new AutoResizeTextView(getContext());
+            textView.setGravity(Gravity.CENTER);
+            textView.setMaxLines(1);
+            textView.setBackgroundResource(R.drawable.alpha_index_selector);
+            textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
+            textView.setTextColor(Color.WHITE);
+            textView.setText(((CheckedTextView) ctView.getChildAt(0)).getText());
+            textView.setChecked(true);
+            ctView.removeAllViews();
+            ctView.addView(textView);
+
+            if(mListView==null) {
                 return;
-            if(mListView==null)
-                return;
+            }
             int i=position+1;
-            if(i<=indexer.getSections().length){
+            if (i <= indexer.getSections().length) {
                 mListView.setSelection(indexer.getPositionForSection(i));
             }
-
         }
 
         @Override
@@ -106,14 +142,11 @@ public class TopSectionBar extends Gallery {
         }
     }
 
-
-
-
     private class SectionAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return indexer.getSections().length;
+            return indexer.getSections().length + 10;
         }
 
         @Override
@@ -128,12 +161,23 @@ public class TopSectionBar extends Gallery {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            CheckedTextView sectionTv;
-            if (convertView == null) {
+            ViewGroup sectionTv = (ViewGroup)convertView;
+            AutoResizeTextView textView;
+            if (sectionTv == null) {
                 convertView = View.inflate(getContext(), R.layout.item_section, null);
+                textView = new AutoResizeTextView(getContext());
+                textView.setGravity(Gravity.CENTER);
+                textView.setMaxLines(1);
+                textView.setBackgroundResource(R.drawable.alpha_index_selector);
+                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+                textView.setTextColor(Color.WHITE);
+                ((ViewGroup) convertView).addView(textView);
+            } else {
+                textView = (AutoResizeTextView)sectionTv.getChildAt(0);
             }
-            sectionTv = (CheckedTextView) convertView.findViewById(R.id.tv_section);
-            sectionTv.setText((CharSequence) indexer.getSections()[position]);
+
+            textView.setText("A");
+
             return convertView;
         }
     }
