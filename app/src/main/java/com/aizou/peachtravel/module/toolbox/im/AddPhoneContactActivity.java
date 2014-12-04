@@ -16,6 +16,7 @@ import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.common.utils.PhoneContactUtils;
 import com.aizou.peachtravel.common.utils.SearchEngine;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 import java.util.ArrayList;
 
@@ -32,8 +33,16 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_phone_contact);
         mListView = (ListView) findViewById(R.id.lv_phone_contact);
+        initTitleBar();
 
         initData();
+    }
+    private void initTitleBar(){
+        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+//        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+
+        titleHeaderBar.getTitleTextView().setText("添加通讯录好友");
+        titleHeaderBar.enableBackKey(true);
     }
 
     private void initData(){
@@ -60,9 +69,6 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 });
             }
         });
-
-
-
     }
 
     private void uploadAddressBook(){
@@ -76,14 +82,14 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
     public class PhoneContactViewHolder extends ViewHolderBase<AddressBookbean>{
 
         private TextView name,phone;
-        private Button actionButton;
+        private TextView actionButton;
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View contentView = layoutInflater.inflate(R.layout.row_add_phone_contact, null);
             name = (TextView) contentView.findViewById(R.id.tv_name);
             phone = (TextView) contentView.findViewById(R.id.tv_contact);
-            actionButton = (Button) contentView.findViewById(R.id.btn_add);
+            actionButton = (TextView) contentView.findViewById(R.id.btn_add);
             return contentView;
         }
 

@@ -5,35 +5,39 @@
     android:layout_height="wrap_content"
     android:padding="10dip"
     android:gravity="center_vertical"
-    android:background="#ffffffff">
+    android:background="@drawable/shape_white_bar">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dip"
+        android:layout_marginLeft="5dip"
         android:orientation="vertical"
         android:layout_centerVertical="true">
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:textSize="17sp"/>
+            android:textColor="@color/base_text_color_title"
+            android:textSize="16sp"/>
         <TextView
             android:id="@+id/tv_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#999999"
+            android:layout_marginTop="7dp"
+            android:textColor="@color/base_text_color_subtitle"
             android:textSize="13sp" />
     </LinearLayout>
-    <Button
+    <TextView
         android:id="@+id/btn_add"
         android:layout_width="60dip"
         android:layout_height="35dip"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:text="添加"
-        android:textSize="14sp"
-        android:textColor="#797979"
+        android:text="邀请"
+        android:paddingRight="5dp"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:drawableRight="@drawable/cell_accessory"
+        android:textColor="@color/app_theme_color"
         />
 </RelativeLayout>
