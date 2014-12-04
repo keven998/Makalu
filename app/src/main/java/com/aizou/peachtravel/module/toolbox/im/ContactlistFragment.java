@@ -37,17 +37,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
@@ -68,7 +71,7 @@ public class ContactlistFragment extends Fragment {
 	private ListView listView;
 	private boolean hidden;
 	private TopSectionBar sectionBar;
-	private InputMethodManager inputMethodManager;
+//	private InputMethodManager inputMethodManager;
     private View emptyView;
 
 	@Override
@@ -80,17 +83,15 @@ public class ContactlistFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		listView = (ListView) getView().findViewById(R.id.list);
-        sectionBar = (TopSectionBar) getView().findViewById(R.id.section_bar);
-		contactList = new ArrayList<IMUser>();
+        contactList = new ArrayList<IMUser>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
-        sectionBar.setListView(listView);
-		listView.setOnItemClickListener(new OnItemClickListener() {
+        listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -185,10 +186,37 @@ public class ContactlistFragment extends Fragment {
                 emptyView.setVisibility(View.VISIBLE);
                 emptyView = null;
             }
+
+            if (contactList.size() > 15) {//magic number for show indexing
+                enableIndexBar(true);
+            } else {
+                enableIndexBar(false);
+            }
         }
 	}
 
-	/**
+    private void enableIndexBar(boolean enable) {
+        if (enable) {
+            if (sectionBar == null) {
+                sectionBar = (TopSectionBar) getView().findViewById(R.id.section_bar);
+                sectionBar.setListView(listView);
+                ((FrameLayout)sectionBar.getParent()).setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (sectionBar != null) {
+                ((FrameLayout)sectionBar.getParent()).setVisibility(View.GONE);
+                sectionBar = null;
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sectionBar = null;
+    }
+
+    /**
 	 * 删除联系人
 	 * 
 	 * @param tobeDeleteUser

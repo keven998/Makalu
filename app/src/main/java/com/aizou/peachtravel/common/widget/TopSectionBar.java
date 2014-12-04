@@ -1,20 +1,25 @@
 package com.aizou.peachtravel.common.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 
 /**
@@ -26,6 +31,11 @@ public class TopSectionBar extends Gallery {
     private SectionIndexer indexer;
     private boolean isGalleryFocus;
     private int curIndex;
+    private ViewGroup mTempView;
+    private int lytNormalSize;
+    private int lytSelectSize;
+    private float textNormalSize;
+    private float textSelectSize;
 
     public TopSectionBar(Context context) {
         super(context);
@@ -33,6 +43,11 @@ public class TopSectionBar extends Gallery {
 
     public TopSectionBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Resources res = getResources();
+        lytNormalSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_normal);
+        lytSelectSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_size_selected);
+        textNormalSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_text_size_normal);
+        textSelectSize = res.getDimensionPixelSize(R.dimen.alpha_indexing_text_size_selected);
     }
 
     public void setListView(ListView listView) {
@@ -89,15 +104,44 @@ public class TopSectionBar extends Gallery {
     private class SectionOnItemSelectedListener implements OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(!isGalleryFocus)
+//            if(!isGalleryFocus) {
+//                return;
+//            }
+            ViewGroup ctView = (ViewGroup)view;
+            if (mTempView != null && mTempView != ctView) {
+                AutoResizeTextView textView = new AutoResizeTextView(getContext());
+                textView.setGravity(Gravity.CENTER);
+                textView.setMaxLines(1);
+                textView.setTextSize(textNormalSize);
+                textView.setEnableSizeCache(false);
+                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+                textView.setBackgroundResource(R.drawable.alpha_index_selector);
+                textView.setTextColor(Color.WHITE);
+                textView.setText(((AutoResizeTextView)mTempView.getChildAt(0)).getText());
+                mTempView.removeAllViews();
+                mTempView.addView(textView);
+            }
+            mTempView = ctView;
+            AutoResizeTextView textView = new AutoResizeTextView(getContext());
+            textView.setGravity(Gravity.CENTER);
+            textView.setMaxLines(1);
+            textView.setTextSize(textSelectSize);
+            textView.setEnableSizeCache(false);
+            textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
+            textView.setBackgroundResource(R.drawable.alpha_index_selector);
+            textView.setTextColor(Color.WHITE);
+            textView.setText(((AutoResizeTextView) ctView.getChildAt(0)).getText());
+            textView.setChecked(true);
+            ctView.removeAllViews();
+            ctView.addView(textView);
+
+            if(mListView==null) {
                 return;
-            if(mListView==null)
-                return;
+            }
             int i=position+1;
-            if(i<=indexer.getSections().length){
+            if (i <= indexer.getSections().length) {
                 mListView.setSelection(indexer.getPositionForSection(i));
             }
-
         }
 
         @Override
@@ -105,9 +149,6 @@ public class TopSectionBar extends Gallery {
 
         }
     }
-
-
-
 
     private class SectionAdapter extends BaseAdapter {
 
@@ -128,12 +169,24 @@ public class TopSectionBar extends Gallery {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            CheckedTextView sectionTv;
-            if (convertView == null) {
+            ViewGroup sectionTv = (ViewGroup)convertView;
+            AutoResizeTextView textView;
+            if (sectionTv == null) {
                 convertView = View.inflate(getContext(), R.layout.item_section, null);
+                textView = new AutoResizeTextView(getContext());
+                textView.setGravity(Gravity.CENTER);
+                textView.setMaxLines(1);
+                textView.setBackgroundResource(R.drawable.alpha_index_selector);
+                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+                textView.setTextColor(Color.WHITE);
+                textView.setTextSize(textNormalSize);
+                textView.setEnableSizeCache(false);
+                ((ViewGroup) convertView).addView(textView);
+            } else {
+                textView = (AutoResizeTextView)sectionTv.getChildAt(0);
             }
-            sectionTv = (CheckedTextView) convertView.findViewById(R.id.tv_section);
-            sectionTv.setText((CharSequence) indexer.getSections()[position]);
+            textView.setText((CharSequence) indexer.getSections()[position]);
+
             return convertView;
         }
     }

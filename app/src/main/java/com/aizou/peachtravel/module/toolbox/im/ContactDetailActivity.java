@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
@@ -23,8 +24,10 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 /**
@@ -100,7 +103,16 @@ public class ContactDetailActivity extends ChatBaseActivity {
     }
 
     private void bindView() {
-        ImageLoader.getInstance().displayImage(imUser.getAvatar(), avatarIv, UILUtils.getDefaultOption(), new ImageLoadingListener() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .cacheOnDisc(true)
+                        // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                .build();
+
+        ImageLoader.getInstance().displayImage(imUser.getAvatar(), avatarIv, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
 
@@ -121,7 +133,6 @@ public class ContactDetailActivity extends ChatBaseActivity {
                     public boolean onPreDraw() {
                         bigHeader.getViewTreeObserver().removeOnPreDrawListener(this);
                         bigHeader.buildDrawingCache();
-
                         Bitmap bmp = bigHeader.getDrawingCache();
                         blur(bmp, bigHeader);
                         return true;
@@ -134,14 +145,23 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
             }
         });
+
+        if (imUser.getGender().equalsIgnoreCase("m")) {
+            genderIv.setImageResource(R.drawable.ic_gender_man);
+        } else if (imUser.getGender().equalsIgnoreCase("f")) {
+            genderIv.setImageResource(R.drawable.ic_gender_lady);
+        } else {
+            genderIv.setImageResource(R.drawable.avatar_placeholder);
+        }
+
         nickNameTv.setText("昵称：" + imUser.getNick());
         idTv.setText("桃号：" + imUser.getUserId());
-        signTv.setText("签名：" + imUser.getSignature());
+        signTv.setText("旅行签名：" + imUser.getSignature());
     }
 
     public void startChat(View view) {
         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
-
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     private void blur(Bitmap bkg, ImageView iv) {

@@ -31,7 +31,7 @@
                     android:onClick="onTabClicked"
                     android:background="@color/base_color_white"
                     android:scaleType="matrix"
-                    android:text="消息"
+                    android:text="Talk"
                     android:textColor="@color/main_botton_text_color"
                     android:textSize="17sp" />
 

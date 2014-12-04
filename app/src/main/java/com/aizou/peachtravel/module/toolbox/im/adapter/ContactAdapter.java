@@ -66,9 +66,9 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.default_avatar)
-                .showImageOnLoading(R.drawable.default_avatar)
-                .showImageForEmptyUri(R.drawable.default_avatar)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .showImageOnLoading(R.drawable.avatar_placeholder)
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
@@ -127,7 +127,6 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.phoneView = (TextView) convertView.findViewById(R.id.phone);
                 vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
                 vh.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
-                vh.headerDivider = (View)convertView.findViewById(R.id.header_divider);
                 convertView.setTag(vh);
 			} else {
                 vh = (ViewHolder1)convertView.getTag();
@@ -139,15 +138,12 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
-                    vh.headerDivider.setVisibility(View.GONE);
 				} else {
                     vh.sectionHeader.setVisibility(View.VISIBLE);
                     vh.sectionHeader.setText(header);
-                    vh.headerDivider.setVisibility(View.VISIBLE);
 				}
 			} else {
                 vh.sectionHeader.setVisibility(View.GONE);
-                vh.headerDivider.setVisibility(View.GONE);
 			}
 
 			//显示申请与通知item
@@ -242,7 +238,6 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 	}
 
     class ViewHolder1 {
-        public View headerDivider;
         public TextView sectionHeader;
         public ImageView avatarView;
         public TextView nickView;

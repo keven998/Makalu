@@ -63,7 +63,4 @@ public class HeaderBarBase extends RelativeLayout {
 		mCenterViewContainer.setOnClickListener(l);
 	}
 
-	public void setRightOnClickListener(OnClickListener l) {
-		mRightViewContainer.setOnClickListener(l);
-	}
 }
