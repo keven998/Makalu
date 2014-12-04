@@ -32,6 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -119,7 +120,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         });
         listView = (ListView) findViewById(R.id.list);
-        sectionBar = (TopSectionBar) findViewById(R.id.section_bar);
         toBeAddContactsRv = (RecyclerView) findViewById(R.id.rv_add_contacts);
         toBeAddContacts = new ArrayList<IMUser>();
         //设置布局管理器
@@ -132,7 +132,12 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
         contactAdapter = new PickContactAdapter(this, R.layout.row_contact_with_checkbox, alluserList);
         listView.setAdapter(contactAdapter);
-        sectionBar.setListView(listView);
+
+        if (alluserList.size() > 15) {//magic number for show indexing
+            sectionBar = (TopSectionBar) findViewById(R.id.section_bar);
+            sectionBar.setListView(listView);
+            findViewById(R.id.indexer).setVisibility(View.VISIBLE);
+        }
 
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -145,7 +150,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
     private void initTitleBar(){
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+//        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+        titleHeaderBar.getRightTextView().setText("确定");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -337,10 +343,23 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
         private LayoutInflater mInflater;
         private List<IMUser> mDatas;
+        DisplayImageOptions picOptions;
 
         public ToBeAddContactsAdapter(Context context, List<IMUser> datas) {
             mInflater = LayoutInflater.from(context);
             mDatas = datas;
+
+            picOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .showImageOnLoading(R.drawable.avatar_placeholder)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
+//				.decodingOptions(D)
+//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(64)))
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -380,7 +399,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
             IMUser user = mDatas.get(i);
-            ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatar(), viewHolder.mImg, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatar(), viewHolder.mImg, picOptions);
             viewHolder.mTxt.setText(mDatas.get(i).getNick());
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -432,7 +451,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
                 vh.nickView = (TextView) convertView.findViewById(R.id.name);
                 vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
-                vh.headerDivider = (View)convertView.findViewById(R.id.header_divider);
                 vh.checkBox = (CheckBox)convertView.findViewById(R.id.checkbox);
                 convertView.setTag(vh);
             } else {
@@ -448,15 +466,12 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
                 if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
-                    vh.headerDivider.setVisibility(View.GONE);
                 } else {
                     vh.sectionHeader.setVisibility(View.VISIBLE);
                     vh.sectionHeader.setText(header);
-                    vh.headerDivider.setVisibility(View.VISIBLE);
                 }
             } else {
                 vh.sectionHeader.setVisibility(View.GONE);
-                vh.headerDivider.setVisibility(View.GONE);
             }
 
             vh.nickView.setText(user.getNick());
@@ -481,6 +496,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                                 toBeAddContacts.add(user);
                             } else {
                                 toBeAddContacts.remove(user);
+                            }
+                            if (toBeAddContacts.size() > 0) {
+                                toBeAddContactsRv.setVisibility(View.VISIBLE);
+                            } else {
+                                toBeAddContactsRv.setVisibility(View.GONE);
                             }
                             toBeAddAdapter.notifyDataSetChanged();
                         }
@@ -513,7 +533,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     }
 
     class ViewHolder {
-        public View headerDivider;
         public TextView sectionHeader;
         public ImageView avatarView;
         public TextView nickView;
