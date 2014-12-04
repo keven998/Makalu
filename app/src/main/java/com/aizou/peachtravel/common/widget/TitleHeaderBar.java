@@ -96,4 +96,8 @@ public class TitleHeaderBar extends HeaderBarBase {
         }
     }
 
+    public void setRightOnClickListener(OnClickListener l) {
+        mRightTextView.setOnClickListener(l);
+    }
+
 }

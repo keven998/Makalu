@@ -154,7 +154,7 @@ public class TopSectionBar extends Gallery {
 
         @Override
         public int getCount() {
-            return indexer.getSections().length + 10;
+            return indexer.getSections().length;
         }
 
         @Override
@@ -185,8 +185,7 @@ public class TopSectionBar extends Gallery {
             } else {
                 textView = (AutoResizeTextView)sectionTv.getChildAt(0);
             }
-
-            textView.setText("A");
+            textView.setText((CharSequence) indexer.getSections()[position]);
 
             return convertView;
         }
