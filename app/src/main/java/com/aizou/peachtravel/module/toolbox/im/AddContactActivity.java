@@ -17,7 +17,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -53,6 +55,15 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         initTitleBar();
 
         editText = (EditText) findViewById(R.id.edit_note);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    searchContact();
+                }
+                return true;
+            }
+        });
 //        searchedUserLayout = (LinearLayout) findViewById(R.id.ll_user);
 //        nameText = (TextView) findViewById(R.id.name);
 //        searchBtn = (Button) findViewById(R.id.search);
@@ -69,7 +80,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchContact(v);
+                searchContact();
             }
         });
 
@@ -82,7 +93,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
      *
      * @param v
      */
-    public void searchContact(View v) {
+    public void searchContact() {
         final String name = editText.getText().toString();
 //        String saveText = searchBtn.getText().toString();
 
@@ -142,7 +153,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissProgressDialog();
-
                 }
             });
 

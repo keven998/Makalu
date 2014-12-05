@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
@@ -44,15 +45,27 @@ import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
 	private Context context;
+    DisplayImageOptions options;
 
 	public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<InviteMessage> objects) {
 		super(context, textViewResourceId, objects);
 		this.context = context;
+
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .cacheOnDisc(true)
+                        // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(39))) // 设置成圆角图片
+                .build();
 	}
 
 	@Override
@@ -87,7 +100,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteStatus.BEAGREED) {
-				holder.status.setVisibility(View.INVISIBLE);
+				holder.status.setVisibility(View.GONE);
 				holder.reason.setText("已同意你的好友请求");
 			} else if (msg.getStatus() == InviteStatus.BEINVITEED || msg.getStatus() == InviteStatus.BEAPPLYED) {
 				holder.status.setVisibility(View.VISIBLE);
@@ -113,14 +126,16 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				});
 			} else if (msg.getStatus() ==  InviteStatus.AGREED) {
 				holder.status.setText("已添加");
-				holder.status.setBackgroundDrawable(null);
+                holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
+				holder.status.setBackgroundResource(0);
 				holder.status.setEnabled(false);
-			} else if(msg.getStatus() ==  InviteStatus.REFUSED){
+			} else if(msg.getStatus() ==  InviteStatus.REFUSED) {
 				holder.status.setText("已拒绝");
-				holder.status.setBackgroundDrawable(null);
+                holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
+				holder.status.setBackgroundResource(0);
 				holder.status.setEnabled(false);
 			}
-            ImageLoader.getInstance().displayImage(msg.getAvatar(),holder.avator, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(msg.getAvatar(),holder.avator, options);
 
 			// 设置用户头像
 		}
@@ -141,6 +156,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
                 button.setText("已同意");
+                button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
                 msg.setStatus(InviteStatus.AGREED);
                 InviteMsgRepository.getInviteMsgDao(context).update(msg);
                 button.setBackgroundDrawable(null);

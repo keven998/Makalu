@@ -13,25 +13,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
-        android:layout_margin="10dp">
+        android:background="@drawable/shape_white_bar"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp">
 
         <FrameLayout android:id="@+id/avatar_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/app_theme_color">
+            android:background="@drawable/ic_shape_pink_with_2_round">
 
             <ImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="83dp"
-                android:layout_height="83dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:padding="3dp"
                 android:layout_gravity="center"
-                android:background="@color/base_color_white"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+                android:background="@drawable/white_circle_65"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="11dp"
                 android:scaleType="fitCenter"/>
         </FrameLayout>
 
@@ -40,11 +42,12 @@
             android:layout_toRightOf="@id/avatar_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_pink_trank_right"
             android:layout_marginTop="20dp"
-            android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:drawablePadding="13dp"
             android:textColor="@color/base_text_color_title"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/tv_sign"
@@ -52,27 +55,25 @@
             android:layout_below="@id/tv_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="17dp"
             android:paddingRight="10dp"
-            android:textColor="@color/base_text_color_subtitle"
-            android:textSize="14sp"/>
+            android:textColor="@color/base_text_color_text_hint"
+            android:textSize="12sp"/>
 
     </RelativeLayout>
 
     <Button
         android:id="@+id/btn_add_contact"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:text="加为旅行圈好友"
-        android:textSize="15sp"
+        android:layout_height="35dp"
+        android:text="加为Talk好友"
+        android:textSize="14sp"
         android:textColor="@color/base_color_white"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:background="@color/app_theme_color"/>
+        android:layout_marginTop="25dp"
+        android:background="@drawable/app_theme_button_selector"/>
 
 </LinearLayout>

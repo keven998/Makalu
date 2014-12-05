@@ -48,18 +48,22 @@
         <EditText android:id="@+id/edit_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/button_normal_shape"
-            android:hint="输入昵称或者手机号"
+            android:hint="输入桃子用户昵称或手机号"
+            android:imeOptions="actionSearch"
             android:singleLine="true"
             android:textColorHint="@color/base_text_color_text_placeholder"
             android:textColor="@color/base_text_color_title"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
     </FrameLayout>
 
@@ -70,7 +74,7 @@
         android:textSize="14sp"
         android:paddingLeft="20dp"
         android:background="@drawable/option_cell_selector"
-        android:paddingRight="10dp"
+        android:paddingRight="11dp"
         android:drawableRight="@drawable/cell_accessory"
         android:gravity="left|center_vertical"
         android:layout_marginTop="10dp"
@@ -83,7 +87,7 @@
         android:textSize="14sp"
         android:paddingLeft="20dp"
         android:background="@drawable/option_cell_selector"
-        android:paddingRight="10dp"
+        android:paddingRight="11dp"
         android:drawableRight="@drawable/cell_accessory"
         android:gravity="left|center_vertical"
         android:layout_marginTop="1dp"

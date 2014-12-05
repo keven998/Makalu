@@ -8,30 +8,46 @@
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_top_bar"
-        android:background="@color/top_bar_normal_bg"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/mm_listitem_simple"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="13dp"
+            android:drawableLeft="@drawable/ic_navigation_back"
+            android:clickable="true"
+            android:onClick="back"
+            android:text="返回"
+            android:gravity="center"
+            android:textColor="@color/base_text_color_text_hint"
+            android:background="@drawable/btn_navigation_back_selector"
+            android:drawablePadding="3dp"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="申请与通知"
-            android:textColor="#fff"
-            android:textSize="18sp" />
+            android:text="请求与通知"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="17sp" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:descendantFocusability="afterDescendants"
-        android:divider="#D4D4D4"
-        android:dividerHeight="1px"
+        android:layout_below="@id/indexer"
+        android:background="@color/app_backgroud"
         android:cacheColorHint="#00000000"
-        android:fastScrollEnabled="true" />
+        android:layout_marginTop="10dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
 </LinearLayout>

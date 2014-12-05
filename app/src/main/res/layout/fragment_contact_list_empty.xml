@@ -21,7 +21,7 @@
         android:layout_marginLeft="50dp"
         android:textSize="12sp"
         android:textColor="#aaaaaa"
-        android:text="快邀爱旅行的蜜蜜们来Talk吧~"/>
+        android:text="快邀爱旅行的蜜蜜们加入Talk吧~"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_marginTop="25dp"
         android:textColor="@color/base_color_white"
         android:background="@drawable/app_theme_button_selector"
-        android:text="添加好友"
+        android:text="加好友"
         android:textSize="14sp"/>
 
 </LinearLayout>

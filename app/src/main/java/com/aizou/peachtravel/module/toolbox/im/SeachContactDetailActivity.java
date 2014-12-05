@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
@@ -25,7 +26,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -151,12 +154,20 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
     private void initTitleBar(){
         TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("搜索结果");
+        thbar.getTitleTextView().setText("查找好友");
         thbar.enableBackKey(true);
     }
 
     private void bindView(){
-        ImageLoader.getInstance().displayImage(user.avatar,avatarIv, UILUtils.getDefaultOption());
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .cacheOnDisc(true)
+                        // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                .build();
+        ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
         nickNameTv.setText(user.nickName);
         signTv.setText(user.signature);
     }

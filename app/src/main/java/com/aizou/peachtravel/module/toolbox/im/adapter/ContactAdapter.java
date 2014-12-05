@@ -148,7 +148,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 
 			//显示申请与通知item
 			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-                vh.nickView.setText("好友请求");
+                vh.nickView.setText("请求与通知");
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.phoneView.setVisibility(View.GONE);
