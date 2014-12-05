@@ -45,8 +45,10 @@ import android.widget.TextView.BufferType;
 import android.widget.Toast;
 
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtMessageBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.task.LoadImageTask;
 import com.aizou.peachtravel.common.task.LoadVideoImageTask;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -84,7 +86,10 @@ import com.easemob.util.EMLog;
 import com.easemob.util.FileUtils;
 import com.easemob.util.LatLng;
 import com.easemob.util.TextFormater;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -124,6 +129,7 @@ public class MessageAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Activity activity;
     private HashMap<String,IMUser> groupMembers=new HashMap<String, IMUser>();
+    private DisplayImageOptions picOptions;
 
     // reference to conversation object in chatsdk
     private EMConversation conversation;
@@ -138,6 +144,17 @@ public class MessageAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
         activity = (Activity) context;
         this.conversation = EMChatManager.getInstance().getConversation(username);
+        picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.avatar_placeholder)
+                .showImageOnLoading(R.drawable.avatar_placeholder)
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+//				.decodingOptions(D)
+//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
     // public void setUser(String user) {
@@ -330,6 +347,7 @@ public class MessageAdapter extends BaseAdapter {
             } else if (message.getType() == Type.VOICE) {
                 try {
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
+                    holder.rl_voice_content = (RelativeLayout) convertView.findViewById(R.id.rl_voice_content);
                     holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
@@ -470,23 +488,30 @@ public class MessageAdapter extends BaseAdapter {
     private void handleGroupMessage(final int position, View convertView, final EMMessage message, ViewHolder holder){
         // 群聊时，显示接收的消息的发送人的名称
         ChatType chatType = message.getChatType();
-        if (chatType == ChatType.GroupChat && message.direct == EMMessage.Direct.RECEIVE){
-            // demo用username代替nick
-            IMUser user = groupMembers.get(message.getFrom());
-            if(user==null){
-                user = IMUserRepository.getContactByUserName(context,message.getFrom());
+        if( message.direct == EMMessage.Direct.RECEIVE){
+            if(chatType==ChatType.GroupChat){
+                // demo用username代替nick
+                IMUser user = groupMembers.get(message.getFrom());
                 if(user==null){
-                    user= IMUtils.getUserInfoFromMessage(context,message);
+                    user = IMUserRepository.getContactByUserName(context,message.getFrom());
+                    if(user==null){
+                        user= IMUtils.getUserInfoFromMessage(context,message);
+                    }
+                    groupMembers.put(message.getFrom(),user);
+
                 }
-                groupMembers.put(message.getFrom(),user);
+                if(user!=null){
+                    holder.tv_userId.setText(user.getNick());
+                    ImageLoader.getInstance().displayImage(user.getAvatar(),holder.head_iv,picOptions);
+                }
+            }else {
+                IMUser user = AccountManager.getInstance().getContactList(activity).get(username);
+                if(user!=null){
+                    holder.tv_userId.setText(user.getNick());
+                    ImageLoader.getInstance().displayImage(user.getAvatar(),holder.head_iv,picOptions);
+                }
 
             }
-            if(user!=null){
-                holder.tv_userId.setText(user.getNick());
-                ImageLoader.getInstance().displayImage(user.getAvatar(),holder.head_iv,UILUtils.getDefaultOption());
-            }
-
-
         }
 
         // 如果是发送的消息并且不是群聊消息，显示已读textview
@@ -962,8 +987,8 @@ public class MessageAdapter extends BaseAdapter {
     private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         holder.tv.setText(voiceBody.getLength() + "\"");
-        holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
-        holder.iv.setOnLongClickListener(new OnLongClickListener() {
+        holder.rl_voice_content .setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
+        holder.rl_voice_content .setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
@@ -1515,11 +1540,14 @@ public class MessageAdapter extends BaseAdapter {
         TextView size;
         LinearLayout container_status_btn;
         LinearLayout ll_container;
+        RelativeLayout rl_voice_content;
         ImageView iv_read_status;
         // 显示已读回执状态
         TextView tv_ack;
         // 显示送达回执状态
         TextView tv_delivered;
+
+
 
         TextView tv_file_name;
         TextView tv_file_size;

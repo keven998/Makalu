@@ -83,6 +83,7 @@ import com.aizou.peachtravel.common.utils.ImageUtils;
 import com.aizou.peachtravel.common.utils.SmileUtils;
 import com.aizou.peachtravel.common.widget.ExpandGridView;
 import com.aizou.peachtravel.common.widget.PasteEditText;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -157,6 +158,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	public static final int CHATTYPE_GROUP = 2;
 
 	public static final String COPY_IMAGE = "EASEMOBIMG";
+    private TitleHeaderBar titleHeaderBar;
 	private View recordingContainer;
 	private ImageView micImage;
 	private TextView recordingHint;
@@ -238,6 +240,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 * initView
 	 */
 	protected void initView() {
+        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.title_bar);
 		recordingContainer = findViewById(R.id.recording_container);
 		micImage = (ImageView) findViewById(R.id.mic_image);
 		recordingHint = (TextView) findViewById(R.id.recording_hint);
@@ -409,7 +412,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             }
 
         }
-        ((TextView) findViewById(R.id.name)).setText("群聊(" + group.getMembers().size() + "人)");
+        titleHeaderBar.getTitleTextView().setText(group.getGroupName());
         memberAdapter.notifyDataSetChanged();
         if(unkownMembers.size()>0){
             UserApi.getContactByHx(unkownMembers,new HttpCallBack<String>() {
@@ -642,6 +645,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 	private void setUpView() {
         activityInstance = this;
+        titleHeaderBar.enableBackKey(true);
 		iv_emoticons_normal.setOnClickListener(this);
 		iv_emoticons_checked.setOnClickListener(this);
 		// position = getIntent().getIntExtra("position", -1);
@@ -655,15 +659,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		if (chatType == CHATTYPE_SINGLE) { // 单聊
 			toChatUsername = getIntent().getStringExtra("userId");
             toChatUser = AccountManager.getInstance().getContactList(mContext).get(toChatUsername);
-			((TextView) findViewById(R.id.name)).setText(toChatUser.getNick());
+			titleHeaderBar.getTitleTextView().setText(toChatUser.getNick());
 
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,false);
 		} else {
 			// 群聊
-			findViewById(R.id.container_to_group).setVisibility(View.VISIBLE);
-			findViewById(R.id.container_remove).setVisibility(View.GONE);
-//			findViewById(R.id.container_voice_call).setVisibility(View.GONE);
+            titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
+            titleHeaderBar.setRightOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 			toChatUsername = getIntent().getStringExtra("groupId");
             setUpGroupMember();
             updateGroup();

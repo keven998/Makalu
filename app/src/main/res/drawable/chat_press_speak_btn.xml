@@ -17,7 +17,7 @@
 
             <solid android:color="#00000000" />
 
-            <stroke android:width="0.5dp" android:color="#999999" />
+            <stroke android:width="0.5dp" android:color="@color/base_divider_color" />
         </shape></item>
 
 </selector>

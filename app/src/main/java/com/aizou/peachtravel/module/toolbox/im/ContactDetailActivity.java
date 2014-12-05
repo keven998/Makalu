@@ -61,8 +61,8 @@ public class ContactDetailActivity extends ChatBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
-        initTitleBar();
         ViewUtils.inject(this);
+        initTitleBar();
         userId = getIntent().getLongExtra("userId", 0);
         imUser = IMUserRepository.getContactByUserId(mContext, userId);
         if (imUser != null) {
@@ -99,7 +99,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+        titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
         titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

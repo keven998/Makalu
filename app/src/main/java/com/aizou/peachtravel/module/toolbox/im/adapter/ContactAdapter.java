@@ -18,6 +18,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,7 +177,12 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
                 vh.phoneView.setVisibility(View.VISIBLE);
-                vh.phoneView.setText(user.getTel());
+               if(TextUtils.isEmpty(user.getSignature())) {
+                   vh.phoneView.setText("没有签名");
+               }else{
+                   vh.phoneView.setText(user.getSignature());
+               }
+
                 vh.unreadMsgView.setVisibility(View.GONE);
 			}
 

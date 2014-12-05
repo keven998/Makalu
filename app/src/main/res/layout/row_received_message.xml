@@ -19,35 +19,35 @@
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
-            android:scaleType="fitXY" />
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/avatar_placeholder" />
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_userhead"
             />
 
         <TextView
-            android:maxWidth="225.0dip"
             android:id="@+id/tv_chatcontent"
             android:layout_below="@id/tv_userid"
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dip"
-            android:gravity="left|center"
-            android:lineSpacingExtra="2dp"
+            android:lineSpacingExtra="5dp"
+            android:layout_marginTop="3dp"
             android:autoLink="web"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
+            android:text="我是你们滴地点  "
+            android:textColor="@color/base_text_color_subtitle"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg" />
+            android:background="@drawable/chatfrom_bg_normal" />
 
     </RelativeLayout>
 
