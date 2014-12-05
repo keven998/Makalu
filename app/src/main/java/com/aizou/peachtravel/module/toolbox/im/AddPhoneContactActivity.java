@@ -71,10 +71,8 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         });
     }
 
-    private void uploadAddressBook(){
-
+    private void uploadAddressBook() {
 //        UserApi.searchByAddressBook()
-
 
     }
 

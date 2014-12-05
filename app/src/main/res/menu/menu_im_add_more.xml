@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/menu_add_friends"
-        android:title="添加好友"
+        android:title="加好友"
         />
 
 
     <item
         android:id="@+id/menu_new_message"
-        android:title="新建聊天"
+        android:title="新建Talk"
         />
 
 

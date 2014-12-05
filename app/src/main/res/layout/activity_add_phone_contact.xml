@@ -44,10 +44,9 @@
         android:paddingRight="11dp"
         android:scrollbarStyle="outsideOverlay"
         android:cacheColorHint="@android:color/transparent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="1dp"
-        android:fadingEdge="none"
-        android:listSelector="@android:color/transparent">
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none">
 
     </ListView>
 
