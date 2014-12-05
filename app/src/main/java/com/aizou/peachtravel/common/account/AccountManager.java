@@ -11,6 +11,7 @@ import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 
@@ -57,6 +58,8 @@ public class AccountManager {
             public void onSuccess() {
                 SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
                 AccountManager.getInstance().setContactList(null);
+                IMUserRepository.clearAllContact(context);
+                InviteMsgRepository.clearAllInviteMsg(context);
                 Intent intent = new Intent();
                 intent.setAction(ACCOUNT_LOGOUT_ACTION);
                 context.sendBroadcast(intent);
@@ -114,10 +117,6 @@ public class AccountManager {
         this.contactList = contactList;
     }
 
-    public interface OnAccountChangeListener{
-        public void onAccountLogin(PeachUser user);
-        public void onAccountLogout();
-    }
 
 
 }

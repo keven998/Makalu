@@ -65,6 +65,8 @@ public class BaseActivity extends FragmentActivity {
      * 显示帐号在别处登录dialog
      */
     protected void showConflictDialog() {
+        if(isFinishing())
+            return;
         try {
             if (conflictBuilder == null)
                 conflictBuilder = new MaterialDialog.Builder(this);

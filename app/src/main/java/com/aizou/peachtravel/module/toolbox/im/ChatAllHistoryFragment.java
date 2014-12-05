@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +74,8 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
+            return;
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
@@ -219,15 +222,23 @@ public class ChatAllHistoryFragment extends Fragment {
         Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
         List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
         //过滤掉messages seize为0的conversation
-        for (EMConversation conversation : conversations.values()) {
-            if (conversation.getAllMessages().size() != 0) {
+        Iterator<EMConversation> conversationIt = conversations.values().iterator();
+        while (conversationIt.hasNext()){
+            EMConversation conversation = conversationIt.next();
+            if(conversation.getIsGroup()){
                 PeachConversation peachConversation = new PeachConversation();
                 peachConversation.emConversation = conversation;
-                if(!TextUtils.isEmpty(conversation.getUserName())){
-                    IMUser user = IMUserRepository.getContactByUserName(getActivity(), conversation.getUserName());
-                    peachConversation.imUser = user;
-                }
                 conversationList.add(peachConversation);
+            }else if(!TextUtils.isEmpty(conversation.getUserName())){
+                IMUser user = IMUserRepository.getMyFriendByUserName(getActivity(), conversation.getUserName());
+                if(user!=null){
+                    PeachConversation peachConversation = new PeachConversation();
+                    peachConversation.emConversation = conversation;
+                    peachConversation.imUser = user;
+                    conversationList.add(peachConversation);
+                }else{
+                    conversationIt.remove();
+                }
             }
         }
         // 排序

@@ -158,6 +158,10 @@ public class LoginActivity extends PeachBaseActivity {
                 try {
                     // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
+                    boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                    if (!updatenick) {
+                        EMLog.e("LoginActivity", "update current user nick fail");
+                    }
 //                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
                     final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                     // 添加user"申请与通知"
@@ -179,10 +183,7 @@ public class LoginActivity extends PeachBaseActivity {
                     List <IMUser> users = new ArrayList<IMUser>(userlist.values());
                     IMUserRepository.saveContactList(mContext,users);
                     // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                    boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                    if (!updatenick) {
-                        EMLog.e("LoginActivity", "update current user nick fail");
-                    }
+
                     // 进入主页面
                     setResult(RESULT_OK);
                     finish();

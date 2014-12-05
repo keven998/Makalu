@@ -16,6 +16,7 @@ package com.aizou.peachtravel.module.toolbox.im;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +47,13 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
@@ -83,6 +87,8 @@ public class ContactlistFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
+            return;
 //		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		listView = (ListView) getView().findViewById(R.id.list);
         contactList = new ArrayList<IMUser>();
@@ -130,31 +136,7 @@ public class ContactlistFragment extends Fragment {
 
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		// 长按前两个不弹menu
-//		if (((AdapterContextMenuInfo) menuInfo).position > 0) {
-//			getActivity().getMenuInflater().inflate(R.menu.context_contact_list, menu);
-//		}
-	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.delete_contact) {
-			IMUser tobeDeleteUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-			// 删除此联系人
-			deleteContact(tobeDeleteUser);
-			// 删除相关的邀请消息
-            InviteMsgRepository.deleteInviteMsg(getActivity(),tobeDeleteUser.getUsername());
-			return true;
-		}else if(item.getItemId() == R.id.add_to_blacklist){
-			IMUser user = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-			moveToBlacklist(user.getUsername());
-			return true;
-		}
-		return super.onContextItemSelected(item);
-	}
 
 	@Override
 	public void onHiddenChanged(boolean hidden) {
@@ -183,7 +165,7 @@ public class ContactlistFragment extends Fragment {
             });
         } else if (contactList.size() > 1) {
             if (emptyView != null) {
-                emptyView.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
                 emptyView = null;
             }
 
@@ -216,74 +198,7 @@ public class ContactlistFragment extends Fragment {
         sectionBar = null;
     }
 
-    /**
-	 * 删除联系人
-	 * 
-	 * @param tobeDeleteUser
-	 */
-	public void deleteContact(final IMUser tobeDeleteUser) {
-//		final ProgressDialog pd = new ProgressDialog(getActivity());
-//		pd.setMessage("正在删除...");
-//		pd.setCanceledOnTouchOutside(false);
-//		pd.show();
-        DialogManager.getInstance().showProgressDialog(getActivity(),"正在删除...");
-        UserApi.deleteContact(tobeDeleteUser.getUserId()+"",new HttpCallBack() {
-            @Override
-            public void doSucess(Object result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
-                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
-                if(deleteResult.code==0){
-                    IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
-                    // 删除此会话
-                    EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername());
-                    AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
-                    adapter.remove(tobeDeleteUser);
-                    adapter.notifyDataSetChanged();
-                    if(((IMMainActivity)getActivity())!=null){
-                        ((IMMainActivity)getActivity()).refreshChatHistoryFragment();
-                    }
-                }else if(!TextUtils.isEmpty(deleteResult.err.message)){
-                    ToastUtil.getInstance(getActivity()).showToast(deleteResult.err.message);
-                }
 
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
-                Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-//        new Thread(new Runnable() {
-//			public void run() {
-//				try {
-//					EMContactManager.getInstance().deleteContact(tobeDeleteUser.getUsername());
-//					// 删除db和内存中此用户的数据
-//					UserDao dao = new UserDao(getActivity());
-//					dao.deleteContact(tobeDeleteUser.getUsername());
-//					AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
-//					getActivity().runOnUiThread(new Runnable() {
-//						public void run() {
-//							pd.dismiss();
-//							adapter.remove(tobeDeleteUser);
-//							adapter.notifyDataSetChanged();
-//
-//						}
-//					});
-//				} catch (final Exception e) {
-//					getActivity().runOnUiThread(new Runnable() {
-//						public void run() {
-//							pd.dismiss();
-//							Toast.makeText(getActivity(), "删除失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//						}
-//					});
-//
-//				}
-//
-//			}
-//		}).start();
-
-	}
 
 	/**
 	 * 把user移入到黑名单
@@ -333,7 +248,7 @@ public class ContactlistFragment extends Fragment {
 			e.printStackTrace();
 		}
 	}
-    private String[] sections = new String[]{"#","A","B","C","D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+
 	private void getContactList() {
 		contactList.clear();
 		Map<String, IMUser> users = AccountManager.getInstance().getContactList(getActivity());
@@ -344,27 +259,6 @@ public class ContactlistFragment extends Fragment {
                 contactList.add(entry.getValue());
             }
 		}
-//        for(int i=0;i<24;i++){
-//            IMUser user = new IMUser();
-//            user.setAvatar("");
-//            user.setNick(sections[i]+"阮金明");
-//            user.setUsername("rjm");
-//            user.setUserId("1111");
-//            if (Character.isDigit(user.getNick().charAt(0))) {
-//                user.setHeader("#");
-//            } else {
-//                user.setHeader(HanziToPinyin.getInstance().get(user.getNick().substring(0, 1))
-//                        .get(0).target.substring(0, 1).toUpperCase());
-//                char header = user.getHeader().toLowerCase().charAt(0);
-//                if (header < 'a' || header > 'z') {
-//                    user.setHeader("#");
-//                }
-//            }
-//            contactList.add(user);
-//            contactList.add(user);
-//            contactList.add(user);
-//            contactList.add(user);
-//        }
 
 		// 排序
 		Collections.sort(contactList, new Comparator<IMUser>() {
@@ -374,7 +268,6 @@ public class ContactlistFragment extends Fragment {
 				return lhs.getHeader().compareTo(rhs.getHeader());
 			}
 		});
-
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位

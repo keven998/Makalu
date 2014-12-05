@@ -13,6 +13,8 @@
  */
 package com.aizou.peachtravel.module.toolbox.im;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,9 +43,11 @@ import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.CmdAgreeBean;
 import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.CmdInvateBean;
+import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -114,6 +118,8 @@ public class IMMainActivity extends ChatBaseActivity {
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment)
 				.commit();
+        //网络更新好友列表
+        getContactFromServer();
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
@@ -137,8 +143,6 @@ public class IMMainActivity extends ChatBaseActivity {
 //				.getOfflineMessageBroadcastAction());
 //		registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
 		
-//		// setContactListener监听联系人的变化等
-		EMContactManager.getInstance().setContactListener(new MyContactListener());
 		// 注册群聊相关的listener
 		EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
 		// 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
@@ -226,6 +230,65 @@ public class IMMainActivity extends ChatBaseActivity {
             }
         });
         menu.show();
+    }
+
+    private void getContactFromServer(){
+
+        UserApi.getContact(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result,ContactListBean.class);
+
+                if(contactResult.code==0){
+                    IMUserRepository.clearMyFriendsContact(mContext);
+                     Map<String, IMUser> userlist = new HashMap<String, IMUser>();
+                    // 添加user"申请与通知"
+                    IMUser newFriends = new IMUser();
+                    newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
+                    newFriends.setNick("申请与通知");
+                    newFriends.setHeader("");
+                    newFriends.setIsMyFriends(true);
+                    userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+//                    // 添加"群聊"
+//                    IMUser groupUser = new IMUser();
+//                    groupUser.setUsername(Constant.GROUP_USERNAME);
+//                    groupUser.setNick("群聊");
+//                    groupUser.setHeader("");
+//                    groupUser.setUnreadMsgCount(0);
+//                    userlist.put(Constant.GROUP_USERNAME, groupUser);
+                    // 存入内存
+                    for (PeachUser peachUser : contactResult.result.contacts) {
+                        IMUser user = new IMUser();
+                        user.setUserId(peachUser.userId);
+                        user.setMemo(peachUser.memo);
+                        user.setNick(peachUser.nickName);
+                        user.setUsername(peachUser.easemobUser);
+                        user.setUnreadMsgCount(0);
+                        user.setAvatar(peachUser.avatar);
+                        user.setSignature(peachUser.signature);
+                        user.setIsMyFriends(true);
+                        user.setGender(peachUser.gender);
+                        IMUtils.setUserHead(user);
+                        userlist.put(peachUser.easemobUser, user);
+                    }
+                    // 存入内存
+                    AccountManager.getInstance().setContactList(userlist);
+                    // 存入db
+                    List <IMUser> users = new ArrayList<IMUser>(userlist.values());
+                    IMUserRepository.saveContactList(mContext,users);
+                    AccountManager.getInstance().setContactList(userlist);
+                    refreshContactListFragment();
+                    refreshChatHistoryFragment();
+
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
     }
 
 	/**
@@ -415,7 +478,7 @@ public class IMMainActivity extends ChatBaseActivity {
                         AccountManager.getInstance().getContactList(mContext).remove(imUser.getUsername());
                         IMUserRepository.deleteContact(mContext, imUser.getUsername());
                         // 删除此会话
-                        EMChatManager.getInstance().deleteConversation(imUser.getUsername());
+                        EMChatManager.getInstance().deleteConversation(imUser.getUsername(),true);
                         InviteMsgRepository.deleteInviteMsg(mContext, imUser.getUsername());
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -516,113 +579,6 @@ public class IMMainActivity extends ChatBaseActivity {
 //	};
 	
 
-	/***
-	 * 好友变化listener
-	 * 
-	 */
-	private class MyContactListener implements EMContactListener {
-
-		@Override
-		public void onContactAdded(List<String> usernameList) {
-
-
-
-		}
-
-		
-		@Override
-		public void onContactDeleted(final List<String> usernameList) {
-			// 被删除
-			Map<String, IMUser> localUsers = AccountManager.getInstance().getContactList(IMMainActivity.this);
-			for (String username : usernameList) {
-				localUsers.remove(username);
-				IMUserRepository.deleteContact(mContext, username);
-				InviteMsgRepository.deleteInviteMsg(mContext, username);
-			}
-			runOnUiThread(new Runnable() {
-				public void run() {
-					//如果正在与此用户的聊天页面
-					if (ChatActivity.activityInstance != null && usernameList.contains(ChatActivity.activityInstance.getToChatUsername())) {
-						Toast.makeText(IMMainActivity.this, ChatActivity.activityInstance.getToChatUsername()+"已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
-						ChatActivity.activityInstance.finish();
-					}
-					updateUnreadLabel();
-				}
-			});
-			// 刷新ui
-			if (currentTabIndex == 1)
-				contactListFragment.refresh();
-
-		}
-
-		@Override
-		public void onContactInvited(final String username, final String reason) {
-			// 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不要重复提醒
-			List<InviteMessage> msgs = InviteMsgRepository.getMessagesList(mContext);
-			for (InviteMessage inviteMessage : msgs) {
-				if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
-				    InviteMsgRepository.deleteInviteMsg(mContext,username);
-				}
-			}
-
-            UserApi.seachContact(username,new HttpCallBack<String>() {
-                @Override
-                public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> seachResult = CommonJson4List.fromJson(result,PeachUser.class);
-                    if(seachResult.code==0){
-                        if(seachResult.result.size()>0){
-                            PeachUser user = seachResult.result.get(0);
-                            // 自己封装的javabean
-                            final InviteMessage msg = new InviteMessage();
-                            msg.setFrom(username);
-                            msg.setTime(System.currentTimeMillis());
-                            msg.setReason(reason);
-                            Log.d(TAG, username + "请求加你为好友,reason: " + reason);
-                            // 设置相应status
-                            msg.setStatus(InviteStatus.BEINVITEED);
-                            msg.setNickname(user.nickName);
-                            msg.setUserId(user.userId);
-                            notifyNewIviteMessage(msg);
-
-                        }
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-            });
-
-
-
-		}
-
-		@Override
-		public void onContactAgreed(String username) {
-//			List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-//			for (InviteMessage inviteMessage : msgs) {
-//				if (inviteMessage.getFrom().equals(username)) {
-//					return;
-//				}
-//			}
-//			// 自己封装的javabean
-//			InviteMessage msg = new InviteMessage();
-//			msg.setFrom(username);
-//			msg.setTime(System.currentTimeMillis());
-//			Log.d(TAG, username + "同意了你的好友请求");
-//			msg.setStatus(InviteMessage.InviteMesageStatus.BEAGREED);
-//			notifyNewIviteMessage(msg);
-
-		}
-
-		@Override
-		public void onContactRefused(String username) {
-			// 参考同意，被邀请实现此功能,demo未实现
-
-		}
-
-	}
 
 	/**
 	 * 保存提示新消息
@@ -864,7 +820,7 @@ public class IMMainActivity extends ChatBaseActivity {
             customView.findViewById(R.id.new_talk).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE),NEW_CHAT_REQUEST_CODE);
+                    getActivity().startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                     dismiss();
                 }
             });

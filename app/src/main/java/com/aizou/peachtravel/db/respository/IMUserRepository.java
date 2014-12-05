@@ -30,6 +30,9 @@ public class IMUserRepository {
     public static IMUser getContactByUserName(Context c, String username){
        return getIMUserDao(c).queryBuilder().where(IMUserDao.Properties.Username.eq(username)).build().unique();
     }
+    public static IMUser getMyFriendByUserName(Context c, String username){
+        return getIMUserDao(c).queryBuilder().where(IMUserDao.Properties.Username.eq(username),IMUserDao.Properties.IsMyFriends.eq(true)).build().unique();
+    }
     public static IMUser getContactByUserId(Context c, long userId){
         return getIMUserDao(c).queryBuilder().where(IMUserDao.Properties.UserId.eq(userId)).build().unique();
     }
@@ -51,5 +54,13 @@ public class IMUserRepository {
     }
     public static void saveContactList(Context c,List<IMUser> user){
         getIMUserDao(c).insertOrReplaceInTx(user);
+    }
+
+    public static void clearAllContact(Context c){
+        getIMUserDao(c).deleteAll();
+    }
+    public static void clearMyFriendsContact(Context c){
+
+        getIMUserDao(c).queryBuilder().where(IMUserDao.Properties.IsMyFriends.eq(true)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
 }

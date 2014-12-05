@@ -1,27 +1,36 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.FastBlurHelper;
+import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.easemob.chat.EMChatManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -93,8 +102,14 @@ public class ContactDetailActivity extends ChatBaseActivity {
         titleHeaderBar.setRightViewImageRes(R.drawable.add);
         titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
+                ContactDetailMenu fragment = new ContactDetailMenu();
+                Bundle args = new Bundle();
+                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
+                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+                args.putSerializable("imUser",imUser);
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "contact_detail_menu");
             }
         });
 
@@ -146,9 +161,9 @@ public class ContactDetailActivity extends ChatBaseActivity {
             }
         });
 
-        if (imUser.getGender().equalsIgnoreCase("m")) {
+        if (imUser.getGender().equalsIgnoreCase("M")) {
             genderIv.setImageResource(R.drawable.ic_gender_man);
-        } else if (imUser.getGender().equalsIgnoreCase("f")) {
+        } else if (imUser.getGender().equalsIgnoreCase("F")) {
             genderIv.setImageResource(R.drawable.ic_gender_lady);
         } else {
             genderIv.setImageResource(R.drawable.avatar_placeholder);
@@ -172,4 +187,68 @@ public class ContactDetailActivity extends ChatBaseActivity {
         Bitmap overlay = FastBlurHelper.doBlur(bkg, (int) radius, true);
         iv.setImageBitmap(overlay);
     }
+
+    public static class ContactDetailMenu extends SupportBlurDialogFragment {
+        private IMUser mImUser;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mImUser = (IMUser) getArguments().getSerializable("imUser");
+
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
+            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_contact_detail, null);
+            connectionDialog.setContentView(customView);
+            customView.findViewById(R.id.delete_contact);
+            customView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteContact(mImUser);
+
+                }
+            });
+
+            return connectionDialog;
+        }
+
+        /**
+         * 删除联系人
+         *
+         * @param tobeDeleteUser
+         */
+        public void deleteContact(final IMUser tobeDeleteUser) {
+            DialogManager.getInstance().showProgressDialog(getActivity(),"正在删除...");
+            UserApi.deleteContact(tobeDeleteUser.getUserId()+"",new HttpCallBack() {
+                @Override
+                public void doSucess(Object result, String method) {
+                    DialogManager.getInstance().dissMissProgressDialog();
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
+                    if(deleteResult.code==0){
+                        IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
+                        // 删除此会话
+                        EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(),true);
+                        AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
+                        dismiss();
+                        getActivity().finish();
+                    }else if(!TextUtils.isEmpty(deleteResult.err.message)){
+                        ToastUtil.getInstance(getActivity()).showToast(deleteResult.err.message);
+                    }
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissProgressDialog();
+                    ToastUtil.getInstance(getActivity()).showToast("删除失败");
+                }
+            });
+
+        }
+    }
+
+
 }

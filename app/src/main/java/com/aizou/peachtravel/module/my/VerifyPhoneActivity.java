@@ -27,7 +27,9 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.easemob.EMCallBack;
+import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
@@ -191,6 +193,28 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 //                    groupUser.setNick("群聊");
 //                    groupUser.setHeader("");
 //                    userlist.put(Constant.GROUP_USERNAME, groupUser);
+
+                    AccountManager.getInstance().setContactList(userlist);
+                    List <IMUser> users = new ArrayList<IMUser>(userlist.values());
+                    IMUserRepository.saveContactList(mContext,users);
+                    // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
+                    boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                    if (!updatenick) {
+                        EMLog.e("LoginActivity", "update current user nick fail");
+                    }
+                    // 进入主页面
+                    setResult(RESULT_OK);
+                    finish();
+                    EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+                        @Override
+                        public void onSuccess(List<EMGroup> emGroups) {
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+                    });
                     UserApi.getContact(new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -223,24 +247,10 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         }
                     });
 
-                    // 存入内存
-                    AccountManager.getInstance().setContactList(userlist);
-                    // 存入db
-                    List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext,users);
-                    // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                    EMGroupManager.getInstance().getGroupsFromServer();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                if (!updatenick) {
-                    EMLog.e("LoginActivity", "update current user nick fail");
-                }
 
-                // 进入主页面
-                setResult(RESULT_OK);
-                finish();
             }
 
             @Override

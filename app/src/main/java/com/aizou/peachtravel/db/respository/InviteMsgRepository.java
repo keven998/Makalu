@@ -32,4 +32,8 @@ public class InviteMsgRepository {
     public static List<InviteMessage> getMessagesList(Context c){
         return getInviteMsgDao(c).loadAll();
     }
+
+    public static void clearAllInviteMsg(Context c){
+        getInviteMsgDao(c).deleteAll();
+    }
 }

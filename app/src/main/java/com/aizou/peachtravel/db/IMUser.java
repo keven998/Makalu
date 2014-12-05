@@ -15,7 +15,7 @@ public class IMUser extends EMContact implements Serializable {
     private String username;
     private String nick;
     private String avatar="";
-    private String gender;
+    private String gender="";
     private String signature;
     private String tel;
     private String memo;
