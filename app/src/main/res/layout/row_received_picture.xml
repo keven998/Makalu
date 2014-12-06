@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -19,17 +20,18 @@
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
-            android:scaleType="fitXY" />
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/avatar_placeholder" />
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
+            android:layout_marginLeft="3dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_userhead"
             />
@@ -38,17 +40,18 @@
             android:id="@+id/row_recv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:layout_below="@id/tv_userid"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
              >
 
-            <ImageView
-                android:background="@drawable/chatfrom_bg"
+            <com.aizou.peachtravel.common.widget.MaskImage
                 android:id="@+id/iv_sendPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter" />
+                android:minWidth="100dp"
+                mask:mask="@drawable/chatfrom_image_mask"
+                android:scaleType="fitStart" />
 
             <LinearLayout
                 android:id="@+id/ll_loading"
@@ -69,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0%"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/base_text_color_subtitle"
                     android:visibility="visible" />
             </LinearLayout>
         </RelativeLayout>

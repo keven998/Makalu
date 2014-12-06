@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.text.Spannable;
@@ -755,17 +756,18 @@ public class MessageAdapter extends BaseAdapter {
 
         // 接收方向的消息
         if (message.direct == EMMessage.Direct.RECEIVE) {
+            Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.default_image);
             // "it is receive msg";
             if (message.status == EMMessage.Status.INPROGRESS) {
                 // "!!!! back receive";
-                holder.iv.setImageResource(R.drawable.default_image);
+                holder.iv.setImageBitmap(defaultImage);
                 showDownloadImageProgress(message, holder);
                 // downloadImage(message, holder);
             } else {
                 // "!!!! not back receive, show image directly");
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
-                holder.iv.setImageResource(R.drawable.default_image);
+                holder.iv.setImageBitmap(defaultImage);
                 ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
                 if (imgBody.getLocalUrl() != null) {
                     // String filePath = imgBody.getLocalUrl();

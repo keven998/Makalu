@@ -9,13 +9,16 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
+import com.google.gson.Gson;
 
 
 public class MainActivity extends PeachBaseActivity {
@@ -66,6 +69,7 @@ public class MainActivity extends PeachBaseActivity {
             mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
         }
     }
+
 
     /**
      * 给Tab按钮设置图标和文字

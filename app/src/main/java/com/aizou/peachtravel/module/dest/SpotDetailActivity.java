@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -18,10 +19,12 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.SpotDetailBean;
+import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -44,7 +47,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
-
     }
 
     private void initView(){

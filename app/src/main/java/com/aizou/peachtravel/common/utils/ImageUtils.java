@@ -13,6 +13,13 @@
  */
 package com.aizou.peachtravel.common.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
@@ -40,6 +47,17 @@ public class ImageUtils {
 		String path =PathUtil.getInstance().getImagePath()+"/"+ "th"+thumbImageName;
         EMLog.d("msg", "thum image path:" + path);
         return path;
+    }
+
+    public static Bitmap getMaskImage(Bitmap mask,Bitmap source){
+        Bitmap result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas mCanvas = new Canvas(result);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        mCanvas.drawBitmap(source, 0, 0, null);
+        mCanvas.drawBitmap(mask, 0, 0, paint);
+        paint.setXfermode(null);
+        return result ;
     }
 	
 	
