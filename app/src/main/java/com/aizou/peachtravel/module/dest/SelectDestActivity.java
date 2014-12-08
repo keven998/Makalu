@@ -67,7 +67,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
-    private List<LocBean> allAddCityList = new ArrayList<LocBean>();
+    private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private Set<OnDestActionListener> mOnDestActionListeners= new HashSet<OnDestActionListener>();
 
     @Override
@@ -122,6 +122,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putParcelableArrayListExtra("destinations", allAddCityList);
                 startActivity(intent);
             }
         });
