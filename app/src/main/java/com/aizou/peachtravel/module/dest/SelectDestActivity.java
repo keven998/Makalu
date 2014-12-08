@@ -13,6 +13,7 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -60,6 +62,7 @@ import java.util.Set;
 public class SelectDestActivity extends PeachBaseActivity implements OnDestActionListener {
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
+    private FrameLayout mBottomPanel;
     private TextView startTv;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
@@ -73,19 +76,25 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         citysLl.addView(cityView);
         allAddCityList.add(locBean);
         TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
-        ImageView removeIv = (ImageView) cityView.findViewById(R.id.iv_remove);
         cityNameTv.setText(locBean.zhName);
-        removeIv.setOnClickListener(new View.OnClickListener() {
+        cityNameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int index = allAddCityList.indexOf(locBean);
                 citysLl.removeViewAt(index);
                 allAddCityList.remove(locBean);
+                if (allAddCityList.size() == 0) {
+                    mBottomPanel.setVisibility(View.GONE);
+                }
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestRemoved(locBean);
                 }
             }
         });
+
+        if (allAddCityList.size() > 0) {
+            mBottomPanel.setVisibility(View.VISIBLE);
+        }
 
     }
     @Override
@@ -93,15 +102,19 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         int index = allAddCityList.indexOf(locBean);
         citysLl.removeViewAt(index);
         allAddCityList.remove(locBean);
+        if (allAddCityList.size() == 0) {
+            mBottomPanel.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = View.inflate(mContext,R.layout.activity_select_dest, null);
+        View rootView = View.inflate(mContext, R.layout.activity_select_dest, null);
         setContentView(rootView);
         initTitleBar();
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
+        mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
         startTv = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
@@ -112,8 +125,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 startActivity(intent);
             }
         });
-        indicatorViewPager =new IndicatorViewPager(inOutIndicator,mSelectDestVp);
+        indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
+//        indicatorViewPager.setIndicatorScrollBar(new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
         mSelectDestVp.setOffscreenPageLimit(2);
@@ -142,8 +156,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             }
         });
         titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.getTitleTextView().setText("选择想去的城市");
 
     }
+
     private void initData() {
 
     }
@@ -166,11 +182,11 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
             if (convertView == null) {
-                convertView = (TextView) inflater.inflate(R.layout.tab_select_dest, container, false);
+                convertView = inflater.inflate(R.layout.tab_select_dest, container, false);
             }
-            TextView textView = (TextView) convertView;
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
             textView.setText(tabNames[position]);
-            return textView;
+            return convertView;
         }
 
         @Override
@@ -186,9 +202,5 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
         }
     }
-
-
-
-
 
 }

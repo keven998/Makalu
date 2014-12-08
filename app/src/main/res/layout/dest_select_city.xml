@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="wrap_content"
-    android:padding="10dp"
-    android:gravity="center_vertical"
-    android:layout_height="wrap_content">
+    <CheckedTextView
+        android:id="@+id/tv_cell_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/radio_colors"
+        android:background="@drawable/checker_cell_frame_bg"
+        android:clickable="true"
+        android:textSize="13sp"
+        android:paddingLeft="9dp"
+        android:paddingRight="9dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:drawablePadding="6dp"
+        android:drawableRight="@drawable/checker_cell_add_city"/>
 
-        <TextView
-            android:id="@+id/tv_city_name"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <ImageView
-            android:id="@+id/iv_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/ic_view_add"/>
-</LinearLayout>
+</FrameLayout>

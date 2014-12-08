@@ -2,18 +2,24 @@ package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -61,6 +67,14 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return new InCityViewHolder();
             }
         });
+//        LinearLayout footer = new LinearLayout(getActivity());
+//        footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(64)));
+//        footer.setBackgroundColor(getResources().getColor(R.color.app_backgroud));
+//        ViewGroup.LayoutParams params = footer.getLayoutParams();
+//        params.height = LocalDisplay.dp2px(64);
+//        footer.setLayoutParams(params);
+//        mLvInCity.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.padding_footer, null));
+
         mLvInCity.setAdapter(inCityAdapter);
         mSectionBar.setListView(mLvInCity);
         getInLocList();
@@ -227,7 +241,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         private TextView sectionTv;
         private FlowLayout cityListFl;
 
-
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View contentView = layoutInflater.inflate(R.layout.dest_in_item, null);
@@ -242,33 +255,26 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-                TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_city_name);
+                CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
-                ImageView addIv = (ImageView) contentView.findViewById(R.id.iv_add);
-                if(bean.isAdded){
-                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
-                }else{
-                    addIv.setImageResource(R.drawable.ic_view_add);
-                }
-                addIv.setOnClickListener(new View.OnClickListener() {
+                cityNameTv.setChecked(bean.isAdded);
+                cityNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        bean.isAdded=!bean.isAdded;
-                        if(mOnDestActionListener!=null){
-                            if(bean.isAdded){
+                        bean.isAdded = !bean.isAdded;
+                        if (mOnDestActionListener != null) {
+                            if (bean.isAdded) {
                                 mOnDestActionListener.onDestAdded(bean);
-                            }else{
+                            } else {
                                 mOnDestActionListener.onDestRemoved(bean);
                             }
-
                         }
                         inCityAdapter.notifyDataSetChanged();
                     }
                 });
+
                 cityListFl.addView(contentView);
             }
-
-
         }
     }
 }

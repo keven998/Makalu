@@ -176,26 +176,26 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 View view = View.inflate(getActivity(),R.layout.dest_select_city,null);
                 TextView cityNameTv = (TextView) view.findViewById(R.id.tv_city_name);
                 cityNameTv.setText(bean.zhName);
-                ImageView addIv = (ImageView) view.findViewById(R.id.iv_add);
-                if(bean.isAdded){
-                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
-                }else{
-                    addIv.setImageResource(R.drawable.ic_view_add);
-                }
-                addIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bean.isAdded=!bean.isAdded;
-                        if(mOnDestActionListener!=null){
-                            if(bean.isAdded){
-                                mOnDestActionListener.onDestAdded(bean);
-                            }else{
-                                mOnDestActionListener.onDestRemoved(bean);
-                            }
-                        }
-                        outCountryAdapter.notifyDataSetChanged();
-                    }
-                });
+//                ImageView addIv = (ImageView) view.findViewById(R.id.iv_add);
+//                if(bean.isAdded){
+//                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
+//                }else{
+//                    addIv.setImageResource(R.drawable.ic_view_add);
+//                }
+//                addIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        bean.isAdded=!bean.isAdded;
+//                        if(mOnDestActionListener!=null){
+//                            if(bean.isAdded){
+//                                mOnDestActionListener.onDestAdded(bean);
+//                            }else{
+//                                mOnDestActionListener.onDestRemoved(bean);
+//                            }
+//                        }
+//                        outCountryAdapter.notifyDataSetChanged();
+//                    }
+//                });
 
                 cityListFl.addView(view);
                 i++;

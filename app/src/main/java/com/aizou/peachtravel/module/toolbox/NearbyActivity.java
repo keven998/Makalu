@@ -47,7 +47,7 @@ public class NearbyActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
-        mNearbyIndicator.setScrollBar(new ColorBar(mContext, Color.RED, 5));
+        mNearbyIndicator.setScrollBar(new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5));
         mNearbyViewPager.setOffscreenPageLimit(2);
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
