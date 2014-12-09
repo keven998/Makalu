@@ -60,6 +60,7 @@ public class ChatAllHistoryFragment extends Fragment {
     private ListView listView;
     private Map<String, IMUser> contactList;
     private ChatAllHistoryAdapter adapter;
+    private List<PeachConversation> conversationList=new ArrayList<PeachConversation>();
 //    private EditText query;
 //    private ImageButton clearSearch;
 //    public RelativeLayout errorItem;
@@ -83,9 +84,9 @@ public class ChatAllHistoryFragment extends Fragment {
         // contact list
         contactList = AccountManager.getInstance().getContactList(getActivity());
         listView = (ListView) getView().findViewById(R.id.list);
-        adapter = new ChatAllHistoryAdapter(getActivity(), 1, loadConversationsWithRecentChat());
+        loadConversationsWithRecentChat();
+        adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
         groups = EMGroupManager.getInstance().getAllGroups();
-
         // 设置adapter
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -107,7 +108,7 @@ public class ChatAllHistoryFragment extends Fragment {
                             break;
                         }
                     }
-                    if (emContact != null && emContact instanceof EMGroup) {
+                    if (conversation.getIsGroup()) {
                         // it is group chat
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
                         intent.putExtra("groupId", ((EMGroup) emContact).getGroupId());
@@ -214,9 +215,11 @@ public class ChatAllHistoryFragment extends Fragment {
      * 刷新页面
      */
     public void refresh() {
-        adapter = new ChatAllHistoryAdapter(getActivity(), R.layout.row_chat_history, loadConversationsWithRecentChat());
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        loadConversationsWithRecentChat();
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     /**
@@ -227,11 +230,13 @@ public class ChatAllHistoryFragment extends Fragment {
     private List<PeachConversation> loadConversationsWithRecentChat() {
         // 获取所有会话，包括陌生人
         Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
-        List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
+        conversationList.clear();
         //过滤掉messages seize为0的conversation
         Iterator<EMConversation> conversationIt = conversations.values().iterator();
         while (conversationIt.hasNext()){
             EMConversation conversation = conversationIt.next();
+            if(conversation.getLastMessage()==null)
+                continue;
             if(conversation.getIsGroup()){
                 PeachConversation peachConversation = new PeachConversation();
                 peachConversation.emConversation = conversation;
@@ -265,6 +270,9 @@ public class ChatAllHistoryFragment extends Fragment {
 
                 EMMessage con2LastMessage = con2.emConversation.getLastMessage();
                 EMMessage con1LastMessage = con1.emConversation.getLastMessage();
+                if(con1LastMessage==null||con2LastMessage==null){
+                    return -1;
+                }
                 if (con2LastMessage.getMsgTime() == con1LastMessage.getMsgTime()) {
                     return 0;
                 } else if (con2LastMessage.getMsgTime() > con1LastMessage.getMsgTime()) {

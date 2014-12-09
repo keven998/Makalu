@@ -33,10 +33,22 @@ public class UILUtils {
 
         return picOptions;
     }
+    public static DisplayImageOptions getRadiusOption(int radius) {
+        DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                .resetViewBeforeLoading(true)
+//				.decodingOptions(D)
+                .displayer(new RoundedBitmapDisplayer(radius))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
-	
-	
-	public static String formartQiNiuUrl(String imageUrl,int width,int height){
+        return picOptions;
+    }
+
+
+
+
+    public static String formartQiNiuUrl(String imageUrl,int width,int height){
 //		if(imageUrl.contains("qiniudn")&&width>0){
 //			String url = String.format(imageUrl+QINIU_URL_FORMART, width,height);
 //			return url;

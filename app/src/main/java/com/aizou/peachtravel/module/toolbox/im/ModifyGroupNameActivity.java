@@ -25,8 +25,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 public class ModifyGroupNameActivity extends PeachBaseActivity implements View.OnClickListener {
     @ViewInject(R.id.et_groupname)
     private EditText groupNameEt;
-    @ViewInject(R.id.iv_delete)
-    private ImageView deleteIv;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
 
@@ -38,10 +36,9 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_groupname);
         ViewUtils.inject(this);
-        deleteIv.setOnClickListener(this);
-        titleHeaderBar.getRightTextView().setText("保存");
+        titleHeaderBar.getTitleTextView().setText("设置群名称");
         titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!CommonUtils.isNetWorkConnected(mContext)){
@@ -59,7 +56,6 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
                 } catch (EaseMobException e) {
                     e.printStackTrace();
                 }
-
             }
         });
         initData();
@@ -81,10 +77,5 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_delete:
-                groupNameEt.setText("");
-                break;
-        }
     }
 }

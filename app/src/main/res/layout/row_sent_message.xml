@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dip"
             android:layout_marginTop="6dp"
+            android:lineSpacingExtra="3dp"
             android:gravity="right|center"
             android:autoLink="web"
             android:textColor="@color/base_color_white"

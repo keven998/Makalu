@@ -60,12 +60,15 @@ import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
+import com.easemob.EMCallBack;
+import com.easemob.EMValueCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -118,13 +121,27 @@ public class IMMainActivity extends ChatBaseActivity {
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment)
 				.commit();
+
+      EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+          @Override
+          public void onSuccess(List<EMGroup> emGroups) {
+              if(chatHistoryFragment!=null){
+                  chatHistoryFragment.refresh();
+              }
+          }
+
+          @Override
+          public void onError(int i, String s) {
+
+          }
+      });
         //网络更新好友列表
         getContactFromServer();
+
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
         mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-
 
 		// 注册一个接收消息的BroadcastReceiver
 		msgReceiver = new NewMessageBroadcastReceiver();
@@ -619,44 +636,38 @@ public class IMMainActivity extends ChatBaseActivity {
 
 		@Override
 		public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-//			boolean hasGroup = false;
-//			for(EMGroup group : EMGroupManager.getInstance().getAllGroups()){
-//				if(group.getGroupId().equals(groupId)){
-//					hasGroup = true;
-//					break;
-//				}
-//			}
-//			if(!hasGroup)
-//				return;
-//
-//			// 被邀请
-//			EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-//			msg.setChatType(ChatType.GroupChat);
-//			msg.setFrom(inviter);
-//			msg.setTo(groupId);
-//			msg.setMsgId(UUID.randomUUID().toString());
-//			msg.addBody(new TextMessageBody(inviter + "邀请你加入了群聊"));
-//			// 保存邀请消息
-//			EMChatManager.getInstance().saveMessage(msg);
-//			// 提醒新消息
-//			EMNotifier.getInstance(getApplicationContext()).notifyOnNewMsg();
-//
-//			runOnUiThread(new Runnable() {
-//				public void run() {
-//					updateUnreadLabel();
-//					// 刷新ui
-//					if (currentTabIndex == 0)
-//						chatHistoryFragment.refresh();
-//					if (CommonUtils.getTopActivity(IMMainActivity.this).equals(GroupsActivity.class.getName())) {
-//						GroupsActivity.instance.onResume();
-//					}
-//				}
-//			});
+            EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+                @Override
+                public void onSuccess(List<EMGroup> emGroups) {
+                    if(chatHistoryFragment!=null){
+                        chatHistoryFragment.refresh();
+                    }
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+            });
+
 
 		}
 
 		@Override
 		public void onInvitationAccpted(String groupId, String inviter, String reason) {
+            EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+                @Override
+                public void onSuccess(List<EMGroup> emGroups) {
+                    if(chatHistoryFragment!=null){
+                        chatHistoryFragment.refresh();
+                    }
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+            });
 
 		}
 

@@ -19,34 +19,78 @@
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
-            android:scaleType="fitXY" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/avatar_placeholder"  />
+
         <RelativeLayout
             android:id="@+id/rl_chatcontent"
-            android:layout_width="wrap_content"
-            android:maxWidth="225.0dip"
+            android:layout_width="185.0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg">
+            android:background="@drawable/chatto_taozi_bg">
             <TextView
                 android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center_vertical"
+                android:text="景点"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/base_color_white"/>
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="6dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="6dp"
+                android:scaleType="centerCrop"
+                android:layout_below="@id/tv_type"
+                />
             <TextView
                 android:id="@+id/tv_name"
+                android:layout_toLeftOf="@id/iv_image"
+                android:layout_marginTop="6dp"
                 android:layout_below="@id/tv_type"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:text="景点名称"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/base_text_color_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_attr"
+                android:layout_toLeftOf="@id/iv_image"
+                android:layout_below="@id/tv_name"
+                android:textSize="11sp"
+                android:layout_marginRight="8dp"
+                android:text="3小时"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/base_text_color_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_desc"
-                android:layout_below="@id/tv_name"
+                android:textSize="11sp"
+                android:layout_below="@id/iv_image"
+                android:textColor="@color/base_text_color_subtitle"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="6dp"
+                android:text="景点描述"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="4dp"
+                android:maxLines="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

@@ -26,18 +26,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupDetailsActivity extends ChatBaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
@@ -49,10 +60,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	
 //	private ExpandGridView userGridview;
 	private String groupId;
-	private ProgressBar loadingPB;
 	private Button exitBtn;
 	private Button deleteBtn;
 	private EMGroup group;
+    private TitleHeaderBar titleHeaderBar;
 //	private GridAdapter adapter;
 	private int referenceWidth;
 	private int referenceHeight;
@@ -80,9 +91,9 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_group_details);
 		instance = this;
+        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.title_bar);
 		clearAllHistory=(RelativeLayout) findViewById(R.id.clear_all_history);
 //		userGridview = (ExpandGridView) findViewById(R.id.gridview);
-		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
 
@@ -135,11 +146,30 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent(GroupDetailsActivity.this, AlertDialog.class);
-				intent.putExtra("cancel",true);
-				intent.putExtra("titleIsCancel", true);
-				intent.putExtra("msg","确定清空此群的聊天记录吗？");
-				startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
+                new MaterialDialog.Builder(GroupDetailsActivity.this)
+
+                        .title(null)
+                        .content("确定清空此群的聊天记录吗？")
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .autoDismiss(false)
+                        .positiveColor(getResources().getColor(R.color.app_theme_color))
+                        .negativeColor(getResources().getColor(R.color.app_theme_color))
+                        .callback(new MaterialDialog.Callback() {
+                            @Override
+                            public void onPositive(final MaterialDialog dialog) {
+                                View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                                dialog.setContentView(progressView);
+                                clearGroupHistory(dialog);
+
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
 			}
 		});
 		
@@ -158,20 +188,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 				addMembersToGroup(newmembers);
 
 				break;
-			case REQUEST_CODE_EXIT: // 退出群
-                DialogManager.getInstance().showProgressDialog(mContext,"正在退出群聊");
-				exitGrop();
-				break;
-			case REQUEST_CODE_EXIT_DELETE: // 解散群
-                DialogManager.getInstance().showProgressDialog(mContext,"正在解散群聊...");
-				deleteGrop();
-				break;
-			case REQUEST_CODE_CLEAR_ALL_HISTORY:
-				//清空此群聊的聊天记录
-                DialogManager.getInstance().showProgressDialog(mContext,"正在清空群消息...");
-				clearGroupHistory();
-				break;
-                case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
+           case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
                 group = EMGroupManager.getInstance().getGroup(groupId);
                 groupNameTv.setText(group.getGroupName());
                 break;
@@ -187,7 +204,30 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	 * @param view
 	 */
 	public void exitGroup(View view) {
-		startActivityForResult(new Intent(this, ExitGroupDialog.class), REQUEST_CODE_EXIT);
+        new MaterialDialog.Builder(this)
+
+                .title(null)
+                .content("退出后，将不再接收此群聊消息")
+                .positiveText("退出")
+                .negativeText("取消")
+                .autoDismiss(false)
+                .positiveColor(getResources().getColor(R.color.app_theme_color))
+                .negativeColor(getResources().getColor(R.color.app_theme_color))
+                .callback(new MaterialDialog.Callback() {
+                    @Override
+                    public void onPositive(final MaterialDialog dialog) {
+                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                        dialog.setContentView(progressView);
+                        exitGroup(dialog);
+
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
 
 	}
 
@@ -197,8 +237,30 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	 * @param view
 	 */
 	public void exitDeleteGroup(View view) {
-		startActivityForResult(new Intent(this, ExitGroupDialog.class).putExtra("deleteToast", getString(R.string.dissolution_group_hint)),
-				REQUEST_CODE_EXIT_DELETE);
+        new MaterialDialog.Builder(this)
+
+                .title(null)
+                .content(getString(R.string.dissolution_group_hint))
+                .positiveText("退出")
+                .negativeText("取消")
+                .autoDismiss(false)
+                .positiveColor(getResources().getColor(R.color.app_theme_color))
+                .negativeColor(getResources().getColor(R.color.app_theme_color))
+                .callback(new MaterialDialog.Callback() {
+                    @Override
+                    public void onPositive(final MaterialDialog dialog) {
+                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                        dialog.setContentView(progressView);
+                        deleteGrop(dialog);
+
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
 
 	}
 
@@ -208,11 +270,11 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	/**
 	 * 清空群聊天记录
 	 */
-	public void clearGroupHistory(){
+	public void clearGroupHistory(MaterialDialog dialog){
 		
 		
 		EMChatManager.getInstance().clearConversation(group.getGroupId());
-        DialogManager.getInstance().dissMissProgressDialog();
+        dialog.dismiss();
 //		adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 		
 		
@@ -224,7 +286,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	 * 退出群组
 	 * 
 	 */
-	private void exitGrop() {
+	public void exitGroup(final MaterialDialog dialog) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -247,7 +309,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                             }
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    dialog.dismiss();
                                     setResult(RESULT_OK);
                                     finish();
                                     ChatActivity.activityInstance.finish();
@@ -257,7 +319,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                         @Override
                         public void onError(int i, String s) {
-
+                            dialog.dismiss();
                         }
 
                         @Override
@@ -269,7 +331,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            dialog.dismiss();
 							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -282,14 +344,14 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	 * 解散群组
 	 * 
 	 */
-	private void deleteGrop() {
+	private void deleteGrop(final MaterialDialog dialog) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
 					EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
 					runOnUiThread(new Runnable() {
 						public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            dialog.dismiss();
 							setResult(RESULT_OK);
 							finish();
 							ChatActivity.activityInstance.finish();
@@ -298,7 +360,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            dialog.dismiss();
 							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -327,7 +389,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					runOnUiThread(new Runnable() {
 						public void run() {
 //							adapter.notifyDataSetChanged();
-							((TextView) findViewById(R.id.group_name)).setText(group.getGroupName()+"("+group.getAffiliationsCount()+"人)");
                             DialogManager.getInstance().dissMissProgressDialog();
 						}
 					});
@@ -361,8 +422,11 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     startActivityForResult(intent,REQUEST_CODE_MODIFY_GROUP_NAME);
                 }
             });
+        }else{
+            findViewById(R.id.iv_arr).setVisibility(View.GONE);
         }
-        ((TextView) findViewById(R.id.group_name)).setText("聊天信息"+"("+group.getAffiliationsCount()+"人)");
+        titleHeaderBar.getTitleTextView().setText("群聊设置");
+        titleHeaderBar.enableBackKey(true);
         groupNameTv.setText(group.getGroupName());
         //update block
         System.out.println("group msg is blocked:" + group.getMsgBlocked());
@@ -385,19 +449,13 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					
 					runOnUiThread(new Runnable() {
 						public void run() {
-							((TextView) findViewById(R.id.group_name)).setText(group.getGroupName()+"("+group.getAffiliationsCount()+"人)");
-							loadingPB.setVisibility(View.INVISIBLE);
                             bindView();
 
 						}
 					});
 
 				} catch (Exception e) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							loadingPB.setVisibility(View.INVISIBLE);
-						}
-					});
+                    e.printStackTrace();
 				}
 			}
 		}).start();
@@ -433,7 +491,14 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 			if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
 				System.out.println("change to unblock group msg");
 				try {
-				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
+//				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
+                    EMChatOptions options = new EMChatOptions();
+                    List<String> notReceiveNotifyGroups =options.getReceiveNoNotifyGroup();
+                    if(notReceiveNotifyGroups==null){
+                        notReceiveNotifyGroups=new ArrayList<String>();
+                    }
+                    notReceiveNotifyGroups.remove(groupId);
+                    options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
 				    iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
 					iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 				} catch (Exception e) {
@@ -443,7 +508,14 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 			} else {
 				System.out.println("change to block group msg");
 				try {
-				    EMGroupManager.getInstance().blockGroupMessage(groupId);
+//				    EMGroupManager.getInstance().blockGroupMessage(groupId);
+                    EMChatOptions options = new EMChatOptions();
+                    List<String> notReceiveNotifyGroups =options.getReceiveNoNotifyGroup();
+                    if(notReceiveNotifyGroups==null){
+                        notReceiveNotifyGroups=new ArrayList<String>();
+                    }
+                    notReceiveNotifyGroups.add(groupId);
+                    options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
 				    iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
 					iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
 				} catch (Exception e) {
