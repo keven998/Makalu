@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:textColor="@color/tab_strategy_color"
-    android:textSize="14sp" />
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white">
+    <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/radio_colors"
+        android:background="@color/base_color_white"
+        android:textSize="15sp" />
+
+    <CheckedTextView
+        android:layout_width="80dp"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/checker_tab_indicator"/>
+
+</FrameLayout>

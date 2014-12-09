@@ -28,7 +28,7 @@ public class UILUtils {
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
 //				.decodingOptions(D)
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(3)))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
         return picOptions;

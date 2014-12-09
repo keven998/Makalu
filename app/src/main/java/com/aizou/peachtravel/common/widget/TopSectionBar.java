@@ -109,28 +109,21 @@ public class TopSectionBar extends Gallery {
 //            }
             ViewGroup ctView = (ViewGroup)view;
             if (mTempView != null && mTempView != ctView) {
-                AutoResizeTextView textView = new AutoResizeTextView(getContext());
-                textView.setGravity(Gravity.CENTER);
-                textView.setMaxLines(1);
-                textView.setTextSize(textNormalSize);
-                textView.setEnableSizeCache(false);
+                AutoResizeTextView textView = (AutoResizeTextView) mTempView.getChildAt(0);
                 textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
-                textView.setBackgroundResource(R.drawable.alpha_index_selector);
                 textView.setTextColor(Color.WHITE);
-                textView.setText(((AutoResizeTextView)mTempView.getChildAt(0)).getText());
+                textView.setTextSize(textNormalSize);
+                textView.setChecked(false);
                 mTempView.removeAllViews();
                 mTempView.addView(textView);
             }
+
             mTempView = ctView;
-            AutoResizeTextView textView = new AutoResizeTextView(getContext());
-            textView.setGravity(Gravity.CENTER);
-            textView.setMaxLines(1);
-            textView.setTextSize(textSelectSize);
-            textView.setEnableSizeCache(false);
+
+            AutoResizeTextView textView = (AutoResizeTextView) ctView.getChildAt(0);
             textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
-            textView.setBackgroundResource(R.drawable.alpha_index_selector);
             textView.setTextColor(Color.WHITE);
-            textView.setText(((AutoResizeTextView) ctView.getChildAt(0)).getText());
+            textView.setTextSize(textSelectSize);
             textView.setChecked(true);
             ctView.removeAllViews();
             ctView.addView(textView);

@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
@@ -11,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,7 +33,10 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.List;
 
@@ -78,6 +83,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             }
         });
     }
+
     @Override
     public void onAttach(Activity activity) {
         try {
@@ -87,6 +93,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         }
         super.onAttach(activity);
     }
+
     private void bindOutView(List<CountryBean> result) {
         outCountryAdapter.getDataList().addAll(result);
         outCountryAdapter.notifyDataSetChanged();
@@ -126,7 +133,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         private ImageView imageIv;
         private FlowLayout cityListFl;
         private View contentView;
-
+        DisplayImageOptions picOptions;
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -139,10 +146,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             imageIv = (ImageView) headRl.findViewById(R.id.iv_country);
             cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
             int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
-            int height = width * 220 / 600;
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    width, height);
+            int height = width * 240 / 640;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
             imageIv.setLayoutParams(lp);
+
+            picOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .showImageForEmptyUri(R.drawable.ic_launcher)
+                    .showImageOnFail(R.drawable.ic_launcher)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                    .resetViewBeforeLoading(true)
+//				.decodingOptions(D)
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
             return contentView;
         }
 
@@ -158,31 +175,28 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //                    }
 //                }
 //            });
-            nameTv.setText("");
             nameTv.setText(itemData.zhName);
-            SpannableString impress = new SpannableString("|"+itemData.desc);
-            impress.setSpan(
-                    new ForegroundColorSpan(getResources().getColor(
-                            R.color.route_price_color)), 0, impress.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            nameTv.append(impress);
-            if(itemData.image!=null&&itemData.image.size()>0)
-            ImageLoader.getInstance().displayImage(itemData.image.get(0).url, imageIv, UILUtils.getRadiusOption());
+//            SpannableString impress = new SpannableString("|"+itemData.desc);
+//            impress.setSpan(
+//                    new ForegroundColorSpan(getResources().getColor(
+//                            R.color.route_price_color)), 0, impress.length(),
+//                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            nameTv.append(impress);
+            if(itemData.image!=null&&itemData.image.size()>0) {
+                ImageLoader.getInstance().displayImage(itemData.image.get(0).url, imageIv, picOptions);
+            } else {
+                imageIv.setImageResource(R.drawable.ic_launcher);
+            }
+            descTv.setText(itemData.desc);
+            descTv.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
             cityListFl.removeAllViews();
-            int i=0;
             for(final LocBean bean:itemData.destinations){
                 View view = View.inflate(getActivity(),R.layout.dest_select_city,null);
-                TextView cityNameTv = (TextView) view.findViewById(R.id.tv_city_name);
+                CheckedTextView cityNameTv = (CheckedTextView) view.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
-                ImageView addIv = (ImageView) view.findViewById(R.id.iv_add);
-                if(bean.isAdded){
-                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
-                }else{
-                    addIv.setImageResource(R.drawable.ic_view_add);
-                }
-                addIv.setOnClickListener(new View.OnClickListener() {
+                cityNameTv.setChecked(bean.isAdded);
+                cityNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         bean.isAdded=!bean.isAdded;
@@ -196,9 +210,28 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                         outCountryAdapter.notifyDataSetChanged();
                     }
                 });
+//                ImageView addIv = (ImageView) view.findViewById(R.id.iv_add);
+//                if(bean.isAdded){
+//                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
+//                }else{
+//                    addIv.setImageResource(R.drawable.ic_view_add);
+//                }
+//                addIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        bean.isAdded=!bean.isAdded;
+//                        if(mOnDestActionListener!=null){
+//                            if(bean.isAdded){
+//                                mOnDestActionListener.onDestAdded(bean);
+//                            }else{
+//                                mOnDestActionListener.onDestRemoved(bean);
+//                            }
+//                        }
+//                        outCountryAdapter.notifyDataSetChanged();
+//                    }
+//                });
 
                 cityListFl.addView(view);
-                i++;
             }
             cityListFl.requestLayout();
 
