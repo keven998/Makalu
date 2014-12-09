@@ -8,7 +8,8 @@ public class ExtMessageBean {
         public String image;
         public String name;
         public String desc;
-        public String costTime;
-        public String star;
-        public String price;
+        public String timeCost="";
+        public float star;
+        public String price="";
+        public String address;
 }

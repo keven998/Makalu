@@ -41,10 +41,9 @@
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
+            android:lineSpacingExtra="3dp"
             android:layout_marginTop="3dp"
             android:autoLink="web"
-            android:text="我是你们滴地点  "
             android:textColor="@color/base_text_color_subtitle"
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@drawable/chatfrom_bg_normal" />

@@ -4,12 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud" >
-
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
-
     <LinearLayout
         android:id="@+id/bar_bottom"
         android:layout_width="match_parent"
@@ -292,6 +286,8 @@
         </LinearLayout>
     </LinearLayout>
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -345,16 +341,15 @@
                 android:textSize="10sp" />
         </RelativeLayout>
     </RelativeLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_group_members"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:padding="10dp"
-        android:background="@color/base_color_white"
+        android:background="#eeffffff"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_below="@id/top_bar"
+        android:visibility="invisible"
+        android:layout_below="@id/title_bar"
         >
         <LinearLayout
             android:layout_width="fill_parent"
@@ -363,15 +358,13 @@
         <GridView
             android:id="@+id/gv_members"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:background="@drawable/app_pref_bg"
-            android:columnWidth="40dp"
             android:gravity="start"
-            android:horizontalSpacing="6dp"
+            android:horizontalSpacing="8dp"
+            android:numColumns="auto_fit"
+            android:columnWidth="40dp"
             android:listSelector="@android:color/transparent"
-            android:numColumns="4"
             android:verticalSpacing="10dp"
             />
             <ImageView
@@ -384,7 +377,7 @@
                 android:id="@+id/iv_del_member"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="7dp"
                 android:background="@drawable/smiley_minus_btn"/>
 
 
@@ -394,18 +387,19 @@
             android:id="@+id/iv_close"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:layout_gravity="right"
-            android:background="@color/main_color"/>
+            android:src="@drawable/ic_group_unexpand"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="centerInside"
 
-        </LinearLayout>
+            />
 
-    <ImageView
-        android:id="@+id/iv_expend"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/top_bar"
-        android:visibility="gone"
-        android:layout_alignParentRight="true"
-        android:background="@color/main_color"/>
+        </RelativeLayout>
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"/>
+
+
 
 </RelativeLayout>

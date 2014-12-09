@@ -154,27 +154,7 @@ public class ContactlistFragment extends Fragment {
 			refresh();
 		}
 
-        if (contactList.size() <= 1 && emptyView == null) {
-            emptyView = getView().findViewById(R.id.empty_view);
-            emptyView.setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), AddContactActivity.class));
-                }
-            });
-        } else if (contactList.size() > 1) {
-            if (emptyView != null) {
-                emptyView.setVisibility(View.GONE);
-                emptyView = null;
-            }
 
-            if (contactList.size() > 15) {//magic number for show indexing
-                enableIndexBar(true);
-            } else {
-                enableIndexBar(false);
-            }
-        }
 	}
 
     private void enableIndexBar(boolean enable) {
@@ -241,6 +221,27 @@ public class ContactlistFragment extends Fragment {
 				public void run() {
 					getContactList();
 					adapter.notifyDataSetChanged();
+                    if (contactList.size() <= 1 && emptyView == null) {
+                        emptyView = getView().findViewById(R.id.empty_view);
+                        emptyView.setVisibility(View.VISIBLE);
+                        getView().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(getActivity(), AddContactActivity.class));
+                            }
+                        });
+                    } else if (contactList.size() > 1) {
+                        if (emptyView != null) {
+                            emptyView.setVisibility(View.GONE);
+                            emptyView = null;
+                        }
+
+                        if (contactList.size() > 15) {//magic number for show indexing
+                            enableIndexBar(true);
+                        } else {
+                            enableIndexBar(false);
+                        }
+                    }
 
 				}
 			});
@@ -271,7 +272,11 @@ public class ContactlistFragment extends Fragment {
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
-		contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
+        if(user!=null){
+            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+        }
+
 
 	}
 }

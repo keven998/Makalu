@@ -43,6 +43,7 @@ import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,6 +51,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -67,6 +71,7 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -109,7 +114,10 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -171,10 +179,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	private ViewPager expressionViewpager;
 	private LinearLayout expressionContainer;
 	private LinearLayout btnContainer;
-    private LinearLayout membersLl;
+    private RelativeLayout membersLl;
     private GridView memberGv;
     private ImageView addIv,deleteIv;
-    private ImageView closeIv,expandIv;
+    private ImageView closeIv;
 //	private ImageView locationImgview;
 	private View more;
 	private int position;
@@ -197,6 +205,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	static int resendPos;
 
 	private GroupListener groupListener;
+
+    //group动画相关
+    private boolean isExpanded =false;
+    private boolean isInAnimation =false;
 
 	private ImageView iv_emoticons_normal;
 	private ImageView iv_emoticons_checked;
@@ -333,12 +345,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			}
 		});
         //群成员
-        membersLl = (LinearLayout) findViewById(R.id.ll_group_members);
+        membersLl = (RelativeLayout) findViewById(R.id.ll_group_members);
         memberGv = (GridView) findViewById(R.id.gv_members);
         addIv = (ImageView) findViewById(R.id.iv_add_member);
         deleteIv = (ImageView) findViewById(R.id.iv_del_member);
         closeIv = (ImageView) findViewById(R.id.iv_close);
-        expandIv = (ImageView) findViewById(R.id.iv_expend);
+//        expandIv = (ImageView) findViewById(R.id.iv_expend);
 
 
 	}
@@ -369,24 +381,45 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
     }
 
     private void setUpGroupMember(){
-        if(membersLl.getVisibility()==View.VISIBLE){
-            expandIv.setVisibility(View.GONE);
+        final Drawable expanddrawable = getResources().getDrawable(R.drawable.ic_group_expand);
+        final Drawable unexpanddrawable = getResources().getDrawable(R.drawable.ic_group_unexpand);
+        expanddrawable.setBounds(0,0,expanddrawable.getMinimumWidth(),expanddrawable.getMinimumHeight());
+        unexpanddrawable.setBounds(0, 0, unexpanddrawable.getMinimumWidth(), unexpanddrawable.getMinimumHeight());
+        titleHeaderBar.getTitleTextView().setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        titleHeaderBar.getTitleTextView().setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        titleHeaderBar.getTitleTextView().setMaxWidth(LocalDisplay.dp2px(200));
+        if(isExpanded){
+            titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null, unexpanddrawable);
         }else{
-            expandIv.setVisibility(View.VISIBLE);
+            titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null, expanddrawable);
         }
-        expandIv.setOnClickListener(new OnClickListener() {
+        titleHeaderBar.getTitleTextView().setCompoundDrawablePadding(LocalDisplay.dp2px(4));
+        titleHeaderBar.getTitleTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandIv.setVisibility(View.INVISIBLE);
-                membersLl.setVisibility(View.VISIBLE);
+                if(isInAnimation)
+                    return;
+
+                if (isExpanded) {
+                    unexpandMemberLl();
+                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
+                } else {
+                    expandMemberLl();
+                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null,  null,unexpanddrawable);
+                }
+
             }
         });
         closeIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isInAnimation){
+                    unexpandMemberLl();
+                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
+                }
 
-                membersLl.setVisibility(View.GONE);
-                expandIv.setVisibility(View.VISIBLE);
+
+//                expandIv.setVisibility(View.VISIBLE);
             }
         });
         memberAdapter = new ListViewDataAdapter<IMUser>(new ViewHolderCreator<IMUser>() {
@@ -396,7 +429,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             }
         });
         memberGv.setAdapter(memberAdapter);
-        group = EMGroupManager.getInstance().getGroup(toChatUsername);
+        titleHeaderBar.setRightOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,GroupDetailsActivity.class );
+                intent.putExtra("groupId",group.getGroupId());
+                startActivity(intent);
+
+            }
+        });
         final List<String> members=group.getMembers();
         final List<String> unkownMembers= new ArrayList<String>();
 
@@ -506,12 +547,75 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             deleteIv.setVisibility(View.GONE);
         }
 
+
+
+
+    }
+    private void expandMemberLl(){
+        animationMembersLl(-membersLl.getMeasuredHeight(),0);
+    }
+    private void unexpandMemberLl(){
+        animationMembersLl(0,-membersLl.getMeasuredHeight());
+    }
+
+    private void animationMembersLl(final float fromYDelta, final float toYDelta){
+        TranslateAnimation animation = new TranslateAnimation(0, 0, fromYDelta, toYDelta);
+        animation.setInterpolator(new OvershootInterpolator());
+        animation.setDuration(200);
+        animation.setStartOffset(0);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                membersLl.setVisibility(View.VISIBLE);
+                isInAnimation=true;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                int left = membersLl.getLeft();
+                int top = membersLl.getTop()+(int)(toYDelta-fromYDelta);
+                int right = membersLl.getRight();
+                int bottom = membersLl.getBottom();
+                int width = membersLl.getWidth();
+                int height = membersLl.getHeight();
+                if(fromYDelta<toYDelta){
+                    membersLl.setVisibility(View.VISIBLE);
+                }else{
+                    membersLl.setVisibility(View.GONE);
+                }
+                membersLl.clearAnimation();
+                isExpanded = !isExpanded;
+                isInAnimation =false;
+            }
+        });
+        membersLl.startAnimation(animation);
     }
 
 
     private class MemberViewHolder extends ViewHolderBase<IMUser> {
         private View contentView;
         private ImageView avatarIv,removeIv;
+        private TextView nicknameTv;
+        private DisplayImageOptions picOptions;
+        public MemberViewHolder (){
+            super();
+            picOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .showImageOnLoading(R.drawable.avatar_placeholder)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
+//				.decodingOptions(D)
+//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+        }
 
 
 
@@ -520,26 +624,27 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             contentView = layoutInflater.inflate(R.layout.grid, null);
             avatarIv = (ImageView) contentView.findViewById(R.id.iv_avatar);
             removeIv = (ImageView) contentView.findViewById(R.id.badge_delete);
+            nicknameTv = (TextView) contentView.findViewById(R.id.tv_nickname);
             return contentView;
         }
 
         @Override
         public void showData(int position, final IMUser itemData) {
             avatarIv.setImageResource(R.drawable.avatar_placeholder);
-            ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv);
-            if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
-                if(isInDeleteMode){
-                    removeIv.setVisibility(View.VISIBLE);
-                    contentView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            deleteMembersFromGroup(itemData);
-                        }
-                    });
-                }else{
-                    removeIv.setVisibility(View.INVISIBLE);
+            nicknameTv.setText(itemData.getNick());
+            ImageLoader.getInstance().displayImage(itemData.getAvatar(),avatarIv,picOptions);
+            if(isInDeleteMode){
+                if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
+                        removeIv.setVisibility(View.VISIBLE);
+                        contentView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                deleteMembersFromGroup(itemData);
+                            }
+                        });
                 }
             }else{
+                removeIv.setVisibility(View.INVISIBLE);
                 contentView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -665,16 +770,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			// EMChatManager.getInstance().getConversation(toChatUsername,false);
 		} else {
 			// 群聊
+            toChatUsername = getIntent().getStringExtra("groupId");
             titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
-            titleHeaderBar.setRightOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-			toChatUsername = getIntent().getStringExtra("groupId");
-            setUpGroupMember();
+            group = EMGroupManager.getInstance().getGroup(toChatUsername);
+            if(group!=null){
+                setUpGroupMember();
+            }
             updateGroup();
+
+
 
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,true);
@@ -937,7 +1041,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 contentJson.put("id","1");
                 contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
                 contentJson.put("name","我的攻略");
-                contentJson.put("desc","我的攻略描述");
+                contentJson.put("desc","北京-天津-石家庄");
+                contentJson.put("timeCost","5天");
                 sendText(contentJson.toString(), Constant.ExtType.GUIDE);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -960,7 +1065,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 contentJson.put("id","1");
                 contentJson.put("desc","我的景点描述");
                 contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("costTime","3小时");
+                contentJson.put("timeCost","3小时");
                 contentJson.put("name","景点");
                 sendText(contentJson.toString(), Constant.ExtType.SPOT);
             } catch (JSONException e) {

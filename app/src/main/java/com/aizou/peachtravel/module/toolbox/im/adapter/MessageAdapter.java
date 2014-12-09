@@ -49,6 +49,7 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtMessageBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.task.LoadImageTask;
 import com.aizou.peachtravel.common.task.LoadVideoImageTask;
@@ -63,7 +64,9 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.toolbox.im.AlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
+import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContextMenu;
+import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.ShowBigImage;
 import com.aizou.peachtravel.module.toolbox.im.ShowNormalFileActivity;
 import com.aizou.peachtravel.module.toolbox.im.ShowVideoActivity;
@@ -312,31 +315,32 @@ public class MessageAdapter extends BaseAdapter {
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     // 这里是文字内容
-
                     // 语音通话
                     if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                         holder.iv = (ImageView) convertView.findViewById(R.id.iv_call_icon);
                         holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     } else {
-
                         int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
                         holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                         holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
                         holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
                         if (extType == 0) {
                             holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
-                            holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                         } else if (extType == Constant.ExtType.GUIDE) {
+                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.CITY) {
                             holder.iv_city_pic = (ImageView) convertView.findViewById(R.id.iv_city_pic);
                         } else if (extType == Constant.ExtType.TRAVELS) {
                             holder.iv_travels = (ImageView) convertView.findViewById(R.id.iv_travels);
                         } else if (extType == Constant.ExtType.SPOT) {
-                            holder.iv_spot = (ImageView) convertView.findViewById(R.id.iv_spot);
-                            holder.tv_costTime = (TextView) convertView.findViewById(R.id.tv_cost_time);
+                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
-                            holder.iv_fsh = (ImageView) convertView.findViewById(R.id.iv_fsh);
+                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.TIPS) {
                             holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
                         }
@@ -588,17 +592,35 @@ public class MessageAdapter extends BaseAdapter {
             });
 
         } else {
-            // 长按头像，移入黑名单
-            holder.head_iv.setOnLongClickListener(new OnLongClickListener() {
+            // 点击头像进入详情
+            holder.head_iv.setOnClickListener(new OnClickListener() {
 
                 @Override
-                public boolean onLongClick(View v) {
-                    Intent intent = new Intent(activity, AlertDialog.class);
-                    intent.putExtra("msg", "移入到黑名单？");
-                    intent.putExtra("cancel", true);
-                    intent.putExtra("position", position);
-                    activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_ADD_TO_BLACKLIST);
-                    return true;
+                public void onClick(View v) {
+                    if (IMUserRepository.isMyFriend(context, message.getFrom())) {
+                        Intent intent = new Intent(context, ContactDetailActivity.class);
+                        intent.putExtra("userId", message.getFrom());
+                        context.startActivity(intent);
+                    } else {
+                        IMUser itemData=IMUserRepository.getContactByUserName(context,message.getFrom());
+                        PeachUser user = new PeachUser();
+                        if(itemData!=null){
+                            user.nickName = itemData.getNick();
+                            user.userId = itemData.getUserId();
+                            user.easemobUser = itemData.getUsername();
+                            user.avatar = itemData.getAvatar();
+                            user.signature = itemData.getSignature();
+                            user.gender = itemData.getGender();
+                            user.memo = itemData.getMemo();
+                        }else{
+                           user.easemobUser =message.getFrom();
+                        }
+                        Intent intent = new Intent(context, SeachContactDetailActivity.class);
+                        intent.putExtra("user", user);
+                        context.startActivity(intent);
+
+
+                    }
                 }
             });
         }
@@ -664,32 +686,38 @@ public class MessageAdapter extends BaseAdapter {
 
         if (extType == Constant.ExtType.GUIDE) {
             holder.tv_desc.setText(bean.desc);
+            holder.tv_attr.setText(bean.timeCost);
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.tv_type.setText("攻略");
         } else if (extType == Constant.ExtType.CITY) {
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_city_pic, UILUtils.getDefaultOption());
+            holder.tv_name.setText(bean.name);
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_city_pic, UILUtils.getRadiusOption(8));
         } else if (extType == Constant.ExtType.TRAVELS) {
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_travels, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_travels, UILUtils.getRadiusOption(3));
         } else if (extType == Constant.ExtType.SPOT) {
             holder.tv_desc.setText(bean.desc);
-            holder.tv_costTime.setText(bean.costTime);
+            holder.tv_attr.setText(bean.timeCost);
             holder.tv_type.setText("景点");
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_spot, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
             switch (extType) {
                 case Constant.ExtType.FOOD:
                     holder.tv_type.setText("美食");
+                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 "+bean.price);
                     break;
                 case Constant.ExtType.HOTEL:
                     holder.tv_type.setText("酒店");
+                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 "+bean.price);
                     break;
                 case Constant.ExtType.SHOPPING:
-                    holder.tv_type.setText("酒店");
+                    holder.tv_type.setText("购物");
+                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 ");
                     break;
             }
-            holder.tv_desc.setText(bean.desc);
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_fsh, UILUtils.getDefaultOption());
+            holder.tv_desc.setText(bean.address);
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
         }
         // 设置长按事件监听
         holder.rl_content.setOnClickListener(new OnClickListener() {
@@ -1532,9 +1560,9 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_userId;
         TextView tv_type;
         TextView tv_name;
+        TextView tv_attr;
         TextView tv_desc;
-        TextView tv_costTime;
-        ImageView iv_city_pic, iv_fsh, iv_spot, iv_travels;
+        ImageView iv_city_pic, iv_image, iv_travels;
         RelativeLayout rl_content;
         TextView tv_tips;
         ImageView playBtn;
