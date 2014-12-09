@@ -46,10 +46,10 @@
             android:layout_gravity="bottom"
             android:background="@drawable/select_city_container_bg"></View>
 
-        <HorizontalScrollView
+        <HorizontalScrollView android:id="@+id/scroll_panel"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:layout_marginRight="72dp"
+            android:layout_marginRight="80dp"
             android:layout_gravity="bottom"
             android:scrollbars="none">
 

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -58,26 +60,23 @@ public class RouteDayFragment extends PeachBaseFragment {
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
     @InjectView(R.id.edit_btn)
-    Button mEditBtn;
+    CheckedTextView mEditBtn;
     View addDayFooter;
     View lineLl;
     Button addDayBtn;
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
-        addDayFooter = View.inflate(getActivity(),R.layout.footer_route_day_add_day,null);
+        addDayFooter = View.inflate(getActivity(),R.layout.footer_route_day_add_day, null);
         addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
         lineLl = addDayFooter.findViewById(R.id.ll_line);
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
-
     }
+
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary){
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for(int i=0;i< day;i++){
@@ -107,11 +106,13 @@ public class RouteDayFragment extends PeachBaseFragment {
             @Override
             public void onClick(View v) {
                 routeDayAdpater.isEditableMode =!routeDayAdpater.isEditableMode;
-                if(routeDayAdpater.isEditableMode){
+                if (routeDayAdpater.isEditableMode) {
+                    mEditBtn.setChecked(true);
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     //todo:保存路线
+                    mEditBtn.setChecked(false);
                     lineLl.setVisibility(View.GONE);
                     addDayFooter.setVisibility(View.INVISIBLE);
                 }
@@ -124,6 +125,12 @@ public class RouteDayFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 routeDayMap.add(new ArrayList<PoiDetailBean>());
                 routeDayAdpater.notifyDataSetChanged();
+                mEditDslv.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
+                    }
+                }, 50);
             }
         });
     }
@@ -145,8 +152,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         private RouteDayAdapter mAdapter;
         DragSortListView mDslv;
 
-        public SectionController(DragSortListView dslv,
-                                 RouteDayAdapter adapter) {
+        public SectionController(DragSortListView dslv, RouteDayAdapter adapter) {
             super(dslv, R.id.drag_handle, DragSortController.ON_DOWN, 0);
             setRemoveEnabled(false);
             mDslv = dslv;
@@ -168,8 +174,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         private int origHeight = -1;
 
         @Override
-        public void onDragFloatView(View floatView, Point floatPoint,
-                                    Point touchPoint) {
+        public void onDragFloatView(View floatView, Point floatPoint, Point touchPoint) {
             // final int first = mDslv.getFirstVisiblePosition();
             final int lvDivHeight = mDslv.getDividerHeight();
 
@@ -186,6 +191,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     floatPoint.y = limit;
                 }
             } else {
+
             }
         }
 
@@ -195,6 +201,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
 
     }
+
     public class RouteDayAdapter extends BaseSectionAdapter implements
             DragSortListView.DropListener{
         public static final int SPOT=0;
@@ -253,7 +260,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
                         holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
                         holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
                         holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
@@ -263,7 +270,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                        holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
                         holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                         holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
                         holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
@@ -279,7 +286,6 @@ public class RouteDayFragment extends PeachBaseFragment {
             final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
             switch (type){
                 case SPOT:
-
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
@@ -332,14 +338,15 @@ public class RouteDayFragment extends PeachBaseFragment {
                         }
                     });
 
-
                     break;
+
                 case POI:
 
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
                     holder.poiRating.setRating(poiDetailBean.rating);
+
                     holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
@@ -349,7 +356,6 @@ public class RouteDayFragment extends PeachBaseFragment {
                             @Override
                             public void onClick(View v) {
                                 new MaterialDialog.Builder(getActivity())
-
                                         .title(null)
                                         .content("确定删除")
                                         .theme(Theme.LIGHT)  // the default is light, so you don't need this line
@@ -438,9 +444,9 @@ public class RouteDayFragment extends PeachBaseFragment {
                     }
                 }
 
-                holder.dayTv.setText("D"+(section+1)+"-"+citySet.toString());
+                holder.dayTv.setText("D" + (section+1) + "  " + citySet.toString());
             }else{
-                holder.dayTv.setText("D"+(section+1)+"-（未安排）");
+                holder.dayTv.setText("D" + (section+1) + "  未安排");
                 if(isEditableMode){
                     holder.nullLl.setVisibility(View.GONE);
                 }else{
@@ -526,6 +532,7 @@ public class RouteDayFragment extends PeachBaseFragment {
             notifyDataSetChanged();
 
         }
+
         @Override
         public boolean isEnabled(int position) {
 
@@ -539,14 +546,15 @@ public class RouteDayFragment extends PeachBaseFragment {
         private class ItemViewHolder {
             public LinearLayout lineLl;
             public ImageView deleteIv, dragHandleIv;
-            public TextView nearByTv;
+            public Button nearByTv;
             public ImageView poiImageIv, spotImageIv;
             public TextView poiNameTv, spotNameTv;
             public TextView poiAddressTv, spotCostTimeTv;
             public TextView poiPriceTv;
             public RatingBar poiRating;
         }
-        private class HeaderViewHolder{
+
+        private class HeaderViewHolder {
             public LinearLayout lineLl;
             public LinearLayout nullLl;
             public View topLineVw;
@@ -606,7 +614,6 @@ public class RouteDayFragment extends PeachBaseFragment {
                 @Override
                 public void onClick(View view) {
                     new MaterialDialog.Builder(getActivity())
-
                             .title(null)
                             .content("确定删除")
                             .theme(Theme.LIGHT)  // the default is light, so you don't need this line
@@ -633,287 +640,6 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
     }
 
-
-
-
-//    public class DragAdapter extends BaseAdapter implements
-//            DragSortListView.DropListener {
-//        public Context context;
-//        public List<RouteDayDragBean> dragBeanList;
-//        public boolean isEditableMode;
-//
-//        public DragAdapter(Context context) {
-//            this.context = context;
-//            dragBeanList = new ArrayList<RouteDayDragBean>();
-//            resizeData();
-//
-//        }
-//
-//        public void resizeData() {
-//            for (int i = 0; i < 10; i++) {
-//                RouteDayDragBean bean;
-//                if (i == 0 || i == 5) {
-//                    bean = new RouteDayDragBean();
-//                    bean.type = RouteDayDragBean.DIV;
-//                    bean.day = "DAY---";
-//                } else if (i == 2 || i == 6) {
-//                    bean = new RouteDayDragBean();
-//                    bean.type = RouteDayDragBean.POI;
-//                    bean.address = "海淀图书城";
-//                    bean.name = "3W咖啡厅";
-//                    bean.city = "北京";
-//                    bean.price = "100/人";
-//                    bean.rating = 3;
-//                    bean.image = "http://img0.bdstatic.com/img/image/shouye/mnqz-12246357954.jpg";
-//                } else {
-//                    bean = new RouteDayDragBean();
-//                    bean.type = RouteDayDragBean.SPOT;
-//                    bean.address = "天安门";
-//                    bean.name = "故宫";
-//                    bean.city = "北京";
-//                    bean.costTime = "半天";
-//                    bean.image = "http://c.hiphotos.baidu.com/image/h%3D360/sign=52092c3e710e0cf3bff748fd3a46f23d/adaf2edda3cc7cd94f4bb5f53a01213fb80e91bc.jpg";
-//                }
-//                dragBeanList.add(bean);
-//            }
-//
-//        }
-//
-//
-//        @Override
-//        public int getCount() {
-//            return dragBeanList.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return dragBeanList.get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public int getViewTypeCount() {
-//            return 3;
-//        }
-//
-//        @Override
-//        public int getItemViewType(int position) {
-//            return dragBeanList.get(position).type;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            int type = getItemViewType(position);
-//            ViewHolder holder = null;
-//            if (convertView == null) {
-//                holder = new ViewHolder();
-//                switch (type) {
-//                    case RouteDayDragBean.DIV:
-//                        convertView = View.inflate(context, R.layout.row_drag_div, null);
-//                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-//                        holder.topLineVw = convertView.findViewById(R.id.line_top);
-//                        holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
-//                        holder.menuIv = (ImageView) convertView.findViewById(R.id.iv_menu);
-//                        break;
-//                    case RouteDayDragBean.SPOT:
-//                        convertView = View.inflate(context, R.layout.row_routeday_spot, null);
-//                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-//                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
-//                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-//                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
-//                        holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
-//                        holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
-//                        holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
-//                        break;
-//                    case RouteDayDragBean.POI:
-//                        convertView = View.inflate(context, R.layout.row_routeday_poi, null);
-//                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-//                        holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
-//                        holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-//                        holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
-//                        holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
-//                        holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
-//                        holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
-//                        holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
-//                        holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
-//                        break;
-//                }
-//                convertView.setTag(holder);
-//            } else {
-//                holder = (ViewHolder) convertView.getTag();
-//            }
-//            RouteDayDragBean dragBean = dragBeanList.get(position);
-//            if(isEditableMode){
-//                holder.lineLl.setVisibility(View.GONE);
-//            }else{
-//                holder.lineLl.setVisibility(View.VISIBLE);
-//            }
-//            switch (dragBean.type) {
-//                case RouteDayDragBean.DIV:
-//                    if(position==0){
-//                        holder.topLineVw.setVisibility(View.INVISIBLE);
-//                    }else{
-//                        holder.topLineVw.setVisibility(View.VISIBLE);
-//                    }
-//                    holder.dayTv.setText(dragBean.day);
-//                    holder.menuIv.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    });
-//                    break;
-//                case RouteDayDragBean.SPOT:
-//                    ImageLoader.getInstance().displayImage(dragBean.image, holder.spotImageIv, UILUtils.getDefaultOption());
-//                    holder.spotNameTv.setText(dragBean.name);
-//                    holder.spotCostTimeTv.setText(dragBean.costTime);
-//                    if (isEditableMode) {
-//                        holder.deleteIv.setVisibility(View.VISIBLE);
-//                        holder.nearByTv.setVisibility(View.GONE);
-//                        holder.dragHandleIv.setVisibility(View.VISIBLE);
-//                        holder.deleteIv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//                        });
-//                    } else {
-//                        holder.deleteIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setVisibility(View.VISIBLE);
-//                        holder.dragHandleIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//                        });
-//                    }
-//
-//
-//                    break;
-//                case RouteDayDragBean.POI:
-//                    ImageLoader.getInstance().displayImage(dragBean.image, holder.poiImageIv, UILUtils.getDefaultOption());
-//                    holder.poiNameTv.setText(dragBean.name);
-//                    holder.poiAddressTv.setText(dragBean.address);
-//                    holder.poiRating.setRating(dragBean.rating);
-//                    holder.poiPriceTv.setText(dragBean.price);
-//                    if (isEditableMode) {
-//                        holder.deleteIv.setVisibility(View.VISIBLE);
-//                        holder.nearByTv.setVisibility(View.GONE);
-//                        holder.dragHandleIv.setVisibility(View.VISIBLE);
-//                        holder.deleteIv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//                        });
-//                    } else {
-//                        holder.deleteIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setVisibility(View.VISIBLE);
-//                        holder.dragHandleIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//                        });
-//                    }
-//                    break;
-//            }
-//
-//
-//            return convertView;
-//        }
-//
-//        private class ViewHolder {
-//            public LinearLayout lineLl;
-//            public View topLineVw;
-//            public ImageView deleteIv, dragHandleIv;
-//            public TextView nearByTv;
-//            public ImageView poiImageIv, spotImageIv;
-//            public TextView poiNameTv, spotNameTv;
-//            public TextView poiAddressTv, spotCostTimeTv;
-//            public TextView poiPriceTv;
-//            public RatingBar poiRating;
-//            public TextView dayTv;
-//            public ImageView menuIv;
-//
-//        }
-//
-//        @Override
-//        public void drop(int from, int to) {
-//            RouteDayDragBean bean = dragBeanList.get(from);
-//            dragBeanList.remove(bean);
-//            dragBeanList.add(to, bean);
-//            checkDayIsNull();
-//            resizeDay();
-//            notifyDataSetChanged();
-//
-//        }
-//
-//        public void resizeDay() {
-//            int size = dragBeanList.size();
-//            int index = 1;
-//            for (int i = 0; i < size; i++) {
-//                RouteDayDragBean bean = dragBeanList.get(i);
-//                if (bean.type == RouteDayDragBean.DIV) {
-//                    bean.dayIndex = index;
-//                    index++;
-//                }
-//            }
-//        }
-//        public void addDay() {
-//            RouteDayDragBean itemBean = new RouteDayDragBean();
-//            itemBean.type = RouteDayDragBean.DIV;
-//            // itemBean.date = bean.day;
-//            dragBeanList.add(itemBean);
-//            resizeDay();
-//            notifyDataSetChanged();
-//        }
-//
-//        private boolean checkDayIsNull() {
-//            int size = dragBeanList.size();
-//            for (int i = 0; i < size; i++) {
-//                RouteDayDragBean bean = dragBeanList.get(i);
-//                if (bean.type == RouteDayDragBean.DIV) {
-//                    if (i == size - 1) {
-//                        bean.isCanRemove = false;
-//                    } else {
-//                        RouteDayDragBean nextBean = dragBeanList
-//                                .get(i + 1);
-//                        if (nextBean.type == RouteDayDragBean.DIV&&size!=1) {
-//                            bean.isCanRemove = true;
-//                        } else {
-//                            bean.isCanRemove = false;
-//                        }
-//                    }
-//
-//                } else if (bean.type == RouteDayDragBean.SPOT||bean.type==RouteDayDragBean.POI) {
-//                }
-//            }
-//            return false;
-//        }
-//
-//
-//        @Override
-//        public boolean areAllItemsEnabled() {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean isEnabled(int position) {
-//            RouteDayDragBean bean = dragBeanList.get(position);
-//            if (bean.type == RouteDayDragBean.DIV) {
-//                return false;
-//            } else {
-//                return true;
-//            }
-//        }
-//    }
 
 }
 

@@ -27,6 +27,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
+import com.aizou.peachtravel.module.toolbox.StrategyListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,8 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -94,6 +96,10 @@ public class StrategyActivity extends PeachBaseActivity {
         id =getIntent().getStringExtra("id");
         cityIdList = getIntent().getStringArrayListExtra("cityIdList");
         cityIdList = new ArrayList<String>();
+        for (LocBean loc : destinations) {
+//            cityIdList.add(loc.id);
+        }
+        //test
         cityIdList.add("54756008d17491193832582d");
         cityIdList.add("5475b938d174911938325835");
         createStrategyByCityIds(cityIdList);
@@ -233,7 +239,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            if(position==0) {
+            if (position==0) {
                 RouteDayFragment routeDayFragment = new RouteDayFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("id",strategyBean.id);

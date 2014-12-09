@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -69,6 +70,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private Set<OnDestActionListener> mOnDestActionListeners= new HashSet<OnDestActionListener>();
+    private HorizontalScrollView mScrollPanel;
 
     @Override
     public void onDestAdded(final LocBean locBean) {
@@ -89,6 +91,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestRemoved(locBean);
                 }
+                autoScrollPanel();
             }
         });
 
@@ -96,7 +99,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             mBottomPanel.setVisibility(View.VISIBLE);
         }
 
+        autoScrollPanel();
     }
+
     @Override
     public void onDestRemoved(LocBean locBean) {
         int index = allAddCityList.indexOf(locBean);
@@ -105,6 +110,16 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         if (allAddCityList.size() == 0) {
             mBottomPanel.setVisibility(View.GONE);
         }
+        autoScrollPanel();
+    }
+
+    private void autoScrollPanel() {
+        mScrollPanel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mScrollPanel.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 100);
     }
 
     @Override
@@ -114,6 +129,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         setContentView(rootView);
         initTitleBar();
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
+        mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
         startTv = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);

@@ -2,14 +2,12 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:visibility="invisible"
     android:gravity="center_vertical"
     android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/ll_line"
-        android:layout_width="20dp"
+        android:layout_width="29dp"
         android:visibility="gone"
         android:layout_height="fill_parent"
         android:orientation="vertical">
@@ -18,33 +16,43 @@
             android:id="@+id/line_top"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:background="@color/base_color_black" />
+            android:layout_gravity="center_horizontal"
+            android:background="@color/base_border_color"
+            android:layout_weight="1"/>
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:background="@color/main_color" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_time_point"
+            android:layout_gravity="center_horizontal"/>
+
         <View
             android:id="@+id/line_bottom"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:background="@color/base_color_black" />
+            android:background="@color/base_border_color" />
     </LinearLayout>
-    <RelativeLayout
+
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:layout_marginLeft="20dp">
 
-    <Button
-        android:id="@+id/btn_add_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="添加一天"/>
-    </RelativeLayout>
+        <Button
+            android:id="@+id/btn_add_day"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="加一天"
+            android:background="@drawable/app_theme_button_selector"
+            android:textColor="@color/base_color_white"
+            android:textSize="14sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+
+    </FrameLayout>
 
 </LinearLayout>

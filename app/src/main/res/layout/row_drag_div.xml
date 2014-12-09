@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
-
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,52 +13,55 @@
 
         <LinearLayout
             android:id="@+id/ll_line"
-            android:layout_width="20dp"
-            android:layout_height="fill_parent"
+            android:layout_width="9dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
                 android:id="@+id/line_top"
                 android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:background="@color/base_color_black" />
+                android:background="@color/base_border_color" />
 
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@color/main_color" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_time_point" />
         </LinearLayout>
 
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/base_color_white">
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_white_bar"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_div"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:padding="10dp" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="64dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="15sp"
+                android:textColor="@color/base_text_color_title"/>
 
             <ImageView
                 android:id="@+id/iv_menu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@color/base_color_black"
-                android:padding="10dp" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/tv_div"
-                android:background="@color/base_color_black" />
+                android:paddingLeft="15dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_more"/>
 
         </RelativeLayout>
 
@@ -71,35 +73,36 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="20dp"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="9dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="match_parent">
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@color/base_color_black" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/base_border_color" />
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/base_color_white">
+            android:background="@drawable/shape_white_bar">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:drawablePadding="10dp"
+                android:drawablePadding="7dp"
                 android:drawableLeft="@drawable/ic_launcher"
-                android:text="还木有任何安排\n快来添加安排吧"
-                android:padding="10dp" />
-        </RelativeLayout>
+                android:text="今天木有任何安排"
+                android:padding="15dp"
+                android:textSize="13sp"
+                android:textColor="@color/base_text_color_subtitle"/>
+        </FrameLayout>
 
 
     </LinearLayout>
