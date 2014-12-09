@@ -65,11 +65,11 @@
         android:layout_weight="1" />
 
     <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
-        android:background="#fff"
+        android:background="@drawable/shape_rectangle_white_with_border"
         android:id="@+id/strategy_indicator"
         android:layout_width="match_parent"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingLeft="52dp"
+        android:paddingRight="52dp"
         android:layout_height="62dp" />
 
 </LinearLayout>

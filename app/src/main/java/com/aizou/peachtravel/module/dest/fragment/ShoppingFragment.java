@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -44,7 +46,7 @@ public class ShoppingFragment extends PeachBaseFragment {
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     @InjectView(R.id.edit_btn)
-    Button mEditBtn;
+    CheckedTextView mEditBtn;
     View addFooter;
     View lineLl;
     Button addBtn;
@@ -85,7 +87,7 @@ public class ShoppingFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
                 if(mRestAdapter.isEditableMode){
-                    mEditBtn.setText("完成");
+                    mEditBtn.setChecked(true);
                     addFooter.setVisibility(View.VISIBLE);
                 }else{
                     //todo: need to 保存路线
@@ -101,7 +103,7 @@ public class ShoppingFragment extends PeachBaseFragment {
                             DialogManager.getInstance().dissMissProgressDialog();
                         }
                     });
-                    mEditBtn.setText("编辑");
+                    mEditBtn.setChecked(false);
                     addFooter.setVisibility(View.INVISIBLE);
                 }
                 mRestAdapter.notifyDataSetChanged();
@@ -161,14 +163,14 @@ public class ShoppingFragment extends PeachBaseFragment {
                 convertView = View.inflate(getActivity(), R.layout.row_list_poi, null);
                 holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                 holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                holder.nearByTv = (ImageButton) convertView.findViewById(R.id.drag_nearby_tv);
                 holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                 holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
                 holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                 convertView.setTag(holder);
-            }else{
+            } else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
             ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
@@ -184,7 +186,6 @@ public class ShoppingFragment extends PeachBaseFragment {
                     @Override
                     public void onClick(View v) {
                         new MaterialDialog.Builder(getActivity())
-
                                 .title(null)
                                 .content("确定删除")
                                 .theme(Theme.LIGHT)  // the default is light, so you don't need this line
@@ -242,7 +243,7 @@ public class ShoppingFragment extends PeachBaseFragment {
 
         private class ItemViewHolder {
             public ImageView deleteIv, dragHandleIv;
-            public TextView nearByTv;
+            public ImageButton nearByTv;
             public ImageView poiImageIv;
             public TextView poiNameTv;
             public TextView poiAddressTv;

@@ -51,7 +51,7 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class RouteDayFragment extends PeachBaseFragment {
-    public static final int ADD_POI_REQUEST_CODE=101;
+    public static final int ADD_POI_REQUEST_CODE = 101;
     private ArrayList<StrategyBean.IndexPoi> itinerary;
     private int day;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
@@ -90,7 +90,7 @@ public class RouteDayFragment extends PeachBaseFragment {
     }
 
     private void initData() {
-        itinerary =getArguments().getParcelableArrayList("itinerary");
+        itinerary = getArguments().getParcelableArrayList("itinerary");
         locList = getArguments().getParcelableArrayList("locList");
         day = getArguments().getInt("day");
         resizeData(itinerary);
