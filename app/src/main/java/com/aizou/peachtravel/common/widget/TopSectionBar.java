@@ -91,7 +91,7 @@ public class TopSectionBar extends Gallery {
                     int i = curIndex - 1;
                     if( i >= 0) {
 //                        setSelection(i);
-                        setSelection(i, false);
+                        setSelection(i, true);
                     }
                 }
             }
