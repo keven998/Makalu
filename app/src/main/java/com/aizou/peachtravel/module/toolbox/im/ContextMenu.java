@@ -41,7 +41,9 @@ public class ContextMenu extends ChatBaseActivity {
 		    setContentView(R.layout.context_menu_for_voice);
 		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
 			setContentView(R.layout.context_menu_for_video);
-		}
+		}else{
+            setContentView(R.layout.context_menu_for_ext);
+        }
 		    
 		/*    
 		switch (getIntent().getIntExtra("type", -1)) {
@@ -102,5 +104,10 @@ public class ContextMenu extends ChatBaseActivity {
 	    setResult(ChatActivity.RESULT_CODE_TO_CLOUD, new Intent().putExtra("position", position));
         finish();
 	}
-	
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,R.anim.fade_out);
+    }
 }

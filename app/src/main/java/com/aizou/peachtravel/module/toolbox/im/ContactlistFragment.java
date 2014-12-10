@@ -251,8 +251,11 @@ public class ContactlistFragment extends Fragment {
 	}
 
 	private void getContactList() {
-		contactList.clear();
 		Map<String, IMUser> users = AccountManager.getInstance().getContactList(getActivity());
+        if(users==null){
+            return;
+        }
+        contactList.clear();
 		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Map.Entry<String, IMUser> entry = iterator.next();

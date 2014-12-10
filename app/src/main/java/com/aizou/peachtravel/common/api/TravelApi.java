@@ -53,6 +53,8 @@ public class TravelApi extends BaseApi{
     public final static String GUIDE="/guides";
     //收藏
     public final static String FAV="/misc/favorites";
+    //搜索
+    public final static String SEARCH="/search";
 
 
 
@@ -266,6 +268,33 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + FAV+"/"+id);
         setDefaultParams(request);
         return HttpManager.request(request, callBack);
+    }
+
+    public static PTRequestHandler searchAll(String keyword,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + SEARCH);
+        request.putUrlParams("keyWord",keyword);
+        request.putUrlParams("loc","true");
+        request.putUrlParams("vs","true");
+        request.putUrlParams("hotel","true");
+        request.putUrlParams("restaurant","true");
+        request.putUrlParams("shopping","true");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    public static PTRequestHandler searchForType(String keyword,String type,String locId,int page,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + SEARCH);
+        request.putUrlParams("keyWord",keyword);
+        request.putUrlParams(type,"true");
+        request.putUrlParams("locId",locId);
+        request.putUrlParams("page",page+"");
+        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
     }
 
 }

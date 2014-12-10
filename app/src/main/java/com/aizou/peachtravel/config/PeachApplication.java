@@ -50,7 +50,7 @@ public class PeachApplication extends BaseApplication {
         super.onCreate();
         initPeachConfig();
         initImageLoader();
-        refreshUserInfo();
+//        refreshUserInfo();
         BaseApi.testHttps();
         setupDatabase();
         initIM();

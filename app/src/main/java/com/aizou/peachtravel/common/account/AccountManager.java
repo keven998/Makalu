@@ -97,7 +97,7 @@ public class AccountManager {
      * @return
      */
     public Map<String, IMUser> getContactList(Context context) {
-        if (user != null&&user.easemobUser!=null && contactList == null) {
+        if (contactList == null) {
             // 获取本地好友user list到内存,方便以后获取好友list
             List<IMUser> userList= IMUserRepository.getContactList(context);
             contactList = new HashMap<String, IMUser>();

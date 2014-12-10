@@ -725,6 +725,15 @@ public class MessageAdapter extends BaseAdapter {
             public void onClick(View v) {
             }
         });
+        holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                        activity.startActivityForResult(
+                                (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                        -1), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                        return true;
+            }
+        });
 
         if (message.direct == EMMessage.Direct.SEND) {
             switch (message.status) {

@@ -264,6 +264,7 @@ public class IMMainActivity extends ChatBaseActivity {
 
                 if(contactResult.code==0){
                     IMUserRepository.clearMyFriendsContact(mContext);
+                    AccountManager.getInstance().setContactList(null);
                      Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                     // 添加user"申请与通知"
                     IMUser newFriends = new IMUser();
@@ -294,8 +295,6 @@ public class IMMainActivity extends ChatBaseActivity {
                         IMUtils.setUserHead(user);
                         userlist.put(peachUser.easemobUser, user);
                     }
-                    // 存入内存
-                    AccountManager.getInstance().setContactList(userlist);
                     // 存入db
                     List <IMUser> users = new ArrayList<IMUser>(userlist.values());
                     IMUserRepository.saveContactList(mContext,users);

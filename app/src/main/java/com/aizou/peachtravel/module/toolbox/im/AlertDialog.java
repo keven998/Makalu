@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.task.DownloadImageTask;
@@ -44,10 +45,10 @@ public class AlertDialog extends ChatBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alert_dialog);
-		mTextView = (TextView) findViewById(R.id.title);
-		mButton = (Button) findViewById(R.id.btn_cancel);
-		imageView = (ImageView) findViewById(R.id.image);
-		editText = (EditText) findViewById(R.id.edit);
+//		mTextView = (TextView) findViewById(R.id.title);
+//		mButton = (Button) findViewById(R.id.btn_cancel);
+//		imageView = (ImageView) findViewById(R.id.image);
+//		editText = (EditText) findViewById(R.id.edit);
 		//提示内容
 		String msg = getIntent().getStringExtra("msg");
 		//提示标题
@@ -62,39 +63,65 @@ public class AlertDialog extends ChatBaseActivity {
 		isEditextShow = getIntent().getBooleanExtra("editTextShow",false);
 		//转发复制的图片的path
 		String path = getIntent().getStringExtra("forwardImage");
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+//        builder.title(title)
 		if(msg != null)
-		    ((TextView)findViewById(R.id.alert_message)).setText(msg);
+            builder.content(msg);
+//		    ((TextView)findViewById(R.id.alert_message)).setText(msg);
 		if(title != null)
-			mTextView.setText(title);
+            builder.title(title);
+//			mTextView.setText(title);
 		if(isCanceTitle){
-			mTextView.setVisibility(View.GONE);
+//			mTextView.setVisibility(View.GONE);
 		}
-		if(isCanceShow)
-			mButton.setVisibility(View.VISIBLE);
-		if(path != null){
-			 //优先拿大图，没有去取缩略图
-			if(!new File(path).exists())
-				path = DownloadImageTask.getThumbnailImagePath(path);
-		    imageView.setVisibility(View.VISIBLE);
-		    ((TextView)findViewById(R.id.alert_message)).setVisibility(View.GONE);
-		    if(ImageCache.getInstance().get(path) != null){
-		        imageView.setImageBitmap(ImageCache.getInstance().get(path));
-		    }else{
-		        Bitmap bm = ImageUtils.decodeScaleImage(path, 150, 150);
-		        imageView.setImageBitmap(bm);
-		        ImageCache.getInstance().put(path, bm);
-		    }
-		    
-		}
-		if(isEditextShow){
-			editText.setVisibility(View.VISIBLE);
-			
-		}
+		if(isCanceShow){
+            builder.negativeText("取消");
+        }
+        builder.cancelable(false);
+        builder.positiveText("确定");
+        builder.positiveColorRes(R.color.app_theme_color)
+                .negativeColorRes(R.color.app_theme_color);
+        builder.callback(new MaterialDialog.Callback() {
+            @Override
+            public void onNegative(MaterialDialog dialog) {
+                cancel();
+            }
+
+            @Override
+            public void onPositive(MaterialDialog dialog) {
+                ok();
+            }
+        });
+        builder.show();
+
+
+
+//			mButton.setVisibility(View.VISIBLE);
+//		if(path != null){
+//			 //优先拿大图，没有去取缩略图
+//			if(!new File(path).exists())
+//				path = DownloadImageTask.getThumbnailImagePath(path);
+//		    imageView.setVisibility(View.VISIBLE);
+//		    ((TextView)findViewById(R.id.alert_message)).setVisibility(View.GONE);
+//		    if(ImageCache.getInstance().get(path) != null){
+//		        imageView.setImageBitmap(ImageCache.getInstance().get(path));
+//		    }else{
+//		        Bitmap bm = ImageUtils.decodeScaleImage(path, 150, 150);
+//		        imageView.setImageBitmap(bm);
+//		        ImageCache.getInstance().put(path, bm);
+//		    }
+//
+//		}
+//		if(isEditextShow){
+//			editText.setVisibility(View.VISIBLE);
+//
+//		}
 	}
 	
-	public void ok(View view){
+	public void ok(){
 		setResult(RESULT_OK,new Intent().putExtra("position", position).
-				putExtra("edittext", editText.getText().toString())
+				putExtra("edittext","")
 				/*.putExtra("voicePath", voicePath)*/);
 		if(position != -1)
 			ChatActivity.resendPos = position;
@@ -102,7 +129,7 @@ public class AlertDialog extends ChatBaseActivity {
 		
 	}
 	
-	public void cancel(View view){
+	public void cancel(){
 		finish();
 	}
 
@@ -112,8 +139,9 @@ public class AlertDialog extends ChatBaseActivity {
 		return true;
 	}
 
-	 
-
-	
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,R.anim.fade_out);
+    }
 }

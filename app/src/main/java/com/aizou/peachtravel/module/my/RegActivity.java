@@ -95,7 +95,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_CHECH_VALICATION){
-            setResult(RESULT_OK);
+            setResult(RESULT_OK,data);
             finish();
         }
     }

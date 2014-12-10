@@ -6,7 +6,7 @@
     <color name="app_theme_color">#ee528c</color>
 
     <drawable name="highlight_btn_color">#ee528c</drawable>
-    <drawable name="highlight_btn_color_selected">#ccee528c</drawable>
+    <drawable name="highlight_btn_color_selected">#aaee528c</drawable>
 
     <color name="plan_start_end">#B2B2B2</color>
     <color name="main_color">#08dca8</color>

@@ -523,8 +523,9 @@ public class LoginActivity extends PeachBaseActivity {
             mTencentHandler.onActivityResult(requestCode, resultCode, data);
         }
         if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_REG){
-            setResult(RESULT_OK);
-            finish();
+            PeachUser user = (PeachUser) data.getSerializableExtra("user");
+            DialogManager.getInstance().showProgressDialog(mContext,"正在登录");
+            imLogin(user);
         }
     }
 
