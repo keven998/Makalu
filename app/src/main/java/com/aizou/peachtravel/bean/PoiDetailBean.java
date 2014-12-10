@@ -25,8 +25,8 @@ public class PoiDetailBean implements Parcelable {
     public LocationBean loction;
     public List<ImageBean> images = new ArrayList<ImageBean>();
     public List<LocBean> locList = new ArrayList<LocBean>();
-    public String address;
-    public String telephone;
+    public String address="";
+    public String telephone="";
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
     public List<CommentBean> comments= new ArrayList<CommentBean>();
 

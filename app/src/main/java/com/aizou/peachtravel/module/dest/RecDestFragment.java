@@ -114,7 +114,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public void showData(int position, final RecDestBean itemData) {
-            nameTv.setText(itemData.type.name);
+            nameTv.setText(itemData.title);
             final ListViewDataAdapter<RecDestBean.RecDestItem> adapter = new ListViewDataAdapter<RecDestBean.RecDestItem>(new ViewHolderCreator<RecDestBean.RecDestItem>() {
                 @Override
                 public ViewHolderBase<RecDestBean.RecDestItem> createViewHolder() {
@@ -134,7 +134,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
                 }
             });
-            adapter.getDataList().addAll(itemData.localities);
+            adapter.getDataList().addAll(itemData.contents);
             adapter.notifyDataSetChanged();
 
         }

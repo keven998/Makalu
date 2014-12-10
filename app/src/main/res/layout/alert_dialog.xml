@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center_horizontal"
+        android:visibility="gone"
         android:orientation="vertical" >
 
         <TextView
@@ -56,6 +57,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center_horizontal"
+        android:visibility="gone"
         android:orientation="horizontal" >
 
         <Button

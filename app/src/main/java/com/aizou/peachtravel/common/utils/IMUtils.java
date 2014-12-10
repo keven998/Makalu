@@ -124,7 +124,34 @@ public class IMUtils {
 
 
 
-    public static void showImSharePoiDialog(Context context,PoiDetailBean detailBean,MaterialDialog.Callback callback){
+    public static void showImSharePoiDialog(Context context,Object detailBean,MaterialDialog.Callback callback){
+        String type = "";
+        String id="";
+        String zhName="";
+        String attr="";
+        String desc="";
+        String image="";
+        if(detailBean instanceof PoiDetailBean){
+            PoiDetailBean detail = (PoiDetailBean)detailBean;
+            type =detail.type;
+            id =detail.id;
+            zhName =detail.zhName;
+            attr = detail.rating+"  "+detail.priceDesc;
+            desc =detail.address;
+            if(detail.images!=null&&detail.images.size()>0){
+                image = detail.images.get(0).url;
+            }
+        }else if(detailBean instanceof SpotDetailBean){
+            SpotDetailBean detail = (SpotDetailBean)detailBean;
+            type =detail.type;
+            id =detail.id;
+            zhName =detail.zhName;
+            attr = detail.timeCostStr;
+            desc = detail.desc;
+            if(detail.images!=null&&detail.images.size()>0){
+                image = detail.images.get(0).url;
+            }
+        }
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
         View contentView = View.inflate(context, R.layout.dialog_im_share,null);
         TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
@@ -132,19 +159,18 @@ public class IMUtils {
         TextView nameTv = (TextView) contentView.findViewById(R.id.name_tv);
         TextView attrTv = (TextView) contentView.findViewById(R.id.attr_tv);
         TextView descTv = (TextView) contentView.findViewById(R.id.desc_tv);
-        if(detailBean.type.equals(TravelApi.PoiType.RESTAURANTS)){
+        if(type.equals(TravelApi.PoiType.RESTAURANTS)){
             titleTv.setText("美食");
-        }else if(detailBean.type.equals(TravelApi.PoiType.SHOPPING)){
+        }else if(type.equals(TravelApi.PoiType.SHOPPING)){
             titleTv.setText("购物");
-        }else if(detailBean.type.equals(TravelApi.PoiType.HOTEL)){
+        }else if(type.equals(TravelApi.PoiType.HOTEL)){
             titleTv.setText("酒店");
         }
 
-        nameTv.setText(detailBean.zhName);
-        attrTv.setText(detailBean.rating+"  "+detailBean.priceDesc);
-        descTv.setText(detailBean.address);
-        if(detailBean.images!=null&&detailBean.images.size()>0)
-            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url,vsIv,UILUtils.getDefaultOption());
+        nameTv.setText(zhName);
+        attrTv.setText(attr);
+        descTv.setText(desc);
+            ImageLoader.getInstance().displayImage(image,vsIv,UILUtils.getDefaultOption());
         builder.customView(contentView)
                 .positiveText("发送")
                 .negativeText("取消")

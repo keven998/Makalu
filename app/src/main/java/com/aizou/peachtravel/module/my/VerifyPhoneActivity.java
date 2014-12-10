@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -116,7 +117,12 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             public void doSucess(String result, String method) {
                                 CommonJson<PeachUser> userResult = CommonJson.fromJson(result,PeachUser.class);
                                 if(userResult.code==0){
-                                    imLogin(userResult.result);
+                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
+                                    ToastUtil.getInstance(mContext).showToast("注册成功");
+                                    Intent intent = new Intent();
+                                    intent.putExtra("user",userResult.result);
+                                    setResult(RESULT_OK,intent);
+                                    finish();
                                 }else{
                                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                                 }
@@ -167,109 +173,5 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
                 break;
         }
-    }
-    private void imLogin(final PeachUser user){
-        EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
-
-            @Override
-            public void onSuccess() {
-                DialogManager.getInstance().dissMissProgressDialog();
-                // 登陆成功，保存用户名密码
-                try {
-                    // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
-                    AccountManager.getInstance().saveLoginAccount(mContext, user);
-//                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
-                    final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
-                    // 添加user"申请与通知"
-                    IMUser newFriends = new IMUser();
-                    newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                    newFriends.setNick("申请与通知");
-                    newFriends.setHeader("");
-                    newFriends.setIsMyFriends(true);
-                    userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-//                    // 添加"群聊"
-//                    IMUser groupUser = new IMUser();
-//                    groupUser.setUsername(Constant.GROUP_USERNAME);
-//                    groupUser.setNick("群聊");
-//                    groupUser.setHeader("");
-//                    userlist.put(Constant.GROUP_USERNAME, groupUser);
-
-                    AccountManager.getInstance().setContactList(userlist);
-                    List <IMUser> users = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext,users);
-                    // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                    boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                    if (!updatenick) {
-                        EMLog.e("LoginActivity", "update current user nick fail");
-                    }
-                    // 进入主页面
-                    setResult(RESULT_OK);
-                    finish();
-                    EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
-                        @Override
-                        public void onSuccess(List<EMGroup> emGroups) {
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-
-                        }
-                    });
-                    UserApi.getContact(new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-                            CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                            if (contactResult.code == 0) {
-                                for (PeachUser peachUser : contactResult.result.contacts) {
-                                    IMUser user = new IMUser();
-                                    user.setUserId(peachUser.userId);
-                                    user.setMemo(peachUser.memo);
-                                    user.setNick(peachUser.nickName);
-                                    user.setUsername(peachUser.easemobUser);
-                                    user.setIsMyFriends(true);
-                                    user.setAvatar(peachUser.avatar);
-                                    user.setSignature(peachUser.signature);
-                                    IMUtils.setUserHead(user);
-                                    userlist.put(peachUser.easemobUser, user);
-                                }
-                                // 存入内存
-                                AccountManager.getInstance().setContactList(userlist);
-                                // 存入db
-                                List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                                IMUserRepository.saveContactList(mContext,users);
-                            }
-
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, final String message) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        DialogManager.getInstance().dissMissProgressDialog();
-                        Toast.makeText(getApplicationContext(), "登录失败: " + message, Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-        });
-
-
     }
 }

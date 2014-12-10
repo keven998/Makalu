@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/main_color" />
+
+    <LinearLayout
+        android:id="@+id/ll_loc"
+        android:layout_width="fill_parent"
+        android:layout_height="38dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/highlight_btn_color_selected"
+        android:paddingLeft="21dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="所在城市"
+            android:textSize="14sp"
+            android:textColor="@color/base_color_white"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/loc_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textSize="13sp"
+            android:text="未选择"
+            android:drawableRight="@drawable/cell_accessory"
+            android:textColor="@color/base_color_white"/>
+
+
+        </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:paddingTop="10dp"
+        android:layout_weight="1">
+
+
+        <com.aizou.core.widget.prv.PullToRefreshListView
+            android:id="@+id/search_type_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:visibility="visible" />
+
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -91,7 +91,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     /**
      * 查找contact
      *
-     * @param v
      */
     public void searchContact() {
         final String name = editText.getText().toString();
@@ -172,6 +171,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 break;
 
             case R.id.tv_weixin_contacts:
+
                 break;
         }
     }

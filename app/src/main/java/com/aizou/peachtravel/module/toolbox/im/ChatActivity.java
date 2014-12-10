@@ -92,6 +92,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.MessageAdapter;
@@ -1059,18 +1060,20 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 e.printStackTrace();
             }
         }  else if (id == R.id.btn_dest) {
+            Intent intent = new Intent(mContext, SearchAllActivity.class);
+            startActivity(intent);
             // 点击我的目的地图标
-            JSONObject contentJson = new JSONObject();
-            try {
-                contentJson.put("id","1");
-                contentJson.put("desc","我的景点描述");
-                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("timeCost","3小时");
-                contentJson.put("name","景点");
-                sendText(contentJson.toString(), Constant.ExtType.SPOT);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            JSONObject contentJson = new JSONObject();
+//            try {
+//                contentJson.put("id","1");
+//                contentJson.put("desc","我的景点描述");
+//                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
+//                contentJson.put("timeCost","3小时");
+//                contentJson.put("name","景点");
+//                sendText(contentJson.toString(), Constant.ExtType.SPOT);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
         } else if (id == R.id.btn_travels) {
             // 点击我的目的地图标
             JSONObject contentJson = new JSONObject();
@@ -1831,8 +1834,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		adapter.refresh();
+        refresh();
 	}
+
+    public void refresh(){
+        if(adapter!=null){
+            adapter.refresh();
+        }
+    }
 
 	@Override
 	protected void onPause() {
