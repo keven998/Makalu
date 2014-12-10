@@ -23,16 +23,15 @@
             android:dividerHeight="0dp"
             android:fadingEdge="none" />
 
-        <Button
+        <CheckedTextView
             android:id="@+id/edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="48dp"
-            android:background="#66000000"
-            android:text="编辑"
-            android:textSize="14sp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/checker_ic_layer_edit"
+            />
 
     </FrameLayout>
 

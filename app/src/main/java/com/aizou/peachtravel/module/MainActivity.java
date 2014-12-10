@@ -84,19 +84,20 @@ public class MainActivity extends PeachBaseActivity {
         textView.setText(mTextviewArray[index]);
         return view;
     }
+
     @Override
     protected void showConflictDialog(){
         AccountManager.getInstance().logout(this,null);
         try {
-            if (conflictBuilder == null)
+            if (conflictBuilder == null) {
                 conflictBuilder = new MaterialDialog.Builder(this);
+            }
             conflictBuilder.title("下线通知");
             conflictBuilder.content(R.string.connect_conflict);
             conflictBuilder.positiveText(R.string.ok);
             conflictBuilder.callback(new MaterialDialog.Callback() {
                 @Override
                 public void onNegative(MaterialDialog dialog) {
-
 
                 }
 

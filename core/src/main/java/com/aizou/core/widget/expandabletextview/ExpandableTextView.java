@@ -93,21 +93,38 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         init(attrs);
     }
 
+    public boolean isCollpased() {
+        return mCollapsed;
+    }
+
     @Override
     public void onClick(View view) {
         if (mButton.getVisibility() != View.VISIBLE) {
             return;
         }
 
-        mCollapsed = !mCollapsed;
-        mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
+        enableCollapse(!mCollapsed);
+    }
+
+    public void reset() {
+        mCollapsed = true;
+        mButton.setImageDrawable(mExpandDrawable);
+        final int newHeight = (int)(mCollapsedHeight - getHeight() + getHeight());
+        mTv.setMaxHeight(newHeight - mMarginBetweenTxtAndBottom);
+        getLayoutParams().height = newHeight;
+//        requestLayout();
+    }
+
+    public void enableCollapse(boolean collpase) {
+        mCollapsed = collpase;
+        mButton.setImageDrawable(collpase ? mExpandDrawable : mCollapseDrawable);
 
         if (mCollapsedStatus != null) {
-            mCollapsedStatus.put(mPosition, mCollapsed);
+            mCollapsedStatus.put(mPosition, collpase);
         }
 
         Animation animation;
-        if (mCollapsed) {
+        if (collpase) {
             animation = new ExpandCollapseAnimation(this, getHeight(), mCollapsedHeight);
         } else {
             animation = new ExpandCollapseAnimation(this, getHeight(), getHeight() +
