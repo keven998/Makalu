@@ -108,8 +108,8 @@ public class StrategyActivity extends PeachBaseActivity {
 //            cityIdList.add(loc.id);
         }
         //test
-        cityIdList.add("54756008d17491193832582d");
-        cityIdList.add("5475b938d174911938325835");
+        cityIdList.add("5473ccd7b8ce043a64108c46");
+        cityIdList.add("546f2daab8ce0440eddb2aff");
         createStrategyByCityIds(cityIdList);
     }
 
@@ -152,7 +152,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private void bindView(StrategyBean result) {
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(),result));
-        mLocListRv.setAdapter(new LocAdapter(mContext,result.destinations));
+        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
     }
 
     public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {
@@ -255,7 +255,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 bundle.putString("title",strategyBean.title);
                 bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
                 bundle.putInt("day",strategyBean.itineraryDays);
-                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                bundle.putParcelableArrayList("locList", strategyBean.localities);
                 routeDayFragment.setArguments(bundle);
                 return routeDayFragment;
             } else if (position==1) {
@@ -264,7 +264,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 bundle.putString("id",strategyBean.id);
                 bundle.putString("title",strategyBean.title);
                 bundle.putParcelableArrayList("restaurant",strategyBean.restaurant);
-                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                bundle.putParcelableArrayList("locList", strategyBean.localities);
                 restFragment.setArguments(bundle);
                 return restFragment;
             } else {
@@ -272,8 +272,8 @@ public class StrategyActivity extends PeachBaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("id",strategyBean.id);
                 bundle.putString("title",strategyBean.title);
-                bundle.putParcelableArrayList("shopping",strategyBean.shopping);
-                bundle.putParcelableArrayList("locList",strategyBean.destinations);
+                bundle.putParcelableArrayList("shopping", strategyBean.shopping);
+                bundle.putParcelableArrayList("locList", strategyBean.localities);
                 shoppingFragment.setArguments(bundle);
                 return shoppingFragment;
             }

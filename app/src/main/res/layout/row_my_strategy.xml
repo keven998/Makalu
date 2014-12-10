@@ -8,66 +8,88 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white">
+        android:background="@drawable/shape_white_bar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <ImageView
             android:id="@+id/strategy_iv"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/day_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:background="@drawable/shape_circle_zoom_glass"
             android:textColor="@color/base_color_white" />
 
-        <TextView
-            android:id="@+id/citys_tv"
+        <TextView android:id="@+id/citys_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/day_tv"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/base_color_white" />
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:maxLines="2"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/strategy_iv"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="9dp">
 
             <TextView
                 android:id="@+id/name_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/edit_title_iv"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_launcher"/>
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:maxLines="2"
+                android:lineSpacingExtra="3dp"/>
 
             <TextView
                 android:id="@+id/time_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="10sp"
+                android:layout_gravity="bottom"
+                android:textStyle="italic"
+                android:textColor="@color/base_text_color_text_placeholder"/>
         </LinearLayout>
 
     </RelativeLayout>
+
     <ImageView
         android:id="@+id/delete_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="4dp"
+        android:paddingRight="14dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_line_edit_delete"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

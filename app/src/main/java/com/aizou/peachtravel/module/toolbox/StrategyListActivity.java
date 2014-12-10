@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,6 +31,8 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.dest.SelectDestActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -49,7 +52,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @InjectView(R.id.my_strategy_lv)
     PullToRefreshListView mMyStrategyLv;
     @InjectView(R.id.edit_btn)
-    Button mEditBtn;
+    CheckedTextView mEditBtn;
     ListViewDataAdapter mStrategyListAdapter;
     public boolean isEditableMode;
 
@@ -94,9 +97,9 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 isEditableMode = !isEditableMode;
                 if (isEditableMode) {
-                    mEditBtn.setText("完成");
+                    mEditBtn.setChecked(true);
                 } else {
-                    mEditBtn.setText("编辑");
+                    mEditBtn.setChecked(false);
                 }
                 mStrategyListAdapter.notifyDataSetChanged();
             }
@@ -108,6 +111,15 @@ public class StrategyListActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        mTitleBar.getRightTextView().setText("新建");
+        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
     }
@@ -184,24 +196,29 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView mNameTv;
         @InjectView(R.id.time_tv)
         TextView mTimeTv;
-        @InjectView(R.id.edit_title_iv)
-        ImageView mEditTitleIv;
 
+        DisplayImageOptions poptions;
+
+        public StrategyListViewHolder() {
+            poptions = UILUtils.getDefaultOption();
+        }
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View view = layoutInflater.inflate(R.layout.row_my_strategy, mMyStrategyLv.getRefreshableView(), false);
             ButterKnife.inject(this, view);
-            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20));
-            int height = width / 2;
-            mStrategyIv.setLayoutParams(new RelativeLayout.LayoutParams(width,height));
+//            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20));
+//            int height = width * 480 / 150;
+//            mStrategyIv.setLayoutParams(new RelativeLayout.LayoutParams(width,height));
             return view;
         }
 
         @Override
         public void showData(int position, final StrategyBean itemData) {
             if (itemData.images != null && itemData.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, UILUtils.getDefaultOption());
+                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, poptions);
+            } else {
+                mStrategyIv.setImageResource(R.drawable.guide_1);
             }
             mDayTv.setText(itemData.dayCnt + "天");
             mCitysTv.setText(itemData.summary);
@@ -209,7 +226,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isEditableMode) {
                 mDeleteIv.setVisibility(View.VISIBLE);
-                mEditTitleIv.setVisibility(View.VISIBLE);
+                mNameTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_line_edit_delete, 0);
                 mNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -219,59 +236,60 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mDeleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MaterialDialog.Builder(StrategyListActivity.this)
-
-                                .title(null)
-                                .content("确定删除吗？")
-                                .positiveText("确定")
-                                .negativeText("取消")
-                                .autoDismiss(false)
-                                .positiveColor(getResources().getColor(R.color.app_theme_color))
-                                .negativeColor(getResources().getColor(R.color.app_theme_color))
-                                .callback(new MaterialDialog.Callback() {
-                                    @Override
-                                    public void onPositive(final MaterialDialog dialog) {
-                                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
-                                        dialog.setContentView(progressView);
-
-                                        TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
-                                            @Override
-                                            public void doSucess(String result, String method) {
-                                                dialog.dismiss();
-                                                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                                                if(deleteResult.code==0){
-                                                    mStrategyListAdapter.getDataList().remove(itemData);
-                                                    mStrategyListAdapter.notifyDataSetChanged();
-                                                    ToastUtil.getInstance(mContext).showToast("删除成功");
-
-                                                }else{
-                                                    ToastUtil.getInstance(mContext).showToast("删除失败");
-                                                }
-                                            }
-
-                                            @Override
-                                            public void doFailure(Exception error, String msg, String method) {
-                                                ToastUtil.getInstance(mContext).showToast("删除失败");
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onNegative(MaterialDialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
-
+                        deleteItem(itemData);
                     }
                 });
             } else {
                 mDeleteIv.setVisibility(View.GONE);
-                mEditTitleIv.setVisibility(View.GONE);
+                mNameTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
-
-
         }
+
+        private void deleteItem(final StrategyBean itemData) {
+            new MaterialDialog.Builder(StrategyListActivity.this)
+                    .title(null)
+                    .content("确定删除吗？")
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .autoDismiss(false)
+                    .positiveColor(getResources().getColor(R.color.app_theme_color))
+                    .negativeColor(getResources().getColor(R.color.app_theme_color))
+                    .callback(new MaterialDialog.Callback() {
+                        @Override
+                        public void onPositive(final MaterialDialog dialog) {
+                            View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                            dialog.setContentView(progressView);
+
+                            TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                                @Override
+                                public void doSucess(String result, String method) {
+                                    dialog.dismiss();
+                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                                    if(deleteResult.code==0){
+                                        mStrategyListAdapter.getDataList().remove(itemData);
+                                        mStrategyListAdapter.notifyDataSetChanged();
+                                        ToastUtil.getInstance(mContext).showToast("删除成功");
+
+                                    }else{
+                                        ToastUtil.getInstance(mContext).showToast("删除失败");
+                                    }
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    ToastUtil.getInstance(mContext).showToast("删除失败");
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        }
+
     }
 }

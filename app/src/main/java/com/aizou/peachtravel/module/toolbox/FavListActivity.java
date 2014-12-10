@@ -38,6 +38,8 @@ public class FavListActivity extends PeachBaseActivity {
     @InjectView(R.id.edit_btn)
     CheckedTextView mEditBtn;
 
+    private CustomAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -55,12 +57,26 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
 
-        mFavLv.getRefreshableView().setAdapter(new CustomAdapter());
+        mFavLv.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
     }
 
     private void initView() {
         setContentView(R.layout.activity_fav_list);
         ButterKnife.inject(this);
+
+        mEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isEditable = mEditBtn.isChecked();
+                mEditBtn.setChecked(!isEditable);
+                if (isEditable) {
+                    //TODO
+                } else {
+                    //TODO
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initData() {
@@ -176,6 +192,12 @@ public class FavListActivity extends PeachBaseActivity {
 
     class FavoriteItem {
 
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
 }

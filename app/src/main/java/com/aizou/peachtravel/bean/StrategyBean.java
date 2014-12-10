@@ -16,15 +16,12 @@ public class StrategyBean {
     public long updateTime;
     public int dayCnt;
     public List<ImageBean> images;
-    public ArrayList<LocBean> destinations;
+    public ArrayList<LocBean> localities;
     public ArrayList<IndexPoi> itinerary;
     public ArrayList<PoiDetailBean> shopping;
     public ArrayList<PoiDetailBean> restaurant;
     public String userId;
     public int itineraryDays;
-
-
-
 
     public static class IndexPoi implements Parcelable {
         public int dayIndex;
