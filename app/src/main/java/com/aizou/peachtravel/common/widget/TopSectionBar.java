@@ -79,39 +79,38 @@ public class TopSectionBar extends Gallery {
     }
 
     private class SectionScrollListener implements AbsListView.OnScrollListener {
+        private int currentPos;
+
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+            if (scrollState == SCROLL_STATE_IDLE) {
+                if(curIndex != indexer.getSectionForPosition(currentPos)){
+                    curIndex = indexer.getSectionForPosition(currentPos);
+                    int i = curIndex - 1;
+                    if( i >= 0) {
+//                        setSelection(i);
+                        setSelection(i, false);
+                    }
+                }
+            }
         }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            if(isGalleryFocus)
+            if(isGalleryFocus) {
                 return;
-            int pos = view.getFirstVisiblePosition();
-            if(curIndex!=indexer.getSectionForPosition(pos)){
-                curIndex=indexer.getSectionForPosition(pos);
-                int i=curIndex-1;
-                if(i>=0){
-                    setSelection(i);
-                }
-
             }
-
+            currentPos = view.getFirstVisiblePosition();
         }
     }
 
     private class SectionOnItemSelectedListener implements OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//            if(!isGalleryFocus) {
-//                return;
-//            }
             ViewGroup ctView = (ViewGroup)view;
             if (mTempView != null && mTempView != ctView) {
                 AutoResizeTextView textView = (AutoResizeTextView) mTempView.getChildAt(0);
                 textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
-                textView.setTextColor(Color.WHITE);
                 textView.setTextSize(textNormalSize);
                 textView.setChecked(false);
                 mTempView.removeAllViews();
@@ -122,16 +121,15 @@ public class TopSectionBar extends Gallery {
 
             AutoResizeTextView textView = (AutoResizeTextView) ctView.getChildAt(0);
             textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
-            textView.setTextColor(Color.WHITE);
             textView.setTextSize(textSelectSize);
             textView.setChecked(true);
             ctView.removeAllViews();
             ctView.addView(textView);
 
-            if(mListView==null) {
+            if(!isGalleryFocus || mListView==null) {
                 return;
             }
-            int i=position+1;
+            int i = position + 1;
             if (i <= indexer.getSections().length) {
                 mListView.setSelection(indexer.getPositionForSection(i));
             }

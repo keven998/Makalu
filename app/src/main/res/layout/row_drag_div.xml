@@ -61,6 +61,7 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="15dp"
                 android:scaleType="center"
+                android:visibility="gone"
                 android:src="@drawable/ic_more"/>
 
         </RelativeLayout>

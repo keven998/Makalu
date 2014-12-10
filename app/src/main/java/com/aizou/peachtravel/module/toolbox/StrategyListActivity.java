@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.toolbox;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.MainActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -100,7 +102,28 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
 
-        mTitleBar.enableBackKey(true);
+//        mTitleBar.enableBackKey(true);
+        mTitleBar.getTitleTextView().setText("我的攻略");
+        mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void finish() {
+//        String action = getIntent().getAction();
+//        if ("plan.flow".equals(action)) {
+//            Intent intent = new Intent(StrategyListActivity.this, MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//            overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
+//            return;
+//        }
+        super.finish();
+        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
     private void initData() {

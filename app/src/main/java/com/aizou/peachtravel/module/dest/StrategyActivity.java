@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -86,10 +88,16 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
-                startActivity(intent);
+                Toast.makeText(StrategyActivity.this, "已保存到\"我的攻略\"", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
     private void initData() {
@@ -186,6 +194,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     Intent intent = new Intent(mContext,CityDetailActivity.class);
                     intent.putExtra("id",mDatas.get(i).id);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
 
@@ -282,5 +291,35 @@ public class StrategyActivity extends PeachBaseActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        warnCancel();
+    }
+
+    private void warnCancel() {
+        new MaterialDialog.Builder(this)
+                .title("提示")
+                .content("是否保存已完成的清单")
+                .positiveText("保存")
+                .negativeText("直接返回")
+                .callback(new MaterialDialog.Callback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+//                        Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
+//                        intent.setAction("plan.flow"); //magic number in stand of being start in plan flow
+//                        startActivity(intent);
+//                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+                        Toast.makeText(StrategyActivity.this, "已保存到\"我的攻略\"", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                })
+                .show();
     }
 }

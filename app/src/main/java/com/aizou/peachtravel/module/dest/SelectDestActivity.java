@@ -123,6 +123,12 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View rootView = View.inflate(mContext, R.layout.activity_select_dest, null);
@@ -140,6 +146,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 Intent intent = new Intent(mContext, StrategyActivity.class);
                 intent.putParcelableArrayListExtra("destinations", allAddCityList);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
@@ -151,6 +158,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
         initData();
+
     }
 
     @Override

@@ -47,8 +47,9 @@ public class RecDestFragment extends PeachBaseFragment {
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),SelectDestActivity.class);
+                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
         titleHeaderBar.enableBackKey(false);
@@ -114,6 +115,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public void showData(int position, final RecDestBean itemData) {
+            if (itemData.type == null) return;
             nameTv.setText(itemData.type.name);
             final ListViewDataAdapter<RecDestBean.RecDestItem> adapter = new ListViewDataAdapter<RecDestBean.RecDestItem>(new ViewHolderCreator<RecDestBean.RecDestItem>() {
                 @Override

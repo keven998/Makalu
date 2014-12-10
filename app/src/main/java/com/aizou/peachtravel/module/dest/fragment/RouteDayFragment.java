@@ -455,37 +455,54 @@ public class RouteDayFragment extends PeachBaseFragment {
 
             }
             if(isEditableMode){
+                holder.menuIv.setVisibility(View.VISIBLE);
                 holder.menuIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        RouteDayMenu fragment = new RouteDayMenu();
-                        fragment.setRouteDay(routeDayMap, routeDayAdpater);
-                        Bundle args = new Bundle();
-                        args.putInt(
-                                SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                                4
-                        );
-                        args.putFloat(
-                                SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                                5
-                        );
-                        args.putInt("dayIndex", section);
-                        args.putParcelableArrayList("locList", locList);
-
-                        fragment.setArguments(args);
-                        fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
+//                        RouteDayMenu fragment = new RouteDayMenu();
+//                        fragment.setRouteDay(routeDayMap, routeDayAdpater);
+//                        Bundle args = new Bundle();
+//                        args.putInt(
+//                                SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+//                                4
+//                        );
+//                        args.putFloat(
+//                                SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+//                                5
+//                        );
+//                        args.putInt("dayIndex", section);
+//                        args.putParcelableArrayList("locList", locList);
+//
+//                        fragment.setArguments(args);
+//                        fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
+                        showMenu();
                     }
                 });
-            }else{
-                holder.menuIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
+            } else {
+//                holder.menuIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
+                holder.menuIv.setVisibility(View.GONE);
             }
 
 
             return convertView;
+        }
+
+        private void showMenu() {
+            new MaterialDialog.Builder(getActivity())
+                    .title(null)
+                    .items(new String[]{"添加地点", "删除这天"})
+                    .itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        }
+                    })
+                    .show();
         }
 
         @Override
