@@ -4,7 +4,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion '21.1.1'
     defaultConfig {
-        applicationId "com.aizou.core"
+//        applicationId "com.aizou.core"
         minSdkVersion 9
         targetSdkVersion 18
         versionCode 1
@@ -12,7 +12,7 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

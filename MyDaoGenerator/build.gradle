@@ -4,7 +4,7 @@ project(':MyDaoGenerator') {
 
     mainClassName = "com.aizou.peachtravel.MyDaoGenerator"
     // edit output direction
-    outputDir = "../app/src/main/java-gen"
+//    outputDir = "../app/src/main/java-gen"
 
     dependencies {
         compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -12,11 +12,11 @@ project(':MyDaoGenerator') {
     }
 
     task createDocs {
-        def docs = file(outputDir)
+        def docs = file('../app/src/main/java-gen')
         docs.mkdirs()
     }
 
     run {
-        args outputDir
+        args '../app/src/main/java-gen'
     }
 }

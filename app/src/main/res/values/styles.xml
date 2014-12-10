@@ -66,4 +66,13 @@
         <attr name="frame" format="reference" />
     </declare-styleable>
 
+    <style name="custom_small_rating_bar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/resource_small_rating_bar</item>
+        <item name="android:minHeight">9dp</item>
+        <item name="android:maxHeight">9dp</item>
+        <item name="android:numStars">5</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:max">5</item>
+    </style>
+
 </resources>

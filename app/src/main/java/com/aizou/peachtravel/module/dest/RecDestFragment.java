@@ -47,8 +47,9 @@ public class RecDestFragment extends PeachBaseFragment {
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),SelectDestActivity.class);
+                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
         titleHeaderBar.enableBackKey(false);

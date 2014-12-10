@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -69,6 +70,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private Set<OnDestActionListener> mOnDestActionListeners= new HashSet<OnDestActionListener>();
+    private HorizontalScrollView mScrollPanel;
 
     @Override
     public void onDestAdded(final LocBean locBean) {
@@ -89,6 +91,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestRemoved(locBean);
                 }
+                autoScrollPanel();
             }
         });
 
@@ -96,7 +99,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             mBottomPanel.setVisibility(View.VISIBLE);
         }
 
+        autoScrollPanel();
     }
+
     @Override
     public void onDestRemoved(LocBean locBean) {
         int index = allAddCityList.indexOf(locBean);
@@ -105,6 +110,22 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         if (allAddCityList.size() == 0) {
             mBottomPanel.setVisibility(View.GONE);
         }
+        autoScrollPanel();
+    }
+
+    private void autoScrollPanel() {
+        mScrollPanel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mScrollPanel.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 100);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
     @Override
@@ -114,6 +135,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         setContentView(rootView);
         initTitleBar();
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
+        mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
         startTv = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
@@ -124,6 +146,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 Intent intent = new Intent(mContext, StrategyActivity.class);
                 intent.putParcelableArrayListExtra("destinations", allAddCityList);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
@@ -135,6 +158,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
         initData();
+
     }
 
     @Override
