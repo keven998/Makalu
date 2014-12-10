@@ -1,11 +1,14 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -18,6 +21,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -37,9 +41,12 @@ public class PoiAdapter extends BaseAdapter {
     private List<PoiDetailBean> mPoiList = new ArrayList<PoiDetailBean>();
     private OnPoiActionListener mOnPoiActionListener;
 
+    private DisplayImageOptions picOptions;
+
     public PoiAdapter(Context context,boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
+        picOptions = UILUtils.getRadiusOption();
     }
 
     public void setData(List<PoiDetailBean> ds) {
@@ -90,77 +97,103 @@ public class PoiAdapter extends BaseAdapter {
         final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(position);
         SpotViewHolder spotViewHolder = null;
         PoiViewHolder poiViewHolder = null;
+        final Context context = mContext;
         if (convertView == null) {
             if (type == SPOT) {
-                convertView = View.inflate(mContext, R.layout.row_spot_list, null);
+                convertView = View.inflate(context, R.layout.row_spot_list, null);
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
-            } else if (type == POI) {
-                convertView = View.inflate(mContext, R.layout.row_poi_list, null);
+                if (!mIsCanAdd) {
+                    spotViewHolder.mBtnAdd.setBackgroundColor(Color.WHITE);
+                    spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_text_color_subtitle));
+                    spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.selector_ic_navigation, 0);
+                }
+            } else {
+                convertView = View.inflate(context, R.layout.row_poi_list, null);
                 poiViewHolder = new PoiViewHolder(convertView);
                 convertView.setTag(poiViewHolder);
+                if (!mIsCanAdd) {
+                    poiViewHolder.mBtnAdd.setBackgroundColor(Color.WHITE);
+                    poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_text_color_subtitle));
+                    poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.selector_ic_navigation, 0);
+                }
             }
-        }else{
-            if(type==SPOT){
+        } else {
+            if(type == SPOT){
                spotViewHolder = (SpotViewHolder) convertView.getTag();
             } else {
                poiViewHolder = (PoiViewHolder) convertView.getTag();
             }
         }
 
-        if(type==SPOT){
-            if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url,spotViewHolder.mSpotImageIv, UILUtils.getDefaultOption());
+        if (type == SPOT) {
+            if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, spotViewHolder.mSpotImageIv, picOptions);
+            } else {
+                spotViewHolder.mSpotImageIv.setImageResource(R.drawable.default_image);
             }
             spotViewHolder.mSpotNameTv.setText(poiDetailBean.zhName);
             spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间："+poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotDescTv.setText(poiDetailBean.desc);
-            if(mIsCanAdd){
-                spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
+            if(mIsCanAdd) {
                 if(poiDetailBean.hasAdded){
                     spotViewHolder.mBtnAdd.setText("已选择");
-
                 }else{
                     spotViewHolder.mBtnAdd.setText("选择");
                 }
                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.hasAdded){
-                            poiDetailBean.hasAdded=false;
-                            if(mOnPoiActionListener!=null){
+                        if(poiDetailBean.hasAdded) {
+                            poiDetailBean.hasAdded = false;
+                            if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         }else{
-                            poiDetailBean.hasAdded=true;
-                            if(mOnPoiActionListener!=null){
+                            poiDetailBean.hasAdded = true;
+                            if(mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
                         }
                         notifyDataSetChanged();
                     }
                 });
-            }else{
-                spotViewHolder.mBtnAdd.setVisibility(View.GONE);
+            } else {
+                spotViewHolder.mBtnAdd.setText("");     //TODO 添加距离
+                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //TODO
+                    }
+                });
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, SpotDetailActivity.class);
+                    Activity act = (Activity) context;
+                    Intent intent = new Intent(act, SpotDetailActivity.class);
                     intent.putExtra("id",poiDetailBean.id);
-                    mContext.startActivity(intent);
+                    act.startActivity(intent);
+                    act.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
+        } else {
+//            poiViewHolder.mTvPoiName.setText("hellohellohellohellohellohellohello");
+//            poiViewHolder.mTvPrice.setText("129/人");
+//            poiViewHolder.mTvAddr.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
+//            poiViewHolder.mIvPoiImage.setImageResource(R.drawable.guide_1);
+//            poiViewHolder.mRatingBarPoi.setRating(2.7f);
+//            poiViewHolder.mTvCommentName.setText("hellohello");
+//            poiViewHolder.mTvCommentNum.setText(String.valueOf(9999));
+//            poiViewHolder.mTvCommentContent.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
 
 
-        }else {
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
-            if(mIsCanAdd){
-                poiViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
-                if(poiDetailBean.hasAdded){
+            if (mIsCanAdd) {
+                if (poiDetailBean.hasAdded) {
                     poiViewHolder.mBtnAdd.setText("已选择");
 
-                }else{
+                } else {
                     poiViewHolder.mBtnAdd.setText("选择");
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
@@ -180,30 +213,41 @@ public class PoiAdapter extends BaseAdapter {
                         notifyDataSetChanged();
                     }
                 });
-            }else{
-                poiViewHolder.mBtnAdd.setVisibility(View.GONE);
+            } else {
+                spotViewHolder.mBtnAdd.setText("");     //TODO 添加距离 导航
+                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //TODO
+                    }
+                });
             }
             poiViewHolder.mTvPrice.setText(poiDetailBean.priceDesc);
             poiViewHolder.mTvAddr.setText(poiDetailBean.address);
-            if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0)
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url,poiViewHolder.mIvPoiImage,UILUtils.getDefaultOption());
+            if(poiDetailBean.images != null&&poiDetailBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mIvPoiImage, picOptions);
+            } else {
+                spotViewHolder.mSpotImageIv.setImageResource(R.drawable.default_image);
+            }
             poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.rating);
-            if(poiDetailBean.comments==null||poiDetailBean.comments.size()==0){
+            if(poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
                 poiViewHolder.mRlComment.setVisibility(View.GONE);
-            }else{
+            } else {
                 poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
                 CommentBean commentBean = poiDetailBean.comments.get(0);
                 poiViewHolder.mTvCommentName.setText(commentBean.nickName);
-                poiViewHolder.mTvCommentNum.setText(poiDetailBean.commentCnt+"");
+                poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
                 poiViewHolder.mTvCommentContent.setText(commentBean.commentDetails);
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, PoiDetailActivity.class);
-                    intent.putExtra("id",poiDetailBean.id);
-                    intent.putExtra("type",poiDetailBean.type);
-                    mContext.startActivity(intent);
+                    Activity act = (Activity) context;
+                    Intent intent = new Intent(act, PoiDetailActivity.class);
+                    intent.putExtra("id", poiDetailBean.id);
+                    intent.putExtra("type", poiDetailBean.type);
+                    act.startActivity(intent);
+                    act.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
 
@@ -219,7 +263,7 @@ public class PoiAdapter extends BaseAdapter {
         @InjectView(R.id.spot_time_cost_tv)
         TextView mSpotTimeCostTv;
         @InjectView(R.id.btn_add)
-        Button mBtnAdd;
+        CheckedTextView mBtnAdd;
         @InjectView(R.id.spot_desc_tv)
         TextView mSpotDescTv;
 
@@ -235,7 +279,7 @@ public class PoiAdapter extends BaseAdapter {
         @InjectView(R.id.tv_poi_name)
         TextView mTvPoiName;
         @InjectView(R.id.btn_add)
-        Button mBtnAdd;
+        CheckedTextView mBtnAdd;
         @InjectView(R.id.tv_price)
         TextView mTvPrice;
         @InjectView(R.id.tv_addr)

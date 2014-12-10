@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_title"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/base_color_white">
-    <TextView android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
-        android:paddingTop="9dp"
-        android:paddingBottom="9dp"
-        android:gravity="center"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="13sp" />
-</FrameLayout>
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="9dp"
+    android:gravity="center"
+    android:textColor="@color/main_botton_text_color"
+    android:drawablePadding="6dp"
+    android:textSize="10sp" />

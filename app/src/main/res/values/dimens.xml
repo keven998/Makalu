@@ -2,6 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="title_bar_height">48dp</dimen>
 
+    <dimen name="base_magin">10dp</dimen>
+
     <dimen name="alpha_indexing_size_normal">22dp</dimen>
     <dimen name="alpha_indexing_size_selected">32dp</dimen>
     <dimen name="alpha_indexing_text_size_normal">12dp</dimen>

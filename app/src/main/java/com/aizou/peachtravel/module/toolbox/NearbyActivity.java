@@ -7,16 +7,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.toolbox.fragment.NearbyItemFragment;
+import com.umeng.socialize.utils.Log;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,13 +37,14 @@ public class NearbyActivity extends PeachBaseActivity {
     FixedViewPager mNearbyViewPager;
     private IndicatorViewPager indicatorViewPager;
 
-    private String[] types;
+    private String[] tabTitles;
+    private int[] tabRes = {R.drawable.checker_tab_nearby_ic_spot, R.drawable.checker_tab_nearby_ic_delicacy, R.drawable.checker_tab_nearby_ic_shopping, R.drawable.checker_tab_nearby_ic_stay};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        types = getResources().getStringArray(R.array.local_type);
+        tabTitles = getResources().getStringArray(R.array.local_type_title);
 
         initView();
     }
@@ -52,7 +57,7 @@ public class NearbyActivity extends PeachBaseActivity {
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
 
-        mTitleBar.getTitleTextView().setText("我的身边");
+        mTitleBar.getTitleTextView().setText("我身边");
         mTitleBar.enableBackKey(true);
     }
 
@@ -64,16 +69,20 @@ public class NearbyActivity extends PeachBaseActivity {
 
         @Override
         public int getCount() {
-            return types.length;
+            return tabTitles.length;
         }
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
             if (convertView == null) {
                 convertView = View.inflate(mContext, R.layout.tab_top, null);
+                int width = LocalDisplay.SCREEN_WIDTH_PIXELS/4;
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+                convertView.setLayoutParams(params);
             }
-            TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
-            textView.setText(types[position]);
+            CheckedTextView textView = (CheckedTextView) convertView;
+            textView.setText(tabTitles[position]);
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, tabRes[position], 0, 0);
             return convertView;
         }
 
