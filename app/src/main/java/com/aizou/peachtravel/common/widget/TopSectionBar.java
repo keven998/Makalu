@@ -10,6 +10,8 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -107,24 +109,22 @@ public class TopSectionBar extends Gallery {
     private class SectionOnItemSelectedListener implements OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            ViewGroup ctView = (ViewGroup)view;
-            if (mTempView != null && mTempView != ctView) {
-                AutoResizeTextView textView = (AutoResizeTextView) mTempView.getChildAt(0);
-                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
-                textView.setTextSize(textNormalSize);
-                textView.setChecked(false);
-                mTempView.removeAllViews();
-                mTempView.addView(textView);
-            }
-
-            mTempView = ctView;
-
-            AutoResizeTextView textView = (AutoResizeTextView) ctView.getChildAt(0);
-            textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
-            textView.setTextSize(textSelectSize);
-            textView.setChecked(true);
-            ctView.removeAllViews();
-            ctView.addView(textView);
+//            ViewGroup ctView = (ViewGroup)view;
+//            if (mTempView != null && mTempView != ctView) {
+//                AutoResizeTextView textView = (AutoResizeTextView) mTempView.getChildAt(0);
+//                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+//                textView.setTextSize(textNormalSize);
+//                textView.setChecked(false);
+//                mTempView.removeAllViews();
+//                mTempView.addView(textView);
+//            }
+//            mTempView = ctView;
+//            AutoResizeTextView textView = (AutoResizeTextView) ctView.getChildAt(0);
+//            textView.setLayoutParams(new LayoutParams(lytSelectSize, lytSelectSize));
+//            textView.setTextSize(textSelectSize);
+//            textView.setChecked(true);
+//            ctView.removeAllViews();
+//            ctView.addView(textView);
 
             if(!isGalleryFocus || mListView==null) {
                 return;
@@ -142,6 +142,7 @@ public class TopSectionBar extends Gallery {
     }
 
     private class SectionAdapter extends BaseAdapter {
+//        private int selectItem = -1;
 
         @Override
         public int getCount() {
@@ -157,6 +158,10 @@ public class TopSectionBar extends Gallery {
         public long getItemId(int position) {
             return position;
         }
+
+//        public void setSelectedItem(int selectedItem) {
+//            selectItem = selectedItem;
+//        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -177,6 +182,13 @@ public class TopSectionBar extends Gallery {
                 textView = (AutoResizeTextView)sectionTv.getChildAt(0);
             }
             textView.setText((CharSequence) indexer.getSections()[position]);
+
+//            if (selectItem == position) {
+//                Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.indicator_scale);    //实现动画效果
+//                textView.startAnimation(animation);
+//            } else {
+//                textView.setLayoutParams(new LayoutParams(lytNormalSize, lytNormalSize));
+//            }
 
             return convertView;
         }
