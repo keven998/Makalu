@@ -151,12 +151,14 @@ public class StrategyListActivity extends PeachBaseActivity {
                     bindView(strategyListResult.result);
                     page++;
                 }
-
+                mMyStrategyLv.onPullUpRefreshComplete();
+                mMyStrategyLv.onPullDownRefreshComplete();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                mMyStrategyLv.onPullUpRefreshComplete();
+                mMyStrategyLv.onPullDownRefreshComplete();
             }
         });
 
@@ -168,17 +170,22 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
         mStrategyListAdapter.getDataList().addAll(result);
         mStrategyListAdapter.notifyDataSetChanged();
-        if (result == null
-                || result.size() < BaseApi.PAGE_SIZE) {
+        if (mStrategyListAdapter.getCount() == 0) {
+            mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+            findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+                }
+            });
+        }
+        if (result == null || result.size() < BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setHasMoreData(false);
             // ptrLv.setScrollLoadEnabled(false);
         } else {
             mMyStrategyLv.setHasMoreData(true);
-            mMyStrategyLv.onPullUpRefreshComplete();
-        }
-        if (page == 0) {
-            mMyStrategyLv.onPullUpRefreshComplete();
-            mMyStrategyLv.onPullDownRefreshComplete();
         }
     }
 

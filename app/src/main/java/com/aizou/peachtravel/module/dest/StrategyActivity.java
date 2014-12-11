@@ -301,7 +301,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private void warnCancel() {
         new MaterialDialog.Builder(this)
                 .title("提示")
-                .content("是否保存已完成的清单")
+                .content("是否先保存已完成的清单")
                 .positiveText("保存")
                 .negativeText("直接返回")
                 .callback(new MaterialDialog.Callback() {

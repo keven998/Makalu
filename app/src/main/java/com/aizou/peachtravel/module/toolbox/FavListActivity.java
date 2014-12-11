@@ -7,16 +7,30 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
+import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.FavoritesBean;
+import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,6 +44,7 @@ public class FavListActivity extends PeachBaseActivity {
     public final static int CONST_TYPE_SHOP = 3;
     public final static int CONST_TYPE_STAY = 4;
     public final static int CONST_TYPE_NOTE = 5;
+    public final static int CONST_TYPE_CITY = 6;
 
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
@@ -38,14 +53,15 @@ public class FavListActivity extends PeachBaseActivity {
     @InjectView(R.id.edit_btn)
     CheckedTextView mEditBtn;
 
+    private int currentPage = 0;
     private CustomAdapter mAdapter;
+    private boolean isEditable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
-        initData();
 
         mTitleBar.getTitleTextView().setText("收藏夹");
         mTitleBar.enableBackKey(true);
@@ -58,6 +74,19 @@ public class FavListActivity extends PeachBaseActivity {
         });
 
         mFavLv.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
+        mFavLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                initData(0);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                initData(currentPage + 1);
+            }
+        });
+
+        initData(0);
     }
 
     private void initView() {
@@ -67,37 +96,73 @@ public class FavListActivity extends PeachBaseActivity {
         mEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isEditable = mEditBtn.isChecked();
-                mEditBtn.setChecked(!isEditable);
-                if (isEditable) {
-                    //TODO
-                } else {
-                    //TODO
-                }
+                boolean status = mEditBtn.isChecked();
+                mEditBtn.setChecked(!status);
+                isEditable = !status;
                 mAdapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void initData() {
+    private void initData(final int page) {
+        OtherApi.getFavist(page, new HttpCallBack() {
+            @Override
+            public void doSucess(Object result, String method) {
+                CommonJson4List<FavoritesBean> lists = CommonJson4List.fromJson(result.toString(), FavoritesBean.class);
+                if (lists.code == 0) {
+                    setupView(lists.result);
+                    currentPage = page;
+                }
+
+                mFavLv.onPullUpRefreshComplete();
+                mFavLv.onPullDownRefreshComplete();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                mFavLv.onPullUpRefreshComplete();
+                mFavLv.onPullDownRefreshComplete();
+            }
+        });
+    }
+
+    public void setupView(List<FavoritesBean> datas) {
+        if (datas == null || datas.size() == 0) {
+            if (currentPage == 0) {
+                Toast.makeText(FavListActivity.this, "没有任何收藏", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(FavListActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        mAdapter.appendData(datas);
 
     }
 
     class CustomAdapter extends BaseAdapter {
         private LayoutInflater inflater;
+        protected ArrayList<FavoritesBean> mItemDataList = new ArrayList<FavoritesBean>();
+        DisplayImageOptions poptions;
 
         public CustomAdapter() {
             inflater = getLayoutInflater();
+            poptions = UILUtils.getRadiusOption();
+        }
+
+        public void appendData(List<FavoritesBean> mItemDataList) {
+            mItemDataList.addAll(mItemDataList);
+            notifyDataSetChanged();
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return mItemDataList.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return i;
+            return mItemDataList.get(i);
         }
 
         @Override
@@ -106,7 +171,7 @@ public class FavListActivity extends PeachBaseActivity {
         }
 
         @Override
-        public View getView(int i, View contentView, ViewGroup viewGroup) {
+        public View getView(final int i, View contentView, ViewGroup viewGroup) {
             View view = contentView;
             ViewHolder vh;
             if (view == null) {
@@ -118,6 +183,7 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.typeView = (TextView)view.findViewById(R.id.tv_type);
                 vh.descView = (ExpandableTextView)view.findViewById(R.id.expand_text_view);
                 vh.flagView = (ImageView)view.findViewById(R.id.iv_flag);
+                vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
 
 //                int width = LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20);
 //                int height = width * 260 / 640;
@@ -132,16 +198,31 @@ public class FavListActivity extends PeachBaseActivity {
                 }
             }
 
-            //TEST
-            vh.imgView.setImageResource(R.drawable.guide_1);
-            vh.titleView.setText("黄果树瀑布");
+            if (isEditable) {
+                vh.deleteBtn.setVisibility(View.VISIBLE);
+                vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mItemDataList.remove(i);
+                        notifyDataSetChanged();
+                    }
+                });
+            } else {
+                vh.deleteBtn.setVisibility(View.GONE);
+            }
+
+            FavoritesBean item = mItemDataList.get(i);
+            if (item.images != null && item.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(item.images.get(0).url, vh.imgView, poptions);
+            } else {
+                vh.imgView.setImageResource(R.drawable.guide_1);
+            }
+
+            vh.titleView.setText(item.zhName);
             vh.tvLocal.setText("安顺");
 
-            vh.descView.setText("不久前，巴萨主帅恩里克因战绩不佳陷入而信任危机，俱乐部高层对其执教能力信心不足，西班牙《机密报》披露，由于担心被死敌皇马长期压制，巴萨正在考虑未来由穆里尼奥替代恩里克的可能性，这或许在一定程度上促使了切尔西尽快着手续约事宜。\n" +
-                    "\n" +
-                    "　　穆里尼奥与切尔西的合同将于2017年6月到期，此前穆帅已多次在公开场合强调，只要俱乐部愿意一直聘用他，他永远都不会离开斯坦福桥。在接受英国广播公司采访时，穆帅说：“俱乐部知道我不想走。我也不会去想下一步打算，因为我根本没有这方面的考虑");
-
-            int type = 1;
+            vh.descView.setText(item.desc);
+            int type = item.getType();
             int res = 0;
             String typeText = "";
             switch (type) {
@@ -170,6 +251,11 @@ public class FavListActivity extends PeachBaseActivity {
                     res = R.drawable.ic_standard_spot;
                     break;
 
+                case CONST_TYPE_CITY:
+                    typeText = "城市";
+                    res = R.drawable.ic_standard_spot;
+                    break;
+
                 default:
                     break;
             }
@@ -188,6 +274,7 @@ public class FavListActivity extends PeachBaseActivity {
         ImageView flagView;
         TextView  typeView;
         ExpandableTextView descView;
+        ImageButton deleteBtn;
     }
 
     class FavoriteItem {
