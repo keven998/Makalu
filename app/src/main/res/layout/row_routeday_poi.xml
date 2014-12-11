@@ -109,15 +109,15 @@
         <Button
             android:id="@+id/drag_nearby_btn"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:layout_height="28dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:textSize="12sp"
             android:textColor="@color/main_botton_text_color"
             android:background="@drawable/checker_cell_frame_bg"
-            android:text="周边还有" />
+            android:text="周边" />
 
         <ImageView
             android:id="@+id/drag_handle"

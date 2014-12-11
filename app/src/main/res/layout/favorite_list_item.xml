@@ -49,6 +49,15 @@
                 android:layout_below="@id/tv_local"
                 android:layout_centerHorizontal="true"/>
 
+            <ImageButton android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:paddingLeft="30dp"
+                android:paddingBottom="30dp"
+                android:src="@drawable/ic_line_edit_delete"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <TextView android:id="@+id/tv_type"

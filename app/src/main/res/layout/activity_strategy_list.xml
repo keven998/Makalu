@@ -33,4 +33,48 @@
         android:background="@drawable/checker_ic_layer_edit"
         />
 
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="35dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView android:id="@+id/desc_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingTop="24dp"
+            android:paddingBottom="28dp"
+            android:gravity="center"
+            android:text="木有任何旅行攻略\n有攻略,旅行好助手"
+            android:textColor="@color/base_text_color_text_hint"
+            android:lineSpacingExtra="3dp"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/desc_tv"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher" />
+
+        <Button
+            android:id="@+id/start_create"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/desc_tv"
+            android:background="@drawable/app_theme_button_selector"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
+            android:text="新建"
+            android:textColor="@color/base_color_white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
