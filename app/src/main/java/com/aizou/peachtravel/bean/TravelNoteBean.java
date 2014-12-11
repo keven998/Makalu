@@ -9,13 +9,13 @@ import android.os.Parcelable;
 public class TravelNoteBean implements Parcelable {
     public String id;
     public String title;
-    public String desc;
+    public String summary;
     public String cover;
     public String authorName;
     public String authorAvatar;
     public String source;
     public String sourceUrl;
-    public String publishDate;
+    public long publishDate;
 
     @Override
     public int describeContents() {
@@ -26,13 +26,13 @@ public class TravelNoteBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.title);
-        dest.writeString(this.desc);
+        dest.writeString(this.summary);
         dest.writeString(this.cover);
         dest.writeString(this.authorName);
         dest.writeString(this.authorAvatar);
         dest.writeString(this.source);
         dest.writeString(this.sourceUrl);
-        dest.writeString(this.publishDate);
+        dest.writeLong(this.publishDate);
     }
 
     public TravelNoteBean() {
@@ -41,16 +41,16 @@ public class TravelNoteBean implements Parcelable {
     private TravelNoteBean(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
-        this.desc = in.readString();
+        this.summary = in.readString();
         this.cover = in.readString();
         this.authorName = in.readString();
         this.authorAvatar = in.readString();
         this.source = in.readString();
         this.sourceUrl = in.readString();
-        this.publishDate = in.readString();
+        this.publishDate = in.readLong();
     }
 
-    public static final Parcelable.Creator<TravelNoteBean> CREATOR = new Parcelable.Creator<TravelNoteBean>() {
+    public static final Creator<TravelNoteBean> CREATOR = new Creator<TravelNoteBean>() {
         public TravelNoteBean createFromParcel(Parcel source) {
             return new TravelNoteBean(source);
         }

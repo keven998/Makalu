@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.dest;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.module.GuideActivity;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -68,7 +70,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     }
     private void initData(){
         mSpotId = getIntent().getStringExtra("id");
-        mSpotId = "53f30c3f10114e376de5b0fc";
+        mSpotId = "54814af98b5f77f8306decf4";
         getSpotDetailData();
     }
 
@@ -100,10 +102,28 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mOpenTimeTv.setText(result.openTime);
         mTimeCostTv.setText(result.timeCostStr);
         mAddressTv.setText(result.address);
+        mZoomImagesVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSpotImagesVp.setCurrentItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mOtherLl.removeAllViews();
         if(!TextUtils.isEmpty(result.guideUrl)){
             View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
+            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
+            otherIv.setImageResource(R.drawable.spot_guide_btn_normal);
             otherTv.setText("游玩指南");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +135,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         }
         if(!TextUtils.isEmpty(result.kengdieUrl)){
             View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
+            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
+            otherIv.setImageResource(R.drawable.spot_fangken_btn_normal);
             otherTv.setText("防坑攻略");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +149,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         }
         if(!TextUtils.isEmpty(result.trafficInfoUrl)){
             View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
+            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
+            otherIv.setImageResource(R.drawable.spot_traffic_btn_normal);
             otherTv.setText("交通指南");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {

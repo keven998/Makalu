@@ -253,6 +253,12 @@ public class TravelApi extends BaseApi{
         return HttpManager.request(request, callBack);
     }
 
+    /**
+     * 获取收藏列表
+     * @param page
+     * @param callback
+     * @return
+     */
     public static PTRequestHandler getFavist(int page,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
@@ -262,6 +268,13 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+
+    /**
+     * 删除收藏
+     * @param id
+     * @param callBack
+     * @return
+     */
     public static PTRequestHandler deleteFav(String id,HttpCallBack callBack){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
@@ -269,7 +282,7 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callBack);
     }
-
+    //联合查询
     public static PTRequestHandler searchAll(String keyword,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
@@ -283,7 +296,7 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-
+    //搜索地点
     public static PTRequestHandler searchForType(String keyword,String type,String locId,int page,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

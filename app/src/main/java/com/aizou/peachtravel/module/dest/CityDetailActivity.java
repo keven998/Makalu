@@ -8,34 +8,46 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.TravelNoteBean;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
 
 /**
  * Created by Rjm on 2014/11/13.
  */
-public class CityDetailActivity extends PeachBaseActivity {
+public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
     private ListView mTravelLv;
     private View headerView;
     private ImageView mCityIv;
     private TextView mPicNumTv;
     private TextView mCityNameTv;
     private ImageView mFavIv;
-    private TextView mCityDescTv;
+    private ExpandableTextView mCityDescTv;
     private TextView mCostTimeTv;
     private TextView bestMonthTv;
-    private View footerView;
+    private DrawableCenterTextView travelTv,foodTv,shoppingTv;
     private ListViewDataAdapter travelAdapter;
+    private TitleHeaderBar titleHeaderBar;
+    private LocBean locDetailBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,25 +61,30 @@ public class CityDetailActivity extends PeachBaseActivity {
         String id = getIntent().getStringExtra("id");
         id="5473ccd7b8ce043a64108c46";
         getCityDetailData(id);
+        getTravelNotes(id);
     }
 
     private void initView(){
         mTravelLv = (ListView) findViewById(R.id.lv_city_detail);
+        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        titleHeaderBar.setRightViewImageRes(R.drawable.ic_launcher);
+        titleHeaderBar.enableBackKey(true);
         headerView = View.inflate(mContext,R.layout.view_city_detail_head,null);
-        footerView = View.inflate(mContext,R.layout.view_city_detail_footer,null);
         mTravelLv.addHeaderView(headerView);
-        mTravelLv.addFooterView(footerView);
         mCityIv = (ImageView) headerView.findViewById(R.id.iv_city_detail);
         mPicNumTv = (TextView) headerView.findViewById(R.id.tv_pic_num);
         mCityNameTv = (TextView) headerView.findViewById(R.id.tv_city_name);
-        mCityDescTv = (TextView) headerView.findViewById(R.id.tv_city_desc);
+        mCityDescTv = (ExpandableTextView) headerView.findViewById(R.id.tv_city_desc);
         mCostTimeTv = (TextView) headerView.findViewById(R.id.tv_cost_time);
         bestMonthTv = (TextView) headerView.findViewById(R.id.tv_best_month);
-
+        mFavIv = (ImageView) headerView.findViewById(R.id.iv_fav);
+        travelTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_travel);
+        foodTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_restaurant);
+        shoppingTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_shopping);
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelViewHolder();
+                return new TravelNoteViewHolder(false,true);
             }
         });
         mTravelLv.setAdapter(travelAdapter);
@@ -91,7 +108,35 @@ public class CityDetailActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindView(LocBean detailBean){
+    private void getTravelNotes(String locId){
+        OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
+                if (detailResult.code == 0) {
+                    travelAdapter.getDataList().clear();
+                    travelAdapter.getDataList().addAll(detailResult.result);
+                    travelAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
+    }
+    private void refreshFav(LocBean detailBean){
+        if(detailBean.isMyFav){
+            mFavIv.setImageResource(R.drawable.ic_unfav);
+        }else{
+            mFavIv.setImageResource(R.drawable.ic_fav);
+        }
+    }
+
+    private void bindView(final LocBean detailBean){
+        locDetailBean = detailBean;
         if(detailBean.images!=null&&detailBean.images.size()>0)
         ImageLoader.getInstance().displayImage(detailBean.images.get(0).url,mCityIv,UILUtils.getDefaultOption());
         mCityIv.setOnClickListener(new View.OnClickListener() {
@@ -102,50 +147,94 @@ public class CityDetailActivity extends PeachBaseActivity {
 
             }
         });
+
+        mFavIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.getInstance().showProgressDialog(CityDetailActivity.this);
+                if(detailBean.isMyFav){
+                    OtherApi.deleteFav(detailBean.id,new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            if(deleteResult.code==0){
+                                detailBean.isMyFav=false;
+                                refreshFav(detailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }else{
+                    OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            if(deleteResult.code==0){
+                                detailBean.isMyFav=true;
+                                refreshFav(detailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }
+            }
+        });
+
+        titleHeaderBar.getTitleTextView().setText(detailBean.zhName);
         mPicNumTv.setText(detailBean.imageCnt+"");
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
         mCostTimeTv.setText(detailBean.timeCost+"天");
         bestMonthTv.setText(detailBean.travelMonth);
-        travelAdapter.getDataList().addAll(detailBean.travelNote);
-        travelAdapter.notifyDataSetChanged();
+        travelTv.setOnClickListener(this);
+        foodTv.setOnClickListener(this);
+        shoppingTv.setOnClickListener(this);
 
     }
 
-    private class TravelViewHolder extends ViewHolderBase<TravelNoteBean>{
-        ImageView mTravelIv;
-        TextView mNoteNameTv;
-        TextView mNoteDescTv;
-        ImageView mAvatarIv;
-        TextView mAuthorNameTv;
-        TextView mFromTv;
-        TextView mTimeTv;
-
-
-        @Override
-        public View createView(LayoutInflater layoutInflater) {
-            View view = layoutInflater.inflate(R.layout.row_travels,null);
-            mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
-            mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
-            mNoteDescTv = (TextView) view.findViewById(R.id.tv_travels_desc);
-            mAvatarIv = (ImageView) view.findViewById(R.id.iv_avatar);
-            mAuthorNameTv = (TextView) view.findViewById(R.id.tv_username);
-            mFromTv = (TextView) view.findViewById(R.id.tv_from);
-            mTimeTv = (TextView) view.findViewById(R.id.tv_time);
-            return view;
-        }
-
-        @Override
-        public void showData(int position, TravelNoteBean itemData) {
-            ImageLoader.getInstance().displayImage(itemData.cover,mTravelIv, UILUtils.getDefaultOption());
-            mNoteNameTv.setText(itemData.title);
-            mNoteDescTv.setText(itemData.desc);
-            ImageLoader.getInstance().displayImage(itemData.authorAvatar,mAvatarIv,UILUtils.getDefaultOption());
-            mAuthorNameTv.setText(itemData.authorName);
-            mFromTv.setText(itemData.source);
-            mTimeTv.setText(itemData.publishDate);
-
-        }
+    public void intentToTravel(View view){
+        Intent intent = new Intent(mContext,SpotDetailActivity.class);
+        startActivity(intent);
+        //todo:跳转html
+    }
+    public void intentToFood(View view){
+        Intent intent = new Intent(mContext,PoiListActivity.class);
+        ArrayList<LocBean> locList =new ArrayList<LocBean>();
+        locList.add(locDetailBean);
+        intent.putParcelableArrayListExtra("locList", locList);
+        intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
+        startActivity(intent);
+        //todo:跳转美食
+    }
+    public void intentToShopping(View view){
+        //todo:跳转购物
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_travel:
+                intentToTravel(v);
+                break;
+            case R.id.tv_restaurant:
+                intentToFood(v);
+                break;
+            case R.id.tv_shopping:
+                intentToShopping(v);
+                break;
+        }
+    }
 }

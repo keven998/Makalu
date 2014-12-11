@@ -135,15 +135,20 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id);
             }
         });
-        mBtnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putParcelableArrayListExtra("poiList", hasAddList);
-                setResult(RESULT_OK,intent);
-                finish();
-            }
-        });
+        if(canAdd){
+            mBtnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putParcelableArrayListExtra("poiList", hasAddList);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
+            });
+        }else{
+            mBtnOk.setVisibility(View.INVISIBLE);
+        }
+
 
 
     }
@@ -203,13 +208,16 @@ public class PoiListActivity extends PeachBaseActivity {
         if (page == 0) {
             mPoiAdapter.getDataList().clear();
         }
-        for(PoiDetailBean detailBean:result){
-            if(hasAddList.contains(detailBean)){
-                detailBean.hasAdded=true;
-            }else{
-                detailBean.hasAdded=false;
+        if(canAdd){
+            for(PoiDetailBean detailBean:result){
+                if(hasAddList.contains(detailBean)){
+                    detailBean.hasAdded=true;
+                }else{
+                    detailBean.hasAdded=false;
+                }
             }
         }
+
         mPoiAdapter.getDataList().addAll(result);
         mPoiAdapter.notifyDataSetChanged();
         if (result == null

@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/14.
@@ -20,9 +21,13 @@ public class LocBean implements Parcelable {
     public float timeCost;
     public String timeCostDesc;
     public String travelMonth;
-    public ArrayList<ImageBean> images =new ArrayList<ImageBean>();
+    public List<ImageBean> images =new ArrayList<ImageBean>();
     public int imageCnt;
-    public ArrayList<TravelNoteBean> travelNote = new ArrayList<TravelNoteBean>();
+    public boolean isMyFav;
+
+
+    public LocBean() {
+    }
 
 
     @Override
@@ -42,12 +47,9 @@ public class LocBean implements Parcelable {
         dest.writeFloat(this.timeCost);
         dest.writeString(this.timeCostDesc);
         dest.writeString(this.travelMonth);
-        dest.writeSerializable(this.images);
+        dest.writeTypedList(images);
         dest.writeInt(this.imageCnt);
-        dest.writeSerializable(this.travelNote);
-    }
-
-    public LocBean() {
+        dest.writeByte(isMyFav ? (byte) 1 : (byte) 0);
     }
 
     private LocBean(Parcel in) {
@@ -61,12 +63,12 @@ public class LocBean implements Parcelable {
         this.timeCost = in.readFloat();
         this.timeCostDesc = in.readString();
         this.travelMonth = in.readString();
-        this.images = (ArrayList<ImageBean>) in.readSerializable();
+        in.readTypedList(images, ImageBean.CREATOR);
         this.imageCnt = in.readInt();
-        this.travelNote = (ArrayList<TravelNoteBean>) in.readSerializable();
+        this.isMyFav = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<LocBean> CREATOR = new Parcelable.Creator<LocBean>() {
+    public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {
         public LocBean createFromParcel(Parcel source) {
             return new LocBean(source);
         }
