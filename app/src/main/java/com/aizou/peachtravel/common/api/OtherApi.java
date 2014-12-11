@@ -144,6 +144,7 @@ public class OtherApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FAV);
         setDefaultParams(request);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("itemId", id);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -214,8 +215,8 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                spotViewHolder.mBtnAdd.setText("");     //TODO 添加距离 导航
-                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                poiViewHolder.mBtnAdd.setText("");     //TODO 添加距离 导航
+                poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //TODO
@@ -227,7 +228,7 @@ public class PoiAdapter extends BaseAdapter {
             if(poiDetailBean.images != null&&poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mIvPoiImage, picOptions);
             } else {
-                spotViewHolder.mSpotImageIv.setImageResource(R.drawable.default_image);
+                poiViewHolder.mIvPoiImage.setImageResource(R.drawable.default_image);
             }
             poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.rating);
             if(poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
@@ -235,9 +236,9 @@ public class PoiAdapter extends BaseAdapter {
             } else {
                 poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
                 CommentBean commentBean = poiDetailBean.comments.get(0);
-                poiViewHolder.mTvCommentName.setText(commentBean.nickName);
+                poiViewHolder.mTvCommentName.setText(commentBean.userName);
                 poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
-                poiViewHolder.mTvCommentContent.setText(commentBean.commentDetails);
+                poiViewHolder.mTvCommentContent.setText(Html.fromHtml(commentBean.contents));
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override

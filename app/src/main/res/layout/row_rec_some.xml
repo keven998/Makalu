@@ -2,8 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingLeft="5dp"
-    android:background="@color/base_color_white" >
+    android:paddingRight="10dp"
+     >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee">
 
     <ImageView
         android:id="@+id/rec_some_iv"
@@ -18,11 +22,14 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="3dp"
+        android:padding="5dp"
+        android:maxLines="2"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/base_color_black"
+        android:background="#aaeeeeee"
+        android:textColor="@color/base_text_color_subtitle"
         android:text="some info"
-        android:textSize="12dp" />
+        android:textSize="11sp" />
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.HackyViewPager;
@@ -19,12 +20,16 @@ import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
+import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.SpotDetailBean;
 import com.aizou.peachtravel.bean.TestBean;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.GuideActivity;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,6 +41,7 @@ import java.util.ArrayList;
  */
 public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
+    private TitleHeaderBar mTitleBar;
     private AutoScrollViewPager mSpotImagesVp;
     private HackyViewPager mZoomImagesVp;
     private View zoomContainer;
@@ -44,6 +50,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private LinearLayout mOtherLl;
     private View containView;
     private ImageZoomAnimator2 zoomAnimator;
+    private TextView picNumTv;
+    private ImageView favIv;
+    private SpotDetailBean spotDetailBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +62,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
+        mTitleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        picNumTv = (TextView) findViewById(R.id.tv_pic_num);
+        favIv = (ImageView) findViewById(R.id.iv_fav);
+        mTitleBar.enableBackKey(true);
         containView = findViewById(R.id.container);
         mSpotImagesVp = (AutoScrollViewPager) findViewById(R.id.vp_spot_images);
         zoomContainer = findViewById(R.id.zoom_container);
@@ -80,6 +93,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<SpotDetailBean> detailResult = CommonJson.fromJson(result,SpotDetailBean.class);
                 if(detailResult.code==0){
+                    spotDetailBean=detailResult.result;
                     bindView(detailResult.result);
                 }
 
@@ -91,9 +105,17 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
     }
-
-    private void bindView(SpotDetailBean result) {
+    private void refreshFav(SpotDetailBean detailBean){
+        if(detailBean.isMyFav){
+            favIv.setImageResource(R.drawable.ic_unfav);
+        }else{
+            favIv.setImageResource(R.drawable.ic_fav);
+        }
+    }
+    private void bindView(final SpotDetailBean result) {
         ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(mContext,result.images);
+        picNumTv.setText(1+"/"+result.images.size());
+        mTitleBar.getTitleTextView().setText(result.zhName);
         mSpotImagesVp.setAdapter(imagePagerAdapter);
         mSpotNameTv.setText(result.zhName);
         mSpotIntroTv.setText(result.desc);
@@ -102,6 +124,65 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mOpenTimeTv.setText(result.openTime);
         mTimeCostTv.setText(result.timeCostStr);
         mAddressTv.setText(result.address);
+        favIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.getInstance().showProgressDialog(SpotDetailActivity.this);
+                if(result.isMyFav){
+                    OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
+                                spotDetailBean.isMyFav = false;
+                                refreshFav(spotDetailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }else{
+                    OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            if(deleteResult.code==0){
+                                spotDetailBean.isMyFav=true;
+                                refreshFav(spotDetailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }
+            }
+        });
+        mSpotImagesVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                picNumTv.setText((position+1)+"/"+result.images.size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mZoomImagesVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

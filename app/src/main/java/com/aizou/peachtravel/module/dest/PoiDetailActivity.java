@@ -7,12 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -32,10 +27,11 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
-import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RecommendBean;
-import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -44,12 +40,11 @@ import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
-import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
-import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
-import com.aizou.peachtravel.module.toolbox.im.IMShareActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -62,7 +57,7 @@ import butterknife.Optional;
 public class PoiDetailActivity extends PeachBaseActivity {
     @Optional
     @InjectView(R.id.ly_header_bar_title_wrap)
-    TitleHeaderBar mLyHeaderBarTitleWrap;
+    TitleHeaderBar mTitleBar;
     ListView mLvFoodshopDetail;
     @Optional
     @InjectView(R.id.iv_poi)
@@ -88,8 +83,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Optional
     @InjectView(R.id.rv_rec_some)
     RecyclerView mRvRecSome;
-    PoiDetailBean poiDetailBean;
+    @InjectView(R.id.iv_fav)
+    ImageView mIvFav;
     private String id;
+    PoiDetailBean poiDetailBean;
     private String type;
 
 
@@ -106,8 +103,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
-        mLyHeaderBarTitleWrap.getRightTextView().setText("更多");
-        mLyHeaderBarTitleWrap.getRightTextView().setOnClickListener(new View.OnClickListener() {
+        mTitleBar.getRightTextView().setText("更多");
+        mTitleBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PoiMoreMenu fragment = new PoiMoreMenu();
@@ -125,25 +122,26 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 fragment.show(getSupportFragmentManager(), "more_menu");
             }
         });
-        mLyHeaderBarTitleWrap.enableBackKey(true);
+        mTitleBar.enableBackKey(true);
 
     }
 
     private void initData() {
         id = getIntent().getStringExtra("id");
         type = getIntent().getStringExtra("type");
-        type="restaurant";
-        if("restaurant".equals(type)){
+        type = "restaurant";
+        if ("restaurant".equals(type)) {
             id = "53b0599710114e05dc63b5a2";
-        }else{
+        } else {
             id = "53b0599710114e05dc63b5a5";
         }
         getDetailData();
 
     }
 
+
     private void getDetailData() {
-        TravelApi.getPoiDetail(type,id,new HttpCallBack<String>() {
+        TravelApi.getPoiDetail(type, id, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
@@ -161,15 +159,68 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     }
 
+    private void refreshFav(PoiDetailBean detailBean){
+        if(detailBean.isMyFav){
+            mIvFav.setImageResource(R.drawable.ic_unfav);
+        }else{
+            mIvFav.setImageResource(R.drawable.ic_fav);
+        }
+    }
+
     private void bindView(PoiDetailBean bean) {
         if (bean.images != null && bean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
         mTvPoiName.setText(bean.zhName);
+        mTitleBar.getTitleTextView().setText(bean.zhName);
         mTvPoiPrice.setText(bean.priceDesc);
         mPoiStar.setRating(bean.rating);
-        mTvTel.setText(bean.telephone);
+        mTvTel.setText("电话:" + bean.telephone);
         mTvAddr.setText(bean.address);
+        refreshFav(bean);
+        mIvFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.getInstance().showProgressDialog(PoiDetailActivity.this);
+                if(poiDetailBean.isMyFav){
+                    OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
+                                poiDetailBean.isMyFav = false;
+                                refreshFav(poiDetailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }else{
+                    OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            if(deleteResult.code==0){
+                                poiDetailBean.isMyFav=true;
+                                refreshFav(poiDetailBean);
+                            }
+
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                        }
+                    });
+                }
+            }
+        });
 
         //设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -194,10 +245,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareLogin(mContext,requestCode,resultCode,data);
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==IMUtils.IM_SHARE_REQUEST_CODE){
-                final int chatType = data.getIntExtra("chatType",0);
+        IMUtils.onShareLogin(mContext, requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMUtils.IM_SHARE_REQUEST_CODE) {
+                final int chatType = data.getIntExtra("chatType", 0);
                 final String groupId = data.getStringExtra("groupId");
                 final String userId = data.getStringExtra("userId");
                 IMUtils.showImSharePoiDialog(mContext, poiDetailBean, new MaterialDialog.Callback() {
@@ -209,22 +260,21 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         Intent intent = new Intent(mContext, ChatActivity.class);
-                        if(poiDetailBean.type.equals(TravelApi.PoiType.RESTAURANTS)){
+                        if (poiDetailBean.type.equals(TravelApi.PoiType.RESTAURANTS)) {
                             intent.putExtra("extType", Constant.ExtType.FOOD);
-                        }else if(poiDetailBean.type.equals(TravelApi.PoiType.HOTEL)){
+                        } else if (poiDetailBean.type.equals(TravelApi.PoiType.HOTEL)) {
                             intent.putExtra("extType", Constant.ExtType.HOTEL);
-                        }
-                        else if(poiDetailBean.type.equals(TravelApi.PoiType.SHOPPING)){
+                        } else if (poiDetailBean.type.equals(TravelApi.PoiType.SHOPPING)) {
                             intent.putExtra("extType", Constant.ExtType.SHOPPING);
                         }
-                        intent.putExtra("content",IMUtils.createExtMessageContentForPoi(poiDetailBean));
+                        intent.putExtra("content", IMUtils.createExtMessageContentForPoi(poiDetailBean));
 
-                        if(chatType==ChatActivity.CHATTYPE_GROUP){
+                        if (chatType == ChatActivity.CHATTYPE_GROUP) {
                             //进入群聊
                             // it is group chat
                             intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
                             intent.putExtra("groupId", groupId);
-                        }else{
+                        } else {
                             // it is single chat
                             intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
                             intent.putExtra("userId", userId);
@@ -252,6 +302,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView mTvMore;
         @InjectView(R.id.ll_comment_index)
         RelativeLayout mLlCommentIndex;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -262,29 +313,29 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, CommentBean itemData) {
-            if(position==0){
+            if (position == 0) {
                 mLlCommentIndex.setVisibility(View.VISIBLE);
                 mTvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        //
                     }
                 });
                 mTvCommentNum.setText("网友点评");
-                SpannableString impress = new SpannableString("( "+ poiDetailBean.commentCnt+" )");
-                impress.setSpan(
-                        new ForegroundColorSpan(getResources().getColor(
-                                R.color.base_divider_color)), 0, impress.length(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(12)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mTvCommentNum.append(impress);
-            }else{
+//                SpannableString impress = new SpannableString("( "+ poiDetailBean.commentCnt+" )");
+//                impress.setSpan(
+//                        new ForegroundColorSpan(getResources().getColor(
+//                                R.color.base_divider_color)), 0, impress.length(),
+//                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(12)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                mTvCommentNum.append(impress);
+            } else {
                 mLlCommentIndex.setVisibility(View.GONE);
             }
-            mTvUsername.setText(itemData.nickName);
-            mTvDate.setText(itemData.commentTime);
-            mTvComment.setText(itemData.commentDetails);
+            mTvUsername.setText(itemData.userName);
+            mTvDate.setText(dateFormat.format(new Date(itemData.cTime)));
+            mTvComment.setText(Html.fromHtml(itemData.contents));
             mCommentStar.setRating(itemData.rating);
 
         }

@@ -210,12 +210,14 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         //todo:跳转html
     }
     public void intentToFood(View view){
-        Intent intent = new Intent(mContext,PoiListActivity.class);
-        ArrayList<LocBean> locList =new ArrayList<LocBean>();
-        locList.add(locDetailBean);
-        intent.putParcelableArrayListExtra("locList", locList);
-        intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
-        startActivity(intent);
+//        Intent intent = new Intent(mContext,PoiListActivity.class);
+//        ArrayList<LocBean> locList =new ArrayList<LocBean>();
+//        locList.add(locDetailBean);
+//        intent.putParcelableArrayListExtra("locList", locList);
+//        intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
+//        startActivity(intent);
+          Intent intent = new Intent(mContext,PoiDetailActivity.class);
+          startActivity(intent);
         //todo:跳转美食
     }
     public void intentToShopping(View view){

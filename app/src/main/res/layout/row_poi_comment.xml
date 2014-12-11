@@ -2,6 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@drawable/shape_white_bar"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -14,6 +15,10 @@
             android:id="@+id/tv_comment_num"
             android:layout_width="wrap_content"
             android:text="网友点评"
+            android:textColor="@color/base_text_color_title"
+            android:drawableLeft="@drawable/ic_comment"
+            android:drawablePadding="10dp"
+            android:textSize="12dp"
             android:padding="10dp"
             android:layout_height="wrap_content" />
 
@@ -23,13 +28,15 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="12dp"
             android:padding="10dp"
             android:text="更多" />
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:background="@color/base_color_black"
+            android:background="@color/base_divider_color"
             android:layout_below="@id/tv_comment_num" />
     </RelativeLayout>
 
@@ -37,26 +44,45 @@
         android:layout_below="@id/ll_comment_index"
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="小明"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/ic_comment_point"
+        android:textColor="@color/base_text_color_title"
         android:layout_height="wrap_content" />
 
     <RatingBar
         android:id="@+id/comment_star"
-        style="?android:attr/ratingBarStyleSmall"
+        style="@style/custom_small_rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="30dp"
+
         android:layout_below="@id/tv_username" />
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         android:layout_below="@id/tv_username"
+        android:text="2012-1-5"
+        android:textSize="10sp"
+        android:textColor="@color/base_text_color_subtitle"
         android:layout_alignParentRight="true" />
 
     <TextView
         android:id="@+id/tv_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="11sp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/base_text_color_subtitle"
         android:layout_below="@id/comment_star" />
 
 </RelativeLayout>
