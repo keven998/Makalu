@@ -485,7 +485,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 //
 //                    }
 //                });
-                holder.menuIv.setVisibility(View.GONE);
+                holder.menuIv.setVisibility(View.INVISIBLE);
             }
 
 

@@ -32,7 +32,7 @@ public class ListViewDataAdapter<ItemDataType> extends ListViewDataAdapterBase<I
 
     @Override
     public ItemDataType getItem(int position) {
-        if (mItemDataList.size() <= position || position < 0) {
+        if (mItemDataList == null || mItemDataList.size() <= position || position < 0) {
             return null;
         }
         return mItemDataList.get(position);

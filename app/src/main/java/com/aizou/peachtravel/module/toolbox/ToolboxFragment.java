@@ -97,10 +97,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 weatherStr = DateUtil.getCurrentMonthDay() + "   "+city+"   " + weatherArray[weatherInfo.getCurrentCode()];
                 ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
                 mTvWeather.setText(weatherStr);
-
             }
         });
-
     }
 
     @Override

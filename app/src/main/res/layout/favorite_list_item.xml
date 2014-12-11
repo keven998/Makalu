@@ -9,15 +9,15 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:background="@color/base_color_white">
+        android:background="@drawable/shape_white_bar">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="176dp">
+            android:layout_height="130dp">
 
             <ImageView android:id="@+id/stand_img"
                 android:layout_width="match_parent"
-                android:layout_height="176dp"
+                android:layout_height="130dp"
                 android:scaleType="centerCrop"/>
 
             <TextView android:id="@+id/tv_local"
@@ -26,14 +26,20 @@
                 android:layout_centerInParent="true"
                 android:textSize="12sp"
                 android:textColor="@color/base_color_white"
-                android:padding="6dp"/>
+                android:textStyle="italic"
+                android:paddingTop="8dp"
+                android:paddingBottom="6dp"/>
 
             <TextView android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/tv_local"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:maxLines="2"
+                android:gravity="center"
                 android:textColor="@color/base_color_white"/>
 
             <ImageView android:id="@+id/iv_flag"
@@ -48,36 +54,40 @@
         <TextView android:id="@+id/tv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/base_text_color_text_hint"
+            android:textSize="11sp"
+            android:textColor="@color/base_text_color_text_placeholder"
             android:textStyle="italic"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="11dp"/>
 
-        <com.ms.square.android.expandabletextview.ExpandableTextView
+        <com.aizou.core.widget.expandabletextview.ExpandableTextView
             xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
             android:id="@+id/expand_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             expandableTextView:maxCollapsedLines="2"
-            expandableTextView:animDuration="200">
+            expandableTextView:animDuration="200"
+            expandableTextView:animAlphaStart="1.0"
+            expandableTextView:expandDrawable="@drawable/cell_accessory_down"
+            expandableTextView:collapseDrawable="@drawable/cell_accessory_up">
             <TextView
                 android:id="@id/expandable_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/base_text_color_title"/>
+                android:textSize="12sp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="@color/base_text_color_subtitle"/>
             <ImageButton
                 android:id="@id/expand_collapse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
-                android:layout_marginTop="-24dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="-22dp"
                 android:layout_gravity="right|bottom"
-                android:background="@android:color/transparent"/>
-        </com.ms.square.android.expandabletextview.ExpandableTextView>
+                android:background="@null"/>
+        </com.aizou.core.widget.expandabletextview.ExpandableTextView>
 
     </LinearLayout>
 

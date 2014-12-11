@@ -93,10 +93,10 @@
             android:background="@drawable/shape_white_bar">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:drawablePadding="7dp"
                 android:drawableLeft="@drawable/ic_launcher"
                 android:text="今天木有任何安排"
