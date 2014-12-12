@@ -49,7 +49,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="28dp"
             android:gravity="center"
-            android:text="木有任何旅行攻略\n有攻略,旅行好助手"
+            android:text="木有任何旅行攻略\n这么好的旅行助手不用可惜了"
             android:textColor="@color/base_text_color_text_hint"
             android:lineSpacingExtra="3dp"
             android:textSize="15sp" />
