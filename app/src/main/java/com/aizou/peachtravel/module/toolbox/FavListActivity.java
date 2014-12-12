@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -22,14 +23,19 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.FavoritesBean;
+import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -77,12 +83,13 @@ public class FavListActivity extends PeachBaseActivity {
         mFavLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(0);
+                currentPage=0;
+                initData(currentPage);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(currentPage + 1);
+                initData(currentPage);
             }
         });
 
@@ -111,7 +118,7 @@ public class FavListActivity extends PeachBaseActivity {
                 CommonJson4List<FavoritesBean> lists = CommonJson4List.fromJson(result.toString(), FavoritesBean.class);
                 if (lists.code == 0) {
                     setupView(lists.result);
-                    currentPage = page;
+                    currentPage++;
                 }
 
                 mFavLv.onPullUpRefreshComplete();
@@ -128,14 +135,19 @@ public class FavListActivity extends PeachBaseActivity {
 
     public void setupView(List<FavoritesBean> datas) {
         if (datas == null || datas.size() == 0) {
+            mFavLv.setHasMoreData(false);
             if (currentPage == 0) {
                 Toast.makeText(FavListActivity.this, "没有任何收藏", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(FavListActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
             }
             return;
+        }else{
+            mFavLv.setHasMoreData(true);
         }
-
+        if (currentPage == 0) {
+            mAdapter.getDataList().clear();
+        }
         mAdapter.appendData(datas);
 
     }
@@ -144,15 +156,19 @@ public class FavListActivity extends PeachBaseActivity {
         private LayoutInflater inflater;
         protected ArrayList<FavoritesBean> mItemDataList = new ArrayList<FavoritesBean>();
         DisplayImageOptions poptions;
+        private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         public CustomAdapter() {
             inflater = getLayoutInflater();
             poptions = UILUtils.getRadiusOption();
         }
 
-        public void appendData(List<FavoritesBean> mItemDataList) {
-            mItemDataList.addAll(mItemDataList);
+        public void appendData(List<FavoritesBean> itemDataList) {
+            mItemDataList.addAll(itemDataList);
             notifyDataSetChanged();
+        }
+        public ArrayList<FavoritesBean> getDataList(){
+            return mItemDataList;
         }
 
         @Override
@@ -181,9 +197,11 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.titleView = (TextView)view.findViewById(R.id.tv_title);
                 vh.tvLocal = (TextView)view.findViewById(R.id.tv_local);
                 vh.typeView = (TextView)view.findViewById(R.id.tv_type);
+                vh.timeView = (TextView) view.findViewById(R.id.tv_create_time);
                 vh.descView = (ExpandableTextView)view.findViewById(R.id.expand_text_view);
                 vh.flagView = (ImageView)view.findViewById(R.id.iv_flag);
                 vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
+
 
 //                int width = LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20);
 //                int height = width * 260 / 640;
@@ -197,21 +215,38 @@ public class FavListActivity extends PeachBaseActivity {
                     vh.descView.reset();
                 }
             }
-
+            final FavoritesBean item = mItemDataList.get(i);
             if (isEditable) {
                 vh.deleteBtn.setVisibility(View.VISIBLE);
                 vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mItemDataList.remove(i);
-                        notifyDataSetChanged();
+                        DialogManager.getInstance().showProgressDialog(FavListActivity.this);
+                        OtherApi.deleteFav(item.itemId,new HttpCallBack<String>() {
+                            @Override
+                            public void doSucess(String result, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+                                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                                if(deleteResult.code==0){
+                                    mItemDataList.remove(i);
+                                    notifyDataSetChanged();
+                                }
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+
+                            }
+                        });
+
                     }
                 });
             } else {
                 vh.deleteBtn.setVisibility(View.GONE);
             }
 
-            FavoritesBean item = mItemDataList.get(i);
+
             if (item.images != null && item.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(item.images.get(0).url, vh.imgView, poptions);
             } else {
@@ -219,7 +254,13 @@ public class FavListActivity extends PeachBaseActivity {
             }
 
             vh.titleView.setText(item.zhName);
-            vh.tvLocal.setText("安顺");
+            if(item.locality!=null){
+                vh.tvLocal.setVisibility(View.VISIBLE);
+                vh.tvLocal.setText(item.locality.zhName);
+            }else{
+                vh.tvLocal.setVisibility(View.GONE);
+            }
+
 
             vh.descView.setText(item.desc);
             int type = item.getType();
@@ -260,6 +301,7 @@ public class FavListActivity extends PeachBaseActivity {
                     break;
             }
             vh.typeView.setText(typeText);
+            vh.timeView.setText(simpleDateFormat.format(new Date(item.createTime)));
             vh.flagView.setImageResource(res);
 
             return view;
@@ -273,6 +315,7 @@ public class FavListActivity extends PeachBaseActivity {
         TextView  tvLocal;
         ImageView flagView;
         TextView  typeView;
+        TextView  timeView;
         ExpandableTextView descView;
         ImageButton deleteBtn;
     }

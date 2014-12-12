@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -69,9 +71,9 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-        mMyStrategyLv.setPullLoadEnabled(false);
-        mMyStrategyLv.setPullRefreshEnabled(false);
-        mMyStrategyLv.setScrollLoadEnabled(true);
+//        mMyStrategyLv.setPullLoadEnabled(false);
+//        mMyStrategyLv.setPullRefreshEnabled(false);
+//        mMyStrategyLv.setScrollLoadEnabled(true);
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -89,6 +91,15 @@ public class StrategyListActivity extends PeachBaseActivity {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 getStrategyListData();
+            }
+        });
+        mMyStrategyLv.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                StrategyBean bean= (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                intent.putExtra("id",bean.id);
+                startActivity(intent);
             }
         });
 

@@ -129,6 +129,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.dest.TravelNoteSearchActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.SearchTypeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

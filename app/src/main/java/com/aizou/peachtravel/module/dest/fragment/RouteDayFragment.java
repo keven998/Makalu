@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -257,6 +258,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                 switch (type) {
                     case SPOT:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_spot, null);
+                        holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                         holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
@@ -267,6 +269,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                         break;
                     case POI:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
+                        holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                         holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
@@ -329,7 +332,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                             }
                         });
                     }
-                    convertView.setOnClickListener(new View.OnClickListener() {
+                    holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), SpotDetailActivity.class);
@@ -388,7 +391,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                             }
                         });
                     }
-                    convertView.setOnClickListener(new View.OnClickListener() {
+                    holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
@@ -562,6 +565,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
         private class ItemViewHolder {
             public LinearLayout lineLl;
+            public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
             public Button nearByTv;
             public ImageView poiImageIv, spotImageIv;

@@ -93,6 +93,7 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
+import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.MessageAdapter;
@@ -486,6 +487,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                                 memberAdapter.getDataList().add(user);
                             }
                         }
+                        memberAdapter.notifyDataSetChanged();
                     }
                 }
 
@@ -1075,17 +1077,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 //                e.printStackTrace();
 //            }
         } else if (id == R.id.btn_travels) {
-            // 点击我的目的地图标
-            JSONObject contentJson = new JSONObject();
-            try {
-                contentJson.put("id","1");
-                contentJson.put("desc","我的游记描述");
-                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("name","游记");
-                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
+            startActivity(intent);
+//            // 点击我的目的地图标
+//            JSONObject contentJson = new JSONObject();
+//            try {
+//                contentJson.put("id","1");
+//                contentJson.put("desc","我的游记描述");
+//                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
+//                contentJson.put("name","游记");
+//                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
         }else if (id == R.id.btn_take_picture) {
 			selectPicFromCamera();// 点击照相图标
 		} else if (id == R.id.btn_picture) {

@@ -27,7 +27,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
-import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RecommendBean;
@@ -160,10 +159,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     private void refreshFav(PoiDetailBean detailBean){
-        if(detailBean.isMyFav){
-            mIvFav.setImageResource(R.drawable.ic_unfav);
-        }else{
+        if(detailBean.isFavorite){
             mIvFav.setImageResource(R.drawable.ic_fav);
+        }else{
+            mIvFav.setImageResource(R.drawable.ic_unfav);
         }
     }
 
@@ -182,14 +181,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 DialogManager.getInstance().showProgressDialog(PoiDetailActivity.this);
-                if(poiDetailBean.isMyFav){
+                if(poiDetailBean.isFavorite){
                     OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
-                                poiDetailBean.isMyFav = false;
+                                poiDetailBean.isFavorite = false;
                                 refreshFav(poiDetailBean);
                             }
 
@@ -207,7 +206,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
-                                poiDetailBean.isMyFav=true;
+                                poiDetailBean.isFavorite =true;
                                 refreshFav(poiDetailBean);
                             }
 

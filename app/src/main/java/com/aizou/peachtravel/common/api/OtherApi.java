@@ -94,7 +94,7 @@ public class OtherApi extends BaseApi {
     public static PTRequestHandler getTravelNoteByKeyword(String keyword,int page,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + COVER_STORY);
+        request.setUrl(SystemConfig.BASE_URL + TRAVEL_NOTES);
         request.putUrlParams("keyWord", keyword);
         request.putUrlParams("page",page+"");
         request.putUrlParams("pageSize",PAGE_SIZE+"");

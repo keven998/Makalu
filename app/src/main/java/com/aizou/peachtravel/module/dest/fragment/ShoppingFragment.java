@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -58,7 +60,7 @@ public class ShoppingFragment extends PeachBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_shopping_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
         addBtn.setText("添加购物");
@@ -76,6 +78,7 @@ public class ShoppingFragment extends PeachBaseFragment {
         locList = getArguments().getParcelableArrayList("locList");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
+        controller.setBackgroundColor(Color.TRANSPARENT);
         controller.setRemoveEnabled(false);
         mRestAdapter = new RestAdapter();
         mEditDslv.setFloatViewManager(controller);
@@ -161,6 +164,7 @@ public class ShoppingFragment extends PeachBaseFragment {
             if (convertView == null) {
                 holder = new ItemViewHolder();
                 convertView = View.inflate(getActivity(), R.layout.row_list_poi, null);
+                holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                 holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                 holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
                 holder.nearByTv = (ImageButton) convertView.findViewById(R.id.drag_nearby_tv);
@@ -219,7 +223,7 @@ public class ShoppingFragment extends PeachBaseFragment {
                     }
                 });
             }
-            convertView.setOnClickListener(new View.OnClickListener() {
+            holder.contentRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
@@ -242,6 +246,7 @@ public class ShoppingFragment extends PeachBaseFragment {
         }
 
         private class ItemViewHolder {
+            public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
             public ImageButton nearByTv;
             public ImageView poiImageIv;

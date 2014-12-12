@@ -13,7 +13,7 @@ public class PoiDetailBean implements Parcelable {
     public final static String RESTAURANT="restaurant";
     public final static String SHOPPING="shopping";
     public boolean hasAdded=false;
-    public boolean isMyFav;
+    public boolean isFavorite;
     public String type;
     public String id;
     public String zhName;
@@ -23,7 +23,7 @@ public class PoiDetailBean implements Parcelable {
     public String timeCostDesc;
     public float rating;
     public int commentCnt;
-    public LocationBean loction;
+    public LocationBean location;
     public List<ImageBean> images = new ArrayList<ImageBean>();
     public List<LocBean> locList = new ArrayList<LocBean>();
     public String address="";
@@ -50,7 +50,7 @@ public class PoiDetailBean implements Parcelable {
         dest.writeString(this.timeCostDesc);
         dest.writeFloat(this.rating);
         dest.writeInt(this.commentCnt);
-        dest.writeParcelable(this.loction, 0);
+        dest.writeParcelable(this.location, 0);
         dest.writeTypedList(images);
         dest.writeTypedList(locList);
         dest.writeString(this.address);
@@ -69,7 +69,7 @@ public class PoiDetailBean implements Parcelable {
         this.timeCostDesc = in.readString();
         this.rating = in.readFloat();
         this.commentCnt = in.readInt();
-        this.loction = in.readParcelable(LocationBean.class.getClassLoader());
+        this.location = in.readParcelable(LocationBean.class.getClassLoader());
         in.readTypedList(images, ImageBean.CREATOR);
         in.readTypedList(locList, LocBean.CREATOR);
         this.address = in.readString();

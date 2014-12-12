@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -29,7 +30,6 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
-import com.aizou.peachtravel.module.toolbox.StrategyListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,8 @@ import butterknife.InjectView;
 public class StrategyActivity extends PeachBaseActivity {
     @InjectView(R.id.loc_list_rv)
     RecyclerView mLocListRv;
+    @InjectView(R.id.title_bar)
+    TitleHeaderBar mTitleBar;
     private IndicatorViewPager indicatorViewPager;
     @InjectView(R.id.strategy_viewpager)
     FixedViewPager mStrategyViewpager;
@@ -77,21 +79,7 @@ public class StrategyActivity extends PeachBaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
-
-        String title = "";
-        for (LocBean loc : destinations) {
-            title += loc.zhName;
-        }
-        title += "旅行计划";
-        TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
-        titleView.setText(title);
-        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(StrategyActivity.this, "已保存到\"我的攻略\"", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        });
+        mTitleBar.enableBackKey(true);
     }
 
     @Override
@@ -101,38 +89,24 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private void initData() {
-        id =getIntent().getStringExtra("id");
-        cityIdList = getIntent().getStringArrayListExtra("cityIdList");
-        cityIdList = new ArrayList<String>();
-        for (LocBean loc : destinations) {
+        id = getIntent().getStringExtra("id");
+        if (id == null) {
+            cityIdList = new ArrayList<String>();
+            for (LocBean loc : destinations) {
 //            cityIdList.add(loc.id);
+            }
+            //test
+            cityIdList.add("5473ccd7b8ce043a64108c46");
+            cityIdList.add("546f2daab8ce0440eddb2aff");
+            createStrategyByCityIds(cityIdList);
+        } else {
+            getStrategyDataById();
         }
-        //test
-        cityIdList.add("5473ccd7b8ce043a64108c46");
-        cityIdList.add("546f2daab8ce0440eddb2aff");
-        createStrategyByCityIds(cityIdList);
+
     }
 
-    public void getStrategyDataById(){
-        TravelApi.getGuideDetail(id,new HttpCallBack<String>() {
-            @Override
-            public void doSucess(String result, String method) {
-                CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result,StrategyBean.class);
-                if(strategyResult.code==0){
-                    bindView(strategyResult.result);
-                }
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-        });
-    }
-
-    public void createStrategyByCityIds(List<String> cityIds){
-        TravelApi.createGuide(cityIds, new HttpCallBack<String>() {
+    public void getStrategyDataById() {
+        TravelApi.getGuideDetail(id, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
@@ -149,9 +123,29 @@ public class StrategyActivity extends PeachBaseActivity {
         });
     }
 
+    public void createStrategyByCityIds(List<String> cityIds) {
+        TravelApi.createGuide(cityIds, new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
+                if (strategyResult.code == 0) {
+                    ToastUtil.getInstance(mContext).showToast("已保存到我的攻略");
+                    bindView(strategyResult.result);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
+    }
+
     private void bindView(StrategyBean result) {
+        mTitleBar.getTitleTextView().setText(result.title);
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(),result));
+        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
     }
 
@@ -169,6 +163,7 @@ public class StrategyActivity extends PeachBaseActivity {
             public ViewHolder(View arg0) {
                 super(arg0);
             }
+
             ImageView mImg;
             TextView mTxt;
         }
@@ -191,8 +186,8 @@ public class StrategyActivity extends PeachBaseActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext,CityDetailActivity.class);
-                    intent.putExtra("id",mDatas.get(i).id);
+                    Intent intent = new Intent(mContext, CityDetailActivity.class);
+                    intent.putExtra("id", mDatas.get(i).id);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
@@ -224,7 +219,7 @@ public class StrategyActivity extends PeachBaseActivity {
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 
-        public StrategyAdapter(FragmentManager fragmentManager,StrategyBean strategyBean) {
+        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean) {
             super(fragmentManager);
             inflater = LayoutInflater.from(getApplicationContext());
             this.strategyBean = strategyBean;
@@ -248,30 +243,30 @@ public class StrategyActivity extends PeachBaseActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            if (position==0) {
+            if (position == 0) {
                 RouteDayFragment routeDayFragment = new RouteDayFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id",strategyBean.id);
-                bundle.putString("title",strategyBean.title);
-                bundle.putParcelableArrayList("itinerary",strategyBean.itinerary);
-                bundle.putInt("day",strategyBean.itineraryDays);
+                bundle.putString("id", strategyBean.id);
+                bundle.putString("title", strategyBean.title);
+                bundle.putParcelableArrayList("itinerary", strategyBean.itinerary);
+                bundle.putInt("day", strategyBean.itineraryDays);
                 bundle.putParcelableArrayList("locList", strategyBean.localities);
                 routeDayFragment.setArguments(bundle);
                 return routeDayFragment;
-            } else if (position==1) {
+            } else if (position == 1) {
                 RestaurantFragment restFragment = new RestaurantFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id",strategyBean.id);
-                bundle.putString("title",strategyBean.title);
-                bundle.putParcelableArrayList("restaurant",strategyBean.restaurant);
+                bundle.putString("id", strategyBean.id);
+                bundle.putString("title", strategyBean.title);
+                bundle.putParcelableArrayList("restaurant", strategyBean.restaurant);
                 bundle.putParcelableArrayList("locList", strategyBean.localities);
                 restFragment.setArguments(bundle);
                 return restFragment;
             } else {
                 ShoppingFragment shoppingFragment = new ShoppingFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id",strategyBean.id);
-                bundle.putString("title",strategyBean.title);
+                bundle.putString("id", strategyBean.id);
+                bundle.putString("title", strategyBean.title);
                 bundle.putParcelableArrayList("shopping", strategyBean.shopping);
                 bundle.putParcelableArrayList("locList", strategyBean.localities);
                 shoppingFragment.setArguments(bundle);
@@ -282,10 +277,10 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==RESULT_OK){
-            for(Fragment fragment:getSupportFragmentManager().getFragments()){
-                if(fragment!=null){
-                    fragment.onActivityResult(requestCode,resultCode,data);
+        if (resultCode == RESULT_OK) {
+            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                if (fragment != null) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
                 }
 
             }

@@ -22,6 +22,7 @@ public class FavoritesBean {
     public String enName;
     public String desc;
     public List<ImageBean> images;
+    public LocBean locality;
     public long createTime;
 
     public int getType() {
