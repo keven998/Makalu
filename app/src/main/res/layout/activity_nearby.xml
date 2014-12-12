@@ -1,21 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height" />
+
     <com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView
         android:id="@+id/nearby_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"/>
+        android:background="@color/base_color_white" />
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/nearby_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/base_text_color_subtitle"
+             />
+        <ProgressBar
+            android:id="@+id/pb_location"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleSmall"
+            />
+
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="刷新" />
+    </LinearLayout>
+
 
 </LinearLayout>

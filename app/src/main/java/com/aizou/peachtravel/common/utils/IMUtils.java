@@ -24,7 +24,12 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMShareActivity;
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.HanziToPinyin;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -180,36 +185,6 @@ public class IMUtils {
                 .show();
 
     }
-    public static void showImShareVsDialog(Context context,SpotDetailBean detailBean,MaterialDialog.Callback callback){
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
-        View contentView = View.inflate(context, R.layout.dialog_im_share,null);
-        TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
-        ImageView vsIv = (ImageView) contentView.findViewById(R.id.image_iv);
-        TextView nameTv = (TextView) contentView.findViewById(R.id.name_tv);
-        TextView attrTv = (TextView) contentView.findViewById(R.id.attr_tv);
-        TextView descTv = (TextView) contentView.findViewById(R.id.desc_tv);
-        if(detailBean.type.equals(TravelApi.PoiType.RESTAURANTS)){
-            titleTv.setText("美食");
-        }else if(detailBean.type.equals(TravelApi.PoiType.SHOPPING)){
-            titleTv.setText("购物");
-        }else if(detailBean.type.equals(TravelApi.PoiType.HOTEL)){
-            titleTv.setText("酒店");
-        }
-
-        nameTv.setText(detailBean.zhName);
-        attrTv.setText(detailBean.timeCostStr+"");
-        descTv.setText(detailBean.desc);
-        if(detailBean.images!=null&&detailBean.images.size()>0)
-            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url,vsIv,UILUtils.getDefaultOption());
-        builder.customView(contentView)
-                .positiveText("发送")
-                .negativeText("取消")
-                .positiveColor(context.getResources().getColor(R.color.app_theme_color))
-                .negativeColor(context.getResources().getColor(R.color.app_theme_color))
-                .callback(callback)
-                .show();
-
-    }
 
 
     public static String createExtMessageContentForSpot(SpotDetailBean detailBean){
@@ -255,6 +230,18 @@ public class IMUtils {
             e.printStackTrace();
         }
         return contentJson.toString();
+    }
+
+    public static void sendExtMessage(Context context,int type,String contentJson,String to,EMCallBack callBack){
+        EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+        msg.setChatType(EMMessage.ChatType.GroupChat);
+        msg.setFrom(AccountManager.getInstance().getLoginAccount(context).easemobUser);
+        msg.setReceipt(to);
+        IMUtils.setMessageWithTaoziUserInfo(context, msg);
+        msg.setAttribute("tzType",type);
+        msg.setAttribute("content",contentJson);
+        msg.addBody(new TextMessageBody("[链接]"));
+        EMChatManager.getInstance().sendMessage(msg,callBack);
     }
 
 

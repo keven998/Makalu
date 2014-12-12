@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.bean;
 
-import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -23,7 +22,7 @@ public class LocBean implements Parcelable {
     public String travelMonth;
     public List<ImageBean> images =new ArrayList<ImageBean>();
     public int imageCnt;
-    public boolean isMyFav;
+    public boolean isFavorite;
 
 
     public LocBean() {
@@ -49,7 +48,7 @@ public class LocBean implements Parcelable {
         dest.writeString(this.travelMonth);
         dest.writeTypedList(images);
         dest.writeInt(this.imageCnt);
-        dest.writeByte(isMyFav ? (byte) 1 : (byte) 0);
+        dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
     }
 
     private LocBean(Parcel in) {
@@ -65,7 +64,7 @@ public class LocBean implements Parcelable {
         this.travelMonth = in.readString();
         in.readTypedList(images, ImageBean.CREATOR);
         this.imageCnt = in.readInt();
-        this.isMyFav = in.readByte() != 0;
+        this.isFavorite = in.readByte() != 0;
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -21,17 +20,13 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.ModifyResult;
-import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.SpotDetailBean;
-import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.module.GuideActivity;
-import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -106,10 +101,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
         });
     }
     private void refreshFav(SpotDetailBean detailBean){
-        if(detailBean.isMyFav){
-            favIv.setImageResource(R.drawable.ic_unfav);
-        }else{
+        if(detailBean.isFavorite){
             favIv.setImageResource(R.drawable.ic_fav);
+        }else{
+            favIv.setImageResource(R.drawable.ic_unfav);
         }
     }
     private void bindView(final SpotDetailBean result) {
@@ -124,18 +119,19 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mOpenTimeTv.setText(result.openTime);
         mTimeCostTv.setText(result.timeCostStr);
         mAddressTv.setText(result.address);
+        refreshFav(spotDetailBean);
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogManager.getInstance().showProgressDialog(SpotDetailActivity.this);
-                if(result.isMyFav){
+                if(result.isFavorite){
                     OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
-                                spotDetailBean.isMyFav = false;
+                                spotDetailBean.isFavorite = false;
                                 refreshFav(spotDetailBean);
                             }
 
@@ -153,7 +149,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
-                                spotDetailBean.isMyFav=true;
+                                spotDetailBean.isFavorite =true;
                                 refreshFav(spotDetailBean);
                             }
 

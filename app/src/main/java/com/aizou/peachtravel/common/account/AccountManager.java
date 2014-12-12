@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AccountManager {
-    public static final String ACCOUNT_LOGOUT_ACTION="com.aizou.peathtravel.ACTION_LOGOUT";
-	public static final String LOGIN_USER_PREF = "login_user";
+    public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
+    public static final String LOGIN_USER_PREF = "login_user";
     public static PeachUser user;
     private Map<String, IMUser> contactList;
 
@@ -31,28 +31,29 @@ public class AccountManager {
      */
     public static String currentUserNick = "";
     private static AccountManager instance;
-    public static AccountManager getInstance(){
-        if(instance==null){
-            instance=new AccountManager();
+
+    public static AccountManager getInstance() {
+        if (instance == null) {
+            instance = new AccountManager();
         }
         return instance;
 
     }
 
 
-	public  PeachUser getLoginAccount(Context context) {
-		String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
-		if (TextUtils.isEmpty(userJson)) {
-			return null;
-		}
-        if(user==null){
+    public PeachUser getLoginAccount(Context context) {
+        String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
+        if (TextUtils.isEmpty(userJson)) {
+            return null;
+        }
+        if (user == null) {
             user = GsonTools.parseJsonToBean(userJson,
                     PeachUser.class);
         }
-		return user;
-	}
+        return user;
+    }
 
-	public  void logout(final Context context,final EMCallBack callBack) {
+    public void logout(final Context context, final EMCallBack callBack) {
         PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -63,31 +64,31 @@ public class AccountManager {
                 Intent intent = new Intent();
                 intent.setAction(ACCOUNT_LOGOUT_ACTION);
                 context.sendBroadcast(intent);
-                if(callBack!=null){
+                if (callBack != null) {
                     callBack.onSuccess();
                 }
             }
 
             @Override
             public void onError(int i, String s) {
-                if(callBack!=null){
-                    callBack.onError(i,s);
+                if (callBack != null) {
+                    callBack.onError(i, s);
                 }
             }
 
             @Override
             public void onProgress(int i, String s) {
-                if(callBack!=null){
-                    callBack.onProgress(i,s);
+                if (callBack != null) {
+                    callBack.onProgress(i, s);
                 }
             }
         });
         // reset password to null
 
-	}
-	
-    public  void saveLoginAccount(Context context,PeachUser user) {
-        this.user =user;
+    }
+
+    public void saveLoginAccount(Context context, PeachUser user) {
+        this.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
 
@@ -97,13 +98,11 @@ public class AccountManager {
      * @return
      */
     public Map<String, IMUser> getContactList(Context context) {
-        if (contactList == null) {
-            // 获取本地好友user list到内存,方便以后获取好友list
-            List<IMUser> userList= IMUserRepository.getContactList(context);
-            contactList = new HashMap<String, IMUser>();
-            for(IMUser user :userList){
-                contactList.put(user.getUsername(),user);
-            }
+        // 获取本地好友user list到内存,方便以后获取好友list
+        List<IMUser> userList = IMUserRepository.getContactList(context);
+        contactList = new HashMap<String, IMUser>();
+        for (IMUser user : userList) {
+            contactList.put(user.getUsername(), user);
         }
         return contactList;
     }
@@ -116,7 +115,6 @@ public class AccountManager {
     public void setContactList(Map<String, IMUser> contactList) {
         this.contactList = contactList;
     }
-
 
 
 }

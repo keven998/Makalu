@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.peachtravel.R;
@@ -39,7 +41,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/10/9.
  */
-public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener, AMapLocationListener {
+public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener {
     public final static int IM_LOGIN = 100;
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
@@ -61,6 +63,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     private String[] weatherArray;
     private String weatherStr;
     private String city;
+    private String street;
+    private String address;
     private Double geoLat;
     private Double geoLng;
 
@@ -80,9 +84,40 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
-        mLocationManagerProxy.requestLocationData(
-                LocationProviderProxy.AMapNetwork, -1, 15, this);
         mLocationManagerProxy.setGpsEnable(false);
+        mLocationManagerProxy.requestLocationData(
+                LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+                    @Override
+                    public void onLocationChanged(AMapLocation aMapLocation) {
+                        //获取位置信息
+                        geoLat = aMapLocation.getLatitude();
+                        geoLng = aMapLocation.getLongitude();
+                        city=aMapLocation.getCity();
+                        address = aMapLocation.getAddress();
+                        street = aMapLocation.getStreet();
+                        getYahooWeather(geoLat,geoLng);
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+
+                    }
+                } );
         return rootView;
     }
 
@@ -115,8 +150,63 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 break;
 
             case R.id.tv_nearby:
-                Intent intent = new Intent(getActivity(), NearbyActivity.class);
-                startActivity(intent);
+                if(geoLat==null){
+                    DialogManager.getInstance().showProgressDialog(getActivity(),"正在定位");
+                    mLocationManagerProxy.requestLocationData(
+                            LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+                                @Override
+                                public void onLocationChanged(AMapLocation aMapLocation) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
+                                        //获取位置信息
+                                        geoLat = aMapLocation.getLatitude();
+                                        geoLng = aMapLocation.getLongitude();
+                                        city=aMapLocation.getCity();
+                                        street = aMapLocation.getStreet();
+                                        address = aMapLocation.getAddress();
+                                        Intent intent = new Intent(getActivity(), NearbyActivity.class);
+                                        intent.putExtra("lat",geoLat);
+                                        intent.putExtra("lng",geoLng);
+                                        intent.putExtra("street",street);
+                                        intent.putExtra("address",address);
+                                        intent.putExtra("city",city);
+                                        startActivity(intent);
+                                    }else{
+                                        ToastUtil.getInstance(getActivity()).showToast("定位失败，请稍后重试");
+                                    }
+
+                                }
+
+                                @Override
+                                public void onLocationChanged(Location location) {
+
+                                }
+
+                                @Override
+                                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                                }
+
+                                @Override
+                                public void onProviderEnabled(String provider) {
+
+                                }
+
+                                @Override
+                                public void onProviderDisabled(String provider) {
+
+                                }
+                            } );
+                }else{
+                    Intent intent = new Intent(getActivity(), NearbyActivity.class);
+                    intent.putExtra("lat",geoLat);
+                    intent.putExtra("lng",geoLng);
+                    intent.putExtra("street",street);
+                    intent.putExtra("address",address);
+                    intent.putExtra("city",city);
+                    startActivity(intent);
+                }
+
                 break;
 
             case R.id.tv_my_guide:
@@ -165,35 +255,4 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         user = AccountManager.getInstance().getLoginAccount(getActivity());
     }
 
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
-            //获取位置信息
-             geoLat = aMapLocation.getLatitude();
-             geoLng = aMapLocation.getLongitude();
-             city=aMapLocation.getCity();
-            getYahooWeather(geoLat,geoLng);
-        }
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

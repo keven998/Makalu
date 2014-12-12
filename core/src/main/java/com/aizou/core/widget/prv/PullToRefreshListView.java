@@ -11,6 +11,8 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.Adapter;
 import android.widget.ListView;
 
+import com.aizou.core.log.LogUtil;
+
 
 /**
  * 这个类实现了ListView下拉刷新，上加载更多和滑到底部自动加载
@@ -115,6 +117,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
 
     @Override
     protected boolean isReadyForPullDown() {
+        LogUtil.d("isFirstItemVisible---"+isFirstItemVisible());
         return isFirstItemVisible();
     }
 
@@ -219,10 +222,13 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
             return true;
         }
 
-        int mostTop = (mListView.getChildCount() > 0) ? mListView.getChildAt(0).getTop() : 0;
-        if (mostTop >= 0) {
-            return true;
-        }
+       if(mListView.getFirstVisiblePosition() ==0&&mListView.getChildCount() > 0&&mListView.getChildAt(0).getTop()>=0){
+           return true;
+       }
+//        int mostTop = (mListView.getChildCount() > 0) ? mListView.getChildAt(0).getTop() : 0;
+//        if (mostTop >= 0) {
+//            return true;
+//        }
 
         return false;
     }

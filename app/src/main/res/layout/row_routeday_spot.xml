@@ -41,14 +41,15 @@
             android:visibility="gone" />
 
         <RelativeLayout
+            android:id="@+id/rl_content"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/spot_image_iv"
-                android:layout_width="54dp"
-                android:layout_height="match_parent"
+                android:layout_width="52dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp"
                 android:scaleType="centerCrop"/>
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/17.
  */
 public class SpotDetailBean {
-    public boolean isMyFav;
+    public boolean isFavorite;
     public String type;
     public String id;
     public CoordsBean coords;

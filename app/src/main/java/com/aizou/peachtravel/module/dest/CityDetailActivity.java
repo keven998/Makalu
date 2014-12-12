@@ -2,13 +2,13 @@ package com.aizou.peachtravel.module.dest;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -18,7 +18,9 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TravelNoteBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
@@ -27,9 +29,8 @@ import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.ArrayList;
 
 /**
  * Created by Rjm on 2014/11/13.
@@ -128,10 +129,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
     }
     private void refreshFav(LocBean detailBean){
-        if(detailBean.isMyFav){
-            mFavIv.setImageResource(R.drawable.ic_unfav);
-        }else{
+        if(detailBean.isFavorite){
             mFavIv.setImageResource(R.drawable.ic_fav);
+        }else{
+            mFavIv.setImageResource(R.drawable.ic_unfav);
         }
     }
 
@@ -147,19 +148,27 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             }
         });
+        refreshFav(locDetailBean);
 
         mFavIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PeachUser user=AccountManager.getInstance().getLoginAccount(mContext);
+                if(user==null){
+                    ToastUtil.getInstance(mContext).showToast("请先登录");
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 DialogManager.getInstance().showProgressDialog(CityDetailActivity.this);
-                if(detailBean.isMyFav){
+                if(detailBean.isFavorite){
                     OtherApi.deleteFav(detailBean.id,new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
-                                detailBean.isMyFav=false;
+                                detailBean.isFavorite =false;
                                 refreshFav(detailBean);
                             }
 
@@ -177,7 +186,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
-                                detailBean.isMyFav=true;
+                                detailBean.isFavorite =true;
                                 refreshFav(detailBean);
                             }
 

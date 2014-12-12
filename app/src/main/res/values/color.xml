@@ -9,7 +9,7 @@
     <drawable name="highlight_btn_color_selected">#aaee528c</drawable>
 
     <color name="plan_start_end">#B2B2B2</color>
-    <color name="main_color">#08dca8</color>
+    <color name="main_color">#ee528c</color>
     <color name="main_color_second">#22B599</color>
     <color name="home_title_color">#08dca7</color>
     <color name="has_add_view">#F20D0D</color>
