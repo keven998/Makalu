@@ -79,7 +79,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
-        listView.setScrollLoadEnabled(true);
+        listView.setScrollLoadEnabled(false);
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -141,7 +141,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
 
-        listView.doPullRefreshing(true, 0);
+        listView.doPullRefreshing(true, 100);
     }
 
     @Override
@@ -218,6 +218,9 @@ public class StrategyListActivity extends PeachBaseActivity {
 //        } else {
 //            mMyStrategyLv.setHasMoreData(true);
 //        }
+        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
+            mMyStrategyLv.setScrollLoadEnabled(true);
+        }
     }
 
     public class StrategyListViewHolder extends ViewHolderBase<StrategyBean> {
@@ -296,7 +299,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         private void deleteItem(final StrategyBean itemData) {
             new MaterialDialog.Builder(StrategyListActivity.this)
                     .title(null)
-                    .content("小心,删除后不可恢复")
+                    .content("删除后就找不到了")
                     .positiveText("删除")
                     .negativeText("取消")
                     .autoDismiss(false)

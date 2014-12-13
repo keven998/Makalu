@@ -14,7 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -24,8 +26,10 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
@@ -79,21 +83,25 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
 
-        mFavLv.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
-        mFavLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        PullToRefreshListView listView = mFavLv;
+        listView.setPullLoadEnabled(false);
+        listView.setPullRefreshEnabled(true);
+        listView.setScrollLoadEnabled(false);
+        listView.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 currentPage=0;
-                initData(currentPage);
+                initData(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(currentPage);
+                initData(currentPage + 1);
             }
         });
-
-        initData(0);
+        listView.doPullRefreshing(true, 100);
+//        initData(0);
     }
 
     private void initView() {
@@ -118,7 +126,7 @@ public class FavListActivity extends PeachBaseActivity {
                 CommonJson4List<FavoritesBean> lists = CommonJson4List.fromJson(result.toString(), FavoritesBean.class);
                 if (lists.code == 0) {
                     setupView(lists.result);
-                    currentPage++;
+                    currentPage = page;
                 }
 
                 mFavLv.onPullUpRefreshComplete();
@@ -142,7 +150,7 @@ public class FavListActivity extends PeachBaseActivity {
                 Toast.makeText(FavListActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
             }
             return;
-        }else{
+        } else {
             mFavLv.setHasMoreData(true);
         }
         if (currentPage == 0) {
@@ -150,6 +158,9 @@ public class FavListActivity extends PeachBaseActivity {
         }
         mAdapter.appendData(datas);
 
+        if (mAdapter.getCount() >= BaseApi.PAGE_SIZE) {
+            mFavLv.setScrollLoadEnabled(true);
+        }
     }
 
     class CustomAdapter extends BaseAdapter {
@@ -221,25 +232,7 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DialogManager.getInstance().showProgressDialog(FavListActivity.this);
-                        OtherApi.deleteFav(item.itemId,new HttpCallBack<String>() {
-                            @Override
-                            public void doSucess(String result, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
-                                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                                if(deleteResult.code==0){
-                                    mItemDataList.remove(i);
-                                    notifyDataSetChanged();
-                                }
-                            }
-
-                            @Override
-                            public void doFailure(Exception error, String msg, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
-
-                            }
-                        });
-
+                        deleteItem(item);
                     }
                 });
             } else {
@@ -305,6 +298,47 @@ public class FavListActivity extends PeachBaseActivity {
             vh.flagView.setImageResource(res);
 
             return view;
+        }
+
+        private void deleteItem(final FavoritesBean itemData) {
+            new MaterialDialog.Builder(FavListActivity.this)
+                    .title(null)
+                    .content("删除后就找不到了")
+                    .positiveText("删除")
+                    .negativeText("取消")
+                    .autoDismiss(false)
+                    .positiveColor(getResources().getColor(R.color.app_theme_color))
+                    .negativeColor(getResources().getColor(R.color.app_theme_color))
+                    .callback(new MaterialDialog.Callback() {
+                        @Override
+                        public void onPositive(final MaterialDialog dialog) {
+                            DialogManager.getInstance().showProgressDialog(FavListActivity.this);
+                            OtherApi.deleteFav(itemData.itemId, new HttpCallBack<String>() {
+                                @Override
+                                public void doSucess(String result, String method) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                                    if(deleteResult.code==0){
+//                                        mItemDataList.remove(i);
+                                        mItemDataList.remove(itemData);
+                                        notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
         }
 
     }

@@ -83,7 +83,7 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + DESTINATIONS);
-        request.putUrlParams("abroad",abroad+"");
+        request.putUrlParams("abroad", String.valueOf(abroad));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -136,8 +136,8 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC,type)+id);
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -235,8 +235,8 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -303,11 +303,11 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH);
-        request.putUrlParams("keyWord",keyword);
-        request.putUrlParams(type,"true");
-        request.putUrlParams("locId",locId);
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("keyWord", keyword);
+        request.putUrlParams(type, "true");
+        request.putUrlParams("locId", locId);
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -316,11 +316,11 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + NEARBY);
-        request.putUrlParams("lat",lat+"");
-        request.putUrlParams("lng",lng+"");
-        request.putUrlParams(type,"true");
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("lat", String.valueOf(lat));
+        request.putUrlParams("lng", String.valueOf(lng));
+        request.putUrlParams(type, "true");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
