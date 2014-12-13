@@ -141,12 +141,12 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间："+poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotDescTv.setText(poiDetailBean.desc);
             if(mIsCanAdd) {
-                if(poiDetailBean.hasAdded){
+                if(poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已选择");
-                }else{
+                } else {
                     spotViewHolder.mBtnAdd.setText("选择");
                 }
-                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(poiDetailBean.hasAdded) {
@@ -154,7 +154,7 @@ public class PoiAdapter extends BaseAdapter {
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
-                        }else{
+                        } else {
                             poiDetailBean.hasAdded = true;
                             if(mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
@@ -165,7 +165,7 @@ public class PoiAdapter extends BaseAdapter {
                 });
             } else {
                 spotViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离
-                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //TODO
@@ -204,14 +204,14 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.hasAdded){
+                        if(poiDetailBean.hasAdded) {
                             poiDetailBean.hasAdded=false;
-                            if(mOnPoiActionListener!=null){
+                            if(mOnPoiActionListener!=null) {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
-                        }else{
+                        } else {
                             poiDetailBean.hasAdded=true;
-                            if(mOnPoiActionListener!=null){
+                            if(mOnPoiActionListener!=null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
                         }

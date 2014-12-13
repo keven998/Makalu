@@ -14,7 +14,6 @@
             android:dividerHeight="10dp"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"
-            android:layout_below="@id/title_bar"
             android:paddingTop="10dp"/>
 
     <ProgressBar
