@@ -42,7 +42,11 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/10/9.
  */
 public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener {
-    public final static int IM_LOGIN = 100;
+    public final static int CODE_IM_LOGIN = 101;
+    public final static int CODE_FAVORITE = 102;
+    public final static int CODE_PLAN = 103;
+
+
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
     @InjectView(R.id.iv_weather)
@@ -145,7 +149,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent, IM_LOGIN);
+                    startActivityForResult(intent, CODE_IM_LOGIN);
                 }
                 break;
 
@@ -171,7 +175,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                                         intent.putExtra("address",address);
                                         intent.putExtra("city",city);
                                         startActivity(intent);
-                                    }else{
+                                    } else {
                                         ToastUtil.getInstance(getActivity()).showToast("定位失败，请稍后重试");
                                     }
 
@@ -197,7 +201,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
                                 }
                             } );
-                }else{
+                } else {
                     Intent intent = new Intent(getActivity(), NearbyActivity.class);
                     intent.putExtra("lat",geoLat);
                     intent.putExtra("lng",geoLng);
@@ -215,7 +219,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     startActivity(strategyIntent);
                 } else {
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(loginIntent, IM_LOGIN);
+                    startActivityForResult(loginIntent, CODE_PLAN);
                 }
                 break;
 
@@ -225,7 +229,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     startActivity(fIntent);
                 } else {
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(loginIntent, IM_LOGIN);
+                    startActivityForResult(loginIntent, CODE_FAVORITE);
                 }
 
                 break;
@@ -241,9 +245,16 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case IM_LOGIN:
-                    Intent intent = new Intent(getActivity(), IMMainActivity.class);
-                    startActivity(intent);
+                case CODE_IM_LOGIN:
+                    startActivity(new Intent(getActivity(), IMMainActivity.class));
+                    break;
+
+                case CODE_FAVORITE:
+                    startActivity(new Intent(getActivity(), FavListActivity.class));
+                    break;
+
+                case CODE_PLAN:
+                    startActivity(new Intent(getActivity(), StrategyListActivity.class));
                     break;
             }
         }

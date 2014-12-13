@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.ToastUtil;
@@ -23,6 +26,7 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.BaseApi;
@@ -58,7 +62,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     ListViewDataAdapter mStrategyListAdapter;
     public boolean isEditableMode;
 
-    int page = 0;
+    int mCurrentPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,34 +75,37 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-//        mMyStrategyLv.setPullLoadEnabled(false);
-//        mMyStrategyLv.setPullRefreshEnabled(false);
-//        mMyStrategyLv.setScrollLoadEnabled(true);
+
+        PullToRefreshListView listView = mMyStrategyLv;
+        listView.setPullLoadEnabled(false);
+        listView.setPullRefreshEnabled(true);
+        listView.setScrollLoadEnabled(true);
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
                 return new StrategyListViewHolder();
             }
         });
-        mMyStrategyLv.getRefreshableView().setAdapter(mStrategyListAdapter);
-        mMyStrategyLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+
+        listView.getRefreshableView().setAdapter(mStrategyListAdapter);
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                page = 0;
-                getStrategyListData();
+                getStrategyListData(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData();
+                getStrategyListData(mCurrentPage + 1);
             }
         });
-        mMyStrategyLv.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        listView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mContext, StrategyActivity.class);
-                StrategyBean bean= (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                intent.putExtra("id",bean.id);
+                StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                intent.putExtra("id", bean.id);
                 startActivity(intent);
             }
         });
@@ -133,6 +140,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                 overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
+
+        listView.doPullRefreshing(true, 0);
     }
 
     @Override
@@ -149,18 +158,23 @@ public class StrategyListActivity extends PeachBaseActivity {
         overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
-    private void initData() {
-        getStrategyListData();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void getStrategyListData() {
+    private void initData() {
+//        getStrategyListData(0);
+    }
+
+    private void getStrategyListData(final int page) {
         TravelApi.getStrategyList(page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                 if (strategyListResult.code == 0) {
+                    mCurrentPage = page;
                     bindView(strategyListResult.result);
-                    page++;
                 }
                 mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
@@ -176,28 +190,34 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void bindView(List<StrategyBean> result) {
-        if (page == 0) {
-            mStrategyListAdapter.getDataList().clear();
+        ListViewDataAdapter adapter = mStrategyListAdapter;
+        if (result.size() == 0) {
+            if (adapter.getCount() == 0) {
+                mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+                    }
+                });
+            } else {
+                Toast.makeText(this, "已加载全部", Toast.LENGTH_SHORT).show();
+            }
+            return;
         }
-        mStrategyListAdapter.getDataList().addAll(result);
-        mStrategyListAdapter.notifyDataSetChanged();
-        if (mStrategyListAdapter.getCount() == 0) {
-            mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-            findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
-                }
-            });
+        if (mCurrentPage == 0) {
+            adapter.getDataList().clear();
         }
-        if (result == null || result.size() < BaseApi.PAGE_SIZE) {
-            mMyStrategyLv.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
-        } else {
-            mMyStrategyLv.setHasMoreData(true);
-        }
+        adapter.getDataList().addAll(result);
+        adapter.notifyDataSetChanged();
+//        if (result == null || result.size() < BaseApi.PAGE_SIZE) {
+//            mMyStrategyLv.setHasMoreData(false);
+//            // ptrLv.setScrollLoadEnabled(false);
+//        } else {
+//            mMyStrategyLv.setHasMoreData(true);
+//        }
     }
 
     public class StrategyListViewHolder extends ViewHolderBase<StrategyBean> {
@@ -239,12 +259,22 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mStrategyIv.setImageResource(R.drawable.guide_1);
             }
             mDayTv.setText(itemData.dayCnt + "天");
+//            String city = "";
+//            int size = itemData.localities.size();
+//            for (int i = 0; i < size; ++i) {
+//                LocBean loc = itemData.localities.get(i);
+//                if (i > 0) {
+//                    city += "、" + loc.zhName;
+//                } else {
+//                    city += loc.zhName;
+//                }
+//            }
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isEditableMode) {
                 mDeleteIv.setVisibility(View.VISIBLE);
-                mNameTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_line_edit_delete, 0);
+                mNameTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_line_edit_delete, 0, 0, 0);
                 mNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -266,8 +296,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         private void deleteItem(final StrategyBean itemData) {
             new MaterialDialog.Builder(StrategyListActivity.this)
                     .title(null)
-                    .content("确定删除吗？")
-                    .positiveText("确定")
+                    .content("小心,删除后不可恢复")
+                    .positiveText("删除")
                     .negativeText("取消")
                     .autoDismiss(false)
                     .positiveColor(getResources().getColor(R.color.app_theme_color))
@@ -275,7 +305,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     .callback(new MaterialDialog.Callback() {
                         @Override
                         public void onPositive(final MaterialDialog dialog) {
-                            View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                            View progressView = View.inflate(mContext, R.layout.view_progressbar,null);
                             dialog.setContentView(progressView);
 
                             TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {

@@ -54,23 +54,22 @@
             android:paddingLeft="12dp"
             android:paddingRight="9dp">
 
-            <TextView
-                android:id="@+id/name_tv"
+            <TextView android:id="@+id/name_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="14sp"
+                android:layout_weight="1"
                 android:textColor="@color/base_text_color_subtitle"
+                android:drawablePadding="2dp"
                 android:maxLines="2"
                 android:lineSpacingExtra="3dp"/>
 
-            <TextView
-                android:id="@+id/time_tv"
+            <TextView android:id="@+id/time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:textSize="10sp"
-                android:layout_gravity="bottom"
+                android:layout_gravity="top"
                 android:textStyle="italic"
                 android:textColor="@color/base_text_color_text_placeholder"/>
         </LinearLayout>
