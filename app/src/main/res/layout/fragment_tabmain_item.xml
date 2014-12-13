@@ -11,10 +11,9 @@
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
-            android:dividerHeight="10dp"
+            android:dividerHeight="0dp"
             android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:paddingTop="10dp"/>
+            android:listSelector="@android:color/transparent"/>
 
     <ProgressBar
         android:id="@+id/fragment_mainTab_item_progressBar"

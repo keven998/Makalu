@@ -16,6 +16,12 @@
         android:layout_height="wrap_content"
         android:background="@color/base_color_white" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_backgroud"
+        ></View>
+
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/nearby_viewPager"
         android:layout_width="match_parent"
