@@ -286,8 +286,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                                     if(deleteResult.code==0){
                                         mStrategyListAdapter.getDataList().remove(itemData);
                                         mStrategyListAdapter.notifyDataSetChanged();
+                                        if (mStrategyListAdapter.getCount() == 0) {
+                                            mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                                        }
                                         ToastUtil.getInstance(mContext).showToast("删除成功");
-
                                     }else{
                                         ToastUtil.getInstance(mContext).showToast("删除失败");
                                     }
