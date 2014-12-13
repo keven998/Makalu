@@ -10,7 +10,5 @@ public class AddressBookbean {
     public int entryId;
     public int sourceId;
     public String name;
-    public List<String> tel=new ArrayList<String>();
-    public List<String> email=new ArrayList<String>();
-    public List<String> weixin= new ArrayList<String>();
+    public String tel;
 }

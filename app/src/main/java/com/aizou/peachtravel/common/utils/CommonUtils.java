@@ -13,6 +13,7 @@
  */
 package com.aizou.peachtravel.common.utils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.graphics.Point;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -27,45 +29,45 @@ import android.view.Display;
 
 public class CommonUtils {
 
-	/**
-	 * 检测网络是否可用
-	 * 
-	 * @param context
-	 * @return
-	 */
-	public static boolean isNetWorkConnected(Context context) {
-		if (context != null) {
-			ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-			if (mNetworkInfo != null) {
-				return mNetworkInfo.isAvailable();
-			}
-		}
+    /**
+     * 检测网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetWorkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * 检测Sdcard是否存在
-	 * 
-	 * @return
-	 */
-	public static boolean isExitsSdcard() {
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-			return true;
-		else
-			return false;
-	}
+    /**
+     * 检测Sdcard是否存在
+     *
+     * @return
+     */
+    public static boolean isExitsSdcard() {
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+            return true;
+        else
+            return false;
+    }
 
-	public static String getTopActivity(Context context) {
-		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+    public static String getTopActivity(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
 
-		if (runningTaskInfos != null)
-			return runningTaskInfos.get(0).topActivity.getClassName();
-		else
-			return "";
-	}
+        if (runningTaskInfos != null)
+            return runningTaskInfos.get(0).topActivity.getClassName();
+        else
+            return "";
+    }
 
     public static int getScreenWidth(Activity context) {
 
@@ -77,5 +79,27 @@ public class CommonUtils {
         }
         return display.getWidth();
     }
+
+    public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
+
+        float[] results = new float[1];
+
+        Location.distanceBetween(lat1, lon1, lat2, lon2, results);
+
+        return results[0];
+
+    }
+
+    public static String getDistanceStr(double lat1, double lon1, double lat2, double lon2) {
+        DecimalFormat df = new DecimalFormat(".0");
+        double distance = getDistance(lat1, lon1, lat2, lon2);
+        if (distance > 1000) {
+            return df.format(distance / 1000d)+"km";
+        } else {
+            return (int) distance + "m";
+        }
+
+    }
+
 
 }

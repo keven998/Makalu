@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,12 +20,14 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +109,7 @@ public class PoiAdapter extends BaseAdapter {
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
                     spotViewHolder.mBtnAdd.setBackgroundColor(Color.WHITE);
+                    spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_text_color_subtitle));
                     spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.selector_ic_navigation, 0);
                 }
@@ -160,7 +164,7 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                spotViewHolder.mBtnAdd.setText("");     //TODO 添加距离
+                spotViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离
                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -215,7 +219,7 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                poiViewHolder.mBtnAdd.setText("");     //TODO 添加距离 导航
+                poiViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离 导航
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

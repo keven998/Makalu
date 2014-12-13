@@ -18,9 +18,11 @@ import com.aizou.peachtravel.bean.SearchAllBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +124,13 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             poiAdapter = new PoiAdapter(getActivity(), false);
             mPoiList.clear();
             mListView.getRefreshableView().setAdapter(poiAdapter);
+        }
+
+        for(PoiDetailBean poi:poiList){
+            if(poi.location!=null){
+                String distance = CommonUtils.getDistanceStr(mLat,mLng,poi.location.coordinates[1],poi.location.coordinates[0]);
+                poi.distance = distance;
+            }
         }
         mPoiList.addAll(poiList);
         poiAdapter.getDataList().addAll(poiList);

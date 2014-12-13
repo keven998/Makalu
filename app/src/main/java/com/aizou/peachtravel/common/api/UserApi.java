@@ -12,6 +12,7 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.bean.UploadAddrBookBean;
 import com.aizou.peachtravel.config.SystemConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -444,18 +445,18 @@ public class UserApi extends BaseApi {
 
     /**
      * 根据通讯录获取联系人
-     * @param addressBookList
+     * @param uploadAddrBookBean
      * @param callback
      * @return
      */
 
-    public static PTRequestHandler searchByAddressBook(List<AddressBookbean> addressBookList,HttpCallBack callback) {
+    public static PTRequestHandler searchByAddressBook(UploadAddrBookBean uploadAddrBookBean,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_BY_ADDRESSBOOK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        String addressList =GsonTools.createGsonString(addressBookList);
+        String addressList =GsonTools.createGsonString(uploadAddrBookBean);
         try {
             StringEntity entity = new StringEntity(addressList);
             request.setBodyEntity(entity);

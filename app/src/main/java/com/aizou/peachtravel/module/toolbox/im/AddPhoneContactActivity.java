@@ -94,7 +94,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         @Override
         public void showData(int position, AddressBookbean itemData) {
             name.setText(itemData.name);
-            phone.setText(itemData.tel.get(0));
+            phone.setText(itemData.tel);
         }
     }
 }
