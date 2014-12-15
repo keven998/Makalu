@@ -80,8 +80,8 @@ public class OtherApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + TRAVEL_NOTES);
         request.putUrlParams("locId", locId);
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",pageSize+"");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(pageSize));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -96,8 +96,8 @@ public class OtherApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + TRAVEL_NOTES);
         request.putUrlParams("keyWord", keyword);
-        request.putUrlParams("page",page+"");
-        request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -113,8 +113,8 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + FAV);
-        request.putUrlParams("page", page+"");
-        request.putUrlParams("pageSize", PAGE_SIZE+"");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

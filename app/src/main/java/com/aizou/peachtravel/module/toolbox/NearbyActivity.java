@@ -6,8 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,15 +48,16 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     @InjectView(R.id.tv_address)
     TextView mTvAddress;
     @InjectView(R.id.btn_refresh)
-    Button mBtnRefresh;
-    @InjectView(R.id.pb_location)
-    ProgressBar mPbLocation;
+    ImageButton mBtnRefresh;
+//    @InjectView(R.id.pb_location)
+//    ProgressBar mPbLocation;
     private IndicatorViewPager indicatorViewPager;
     private double lat;
     private double lng;
     private String city;
     private String street;
     private String address;
+    private Animation mAnim;
 
     private String[] tabTitles;
     private String[] tabTypes = {"vs", "restaurant", "shopping", "hotel"};
@@ -73,6 +77,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         initView();
         mLocationManagerProxy = LocationManagerProxy.getInstance(this);
         mLocationManagerProxy.setGpsEnable(false);
+
+        mAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
     }
 
     private void initView() {
@@ -85,8 +91,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
-
         indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
+
         mTitleBar.getTitleTextView().setText("我身边");
         mTitleBar.enableBackKey(true);
         mBtnRefresh.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +104,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     }
 
     private void startLocation() {
-        mPbLocation.setVisibility(View.VISIBLE);
+//        mPbLocation.setVisibility(View.VISIBLE);
+        mBtnRefresh.startAnimation(mAnim);
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, this);
     }
@@ -116,7 +123,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        mPbLocation.setVisibility(View.GONE);
+//        mPbLocation.setVisibility(View.GONE);
+        mAnim.cancel();
         if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
             //获取位置信息
             lat = aMapLocation.getLatitude();

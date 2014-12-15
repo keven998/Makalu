@@ -49,22 +49,24 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         rootView = inflater.inflate(R.layout.fragment_tabmain_item, container, false);
         ButterKnife.inject(this, rootView);
         type = getArguments().getString("type");
-        mListView = (PullToRefreshListView) rootView.findViewById(R.id.nearby_lv);
-        mListView.setPullLoadEnabled(false);
-        mListView.setPullRefreshEnabled(true);
-        mListView.setScrollLoadEnabled(true);
+
+        PullToRefreshListView listView = (PullToRefreshListView) rootView.findViewById(R.id.nearby_lv);
+        mListView = listView;
+        listView.setPullLoadEnabled(false);
+        listView.setPullRefreshEnabled(false);
+        listView.setScrollLoadEnabled(false);
         poiAdapter = new PoiAdapter(getActivity(), false);
-        mListView.getRefreshableView().setAdapter(poiAdapter);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        listView.getRefreshableView().setAdapter(poiAdapter);
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage = 0;
-                getPoiListByLoc(mPage, mLat, mLng);
+//                mPage = 0;
+//                getPoiListByLoc(mPage, mLat, mLng);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getPoiListByLoc(mPage, mLat, mLng);
+                getPoiListByLoc(mPage + 1, mLat, mLng);
             }
         });
 
@@ -82,18 +84,17 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             poiAdapter.notifyDataSetChanged();
         }
 
-
         return rootView;
     }
 
-    private void getPoiListByLoc(int page, double lat, double lng) {
+    private void getPoiListByLoc(final int page, double lat, double lng) {
         TravelApi.getNearbyPoi(lat, lng, page, type, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<SearchAllBean> allResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (allResult.code == 0) {
+                    mPage = page;
                     bindView(allResult.result);
-                    mPage++;
                 }
                 mListView.onPullUpRefreshComplete();
                 mListView.onPullDownRefreshComplete();
@@ -140,6 +141,10 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             // ptrLv.setScrollLoadEnabled(false);
         } else {
             mListView.setHasMoreData(true);
+        }
+
+        if (poiAdapter.getCount() >= TravelApi.PAGE_SIZE) {
+            mListView.setScrollLoadEnabled(true);
         }
 
     }

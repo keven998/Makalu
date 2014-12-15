@@ -16,6 +16,12 @@
         android:layout_height="wrap_content"
         android:background="@color/base_color_white" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_backgroud"
+        ></View>
+
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/nearby_viewPager"
         android:layout_width="match_parent"
@@ -25,29 +31,47 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:orientation="horizontal"
+        android:background="#60000000">
 
         <TextView
             android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/base_text_color_subtitle"
-             />
-        <ProgressBar
-            android:id="@+id/pb_location"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:visibility="gone"
-            style="?android:attr/progressBarStyleSmall"
-            />
+            android:textSize="10sp"
+            android:layout_weight="1"
+            android:textColor="@color/base_text_color_text_hint"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:layout_gravity="center_vertical"/>
 
-        <Button
-            android:id="@+id/btn_refresh"
+        <ImageButton android:id="@+id/btn_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:text="刷新" />
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:scaleType="center"
+            android:background="@null"
+            android:src="@drawable/ic_refresh_white_18dp"/>
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/pb_location"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:visibility="gone"-->
+            <!--style="?android:attr/progressBarStyleSmall"-->
+            <!--/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_refresh"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="13sp"-->
+            <!--android:text="刷新" />-->
     </LinearLayout>
 
 
