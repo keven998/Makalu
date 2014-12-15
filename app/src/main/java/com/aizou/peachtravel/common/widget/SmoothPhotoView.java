@@ -242,9 +242,12 @@ public class SmoothPhotoView extends PhotoView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (getDrawable() == null) {
-            return; // couldn't resolve the URI
-        }
+//        if (getDrawable() == null) {
+//            mPaint.setAlpha(0);
+//            canvas.drawPaint(mPaint);
+//            super.onDraw(canvas);
+//            return;
+//        }
 
         if (mState == STATE_TRANSFORM_IN || mState == STATE_TRANSFORM_OUT) {
             if (mTransformStart) {
@@ -331,6 +334,9 @@ public class SmoothPhotoView extends PhotoView {
                 mTransfrom.rect.height = (Float) animation.getAnimatedValue("height");
                 mBgAlpha = (Integer) animation.getAnimatedValue("alpha");
                 invalidate();
+                if(mAnimatorUpdateListener!=null){
+                    mAnimatorUpdateListener.onAnimationUpdate(animation);
+                }
 //                ((Activity)getContext()).getWindow().getDecorView().invalidate();
             }
         });
@@ -374,8 +380,12 @@ public class SmoothPhotoView extends PhotoView {
     public void setOnTransformListener(TransformListener listener) {
         mTransformListener = listener;
     }
+    public void setOnAnimatorUpdateListener(ValueAnimator.AnimatorUpdateListener listener) {
+        mAnimatorUpdateListener = listener;
+    }
 
     private TransformListener mTransformListener;
+    private ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
 
     public static interface TransformListener {
         /**

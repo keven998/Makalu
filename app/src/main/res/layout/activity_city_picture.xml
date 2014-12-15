@@ -37,6 +37,7 @@
         android:id="@+id/zoom_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/base_color_black"
         android:visibility="invisible">
 
         <com.aizou.core.widget.HackyViewPager

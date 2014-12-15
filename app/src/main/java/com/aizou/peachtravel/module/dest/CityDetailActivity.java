@@ -21,6 +21,7 @@ import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
@@ -28,6 +29,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -144,6 +146,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,CityPictureActivity.class);
+                intent.putExtra("id",locDetailBean.id);
                 startActivity(intent);
 
             }
@@ -214,7 +217,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     public void intentToTravel(View view){
-        Intent intent = new Intent(mContext,SpotDetailActivity.class);
+//        Intent intent = new Intent(mContext,SpotDetailActivity.class);
+//        startActivity(intent);
+        Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+        intent.putExtra("url", H5Url.LOC_TRAVEL);
         startActivity(intent);
         //todo:跳转html
     }

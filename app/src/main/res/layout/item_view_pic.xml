@@ -6,7 +6,8 @@
     <com.aizou.peachtravel.common.widget.SmoothPhotoView
         android:id="@+id/pv_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        />
 
     <ProgressBar
         android:id="@+id/pb_loading"

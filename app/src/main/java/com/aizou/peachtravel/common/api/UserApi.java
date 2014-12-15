@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class UserApi extends BaseApi {
     public static class ValidationCode {
-//        1：注册
+        //        1：注册
 //        2：找回密码
 //        3：绑定手机号
         public final static String REG_CODE = "1";
@@ -61,11 +62,11 @@ public class UserApi extends BaseApi {
     //联系人
     public final static String CONTACTS = "/users/contacts";
     //搜索联系人
-    public final static String SEACH_CONTACT="/users/search";
+    public final static String SEACH_CONTACT = "/users/search";
     //根据环信ID获取用户信息
-    public final static String GET_CONTACT_BY_HX="/users/easemob";
+    public final static String GET_CONTACT_BY_HX = "/users/easemob";
     //通讯录匹配
-    public final static String SEARCH_BY_ADDRESSBOOK="/users/search-by-address-book";
+    public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -338,6 +339,7 @@ public class UserApi extends BaseApi {
 
     /**
      * 获取好友列表
+     *
      * @param callback
      * @return
      */
@@ -352,6 +354,7 @@ public class UserApi extends BaseApi {
 
     /**
      * 添加好友
+     *
      * @param uid
      * @param callback
      * @return
@@ -381,14 +384,15 @@ public class UserApi extends BaseApi {
 
     /**
      * 删除好友
+     *
      * @param uid
      * @param callback
      * @return
      */
-    public static PTRequestHandler deleteContact(String uid,HttpCallBack callback) {
+    public static PTRequestHandler deleteContact(String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS+"/"+uid);
+        request.setUrl(SystemConfig.BASE_URL + CONTACTS + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -396,28 +400,30 @@ public class UserApi extends BaseApi {
 
     /**
      * 搜索联系人
+     *
      * @param key
      * @param callback
      * @return
      */
 
-    public static PTRequestHandler seachContact(String key,HttpCallBack callback) {
+    public static PTRequestHandler seachContact(String key, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEACH_CONTACT);
-        request.putUrlParams("keyword",key);
+        request.putUrlParams("keyword", key);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
 
     /**
      * 根据环信ID获取联系人
+     *
      * @param users
      * @param callback
      * @return
      */
 
-    public static PTRequestHandler getContactByHx(List<String> users,HttpCallBack callback) {
+    public static PTRequestHandler getContactByHx(List<String> users, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + GET_CONTACT_BY_HX);
@@ -426,10 +432,10 @@ public class UserApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         try {
             JSONArray jsonArray = new JSONArray();
-            for(String user:users){
+            for (String user : users) {
                 jsonArray.put(user);
             }
-            jsonObject.put("easemob",jsonArray );
+            jsonObject.put("easemob", jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -445,25 +451,44 @@ public class UserApi extends BaseApi {
 
     /**
      * 根据通讯录获取联系人
-     * @param uploadAddrBookBean
+     *
+     * @param bookList
      * @param callback
      * @return
      */
 
-    public static PTRequestHandler searchByAddressBook(UploadAddrBookBean uploadAddrBookBean,HttpCallBack callback) {
+    public static PTRequestHandler searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_BY_ADDRESSBOOK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+//        request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
-        String addressList =GsonTools.createGsonString(uploadAddrBookBean);
         try {
-            StringEntity entity = new StringEntity(addressList);
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
+            JSONObject rootObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject;
+            for (AddressBookbean addressBookbean : bookList) {
+                jsonObject = new JSONObject();
+                jsonObject.put("entryId", addressBookbean.entryId);
+                jsonObject.put("sourceId", addressBookbean.sourceId);
+                jsonObject.put("tel", addressBookbean.tel);
+                jsonObject.put("name", addressBookbean.name);
+                jsonArray.put(jsonObject);
+            }
+            rootObject.put("contants", jsonArray);
+            try {
+                StringEntity entity = new StringEntity(rootObject.toString());
+                request.setBodyEntity(entity);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            LogUtil.d(rootObject.toString());
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        LogUtil.d(addressList);
+
+
         return HttpManager.request(request, callback);
     }
 

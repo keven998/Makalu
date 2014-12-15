@@ -11,4 +11,7 @@ public class AddressBookbean {
     public int sourceId;
     public String name;
     public String tel;
+    public boolean isUser;
+    public boolean isContact;
+    public String userId;
 }

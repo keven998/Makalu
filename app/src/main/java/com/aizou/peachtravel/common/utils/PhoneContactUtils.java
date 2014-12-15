@@ -37,11 +37,21 @@ public class PhoneContactUtils {
                 final int displayNameIndex = phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                 final int phoneIndex = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 String phoneString, displayNameString, contactIdString;
+                String lastContactIdString="";
+                int entryId=0;
+                int sourceId=0;
                 while (phones.moveToNext()) {
                     bean= new AddressBookbean();
                     phoneString = phones.getString(phoneIndex);
                     displayNameString = phones.getString(displayNameIndex);
                     contactIdString = phones.getString(contactIdIndex);
+                    if(!lastContactIdString.equals(contactIdString)){
+                        sourceId++;
+                    }
+                    entryId++;
+
+                    bean.entryId=entryId;
+                    bean.sourceId = sourceId;
                     bean.name =displayNameString;
                     bean.tel = phoneString;
                     contactList.add(bean);

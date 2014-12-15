@@ -16,7 +16,6 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
     protected WebView mWebView;
     protected String mCurrentUrl;
 
-    abstract protected WebView initWebView(int webRes);
 
 
     @Override
@@ -69,7 +68,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
     /**
      * 初始化浏览器设置信息
      */
-    private void initWebView() {
+    protected void initWebView() {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new PeachWebViewClient());

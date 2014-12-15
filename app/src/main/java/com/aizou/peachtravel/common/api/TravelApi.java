@@ -36,6 +36,8 @@ public class TravelApi extends BaseApi{
     public final static String DESTINATIONS="/destinations";
     //目的地详情
     public final static String CITY_DETAIL="/geo/localities/";
+    //目的地图集
+    public final static String CITY_GALLEY="/geo/localities/%1$s/album";
     //目的地美食、购物介绍
     public final static String LOC_POI_GUIDE="/guides/destination/%1$s/%2$s";
     //poi相关
@@ -114,6 +116,20 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+    /**
+     * 获取目的地图集
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getCityGalley(String id,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + String.format(CITY_GALLEY,id));
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+
 
     /**
      * 获取景点详情

@@ -2,6 +2,7 @@ package com.aizou.peachtravel.common.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.common.widget.SmoothPhotoView;
 import com.aizou.peachtravel.common.widget.photoview.PhotoViewAttacher;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -32,6 +35,8 @@ public class ImageZoomAnimator2 {
     private List<ImageBean> imageUrls;
     private View currentView;
     private ImagePagerAdapter mImagePagerAdpater;
+    private final int mBgColor = 0xFF000000;
+    private int mBgAlpha = 0;
 
     public ImageZoomAnimator2(Context context, ViewGroup fromViewGroup, View zoomContainer, List<ImageBean> imageUrls){
         this.context =context;
@@ -112,6 +117,13 @@ public class ImageZoomAnimator2 {
             View contentView = View.inflate(context, R.layout.item_view_pic, null);
             final SmoothPhotoView photeView =(SmoothPhotoView) contentView.findViewById(R.id.pv_view);
             photeView.setTag(position);
+            photeView.setOnAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    mBgAlpha = (Integer) valueAnimator.getAnimatedValue("alpha");
+                    zoomContainer.getBackground().setAlpha(mBgAlpha);
+                }
+            });
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
             ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
 
@@ -119,12 +131,13 @@ public class ImageZoomAnimator2 {
                 public void onLoadingStarted(String imageUri, View view) {
                     loadingPb.setVisibility(View.VISIBLE);
 
+
                 }
 
                 @Override
                 public void onLoadingFailed(String imageUri, View view,
                                             FailReason failReason) {
-
+                    loadingPb.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -134,7 +147,7 @@ public class ImageZoomAnimator2 {
 
                 @Override
                 public void onLoadingCancelled(String imageUri, View view) {
-                    // TODO Auto-generated method stub
+                    loadingPb.setVisibility(View.GONE);
 
                 }
             });
@@ -143,7 +156,7 @@ public class ImageZoomAnimator2 {
 
                 @Override
                 public void onViewTap(View view, float x, float y) {
-//                    photeView.clearZoom();
+                    photeView.clearZoom();
                     transformOut(position);
 
 

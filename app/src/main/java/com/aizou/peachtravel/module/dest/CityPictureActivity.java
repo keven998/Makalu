@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -21,6 +22,8 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.lidroid.xutils.ViewUtils;
@@ -44,6 +47,7 @@ public class CityPictureActivity extends PeachBaseActivity {
     private LinearLayout containView;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +67,36 @@ public class CityPictureActivity extends PeachBaseActivity {
     }
 
     private void initData() {
-        List<ImageBean> imageList = new ArrayList<ImageBean>();
-        for(int i=0;i<20;i++){
-            ImageBean bean = new ImageBean();
-            bean.url="http://img0.bdstatic.com/img/image/shouye/taiwanlvyou1117.jpg";
-            imageList.add(bean);
-        }
-        picAdapter= new PicAdapter(imageList);
-        mCityPicGv.setAdapter(picAdapter);
-        zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageList);
+        id = getIntent().getStringExtra("id");
+//        for(int i=0;i<20;i++){
+//            ImageBean bean = new ImageBean();
+//            bean.url="http://img0.bdstatic.com/img/image/shouye/taiwanlvyou1117.jpg";
+//            imageList.add(bean);
+//        }
+        TravelApi.getCityGalley(id,new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson4List<ImageBean> imageReuslt = CommonJson4List.fromJson(result,ImageBean.class);
+                if(imageReuslt.code==0){
+                    picAdapter= new PicAdapter(imageReuslt.result);
+                    mCityPicGv.setAdapter(picAdapter);
+                    zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageReuslt.result);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
+
 
     }
 
     @Override
     public void onBackPressed() {
+
         if(zoomContainer.getVisibility()==View.VISIBLE){
             zoomAnimator.transformOut(zoomPicVp.getCurrentItem());
         }else{
