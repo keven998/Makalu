@@ -20,6 +20,7 @@
         android:gravity="center_vertical"
         android:textSize="15sp"
         android:textColor="@color/base_text_color_title"
+        android:singleLine="true"
         android:hint="昵称"
         android:textColorHint="#aaaaaa"/>
 

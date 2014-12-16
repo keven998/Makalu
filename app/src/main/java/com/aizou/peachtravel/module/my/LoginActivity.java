@@ -126,7 +126,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ForgetPwdActivity.class);
-                startActivityForResult(intent,REQUEST_CODE_FIND_PASSWD);
+                startActivityForResult(intent, REQUEST_CODE_FIND_PASSWD);
             }
         });
     }
@@ -150,6 +150,7 @@ public class LoginActivity extends PeachBaseActivity {
         // TODO Auto-generated method stub
         super.finish();
     }
+
     private void imLogin(final PeachUser user){
         EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
 
@@ -531,7 +532,7 @@ public class LoginActivity extends PeachBaseActivity {
         }
         if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD){
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
-            DialogManager.getInstance().showProgressDialog(mContext,"正在登录");
+            DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
             imLogin(user);
         }
     }

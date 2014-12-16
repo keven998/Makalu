@@ -52,10 +52,10 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 if(!RegexUtils.checkNickName(nickEt.getText().toString().trim())){
-                    ToastUtil.getInstance(mContext).showToast("请输入正确格式昵称");
+                    ToastUtil.getInstance(mContext).showToast("请输入合法昵称");
                     return;
                 } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())){
-                    ToastUtil.getInstance(mContext).showToast("昵称不能为连续超过6位数字");
+                    ToastUtil.getInstance(mContext).showToast("昵称不能连续超过6位数字");
                     return;
                 }
                 if(!CommonUtils.isNetWorkConnected(mContext)){
