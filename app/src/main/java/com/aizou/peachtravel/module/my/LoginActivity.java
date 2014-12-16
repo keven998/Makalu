@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,7 +65,8 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginActivity extends PeachBaseActivity {
-    public final static int REQUEST_CODE_REG=101;
+    public final static int REQUEST_CODE_REG = 101;
+    public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
     @ViewInject(R.id.et_user)
     private EditText loginNameEt;
@@ -124,7 +126,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ForgetPwdActivity.class);
-                startActivityForResult(intent,REQUEST_CODE_REG);
+                startActivityForResult(intent,REQUEST_CODE_FIND_PASSWD);
             }
         });
     }
@@ -135,7 +137,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, RegActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_REG);
             }
         });
 
@@ -260,7 +262,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void signIn() {
         if (TextUtils.isEmpty(loginNameEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("请输入手机号、昵称或ID");
+            ToastUtil.getInstance(mContext).showToast("请输入注册手机号或昵称");
             return;
         }
         if (TextUtils.isEmpty(pwdEt.getText())) {
@@ -514,15 +516,20 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_REG) {
+            if (resultCode == RESULT_OK) {
+                finish();
+                return;
+            }
+        }
         if (mWeiboSsoHandler != null) {
             mWeiboSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
         if (mTencentHandler != null) {
             mTencentHandler.onActivityResult(requestCode, resultCode, data);
         }
-        if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_REG){
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD){
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
             DialogManager.getInstance().showProgressDialog(mContext,"正在登录");
             imLogin(user);

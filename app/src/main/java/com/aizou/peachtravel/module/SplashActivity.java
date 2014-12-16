@@ -6,6 +6,7 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.igexin.sdk.PushManager;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,7 +17,7 @@ import android.view.WindowManager;
 /**
  * 欢迎页，等待2秒，进入主界面
  */
-public class SplashActivity extends PeachBaseActivity {
+public class SplashActivity extends Activity {
 	private final int SPLASH_DISPLAY_LENGHT = 1800; // 延迟三秒
 	private boolean showSplash = true;
 
@@ -36,17 +37,17 @@ public class SplashActivity extends PeachBaseActivity {
 
 			@Override
 			public void run() {
-				boolean hasLoad = SharePrefUtil.getBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), false);
+				boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
 				if (showSplash && !hasLoad) {
 					Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
 					startActivity(mainIntent);
-					finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 				} else {
                     Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(mainActivity);
                     Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
                     startActivity(storyIntent);
-                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 				}
 
 			}

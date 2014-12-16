@@ -61,7 +61,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     public void refresh(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-        if(user == null){
+        if(user == null) {
             idTv.setVisibility(View.GONE);
             signTv.setVisibility(View.GONE);
             genderIv.setVisibility(View.GONE);

@@ -74,7 +74,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                             intent.putExtra("pwd", pwdEt.getText().toString().trim());
                             intent.putExtra("countDown", validationResult.result.coolDown);
                             intent.putExtra("actionCode", UserApi.ValidationCode.REG_CODE);
-                            startActivityForResult(intent,REQUEST_CODE_CHECH_VALICATION);
+                            startActivityForResult(intent, REQUEST_CODE_CHECH_VALICATION);
                         } else {
                             ToastUtil.getInstance(mContext).showToast(validationResult.err.message);
                         }
@@ -94,8 +94,8 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_CHECH_VALICATION){
-            setResult(RESULT_OK,data);
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHECH_VALICATION){
+            setResult(RESULT_OK, data);
             finish();
         }
     }
