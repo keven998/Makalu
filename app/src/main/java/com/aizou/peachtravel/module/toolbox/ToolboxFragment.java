@@ -237,7 +237,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             default:
                 break;
         }
-        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
     }
 
     @Override

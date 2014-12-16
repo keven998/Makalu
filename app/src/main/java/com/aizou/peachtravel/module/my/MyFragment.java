@@ -121,7 +121,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_about:
-                Intent aboutIntent = new Intent(getActivity(),AboutActivity.class);
+                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(aboutIntent);
                 break;
 
@@ -152,6 +152,5 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             default:
                 break;
         }
-        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 }

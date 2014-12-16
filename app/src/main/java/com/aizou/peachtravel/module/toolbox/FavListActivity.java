@@ -377,7 +377,6 @@ public class FavListActivity extends PeachBaseActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
 }

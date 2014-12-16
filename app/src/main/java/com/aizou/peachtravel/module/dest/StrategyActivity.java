@@ -85,7 +85,6 @@ public class StrategyActivity extends PeachBaseActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
     }
 
     private void initData() {
@@ -189,7 +188,6 @@ public class StrategyActivity extends PeachBaseActivity {
                     Intent intent = new Intent(mContext, CityDetailActivity.class);
                     intent.putExtra("id", mDatas.get(i).id);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
 
