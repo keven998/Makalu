@@ -27,9 +27,9 @@
             android:paddingBottom="11dp"
             android:paddingRight="12dp"
             android:paddingLeft="30dp"
-            android:textColor="@color/base_color_white"
+            android:textColor="#eeeeee"
             android:textSize="17sp"
-            app:reflectionColor="#BFEFFF"
+            app:reflectionColor="@color/base_color_white"
             android:text="开启旅行>>">
         </com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView>
 

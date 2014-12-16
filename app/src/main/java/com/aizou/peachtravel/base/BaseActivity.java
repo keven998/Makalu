@@ -31,10 +31,10 @@ public class BaseActivity extends FragmentActivity {
             return;
         }
         super.onCreate(savedInstanceState);
-        mLogoutRecevier =new LogoutRecevier();
+        mLogoutRecevier = new LogoutRecevier();
         IntentFilter filter = new IntentFilter();
         filter.addAction(AccountManager.ACCOUNT_LOGOUT_ACTION);
-        registerReceiver(mLogoutRecevier,filter);
+        registerReceiver(mLogoutRecevier, filter);
         mContext = this;
     }
 
