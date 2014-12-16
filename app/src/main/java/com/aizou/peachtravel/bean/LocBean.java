@@ -2,6 +2,7 @@ package com.aizou.peachtravel.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,4 +77,23 @@ public class LocBean implements Parcelable {
             return new LocBean[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof LocBean){
+            LocBean bean = (LocBean) o;
+            return bean.id.equals(this.id);
+        }else{
+            return false;
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        if(!TextUtils.isEmpty(id)){
+            return id.hashCode();
+        }
+        return super.hashCode();
+    }
 }

@@ -53,7 +53,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     private int dayIndex;
     private String[] poiTypeArray,poiTypeValueArray;
 
-    private int page = 0;
+    private int curPage = 0;
     private LocBean curLoc;
     private PoiAdapter mPoiAdapter;
     private StringSpinnerAdapter mLocSpinnerAdapter,mTypeSpinnerAdapter;
@@ -89,13 +89,12 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLvPoiList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                page = 0;
-                getPoiListByLoc(mType, curLoc.id);
+                getPoiListByLoc(mType, curLoc.id,0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getPoiListByLoc(mType, curLoc.id);
+                getPoiListByLoc(mType, curLoc.id,curPage+1);
             }
         });
         mBtnOk.setOnClickListener(new View.OnClickListener() {
@@ -115,8 +114,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mType = poiTypeValueArray[position];
-                page=0;
-                getPoiListByLoc(mType, curLoc.id);
+                getPoiListByLoc(mType, curLoc.id,0);
             }
 
             @Override
@@ -128,8 +126,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
-                page=0;
-                getPoiListByLoc(mType, curLoc.id);
+                getPoiListByLoc(mType, curLoc.id,0);
             }
 
             @Override
@@ -159,19 +156,19 @@ public class AddPoiActivity extends PeachBaseActivity {
         initSpinnerListener();
         curLoc = locList.get(0);
         mType = poiTypeValueArray[0];
-        getPoiListByLoc(mType, curLoc.id);
+        getPoiListByLoc(mType, curLoc.id,0);
 
     }
 
-    private void getPoiListByLoc(String type, String cityId) {
+    private void getPoiListByLoc(String type, String cityId, final int page) {
 
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
                 if (poiListResult.code == 0) {
+                    curPage=page;
                     bindView(poiListResult.result);
-                    page++;
 
                 }
             }
@@ -184,7 +181,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     }
 
     private void bindView(List<PoiDetailBean> result) {
-        if (page == 0) {
+        if (curPage == 0) {
             mPoiAdapter.getDataList().clear();
         }
         for(PoiDetailBean detailBean:result){
@@ -204,7 +201,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             mLvPoiList.setHasMoreData(true);
             mLvPoiList.onPullUpRefreshComplete();
         }
-        if (page==0) {
+        if (curPage==0) {
             mLvPoiList.onPullUpRefreshComplete();
             mLvPoiList.onPullDownRefreshComplete();
         }

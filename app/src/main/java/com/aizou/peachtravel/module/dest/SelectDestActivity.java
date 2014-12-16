@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -61,6 +62,7 @@ import java.util.Set;
  * Created by Rjm on 2014/10/9.
  */
 public class SelectDestActivity extends PeachBaseActivity implements OnDestActionListener {
+    public final static int REQUEST_CODE_SEARCH_LOC=101;
     private RadioGroup inOutRg;
     private LinearLayout citysLl;
     private FrameLayout mBottomPanel;
@@ -74,6 +76,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     @Override
     public void onDestAdded(final LocBean locBean) {
+        if(allAddCityList.contains(locBean)){
+            ToastUtil.getInstance(mContext).showToast("已添加该景点");
+            return;
+        }
         View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
         citysLl.addView(cityView);
         allAddCityList.add(locBean);
@@ -178,6 +184,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mContext,SearchDestActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
             }
         });
         titleHeaderBar.enableBackKey(true);
@@ -228,4 +236,17 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==REQUEST_CODE_SEARCH_LOC){
+                LocBean locBean =data.getParcelableExtra("loc");
+                onDestAdded(locBean);
+                for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
+                    onDestActionListener.onDestAdded(locBean);
+                }
+            }
+        }
+    }
 }

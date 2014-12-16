@@ -300,6 +300,18 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callBack);
     }
+    //目的地查询
+    public static PTRequestHandler searchLoc(String keyword,int page,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + SEARCH);
+        request.putUrlParams("keyWord", keyword);
+        request.putUrlParams("loc", "true");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
     //联合查询
     public static PTRequestHandler searchAll(String keyword,HttpCallBack callback) {
         PTRequest request = new PTRequest();

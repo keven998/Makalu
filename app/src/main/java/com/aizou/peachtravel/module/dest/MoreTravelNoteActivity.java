@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,63 +33,55 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/12/11.
  */
-public class TravelNoteSearchActivity extends PeachBaseActivity {
+public class MoreTravelNoteActivity extends PeachBaseActivity {
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
-    @InjectView(R.id.et_search)
-    EditText mEtSearch;
-    @InjectView(R.id.btn_search)
-    Button mBtnSearch;
-    @InjectView(R.id.search_travel_note_lv)
-    PullToRefreshListView mSearchTravelNoteLv;
+    @InjectView(R.id.more_travel_note_lv)
+    PullToRefreshListView mMoreTravelNoteLv;
     ListViewDataAdapter mTravelNoteAdapter;
     int mPage=0;
-    String mKeyWord="";
+    String locId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_travelnote);
+        setContentView(R.layout.activity_more_travelnote);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("发送游记");
+        locId = getIntent().getStringExtra("id");
+
+        mTitleBar.getTitleTextView().setText("更多游记");
         mTitleBar.enableBackKey(true);
-        mSearchTravelNoteLv.setPullLoadEnabled(false);
-        mSearchTravelNoteLv.setPullRefreshEnabled(false);
-        mSearchTravelNoteLv.setScrollLoadEnabled(true);
+        mMoreTravelNoteLv.setPullLoadEnabled(false);
+        mMoreTravelNoteLv.setPullRefreshEnabled(false);
+        mMoreTravelNoteLv.setScrollLoadEnabled(true);
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelNoteViewHolder(true,false);
+                TravelNoteViewHolder viewHolder =  new TravelNoteViewHolder(false,false);
+                return viewHolder;
             }
         });
-        mSearchTravelNoteLv.getRefreshableView().setAdapter(mTravelNoteAdapter);
-        mSearchTravelNoteLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        mMoreTravelNoteLv.getRefreshableView().setAdapter(mTravelNoteAdapter);
+        mMoreTravelNoteLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                searchTravelNote(mKeyWord,0);
+                getTravelNoteList(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                searchTravelNote(mKeyWord,mPage+1);
+                getTravelNoteList(mPage + 1);
             }
         });
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mKeyWord = mEtSearch.getText().toString().trim();
-                DialogManager.getInstance().showProgressDialog(TravelNoteSearchActivity.this);
-                searchTravelNote(mKeyWord, 0);
-            }
-        });
+        mMoreTravelNoteLv.doPullRefreshing(true, 100);
 
     }
 
 
 
-    private void searchTravelNote(String keyWord, final int page){
-        OtherApi.getTravelNoteByKeyword(keyWord,page,new HttpCallBack<String>() {
+    private void getTravelNoteList(final int page){
+        OtherApi.getTravelNoteByLocId(locId, page, BaseApi.PAGE_SIZE,new HttpCallBack < String > () {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
@@ -97,39 +90,40 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                     bindView(detailResult.result);
                     mPage = page;
                 }
-                mSearchTravelNoteLv.onPullUpRefreshComplete();
-                mSearchTravelNoteLv.onPullDownRefreshComplete();
+                mMoreTravelNoteLv.onPullUpRefreshComplete();
+                mMoreTravelNoteLv.onPullDownRefreshComplete();
 
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
-                mSearchTravelNoteLv.onPullUpRefreshComplete();
-                mSearchTravelNoteLv.onPullDownRefreshComplete();
+                mMoreTravelNoteLv.onPullUpRefreshComplete();
+                mMoreTravelNoteLv.onPullDownRefreshComplete();
             }
         });
 
     }
 
     private void bindView(List<TravelNoteBean> result) {
+        if (result == null || result.size() == 0) {
+            mMoreTravelNoteLv.setHasMoreData(false);
+            if (mPage == 0) {
+                Toast.makeText(MoreTravelNoteActivity.this, "没有任何收藏", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MoreTravelNoteActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        } else {
+            mMoreTravelNoteLv.setHasMoreData(true);
+        }
         if (mPage == 0) {
             mTravelNoteAdapter.getDataList().clear();
         }
         mTravelNoteAdapter.getDataList().addAll(result);
 
         if (mTravelNoteAdapter.getCount() >= BaseApi.PAGE_SIZE) {
-            mSearchTravelNoteLv.setScrollLoadEnabled(true);
-        }
-        if (result == null || result.size() == 0) {
-            mSearchTravelNoteLv.setHasMoreData(false);
-            if (mPage == 0) {
-                Toast.makeText(TravelNoteSearchActivity.this, "没有结果", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(TravelNoteSearchActivity.this, "已列出全部", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            mSearchTravelNoteLv.setHasMoreData(true);
+            mMoreTravelNoteLv.setScrollLoadEnabled(true);
         }
     }
 }

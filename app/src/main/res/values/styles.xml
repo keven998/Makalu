@@ -74,5 +74,9 @@
         <item name="android:isIndicator">true</item>
         <item name="android:max">5</item>
     </style>
+    <style name="SpinnerStyle" parent="android:style/Widget.ListView.DropDown">
+        <item name="android:divider">#00ff00</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
 
 </resources>

@@ -109,10 +109,11 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getFavist(int page, HttpCallBack callback) {
+    public static PTRequestHandler getFavist(String type,int page, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + FAV);
+        request.putUrlParams("faType", type);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);

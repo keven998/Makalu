@@ -51,6 +51,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private ListViewDataAdapter travelAdapter;
     private TitleHeaderBar titleHeaderBar;
     private LocBean locDetailBean;
+    private String locId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +62,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void initData() {
-        String id = getIntent().getStringExtra("id");
-        id="5473ccd7b8ce043a64108c46";
-        getCityDetailData(id);
-        getTravelNotes(id);
+        locId = getIntent().getStringExtra("id");
+        locId="5473ccd7b8ce043a64108c46";
+        getCityDetailData(locId);
+        getTravelNotes(locId);
     }
 
     private void initView(){
@@ -87,7 +88,16 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelNoteViewHolder(false,true);
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(false,true);
+                viewHolder.setOnMoreClickListener(new TravelNoteViewHolder.OnMoreClickListener() {
+                    @Override
+                    public void onMoreClick(View view) {
+                        Intent intent = new Intent(mContext,MoreTravelNoteActivity.class);
+                        intent.putExtra("id",locId);
+                        startActivity(intent);
+                    }
+                });
+                return viewHolder;
             }
         });
         mTravelLv.setAdapter(travelAdapter);

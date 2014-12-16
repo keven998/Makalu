@@ -35,6 +35,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     TextView mFromTv;
     TextView mTimeTv;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    OnMoreClickListener mOnMoreClickListener;
 
     private boolean mIsShowSend;
     private boolean mIsShowMore;
@@ -42,6 +43,11 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     public TravelNoteViewHolder(boolean isShowSend,boolean isShowMore){
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
+    }
+
+    public void setOnMoreClickListener(OnMoreClickListener onMoreClickListener){
+        mOnMoreClickListener = onMoreClickListener;
+
     }
 
 
@@ -68,7 +74,9 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             mMoreTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(mOnMoreClickListener!=null){
+                        mOnMoreClickListener.onMoreClick(v);
+                    }
                 }
             });
         }else{
@@ -106,6 +114,11 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         mFromTv.setText("from:"+itemData.source);
         mFromTv.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
         mTimeTv.setText(simpleDateFormat.format(new Date(itemData.publishDate)));
+
+    }
+
+    public interface OnMoreClickListener{
+        void onMoreClick(View view);
 
     }
 }

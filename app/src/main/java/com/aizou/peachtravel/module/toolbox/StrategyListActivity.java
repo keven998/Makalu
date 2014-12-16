@@ -79,7 +79,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
-        listView.setScrollLoadEnabled(false);
+        listView.setScrollLoadEnabled(true);
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -191,6 +191,22 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void bindView(List<StrategyBean> result) {
         ListViewDataAdapter adapter = mStrategyListAdapter;
+        if (mCurrentPage == 0) {
+            adapter.getDataList().clear();
+        }
+        adapter.getDataList().addAll(result);
+        adapter.notifyDataSetChanged();
+        if (result == null || result.size() < BaseApi.PAGE_SIZE) {
+            mMyStrategyLv.setHasMoreData(false);
+            // ptrLv.setScrollLoadEnabled(false);
+        } else {
+            mMyStrategyLv.setHasMoreData(true);
+        }
+//        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
+//            mMyStrategyLv.setScrollLoadEnabled(true);
+//        }else{
+//            mMyStrategyLv.setScrollLoadEnabled(false);
+//        }
         if (result.size() == 0) {
             if (adapter.getCount() == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
@@ -206,20 +222,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 Toast.makeText(this, "已加载全部", Toast.LENGTH_SHORT).show();
             }
             return;
-        }
-        if (mCurrentPage == 0) {
-            adapter.getDataList().clear();
-        }
-        adapter.getDataList().addAll(result);
-        adapter.notifyDataSetChanged();
-//        if (result == null || result.size() < BaseApi.PAGE_SIZE) {
-//            mMyStrategyLv.setHasMoreData(false);
-//            // ptrLv.setScrollLoadEnabled(false);
-//        } else {
-//            mMyStrategyLv.setHasMoreData(true);
-//        }
-        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
-            mMyStrategyLv.setScrollLoadEnabled(true);
         }
     }
 
@@ -277,7 +279,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isEditableMode) {
                 mDeleteIv.setVisibility(View.VISIBLE);
-                mNameTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_line_edit_delete, 0, 0, 0);
+                mNameTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_title_edit, 0, 0, 0);
                 mNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

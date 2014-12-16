@@ -182,7 +182,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     viewGroup, false);
             ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.mTxt = (TextView) view
-                    .findViewById(R.id.tv_nickname);
+                    .findViewById(R.id.tv_name);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
