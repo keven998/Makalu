@@ -95,6 +95,6 @@
         android:textSize="15sp"
         android:background="@drawable/app_theme_button_selector"
         android:textColor="@color/base_color_white"
-        android:text="开始Talk"/>
+        android:text="Talk"/>
 
 </LinearLayout>
