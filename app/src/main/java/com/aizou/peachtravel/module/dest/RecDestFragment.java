@@ -43,7 +43,7 @@ public class RecDestFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
         recDestLv = (ListView) rootView.findViewById(R.id.lv_rec_dest);
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getRightTextView().setText("做攻略");
+        titleHeaderBar.getRightTextView().setText("新Memo");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

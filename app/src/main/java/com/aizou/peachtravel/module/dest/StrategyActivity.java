@@ -128,7 +128,7 @@ public class StrategyActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
-                    ToastUtil.getInstance(mContext).showToast("已保存到我的攻略");
+                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
                 }
 
@@ -309,7 +309,7 @@ public class StrategyActivity extends PeachBaseActivity {
 //                        intent.setAction("plan.flow"); //magic number in stand of being start in plan flow
 //                        startActivity(intent);
 //                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
-                        Toast.makeText(StrategyActivity.this, "已保存到\"我的攻略\"", Toast.LENGTH_LONG).show();
+                        Toast.makeText(StrategyActivity.this, "已保存到\"旅行Memo\"", Toast.LENGTH_LONG).show();
                         finish();
                     }
                 })

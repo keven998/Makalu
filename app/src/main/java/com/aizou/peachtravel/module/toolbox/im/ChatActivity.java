@@ -1057,7 +1057,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             try {
                 contentJson.put("id","1");
                 contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("name","我的攻略");
+                contentJson.put("name","旅行Memo");
                 contentJson.put("desc","北京-天津-石家庄");
                 contentJson.put("timeCost","5天");
                 sendText(contentJson.toString(), Constant.ExtType.GUIDE);
@@ -2027,7 +2027,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                             public void run() {
                                 //如果正在与此用户的聊天页面
                                 if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
-                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他桃友列表里移除", Toast.LENGTH_SHORT).show();
                                     ChatActivity.activityInstance.finish();
                                 }
                             }

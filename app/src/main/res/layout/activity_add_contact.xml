@@ -41,22 +41,21 @@
             <!--android:textSize="16sp" />-->
     <!--</RelativeLayout>-->
 
-    <FrameLayout android:layout_width="match_parent"
+    <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white">
+        android:background="@color/base_color_white"
+        android:orientation="horizontal">
 
         <EditText android:id="@+id/edit_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
             android:paddingLeft="10dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:background="@drawable/button_normal_shape"
-            android:hint="输入桃子用户昵称或手机号"
+            android:hint="用户昵称、手机号"
             android:imeOptions="actionSearch"
             android:singleLine="true"
             android:textColorHint="@color/base_text_color_text_placeholder"
@@ -65,7 +64,17 @@
             android:drawablePadding="10dp"
             android:textSize="13sp" />
 
-    </FrameLayout>
+        <Button android:id="@+id/search_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginRight="10dp"
+            android:textSize="13sp"
+            android:text="查找"
+            android:background="@drawable/app_theme_button_selector"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/base_color_white"/>
+
+    </LinearLayout>
 
     <TextView android:id="@+id/tv_phone_contact"
         android:layout_width="match_parent"
@@ -78,7 +87,7 @@
         android:drawableRight="@drawable/cell_accessory"
         android:gravity="left|center_vertical"
         android:layout_marginTop="10dp"
-        android:text="添加通讯录好友"/>
+        android:text="添加通讯录桃友"/>
 
     <TextView android:id="@+id/tv_weixin_contacts"
         android:layout_width="match_parent"

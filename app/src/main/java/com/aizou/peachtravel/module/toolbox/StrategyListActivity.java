@@ -174,7 +174,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         });
 
 //        mTitleBar.enableBackKey(true);
-        mTitleBar.getTitleTextView().setText("我的攻略");
+        mTitleBar.getTitleTextView().setText("旅行Memo");
         mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

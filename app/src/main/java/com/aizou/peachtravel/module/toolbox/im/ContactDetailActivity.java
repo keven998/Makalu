@@ -113,7 +113,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("好友信息");
+        titleHeaderBar.getTitleTextView().setText("桃友信息");
         titleHeaderBar.enableBackKey(true);
     }
 

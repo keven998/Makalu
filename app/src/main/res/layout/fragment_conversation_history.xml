@@ -60,7 +60,7 @@
             android:background="@drawable/app_theme_button_selector"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
-            android:text="新建Talk"
+            android:text="开始Talk"
             android:textColor="@color/base_color_white"
             android:textSize="14sp" />
 

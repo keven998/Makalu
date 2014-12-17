@@ -218,6 +218,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             EMChatManager.getInstance().sendGroupMessage(msg,new EMCallBack() {
                                 @Override
                                 public void onSuccess() {
+
                                 }
 
                                 @Override

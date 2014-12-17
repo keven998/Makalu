@@ -23,13 +23,15 @@
         <EditText
             android:id="@+id/et_search"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:textSize="14sp"
-            android:textColorHint="@color/base_text_color_text_hint"
-            android:hint="输入关键字"
+            android:textColorHint="@color/base_text_color_text_placeholder"
+            android:hint="景点、酒店、美食、购物"
             android:textColor="@color/base_text_color_title"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
             android:drawablePadding="10dp"
             android:background="@drawable/button_normal_shape"
             android:drawableLeft="@drawable/ic_search" />
@@ -39,8 +41,8 @@
             android:layout_width="50dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/button_normal_shape"
-            android:layout_height="30dp"
-            android:textSize="15sp"
+            android:layout_height="35dp"
+            android:textSize="14sp"
             android:textColor="@color/base_text_color_title"
             android:text="搜索" />
     </LinearLayout>
