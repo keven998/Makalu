@@ -50,8 +50,9 @@ public class StoryActivity extends SwipeBackActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StoryActivity.this, MainActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left);
+                overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left_100);
             }
         });
         Shimmer shimmer = new Shimmer();

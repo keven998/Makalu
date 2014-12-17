@@ -44,6 +44,7 @@
             android:background="@null"
             android:textSize="14sp"
             android:textColor="@color/base_text_color_title"
+            android:singleLine="true"
             android:hint="账户关联的手机号"
             android:textColorHint="#aaaaaa"
             android:paddingLeft="6dp"
@@ -93,7 +94,8 @@
             android:background="@null"
             android:paddingLeft="6dp"
             android:textSize="14sp"
-            android:hint="接收的短信验证码"
+            android:hint="短信验证码"
+            android:singleLine="true"
             android:textColorHint="#aaaaaa"
             android:textColor="@color/base_text_color_title"
             android:paddingRight="10dp"/>
@@ -107,7 +109,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="下一步"
+        android:text="提交"
         android:textSize="15sp"
         android:textColor="@color/base_color_white"
         android:background="@drawable/theme_button_selctor"/>

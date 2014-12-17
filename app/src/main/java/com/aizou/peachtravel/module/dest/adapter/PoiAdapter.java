@@ -179,7 +179,6 @@ public class PoiAdapter extends BaseAdapter {
                     Intent intent = new Intent(act, SpotDetailActivity.class);
                     intent.putExtra("id",poiDetailBean.id);
                     act.startActivity(intent);
-                    act.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
         } else {
@@ -252,7 +251,6 @@ public class PoiAdapter extends BaseAdapter {
                     intent.putExtra("id", poiDetailBean.id);
                     intent.putExtra("type", poiDetailBean.type);
                     act.startActivity(intent);
-                    act.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                 }
             });
 

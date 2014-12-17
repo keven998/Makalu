@@ -43,13 +43,14 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     private CountDownTimer countDownTimer;
     private int countDown;
     private String sendSuccessPhone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
         titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("找回密码");
+        titleBar.getTitleTextView().setText("验证账户");
         titleBar.enableBackKey(true);
         ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);
@@ -108,6 +109,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                 });
 
                 break;
+
             case R.id.btn_next:
                 if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
@@ -122,15 +124,15 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     return;
                 }
                 DialogManager.getInstance().showProgressDialog(ForgetPwdActivity.this);
-                UserApi.checkValidation(phoneEt.getText().toString().trim(),smsEt.getText().toString(),UserApi.ValidationCode.FIND_PWD,null,new HttpCallBack<String>() {
+                UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
-                        if(chechResult.code==0){
+                        if(chechResult.code == 0) {
                                 Intent intent = new Intent(mContext,ResetPwdActivity.class);
-                                intent.putExtra("token",chechResult.result.token);
-                                intent.putExtra("phone",phoneEt.getText().toString().trim());
+                                intent.putExtra("token", chechResult.result.token);
+                                intent.putExtra("phone", phoneEt.getText().toString().trim());
                                 startActivity(intent);
                         } else {
                             ToastUtil.getInstance(mContext).showToast(chechResult.err.message);
@@ -143,7 +145,6 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         Log.e("http", "error = " + msg);
                     }
                 });
-
 
                 break;
         }

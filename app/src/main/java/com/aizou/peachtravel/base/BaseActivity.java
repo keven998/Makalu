@@ -31,10 +31,10 @@ public class BaseActivity extends FragmentActivity {
             return;
         }
         super.onCreate(savedInstanceState);
-        mLogoutRecevier =new LogoutRecevier();
+        mLogoutRecevier = new LogoutRecevier();
         IntentFilter filter = new IntentFilter();
         filter.addAction(AccountManager.ACCOUNT_LOGOUT_ACTION);
-        registerReceiver(mLogoutRecevier,filter);
+        registerReceiver(mLogoutRecevier, filter);
         mContext = this;
     }
 
@@ -54,6 +54,24 @@ public class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         unregisterReceiver(mLogoutRecevier);
         super.onDestroy();
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     public void setAccountAbout(boolean isAccountAbout){

@@ -43,7 +43,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
         user = AccountManager.getInstance().getLoginAccount(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("设置密码");
+        titleBar.getTitleTextView().setText("设置新密码");
         titleBar.enableBackKey(true);
     }
 
@@ -51,22 +51,21 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_ok:
-                if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())){
+                if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-16位新密码");
                 } else {
                     DialogManager.getInstance().showProgressDialog(this);
-                    UserApi.resetPwd(mPhone,newPwdEt.getText().toString().trim(),mToken,new HttpCallBack<String>() {
+                    UserApi.resetPwd(mPhone,newPwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
-                            CommonJson<ModifyResult> resetResult = CommonJson.fromJson(result,ModifyResult.class);
-                            if(resetResult.code==0){
-                                AccountManager.getInstance().saveLoginAccount(mContext,user);
-                                Intent intent = new Intent(mContext,LoginActivity.class);
+                            CommonJson<ModifyResult> resetResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if(resetResult.code == 0){
+                                AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                Intent intent = new Intent(mContext, LoginActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                                finish();
-                            }else {
+                            } else {
                                 ToastUtil.getInstance(mContext).showToast(resetResult.err.message);
                             }
                         }

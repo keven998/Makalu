@@ -165,6 +165,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 											notifyDataSetChanged();
 											LogUtil.d("获取信息-----------------");
 										} else {
+
 										}
 
 									}
@@ -236,6 +237,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 																LogUtil.d("--------------------------");
 																notifyDataSetChanged();
 															} else {
+
 															}
 
 														}

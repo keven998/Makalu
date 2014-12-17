@@ -11,6 +11,7 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class GuideActivity extends PeachBaseActivity implements OnPageChangeListener {
+public class GuideActivity extends Activity implements OnPageChangeListener {
 	private ViewPager vp;
 	private ViewPagerAdapter vpAdapter;
 	private List<View> views;
@@ -67,18 +68,19 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 		// 初始化引导图片列表
 		for (int i = 0; i < pics.length; i++) {
 			if (i == 3) {
-				View view = View.inflate(mContext, R.layout.guide_last, null);
+				View view = View.inflate(this, R.layout.guide_last, null);
 				Button btn = (Button) view.findViewById(R.id.btn_goto);
 				btn.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						if (TextUtils.isEmpty(type)) {
-							SharePrefUtil.saveBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), true);
+							SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
                             Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
                             startActivity(mainActivity);
                             Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
                             startActivity(storyIntent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 						} else if (type.equals("setting")) {
 
 						}
@@ -87,7 +89,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 				});
 				views.add(view);
 			} else {
-				View view = View.inflate(mContext, R.layout.item_guide, null);
+				View view = View.inflate(this, R.layout.item_guide, null);
 				// view.setBackgroundResource(backgrouds[i]);
 				ImageView iv = (ImageView) view.findViewById(R.id.iv_guide);
 				iv.setImageResource(pics[i]);
@@ -149,11 +151,12 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 		if (arg0 == this.views.size() - 1 && arg1 == 0
 				&& arg2 == 0 && isScrolling) {
 			if (TextUtils.isEmpty(type)) {
-				SharePrefUtil.saveBoolean(mContext, "hasLoad_" + UpdateUtil.getVerName(mContext), true);
+				SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
                 Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
                 startActivity(mainActivity);
                 Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
                 startActivity(storyIntent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 			} else if (type.equals("setting")) {
 
 			}

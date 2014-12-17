@@ -63,7 +63,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         countDownTimer= new CountDownTimer(countDown*1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText("(" + (millisUntilFinished / 1000) + ")");
+                downTimeBtn.setText((millisUntilFinished / 1000) + "s");
             }
 
             @Override
