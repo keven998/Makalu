@@ -9,7 +9,7 @@ public class ExtMessageBean {
         public String name;
         public String desc;
         public String timeCost="";
-        public float star;
+        public String rating="";
         public String price="";
-        public String address;
+        public String address="";
 }

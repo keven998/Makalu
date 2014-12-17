@@ -230,11 +230,11 @@ public class IMShareActivity extends PeachBaseActivity {
                     Intent intent = new Intent();
                     if(finalIsGroup){
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("groupId", ((EMGroup) finalContact).getGroupId());
+                        intent.putExtra("toId", ((EMGroup) finalContact).getGroupId());
 
                     }else{
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                        intent.putExtra("userId", username);
+                        intent.putExtra("toId", username);
                     }
                     setResult(RESULT_OK,intent);
                     finish();

@@ -27,15 +27,15 @@ public class SearchAllAdapter extends BaseSectionAdapter {
     private Context mContext;
     private ArrayList<SearchTypeBean> mSearchList;
     private boolean mIsShowMore;
-    private OnMoreResultClickListener mOnMoreResultClickListener;
+    private OnSearchResultClickListener mOnSearchResultClickListener;
 
     public SearchAllAdapter(Context context, ArrayList<SearchTypeBean> searchList,boolean isShowMore) {
         mContext = context;
         mSearchList = searchList;
         mIsShowMore = isShowMore;
     }
-    public void setOnMoreResultClickListener(OnMoreResultClickListener onMoreResultClickListener){
-        mOnMoreResultClickListener = onMoreResultClickListener;
+    public void setOnSearchResultClickListener(OnSearchResultClickListener onSearchResultClickListener){
+        mOnSearchResultClickListener = onSearchResultClickListener;
     }
 
     @Override
@@ -81,7 +81,15 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         final SearchTypeBean typeBean = mSearchList.get(section);
         LocBean locBean=null;
         PoiDetailBean poiBean;
-        Object itemObject =typeBean.resultList.get(position);
+        final Object itemObject =typeBean.resultList.get(position);
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnSearchResultClickListener!=null){
+                    mOnSearchResultClickListener.onItemOnClick(itemObject);
+                }
+            }
+        });
         if(itemObject instanceof LocBean){
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
@@ -108,8 +116,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                 holder.mAllResultTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mOnMoreResultClickListener!=null){
-                            mOnMoreResultClickListener.onMoreResultClick(typeBean.type);
+                        if(mOnSearchResultClickListener !=null){
+                            mOnSearchResultClickListener.onMoreResultClick(typeBean.type);
                         }
                     }
                 });
@@ -193,7 +201,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     }
 
-    public interface OnMoreResultClickListener{
+    public interface OnSearchResultClickListener {
         void onMoreResultClick(String type);
+        void onItemOnClick(Object object);
     }
 }

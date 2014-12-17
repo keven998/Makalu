@@ -517,6 +517,11 @@ public class MessageAdapter extends BaseAdapter {
                 }
 
             }
+        }else{
+            PeachUser user = AccountManager.getInstance().getLoginAccount(context);
+            if(user!=null){
+                ImageLoader.getInstance().displayImage(user.avatar,holder.head_iv,picOptions);
+            }
         }
 
         // 如果是发送的消息并且不是群聊消息，显示已读textview
@@ -705,15 +710,15 @@ public class MessageAdapter extends BaseAdapter {
             switch (extType) {
                 case Constant.ExtType.FOOD:
                     holder.tv_type.setText("美食");
-                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 "+bean.price);
+                    holder.tv_attr.setText(bean.rating+"星 "+bean.price);
                     break;
                 case Constant.ExtType.HOTEL:
                     holder.tv_type.setText("酒店");
-                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 "+bean.price);
+                    holder.tv_attr.setText(bean.rating+"星 "+bean.price);
                     break;
                 case Constant.ExtType.SHOPPING:
                     holder.tv_type.setText("购物");
-                    holder.tv_attr.setText(String.valueOf((int)bean.star*5)+"星 ");
+                    holder.tv_attr.setText(bean.rating+"星 ");
                     break;
             }
             holder.tv_desc.setText(bean.address);

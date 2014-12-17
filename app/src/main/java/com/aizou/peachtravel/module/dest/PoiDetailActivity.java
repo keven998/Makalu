@@ -102,23 +102,24 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
-        mTitleBar.getRightTextView().setText("更多");
+        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
         mTitleBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PoiMoreMenu fragment = new PoiMoreMenu();
-                Bundle args = new Bundle();
-                args.putInt(
-                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                        4
-                );
-                args.putFloat(
-                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                        5
-                );
-
-                fragment.setArguments(args);
-                fragment.show(getSupportFragmentManager(), "more_menu");
+                IMUtils.onClickImShare(mContext);
+//                PoiMoreMenu fragment = new PoiMoreMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(
+//                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+//                        4
+//                );
+//                args.putFloat(
+//                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+//                        5
+//                );
+//
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "more_menu");
             }
         });
         mTitleBar.enableBackKey(true);
@@ -244,46 +245,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareLogin(mContext, requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMUtils.IM_SHARE_REQUEST_CODE) {
-                final int chatType = data.getIntExtra("chatType", 0);
-                final String groupId = data.getStringExtra("groupId");
-                final String userId = data.getStringExtra("userId");
-                IMUtils.showImShareDialog(mContext, poiDetailBean, new MaterialDialog.Callback() {
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-
-                    }
-
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        Intent intent = new Intent(mContext, ChatActivity.class);
-                        if (poiDetailBean.type.equals(TravelApi.PoiType.RESTAURANTS)) {
-                            intent.putExtra("extType", Constant.ExtType.FOOD);
-                        } else if (poiDetailBean.type.equals(TravelApi.PoiType.HOTEL)) {
-                            intent.putExtra("extType", Constant.ExtType.HOTEL);
-                        } else if (poiDetailBean.type.equals(TravelApi.PoiType.SHOPPING)) {
-                            intent.putExtra("extType", Constant.ExtType.SHOPPING);
-                        }
-                        intent.putExtra("content", IMUtils.createExtMessageContentForPoi(poiDetailBean));
-
-                        if (chatType == ChatActivity.CHATTYPE_GROUP) {
-                            //进入群聊
-                            // it is group chat
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                            intent.putExtra("groupId", groupId);
-                        } else {
-                            // it is single chat
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                            intent.putExtra("userId", userId);
-                        }
-                        startActivity(intent);
-                    }
-                });
-
-            }
-        }
+        IMUtils.onShareResult(mContext,poiDetailBean,requestCode,resultCode,data,null);
     }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
@@ -415,7 +377,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    IMUtils.onClickImShare(getActivity());
+
                     dismiss();
                 }
             });

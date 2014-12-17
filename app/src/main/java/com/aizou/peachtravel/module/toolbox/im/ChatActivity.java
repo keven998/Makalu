@@ -95,6 +95,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
+import com.aizou.peachtravel.module.toolbox.StrategyListActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.MessageAdapter;
@@ -1046,6 +1047,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			String s = mEditTextContent.getText().toString();
 			sendText(s,0);
 		}else if (id == R.id.btn_my_guide) {
+            Intent intent = new Intent(mContext, StrategyListActivity.class);
+            intent.putExtra("chatType",chatType);
+            intent.putExtra("toId",toChatUsername);
+            intent.putExtra("isShare",true);
+            startActivity(intent);
             // 点击我的攻略图标
             JSONObject contentJson = new JSONObject();
             try {
@@ -1071,6 +1077,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             }
         }  else if (id == R.id.btn_dest) {
             Intent intent = new Intent(mContext, SearchAllActivity.class);
+            intent.putExtra("chatType",chatType);
+            intent.putExtra("toId",toChatUsername);
             startActivity(intent);
             // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
@@ -1086,6 +1094,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 //            }
         } else if (id == R.id.btn_travels) {
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
+            intent.putExtra("chatType",chatType);
+            intent.putExtra("toId",toChatUsername);
             startActivity(intent);
 //            // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();

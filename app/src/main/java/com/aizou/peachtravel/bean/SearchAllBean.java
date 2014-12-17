@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Rjm on 2014/12/9.
  */
 public class SearchAllBean {
-    public ArrayList<LocBean> loc;
+    public ArrayList<LocBean> locality;
     public ArrayList<PoiDetailBean> vs;
     public ArrayList<PoiDetailBean> hotel;
     public ArrayList<PoiDetailBean> restaurant;

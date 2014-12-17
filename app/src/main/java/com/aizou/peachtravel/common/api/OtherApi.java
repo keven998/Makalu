@@ -30,6 +30,8 @@ public class OtherApi extends BaseApi {
     public final static String TRAVEL_NOTES="/misc/notes/search";
     //收藏
     public final static String FAV="/misc/favorites";
+    //运营
+    public final static String OPERATE="/columns";
 
     /**
      * 获取封面故事
@@ -43,6 +45,14 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("width", LocalDisplay.SCREEN_WIDTH_PIXELS+"");
         request.putUrlParams("height",LocalDisplay.SCREEN_HEIGHT_PIXELS+"");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    public static PTRequestHandler getOperate(HttpCallBack callback){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + OPERATE);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

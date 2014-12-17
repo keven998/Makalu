@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.toolbox;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.prv.PullToRefreshBase;
@@ -24,12 +27,16 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
+import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -69,6 +76,9 @@ public class FavListActivity extends PeachBaseActivity {
     private String curType="all";
     private CustomAdapter mAdapter;
     private boolean isEditable = false;
+    boolean isShare;
+    int chatType;
+    String toId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +99,58 @@ public class FavListActivity extends PeachBaseActivity {
         listView.setPullRefreshEnabled(true);
         listView.setScrollLoadEnabled(false);
         listView.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
+        listView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FavoritesBean bean =mAdapter.getDataList().get(position);
+                if(isShare){
+                    IMUtils.showImShareDialog(mContext, bean, new IMUtils.OnDialogShareCallBack() {
+                        @Override
+                        public void onDialogShareOk(Dialog dialog, int type, String content) {
+                            DialogManager.getInstance().showProgressDialog(mContext);
+                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("发送成功");
+
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onError(int i, String s) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("发送失败");
+
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onProgress(int i, String s) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                        }
+                    });
+                }else{
+                    Intent intent = new Intent(mContext, StrategyActivity.class);
+                    intent.putExtra("id", bean.id);
+                    startActivity(intent);
+                }
+            }
+        });
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -101,7 +163,9 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
         listView.doPullRefreshing(true, 100);
-
+        isShare=getIntent().getBooleanExtra("isShare",false);
+        toId = getIntent().getStringExtra("toId");
+        chatType = getIntent().getIntExtra("chatType",0);
         mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(favTypeArray));
         mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
         mTypeSpinner.setSelection(0, true);

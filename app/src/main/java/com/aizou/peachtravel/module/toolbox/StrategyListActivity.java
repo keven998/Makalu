@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.toolbox;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
@@ -33,11 +35,13 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
+import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -61,8 +65,10 @@ public class StrategyListActivity extends PeachBaseActivity {
     CheckedTextView mEditBtn;
     ListViewDataAdapter mStrategyListAdapter;
     public boolean isEditableMode;
-
+    boolean isShare;
     int mCurrentPage = 0;
+    int chatType;
+    String toId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +109,54 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mContext, StrategyActivity.class);
                 StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                intent.putExtra("id", bean.id);
-                startActivity(intent);
+                if(isShare){
+                    IMUtils.showImShareDialog(mContext, bean, new IMUtils.OnDialogShareCallBack() {
+                        @Override
+                        public void onDialogShareOk(Dialog dialog, int type, String content) {
+                            DialogManager.getInstance().showProgressDialog(mContext);
+                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("发送成功");
+
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onError(int i, String s) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("发送失败");
+
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onProgress(int i, String s) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                        }
+                    });
+                }else{
+                    Intent intent = new Intent(mContext, StrategyActivity.class);
+                    intent.putExtra("id", bean.id);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -140,7 +190,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
 
-        listView.doPullRefreshing(true, 100);
+
     }
 
     @Override
@@ -162,7 +212,11 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void initData() {
+        isShare=getIntent().getBooleanExtra("isShare",false);
+        toId = getIntent().getStringExtra("toId");
+        chatType = getIntent().getIntExtra("chatType",0);
 //        getStrategyListData(0);
+        mMyStrategyLv.doPullRefreshing(true, 100);
     }
 
     private void getStrategyListData(final int page) {

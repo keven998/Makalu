@@ -353,7 +353,7 @@ public class DialogManager {
      *
      * @param context 上下文
      */
-    public void showProgressDialog(Activity context) {
+    public void showProgressDialog(Context context) {
         mProgressDialog = createProgressDialog(context,null,null);
     }
 

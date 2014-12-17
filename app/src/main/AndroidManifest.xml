@@ -93,6 +93,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.dest.SearchDestForPoiActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.dest.StrategyActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

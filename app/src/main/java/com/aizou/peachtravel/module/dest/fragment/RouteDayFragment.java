@@ -289,6 +289,7 @@ public class RouteDayFragment extends PeachBaseFragment {
             final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
             switch (type){
                 case SPOT:
+                    if(poiDetailBean.images.size()>0)
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
@@ -344,7 +345,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     break;
 
                 case POI:
-
+                    if(poiDetailBean.images.size()>0)
                     ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);

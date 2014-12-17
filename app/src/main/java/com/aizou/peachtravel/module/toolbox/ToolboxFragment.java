@@ -1,25 +1,34 @@
 package com.aizou.peachtravel.module.toolbox;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
+import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
+import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.OperateBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
@@ -31,9 +40,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,6 +72,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     TextView mTvNearby;
     @InjectView(R.id.btn_lxq)
     Button mBtnLxq;
+    @InjectView(R.id.ll_weather)
+    LinearLayout mLlWeather;
+    @InjectView(R.id.dot_view)
+    DotView mDotView;
     private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
@@ -77,7 +90,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_travel, null);
-        ButterKnife.inject(this,rootView);
+        ButterKnife.inject(this, rootView);
         mLyHeaderBarTitleWrap.getTitleTextView().setText("我的攻略");
         mLyHeaderBarTitleWrap.enableBackKey(false);
 
@@ -96,10 +109,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                         //获取位置信息
                         geoLat = aMapLocation.getLatitude();
                         geoLng = aMapLocation.getLongitude();
-                        city=aMapLocation.getCity();
+                        city = aMapLocation.getCity();
                         address = aMapLocation.getAddress();
                         street = aMapLocation.getStreet();
-                        getYahooWeather(geoLat,geoLng);
+                        getYahooWeather(geoLat, geoLng);
                     }
 
                     @Override
@@ -121,19 +134,61 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     public void onProviderDisabled(String provider) {
 
                     }
-                } );
+                });
+        getOperateData();
         return rootView;
+    }
+
+    private void getOperateData() {
+        OtherApi.getOperate(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson4List<OperateBean> operateResult = CommonJson4List.fromJson(result, OperateBean.class);
+                if (operateResult.code == 0) {
+                    bindOperateView(operateResult.result);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
+
+    }
+
+    private void bindOperateView(final List<OperateBean> result) {
+        ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(getActivity(), result);
+        imagePagerAdapter.setInfiniteLoop(true);
+        mVpTravel.setAdapter(imagePagerAdapter);
+        mVpTravel.setStopScrollWhenTouch(true);
+        mDotView.setNum(result.size());
+        mVpTravel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mDotView.setSelected(position%result.size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void getYahooWeather(double lat, double lon) {
         YahooWeather.getInstance().queryYahooWeatherByLatLon(getActivity(), lat + "", lon + "", new YahooWeatherInfoListener() {
             @Override
             public void gotWeatherInfo(WeatherInfo weatherInfo) {
-
                 if (weatherInfo == null) {
                     return;
                 }
-                weatherStr = DateUtil.getCurrentMonthDay() + "   "+city+"   " + weatherArray[weatherInfo.getCurrentCode()];
+                weatherStr = DateUtil.getCurrentMonthDay() + "   " + city + "   " + weatherArray[weatherInfo.getCurrentCode()];
                 ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
                 mTvWeather.setText(weatherStr);
             }
@@ -154,26 +209,26 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 break;
 
             case R.id.tv_nearby:
-                if(geoLat==null){
-                    DialogManager.getInstance().showProgressDialog(getActivity(),"正在定位");
+                if (geoLat == null) {
+                    DialogManager.getInstance().showProgressDialog(getActivity(), "正在定位");
                     mLocationManagerProxy.requestLocationData(
                             LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                                 @Override
                                 public void onLocationChanged(AMapLocation aMapLocation) {
                                     DialogManager.getInstance().dissMissProgressDialog();
-                                    if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
+                                    if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
                                         //获取位置信息
                                         geoLat = aMapLocation.getLatitude();
                                         geoLng = aMapLocation.getLongitude();
-                                        city=aMapLocation.getCity();
+                                        city = aMapLocation.getCity();
                                         street = aMapLocation.getStreet();
                                         address = aMapLocation.getAddress();
                                         Intent intent = new Intent(getActivity(), NearbyActivity.class);
-                                        intent.putExtra("lat",geoLat);
-                                        intent.putExtra("lng",geoLng);
-                                        intent.putExtra("street",street);
-                                        intent.putExtra("address",address);
-                                        intent.putExtra("city",city);
+                                        intent.putExtra("lat", geoLat);
+                                        intent.putExtra("lng", geoLng);
+                                        intent.putExtra("street", street);
+                                        intent.putExtra("address", address);
+                                        intent.putExtra("city", city);
                                         startActivity(intent);
                                     } else {
                                         ToastUtil.getInstance(getActivity()).showToast("定位失败，请稍后重试");
@@ -200,14 +255,14 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                                 public void onProviderDisabled(String provider) {
 
                                 }
-                            } );
+                            });
                 } else {
                     Intent intent = new Intent(getActivity(), NearbyActivity.class);
-                    intent.putExtra("lat",geoLat);
-                    intent.putExtra("lng",geoLng);
-                    intent.putExtra("street",street);
-                    intent.putExtra("address",address);
-                    intent.putExtra("city",city);
+                    intent.putExtra("lat", geoLat);
+                    intent.putExtra("lng", geoLng);
+                    intent.putExtra("street", street);
+                    intent.putExtra("address", address);
+                    intent.putExtra("city", city);
                     startActivity(intent);
                 }
 
@@ -263,6 +318,75 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
+    }
+
+    public class ImagePagerAdapter extends RecyclingPagerAdapter {
+
+        private Context context;
+        private List<OperateBean> operateBeans;
+
+        private int size;
+        private boolean isInfiniteLoop;
+
+        public ImagePagerAdapter(Context context, List<OperateBean> operateBeans) {
+            this.context = context;
+            this.operateBeans = operateBeans;
+            this.size = operateBeans.size();
+            isInfiniteLoop = false;
+        }
+
+        @Override
+        public int getCount() {
+            // Infinite loop
+            return isInfiniteLoop ? Integer.MAX_VALUE : operateBeans.size();
+        }
+
+        /**
+         * get really position
+         *
+         * @param position
+         * @return
+         */
+        private int getPosition(int position) {
+            return isInfiniteLoop ? position % size : position;
+        }
+
+        @Override
+        public View getView(final int position, View view, ViewGroup container) {
+            ImageView imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            ImageLoader.getInstance().displayImage(
+                    operateBeans.get(getPosition(position)).cover, imageView,
+                    UILUtils.getDefaultOption());
+            imageView.setTag(position);
+            return imageView;
+        }
+
+
+        /**
+         * @return the isInfiniteLoop
+         */
+        public boolean isInfiniteLoop() {
+            return isInfiniteLoop;
+        }
+
+        /**
+         * @param isInfiniteLoop the isInfiniteLoop to set
+         */
+        public ImagePagerAdapter setInfiniteLoop(boolean isInfiniteLoop) {
+            this.isInfiniteLoop = isInfiniteLoop;
+            return this;
+        }
+
+
     }
 
 }

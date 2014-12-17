@@ -48,7 +48,7 @@ public class TravelApi extends BaseApi{
     //POI列表
     public final static String POI_LIST_BY_LOC="/poi/%1$s/localities/";
     //根据ID获取攻略
-    public final static String GUIDEBYID="/guides/%1$s/all";
+    public final static String GUIDEBYID="/guides/%1$s";
     //根据目的地ID创建攻略
     public final static String CREATE_GUIDE="/create-guide";
     //攻略
@@ -57,6 +57,8 @@ public class TravelApi extends BaseApi{
     public final static String FAV="/misc/favorites";
     //搜索
     public final static String SEARCH="/search";
+    //搜索联想
+    public final static String SUGGEST="/suggestions";
     //周边
     public final static String NEARBY="/poi/nearby";
 
@@ -312,6 +314,10 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+    //目的地联想
+    public static PTRequestHandler suggestLoc(String keyword,HttpCallBack callback) {
+        return  suggestForType(keyword,"loc",callback);
+    }
     //联合查询
     public static PTRequestHandler searchAll(String keyword,HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -336,6 +342,16 @@ public class TravelApi extends BaseApi{
         request.putUrlParams("locId", locId);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+    //联想地点
+    public static PTRequestHandler suggestForType(String keyword,String type,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + SUGGEST);
+        request.putUrlParams("keyWord", keyword);
+        request.putUrlParams(type, "true");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

@@ -96,7 +96,7 @@ public class StrategyActivity extends PeachBaseActivity {
             }
             //test
             cityIdList.add("5473ccd7b8ce043a64108c46");
-            cityIdList.add("546f2daab8ce0440eddb2aff");
+            cityIdList.add("5473ccddb8ce043a64108d22");
             createStrategyByCityIds(cityIdList);
         } else {
             getStrategyDataById();

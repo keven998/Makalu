@@ -2,6 +2,9 @@ package com.aizou.peachtravel.module.dest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,16 +24,13 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CityBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.SearchAllBean;
-import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -41,7 +41,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/18.
  */
-public class SearchDestActivity extends PeachBaseActivity {
+public class SearchDestForPoiActivity extends PeachBaseActivity {
 
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mTitleBar;
@@ -63,13 +63,13 @@ public class SearchDestActivity extends PeachBaseActivity {
     }
 
     private void initView() {
-        setContentView(R.layout.activity_search_dest);
+        setContentView(R.layout.activity_search_dest_for_poi);
         ButterKnife.inject(this);
         mTitleBar.getTitleTextView().setText("搜索目的地");
         mTitleBar.enableBackKey(true);
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
-        mSearchResultLv.setScrollLoadEnabled(true);
+        mSearchResultLv.setScrollLoadEnabled(false);
         mSearchResultLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -81,11 +81,12 @@ public class SearchDestActivity extends PeachBaseActivity {
                 searchSearchLocData(mKeyWord, curPage + 1);
             }
         });
+        mBtnSearch.setVisibility(View.GONE);
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
-                DialogManager.getInstance().showProgressDialog(SearchDestActivity.this);
+                DialogManager.getInstance().showProgressDialog(SearchDestForPoiActivity.this);
                 searchSearchLocData(mKeyWord, 0);
             }
         });
@@ -96,10 +97,49 @@ public class SearchDestActivity extends PeachBaseActivity {
         mSearchResultAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new SearchResultViewHolder();
+                return new SearchResultForPoiViewHolder();
             }
         });
         mSearchResultLv.getRefreshableView().setAdapter(mSearchResultAdapter);
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s)){
+                    mSearchResultAdapter.getDataList().clear();
+                    mSearchResultAdapter.notifyDataSetChanged();
+                }else{
+                    suggestSearchLocData(s.toString().trim());
+                }
+
+
+            }
+        });
+    }
+
+    private void suggestSearchLocData(String keyWord){
+        TravelApi.suggestLoc(keyWord, new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                if (searchAllResult.code == 0) {
+                    bindView(searchAllResult.result.locality);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+            }
+        });
     }
 
     private void searchSearchLocData(String keyWord, final int page){
@@ -126,37 +166,20 @@ public class SearchDestActivity extends PeachBaseActivity {
 
     }
     private void bindView(List<LocBean> result) {
-
-        if (curPage == 0) {
-            mSearchResultAdapter.getDataList().clear();
-        }
+        mSearchResultAdapter.getDataList().clear();
         mSearchResultAdapter.getDataList().addAll(result);
-
-        if (mSearchResultAdapter.getCount() >= BaseApi.PAGE_SIZE) {
-            mSearchResultLv.setScrollLoadEnabled(true);
-        }
-        if (result == null || result.size() == 0) {
-            mSearchResultLv.setHasMoreData(false);
-            if (curPage == 0) {
-                Toast.makeText(SearchDestActivity.this, "没有结果", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(SearchDestActivity.this, "已列出全部", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            mSearchResultLv.setHasMoreData(true);
-        }
         mSearchResultAdapter.notifyDataSetChanged();
     }
 
-    private class SearchResultViewHolder extends ViewHolderBase<LocBean> {
-        private ImageView destIv;
+    private class SearchResultForPoiViewHolder extends ViewHolderBase<LocBean> {
+//        private ImageView destIv;
         private TextView destNameTv;
         private View contentView;
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            contentView = layoutInflater.inflate(R.layout.row_dest_search, null);
-            destIv = (ImageView) contentView.findViewById(R.id.iv_dest);
+            contentView = layoutInflater.inflate(R.layout.row_dest_search_for_type, null);
+//            destIv = (ImageView) contentView.findViewById(R.id.iv_dest);
             destNameTv = (TextView) contentView.findViewById(R.id.tv_dest_name);
             return contentView;
         }
@@ -164,9 +187,9 @@ public class SearchDestActivity extends PeachBaseActivity {
         @Override
         public void showData(int position, final LocBean itemData) {
             destNameTv.setText(itemData.zhName);
-            if(itemData.images!=null&&itemData.images.size()>0){
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, destIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
-            }
+//            if(itemData.images!=null&&itemData.images.size()>0){
+//                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, destIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+//            }
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
