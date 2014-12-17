@@ -77,7 +77,7 @@
                     android:onClick="onTabClicked"
                     android:scaleType="matrix"
                     android:background="@color/base_color_white"
-                    android:text="好友"
+                    android:text="桃友"
                     android:textColor="@color/main_botton_text_color"
                     android:textSize="17sp" />
 

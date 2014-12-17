@@ -101,14 +101,14 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteStatus.BEAGREED) {
 				holder.status.setVisibility(View.GONE);
-				holder.reason.setText("已同意你的好友请求");
+				holder.reason.setText("已同意你的桃友请求");
 			} else if (msg.getStatus() == InviteStatus.BEINVITEED || msg.getStatus() == InviteStatus.BEAPPLYED) {
 				holder.status.setVisibility(View.VISIBLE);
 				holder.status.setText("同意");
 				if(msg.getStatus() == InviteStatus.BEINVITEED){
 					if (msg.getReason() == null) {
 						// 如果没写理由
-						holder.reason.setText("请求加你为好友");
+						holder.reason.setText("请求加你为桃友");
 					}
 				}else{ //入群申请
 					if (TextUtils.isEmpty(msg.getReason())) {

@@ -12,7 +12,7 @@
         android:layout_marginLeft="50dp"
         android:textSize="15sp"
         android:textColor="#66ee528c"
-        android:text="旅行好友"/>
+        android:text="旅行桃友"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_marginTop="25dp"
         android:textColor="@color/base_color_white"
         android:background="@drawable/app_theme_button_selector"
-        android:text="加好友"
+        android:text="加桃友"
         android:textSize="14sp"/>
 
 </LinearLayout>

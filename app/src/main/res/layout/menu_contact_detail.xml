@@ -11,7 +11,7 @@
         android:textSize="12sp"
         android:drawableTop="@drawable/ic_launcher"
         android:drawablePadding="10dp"
-        android:text="删除好友"
+        android:text="从桃友中删除"
         android:gravity="center_horizontal"
         android:padding="30dp"/>
 

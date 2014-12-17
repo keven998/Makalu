@@ -71,18 +71,25 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         findViewById(R.id.tv_phone_contact).setOnClickListener(this);
         findViewById(R.id.tv_weixin_contacts).setOnClickListener(this);
 //        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        findViewById(R.id.search_contact).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchContact();
+            }
+        });
     }
 
     private void initTitleBar(){
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-//        titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.getRightTextView().setText(getString(R.string.button_search));
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchContact();
-            }
-        });
+
+//        titleHeaderBar.getRightTextView().setText(getString(R.string.button_search));
+//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                searchContact();
+//            }
+//        });
 
         titleHeaderBar.getTitleTextView().setText("添加旅友");
         titleHeaderBar.enableBackKey(true);
@@ -121,7 +128,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                             }
 
                             if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).easemobUser)) {
-                                ToastUtil.getInstance(mContext).showToast("此用户已是你的好友");
+                                ToastUtil.getInstance(mContext).showToast("此用户已是你的桃友");
                                 IMUser imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
                                 imUser.setNick(user.nickName);
                                 imUser.setAvatar(user.avatar);

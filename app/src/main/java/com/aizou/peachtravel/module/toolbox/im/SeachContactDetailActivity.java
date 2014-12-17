@@ -108,7 +108,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                     jsonObject.put("avatar",myUser.avatar);
                     jsonObject.put("gender",myUser.gender);
                     jsonObject.put("easemobUser",myUser.easemobUser);
-                    jsonObject.put("attachMsg","加个好友呗 桃子");
+                    jsonObject.put("attachMsg","加个桃友, 一起去旅行呗");
                     cmdMsg.setAttribute("content",jsonObject.toString());
                     DialogManager.getInstance().showProgressDialog(SeachContactDetailActivity.this);
                     EMChatManager.getInstance().sendMessage(cmdMsg, new EMCallBack() {
@@ -131,7 +131,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                                 @Override
                                 public void run() {
                                     DialogManager.getInstance().dissMissProgressDialog();
-                                    Toast.makeText(getApplicationContext(), "请求添加好友失败:" + s, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败:" + s, Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -154,7 +154,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
     private void initTitleBar(){
         TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("查找好友");
+        thbar.getTitleTextView().setText("查找桃友");
         thbar.enableBackKey(true);
     }
 
