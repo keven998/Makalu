@@ -1051,7 +1051,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             try {
                 contentJson.put("id","1");
                 contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("name","我的攻略");
+                contentJson.put("name","旅行Memo");
                 contentJson.put("desc","北京-天津-石家庄");
                 contentJson.put("timeCost","5天");
                 sendText(contentJson.toString(), Constant.ExtType.GUIDE);

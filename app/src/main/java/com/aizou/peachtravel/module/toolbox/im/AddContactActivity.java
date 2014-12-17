@@ -91,7 +91,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //            }
 //        });
 
-        titleHeaderBar.getTitleTextView().setText("添加旅友");
+        titleHeaderBar.getTitleTextView().setText("添加桃友");
         titleHeaderBar.enableBackKey(true);
     }
 
@@ -102,7 +102,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void searchContact() {
         final String name = editText.getText().toString();
 //        String saveText = searchBtn.getText().toString();
-
 //        if (getString(R.string.button_search).equals(saveText)) {
             toAddUsername = name;
             if (TextUtils.isEmpty(name)) {
