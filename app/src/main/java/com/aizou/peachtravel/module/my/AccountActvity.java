@@ -196,7 +196,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     public void onPositive(final MaterialDialog dialog) {
                         View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
                         dialog.setContentView(progressView);
-                        AccountManager.getInstance().logout(mContext, new EMCallBack() {
+                        AccountManager.getInstance().logout(mContext,false, new EMCallBack() {
                             @Override
                             public void onSuccess() {
                                 dialog.dismiss();

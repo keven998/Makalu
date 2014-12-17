@@ -85,7 +85,11 @@
         <activity
             android:name=".module.dest.SelectDestActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".module.dest.SearchDestActivity"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -368,7 +372,7 @@
         </activity>
         <!-- 自定义的alertdialog -->
         <activity
-            android:name=".module.toolbox.im.AlertDialog"
+            android:name=".module.toolbox.im.IMAlertDialog"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" >
         </activity>

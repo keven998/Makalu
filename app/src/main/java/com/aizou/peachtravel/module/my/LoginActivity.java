@@ -42,6 +42,7 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.ViewUtils;
@@ -153,7 +154,7 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void onSuccess() {
-                DialogManager.getInstance().dissMissProgressDialog();
+
                 // 登陆成功，保存用户名密码
                 try {
                     // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
@@ -162,6 +163,9 @@ public class LoginActivity extends PeachBaseActivity {
                     if (!updatenick) {
                         EMLog.e("LoginActivity", "update current user nick fail");
                     }
+
+                    // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
+
 //                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
                     final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                     // 添加user"申请与通知"
@@ -183,10 +187,6 @@ public class LoginActivity extends PeachBaseActivity {
                     List <IMUser> users = new ArrayList<IMUser>(userlist.values());
                     IMUserRepository.saveContactList(mContext,users);
                     // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-
-                    // 进入主页面
-                    setResult(RESULT_OK);
-                    finish();
                     EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
                         @Override
                         public void onSuccess(List<EMGroup> emGroups) {
@@ -197,6 +197,12 @@ public class LoginActivity extends PeachBaseActivity {
 
                         }
                     });
+
+                    // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
+                    // ** manually load all local groups and
+                    // conversations in case we are auto login
+                    EMGroupManager.getInstance().loadAllGroups();
+                    EMChatManager.getInstance().loadAllConversations();
                     UserApi.getContact(new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -230,10 +236,26 @@ public class LoginActivity extends PeachBaseActivity {
 
                         }
                     });
+                    // 进入主页面
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            DialogManager.getInstance().dissMissProgressDialog();
+
+                        }
+                    });
+                    setResult(RESULT_OK);
+                    finish();
 
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            DialogManager.getInstance().dissMissProgressDialog();
+                            Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
                 }
 
             }

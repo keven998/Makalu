@@ -61,6 +61,7 @@ public class BaseActivity extends FragmentActivity {
     }
 
     protected MaterialDialog.Builder conflictBuilder;
+    protected MaterialDialog conflictDialog;
     /**
      * 显示帐号在别处登录dialog
      */
@@ -68,29 +69,31 @@ public class BaseActivity extends FragmentActivity {
         if(isFinishing())
             return;
         try {
-            if (conflictBuilder == null)
+            if (conflictDialog == null){
                 conflictBuilder = new MaterialDialog.Builder(this);
-            conflictBuilder.title("下线通知");
-            conflictBuilder.content(R.string.connect_conflict);
-            conflictBuilder.positiveText(R.string.ok);
-            conflictBuilder.callback(new MaterialDialog.Callback() {
-                @Override
-                public void onNegative(MaterialDialog dialog) {
+                conflictBuilder.title("下线通知");
+                conflictBuilder.content(R.string.connect_conflict);
+                conflictBuilder.positiveText(R.string.ok);
+                conflictBuilder.callback(new MaterialDialog.Callback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
 
 
-                }
-
-                @Override
-                public void onPositive(MaterialDialog dialog) {
-                    dialog.dismiss();
-                    conflictBuilder = null;
-                    if(isAccountAbout){
-                        finish();
                     }
-                }
-            });
-            conflictBuilder.cancelable(false);
-            conflictBuilder.show();
+
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        dialog.dismiss();
+                        conflictBuilder = null;
+                        if(isAccountAbout){
+                            finish();
+                        }
+                    }
+                });
+                conflictBuilder.cancelable(false);
+                conflictDialog= conflictBuilder.build();
+            }
+            conflictDialog.show();
             isConflict=true;
         } catch (Exception e) {
             Log.e("###", "---------color conflictBuilder error" + e.getMessage());
@@ -104,8 +107,14 @@ public class BaseActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() == AccountManager.ACCOUNT_LOGOUT_ACTION) {
+                boolean isConflict = intent.getBooleanExtra("isConflict",false);
                 if(isFroground){
-                    showConflictDialog();
+                    if(isConflict){
+                        showConflictDialog();
+                    }else{
+                        onDrivingLogout();
+                    }
+
                 }else{
                     if(isAccountAbout){
                         finish();
@@ -115,6 +124,10 @@ public class BaseActivity extends FragmentActivity {
                 }
             }
         }
+    }
+
+    public void onDrivingLogout() {
+
     }
 
     @Override

@@ -53,7 +53,7 @@ public class AccountManager {
         return user;
     }
 
-    public void logout(final Context context, final EMCallBack callBack) {
+    public void logout(final Context context, final boolean isConflict, final EMCallBack callBack) {
         PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -61,12 +61,15 @@ public class AccountManager {
                 AccountManager.getInstance().setContactList(null);
                 IMUserRepository.clearAllContact(context);
                 InviteMsgRepository.clearAllInviteMsg(context);
-                Intent intent = new Intent();
-                intent.setAction(ACCOUNT_LOGOUT_ACTION);
-                context.sendBroadcast(intent);
                 if (callBack != null) {
                     callBack.onSuccess();
                 }
+                Intent intent = new Intent();
+                intent.setAction(ACCOUNT_LOGOUT_ACTION);
+                intent.putExtra("isConflict",isConflict);
+                context.sendBroadcast(intent);
+
+
             }
 
             @Override

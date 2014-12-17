@@ -250,7 +250,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 final int chatType = data.getIntExtra("chatType", 0);
                 final String groupId = data.getStringExtra("groupId");
                 final String userId = data.getStringExtra("userId");
-                IMUtils.showImSharePoiDialog(mContext, poiDetailBean, new MaterialDialog.Callback() {
+                IMUtils.showImShareDialog(mContext, poiDetailBean, new MaterialDialog.Callback() {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
 

@@ -87,34 +87,36 @@ public class MainActivity extends PeachBaseActivity {
 
     @Override
     protected void showConflictDialog(){
-        AccountManager.getInstance().logout(this,null);
+        if(isFinishing())
+            return;
+        MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+        if(myFragment!=null){
+            myFragment.refresh();
+        }
         try {
-            if (conflictBuilder == null) {
+            if (conflictDialog == null){
                 conflictBuilder = new MaterialDialog.Builder(this);
-            }
-            conflictBuilder.title("下线通知");
-            conflictBuilder.content(R.string.connect_conflict);
-            conflictBuilder.positiveText(R.string.ok);
-            conflictBuilder.callback(new MaterialDialog.Callback() {
-                @Override
-                public void onNegative(MaterialDialog dialog) {
+                conflictBuilder.title("下线通知");
+                conflictBuilder.content(R.string.connect_conflict);
+                conflictBuilder.positiveText(R.string.ok);
+                conflictBuilder.callback(new MaterialDialog.Callback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
 
-                }
 
-                @Override
-                public void onPositive(MaterialDialog dialog) {
-                    dialog.dismiss();
-                    conflictBuilder = null;
-                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-                    if(myFragment!=null){
-                        myFragment.refresh();
                     }
 
-                }
-            });
-            conflictBuilder.cancelable(false);
-            conflictBuilder.show();
-            isConflict = true;
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        conflictBuilder = null;
+                    }
+                });
+                conflictBuilder.cancelable(false);
+                conflictDialog= conflictBuilder.build();
+            }
+            conflictDialog.show();
+            isConflict=true;
+
         } catch (Exception e) {
             Log.e("###", "---------color conflictBuilder error" + e.getMessage());
         }
@@ -124,5 +126,11 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+    public void onDrivingLogout() {
+        MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+        if(myFragment!=null){
+            myFragment.refresh();
+        }
     }
 }

@@ -32,7 +32,7 @@ import com.aizou.peachtravel.common.task.DownloadImageTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.easemob.util.ImageUtils;
 
-public class AlertDialog extends ChatBaseActivity {
+public class IMAlertDialog extends ChatBaseActivity {
 	private TextView mTextView;
 	private Button mButton;
 	private int position;

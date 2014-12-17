@@ -61,7 +61,7 @@ import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
-import com.aizou.peachtravel.module.toolbox.im.AlertDialog;
+import com.aizou.peachtravel.module.toolbox.im.IMAlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
@@ -570,7 +570,7 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
 
                     // 显示重发消息的自定义alertdialog
-                    Intent intent = new Intent(activity, AlertDialog.class);
+                    Intent intent = new Intent(activity, IMAlertDialog.class);
                     intent.putExtra("msg", activity.getString(R.string.confirm_resend));
                     intent.putExtra("title", activity.getString(R.string.resend));
                     intent.putExtra("cancel", true);

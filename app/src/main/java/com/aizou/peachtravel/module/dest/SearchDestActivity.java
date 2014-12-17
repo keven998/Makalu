@@ -35,6 +35,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -63,7 +64,8 @@ public class SearchDestActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_search_dest);
-        mTitleBar.getTitleTextView().setText("搜素目的地");
+        ButterKnife.inject(this);
+        mTitleBar.getTitleTextView().setText("搜索目的地");
         mTitleBar.enableBackKey(true);
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
@@ -143,6 +145,7 @@ public class SearchDestActivity extends PeachBaseActivity {
         } else {
             mSearchResultLv.setHasMoreData(true);
         }
+        mSearchResultAdapter.notifyDataSetChanged();
     }
 
     private class SearchResultViewHolder extends ViewHolderBase<LocBean> {
@@ -164,8 +167,6 @@ public class SearchDestActivity extends PeachBaseActivity {
             if(itemData.images!=null&&itemData.images.size()>0){
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, destIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }
-
-
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

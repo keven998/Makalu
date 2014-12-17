@@ -1,10 +1,12 @@
 package com.aizou.peachtravel.common.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,14 +24,11 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.my.LoginActivity;
-import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMShareActivity;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.HanziToPinyin;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -129,7 +128,7 @@ public class IMUtils {
 
 
 
-    public static void showImSharePoiDialog(Context context,Object detailBean,MaterialDialog.Callback callback){
+    public static void showImShareDialog(Context context, Object detailBean, MaterialDialog.Callback callback){
         String type = "";
         String id="";
         String zhName="";
@@ -156,14 +155,17 @@ public class IMUtils {
             if(detail.images!=null&&detail.images.size()>0){
                 image = detail.images.get(0).url;
             }
+        }else if(detailBean instanceof LocBean){
         }
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
+        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.ComfirmDialog);
         View contentView = View.inflate(context, R.layout.dialog_im_share,null);
         TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
         ImageView vsIv = (ImageView) contentView.findViewById(R.id.image_iv);
         TextView nameTv = (TextView) contentView.findViewById(R.id.name_tv);
         TextView attrTv = (TextView) contentView.findViewById(R.id.attr_tv);
         TextView descTv = (TextView) contentView.findViewById(R.id.desc_tv);
+        Button okBtn = (Button) contentView.findViewById(R.id.btn_ok);
+        Button cancleBtn = (Button) contentView.findViewById(R.id.btn_cancel);
         if(type.equals(TravelApi.PoiType.RESTAURANTS)){
             titleTv.setText("美食");
         }else if(type.equals(TravelApi.PoiType.SHOPPING)){
@@ -172,18 +174,13 @@ public class IMUtils {
             titleTv.setText("酒店");
         }
 
+
         nameTv.setText(zhName);
         attrTv.setText(attr);
         descTv.setText(desc);
-            ImageLoader.getInstance().displayImage(image,vsIv,UILUtils.getDefaultOption());
-        builder.customView(contentView)
-                .positiveText("发送")
-                .negativeText("取消")
-                .positiveColor(context.getResources().getColor(R.color.app_theme_color))
-                .negativeColor(context.getResources().getColor(R.color.app_theme_color))
-                .callback(callback)
-                .show();
-
+            ImageLoader.getInstance().displayImage(image, vsIv, UILUtils.getDefaultOption());
+        builder.setView(contentView);
+        builder.show();
     }
 
 
@@ -242,6 +239,11 @@ public class IMUtils {
         msg.setAttribute("content",contentJson);
         msg.addBody(new TextMessageBody("[链接]"));
         EMChatManager.getInstance().sendMessage(msg,callBack);
+    }
+
+
+    public interface onDialogShareCallBack{
+        void onDialogShare(int type,String content);
     }
 
 

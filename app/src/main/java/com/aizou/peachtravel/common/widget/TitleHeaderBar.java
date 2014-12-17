@@ -80,7 +80,7 @@ public class TitleHeaderBar extends HeaderBarBase {
     public void setRightViewImageRes(int res){
         Drawable drawable= getResources().getDrawable(res);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        mRightTextView.setCompoundDrawables(drawable,null,null,null);
+        mRightTextView.setCompoundDrawables(null,null,drawable,null);
     }
 
     public void enableBackKey(boolean enable) {

@@ -1,7 +1,7 @@
 <resources>
 
 
-    <style name="ComfirmDialog" parent="@android:Theme.Dialog">
+    <style name="ComfirmDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>

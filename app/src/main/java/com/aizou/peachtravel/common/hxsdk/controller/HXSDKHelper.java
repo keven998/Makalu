@@ -15,23 +15,47 @@ package com.aizou.peachtravel.common.hxsdk.controller;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
+import com.aizou.core.utils.GsonTools;
+import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.bean.CmdAgreeBean;
+import com.aizou.peachtravel.bean.CmdDeleteBean;
+import com.aizou.peachtravel.bean.CmdInvateBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.hxsdk.model.DefaultHXSDKModel;
 import com.aizou.peachtravel.common.hxsdk.model.HXSDKModel;
+import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.InviteMessage;
+import com.aizou.peachtravel.db.InviteStatus;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
+import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatConfig.EMEnvMode;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMNotifier;
 import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
+import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * The developer can derive from this class to talk with HuanXin SDK
@@ -315,8 +339,10 @@ public abstract class HXSDKHelper {
             }
         };
         EMChatManager.getInstance().addConnectionListener(connectionListener);
+
     }
-    
+
+
     /**
      * the developer can override this function to handle connection conflict error
      */

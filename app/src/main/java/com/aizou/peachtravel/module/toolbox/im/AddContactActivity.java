@@ -99,7 +99,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //        if (getString(R.string.button_search).equals(saveText)) {
             toAddUsername = name;
             if (TextUtils.isEmpty(name)) {
-                startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "请输入用户名"));
+                startActivity(new Intent(this, IMAlertDialog.class).putExtra("msg", "请输入用户名"));
                 return;
             }
             // TODO 从服务器获取此contact,如果不存在提示不存在此用户

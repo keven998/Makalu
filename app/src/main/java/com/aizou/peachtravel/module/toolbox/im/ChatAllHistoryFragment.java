@@ -86,7 +86,6 @@ public class ChatAllHistoryFragment extends Fragment {
         listView = (ListView) getView().findViewById(R.id.list);
         loadConversationsWithRecentChat();
         adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
-        groups = EMGroupManager.getInstance().getAllGroups();
         // 设置adapter
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -95,23 +94,16 @@ public class ChatAllHistoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EMConversation conversation = adapter.getItem(position).emConversation;
                 String username = conversation.getUserName();
-                if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).nickName))
+                if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
                     Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    EMContact emContact = null;
-                    groups = EMGroupManager.getInstance().getAllGroups();
-                    for (EMGroup group : groups) {
-                        if (group.getGroupId().equals(username)) {
-                            emContact = group;
-                            break;
-                        }
-                    }
                     if (conversation.getIsGroup()) {
+                        EMGroup group = EMGroupManager.getInstance().getGroup(username);
                         // it is group chat
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("groupId", ((EMGroup) emContact).getGroupId());
+                        intent.putExtra("groupId", group.getGroupId());
                     } else {
                         // it is single chat
                         intent.putExtra("userId", username);

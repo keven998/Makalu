@@ -77,6 +77,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
@@ -98,6 +99,7 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.MessageAdapter;
 import com.easemob.EMCallBack;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
@@ -367,7 +369,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            setUpGroupMember();
+                            refreshGroup();
 
                         }
                     });
@@ -380,6 +382,82 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 }
             }
         }).start();
+    }
+
+    private void refreshGroup(){
+        final List<String> members=group.getMembers();
+        final List<String> unkownMembers= new ArrayList<String>();
+        memberAdapter.getDataList().clear();
+        for(String username : members){
+            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
+            if(user==null){
+                unkownMembers.add(username);
+                user = new IMUser();
+                user.setUsername(username);
+            }
+            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                memberAdapter.getDataList().add(user);
+            }
+
+        }
+        titleHeaderBar.getTitleTextView().setText(group.getGroupName());
+        memberAdapter.notifyDataSetChanged();
+        if(unkownMembers.size()>0){
+            UserApi.getContactByHx(unkownMembers,new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result,PeachUser.class);
+                    if(userResult.code==0){
+                        for(PeachUser user:userResult.result){
+                            IMUser imUser = new IMUser();
+                            imUser.setUserId(user.userId);
+                            imUser.setNick(user.nickName);
+                            imUser.setUsername(user.easemobUser);
+                            imUser.setMemo(user.memo);
+                            imUser.setGender(user.gender);
+                            imUser.setAvatar(user.avatar);
+                            imUser.setSignature(user.signature);
+                            IMUserRepository.saveContact(mContext, imUser);
+                        }
+                        unkownMembers.clear();
+                        memberAdapter.getDataList().clear();
+                        for(String username : members){
+                            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
+                            if(user==null){
+                                unkownMembers.add(username);
+                                user = new IMUser();
+                                user.setUsername(username);
+                            }
+                            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                                memberAdapter.getDataList().add(user);
+                            }
+                        }
+                        memberAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+            });
+        }
+        if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
+            deleteIv.setVisibility(View.VISIBLE);
+            deleteIv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isInDeleteMode=true;
+                    addIv.setVisibility(View.INVISIBLE);
+                    deleteIv.setVisibility(View.INVISIBLE);
+                    memberAdapter.notifyDataSetChanged();
+//                    baseMemeberAdapter.notifyDataSetChanged();
+                }
+            });
+        }else{
+            deleteIv.setVisibility(View.GONE);
+        }
+
     }
 
     private void setUpGroupMember(){
@@ -440,63 +518,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
             }
         });
-        final List<String> members=group.getMembers();
-        final List<String> unkownMembers= new ArrayList<String>();
-
-        for(String username : members){
-            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
-            if(user==null){
-                unkownMembers.add(username);
-                user = new IMUser();
-                user.setUsername(username);
-            }
-            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
-                memberAdapter.getDataList().add(user);
-            }
-
-        }
-        titleHeaderBar.getTitleTextView().setText(group.getGroupName());
-        memberAdapter.notifyDataSetChanged();
-        if(unkownMembers.size()>0){
-            UserApi.getContactByHx(unkownMembers,new HttpCallBack<String>() {
-                @Override
-                public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result,PeachUser.class);
-                    if(userResult.code==0){
-                        for(PeachUser user:userResult.result){
-                            IMUser imUser = new IMUser();
-                            imUser.setUserId(user.userId);
-                            imUser.setNick(user.nickName);
-                            imUser.setUsername(user.easemobUser);
-                            imUser.setMemo(user.memo);
-                            imUser.setGender(user.gender);
-                            imUser.setAvatar(user.avatar);
-                            imUser.setSignature(user.signature);
-                            IMUserRepository.saveContact(mContext, imUser);
-                        }
-                        unkownMembers.clear();
-                        memberAdapter.getDataList().clear();
-                        for(String username : members){
-                            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
-                            if(user==null){
-                                unkownMembers.add(username);
-                                user = new IMUser();
-                                user.setUsername(username);
-                            }
-                            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
-                                memberAdapter.getDataList().add(user);
-                            }
-                        }
-                        memberAdapter.notifyDataSetChanged();
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-            });
-        }
 
 //        baseMemeberAdapter.notifyDataSetChanged();
         addIv.setOnClickListener(new OnClickListener() {
@@ -534,24 +555,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 return false;
             }
         });
-        if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
-            deleteIv.setVisibility(View.VISIBLE);
-            deleteIv.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    isInDeleteMode=true;
-                    addIv.setVisibility(View.INVISIBLE);
-                    deleteIv.setVisibility(View.INVISIBLE);
-                    memberAdapter.notifyDataSetChanged();
-//                    baseMemeberAdapter.notifyDataSetChanged();
-                }
-            });
-        }else{
-            deleteIv.setVisibility(View.GONE);
-        }
-
-
-
+        refreshGroup();
 
     }
     private void expandMemberLl(){
@@ -811,6 +815,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 				return false;
 			}
 		});
+        // 注册一个cmd消息的BroadcastReceiver
+        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+        cmdIntentFilter.setPriority(3);
+        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 		// 注册接收消息广播
 		receiver = new NewMessageBroadcastReceiver();
 		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
@@ -1507,7 +1515,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 */
 	public void emptyHistory(View view) {
 		startActivityForResult(
-				new Intent(this, AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", "是否清空所有聊天记录").putExtra("cancel", true),
+				new Intent(this, IMAlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", "是否清空所有聊天记录").putExtra("cancel", true),
 				REQUEST_CODE_EMPTY_HISTORY);
 	}
 
@@ -1831,6 +1839,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			ackMessageReceiver = null;
 			unregisterReceiver(deliveryAckMessageReceiver);
 			deliveryAckMessageReceiver = null;
+            unregisterReceiver(cmdMessageReceiver);
+
 		} catch (Exception e) {
 		}
 	}
@@ -1981,7 +1991,49 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 	}
 
-	/**
+    /**
+     * cmd消息BroadcastReceiver
+     */
+    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //获取cmd message对象
+            String msgId = intent.getStringExtra("msgid");
+            EMMessage message = intent.getParcelableExtra("message");
+            //获取消息body
+            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+            String aciton = cmdMsgBody.action;//获取自定义action
+            //获取扩展属性
+            try {
+                int cmdType=message.getIntAttribute("CMDType");
+                String content = message.getStringAttribute("content");
+                //删除好友
+                if(cmdType==3){
+                    CmdDeleteBean deleteBean = GsonTools.parseJsonToBean(content,CmdDeleteBean.class);
+                    final IMUser imUser = IMUserRepository.getContactByUserId(mContext,deleteBean.userId);
+                    if(imUser!=null){
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                //如果正在与此用户的聊天页面
+                                if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
+                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
+                                    ChatActivity.activityInstance.finish();
+                                }
+                            }
+                        });
+                    }
+
+                }
+
+            } catch (EaseMobException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+    /**
 	 * 监测群组解散或者被T事件
 	 * 
 	 */

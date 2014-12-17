@@ -98,20 +98,16 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         // 获取用户username或者群组groupid
         String username = conversation.getUserName();
 
-        List<EMGroup> groups = EMGroupManager.getInstance().getAllGroups();
         EMContact contact = null;
-        boolean isGroup = false;
-        for (EMGroup group : groups) {
-            if (group.getGroupId().equals(username)) {
-                isGroup = true;
-                contact = group;
-                break;
-            }
-        }
+        boolean isGroup = conversation.getIsGroup();
         if (isGroup) {
+            contact = EMGroupManager.getInstance().getGroup(username);
             // 群聊消息，显示群聊头像
             holder.avatar.setImageResource(R.drawable.group_icon);
-            holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
+            if(contact!=null){
+                holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
+            }
+
         } else {
             if(imUser != null){
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
