@@ -33,6 +33,7 @@
         android:dividerHeight="10dp"
         android:layout_below="@id/indexer"
         android:layout_marginTop="10dp"
+        android:overScrollMode="never"
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
         android:visibility="visible"/>

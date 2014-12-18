@@ -65,7 +65,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_search_dest_for_poi);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("搜索目的地");
+        mTitleBar.getTitleTextView().setText("搜索想去的城市");
         mTitleBar.enableBackKey(true);
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
