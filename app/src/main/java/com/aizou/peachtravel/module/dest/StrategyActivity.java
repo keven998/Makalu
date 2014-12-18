@@ -212,7 +212,7 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"线路日程", "美食清单", "购物清单",};
+        private String[] tabNames = {"玩安排", "吃清单", "买清单",};
         private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;

@@ -36,7 +36,7 @@ public class MainActivity extends PeachBaseActivity {
 //            R.drawable.tab_square_btn,R.drawable.tab_more_btn};
 
     //Tab选项卡的文字
-    private String mTextviewArray[] = {"首页", "想去", "我的"};
+    private String mTextviewArray[] = {"首页", "想去", "我"};
     //Tab选项Tag
     private String mTagArray[] = {"Home", "Loc", "My"};
 
