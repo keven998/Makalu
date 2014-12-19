@@ -6,8 +6,7 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        />
+        android:layout_height="@dimen/title_bar_height"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -24,8 +23,8 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:textSize="14sp"
-            android:textColorHint="@color/base_text_color_text_hint"
-            android:hint="输入关键字"
+            android:textColorHint="@color/base_text_color_text_placeholder"
+            android:hint="输入城市名或拼音"
             android:textColor="@color/base_text_color_title"
             android:drawablePadding="10dp"
             android:background="@drawable/button_normal_shape"

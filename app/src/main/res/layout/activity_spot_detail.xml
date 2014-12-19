@@ -20,14 +20,14 @@
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_height="fill_parent">
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -277,7 +277,6 @@
         android:id="@+id/zoom_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-
         android:visibility="invisible">
 
         <com.aizou.core.widget.HackyViewPager

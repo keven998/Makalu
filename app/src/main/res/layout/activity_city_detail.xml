@@ -11,26 +11,15 @@
         android:layout_height="@dimen/title_bar_height"
         android:background="@color/main_color" />
 
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:layout_weight="1">
-
-
-        <ListView
-            android:id="@+id/lv_city_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="10dp"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
-
-    </FrameLayout>
-
+    <ListView
+        android:id="@+id/lv_city_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent"
+        android:visibility="visible" />
 
 </LinearLayout>

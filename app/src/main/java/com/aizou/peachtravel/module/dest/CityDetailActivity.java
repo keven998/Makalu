@@ -55,13 +55,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private TitleHeaderBar titleHeaderBar;
     private LocBean locDetailBean;
     private String locId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
         initView();
         initData();
-
     }
 
     private void initData() {
@@ -83,27 +83,29 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
         titleHeaderBar.enableBackKey(true);
-        headerView = View.inflate(mContext,R.layout.view_city_detail_head,null);
-        mTravelLv.addHeaderView(headerView);
-        mCityIv = (ImageView) headerView.findViewById(R.id.iv_city_detail);
-        mPicNumTv = (TextView) headerView.findViewById(R.id.tv_pic_num);
-        mCityNameTv = (TextView) headerView.findViewById(R.id.tv_city_name);
-        mCityDescTv = (ExpandableTextView) headerView.findViewById(R.id.tv_city_desc);
-        mCostTimeTv = (TextView) headerView.findViewById(R.id.tv_cost_time);
-        bestMonthTv = (TextView) headerView.findViewById(R.id.tv_best_month);
-        mFavIv = (ImageView) headerView.findViewById(R.id.iv_fav);
-        travelTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_travel);
-        foodTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_restaurant);
-        shoppingTv = (DrawableCenterTextView) headerView.findViewById(R.id.tv_shopping);
+        View hv;
+        hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
+        headerView = hv;
+        mTravelLv.addHeaderView(hv);
+        mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
+        mPicNumTv = (TextView) hv.findViewById(R.id.tv_pic_num);
+        mCityNameTv = (TextView) hv.findViewById(R.id.tv_city_name);
+        mCityDescTv = (ExpandableTextView) hv.findViewById(R.id.tv_city_desc);
+        mCostTimeTv = (TextView) hv.findViewById(R.id.tv_cost_time);
+        bestMonthTv = (TextView) hv.findViewById(R.id.tv_best_month);
+        mFavIv = (ImageView) hv.findViewById(R.id.iv_fav);
+        travelTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_travel);
+        foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
+        shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(false,true);
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(false, true);
                 viewHolder.setOnMoreClickListener(new TravelNoteViewHolder.OnMoreClickListener() {
                     @Override
                     public void onMoreClick(View view) {
-                        Intent intent = new Intent(mContext,MoreTravelNoteActivity.class);
-                        intent.putExtra("id",locId);
+                        Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                        intent.putExtra("id", locId);
                         startActivity(intent);
                     }
                 });
@@ -121,7 +123,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if(detailResult.code==0){
                     bindView(detailResult.result);
                 }
-
             }
 
             @Override
@@ -161,7 +162,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void bindView(final LocBean detailBean){
         locDetailBean = detailBean;
         if(detailBean.images!=null&&detailBean.images.size()>0)
-        ImageLoader.getInstance().displayImage(detailBean.images.get(0).url,mCityIv,UILUtils.getDefaultOption());
+        ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,7 +203,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             DialogManager.getInstance().dissMissProgressDialog();
                         }
                     });
-                }else{
+                } else {
                     OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -239,11 +240,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     public void intentToTravel(View view){
 //        Intent intent = new Intent(mContext,SpotDetailActivity.class);
 //        startActivity(intent);
-        Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+        Intent intent = new Intent(mContext, PeachWebViewActivity.class);
         intent.putExtra("url", H5Url.LOC_TRAVEL);
         startActivity(intent);
         //todo:跳转html
     }
+
     public void intentToFood(View view){
         Intent intent = new Intent(mContext,PoiListActivity.class);
         ArrayList<LocBean> locList =new ArrayList<LocBean>();

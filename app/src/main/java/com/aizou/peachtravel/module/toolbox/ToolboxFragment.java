@@ -91,7 +91,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_travel, null);
         ButterKnife.inject(this,rootView);
-        mLyHeaderBarTitleWrap.getTitleTextView().setText("旅行Memo");
+        mLyHeaderBarTitleWrap.getTitleTextView().setText("桃子旅行");
         mLyHeaderBarTitleWrap.enableBackKey(false);
 
         mBtnLxq.setOnClickListener(this);

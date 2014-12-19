@@ -41,7 +41,7 @@ public class MainActivity extends PeachBaseActivity {
             };
 
     //Tab选项卡的文字
-    private String mTextviewArray[] = {"首页", "目的地", "我的"};
+    private String mTextviewArray[] = {"首页", "想去", "我"};
     //Tab选项Tag
     private String mTagArray[] = {"Home", "Loc", "My"};
 
