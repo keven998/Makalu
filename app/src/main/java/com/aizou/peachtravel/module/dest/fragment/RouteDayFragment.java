@@ -9,10 +9,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -31,7 +29,6 @@ import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
@@ -41,7 +38,6 @@ import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -215,7 +211,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         @Override
         public int getContentItemViewType(int section, int position) {
             String type =routeDayMap.get(section).get(position).type;
-            if(type.equals(TravelApi.PoiType.SPOT)){
+            if(type.equals(TravelApi.PeachType.SPOT)){
                 return SPOT ;
             }else{
                 return POI ;
@@ -417,7 +413,7 @@ public class RouteDayFragment extends PeachBaseFragment {
             LogUtils.d("header---section:"+section+"--globle_postion"+getGlobalPositionForHeader(section));
             if(convertView==null){
                 holder = new HeaderViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.row_drag_div, null);
+                convertView = View.inflate(getActivity(), R.layout.row_drag_div,null);
                 convertView.setTag(holder);
             }
             else{
@@ -426,7 +422,8 @@ public class RouteDayFragment extends PeachBaseFragment {
             holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
             holder.topLineVw = convertView.findViewById(R.id.line_top);
             holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
-            holder.menuIv = (ImageView) convertView.findViewById(R.id.iv_menu);
+            holder.addPoiIv = (ImageView) convertView.findViewById(R.id.iv_add_poi);
+            holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);
             holder.nullLl = (LinearLayout) convertView.findViewById(R.id.ll_null);
             if(isEditableMode){
                 holder.lineLl.setVisibility(View.GONE);
@@ -454,15 +451,21 @@ public class RouteDayFragment extends PeachBaseFragment {
                 if(isEditableMode){
                     holder.nullLl.setVisibility(View.GONE);
                 }else{
-                    holder.nullLl.setVisibility(View.VISIBLE);
+                    holder.nullLl.setVisibility(View.GONE);
                 }
 
             }
             if(isEditableMode){
-                holder.menuIv.setVisibility(View.VISIBLE);
-                holder.menuIv.setOnClickListener(new View.OnClickListener() {
+                holder.addPoiIv.setVisibility(View.VISIBLE);
+                holder.deleteDayIv.setVisibility(View.VISIBLE);
+                holder.addPoiIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), AddPoiActivity.class);
+                        intent.putParcelableArrayListExtra("locList",locList);
+                        intent.putExtra("dayIndex", section);
+                        intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
+                        getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
 //                        RouteDayMenu fragment = new RouteDayMenu();
 //                        fragment.setRouteDay(routeDayMap, routeDayAdpater);
 //                        Bundle args = new Bundle();
@@ -479,9 +482,36 @@ public class RouteDayFragment extends PeachBaseFragment {
 //
 //                        fragment.setArguments(args);
 //                        fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
-                        showMenu();
+//                        showMenu();
                     }
                 });
+
+                holder.deleteDayIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new MaterialDialog.Builder(getActivity())
+                                .title(null)
+                                .content("确定删除")
+                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
+                                .positiveText("确定")
+                                .negativeText("取消")
+                                .callback(new MaterialDialog.Callback() {
+                                    @Override
+                                    public void onPositive(MaterialDialog dialog) {
+                                        routeDayMap.remove(section);
+                                        notifyDataSetChanged();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                });
+
             } else {
 //                holder.menuIv.setOnClickListener(new View.OnClickListener() {
 //                    @Override
@@ -489,7 +519,8 @@ public class RouteDayFragment extends PeachBaseFragment {
 //
 //                    }
 //                });
-                holder.menuIv.setVisibility(View.INVISIBLE);
+                holder.addPoiIv.setVisibility(View.GONE);
+                holder.deleteDayIv.setVisibility(View.GONE);
             }
 
 
@@ -581,7 +612,8 @@ public class RouteDayFragment extends PeachBaseFragment {
             public LinearLayout nullLl;
             public View topLineVw;
             public TextView dayTv;
-            public ImageView menuIv;
+            public ImageView deleteDayIv;
+            public ImageView addPoiIv;
         }
     }
 
@@ -635,26 +667,7 @@ public class RouteDayFragment extends PeachBaseFragment {
             customView.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(null)
-                            .content("确定删除")
-                            .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                            .positiveText("确定")
-                            .negativeText("取消")
-                            .callback(new MaterialDialog.Callback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    mRouteDayMap.remove(dayIndex);
-                                    mRouteDayAdapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-                                }
 
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
                     dismiss();
                 }
             });

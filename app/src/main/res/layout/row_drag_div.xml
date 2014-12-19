@@ -38,31 +38,43 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/shape_white_bar"
-            android:orientation="horizontal">
+            android:background="@drawable/shape_white_bar">
+
+            <ImageView
+                android:id="@+id/iv_add_poi"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:scaleType="center"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_phone_contact"/>
+
+            <ImageView
+                android:id="@+id/iv_delete_day"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:scaleType="center"
+                android:visibility="invisible"
+                android:layout_toLeftOf="@id/iv_add_poi"
+                android:src="@drawable/ic_line_edit_delete"/>
 
             <TextView
                 android:id="@+id/tv_div"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:layout_marginRight="64dp"
+                android:paddingRight="10dp"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/iv_delete_day"
+                android:layout_alignWithParentIfMissing="true"
                 android:textColor="@color/base_text_color_title"/>
 
-            <ImageView
-                android:id="@+id/iv_menu"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="15dp"
-                android:scaleType="center"
-                android:visibility="gone"
-                android:src="@drawable/ic_more"/>
 
         </RelativeLayout>
 
@@ -70,6 +82,7 @@
 
     <LinearLayout
         android:id="@+id/ll_null"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

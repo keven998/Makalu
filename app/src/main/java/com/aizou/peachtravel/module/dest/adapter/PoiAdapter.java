@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -20,14 +19,12 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +80,7 @@ public class PoiAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         String type = mPoiList.get(position).type;
-        if (type.equals(TravelApi.PoiType.SPOT)) {
+        if (type.equals(TravelApi.PeachType.SPOT)) {
             return SPOT;
         } else {
             return POI;

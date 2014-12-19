@@ -6,17 +6,33 @@
     <ImageView
         android:id="@+id/iv_city_poi"
         android:layout_width="fill_parent"
-        android:layout_height="200dp" />
+        android:layout_height="120dp" />
 
     <TextView
         android:id="@+id/tv_city_name"
-        android:layout_width="80dp"
-        android:layout_height="60dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="北京"
+        android:paddingLeft="8dp"
+        android:paddingTop="19dp"
+        android:textSize="16sp"
+        android:textColor="@color/base_color_white"
+        android:textStyle="bold"
+        android:background="@drawable/bg_poi_dest"/>
 
     <TextView
         android:id="@+id/tv_city_poi_desc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="      顶顶顶看地方地方地阿娇放大镜案发地阿娇房地局发嗲经费的敬爱放动静啊房地局发神经发达的经费大家分地方就爱点附近"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="20dp"
+        android:maxLines="3"
+        android:lineSpacingExtra="4dp"
+        android:textSize="13sp"
         />
 
 </RelativeLayout>

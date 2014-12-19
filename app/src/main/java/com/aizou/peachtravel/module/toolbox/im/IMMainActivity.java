@@ -156,6 +156,11 @@ public class IMMainActivity extends ChatBaseActivity {
         EMChat.getInstance().setAppInited();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
     public void refreshChatHistoryFragment() {
         if (chatHistoryFragment != null) {
             chatHistoryFragment.refresh();

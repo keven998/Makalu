@@ -95,6 +95,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
+import com.aizou.peachtravel.module.toolbox.FavListActivity;
 import com.aizou.peachtravel.module.toolbox.StrategyListActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionAdapter;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -242,16 +243,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		setContentView(R.layout.activity_chat);
 		initView();
 		setUpView();
-        sendShareMessage();
 	}
 
-    private void sendShareMessage() {
-        int extType = getIntent().getIntExtra("extType",-1);
-        String content = getIntent().getStringExtra("content");
-        if(extType>=0){
-            sendText(content,extType);
-        }
-    }
 
     /**
 	 * initView
@@ -1052,29 +1045,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("toId",toChatUsername);
             intent.putExtra("isShare",true);
             startActivity(intent);
-            // 点击我的攻略图标
-            JSONObject contentJson = new JSONObject();
-            try {
-                contentJson.put("id","1");
-                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("name","旅行Memo");
-                contentJson.put("desc","北京-天津-石家庄");
-                contentJson.put("timeCost","5天");
-                sendText(contentJson.toString(), Constant.ExtType.GUIDE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         } else if (id == R.id.btn_fav) {
             // 点击我的收藏图标
-            JSONObject contentJson = new JSONObject();
-            try {
-                contentJson.put("id","1");
-                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-                contentJson.put("name","城市");
-                sendText(contentJson.toString(), Constant.ExtType.CITY);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(mContext, FavListActivity.class);
+            intent.putExtra("chatType",chatType);
+            intent.putExtra("toId",toChatUsername);
+            intent.putExtra("isShare",true);
+            startActivity(intent);
         }  else if (id == R.id.btn_dest) {
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType",chatType);

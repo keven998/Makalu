@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -31,7 +32,9 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +69,8 @@ public class IMShareActivity extends PeachBaseActivity {
         View headerView = View.inflate(mContext, R.layout.header_im_share, null);
         mImShareLv.addHeaderView(headerView);
         ButterKnife.inject(this);
+        mTitleBar.getTitleTextView().setText("选择Talk");
+        mTitleBar.enableBackKey(true);
         mCreateNewTalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +186,19 @@ public class IMShareActivity extends PeachBaseActivity {
         @InjectView(R.id.name)
         TextView mName;
         View contentView;
+        DisplayImageOptions options;
+
+        public ShareChatViewHolder(){
+            super();
+            options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .cacheOnDisc(true)
+                            // 设置下载的图片是否缓存在SD卡中
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
+                    .build();
+        }
 
 
         @Override
@@ -214,7 +232,7 @@ public class IMShareActivity extends PeachBaseActivity {
             } else {
                 if(imUser!=null){
                     // 本地或者服务器获取用户详情，以用来显示头像和nick
-                    ImageLoader.getInstance().displayImage(imUser.getAvatar(), mAvatar, UILUtils.getDefaultOption());
+                    ImageLoader.getInstance().displayImage(imUser.getAvatar(), mAvatar, options);
                     if (TextUtils.isEmpty(imUser.getMemo())) {
                         mName.setText(imUser.getNick());
                     } else {

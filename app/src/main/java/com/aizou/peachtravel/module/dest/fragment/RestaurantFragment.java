@@ -1,7 +1,6 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
-import com.aizou.peachtravel.module.dest.AddPoiActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -118,7 +116,7 @@ public class RestaurantFragment extends PeachBaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
-                intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
+                intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", locList);
                 intent.putParcelableArrayListExtra("poiList",restaurantList);

@@ -3,25 +3,46 @@ package com.aizou.peachtravel.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.share.ShareDialogBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/12/26.
  */
-public class StrategyBean {
+public class StrategyBean implements ICreateShareDialog{
     public String id;
     public String title;
     public String summary;
     public long updateTime;
-    public int dayCnt;
-    public List<ImageBean> images;
+    public List<ImageBean> images=new ArrayList<>();
     public ArrayList<LocBean> localities;
     public ArrayList<IndexPoi> itinerary;
     public ArrayList<PoiDetailBean> shopping;
     public ArrayList<PoiDetailBean> restaurant;
     public String userId;
-    public int itineraryDays;
+    public Integer dayCnt;
+    public Integer itineraryDays;
+
+    @Override
+    public ShareDialogBean createShareBean() {
+        ExtMessageBean extMessageBean = new ExtMessageBean();
+        extMessageBean.type = TravelApi.PeachType.GUIDE;
+        extMessageBean.id=id;
+        extMessageBean.name = title;
+        extMessageBean.image =images.size()>0?images.get(0).url:"";
+        if(dayCnt==null){
+            extMessageBean.timeCost = itineraryDays+"天";
+        }else{
+            extMessageBean.timeCost = dayCnt+"天";
+        }
+
+        extMessageBean.desc = summary;
+        return new ShareDialogBean(extMessageBean);
+    }
 
     public static class IndexPoi implements Parcelable {
         public int dayIndex;

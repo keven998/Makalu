@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -23,7 +22,6 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -41,7 +39,7 @@ public class PoiListActivity extends PeachBaseActivity {
     @InjectView(R.id.loc_spinner)
     Spinner mLocSpinner;
     @InjectView(R.id.btn_ok)
-    Button mBtnOk;
+    TextView mBtnOk;
     @InjectView(R.id.iv_city_poi)
     ImageView mIvCityPoi;
     @InjectView(R.id.tv_city_name)
@@ -50,6 +48,8 @@ public class PoiListActivity extends PeachBaseActivity {
     TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
     StringSpinnerAdapter mLocSpinnerAdapter;
+    @InjectView(R.id.tv_title_bar_left)
+    TextView mTvTitleBarLeft;
     private PullToRefreshListView mPoiListLv;
     private String type;
     private boolean canAdd;
@@ -86,7 +86,6 @@ public class PoiListActivity extends PeachBaseActivity {
         mPoiListLv.getRefreshableView().setAdapter(mPoiAdapter);
         List<String> cityStrList = new ArrayList<String>();
         for (LocBean locBean : locList) {
-            locBean.id = "53aa9a6410114e3fd47833bd";
             cityStrList.add(locBean.zhName);
         }
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
@@ -97,9 +96,9 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
-                page=0;
+                page = 0;
                 getPoiListData(type, curLoc.id);
-                getPoiGuide(type,curLoc.id);
+                getPoiGuide(type, curLoc.id);
             }
 
             @Override
@@ -109,8 +108,8 @@ public class PoiListActivity extends PeachBaseActivity {
 //        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
 //        mTvCityName.setText(result.zhName);
 //        mTvCityPoiDesc.setText(result.desc);
-        getPoiGuide(type,curLoc.id);
-        getPoiListData(type,curLoc.id);
+        getPoiGuide(type, curLoc.id);
+        getPoiListData(type, curLoc.id);
 
     }
 
@@ -123,6 +122,12 @@ public class PoiListActivity extends PeachBaseActivity {
         mPoiListLv.setPullRefreshEnabled(false);
         mPoiListLv.setScrollLoadEnabled(true);
         ButterKnife.inject(this);
+        mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mPoiListLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -135,29 +140,29 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id);
             }
         });
-        if(canAdd){
+        if (canAdd) {
             mBtnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.putParcelableArrayListExtra("poiList", hasAddList);
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });
-        }else{
+        } else {
             mBtnOk.setVisibility(View.INVISIBLE);
         }
 
 
-
     }
-    private void getPoiGuide(final String type,String cityId){
-        TravelApi.getDestPoiGuide(cityId,type,new HttpCallBack<String>() {
+
+    private void getPoiGuide(final String type, String cityId) {
+        TravelApi.getDestPoiGuide(cityId, type, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result,PoiGuideBean.class);
-                if(poiGuideResult.code==0){
+                CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
+                if (poiGuideResult.code == 0) {
                     bindGuideView(poiGuideResult.result);
                 }
 
@@ -172,16 +177,9 @@ public class PoiListActivity extends PeachBaseActivity {
 
     private void bindGuideView(PoiGuideBean result) {
         mTvCityName.setText(curLoc.zhName);
-        if(TravelApi.PoiType.RESTAURANTS.equals(type)){
-            mTvCityPoiDesc.setText(result.restaurantDesc);
-            if(result.restaurantImages!=null&&result.restaurantImages.size()>0){
-                ImageLoader.getInstance().displayImage(result.restaurantImages.get(0).url,mIvCityPoi, UILUtils.getDefaultOption());
-            }
-        }else if(TravelApi.PoiType.SHOPPING.equals(type)){
-            mTvCityPoiDesc.setText(result.shoppingDesc);
-            if(result.shoppingImages!=null&&result.shoppingImages.size()>0){
-                ImageLoader.getInstance().displayImage(result.shoppingImages.get(0).url,mIvCityPoi, UILUtils.getDefaultOption());
-            }
+        mTvCityPoiDesc.setText(result.desc);
+        if (result.images != null && result.images.size() > 0) {
+            ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
         }
     }
 
@@ -208,12 +206,12 @@ public class PoiListActivity extends PeachBaseActivity {
         if (page == 0) {
             mPoiAdapter.getDataList().clear();
         }
-        if(canAdd){
-            for(PoiDetailBean detailBean:result){
-                if(hasAddList.contains(detailBean)){
-                    detailBean.hasAdded=true;
-                }else{
-                    detailBean.hasAdded=false;
+        if (canAdd) {
+            for (PoiDetailBean detailBean : result) {
+                if (hasAddList.contains(detailBean)) {
+                    detailBean.hasAdded = true;
+                } else {
+                    detailBean.hasAdded = false;
                 }
             }
         }
@@ -228,7 +226,7 @@ public class PoiListActivity extends PeachBaseActivity {
             mPoiListLv.setHasMoreData(true);
             mPoiListLv.onPullUpRefreshComplete();
         }
-        if (page==0) {
+        if (page == 0) {
             mPoiListLv.onPullUpRefreshComplete();
             mPoiListLv.onPullDownRefreshComplete();
         }

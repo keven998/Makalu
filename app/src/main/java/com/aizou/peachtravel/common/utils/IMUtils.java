@@ -1,7 +1,6 @@
 package com.aizou.peachtravel.common.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtFromUser;
+import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PoiDetailBean;
@@ -26,6 +25,8 @@ import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.share.ShareDialogBean;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -123,7 +124,7 @@ public class IMUtils {
         }
     }
 
-    public static void onShareResult(final Context context,Object detailBean,int requestCode, int resultCode, Intent data, final OnDialogShareCallBack callback){
+    public static void onShareResult(final Context context,ICreateShareDialog iCreateShareDialog,int requestCode, int resultCode, Intent data, final OnDialogShareCallBack callback){
         if(resultCode==Activity.RESULT_OK){
             if(requestCode==IM_LOGIN_REQUEST_CODE){
                 Intent intent = new Intent(context, IMShareActivity.class);
@@ -131,7 +132,7 @@ public class IMUtils {
             }else if(requestCode ==IM_SHARE_REQUEST_CODE){
                 final int chatType = data.getIntExtra("chatType", 0);
                 final String toId = data.getStringExtra("toId");
-                showImShareDialog(context,detailBean,new OnDialogShareCallBack() {
+                showImShareDialog(context,iCreateShareDialog,new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
                         DialogManager.getInstance().showProgressDialog(context);
@@ -184,93 +185,8 @@ public class IMUtils {
 
 
 
-    public static void showImShareDialog(Context context, Object detailBean, final OnDialogShareCallBack callback){
-        int extType = 0;
-        String contentJson = "";
-        String type = "";
-        String id="";
-        String zhName="";
-        String attr="";
-        String desc="";
-        String image="";
-        if(detailBean instanceof PoiDetailBean){
-            PoiDetailBean detail = (PoiDetailBean)detailBean;
-            type =detail.type;
-            id =detail.id;
-            zhName =detail.zhName;
-            attr = detail.rating+"  "+detail.priceDesc;
-            desc =detail.address;
-            if(detail.images!=null&&detail.images.size()>0){
-                image = detail.images.get(0).url;
-            }
-            if(type.equals(TravelApi.PoiType.RESTAURANTS)){
-                extType =5;
-            }else if(type.equals(TravelApi.PoiType.SHOPPING)){
-                extType =6;
-            }else if(type.equals(TravelApi.PoiType.HOTEL)){
-                extType =7;
-            }else if(type.equals(TravelApi.PoiType.SPOT)){
-                extType =4;
-            }
-            contentJson = createExtMessageContentForPoi(detail);
-
-        }else if(detailBean instanceof SpotDetailBean){
-            SpotDetailBean detail = (SpotDetailBean)detailBean;
-            type =detail.type;
-            id =detail.id;
-            zhName =detail.zhName;
-            attr = detail.timeCostStr;
-            desc = detail.desc;
-            if(detail.images!=null&&detail.images.size()>0){
-                image = detail.images.get(0).url;
-            }
-            extType =4;
-            contentJson = createExtMessageContentForSpot(detail);
-        }else if(detailBean instanceof LocBean){
-            LocBean detail = (LocBean)detailBean;
-            type ="locality";
-            id =detail.id;
-            zhName =detail.zhName;
-            attr = detail.timeCostDesc;
-            desc = detail.desc;
-            if(detail.images!=null&&detail.images.size()>0){
-                image = detail.images.get(0).url;
-            }
-            extType =2;
-            contentJson = createExtMessageContentForLoc(detail);
-        }else if(detailBean instanceof TravelNoteBean){
-            TravelNoteBean detail = (TravelNoteBean)detailBean;
-            type ="travelNote";
-            id =detail.id;
-            zhName =detail.title;
-            attr = detail.authorName;
-
-            String[] strArray=detail.summary.split("\n");
-            String maxLengthStr=strArray[0];
-            for(String str:strArray){
-                if(str.length()>maxLengthStr.length()){
-                    maxLengthStr=str;
-                }
-            }
-            desc = maxLengthStr;
-            if(detail.cover!=null){
-                image = detail.cover;
-            }
-            extType =3;
-            contentJson = createExtMessageContentForNote(detail);
-        }else if(detailBean instanceof StrategyBean){
-            StrategyBean detail = (StrategyBean)detailBean;
-            type ="guide";
-            id =detail.id;
-            zhName =detail.title;
-            attr = detail.itineraryDays+"天";
-            desc = detail.summary;
-            if(detail.images!=null&&detail.images.size()>0){
-                image = detail.images.get(0).url;
-            }
-            extType =1;
-            contentJson = createExtMessageContentForGuide(detail);
-        }
+    public static void showImShareDialog(Context context, final ICreateShareDialog iCreateShareDialog, final OnDialogShareCallBack callback){
+        final ShareDialogBean dialogBean = iCreateShareDialog.createShareBean();
         final Dialog dialog  = new Dialog(context,R.style.TransparentDialog);
         View contentView = View.inflate(context, R.layout.dialog_im_share,null);
         TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
@@ -280,40 +196,24 @@ public class IMUtils {
         TextView descTv = (TextView) contentView.findViewById(R.id.desc_tv);
         Button okBtn = (Button) contentView.findViewById(R.id.btn_ok);
         Button cancleBtn = (Button) contentView.findViewById(R.id.btn_cancle);
-        if(type.equals(TravelApi.PoiType.RESTAURANTS)){
-            titleTv.setText("美食");
-        }else if(type.equals(TravelApi.PoiType.SHOPPING)){
-            titleTv.setText("购物");
-        }else if(type.equals(TravelApi.PoiType.HOTEL)){
-            titleTv.setText("酒店");
-        }else if(type.equals("locality")){
-            titleTv.setText("城市");
-        }else if(type.equals("travelNote")){
-            titleTv.setText("游记");
-        }else if(type.equals("vs")){
-            titleTv.setText("景点");
-        }else if(type.equals("guide")){
-            titleTv.setText("攻略");
-        }
-        nameTv.setText(zhName);
-        attrTv.setText(attr);
-        descTv.setText(desc);
-        ImageLoader.getInstance().displayImage(image, vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+        titleTv.setText(dialogBean.getTitle());
+        nameTv.setText(dialogBean.getName());
+        attrTv.setText(dialogBean.getAttr());
+        descTv.setText(dialogBean.getDesc());
+        ImageLoader.getInstance().displayImage(dialogBean.getImage(), vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
         dialog.setContentView(contentView);
-        final int finalExtType = extType;
-        final String finalContentJson = contentJson;
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                callback.onDialogShareOk(dialog, finalExtType, finalContentJson);
+                callback.onDialogShareOk(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()));
             }
         });
         cancleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                callback.onDialogShareCancle(dialog, finalExtType, finalContentJson);
+                callback.onDialogShareCancle(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()));
             }
         });
         dialog.show();

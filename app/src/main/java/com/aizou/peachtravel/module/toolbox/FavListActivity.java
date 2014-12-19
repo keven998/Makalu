@@ -34,6 +34,9 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.module.dest.CityDetailActivity;
+import com.aizou.peachtravel.module.dest.PoiDetailActivity;
+import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
@@ -99,58 +102,6 @@ public class FavListActivity extends PeachBaseActivity {
         listView.setPullRefreshEnabled(true);
         listView.setScrollLoadEnabled(false);
         listView.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
-        listView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FavoritesBean bean =mAdapter.getDataList().get(position);
-                if(isShare){
-                    IMUtils.showImShareDialog(mContext, bean, new IMUtils.OnDialogShareCallBack() {
-                        @Override
-                        public void onDialogShareOk(Dialog dialog, int type, String content) {
-                            DialogManager.getInstance().showProgressDialog(mContext);
-                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
-                                @Override
-                                public void onSuccess() {
-                                    DialogManager.getInstance().dissMissProgressDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("发送成功");
-
-                                        }
-                                    });
-
-                                }
-
-                                @Override
-                                public void onError(int i, String s) {
-                                    DialogManager.getInstance().dissMissProgressDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("发送失败");
-
-                                        }
-                                    });
-
-                                }
-
-                                @Override
-                                public void onProgress(int i, String s) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                        }
-                    });
-                }else{
-                    Intent intent = new Intent(mContext, StrategyActivity.class);
-                    intent.putExtra("id", bean.id);
-                    startActivity(intent);
-                }
-            }
-        });
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -307,6 +258,67 @@ public class FavListActivity extends PeachBaseActivity {
                 }
             }
             final FavoritesBean item = mItemDataList.get(i);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isShare){
+                        IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showProgressDialog(mContext);
+                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("发送成功");
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("发送失败");
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(int i, String s) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }else{
+                        Intent intent = new Intent();
+                        if(item.type.equals("vs")){
+                            intent.setClass(mContext, SpotDetailActivity.class);
+                            intent.putExtra("id",item.itemId);
+                        }else if(item.type.equals("hotel")||item.type.equals("restaurant")||item.type.equals("shopping")){
+                            intent.setClass(mContext, PoiDetailActivity.class);
+                            intent.putExtra("id",item.itemId);
+                            intent.putExtra("type",item.type);
+                        }else if(item.type.equals("locality")){
+                            intent.setClass(mContext, CityDetailActivity.class);
+                            intent.putExtra("id",item.itemId);
+                        }
+                        startActivity(intent);
+                    }
+                }
+            });
             if (isEditable) {
                 vh.deleteBtn.setVisibility(View.VISIBLE);
                 vh.deleteBtn.setOnClickListener(new View.OnClickListener() {

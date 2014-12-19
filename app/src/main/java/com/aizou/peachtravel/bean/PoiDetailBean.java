@@ -3,13 +3,18 @@ package com.aizou.peachtravel.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.share.ShareDialogBean;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/22.
  */
-public class PoiDetailBean implements Parcelable {
+public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public final static String RESTAURANT="restaurant";
     public final static String SHOPPING="shopping";
     public String distance="";
@@ -102,5 +107,20 @@ public class PoiDetailBean implements Parcelable {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public ShareDialogBean createShareBean() {
+        ExtMessageBean extMessageBean = new ExtMessageBean();
+        extMessageBean.id = id;
+        extMessageBean.type = type;
+        extMessageBean.image = images.size()>0?images.get(0).url:"";
+        extMessageBean.name = zhName;
+        DecimalFormat df=new   java.text.DecimalFormat("#.#");
+        extMessageBean.rating=df.format(rating*5);
+        extMessageBean.price = priceDesc;
+        extMessageBean.address = address;
+        extMessageBean.timeCost = timeCostDesc;
+        return new ShareDialogBean(extMessageBean);
     }
 }

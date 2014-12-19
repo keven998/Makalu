@@ -22,7 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#60000000">
+            android:background="#88000000">
             <ImageView
                 android:id="@+id/iv_weather"
                 android:layout_width="18dp"
@@ -57,7 +57,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_home_mid"
         android:layout_weight="1">
 
         <TextView android:layout_width="match_parent"
@@ -66,7 +67,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/tool_title"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textColor="@color/base_text_color_subtitle"/>
 
         <LinearLayout
@@ -80,9 +81,9 @@
                 android:layout_height="wrap_content"
                 android:text="旅行Memo"
                 android:textSize="12sp"
-                android:drawablePadding="6dp"
+                android:drawablePadding="13dp"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_launcher"
+                android:drawableTop="@drawable/ic_home_guide"
                 android:textColor="@color/base_text_color_title"/>
             <TextView
                 android:id="@+id/tv_fav"
@@ -92,9 +93,9 @@
                 android:layout_marginRight="28dp"
                 android:text="收藏夹"
                 android:textSize="12sp"
-                android:drawablePadding="6dp"
+                android:drawablePadding="13dp"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_launcher"
+                android:drawableTop="@drawable/ic_home_fav"
                 android:textColor="@color/base_text_color_title"/>
             <TextView
                 android:id="@+id/tv_nearby"
@@ -102,8 +103,8 @@
                 android:layout_height="wrap_content"
                 android:text="我身边"
                 android:textSize="12sp"
-                android:drawablePadding="6dp"
-                android:drawableTop="@drawable/ic_launcher"
+                android:drawablePadding="13dp"
+                android:drawableTop="@drawable/ic_home_around"
                 android:gravity="center"
                 android:textColor="@color/base_text_color_title"/>
 

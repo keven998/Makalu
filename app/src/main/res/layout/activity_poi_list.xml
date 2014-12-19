@@ -8,6 +8,21 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/mm_listitem_simple">
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="13dp"
+            android:drawableLeft="@drawable/ic_navigation_back"
+            android:text="返回"
+            android:gravity="center"
+            android:textColor="@color/base_text_color_text_hint"
+            android:background="@drawable/btn_navigation_back_selector"
+            android:drawablePadding="3dp"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/loc_spinner"
@@ -18,11 +33,16 @@
 
             />
 
-        <Button
+        <TextView
             android:id="@+id/btn_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/frame_cell_bounding_theme_highlight"
+            android:textColor="@color/app_theme_color"
             android:text="完成" />
 
 

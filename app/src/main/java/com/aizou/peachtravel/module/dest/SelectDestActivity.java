@@ -38,6 +38,8 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CountryBean;
 import com.aizou.peachtravel.bean.InDestBean;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
@@ -48,6 +50,7 @@ import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
 import com.aizou.peachtravel.module.dest.fragment.OutCountryFragment;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.easemob.util.HanziToPinyin;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -148,10 +151,18 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         startTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, StrategyActivity.class);
-                intent.putParcelableArrayListExtra("destinations", allAddCityList);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+                PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+                if(user!=null){
+                    Intent intent = new Intent(mContext, StrategyActivity.class);
+                    intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+                }else{
+                    ToastUtil.getInstance(mContext).showToast("请先登录！");
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);

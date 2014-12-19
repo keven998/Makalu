@@ -4,13 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.share.ShareDialogBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class LocBean implements Parcelable {
+public class LocBean implements Parcelable,ICreateShareDialog {
     public boolean isAdded;
     public String header;
     public String id;
@@ -95,5 +99,18 @@ public class LocBean implements Parcelable {
             return id.hashCode();
         }
         return super.hashCode();
+    }
+
+    @Override
+    public ShareDialogBean createShareBean() {
+        ExtMessageBean extMessageBean = new ExtMessageBean();
+        extMessageBean.name = zhName;
+        extMessageBean.timeCost = timeCostDesc;
+        extMessageBean.type= TravelApi.PeachType.LOC;
+        extMessageBean.id = id;
+        extMessageBean.desc = desc;
+        if(images!=null&&images.size()>0)
+        extMessageBean.image =images.get(0).url;
+        return new ShareDialogBean(extMessageBean);
     }
 }

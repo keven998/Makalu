@@ -116,7 +116,7 @@ public class ShoppingFragment extends PeachBaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
-                intent.putExtra("type", TravelApi.PoiType.SHOPPING);
+                intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", locList);
                 intent.putParcelableArrayListExtra("poiList",shoppingList);

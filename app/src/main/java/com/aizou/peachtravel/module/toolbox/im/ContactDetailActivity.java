@@ -30,6 +30,7 @@ import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragm
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.easemob.chat.EMChatManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -232,6 +233,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                         // 删除此会话
                         EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(),true);
                         AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
+                        InviteMsgRepository.deleteInviteMsg(getActivity(),tobeDeleteUser.getUsername());
                         dismiss();
                         getActivity().finish();
                     }else if(!TextUtils.isEmpty(deleteResult.err.message)){

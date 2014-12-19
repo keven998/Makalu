@@ -2,17 +2,34 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp">
     <TextView
         android:id="@+id/create_new_talk"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:textSize="18sp"
+        android:paddingLeft="13dp"
         android:gravity="center_vertical"
+        android:background="@color/base_color_white"
+        android:textColor="@color/base_text_color_title"
         android:text="创建新的聊天"/>
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/base_divider_color"
+        android:layout_height="0.5dp" />
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
+        android:paddingLeft="13dp"
+        android:gravity="center_vertical"
+        android:background="@color/base_color_white"
+        android:textSize="13sp"
+        android:textColor="@color/base_text_color_subtitle"
         android:text="最近聊天"/>
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/base_divider_color"
+        android:layout_height="0.5dp" />
 
 </LinearLayout>

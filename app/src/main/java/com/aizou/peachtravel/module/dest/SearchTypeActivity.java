@@ -24,6 +24,7 @@ import com.aizou.peachtravel.bean.SearchTypeBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
@@ -212,7 +213,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                 @Override
                 public void onItemOnClick(Object object) {
-                    IMUtils.showImShareDialog(mContext, object, new IMUtils.OnDialogShareCallBack() {
+                    IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
                         @Override
                         public void onDialogShareOk(Dialog dialog, int type, String content) {
                             DialogManager.getInstance().showProgressDialog(mContext);

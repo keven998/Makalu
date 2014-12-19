@@ -22,7 +22,6 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,13 +111,13 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
     private void bindView(SearchAllBean result) {
         ArrayList<PoiDetailBean> poiList = null;
-        if (type.equals(TravelApi.PoiType.SPOT)) {
+        if (type.equals(TravelApi.PeachType.SPOT)) {
             poiList = result.vs;
-        } else if (type.equals(TravelApi.PoiType.RESTAURANTS)) {
+        } else if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             poiList = result.restaurant;
-        } else if (type.equals(TravelApi.PoiType.SHOPPING)) {
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             poiList = result.shopping;
-        } else if (type.equals(TravelApi.PoiType.HOTEL)) {
+        } else if (type.equals(TravelApi.PeachType.HOTEL)) {
             poiList = result.hotel;
         }
         if (mPage == 0) {

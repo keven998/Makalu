@@ -23,7 +23,10 @@ import java.util.List;
  * Created by Rjm on 2014/11/13.
  */
 public class TravelApi extends BaseApi{
-    public static class PoiType{
+    public static class PeachType {
+        public final static String GUIDE="guide";
+        public final static String NOTE="travelNote";
+        public final static String LOC="locality";
         public final static String SPOT="vs";
         public final static String RESTAURANTS="restaurant";
         public final static String SHOPPING="shopping";

@@ -249,7 +249,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         ArrayList<LocBean> locList =new ArrayList<LocBean>();
         locList.add(locDetailBean);
         intent.putParcelableArrayListExtra("locList", locList);
-        intent.putExtra("type", TravelApi.PoiType.RESTAURANTS);
+        intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
         startActivity(intent);
 //          Intent intent = new Intent(mContext,PoiDetailActivity.class);
 //          startActivity(intent);

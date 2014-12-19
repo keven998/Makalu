@@ -61,12 +61,14 @@ public class UserApi extends BaseApi {
 
     //联系人
     public final static String CONTACTS = "/users/contacts";
+    public final static String REQUEST_ADD_CONTACTS="/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
     //根据环信ID获取用户信息
     public final static String GET_CONTACT_BY_HX = "/users/easemob";
     //通讯录匹配
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
+
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -351,10 +353,37 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+    /**
+     * 请求添加好友
+     * @param uid
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler requestAddContact(String uid,String message, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", uid);
+            jsonObject.put("message",message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString());
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
 
+        return HttpManager.request(request, callback);
+    }
     /**
      * 添加好友
-     *
      * @param uid
      * @param callback
      * @return

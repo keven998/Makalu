@@ -65,7 +65,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
                 .build();
     }
 

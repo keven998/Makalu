@@ -87,8 +87,9 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissProgressDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
-                    bindView(detailResult.result);
                     mPage = page;
+                    bindView(detailResult.result);
+
                 }
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
@@ -125,5 +126,6 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         if (mTravelNoteAdapter.getCount() >= BaseApi.PAGE_SIZE) {
             mMoreTravelNoteLv.setScrollLoadEnabled(true);
         }
+        mTravelNoteAdapter.notifyDataSetChanged();
     }
 }

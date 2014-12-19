@@ -604,7 +604,8 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (IMUserRepository.isMyFriend(context, message.getFrom())) {
                         Intent intent = new Intent(context, ContactDetailActivity.class);
-                        intent.putExtra("userId", message.getFrom());
+                        IMUser user=IMUserRepository.getContactByUserName(context,message.getFrom());
+                        intent.putExtra("userId", user.getUserId());
                         context.startActivity(intent);
                     } else {
                         IMUser itemData=IMUserRepository.getContactByUserName(context,message.getFrom());
