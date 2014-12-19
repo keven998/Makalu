@@ -52,8 +52,10 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 //    @InjectView(R.id.pb_location)
 //    ProgressBar mPbLocation;
     private IndicatorViewPager indicatorViewPager;
-    private double lat;
-    private double lng;
+    private NearbyAdapter mNAdapter;
+
+    private double lat = -1;
+    private double lng = -1;
     private String city;
     private String street;
     private String address;
@@ -61,7 +63,11 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
     private String[] tabTitles;
     private String[] tabTypes = {"vs", "restaurant", "shopping", "hotel"};
-    private int[] tabRes = {R.drawable.checker_tab_nearby_ic_spot, R.drawable.checker_tab_nearby_ic_delicacy, R.drawable.checker_tab_nearby_ic_shopping, R.drawable.checker_tab_nearby_ic_stay};
+    private int[] tabRes = {R.drawable.checker_tab_nearby_ic_spot,
+            R.drawable.checker_tab_nearby_ic_delicacy,
+            R.drawable.checker_tab_nearby_ic_shopping,
+            R.drawable.checker_tab_nearby_ic_stay
+    };
     private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<OnLocationChangeListener> onLocationChangeListenerList = new ArrayList<OnLocationChangeListener>();
 
@@ -69,29 +75,35 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabTitles = getResources().getStringArray(R.array.local_type_title);
+
+        mAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        initView();
+
+        mLocationManagerProxy = LocationManagerProxy.getInstance(this);
+        mLocationManagerProxy.setGpsEnable(true);
+        startLocation();
+
+    }
+
+    private void init2PreLocData() {
         lat = getIntent().getDoubleExtra("lat", 0);
         lng = getIntent().getDoubleExtra("lng", 0);
         city = getIntent().getStringExtra("city");
         street = getIntent().getStringExtra("street");
         address = getIntent().getStringExtra("address");
-        initView();
-        mLocationManagerProxy = LocationManagerProxy.getInstance(this);
-        mLocationManagerProxy.setGpsEnable(false);
-
-        mAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
     }
 
     private void initView() {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
-        mTvAddress.setText(address);
+        mTvAddress.setText("正在定位...");
         ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5);
         colorBar.setWidth(LocalDisplay.dp2px(50));
         mNearbyIndicator.setScrollBar(colorBar);
 
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
-        indicatorViewPager.setAdapter(new NearbyAdapter(getSupportFragmentManager()));
+        indicatorViewPager.setAdapter(mNAdapter = new NearbyAdapter(getSupportFragmentManager()));
 
         mTitleBar.getTitleTextView().setText("我身边");
         mTitleBar.enableBackKey(true);
@@ -105,6 +117,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
     private void startLocation() {
 //        mPbLocation.setVisibility(View.VISIBLE);
+        mTvAddress.setText("正在定位...");
         mBtnRefresh.startAnimation(mAnim);
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, this);
@@ -138,9 +151,18 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
                     onLocationChangeListener.onLocationChange(lat, lng);
                 }
             }
+            updateContent();
         } else {
-            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
+//            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
+            mTvAddress.setText("定位失败!");
         }
+    }
+
+    private void updateContent() {
+        mNAdapter.updateLocation(lat, lng);
+        int item = indicatorViewPager.getCurrentItem();
+        NearbyItemFragment cf = (NearbyItemFragment) mNAdapter.getFragmentForPage(item);
+        cf.requestDataUpdate();
     }
 
     @Override
@@ -160,7 +182,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        mTvAddress.setText("无法获取你的位置信息");
     }
 
     private class NearbyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
@@ -168,7 +190,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
         public NearbyAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
-            fragmentList =new ArrayList<>();
+            fragmentList = new ArrayList<>();
             for(String type :tabTypes){
                 NearbyItemFragment fragment = new NearbyItemFragment();
                 Bundle bundle = new Bundle();
@@ -178,7 +200,6 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
                 fragment.setArguments(bundle);
                 fragmentList.add(fragment);
             }
-
         }
 
         @Override
@@ -203,6 +224,12 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         @Override
         public Fragment getFragmentForPage(int position) {
             return fragmentList.get(position);
+        }
+
+        public void updateLocation(double lat, double lng) {
+            for (NearbyItemFragment fragment : fragmentList) {
+                fragment.updateLocation(lat, lng);
+            }
         }
 
     }

@@ -82,8 +82,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     private String city;
     private String street;
     private String address;
-    private Double geoLat;
-    private Double geoLng;
+    private double geoLat = -1;
+    private double geoLng = -1;
 
     private LocationManagerProxy mLocationManagerProxy;
 
@@ -209,62 +209,62 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 break;
 
             case R.id.tv_nearby:
-                if (geoLat == null) {
-                    DialogManager.getInstance().showProgressDialog(getActivity(), "正在定位");
-                    mLocationManagerProxy.requestLocationData(
-                            LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
-                                @Override
-                                public void onLocationChanged(AMapLocation aMapLocation) {
-                                    DialogManager.getInstance().dissMissProgressDialog();
-                                    if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
-                                        //获取位置信息
-                                        geoLat = aMapLocation.getLatitude();
-                                        geoLng = aMapLocation.getLongitude();
-                                        city = aMapLocation.getCity();
-                                        street = aMapLocation.getStreet();
-                                        address = aMapLocation.getAddress();
-                                        Intent intent = new Intent(getActivity(), NearbyActivity.class);
-                                        intent.putExtra("lat", geoLat);
-                                        intent.putExtra("lng", geoLng);
-                                        intent.putExtra("street", street);
-                                        intent.putExtra("address", address);
-                                        intent.putExtra("city", city);
-                                        startActivity(intent);
-                                    } else {
-                                        ToastUtil.getInstance(getActivity()).showToast("定位失败，请稍后重试");
-                                    }
+                Intent intent = new Intent(getActivity(), NearbyActivity.class);
+                intent.putExtra("lat", geoLat);
+                intent.putExtra("lng", geoLng);
+                intent.putExtra("street", street);
+                intent.putExtra("address", address);
+                intent.putExtra("city", city);
+                startActivity(intent);
 
-                                }
-
-                                @Override
-                                public void onLocationChanged(Location location) {
-
-                                }
-
-                                @Override
-                                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                                }
-
-                                @Override
-                                public void onProviderEnabled(String provider) {
-
-                                }
-
-                                @Override
-                                public void onProviderDisabled(String provider) {
-
-                                }
-                            });
-                } else {
-                    Intent intent = new Intent(getActivity(), NearbyActivity.class);
-                    intent.putExtra("lat", geoLat);
-                    intent.putExtra("lng", geoLng);
-                    intent.putExtra("street", street);
-                    intent.putExtra("address", address);
-                    intent.putExtra("city", city);
-                    startActivity(intent);
-                }
+//                if (geoLat == null) {
+//                    DialogManager.getInstance().showProgressDialog(getActivity(), "正在定位");
+//                    mLocationManagerProxy.requestLocationData(
+//                            LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+//                                @Override
+//                                public void onLocationChanged(AMapLocation aMapLocation) {
+//                                    DialogManager.getInstance().dissMissProgressDialog();
+//                                    if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+//                                        //获取位置信息
+//                                        geoLat = aMapLocation.getLatitude();
+//                                        geoLng = aMapLocation.getLongitude();
+//                                        city = aMapLocation.getCity();
+//                                        street = aMapLocation.getStreet();
+//                                        address = aMapLocation.getAddress();
+//                                        Intent intent = new Intent(getActivity(), NearbyActivity.class);
+//                                        intent.putExtra("lat", geoLat);
+//                                        intent.putExtra("lng", geoLng);
+//                                        intent.putExtra("street", street);
+//                                        intent.putExtra("address", address);
+//                                        intent.putExtra("city", city);
+//                                        startActivity(intent);
+//                                    } else {
+//                                        ToastUtil.getInstance(getActivity()).showToast("定位失败，请稍后重试");
+//                                    }
+//
+//                                }
+//
+//                                @Override
+//                                public void onLocationChanged(Location location) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onProviderEnabled(String provider) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onProviderDisabled(String provider) {
+//
+//                                }
+//                            });
+//                }
 
                 break;
 

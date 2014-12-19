@@ -69,14 +69,14 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             }
         });
 
-        if(mPoiList==null){
+        if(mPoiList == null){
             LogUtil.d(type+"----poiList=null");
-            mLat = getArguments().getDouble("lat");
-            mLng = getArguments().getDouble("lng");
-            mPage=0;
+//            mLat = getArguments().getDouble("lat");
+//            mLng = getArguments().getDouble("lng");
+            mPage = 0;
             mPoiList = new ArrayList<>();
-            getPoiListByLoc(mPage,mLat,mLng);
-        }else{
+//            getPoiListByLoc(mPage,mLat,mLng);
+        } else {
             LogUtil.d(type+"----poiList!=null");
             poiAdapter.getDataList().clear();
             poiAdapter.getDataList().addAll(mPoiList);
@@ -84,6 +84,18 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         }
 
         return rootView;
+    }
+
+    public void updateLocation(double lat, double lng) {
+        mLat = lat;
+        mLng = lng;
+        mPoiList.clear();
+        mPage = 0;
+        poiAdapter.reset();
+    }
+
+    public void requestDataUpdate() {
+        getPoiListByLoc(0, mLat, mLng);
     }
 
     private void getPoiListByLoc(final int page, double lat, double lng) {
@@ -126,9 +138,9 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             mListView.getRefreshableView().setAdapter(poiAdapter);
         }
 
-        for(PoiDetailBean poi:poiList){
+        for (PoiDetailBean poi : poiList) {
             if(poi.location!=null){
-                String distance = CommonUtils.getDistanceStr(mLat,mLng,poi.location.coordinates[1],poi.location.coordinates[0]);
+                String distance = CommonUtils.getDistanceStr(mLat, mLng, poi.location.coordinates[1], poi.location.coordinates[0]);
                 poi.distance = distance;
             }
         }

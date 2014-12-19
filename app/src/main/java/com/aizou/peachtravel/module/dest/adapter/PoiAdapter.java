@@ -44,10 +44,15 @@ public class PoiAdapter extends BaseAdapter {
 
     private DisplayImageOptions picOptions;
 
-    public PoiAdapter(Context context,boolean isCanAdd) {
+    public PoiAdapter(Context context, boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
         picOptions = UILUtils.getRadiusOption();
+    }
+
+    public void reset() {
+        mPoiList.clear();
+        notifyDataSetChanged();
     }
 
     public void setData(List<PoiDetailBean> ds) {
