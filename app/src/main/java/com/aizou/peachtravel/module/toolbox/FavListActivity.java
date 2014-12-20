@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.toolbox;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
@@ -27,16 +29,19 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -110,7 +115,7 @@ public class FavListActivity extends PeachBaseActivity {
                 initData(curType,currentPage + 1);
             }
         });
-        listView.doPullRefreshing(true, 100);
+
         isShare=getIntent().getBooleanExtra("isShare",false);
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getIntExtra("chatType",0);
@@ -130,6 +135,8 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
 //        initData(0);
+
+        setupViewFromCache();
     }
 
     private void initView() {
@@ -146,6 +153,29 @@ public class FavListActivity extends PeachBaseActivity {
         });
     }
 
+    private void setupViewFromCache() {
+        AccountManager account = AccountManager.getInstance();
+        String data = PreferenceUtils.getCacheData(this, String.format("%s_favorites", account.user.userId));
+        if (!TextUtils.isEmpty(data)) {
+            List<FavoritesBean> lists = GsonTools.parseJsonToBean(data,
+                    new TypeToken<List<FavoritesBean>>() {
+                    });
+            mAdapter.appendData(lists);
+        } else {
+            mFavLv.doPullRefreshing(true, 0);
+        }
+    }
+
+    private void cachePage() {
+        AccountManager account = AccountManager.getInstance();
+        int size = mAdapter.getCount();
+        if (size > OtherApi.PAGE_SIZE) {
+            size = OtherApi.PAGE_SIZE;
+        }
+        List<FavoritesBean> cd = mAdapter.getDataList().subList(0, size);
+        PreferenceUtils.cacheData(FavListActivity.this, String.format("%s_favorites", account.user.userId), GsonTools.createGsonString(cd));
+    }
+
     private void initData(String type, final int page) {
         OtherApi.getFavist(type,page, new HttpCallBack() {
             @Override
@@ -154,7 +184,9 @@ public class FavListActivity extends PeachBaseActivity {
                 if (lists.code == 0) {
                     currentPage = page;
                     setupView(lists.result);
-
+                    if (page == 0) {
+                        cachePage();
+                    }
                 }
                 mFavLv.onPullUpRefreshComplete();
                 mFavLv.onPullDownRefreshComplete();
@@ -178,9 +210,9 @@ public class FavListActivity extends PeachBaseActivity {
         if (datas == null || datas.size() ==0) {
             mFavLv.setHasMoreData(false);
             if (currentPage == 0) {
-                Toast.makeText(FavListActivity.this, "没有相关内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FavListActivity.this, "No收藏", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(FavListActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FavListActivity.this, "已加载全部", Toast.LENGTH_SHORT).show();
             }
             // ptrLv.setScrollLoadEnabled(false);
         } else {
@@ -240,13 +272,10 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.descView = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
                 vh.flagView = (ImageView) view.findViewById(R.id.iv_flag);
                 vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
-
-
 //                int width = LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20);
 //                int height = width * 260 / 640;
 //                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
 //                vh.imgView.setLayoutParams(lp);
-
                 view.setTag(vh);
             } else {
                 vh = (ViewHolder) view.getTag();
@@ -282,7 +311,6 @@ public class FavListActivity extends PeachBaseActivity {
                                         runOnUiThread(new Runnable() {
                                             public void run() {
                                                 ToastUtil.getInstance(mContext).showToast("发送失败");
-
                                             }
                                         });
 
@@ -411,6 +439,7 @@ public class FavListActivity extends PeachBaseActivity {
 //                                        mItemDataList.remove(i);
                                         mItemDataList.remove(itemData);
                                         notifyDataSetChanged();
+                                        cachePage();
                                     }
                                 }
 

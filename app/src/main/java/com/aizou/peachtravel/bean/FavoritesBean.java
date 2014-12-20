@@ -60,8 +60,8 @@ public class FavoritesBean implements ICreateShareDialog{
         extMessageBean.timeCost = timeCostDesc;
         extMessageBean.address =address;
         extMessageBean.name = zhName;
-        extMessageBean.price =priceDesc;
-        DecimalFormat df=new   java.text.DecimalFormat("#.#");
+        extMessageBean.price = priceDesc;
+        DecimalFormat df = new java.text.DecimalFormat("#.#");
         extMessageBean.rating=df.format(rating*5);
         return new ShareDialogBean(extMessageBean);
     }

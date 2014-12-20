@@ -7,20 +7,19 @@
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
+        android:layout_height="@dimen/title_bar_height"/>
 
     <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/my_strategy_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
+        android:background="@color/app_backgroud"
+        android:overScrollMode="never"
         android:divider="@null"
-        android:dividerHeight="10dp"
+        android:dividerHeight="0dp"
         android:fadingEdge="none"
-        android:listSelector="@android:color/transparent"
-        android:layout_below="@id/title_bar"
-        android:paddingTop="10dp"/>
+        android:layout_below="@id/title_bar"/>
 
     <CheckedTextView
         android:id="@+id/edit_btn"

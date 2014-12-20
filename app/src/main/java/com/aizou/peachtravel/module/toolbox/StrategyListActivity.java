@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.toolbox;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -25,16 +27,20 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.BaseApi;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.easemob.EMCallBack;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -186,6 +192,30 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     }
 
+    private void setupViewFromCache() {
+        AccountManager account = AccountManager.getInstance();
+        String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
+        if (!TextUtils.isEmpty(data)) {
+            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+                    new TypeToken<List<StrategyBean>>() {
+                    });
+            mStrategyListAdapter.getDataList().addAll(lists);
+            mStrategyListAdapter.notifyDataSetChanged();
+        } else {
+            mMyStrategyLv.doPullRefreshing(true, 0);
+        }
+    }
+
+    private void cachePage() {
+        AccountManager account = AccountManager.getInstance();
+        int size = mStrategyListAdapter.getCount();
+        if (size > OtherApi.PAGE_SIZE) {
+            size = OtherApi.PAGE_SIZE;
+        }
+        List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
+        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.user.userId), GsonTools.createGsonString(cd));
+    }
+
     @Override
     public void finish() {
 //        String action = getIntent().getAction();
@@ -209,7 +239,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getIntExtra("chatType",0);
 //        getStrategyListData(0);
-        mMyStrategyLv.doPullRefreshing(true, 100);
+//        mMyStrategyLv.doPullRefreshing(true, 100);
+        setupViewFromCache();
     }
 
     private void getStrategyListData(final int page) {
@@ -220,6 +251,9 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (strategyListResult.code == 0) {
                     mCurrentPage = page;
                     bindView(strategyListResult.result);
+                    if (page == 0) {
+                        cachePage();
+                    }
                 }
                 mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
@@ -253,7 +287,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 //            mMyStrategyLv.setScrollLoadEnabled(false);
 //        }
         if (result.size() == 0) {
-            if (adapter.getCount() == 0) {
+            if (mCurrentPage == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                 findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,22 +389,26 @@ public class StrategyListActivity extends PeachBaseActivity {
                     .callback(new MaterialDialog.Callback() {
                         @Override
                         public void onPositive(final MaterialDialog dialog) {
-                            View progressView = View.inflate(mContext, R.layout.view_progressbar,null);
+                            View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
                             dialog.setContentView(progressView);
 
                             TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
                                 @Override
                                 public void doSucess(String result, String method) {
                                     dialog.dismiss();
-                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                                    if(deleteResult.code==0){
-                                        mStrategyListAdapter.getDataList().remove(itemData);
+                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                                    if (deleteResult.code == 0) {
+                                        int index = mStrategyListAdapter.getDataList().indexOf(itemData);
+                                        mStrategyListAdapter.getDataList().remove(index);
                                         mStrategyListAdapter.notifyDataSetChanged();
                                         if (mStrategyListAdapter.getCount() == 0) {
                                             mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                                         }
                                         ToastUtil.getInstance(mContext).showToast("删除成功");
-                                    }else{
+                                        if (index <= OtherApi.PAGE_SIZE) {
+                                            cachePage();
+                                        }
+                                    } else {
                                         ToastUtil.getInstance(mContext).showToast("删除失败");
                                     }
                                 }

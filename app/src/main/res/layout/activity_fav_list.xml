@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
+            android:overScrollMode="never"
             android:divider="@null"
             android:dividerHeight="0dp"
             android:fadingEdge="none" />

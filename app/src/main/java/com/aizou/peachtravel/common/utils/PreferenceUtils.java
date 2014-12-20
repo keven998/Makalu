@@ -15,6 +15,7 @@ package com.aizou.peachtravel.common.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class PreferenceUtils {
 
@@ -85,5 +86,13 @@ public class PreferenceUtils {
 	public boolean getSettingMsgSpeaker() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
 	}
+
+    public static String getCacheData(Context context, String key) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(key, null);
+    }
+
+    public static void cacheData(Context context, String key, String value) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, value).commit();
+    }
 
 }
