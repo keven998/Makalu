@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -25,7 +26,7 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -45,7 +46,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private LinearLayout mOtherLl;
     private View containView;
     private ImageZoomAnimator2 zoomAnimator;
-    private TextView picNumTv;
+    private DotView mDotView;
     private ImageView favIv;
     private SpotDetailBean spotDetailBean;
     @Override
@@ -58,7 +59,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
         mTitleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        picNumTv = (TextView) findViewById(R.id.tv_pic_num);
+        mDotView = (DotView) findViewById(R.id.dot_view);
         favIv = (ImageView) findViewById(R.id.iv_fav);
         mTitleBar.enableBackKey(true);
         containView = findViewById(R.id.container);
@@ -109,7 +110,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     }
     private void bindView(final SpotDetailBean result) {
         ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(mContext,result.images);
-        picNumTv.setText(1+"/"+result.images.size());
+        mDotView.setNum(result.images.size());
         mTitleBar.getTitleTextView().setText(result.zhName);
         mSpotImagesVp.setAdapter(imagePagerAdapter);
         mSpotNameTv.setText(result.zhName);
@@ -171,7 +172,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                picNumTv.setText((position+1)+"/"+result.images.size());
+                mDotView.setSelected(position);
             }
 
             @Override

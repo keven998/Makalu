@@ -1,6 +1,14 @@
 ECLIPSE ANDROID PROJECT IMPORT SUMMARY
 ======================================
 
+ * Project
+   social_sdk_library_project:C:\Users\Rjm\Desktop\umeng_android_social_sdk_4.2_
+   ustom\social_sdk_library_project\.classpath:
+   Could not resolve source path src in project social_sdk_library_project:
+   ignored. The project may not compile if the given source path provided source
+   code.
+
+
 Ignored Files:
 --------------
 The following files were *not* copied into the new Gradle project; you
@@ -36,10 +44,13 @@ Eclipse projects. Here's how the projects were restructured:
 * libs\SocialSDK_evernote.jar => social_sdk_library_project\libs\SocialSDK_evernote.jar
 * libs\SocialSDK_facebook_1.jar => social_sdk_library_project\libs\SocialSDK_facebook_1.jar
 * libs\SocialSDK_facebook_2.jar => social_sdk_library_project\libs\SocialSDK_facebook_2.jar
+* libs\SocialSDK_flickr.jar => social_sdk_library_project\libs\SocialSDK_flickr.jar
 * libs\SocialSDK_instagram.jar => social_sdk_library_project\libs\SocialSDK_instagram.jar
+* libs\SocialSDK_kakao.jar => social_sdk_library_project\libs\SocialSDK_kakao.jar
 * libs\SocialSDK_laiwang_1.jar => social_sdk_library_project\libs\SocialSDK_laiwang_1.jar
 * libs\SocialSDK_laiwang_2.jar => social_sdk_library_project\libs\SocialSDK_laiwang_2.jar
 * libs\SocialSDK_like.jar => social_sdk_library_project\libs\SocialSDK_like.jar
+* libs\SocialSDK_line.jar => social_sdk_library_project\libs\SocialSDK_line.jar
 * libs\SocialSDK_linkedin.jar => social_sdk_library_project\libs\SocialSDK_linkedin.jar
 * libs\SocialSDK_pinterest.jar => social_sdk_library_project\libs\SocialSDK_pinterest.jar
 * libs\SocialSDK_pocket.jar => social_sdk_library_project\libs\SocialSDK_pocket.jar
@@ -55,16 +66,16 @@ Eclipse projects. Here's how the projects were restructured:
 * libs\SocialSDK_tencentWB_1.jar => social_sdk_library_project\libs\SocialSDK_tencentWB_1.jar
 * libs\SocialSDK_tencentWB_2.jar => social_sdk_library_project\libs\SocialSDK_tencentWB_2.jar
 * libs\SocialSDK_tencentWB_3.jar => social_sdk_library_project\libs\SocialSDK_tencentWB_3.jar
+* libs\SocialSDK_tumblr.jar => social_sdk_library_project\libs\SocialSDK_tumblr.jar
 * libs\SocialSDK_UserCenter.jar => social_sdk_library_project\libs\SocialSDK_UserCenter.jar
 * libs\SocialSDK_WeiXin_1.jar => social_sdk_library_project\libs\SocialSDK_WeiXin_1.jar
 * libs\SocialSDK_WeiXin_2.jar => social_sdk_library_project\libs\SocialSDK_WeiXin_2.jar
+* libs\SocialSDK_whatsapp.jar => social_sdk_library_project\libs\SocialSDK_whatsapp.jar
 * libs\SocialSDK_yixin_1.jar => social_sdk_library_project\libs\SocialSDK_yixin_1.jar
 * libs\SocialSDK_yixin_2.jar => social_sdk_library_project\libs\SocialSDK_yixin_2.jar
 * libs\SocialSDK_ynote.jar => social_sdk_library_project\libs\SocialSDK_ynote.jar
 * libs\umeng_social_sdk.jar => social_sdk_library_project\libs\umeng_social_sdk.jar
 * res\ => social_sdk_library_project\src\main\res\
-* src\ => social_sdk_library_project\src\main\java\
-* src\com\sina\sso\RemoteSSO.aidl => social_sdk_library_project\src\main\aidl\com\sina\sso\RemoteSSO.aidl
 
 Missing Android Support Repository:
 -----------------------------------

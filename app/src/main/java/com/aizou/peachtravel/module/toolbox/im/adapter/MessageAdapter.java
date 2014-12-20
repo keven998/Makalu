@@ -57,7 +57,7 @@ import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.utils.ImageUtils;
 import com.aizou.peachtravel.common.utils.SmileUtils;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;

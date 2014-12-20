@@ -19,7 +19,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

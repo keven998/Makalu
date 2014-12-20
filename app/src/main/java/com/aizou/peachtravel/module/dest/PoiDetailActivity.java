@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -34,12 +32,9 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.config.Constant;
-import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -103,25 +98,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
         mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-        mTitleBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IMUtils.onClickImShare(mContext);
-//                PoiMoreMenu fragment = new PoiMoreMenu();
-//                Bundle args = new Bundle();
-//                args.putInt(
-//                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-//                        4
-//                );
-//                args.putFloat(
-//                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-//                        5
-//                );
-//
-//                fragment.setArguments(args);
-//                fragment.show(getSupportFragmentManager(), "more_menu");
-            }
-        });
         mTitleBar.enableBackKey(true);
 
     }
@@ -178,6 +154,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTvTel.setText("电话:" + bean.telephone);
         mTvAddr.setText(bean.address);
         refreshFav(bean);
+        mTitleBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(mContext);
+//                PoiMoreMenu fragment = new PoiMoreMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(
+//                        SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
+//                        4
+//                );
+//                args.putFloat(
+//                        SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
+//                        5
+//                );
+//
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "more_menu");
+            }
+        });
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,6 +3,8 @@ package com.aizou.peachtravel.common.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +15,9 @@ import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ImageBean;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.SmoothPhotoView;
 import com.aizou.peachtravel.common.widget.photoview.PhotoViewAttacher;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -121,7 +123,13 @@ public class ImageZoomAnimator2 {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     mBgAlpha = (Integer) valueAnimator.getAnimatedValue("alpha");
-                    zoomContainer.getBackground().setAlpha(mBgAlpha);
+                    Drawable backgroudDrawable =  zoomContainer.getBackground();
+                    if(backgroudDrawable==null){
+                        backgroudDrawable = new ColorDrawable(Color.BLACK);
+                        zoomContainer.setBackgroundDrawable(backgroudDrawable);
+                    }
+                    backgroudDrawable.setAlpha(mBgAlpha);
+
                 }
             });
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);

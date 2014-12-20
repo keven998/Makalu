@@ -1,4 +1,4 @@
-package com.aizou.peachtravel.common.utils;
+package com.aizou.peachtravel.common.imageloader;
 
 import android.graphics.Bitmap;
 
@@ -40,6 +40,17 @@ public class UILUtils {
                 .resetViewBeforeLoading(true)
 //				.decodingOptions(D)
                 .displayer(new RoundedBitmapDisplayer(radius))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
+        return picOptions;
+    }
+    public static DisplayImageOptions getRadiusOption(int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius) {
+        DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                .resetViewBeforeLoading(true)
+//				.decodingOptions(D)
+                .displayer(new FixedRoundedBitmapDisplayer(topLeftRadius,topRightRadius,bottomLeftRadius,bottomRightRadius))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
         return picOptions;

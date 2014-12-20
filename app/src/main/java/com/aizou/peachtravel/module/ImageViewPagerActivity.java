@@ -6,7 +6,7 @@ import com.aizou.core.widget.HackyViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.photoview.PhotoView;
 import com.aizou.peachtravel.common.widget.photoview.PhotoViewAttacher;
 import com.nineoldandroids.animation.Animator;

@@ -20,9 +20,15 @@
 
         <Button
             android:id="@+id/btn_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/app_theme_color"
+            android:background="@drawable/btn_complete_selector"
             android:text="完成" />
 
         <Spinner
@@ -36,18 +42,36 @@
 
 
     <LinearLayout
-        android:id="@+id/search_ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/base_color_white"
+        android:padding="11dp">
 
-        <TextView
+        <EditText
+            android:id="@+id/et_search"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_search"
-            android:padding="10dp" />
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:textColorHint="@color/base_text_color_text_placeholder"
+            android:hint="输入城市名或拼音"
+            android:textColor="@color/base_text_color_title"
+            android:drawablePadding="10dp"
+            android:background="@drawable/button_normal_shape"
+            android:drawableLeft="@drawable/ic_search" />
 
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_normal_shape"
+            android:layout_height="30dp"
+            android:textSize="15sp"
+            android:textColor="@color/base_text_color_title"
+            android:text="搜索" />
     </LinearLayout>
 
     <FrameLayout

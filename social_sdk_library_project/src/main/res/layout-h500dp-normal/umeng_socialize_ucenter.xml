@@ -130,7 +130,7 @@
             android:layout_marginLeft="13dp"
             android:layout_alignParentTop="true"
             android:gravity="center_vertical"
-            android:text="分享账户管理"
+            android:text="分享设置"
             android:textColor="@color/umeng_socialize_list_item_textcolor"
             android:textSize="18sp"
              />

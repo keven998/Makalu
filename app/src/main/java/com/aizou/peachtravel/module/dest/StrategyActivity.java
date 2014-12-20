@@ -26,6 +26,8 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.share.ShareDialogBean;
+import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
@@ -80,6 +82,13 @@ public class StrategyActivity extends PeachBaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
         mTitleBar.enableBackKey(true);
+        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
+        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
+            }
+        });
     }
 
     @Override
@@ -146,6 +155,7 @@ public class StrategyActivity extends PeachBaseActivity {
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
+
     }
 
     public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {

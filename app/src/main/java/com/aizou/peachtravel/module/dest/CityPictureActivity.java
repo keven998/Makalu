@@ -1,13 +1,10 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,27 +13,27 @@ import android.widget.RelativeLayout;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.HackyViewPager;
-import com.aizou.core.widget.listHelper.ListViewDataAdapter;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
-import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
+import com.aizou.peachtravel.bean.LocAlbum;
 import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/19.
  */
 public class CityPictureActivity extends PeachBaseActivity {
+    @ViewInject(R.id.title_bar)
+    private TitleHeaderBar titleBar;
     @ViewInject(R.id.gv_city_pic)
     private GridView mCityPicGv;
     @ViewInject(R.id.zoom_container)
@@ -60,9 +57,8 @@ public class CityPictureActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_city_picture);
         ViewUtils.inject(this);
-
-
-
+        titleBar.enableBackKey(true);
+        titleBar.getTitleTextView().setText("图集");
 
     }
 
@@ -76,11 +72,11 @@ public class CityPictureActivity extends PeachBaseActivity {
         TravelApi.getCityGalley(id,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson4List<ImageBean> imageReuslt = CommonJson4List.fromJson(result,ImageBean.class);
+                CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result,LocAlbum.class);
                 if(imageReuslt.code==0){
-                    picAdapter= new PicAdapter(imageReuslt.result);
+                    picAdapter= new PicAdapter(imageReuslt.result.album);
                     mCityPicGv.setAdapter(picAdapter);
-                    zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageReuslt.result);
+                    zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageReuslt.result.album);
                 }
 
             }

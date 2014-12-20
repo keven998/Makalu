@@ -5,17 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center">
-
-    <TextView android:id="@+id/new_talk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/app_theme_color"
-        android:textSize="12sp"
-        android:drawableTop="@drawable/ic_launcher"
-        android:drawablePadding="10dp"
-        android:text="开始Talk"
-        android:padding="30dp"/>
-
     <TextView android:id="@+id/add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,5 +14,17 @@
         android:drawablePadding="10dp"
         android:text="添加加桃友"
         android:padding="30dp"/>
+
+    <TextView android:id="@+id/new_talk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/base_color_white"
+        android:textSize="12sp"
+        android:drawableTop="@drawable/ic_new_talk"
+        android:drawablePadding="10dp"
+        android:text="开始Talk"
+        android:padding="30dp"/>
+
+
 
 </LinearLayout>

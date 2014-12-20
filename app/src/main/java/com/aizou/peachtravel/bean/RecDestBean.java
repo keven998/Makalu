@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class RecDestBean {
     public String title;
-    public List<RecDestItem> contents;
+    public List<RecDestItem> contentsList=new ArrayList<>();
 
     public class RecDestItem{
         public String id;

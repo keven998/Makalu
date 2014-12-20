@@ -12,8 +12,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.TravelNoteBean;
-import com.aizou.peachtravel.common.utils.UILUtils;
-import com.aizou.peachtravel.module.my.AccountActvity;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;

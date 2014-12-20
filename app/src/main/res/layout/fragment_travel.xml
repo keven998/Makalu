@@ -22,6 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="bottom"
             android:background="#88000000">
             <ImageView
                 android:id="@+id/iv_weather"
@@ -45,12 +46,13 @@
             android:id="@+id/dot_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="right|bottom"
             android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
             cube_dotview:dot_radius="3dp"
-            cube_dotview:dot_selected_color="0xFF377BEE"
-            cube_dotview:dot_span="18dp"
-            cube_dotview:dot_unselected_color="0xFFC5CEDB"
+            cube_dotview:dot_selected_color="0xffee528c"
+            cube_dotview:dot_span="8dp"
+            cube_dotview:dot_unselected_color="0xFFffffff"
             />
 
     </FrameLayout>

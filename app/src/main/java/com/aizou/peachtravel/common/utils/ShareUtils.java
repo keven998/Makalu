@@ -1,11 +1,21 @@
 package com.aizou.peachtravel.common.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.utils.LocalDisplay;
+import com.aizou.peachtravel.R;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -31,6 +41,90 @@ import java.util.Map;
 import java.util.Set;
 
 public class ShareUtils {
+    public static void showSelectPlatformDialog(Activity act){
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View
+                .inflate(act, R.layout.view_share_bar, null);
+        TextView wxcircleTv = (TextView) contentView
+                .findViewById(R.id.tv_wxcircle);
+        TextView wechatTv = (TextView) contentView.findViewById(R.id.tv_wechat);
+        TextView qzoneTv = (TextView) contentView.findViewById(R.id.tv_qzone);
+        TextView doubanTv = (TextView) contentView.findViewById(R.id.tv_douban);
+        TextView sinaTv = (TextView) contentView.findViewById(R.id.tv_sina);
+        TextView qqTv = (TextView) contentView.findViewById(R.id.tv_qq);
+        TextView cancleIv = (TextView) contentView
+                .findViewById(R.id.tv_share_cancel);
+        wxcircleTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        wechatTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        qzoneTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        doubanTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        sinaTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        qqTv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        cancleIv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        // dialog.setView(contentView);
+        // dialog.setContentView(contentView);
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()) ; // 设置宽度
+        // lp.horizontalMargin=20;
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
 //	public static UMSocialService shareRoute(final SHARE_MEDIA platform,
 //			final Activity act, RouteDetail routeDetail) {
 //		// 首先在您的Activity中添加如下成员变量

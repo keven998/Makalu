@@ -25,7 +25,7 @@ import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.RecDestBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -135,7 +135,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
                 }
             });
-            adapter.getDataList().addAll(itemData.contents);
+            adapter.getDataList().addAll(itemData.contentsList);
             adapter.notifyDataSetChanged();
 
         }

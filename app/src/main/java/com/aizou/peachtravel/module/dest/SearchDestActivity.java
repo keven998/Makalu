@@ -21,16 +21,13 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CityBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.SearchAllBean;
-import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;

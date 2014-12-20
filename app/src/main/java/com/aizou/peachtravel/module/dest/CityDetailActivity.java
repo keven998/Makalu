@@ -27,7 +27,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
-import com.aizou.peachtravel.common.utils.UILUtils;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
@@ -75,13 +75,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mTravelLv = (ListView) findViewById(R.id.lv_city_detail);
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.ic_share);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IMUtils.onClickImShare(mContext);
-
-            }
-        });
         titleHeaderBar.enableBackKey(true);
         View hv;
         hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
@@ -169,6 +162,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 Intent intent = new Intent(mContext,CityPictureActivity.class);
                 intent.putExtra("id",locDetailBean.id);
                 startActivity(intent);
+
+            }
+        });
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(mContext);
 
             }
         });
