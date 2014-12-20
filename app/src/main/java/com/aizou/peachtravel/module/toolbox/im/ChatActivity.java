@@ -93,6 +93,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
@@ -459,16 +460,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         final Drawable unexpanddrawable = getResources().getDrawable(R.drawable.ic_group_unexpand);
         expanddrawable.setBounds(0,0,expanddrawable.getMinimumWidth(),expanddrawable.getMinimumHeight());
         unexpanddrawable.setBounds(0, 0, unexpanddrawable.getMinimumWidth(), unexpanddrawable.getMinimumHeight());
-        titleHeaderBar.getTitleTextView().setEllipsize(TextUtils.TruncateAt.MIDDLE);
-        titleHeaderBar.getTitleTextView().setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-        titleHeaderBar.getTitleTextView().setMaxWidth(LocalDisplay.dp2px(200));
+        final TitleHeaderBar tbar = titleHeaderBar;
+        tbar.getTitleTextView().setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        tbar.getTitleTextView().setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        tbar.getTitleTextView().setMaxWidth(LocalDisplay.dp2px(200));
         if(isExpanded){
-            titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null, unexpanddrawable);
+            tbar.getTitleTextView().setCompoundDrawables(null, null, null, unexpanddrawable);
         }else{
-            titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null, expanddrawable);
+            tbar.getTitleTextView().setCompoundDrawables(null, null, null, expanddrawable);
         }
-        titleHeaderBar.getTitleTextView().setCompoundDrawablePadding(LocalDisplay.dp2px(4));
-        titleHeaderBar.getTitleTextView().setOnClickListener(new OnClickListener() {
+        tbar.getTitleTextView().setCompoundDrawablePadding(LocalDisplay.dp2px(4));
+        tbar.getTitleTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isInAnimation)
@@ -476,10 +478,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
                 if (isExpanded) {
                     unexpandMemberLl();
-                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
+                    tbar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
                 } else {
                     expandMemberLl();
-                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null,  null,unexpanddrawable);
+                    tbar.getTitleTextView().setCompoundDrawables(null, null,  null,unexpanddrawable);
                 }
 
             }
@@ -489,7 +491,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             public void onClick(View v) {
                 if(!isInAnimation){
                     unexpandMemberLl();
-                    titleHeaderBar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
+                    tbar.getTitleTextView().setCompoundDrawables(null, null, null,expanddrawable);
                 }
 
 
@@ -503,7 +505,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             }
         });
         memberGv.setAdapter(memberAdapter);
-        titleHeaderBar.setRightOnClickListener(new OnClickListener() {
+        tbar.setRightOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,GroupDetailsActivity.class );
@@ -749,9 +751,20 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         }
     }
 
-	private void setUpView() {
+    private void setUpView() {
         activityInstance = this;
-        titleHeaderBar.enableBackKey(true);
+//        titleHeaderBar.enableBackKey(true);
+
+        titleHeaderBar.getLeftTextView().setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityWithNoAnim(intent);
+                overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+            }
+        });
+
 		iv_emoticons_normal.setOnClickListener(this);
 		iv_emoticons_checked.setOnClickListener(this);
 		// position = getIntent().getIntExtra("position", -1);

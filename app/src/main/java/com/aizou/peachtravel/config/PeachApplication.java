@@ -54,8 +54,8 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
-
     }
+
     private void setupDatabase() {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "peachtravel-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -69,7 +69,6 @@ public class PeachApplication extends BaseApplication {
 
     private void initIM(){
         hxSDKHelper.onInit(this);
-
     }
 
 

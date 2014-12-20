@@ -290,7 +290,6 @@
         <activity
             android:name=".module.toolbox.im.ContactDetailActivity"
             android:screenOrientation="portrait"
-            android:noHistory="true"
             android:theme="@style/horizontal_slide" >
         </activity>
         <!-- 搜索好友详情 -->

@@ -159,6 +159,7 @@ public class IMMainActivity extends ChatBaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        mTabs[0].performClick();
     }
 
     public void refreshChatHistoryFragment() {
