@@ -57,7 +57,6 @@ public class StoryActivity extends SwipeBackActivity {
         SwipeBackLayout swipeBackLayout;
         swipeBackLayout = getSwipeBackLayout();
         swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_RIGHT);
-
     }
 
     private void initData(){

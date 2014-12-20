@@ -42,8 +42,10 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 
 	// 引导图片资源
 	private static final int[] pics = {
-            R.drawable.guide_1, R.drawable.guide_2,
-			R.drawable.guide_3, R.drawable.guide_4 };
+            R.drawable.guide_1,
+            R.drawable.guide_2,
+			R.drawable.guide_3,
+            R.drawable.guide_4 };
 
 	// private static final int[] backgrouds = { R.drawable.guide_1_bg,
 	// R.drawable.guide_2_bg, R.drawable.guide_3_bg, R.drawable.guide_4_bg };
@@ -80,7 +82,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
                             startActivity(mainActivity);
                             Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
                             startActivity(storyIntent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left);
 						} else if (type.equals("setting")) {
 
 						}
