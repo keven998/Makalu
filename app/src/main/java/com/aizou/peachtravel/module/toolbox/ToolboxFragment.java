@@ -106,13 +106,16 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override
                     public void onLocationChanged(AMapLocation aMapLocation) {
-                        //获取位置信息
-                        geoLat = aMapLocation.getLatitude();
-                        geoLng = aMapLocation.getLongitude();
-                        city = aMapLocation.getCity();
-                        address = aMapLocation.getAddress();
-                        street = aMapLocation.getStreet();
-                        getYahooWeather(geoLat, geoLng);
+                        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+                            //获取位置信息
+                            geoLat = aMapLocation.getLatitude();
+                            geoLng = aMapLocation.getLongitude();
+                            city = aMapLocation.getCity();
+                            address = aMapLocation.getAddress();
+                            street = aMapLocation.getStreet();
+                            getYahooWeather(geoLat, geoLng);
+                        }
+
                     }
 
                     @Override

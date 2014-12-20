@@ -80,7 +80,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         initView();
 
         mLocationManagerProxy = LocationManagerProxy.getInstance(this);
-        mLocationManagerProxy.setGpsEnable(true);
+        mLocationManagerProxy.setGpsEnable(false);
         startLocation();
 
     }
@@ -151,7 +151,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
                     onLocationChangeListener.onLocationChange(lat, lng);
                 }
             }
-            updateContent();
+//            updateContent();
         } else {
 //            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
             mTvAddress.setText("定位失败!");
