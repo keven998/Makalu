@@ -95,7 +95,7 @@ public class ShoppingFragment extends PeachBaseFragment {
                 }else{
                     //todo: need to 保存路线
                     DialogManager.getInstance().showProgressDialog(getActivity());
-                    TravelApi.saveGUide("",new HttpCallBack<String>() {
+                    TravelApi.saveGUide("","",new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();

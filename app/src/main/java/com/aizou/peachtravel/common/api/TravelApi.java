@@ -231,10 +231,11 @@ public class TravelApi extends BaseApi{
      * @return
      */
     public static PTRequestHandler saveGUide
-            (String guideJson, HttpCallBack callback) {
+            (String id,String guideJson, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
+        request.putUrlParams("id",id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         try {

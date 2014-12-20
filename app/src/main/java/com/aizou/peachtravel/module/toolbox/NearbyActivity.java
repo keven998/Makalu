@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
@@ -30,6 +31,7 @@ import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -38,7 +40,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class NearbyActivity extends PeachBaseActivity implements AMapLocationListener {
+public class NearbyActivity extends PeachBaseActivity {
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
     @InjectView(R.id.nearby_indicator)
@@ -54,8 +56,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     private IndicatorViewPager indicatorViewPager;
     private NearbyAdapter mNAdapter;
 
-    private double lat = -1;
-    private double lng = -1;
+    private double mLat = -1;
+    private double mLng = -1;
     private String city;
     private String street;
     private String address;
@@ -68,6 +70,7 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
             R.drawable.checker_tab_nearby_ic_shopping,
             R.drawable.checker_tab_nearby_ic_stay
     };
+
     private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<OnLocationChangeListener> onLocationChangeListenerList = new ArrayList<OnLocationChangeListener>();
 
@@ -75,10 +78,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabTitles = getResources().getStringArray(R.array.local_type_title);
-
         mAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
         initView();
-
         mLocationManagerProxy = LocationManagerProxy.getInstance(this);
         mLocationManagerProxy.setGpsEnable(false);
         startLocation();
@@ -86,8 +87,8 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
     }
 
     private void init2PreLocData() {
-        lat = getIntent().getDoubleExtra("lat", 0);
-        lng = getIntent().getDoubleExtra("lng", 0);
+        mLat = getIntent().getDoubleExtra("lat", 0);
+        mLng = getIntent().getDoubleExtra("lng", 0);
         city = getIntent().getStringExtra("city");
         street = getIntent().getStringExtra("street");
         address = getIntent().getStringExtra("address");
@@ -104,6 +105,14 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
         indicatorViewPager.setAdapter(mNAdapter = new NearbyAdapter(getSupportFragmentManager()));
+        indicatorViewPager.setCurrentItem(0,false);
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
+            @Override
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                NearbyItemFragment cf = (NearbyItemFragment) mNAdapter.getFragmentForPage(currentItem);
+                cf.requestDataForInit();
+            }
+        });
 
         mTitleBar.getTitleTextView().setText("我身边");
         mTitleBar.enableBackKey(true);
@@ -120,7 +129,63 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         mTvAddress.setText("正在定位...");
         mBtnRefresh.startAnimation(mAnim);
         mLocationManagerProxy.requestLocationData(
-                LocationProviderProxy.AMapNetwork, -1, 15, this);
+                LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+                    @Override
+                    public void onLocationChanged(AMapLocation aMapLocation) {
+                        mAnim.cancel();
+                        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+                            //获取位置信息
+                            mLat = aMapLocation.getLatitude();
+                            mLng = aMapLocation.getLongitude();
+                            city = aMapLocation.getCity();
+                            street = aMapLocation.getStreet();
+                            address = aMapLocation.getAddress();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mTvAddress.setText(address);
+                                    updateContent();
+                                }
+                            });
+
+                        } else {
+//            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
+                            mTvAddress.setText("定位失败!");
+                            if(mLat==-1){
+                                init2PreLocData();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateContent();
+                                    }
+                                });
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                        mTvAddress.setText("无法获取你的位置信息");
+                    }
+                });
     }
 
     @Override
@@ -134,72 +199,23 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
         super.onAttachFragment(fragment);
     }
 
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-//        mPbLocation.setVisibility(View.GONE);
-        mAnim.cancel();
-        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
-            //获取位置信息
-            lat = aMapLocation.getLatitude();
-            lng = aMapLocation.getLongitude();
-            city = aMapLocation.getCity();
-            street = aMapLocation.getStreet();
-            address = aMapLocation.getAddress();
-            mTvAddress.setText(address);
-            for (OnLocationChangeListener onLocationChangeListener : onLocationChangeListenerList) {
-                if (onLocationChangeListener != null) {
-                    onLocationChangeListener.onLocationChange(lat, lng);
-                }
-            }
-//            updateContent();
-        } else {
-//            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
-            mTvAddress.setText("定位失败!");
-        }
-    }
 
     private void updateContent() {
-        mNAdapter.updateLocation(lat, lng);
+        for(OnLocationChangeListener onLocationChangeListener:onLocationChangeListenerList){
+            onLocationChangeListener.onLocationChange(mLat,mLng);
+        }
         int item = indicatorViewPager.getCurrentItem();
         NearbyItemFragment cf = (NearbyItemFragment) mNAdapter.getFragmentForPage(item);
         cf.requestDataUpdate();
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        mTvAddress.setText("无法获取你的位置信息");
-    }
 
     private class NearbyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        List<NearbyItemFragment> fragmentList;
+        HashMap<String,NearbyItemFragment> fragmentMap;
 
         public NearbyAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
-            fragmentList = new ArrayList<>();
-            for(String type :tabTypes){
-                NearbyItemFragment fragment = new NearbyItemFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", type);
-                bundle.putDouble("lat", lat);
-                bundle.putDouble("lng", lng);
-                fragment.setArguments(bundle);
-                fragmentList.add(fragment);
-            }
+            fragmentMap= new HashMap<>();
         }
 
         @Override
@@ -223,14 +239,30 @@ public class NearbyActivity extends PeachBaseActivity implements AMapLocationLis
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            return fragmentList.get(position);
-        }
-
-        public void updateLocation(double lat, double lng) {
-            for (NearbyItemFragment fragment : fragmentList) {
-                fragment.updateLocation(lat, lng);
+            LogUtil.d("NearItemFragment","init "+position);
+            NearbyItemFragment fragment = fragmentMap.get(tabTypes[position]);
+            if(fragment==null){
+                fragment = new NearbyItemFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", tabTypes[position]);
+                bundle.putDouble("lat", mLat);
+                bundle.putDouble("lng", mLng);
+                fragment.setArguments(bundle);
+                fragmentMap.put(tabTypes[position], fragment);
             }
+            return fragment;
         }
+//        public void updateLocation(double lat, double lng) {
+//            for (NearbyItemFragment fragment : fragmentList) {
+//                if(fragment.isAdded()){
+//                    Bundle bundle= fragment.getArguments();
+//                    bundle.putDouble("lat",lat);
+//                    bundle.putDouble("lng",lng);
+//                    fragment.setArguments(bundle);
+//                }
+//
+//            }
+//        }
 
     }
 

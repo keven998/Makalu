@@ -48,6 +48,8 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         rootView = inflater.inflate(R.layout.fragment_tabmain_item, container, false);
         ButterKnife.inject(this, rootView);
         type = getArguments().getString("type");
+        mLat = getArguments().getDouble("lat");
+        mLng = getArguments().getDouble("lng");
 
         PullToRefreshListView listView = (PullToRefreshListView) rootView.findViewById(R.id.nearby_lv);
         mListView = listView;
@@ -96,6 +98,12 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
     public void requestDataUpdate() {
         getPoiListByLoc(0, mLat, mLng);
+    }
+
+    public void requestDataForInit(){
+        if(mPoiList.size()==0){
+            getPoiListByLoc(0, mLat, mLng);
+        }
     }
 
     private void getPoiListByLoc(final int page, double lat, double lng) {
@@ -167,9 +175,10 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
     @Override
     public void onLocationChange(double lat, double lng) {
-        mPage = 0;
-        mLat =lat;
+        mLat = lat;
         mLng = lng;
-        getPoiListByLoc(mPage, lat, lng);
+        mPoiList.clear();
+        mPage = 0;
+        poiAdapter.reset();
     }
 }
