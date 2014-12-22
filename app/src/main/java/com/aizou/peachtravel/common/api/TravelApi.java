@@ -54,6 +54,8 @@ public class TravelApi extends BaseApi{
     public final static String GUIDEBYID="/guides/%1$s";
     //根据目的地ID创建攻略
     public final static String CREATE_GUIDE="/create-guide";
+    //复制攻略
+    public final static String COPY_GUIDE="/copy-guide/";
     //攻略
     public final static String GUIDE="/guides";
     //收藏
@@ -230,10 +232,10 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler saveGUide
+    public static PTRequestHandler saveGuide
             (String id,String guideJson, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.PUT);
+        request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
         request.putUrlParams("id",id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
@@ -259,6 +261,19 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 复制攻略
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler copyStrategy(String id,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + String.format(COPY_GUIDE,id));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

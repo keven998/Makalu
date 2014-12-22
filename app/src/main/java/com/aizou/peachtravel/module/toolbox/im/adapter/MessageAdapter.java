@@ -61,6 +61,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMAlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
@@ -685,7 +686,7 @@ public class MessageAdapter extends BaseAdapter {
      */
     private void handleExtMessage(EMMessage message, ViewHolder holder, final int position) {
         int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
-        String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
+        final String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         holder.tv_name.setText(bean.name);
@@ -695,6 +696,15 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.tv_type.setText("Memo");
+            final ExtMessageBean finalBean = bean;
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, StrategyActivity.class);
+                    intent.putExtra("id", finalBean.id);
+                    activity.startActivity(intent);
+                }
+            });
         } else if (extType == Constant.ExtType.CITY) {
             holder.tv_name.setText(bean.name);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_city_pic, UILUtils.getRadiusOption(8));
@@ -725,12 +735,6 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
         }
-        // 设置长按事件监听
-        holder.rl_content.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

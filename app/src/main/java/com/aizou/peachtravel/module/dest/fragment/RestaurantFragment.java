@@ -20,12 +20,17 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
+import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
@@ -53,10 +58,8 @@ public class RestaurantFragment extends PeachBaseFragment {
     View lineLl;
     Button addBtn;
     RestAdapter mRestAdapter;
-    String id;
-    String title;
-    ArrayList<PoiDetailBean> restaurantList;
-    ArrayList<LocBean> locList;
+    StrategyBean strategy;
+    boolean canEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,10 +75,8 @@ public class RestaurantFragment extends PeachBaseFragment {
     }
 
     private void initData() {
-        id = getArguments().getString("id");
-        title = getArguments().getString("title");
-        restaurantList = getArguments().getParcelableArrayList("restaurant");
-        locList = getArguments().getParcelableArrayList("locList");
+        strategy = getArguments().getParcelable("strategy");
+        canEdit = getArguments().getBoolean("canEdit");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
         controller.setBackgroundColor(Color.TRANSPARENT);
@@ -85,41 +86,54 @@ public class RestaurantFragment extends PeachBaseFragment {
         mEditDslv.setOnTouchListener(controller);
         mEditDslv.setDropListener(mRestAdapter);
         mEditDslv.setAdapter(mRestAdapter);
-        mEditBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
-                if(mRestAdapter.isEditableMode){
-                    mEditBtn.setChecked(true);
-                    addFooter.setVisibility(View.VISIBLE);
-                }else{
-                    //todo: need to 保存路线
-                    DialogManager.getInstance().showProgressDialog(getActivity());
-                    TravelApi.saveGUide("","",new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
-                        }
+        if(canEdit){
+            mEditBtn.setVisibility(View.VISIBLE);
+            mEditBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
+                    if(mRestAdapter.isEditableMode){
+                        mEditBtn.setChecked(true);
+                        addFooter.setVisibility(View.VISIBLE);
+                    }else{
+                        //todo: need to 保存路线
+                        DialogManager.getInstance().showProgressDialog(getActivity());
+                        TravelApi.saveGuide(strategy.id, StrategyManager.getSaveRestaurantJson(getActivity(),strategy),new HttpCallBack<String>() {
+                            @Override
+                            public void doSucess(String result, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+                                CommonJson<ModifyResult> saveResult= CommonJson.fromJson(result,ModifyResult.class);
+                                if(saveResult.code==0){
+                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
+                                    mEditBtn.setChecked(false);
+                                    addFooter.setVisibility(View.INVISIBLE);
+                                }
 
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
-                        }
-                    });
-                    mEditBtn.setChecked(false);
-                    addFooter.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                            }
+                        });
+
+                    }
+                    mRestAdapter.notifyDataSetChanged();
                 }
-                mRestAdapter.notifyDataSetChanged();
-            }
-        });
+            });
+        }else{
+            mEditBtn.setVisibility(View.GONE);
+        }
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
-                intent.putParcelableArrayListExtra("locList", locList);
-                intent.putParcelableArrayListExtra("poiList",restaurantList);
+                intent.putParcelableArrayListExtra("locList", strategy.localities);
+                intent.putParcelableArrayListExtra("poiList",strategy.restaurant);
                 getActivity().startActivityForResult(intent, ADD_REST_REQUEST_CODE);
             }
         });
@@ -132,7 +146,7 @@ public class RestaurantFragment extends PeachBaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK){
             if(requestCode==ADD_REST_REQUEST_CODE){
-                restaurantList = data.getParcelableArrayListExtra("poiList");
+                strategy.restaurant = data.getParcelableArrayListExtra("poiList");
                 mRestAdapter.notifyDataSetChanged();
             }
         }
@@ -144,12 +158,12 @@ public class RestaurantFragment extends PeachBaseFragment {
 
         @Override
         public int getCount() {
-            return restaurantList.size();
+            return strategy.restaurant.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return restaurantList.get(position);
+            return strategy.restaurant.get(position);
         }
 
         @Override
@@ -159,7 +173,7 @@ public class RestaurantFragment extends PeachBaseFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final PoiDetailBean poiDetailBean = restaurantList.get(position);
+            final PoiDetailBean poiDetailBean = strategy.restaurant.get(position);
             ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
@@ -199,7 +213,7 @@ public class RestaurantFragment extends PeachBaseFragment {
                                 .callback(new MaterialDialog.Callback() {
                                     @Override
                                     public void onPositive(MaterialDialog dialog) {
-                                        restaurantList.remove(poiDetailBean);
+                                        strategy.restaurant.remove(poiDetailBean);
                                         notifyDataSetChanged();
                                         dialog.dismiss();
                                     }
@@ -240,8 +254,8 @@ public class RestaurantFragment extends PeachBaseFragment {
         public void drop(int from, int to) {
             if (from != to) {
                 PoiDetailBean item = (PoiDetailBean) getItem(from);
-                restaurantList.remove(item);
-                restaurantList.add(to, item);
+                strategy.restaurant.remove(item);
+                strategy.restaurant.add(to, item);
                 notifyDataSetChanged();
             }
         }

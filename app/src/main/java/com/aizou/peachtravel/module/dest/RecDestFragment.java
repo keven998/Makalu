@@ -135,7 +135,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
                 }
             });
-            adapter.getDataList().addAll(itemData.contentsList);
+            adapter.getDataList().addAll(itemData.contents);
             adapter.notifyDataSetChanged();
 
         }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
@@ -23,11 +24,14 @@ import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.share.ShareDialogBean;
 import com.aizou.peachtravel.common.utils.ShareUtils;
+import com.aizou.peachtravel.common.widget.PeachDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
@@ -54,16 +58,14 @@ public class StrategyActivity extends PeachBaseActivity {
     FixedIndicatorView mStrategyIndicator;
     private String id;
     private List<String> cityIdList;
-
     private ArrayList<LocBean> destinations;
+    private boolean canEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-
         destinations = getIntent().getParcelableArrayListExtra("destinations");
-
         initView();
         initData();
     }
@@ -150,10 +152,51 @@ public class StrategyActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindView(StrategyBean result) {
+    private void bindView(final StrategyBean result) {
         mTitleBar.getTitleTextView().setText(result.title);
+        PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+        if(user.userId!=result.userId){
+            mTitleBar.getTitleTextView().setText("复制路线");
+            canEdit = false;
+            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //todo:复制路线
+                    PeachDialog dialog = new PeachDialog(mContext);
+                    dialog.setTitle("提示");
+                    dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+                    dialog.setMessage("复制这条攻略到我的攻略里面吗？");
+                    dialog.setPositiveButton("确定",new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogManager.getInstance().showProgressDialog(mContext);
+                            TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
+                                @Override
+                                public void doSucess(String result, String method) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    DialogManager.getInstance().dissMissProgressDialog();
+                                }
+                            });
+                        }
+                    });
+                    dialog.setNegativeButton("取消",new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+                }
+            });
+        }else{
+            canEdit=true;
+        }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
+        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result,canEdit));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
 
     }
@@ -226,11 +269,13 @@ public class StrategyActivity extends PeachBaseActivity {
         private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
+        private boolean canEdit;
 
-        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean) {
+        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean,boolean canEdit) {
             super(fragmentManager);
             inflater = LayoutInflater.from(getApplicationContext());
             this.strategyBean = strategyBean;
+            this.canEdit = canEdit;
         }
 
         @Override
@@ -254,29 +299,22 @@ public class StrategyActivity extends PeachBaseActivity {
             if (position == 0) {
                 RouteDayFragment routeDayFragment = new RouteDayFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", strategyBean.id);
-                bundle.putString("title", strategyBean.title);
-                bundle.putParcelableArrayList("itinerary", strategyBean.itinerary);
-                bundle.putInt("day", strategyBean.itineraryDays);
-                bundle.putParcelableArrayList("locList", strategyBean.localities);
+                bundle.putParcelable("strategy", strategyBean);
+                bundle.putBoolean("canEdit",canEdit);
                 routeDayFragment.setArguments(bundle);
                 return routeDayFragment;
             } else if (position == 1) {
                 RestaurantFragment restFragment = new RestaurantFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", strategyBean.id);
-                bundle.putString("title", strategyBean.title);
-                bundle.putParcelableArrayList("restaurant", strategyBean.restaurant);
-                bundle.putParcelableArrayList("locList", strategyBean.localities);
+                bundle.putParcelable("strategy", strategyBean);
+                bundle.putBoolean("canEdit",canEdit);
                 restFragment.setArguments(bundle);
                 return restFragment;
             } else {
                 ShoppingFragment shoppingFragment = new ShoppingFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("id", strategyBean.id);
-                bundle.putString("title", strategyBean.title);
-                bundle.putParcelableArrayList("shopping", strategyBean.shopping);
-                bundle.putParcelableArrayList("locList", strategyBean.localities);
+                bundle.putParcelable("strategy", strategyBean);
+                bundle.putBoolean("canEdit",canEdit);
                 shoppingFragment.setArguments(bundle);
                 return shoppingFragment;
             }

@@ -19,14 +19,20 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
@@ -49,10 +55,8 @@ import butterknife.InjectView;
  */
 public class RouteDayFragment extends PeachBaseFragment {
     public static final int ADD_POI_REQUEST_CODE = 101;
-    private ArrayList<StrategyBean.IndexPoi> itinerary;
-    private int day;
+    private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
-    private ArrayList<LocBean> locList;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
@@ -61,6 +65,7 @@ public class RouteDayFragment extends PeachBaseFragment {
     View addDayFooter;
     View lineLl;
     Button addDayBtn;
+    boolean canEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary){
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
-        for(int i=0;i< day;i++){
+        for(int i=0;i< strategy.itineraryDays;i++){
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
@@ -87,10 +92,9 @@ public class RouteDayFragment extends PeachBaseFragment {
     }
 
     private void initData() {
-        itinerary = getArguments().getParcelableArrayList("itinerary");
-        locList = getArguments().getParcelableArrayList("locList");
-        day = getArguments().getInt("day");
-        resizeData(itinerary);
+        strategy = getArguments().getParcelable("strategy");
+        canEdit = getArguments().getBoolean("canEdit");
+        resizeData(strategy.itinerary);
         routeDayAdpater = new RouteDayAdapter();
         mEditDslv.setDropListener(routeDayAdpater);
 
@@ -99,28 +103,54 @@ public class RouteDayFragment extends PeachBaseFragment {
         mEditDslv.setFloatViewManager(c);
         mEditDslv.setOnTouchListener(c);
         mEditDslv.setAdapter(routeDayAdpater);
-        mEditBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                routeDayAdpater.isEditableMode =!routeDayAdpater.isEditableMode;
-                if (routeDayAdpater.isEditableMode) {
-                    mEditBtn.setChecked(true);
-                    lineLl.setVisibility(View.GONE);
-                    addDayFooter.setVisibility(View.VISIBLE);
-                } else {
-                    //todo:保存路线
-                    mEditBtn.setChecked(false);
-                    lineLl.setVisibility(View.GONE);
-                    addDayFooter.setVisibility(View.INVISIBLE);
+        if(canEdit){
+            mEditBtn.setVisibility(View.VISIBLE);
+            mEditBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    routeDayAdpater.isEditableMode =!routeDayAdpater.isEditableMode;
+                    if (routeDayAdpater.isEditableMode) {
+                        mEditBtn.setChecked(true);
+                        lineLl.setVisibility(View.GONE);
+                        addDayFooter.setVisibility(View.VISIBLE);
+                    } else {
+                        //todo:保存路线
+                        DialogManager.getInstance().showProgressDialog(getActivity());
+                        String uploadJson = StrategyManager.getInstance().getSaveItineraryJson(getActivity(), strategy, routeDayMap);
+                        TravelApi.saveGuide(strategy.id, uploadJson,new HttpCallBack<String>() {
+                            @Override
+                            public void doSucess(String result, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+                                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
+                                if(saveResult.code==0){
+                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
+                                    mEditBtn.setChecked(false);
+                                    lineLl.setVisibility(View.GONE);
+                                    addDayFooter.setVisibility(View.INVISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method) {
+                                DialogManager.getInstance().dissMissProgressDialog();
+                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                            }
+                        });
+
+                    }
+                    routeDayAdpater.notifyDataSetChanged();
                 }
-                routeDayAdpater.notifyDataSetChanged();
-            }
-        });
+            });
+        }else{
+            mEditBtn.setVisibility(View.GONE);
+        }
+
 
         addDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 routeDayMap.add(new ArrayList<PoiDetailBean>());
+                strategy.itineraryDays++;
                 routeDayAdpater.notifyDataSetChanged();
                 mEditDslv.postDelayed(new Runnable() {
                     @Override
@@ -462,7 +492,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), AddPoiActivity.class);
-                        intent.putParcelableArrayListExtra("locList",locList);
+                        intent.putParcelableArrayListExtra("locList",strategy.localities);
                         intent.putExtra("dayIndex", section);
                         intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
                         getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
@@ -499,6 +529,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                     @Override
                                     public void onPositive(MaterialDialog dialog) {
                                         routeDayMap.remove(section);
+                                        strategy.itineraryDays--;
                                         notifyDataSetChanged();
                                         dialog.dismiss();
                                     }

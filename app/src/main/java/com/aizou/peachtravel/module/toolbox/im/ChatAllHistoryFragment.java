@@ -49,6 +49,7 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.exceptions.EaseMobException;
 
 /**
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
@@ -100,10 +101,10 @@ public class ChatAllHistoryFragment extends Fragment {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
                     if (conversation.getIsGroup()) {
-                        EMGroup group = EMGroupManager.getInstance().getGroup(username);
+//                        EMGroup group = EMGroupManager.getInstance().getGroup(username);
                         // it is group chat
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("groupId", group.getGroupId());
+                        intent.putExtra("groupId", username);
                     } else {
                         // it is single chat
                         intent.putExtra("userId", username);
@@ -226,13 +227,28 @@ public class ChatAllHistoryFragment extends Fragment {
         //过滤掉messages seize为0的conversation
         Iterator<EMConversation> conversationIt = conversations.values().iterator();
         while (conversationIt.hasNext()){
-            EMConversation conversation = conversationIt.next();
+            final EMConversation conversation = conversationIt.next();
             if(conversation.getLastMessage()==null)
                 continue;
             if(conversation.getIsGroup()){
                 PeachConversation peachConversation = new PeachConversation();
                 peachConversation.emConversation = conversation;
                 conversationList.add(peachConversation);
+                EMGroup group=EMGroupManager.getInstance().getGroup(conversation.getUserName());
+                if(group==null){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
+                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
+                            } catch (EaseMobException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+
             }else if(!TextUtils.isEmpty(conversation.getUserName())){
                 IMUser user = IMUserRepository.getMyFriendByUserName(getActivity(), conversation.getUserName());
                 if(user!=null){

@@ -204,21 +204,13 @@ public class IMShareActivity extends PeachBaseActivity {
         @Override
         public void showData(int position, PeachConversation itemData) {
             // 获取与此用户/群组的会话
-            EMConversation conversation = itemData.emConversation;
+            final EMConversation conversation = itemData.emConversation;
             IMUser imUser = itemData.imUser;
             // 获取用户username或者群组groupid
             final String username = conversation.getUserName();
             List<EMGroup> groups = EMGroupManager.getInstance().getAllGroups();
-            EMContact contact = null;
-            boolean isGroup = false;
-            for (EMGroup group : groups) {
-                if (group.getGroupId().equals(username)) {
-                    isGroup = true;
-                    contact = group;
-                    break;
-                }
-            }
-            if (isGroup) {
+            EMContact contact = EMGroupManager.getInstance().getGroup(username);
+            if (conversation.getIsGroup()) {
                 // 群聊消息，显示群聊头像
                 mAvatar.setImageResource(R.drawable.group_icon);
                 mName.setText(contact.getNick() != null ? contact.getNick() : username);
@@ -233,15 +225,13 @@ public class IMShareActivity extends PeachBaseActivity {
                     }
                 }
             }
-            final boolean finalIsGroup = isGroup;
-            final EMContact finalContact = contact;
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    if(finalIsGroup){
+                    if(conversation.getIsGroup()){
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("toId", ((EMGroup) finalContact).getGroupId());
+                        intent.putExtra("toId", username);
 
                     }else{
                         intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
