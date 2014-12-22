@@ -204,10 +204,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            if(position==0){
+            if (position == 0) {
                 InDestFragment inDestFragment = new InDestFragment();
                 return inDestFragment;
-            }else if(position==1){
+            } else if (position == 1) {
                 OutCountryFragment outCountryFragment = new OutCountryFragment();
                 return outCountryFragment;
             }

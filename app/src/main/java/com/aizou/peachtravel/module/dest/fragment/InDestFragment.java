@@ -5,6 +5,7 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -29,6 +31,7 @@ import com.aizou.peachtravel.bean.InDestBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.db.IMUser;
@@ -77,8 +80,21 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
         mLvInCity.setAdapter(inCityAdapter);
         mSectionBar.setListView(mLvInCity);
-        getInLocList();
+//        getInLocList();
+        initData();
         return rootView;
+    }
+
+    private void initData() {
+        String data = PreferenceUtils.getCacheData(getActivity(), "destination_indest");
+        if (!TextUtils.isEmpty(data)) {
+            CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(data, LocBean.class);
+            if (locListResult.code == 0) {
+                bindInView(locListResult.result);
+            }
+        } else {
+            getInLocList();
+        }
     }
 
     private void getInLocList() {
@@ -88,8 +104,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
+                    PreferenceUtils.cacheData(getActivity(), "destination_indest", result);
                 }
-
             }
 
             @Override

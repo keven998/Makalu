@@ -86,7 +86,6 @@ public class SearchDestActivity extends PeachBaseActivity {
                 searchSearchLocData(mKeyWord, 0);
             }
         });
-
     }
 
     private void initData() {
@@ -120,8 +119,8 @@ public class SearchDestActivity extends PeachBaseActivity {
                 mSearchResultLv.onPullDownRefreshComplete();
             }
         });
-
     }
+
     private void bindView(List<LocBean> result) {
 
         if (curPage == 0) {
@@ -161,7 +160,7 @@ public class SearchDestActivity extends PeachBaseActivity {
         @Override
         public void showData(int position, final LocBean itemData) {
             destNameTv.setText(itemData.zhName);
-            if(itemData.images!=null&&itemData.images.size()>0){
+            if(itemData.images != null && itemData.images.size() > 0){
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, destIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }
             contentView.setOnClickListener(new View.OnClickListener() {
@@ -175,4 +174,5 @@ public class SearchDestActivity extends PeachBaseActivity {
             });
         }
     }
+
 }
