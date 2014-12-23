@@ -7,23 +7,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.CopyStrategyBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
@@ -60,7 +61,9 @@ public class StrategyActivity extends PeachBaseActivity {
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
     private boolean canEdit;
-    private StrategyBean strategyBean;
+
+    private boolean isAniming = false, isRVVisable = true;
+    private Animation inAnim, outAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,9 @@ public class StrategyActivity extends PeachBaseActivity {
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData();
+
+        inAnim = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_top);
+        outAnim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
     }
 
     private void initView() {
@@ -84,12 +90,23 @@ public class StrategyActivity extends PeachBaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
-        mTitleBar.enableBackKey(true);
-    }
+//        mTitleBar.enableBackKey(true);
+        mTitleBar.getLeftTextView().setText("完成");
+        mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-    @Override
-    public void finish() {
-        super.finish();
+        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
+        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
+            }
+        });
     }
 
     private void initData() {
@@ -133,10 +150,9 @@ public class StrategyActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
-                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
+//                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
                 }
-
             }
 
             @Override
@@ -147,17 +163,16 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private void bindView(final StrategyBean result) {
-        strategyBean = result;
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
-            mTitleBar.getRightTextView().setText("复制路线");
+            mTitleBar.getTitleTextView().setText("复制路线");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
-                    final PeachDialog dialog = new PeachDialog(mContext);
+                    PeachDialog dialog = new PeachDialog(mContext);
                     dialog.setTitle("提示");
                     dialog.setTitleIcon(R.drawable.ic_dialog_tip);
                     dialog.setMessage("复制这条攻略到我的攻略里面吗？");
@@ -169,12 +184,6 @@ public class StrategyActivity extends PeachBaseActivity {
                                 @Override
                                 public void doSucess(String result, String method) {
                                     DialogManager.getInstance().dissMissProgressDialog();
-                                    CommonJson<CopyStrategyBean> copyResult = CommonJson.fromJson(result,CopyStrategyBean.class);
-                                    if(copyResult.code==0){
-                                        strategyBean.id= copyResult.result.id;
-                                        strategyBean.userId = AccountManager.getInstance().getLoginAccount(mContext).userId;
-                                        bindView(strategyBean);
-                                    }
                                 }
 
                                 @Override
@@ -182,36 +191,76 @@ public class StrategyActivity extends PeachBaseActivity {
                                     DialogManager.getInstance().dissMissProgressDialog();
                                 }
                             });
-                            dialog.dismiss();
                         }
                     });
                     dialog.setNegativeButton("取消",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
 
                         }
                     });
-                    dialog.show();
 
                 }
             });
-        }else{
-            canEdit=true;
-            mTitleBar.getRightTextView().setText("");
-            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
-                }
-            });
+        } else {
+            canEdit = true;
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result,canEdit));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
-
+//        setRVVisiable(false);
     }
+
+    public void setRVVisiable(boolean visiable) {
+        Log.d("test", "visiable = " + visiable + ", isRVVisable = " + isRVVisable + ", isAniming = " + isAniming);
+        if (isAniming) {
+            return;
+        }
+
+        if (visiable && !isRVVisable) {
+            isAniming = true;
+            mLocListRv.startAnimation(inAnim);
+            inAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    isAniming = false;
+                    isRVVisable = true;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        } else if (!visiable && isRVVisable) {
+            isAniming = true;
+            mLocListRv.startAnimation(outAnim);
+            outAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    isAniming = false;
+                    isRVVisable = false;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
+    }
+
+
 
     public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {
 
@@ -376,3 +425,5 @@ public class StrategyActivity extends PeachBaseActivity {
                 .show();
     }
 }
+
+

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -36,6 +37,7 @@ import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -82,15 +84,38 @@ public class RestaurantFragment extends PeachBaseFragment {
         controller.setBackgroundColor(Color.TRANSPARENT);
         controller.setRemoveEnabled(false);
         mRestAdapter = new RestAdapter();
-        mEditDslv.setFloatViewManager(controller);
-        mEditDslv.setOnTouchListener(controller);
-        mEditDslv.setDropListener(mRestAdapter);
-        mEditDslv.setAdapter(mRestAdapter);
-        if(strategy.restaurant==null||strategy.restaurant.size()==0){
-            mEditBtn.setChecked(true);
-            addFooter.setVisibility(View.VISIBLE);
-        }
-        if(canEdit){
+
+        final DragSortListView listView = mEditDslv;
+        View view = new View(getActivity());
+        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.panel_margin)));
+        listView.addHeaderView(view);
+        listView.setFloatViewManager(controller);
+        listView.setOnTouchListener(controller);
+        listView.setDropListener(mRestAdapter);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                if (i == SCROLL_STATE_IDLE) {
+                    if (absListView.getFirstVisiblePosition() <= 1) {
+                        ((StrategyActivity) getActivity()).setRVVisiable(true);
+                    } else {
+                        ((StrategyActivity) getActivity()).setRVVisiable(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int i2, int i3) {
+                if (firstVisibleItem <= 1) {
+                    ((StrategyActivity)getActivity()).setRVVisiable(true);
+                } else {
+                    ((StrategyActivity)getActivity()).setRVVisiable(false);
+                }
+            }
+        });
+        listView.setAdapter(mRestAdapter);
+
+        if (canEdit) {
             mEditBtn.setVisibility(View.VISIBLE);
             mEditBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,7 +151,10 @@ public class RestaurantFragment extends PeachBaseFragment {
                     mRestAdapter.notifyDataSetChanged();
                 }
             });
-        }else{
+            if (mRestAdapter.getCount() == 0) {
+                mEditBtn.performClick();
+            }
+        } else {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -137,12 +165,10 @@ public class RestaurantFragment extends PeachBaseFragment {
                 intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", strategy.localities);
-                intent.putParcelableArrayListExtra("poiList",strategy.restaurant);
+                intent.putParcelableArrayListExtra("poiList", strategy.restaurant);
                 getActivity().startActivityForResult(intent, ADD_REST_REQUEST_CODE);
             }
         });
-
-
 
     }
 

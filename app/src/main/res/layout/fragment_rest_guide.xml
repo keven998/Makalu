@@ -18,6 +18,7 @@
             android:paddingRight="10dp"
             android:fastScrollEnabled="true"
             dslv:collapsed_height="2dp"
+            android:overScrollMode="never"
             dslv:drag_enabled="true"
             dslv:drag_scroll_start="0.33"
             dslv:drag_start_mode="onDown"

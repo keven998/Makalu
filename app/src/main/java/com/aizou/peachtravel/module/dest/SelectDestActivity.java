@@ -35,8 +35,10 @@ import java.util.Set;
  * Created by Rjm on 2014/10/9.
  */
 public class SelectDestActivity extends PeachBaseActivity implements OnDestActionListener {
-    public final static int REQUEST_CODE_SEARCH_LOC=101;
-    private RadioGroup inOutRg;
+    public final static int REQUEST_CODE_SEARCH_LOC = 101;
+    public final static int REQUEST_CODE_LOGIN = 102;
+
+//    private RadioGroup inOutRg;
     private LinearLayout citysLl;
     private FrameLayout mBottomPanel;
     private TextView startTv;
@@ -44,7 +46,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
-    private Set<OnDestActionListener> mOnDestActionListeners= new HashSet<OnDestActionListener>();
+    private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private HorizontalScrollView mScrollPanel;
 
     @Override
@@ -122,17 +124,16 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             @Override
             public void onClick(View view) {
                 PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
-                if(user!=null){
+                if (user != null) {
                     Intent intent = new Intent(mContext, StrategyActivity.class);
                     intent.putParcelableArrayListExtra("destinations", allAddCityList);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
-                }else{
-                    ToastUtil.getInstance(mContext).showToast("请先登录！");
+                    finishWithNoAnim();
+                } else {
+                    ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE_LOGIN);
                 }
-
             }
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
@@ -143,8 +144,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         mSelectDestVp.setOffscreenPageLimit(2);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
-        initData();
-
+//        initData();
     }
 
     @Override
@@ -164,13 +164,12 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,SearchDestActivity.class);
+                Intent intent = new Intent(mContext, SearchDestActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
             }
         });
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getTitleTextView().setText("选择想去的城市");
-
     }
 
     private void initData() {
@@ -219,13 +218,18 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            if(requestCode==REQUEST_CODE_SEARCH_LOC){
-                LocBean locBean =data.getParcelableExtra("loc");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_SEARCH_LOC) {
+                LocBean locBean = data.getParcelableExtra("loc");
                 onDestAdded(locBean);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestAdded(locBean);
                 }
+            } else if (requestCode == REQUEST_CODE_LOGIN) {
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                startActivityWithNoAnim(intent);
+                finishWithNoAnim();
             }
         }
     }
