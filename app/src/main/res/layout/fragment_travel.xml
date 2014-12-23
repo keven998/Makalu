@@ -114,14 +114,28 @@
 
     </RelativeLayout>
 
-
-    <Button
-        android:id="@+id/btn_lxq"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
-        android:text="桃·Talk"
-        android:background="@color/btn_blue_normal"
-        />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btn_lxq"
+            android:layout_width="fill_parent"
+            android:layout_height="64dp"
+            android:text="桃·Talk"
+            android:background="@color/btn_blue_normal"
+            />
+
+        <ImageView android:id="@+id/unread_msg_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_talk_new_message"
+            android:paddingBottom="18dp"
+            android:paddingLeft="38dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+        </RelativeLayout>
+
+
 
 </LinearLayout>

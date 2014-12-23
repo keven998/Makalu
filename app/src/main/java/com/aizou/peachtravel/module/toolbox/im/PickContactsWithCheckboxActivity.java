@@ -22,11 +22,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
@@ -43,7 +46,10 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.itemanimator.ScaleInOutItemAnimator;
+import com.aizou.peachtravel.common.itemanimator.SlideInOutLeftItemAnimator;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.utils.StretchAnimation;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
@@ -124,9 +130,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         toBeAddContactsRv.setLayoutManager(linearLayoutManager);
+
         //设置适配器
         toBeAddAdapter = new ToBeAddContactsAdapter(this, toBeAddContacts);
         toBeAddContactsRv.setAdapter(toBeAddAdapter);
+        toBeAddContactsRv.setItemAnimator(new SlideInOutLeftItemAnimator(toBeAddContactsRv));
 
         contactAdapter = new PickContactAdapter(this, R.layout.row_contact_with_checkbox, alluserList);
         listView.setAdapter(contactAdapter);
@@ -369,6 +377,16 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ImageView mImg;
             TextView mTxt;
         }
+        public void add(IMUser item, int position) {
+            mDatas.add(position, item);
+            notifyItemInserted(position);
+        }
+
+        public void remove(IMUser item) {
+            int position = mDatas.indexOf(item);
+            mDatas.remove(position);
+            notifyItemRemoved(position);
+        }
 
         @Override
         public int getItemCount() {
@@ -421,12 +439,16 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         int res;
         private LayoutInflater layoutInflater;
         private DisplayImageOptions picOptions;
+        private StretchAnimation stretchanimation;
 
         public PickContactAdapter(Context context, int resource, List<IMUser> users) {
             super(context, resource, users);
             isCheckedArray = new boolean[users.size()];
             res = resource;
             layoutInflater = getLayoutInflater();
+            stretchanimation = new StretchAnimation(LocalDisplay.dp2px(103), 0, StretchAnimation.TYPE.vertical, 500);
+            stretchanimation.setInterpolator(new AccelerateDecelerateInterpolator());
+            stretchanimation.setDuration(500);
 
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
@@ -492,16 +514,21 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             vh.checkBox.setChecked(true);
                         } else {
                             if (isChecked) {
-                                toBeAddContacts.add(user);
+                                toBeAddAdapter.add(user,toBeAddContacts.size()-1);
+
                             } else {
-                                toBeAddContacts.remove(user);
+                                toBeAddAdapter.remove(user);
                             }
                             if (toBeAddContacts.size() > 0) {
-                                toBeAddContactsRv.setVisibility(View.VISIBLE);
+                                if(toBeAddContactsRv.getVisibility()==View.GONE){
+                                    toBeAddContactsRv.setVisibility(View.VISIBLE);
+//                                    stretchanimation.startAnimation(toBeAddContactsRv);
+                                }
                             } else {
                                 toBeAddContactsRv.setVisibility(View.GONE);
+//                                    stretchanimation.startAnimation(toBeAddContactsRv);
                             }
-                            toBeAddAdapter.notifyDataSetChanged();
+
                         }
                         isCheckedArray[position] = isChecked;
                         //如果是单选模式

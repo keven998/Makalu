@@ -1,5 +1,9 @@
 package com.aizou.peachtravel.module;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,7 +24,9 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
+import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMNotifier;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -44,21 +50,18 @@ public class MainActivity extends PeachBaseActivity {
 //    private String mTextviewArray[] = {"首页", "想去", "我"};
     //Tab选项Tag
     private String mTagArray[] = {"Home", "Loc", "My"};
+    private NewMessageBroadcastReceiver msgReceiver;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
         List<String> blacklist = null;
-        try {
-            // 获取黑名单
-            blacklist = EMContactManager.getInstance().getBlackListUsernames();
-            blacklist=  EMContactManager.getInstance().getBlackListUsernamesFromServer();
-            LogUtil.d("blacklist",blacklist.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        // 注册一个接收消息的BroadcastReceiver
+        msgReceiver = new NewMessageBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+        intentFilter.setPriority(3);
+        registerReceiver(msgReceiver, intentFilter);
     }
 
     /**
@@ -135,6 +138,33 @@ public class MainActivity extends PeachBaseActivity {
         }
 
     }
+
+    /**
+     * 新消息广播接收者
+     */
+    private class NewMessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看
+
+            // 消息id
+            String msgId = intent.getStringExtra("msgid");
+            // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
+            // EMMessage message =
+            // EMChatManager.getInstance().getMessage(msgId);
+
+            ToolboxFragment toolboxFragment = (ToolboxFragment) getSupportFragmentManager().findFragmentByTag("Home");
+            if(toolboxFragment!=null){
+                toolboxFragment.updateUnreadLabel();
+            }
+            // 提示有新消息
+            EMNotifier.getInstance(mContext).notifyOnNewMsg();
+            // 注销广播，否则在ChatActivity中会收到这个广播
+            abortBroadcast();
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
