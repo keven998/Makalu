@@ -23,13 +23,13 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.CopyStrategyBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.share.ShareDialogBean;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.PeachDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -60,6 +60,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
     private boolean canEdit;
+    private StrategyBean strategyBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +85,6 @@ public class StrategyActivity extends PeachBaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
         mTitleBar.enableBackKey(true);
-        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
-            }
-        });
     }
 
     @Override
@@ -153,16 +147,17 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private void bindView(final StrategyBean result) {
+        strategyBean = result;
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
-            mTitleBar.getTitleTextView().setText("复制路线");
+            mTitleBar.getRightTextView().setText("复制路线");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
-                    PeachDialog dialog = new PeachDialog(mContext);
+                    final PeachDialog dialog = new PeachDialog(mContext);
                     dialog.setTitle("提示");
                     dialog.setTitleIcon(R.drawable.ic_dialog_tip);
                     dialog.setMessage("复制这条攻略到我的攻略里面吗？");
@@ -174,6 +169,12 @@ public class StrategyActivity extends PeachBaseActivity {
                                 @Override
                                 public void doSucess(String result, String method) {
                                     DialogManager.getInstance().dissMissProgressDialog();
+                                    CommonJson<CopyStrategyBean> copyResult = CommonJson.fromJson(result,CopyStrategyBean.class);
+                                    if(copyResult.code==0){
+                                        strategyBean.id= copyResult.result.id;
+                                        strategyBean.userId = AccountManager.getInstance().getLoginAccount(mContext).userId;
+                                        bindView(strategyBean);
+                                    }
                                 }
 
                                 @Override
@@ -181,19 +182,30 @@ public class StrategyActivity extends PeachBaseActivity {
                                     DialogManager.getInstance().dissMissProgressDialog();
                                 }
                             });
+                            dialog.dismiss();
                         }
                     });
                     dialog.setNegativeButton("取消",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog.dismiss();
 
                         }
                     });
+                    dialog.show();
 
                 }
             });
         }else{
             canEdit=true;
+            mTitleBar.getRightTextView().setText("");
+            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
+            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
+                }
+            });
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result,canEdit));

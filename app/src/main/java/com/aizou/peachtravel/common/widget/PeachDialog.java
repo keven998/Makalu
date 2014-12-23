@@ -23,7 +23,6 @@ public class PeachDialog extends Dialog {
     public PeachDialog(Context context) {
         super(context, R.style.ComfirmDialog);
         initView();
-        setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -57,6 +56,7 @@ public class PeachDialog extends Dialog {
     }
 
     public void setPositiveButton(String str, View.OnClickListener listener) {
+
         mOkBtn.setText(str);
         mOkBtn.setOnClickListener(listener);
     }

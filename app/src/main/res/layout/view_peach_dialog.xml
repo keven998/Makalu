@@ -11,9 +11,11 @@
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:gravity="center_vertical"
-        android:drawablePadding="10dp"
+        android:drawablePadding="15dp"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
+        android:textColor="@color/base_color_white"
+        android:textSize="18sp"
         android:background="@drawable/bg_peach_dialog_title"
         android:layout_height="wrap_content"
         android:text="" />
@@ -27,9 +29,9 @@
         android:paddingBottom="20dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:gravity="center"
-        android:textColor="@android:color/black"
+        android:textColor="@color/base_text_color_title"
         android:text="" />
 
     <View

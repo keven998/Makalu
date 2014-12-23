@@ -55,7 +55,7 @@ public class TravelApi extends BaseApi{
     //根据目的地ID创建攻略
     public final static String CREATE_GUIDE="/create-guide";
     //复制攻略
-    public final static String COPY_GUIDE="/copy-guide/";
+    public final static String COPY_GUIDE="/copy-guide/%1$s";
     //攻略
     public final static String GUIDE="/guides";
     //收藏

@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.DotView;
@@ -40,6 +38,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.easemob.chat.EMChatManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -76,6 +75,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     LinearLayout mLlWeather;
     @InjectView(R.id.dot_view)
     DotView mDotView;
+    @InjectView(R.id.unread_msg_notify)
+    ImageView mUnreadMsgNotify;
     private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
@@ -90,7 +91,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_travel, null);
-        ButterKnife.inject(this,rootView);
+        ButterKnife.inject(this, rootView);
         mLyHeaderBarTitleWrap.getTitleTextView().setText("桃子旅行");
         mLyHeaderBarTitleWrap.enableBackKey(false);
 
@@ -174,7 +175,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
             @Override
             public void onPageSelected(int position) {
-                mDotView.setSelected(position%result.size());
+                mDotView.setSelected(position % result.size());
             }
 
             @Override
@@ -321,6 +322,19 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
+        updateUnreadLabel();
+    }
+    /**
+     * 刷新未读消息数
+     */
+    public void updateUnreadLabel() {
+        int unreadMsgCountTotal = 0;
+        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
+        if (unreadMsgCountTotal > 0) {
+            mUnreadMsgNotify.setVisibility(View.VISIBLE);
+        } else {
+            mUnreadMsgNotify.setVisibility(View.GONE);
+        }
     }
 
     public class ImagePagerAdapter extends RecyclingPagerAdapter {

@@ -86,6 +86,10 @@ public class ShoppingFragment extends PeachBaseFragment {
         mEditDslv.setOnTouchListener(controller);
         mEditDslv.setDropListener(mRestAdapter);
         mEditDslv.setAdapter(mRestAdapter);
+        if(strategy.shopping==null||strategy.shopping.size()==0){
+            mEditBtn.setChecked(true);
+            addFooter.setVisibility(View.VISIBLE);
+        }
         if(canEdit){
             mEditBtn.setVisibility(View.VISIBLE);
             mEditBtn.setOnClickListener(new View.OnClickListener() {

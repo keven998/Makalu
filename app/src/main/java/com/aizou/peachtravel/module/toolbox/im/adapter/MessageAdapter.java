@@ -51,6 +51,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtMessageBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.task.LoadImageTask;
 import com.aizou.peachtravel.common.task.LoadVideoImageTask;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -61,6 +62,8 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.dest.CityDetailActivity;
+import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMAlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
@@ -684,19 +687,19 @@ public class MessageAdapter extends BaseAdapter {
      * @param holder
      * @param position
      */
-    private void handleExtMessage(EMMessage message, ViewHolder holder, final int position) {
-        int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
+    private void handleExtMessage(EMMessage message, final ViewHolder holder, final int position) {
+        final int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
         final String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         holder.tv_name.setText(bean.name);
-
+        final ExtMessageBean finalBean = bean;
         if (extType == Constant.ExtType.GUIDE) {
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.tv_type.setText("Memo");
-            final ExtMessageBean finalBean = bean;
+
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -708,15 +711,32 @@ public class MessageAdapter extends BaseAdapter {
         } else if (extType == Constant.ExtType.CITY) {
             holder.tv_name.setText(bean.name);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_city_pic, UILUtils.getRadiusOption(8));
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, CityDetailActivity.class);
+                    intent.putExtra("id", finalBean.id);
+                    activity.startActivity(intent);
+                }
+            });
         } else if (extType == Constant.ExtType.TRAVELS) {
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_travels, UILUtils.getRadiusOption(3));
+
         } else if (extType == Constant.ExtType.SPOT) {
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             holder.tv_type.setText("景点");
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, SpotDetailActivity.class);
+                    intent.putExtra("id", finalBean.id);
+                    activity.startActivity(intent);
+                }
+            });
         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
             switch (extType) {
                 case Constant.ExtType.FOOD:
@@ -734,6 +754,26 @@ public class MessageAdapter extends BaseAdapter {
             }
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, SpotDetailActivity.class);
+                    switch (extType) {
+                        case Constant.ExtType.FOOD:
+                            intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+                            break;
+                        case Constant.ExtType.HOTEL:
+                            intent.putExtra("type", TravelApi.PeachType.HOTEL);
+                            break;
+                        case Constant.ExtType.SHOPPING:
+                            intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+                            break;
+                    }
+
+                    intent.putExtra("id", finalBean.id);
+                    activity.startActivity(intent);
+                }
+            });
         }
         holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
