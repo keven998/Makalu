@@ -56,6 +56,10 @@ public class BaseActivity extends FragmentActivity {
         super.onDestroy();
     }
 
+    public void finishWithNoAnim() {
+        super.finish();
+    }
+
     public void startActivityWithNoAnim(Intent intent) {
         super.startActivity(intent);
     }

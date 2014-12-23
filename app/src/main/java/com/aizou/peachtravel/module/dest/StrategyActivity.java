@@ -7,16 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -29,7 +31,6 @@ import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.share.ShareDialogBean;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.PeachDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -61,6 +62,9 @@ public class StrategyActivity extends PeachBaseActivity {
     private ArrayList<LocBean> destinations;
     private boolean canEdit;
 
+    private boolean isAniming = false, isRVVisable = true;
+    private Animation inAnim, outAnim;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -68,6 +72,9 @@ public class StrategyActivity extends PeachBaseActivity {
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData();
+
+        inAnim = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_top);
+        outAnim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
     }
 
     private void initView() {
@@ -83,7 +90,16 @@ public class StrategyActivity extends PeachBaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
-        mTitleBar.enableBackKey(true);
+//        mTitleBar.enableBackKey(true);
+        mTitleBar.getLeftTextView().setText("完成");
+        mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         mTitleBar.setRightViewImageRes(R.drawable.ic_share);
         mTitleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,11 +107,6 @@ public class StrategyActivity extends PeachBaseActivity {
                 ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
             }
         });
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
     }
 
     private void initData() {
@@ -139,10 +150,9 @@ public class StrategyActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
-                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
+//                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
                 }
-
             }
 
             @Override
@@ -192,14 +202,65 @@ public class StrategyActivity extends PeachBaseActivity {
 
                 }
             });
-        }else{
-            canEdit=true;
+        } else {
+            canEdit = true;
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result,canEdit));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
-
+//        setRVVisiable(false);
     }
+
+    public void setRVVisiable(boolean visiable) {
+        Log.d("test", "visiable = " + visiable + ", isRVVisable = " + isRVVisable + ", isAniming = " + isAniming);
+        if (isAniming) {
+            return;
+        }
+
+        if (visiable && !isRVVisable) {
+            isAniming = true;
+            mLocListRv.startAnimation(inAnim);
+            inAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    isAniming = false;
+                    isRVVisable = true;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        } else if (!visiable && isRVVisable) {
+            isAniming = true;
+            mLocListRv.startAnimation(outAnim);
+            outAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    isAniming = false;
+                    isRVVisable = false;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
+    }
+
+
 
     public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {
 
@@ -364,3 +425,5 @@ public class StrategyActivity extends PeachBaseActivity {
                 .show();
     }
 }
+
+

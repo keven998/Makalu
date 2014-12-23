@@ -264,7 +264,6 @@ public class LoginActivity extends PeachBaseActivity {
                     public void run() {
                         DialogManager.getInstance().dissMissProgressDialog();
                         Toast.makeText(getApplicationContext(), "登录失败: " + message, Toast.LENGTH_SHORT).show();
-
                     }
                 });
             }
@@ -368,11 +367,11 @@ public class LoginActivity extends PeachBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_REG) {
             if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 finish();
                 return;
             }
-        }
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD){
+        } else if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD){
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
             DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
             imLogin(user);
