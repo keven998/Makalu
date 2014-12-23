@@ -106,11 +106,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
         id = getIntent().getStringExtra("id");
         type = getIntent().getStringExtra("type");
         type = "restaurant";
-        if ("restaurant".equals(type)) {
-            id = "53b0599710114e05dc63b5a2";
-        } else {
-            id = "53b0599710114e05dc63b5a5";
-        }
+//        if ("restaurant".equals(type)) {
+//            id = "53b0599710114e05dc63b5a2";
+//        } else {
+//            id = "53b0599710114e05dc63b5a5";
+//        }
         getDetailData();
 
     }

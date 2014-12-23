@@ -97,11 +97,11 @@ public class StrategyActivity extends PeachBaseActivity {
         if (id == null) {
             cityIdList = new ArrayList<String>();
             for (LocBean loc : destinations) {
-//            cityIdList.add(loc.id);
+            cityIdList.add(loc.id);
             }
             //test
-            cityIdList.add("5473ccd7b8ce043a64108c46");
-            cityIdList.add("5473ccddb8ce043a64108d22");
+//            cityIdList.add("5473ccd7b8ce043a64108c46");
+//            cityIdList.add("5473ccddb8ce043a64108d22");
             createStrategyByCityIds(cityIdList);
         } else {
             getStrategyDataById();

@@ -66,7 +66,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void initData() {
         locId = getIntent().getStringExtra("id");
-        locId="5473ccd7b8ce043a64108c46";
+//        locId="5473ccd7b8ce043a64108c46";
         getCityDetailData(locId);
         getTravelNotes(locId);
     }

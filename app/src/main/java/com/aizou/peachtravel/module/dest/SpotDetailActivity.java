@@ -79,7 +79,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     }
     private void initData(){
         mSpotId = getIntent().getStringExtra("id");
-        mSpotId = "54814af98b5f77f8306decf4";
+//        mSpotId = "54814af98b5f77f8306decf4";
         getSpotDetailData();
     }
 
