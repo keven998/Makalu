@@ -100,9 +100,11 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         getPoiListByLoc(0, mLat, mLng);
     }
 
-    public void requestDataForInit(){
-        if(mPoiList.size()==0){
-            getPoiListByLoc(0, mLat, mLng);
+    public void requestDataForInit() {
+        if (mPoiList.size() == 0) {
+            if (mLat != -1 && mLng != -1) {
+                getPoiListByLoc(0, mLat, mLng);
+            }
         }
     }
 

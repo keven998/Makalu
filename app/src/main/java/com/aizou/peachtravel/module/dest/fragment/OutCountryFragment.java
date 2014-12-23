@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.aizou.peachtravel.bean.CountryBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
@@ -56,8 +58,21 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             }
         });
         mLvOutCountry.setAdapter(outCountryAdapter);
-        getOutCountryList();
+//        getOutCountryList();
+        initData();
         return rootView;
+    }
+
+    private void initData() {
+        String data = PreferenceUtils.getCacheData(getActivity(), "destination_outcountry");
+        if (!TextUtils.isEmpty(data)) {
+            CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(data, CountryBean.class);
+            if (countryListResult.code == 0) {
+                bindOutView(countryListResult.result);
+            }
+        } else {
+            getOutCountryList();
+        }
     }
 
     private void getOutCountryList(){
@@ -67,8 +82,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
+                    PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);
                 }
-
             }
 
             @Override

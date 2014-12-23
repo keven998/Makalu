@@ -83,12 +83,11 @@ public class NearbyActivity extends PeachBaseActivity {
         mLocationManagerProxy = LocationManagerProxy.getInstance(this);
         mLocationManagerProxy.setGpsEnable(false);
         startLocation();
-
     }
 
     private void init2PreLocData() {
-        mLat = getIntent().getDoubleExtra("lat", 0);
-        mLng = getIntent().getDoubleExtra("lng", 0);
+        mLat = getIntent().getDoubleExtra("lat", -1);
+        mLng = getIntent().getDoubleExtra("lng", -1);
         city = getIntent().getStringExtra("city");
         street = getIntent().getStringExtra("street");
         address = getIntent().getStringExtra("address");
@@ -124,8 +123,17 @@ public class NearbyActivity extends PeachBaseActivity {
         });
     }
 
+    private void resetLocation() {
+        mLng = -1;
+        mLat = -1;
+        city = null;
+        street = null;
+        address = null;
+    }
+
     private void startLocation() {
 //        mPbLocation.setVisibility(View.VISIBLE);
+        resetLocation();
         mTvAddress.setText("正在定位...");
         mBtnRefresh.startAnimation(mAnim);
         mLocationManagerProxy.requestLocationData(
@@ -151,18 +159,16 @@ public class NearbyActivity extends PeachBaseActivity {
 
                         } else {
 //            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
-                            mTvAddress.setText("定位失败!");
-                            if(mLat==-1){
-                                init2PreLocData();
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        updateContent();
-                                    }
-                                });
-
-                            }
-
+                            mTvAddress.setText("获取位置信息失败");
+//                            if(mLat==-1){
+//                                init2PreLocData();
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        updateContent();
+//                                    }
+//                                });
+//                            }
                         }
                     }
 
@@ -201,8 +207,9 @@ public class NearbyActivity extends PeachBaseActivity {
 
 
     private void updateContent() {
+        if (mLat == -1 || mLng == -1) return;
         for(OnLocationChangeListener onLocationChangeListener:onLocationChangeListenerList){
-            onLocationChangeListener.onLocationChange(mLat,mLng);
+            onLocationChangeListener.onLocationChange(mLat, mLng);
         }
         int item = indicatorViewPager.getCurrentItem();
         NearbyItemFragment cf = (NearbyItemFragment) mNAdapter.getFragmentForPage(item);
@@ -215,7 +222,7 @@ public class NearbyActivity extends PeachBaseActivity {
 
         public NearbyAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
-            fragmentMap= new HashMap<>();
+            fragmentMap = new HashMap<>();
         }
 
         @Override
