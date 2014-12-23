@@ -166,7 +166,7 @@ public class StrategyActivity extends PeachBaseActivity {
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
-            mTitleBar.getTitleTextView().setText("复制路线");
+            mTitleBar.getRightTextView().setText("复制路线");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
@@ -296,14 +296,12 @@ public class StrategyActivity extends PeachBaseActivity {
             ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.mTxt = (TextView) view
                     .findViewById(R.id.tv_name);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CityDetailActivity.class);
-                    intent.putExtra("id", mDatas.get(i).id);
-                    startActivity(intent);
-                }
-            });
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
 
             return viewHolder;
         }
@@ -319,7 +317,9 @@ public class StrategyActivity extends PeachBaseActivity {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(mContext, CityDetailActivity.class);
+                    intent.putExtra("id", mDatas.get(i).id);
+                    startActivity(intent);
                 }
             });
         }

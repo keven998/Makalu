@@ -518,8 +518,8 @@ public class RouteDayFragment extends PeachBaseFragment {
                 holder.nullLl.setVisibility(View.GONE);
                 LinkedHashSet<String> citySet = new LinkedHashSet<String>();
                 for(PoiDetailBean detailBean:poiList){
-                    if(detailBean.locList!=null&&detailBean.locList.size()>0){
-                        citySet.add(detailBean.locList.get(detailBean.locList.size()-1).zhName);
+                    if(detailBean.locality!=null){
+                        citySet.add(detailBean.locality.zhName);
                     }
                 }
 

@@ -92,13 +92,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             if (locListResult.code == 0) {
                 bindInView(locListResult.result);
             }
-        } else {
-            getInLocList();
         }
+        getInLocList();
     }
 
     private void getInLocList() {
-        TravelApi.getDestList(0, new HttpCallBack<String>() {
+        TravelApi.getInDestList( new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
@@ -131,8 +130,13 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             if (Character.isDigit(locBean.zhName.charAt(0))) {
                 locBean.header = "#";
             } else {
-                locBean.header = HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
-                        0, 1).toUpperCase();
+                if(TextUtils.isEmpty(locBean.pinyin)){
+                    locBean.header = HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
+                            0, 1).toUpperCase();
+                }else{
+                    locBean.header = locBean.pinyin.substring(0,1).toUpperCase();
+                }
+
                 char header = locBean.header.toLowerCase().charAt(0);
                 if (header < 'a' || header > 'z') {
                     locBean.header = "#";
@@ -146,6 +150,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 locMap.put(locBean.header, locList);
             }
         }
+        incityList.clear();
         for (Map.Entry<String, List<LocBean>> entry : locMap.entrySet()) {
             InDestBean inDestBean = new InDestBean();
             inDestBean.section = entry.getKey();
@@ -160,6 +165,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return lhs.section.compareTo(rhs.section);
             }
         });
+        inCityAdapter.getDataList().clear();
         inCityAdapter.getDataList().addAll(incityList);
         inCityAdapter.notifyDataSetChanged();
 

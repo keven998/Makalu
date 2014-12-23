@@ -32,6 +32,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public LocationBean location;
     public List<ImageBean> images = new ArrayList<ImageBean>();
     public List<LocBean> locList = new ArrayList<LocBean>();
+    public LocBean locality;
     public String address="";
     public String telephone="";
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();

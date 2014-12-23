@@ -35,8 +35,10 @@ public class TravelApi extends BaseApi{
 
     //目的地推荐
     public final static String REC_DEST="/recommend";
-    //目的地列表
-    public final static String DESTINATIONS="/destinations";
+    //国内目的地列表
+    public final static String IN_DESTINATIONS="/geo/localities/domestic";
+    //国外目的地列表
+    public final static String OUT_DESTINATIONS="/geo/localities/abroad";
     //目的地详情
     public final static String CITY_DETAIL="/geo/localities/";
     //目的地图集
@@ -84,15 +86,26 @@ public class TravelApi extends BaseApi{
     }
 
     /**
-     * 获取目的地列表
+     * 获取国内目的地列表
      * @param callback
      * @return
      */
-    public static PTRequestHandler getDestList(int abroad,HttpCallBack callback) {
+    public static PTRequestHandler getInDestList(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + DESTINATIONS);
-        request.putUrlParams("abroad", String.valueOf(abroad));
+        request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+    /**
+     * 获取国外目的地列表
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getOutDestList(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + OUT_DESTINATIONS);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

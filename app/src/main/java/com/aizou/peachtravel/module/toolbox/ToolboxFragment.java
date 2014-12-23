@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.toolbox;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -10,9 +11,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -69,14 +70,16 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     TextView mTvFav;
     @InjectView(R.id.tv_nearby)
     TextView mTvNearby;
-    @InjectView(R.id.btn_lxq)
-    Button mBtnLxq;
     @InjectView(R.id.ll_weather)
     LinearLayout mLlWeather;
     @InjectView(R.id.dot_view)
     DotView mDotView;
-    @InjectView(R.id.unread_msg_notify)
-    ImageView mUnreadMsgNotify;
+    @InjectView(R.id.tv_toolbox)
+    TextView mTvToolbox;
+    @InjectView(R.id.iv_talk)
+    ImageView mIvTalk;
+    @InjectView(R.id.rl_talk)
+    RelativeLayout mRlTalk;
     private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
@@ -94,11 +97,11 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         ButterKnife.inject(this, rootView);
         mLyHeaderBarTitleWrap.getTitleTextView().setText("桃子旅行");
         mLyHeaderBarTitleWrap.enableBackKey(false);
-
-        mBtnLxq.setOnClickListener(this);
+        mRlTalk.setOnClickListener(this);
         mTvNearby.setOnClickListener(this);
         mTvMyGuide.setOnClickListener(this);
         rootView.findViewById(R.id.tv_fav).setOnClickListener(this);
+        mTvToolbox.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
@@ -202,7 +205,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_lxq:
+            case R.id.rl_talk:
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent intent = new Intent(getActivity(), IMMainActivity.class);
                     startActivity(intent);
@@ -324,6 +327,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         updateUnreadLabel();
     }
+
     /**
      * 刷新未读消息数
      */
@@ -331,9 +335,9 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         int unreadMsgCountTotal = 0;
         unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
         if (unreadMsgCountTotal > 0) {
-            mUnreadMsgNotify.setVisibility(View.VISIBLE);
+            mIvTalk.setImageResource(R.drawable.ic_toolbox_talk_newmsg);
         } else {
-            mUnreadMsgNotify.setVisibility(View.GONE);
+            mIvTalk.setImageResource(R.drawable.ic_toolbox_talk_normal);
         }
     }
 

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/app_backgroud"
     tools:context=".TravelFragment">
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
@@ -23,6 +24,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="#88000000">
             <ImageView
                 android:id="@+id/iv_weather"
@@ -63,14 +66,19 @@
         android:background="@drawable/bg_home_mid"
         android:layout_weight="1">
 
-        <TextView android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_toolbox"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/tool_title"
+            android:drawableLeft="@drawable/ic_toolbox_left"
+            android:drawableRight="@drawable/ic_toolbox_right"
+            android:drawablePadding="10dp"
             android:textSize="18sp"
-            android:textColor="@color/base_text_color_subtitle"/>
+            android:textColor="@color/base_text_color_title"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,11 +90,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="旅行Memo"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:drawablePadding="13dp"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_home_guide"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_fav"
                 android:layout_width="wrap_content"
@@ -94,47 +102,61 @@
                 android:layout_marginLeft="28dp"
                 android:layout_marginRight="28dp"
                 android:text="收藏夹"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:drawablePadding="13dp"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_home_fav"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_nearby"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我身边"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:drawablePadding="13dp"
                 android:drawableTop="@drawable/ic_home_around"
                 android:gravity="center"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_subtitle"/>
 
         </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rl_talk"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_toolbox_talk"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_toolbox_talk_icon"/>
+            <ImageView
+                android:id="@+id/iv_talk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:src="@drawable/ic_toolbox_talk_normal"
+                />
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_toolbox_right_arr"
+                android:visibility="visible"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-        <Button
-            android:id="@+id/btn_lxq"
-            android:layout_width="fill_parent"
-            android:layout_height="64dp"
-            android:text="桃·Talk"
-            android:background="@color/btn_blue_normal"
-            />
 
-        <ImageView android:id="@+id/unread_msg_notify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_talk_new_message"
-            android:paddingBottom="18dp"
-            android:paddingLeft="38dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-        </RelativeLayout>
 
 
 

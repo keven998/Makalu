@@ -6,7 +6,9 @@
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
     android:layout_height="match_parent"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:focusable="true"
+    android:clickable="true">
     <FrameLayout android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center_horizontal">

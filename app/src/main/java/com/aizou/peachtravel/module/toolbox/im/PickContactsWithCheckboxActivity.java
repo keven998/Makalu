@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,15 +46,15 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.itemanimator.ScaleInOutItemAnimator;
-import com.aizou.peachtravel.common.itemanimator.SlideInOutLeftItemAnimator;
 import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.StretchAnimation;
+import com.aizou.peachtravel.common.widget.OnRecylerItemClickListener;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
@@ -165,6 +164,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(showing){
+                    return;
+                }
                 CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
                 checkBox.toggle();
             }
@@ -389,21 +391,39 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public ViewHolder(View arg0) {
                 super(arg0);
+//                arg0.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        LogUtil.d("onItemClick"+"onItemClick--"+getPosition());
+//
+//                    }
+//                });
             }
+
             View contentView;
             ImageView mImg;
             TextView mTxt;
+
         }
 
-        public void add(IMUser item, int position) {
-            mDatas.add(position, item);
-            notifyItemInserted(position);
+        public void add(IMUser item) {
+            mDatas.add(item);
+            notifyItemInserted(mDatas.size()-1);
+            notifyDataSetChanged();
+            LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
         }
 
         public void remove(IMUser item) {
             int position = mDatas.indexOf(item);
-            mDatas.remove(position);
+            mDatas.remove(item);
             notifyItemRemoved(position);
+            notifyDataSetChanged();
+            LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNick());
+        }
+        public void remove(int pos){
+            mDatas.remove(pos);
+            notifyItemRemoved(pos);
+            LogUtil.d("onItemClick"+" remove--"+pos);
         }
 
         @Override
@@ -433,17 +453,24 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
          */
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-            IMUser user = mDatas.get(i);
+
+            final IMUser user = mDatas.get(i);
             ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatar(), viewHolder.mImg, picOptions);
             viewHolder.mTxt.setText(mDatas.get(i).getNick());
-            viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int index = alluserList.indexOf(mDatas.get(i));
-                    contactAdapter.isCheckedArray[index] = false;
+                    if(showing){
+                        return;
+                    }
+                    int index = alluserList.indexOf(user);
+//                    remove(mDatas.get(i));
+                    contactAdapter.isCheckedArray[index]=false;
                     contactAdapter.notifyDataSetChanged();
                 }
             });
+            LogUtil.d("onItemClick"+"onBindViewHolder--"+i+"--mData.size="+mDatas.size());
+
         }
 
     }
@@ -536,7 +563,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             vh.checkBox.setChecked(true);
                         } else {
                             if (isChecked) {
-                                toBeAddAdapter.add(user, toBeAddContacts.size());
+                                toBeAddAdapter.add(user);
 
                             } else {
                                 toBeAddAdapter.remove(user);
@@ -566,6 +593,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 //                                    stretchanimation.startAnimation(toBeAddContactsRv);
                                 }
                             } else {
+                                showing=true;
                                 AnimationSimple.move(contentLl, 300, 0, -toBeAddContactsRv.getHeight(), new AccelerateDecelerateInterpolator());
                                 toBeAddContactsRv.setLayoutAnimation(contentHide);
                                 toBeAddContactsRv.startLayoutAnimation();

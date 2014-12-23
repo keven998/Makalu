@@ -70,13 +70,12 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             if (countryListResult.code == 0) {
                 bindOutView(countryListResult.result);
             }
-        } else {
-            getOutCountryList();
         }
+            getOutCountryList();
     }
 
     private void getOutCountryList(){
-        TravelApi.getDestList(1, new HttpCallBack<String>() {
+        TravelApi.getOutDestList(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
@@ -104,6 +103,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     private void bindOutView(List<CountryBean> result) {
+        outCountryAdapter.getDataList().clear();
         outCountryAdapter.getDataList().addAll(result);
         outCountryAdapter.notifyDataSetChanged();
     }
