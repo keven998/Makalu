@@ -38,6 +38,7 @@ import android.widget.OverScroller;
 import android.widget.ScrollView;
 
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.BuildConfig;
 import com.aizou.peachtravel.common.widget.freeflow.animations.DefaultLayoutAnimator;
 import com.aizou.peachtravel.common.widget.freeflow.animations.FreeFlowLayoutAnimator;
@@ -207,6 +208,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		maxFlingVelocity = configuration.getScaledMaximumFlingVelocity();
 		minFlingVelocity = configuration.getScaledMinimumFlingVelocity();
 		overflingDistance = configuration.getScaledOverflingDistance();
+        overflingDistance=0;
 		/*overscrollDistance = configuration.getScaledOverscrollDistance();*/
 
 		touchSlop = configuration.getScaledTouchSlop();
@@ -555,6 +557,8 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		if (viewPortY > mScrollableHeight)
 			viewPortY = mScrollableHeight;
 
+        LogUtil.d("freeflow","computeViewPort-viewPortY="+viewPortY);
+
 	}
 
 	/**
@@ -849,7 +853,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 	 * user was actually trying to stop the scroll or swuipe again to increase
 	 * the velocity
 	 */
-	protected final int FLYWHEEL_TIMEOUT = 40;
+	protected final int FLYWHEEL_TIMEOUT = 0;
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -916,7 +920,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		 */
 		mScrollableHeight = mLayout.getContentHeight() - getHeight();
 		mScrollableWidth = mLayout.getContentWidth() - getWidth();
-
+        LogUtil.d("freeflow","mScrollableHeight="+mScrollableHeight);
 		if (mTouchMode == TOUCH_MODE_FLING) {
 			// Wait for some time to see if the user is just trying
 			// to speed up the scroll
@@ -931,7 +935,6 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 				}
 			}, FLYWHEEL_TIMEOUT);
 		}
-
 		beginTouchAt = ViewUtils.getItemAt(frames,
 				(int) (viewPortX + event.getX()),
 				(int) (viewPortY + event.getY()));
@@ -962,8 +965,11 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		float yDiff = event.getY() - deltaY;
 
 		double distance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+
 		if (mLayout.verticalScrollEnabled()) {
-			if (yDiff > 0 && viewPortY == 0) {
+            LogUtil.d("freeflow","yDiff="+yDiff+"viewPortY="+viewPortY);
+			if (yDiff > 0 && viewPortY ==0) {
+//                viewPortY=0;
 				if (mEdgeEffectsEnabled) {
 					float str = (float) distance / getHeight();
 					mTopEdge.onPull(str);
@@ -973,6 +979,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 			}
 
 			if (yDiff < 0 && viewPortY == mScrollableHeight) {
+//                viewPortY=mScrollableHeight;
 				if (mEdgeEffectsEnabled) {
 					float str = (float) distance / getHeight();
 					mBottomEdge.onPull(str);
@@ -992,7 +999,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 				return;
 			}
 
-			if (xDiff < 0 && viewPortY == mScrollableWidth) {
+			if (xDiff < 0 && viewPortX == mScrollableWidth) {
 				if (mEdgeEffectsEnabled) {
 					float str = (float) distance / getWidth();
 					mRightEdge.onPull(str);
@@ -1018,11 +1025,14 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		}
 
 		if (mTouchMode == TOUCH_MODE_SCROLL) {
+
 			moveViewportBy(event.getX() - deltaX, event.getY() - deltaY, false);
+
 			invokeOnItemScrollListeners();
 			deltaX = event.getX();
 			deltaY = event.getY();
 		}
+
 	}
 
 	protected void touchCancel(MotionEvent event) {
@@ -1168,6 +1178,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 			if (mLayout.verticalScrollEnabled()) {
 				viewPortY = scroller.getCurrY();
 			}
+            LogUtil.d("freeflow","flingRunnable-viewPortY="+viewPortY);
 			moveViewport(true);
 			if (more) {
 				post(flingRunnable);
@@ -1210,6 +1221,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		if (mLayout.verticalScrollEnabled()) {
 			viewPortY = (int) (viewPortY - movementY);
 		}
+        LogUtil.d("freeflow","moveViewPortY="+viewPortY);
 		moveViewport(fling);
 	}
 
@@ -1236,25 +1248,26 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 			mScrollableHeight = 0;
 		}
 
-//		if (isInFlingMode) {
-//			if (viewPortX < 0 || viewPortX > mScrollableWidth || viewPortY < 0
-//					|| viewPortY > mScrollableHeight) {
-//				mTouchMode = TOUCH_MODE_OVERFLING;
-//			}
-//		} else {
+		if (isInFlingMode) {
+			if (viewPortX < 0 || viewPortX > mScrollableWidth || viewPortY < 0
+					|| viewPortY > mScrollableHeight) {
+				mTouchMode = TOUCH_MODE_OVERFLING;
+			}
+		} else {
 
 			if (viewPortX < -overflingDistance) {
 				viewPortX = -overflingDistance;
 			} else if (viewPortX > mScrollableWidth + overflingDistance) {
 				viewPortX = (mScrollableWidth + overflingDistance);
 			}
-
+//            LogUtil.d("freeflow","viewPortY="+viewPortY+"-- overflingDistance="+  overflingDistance);
 			if (viewPortY < (int) (-overflingDistance)) {
 				viewPortY = (int) -overflingDistance;
 			} else if (viewPortY > mScrollableHeight + overflingDistance) {
+
 				viewPortY = (int) (mScrollableHeight + overflingDistance);
 			}
-
+            LogUtil.d("freeflow","moveViewPortYAfter="+viewPortY);
 			if (mEdgeEffectsEnabled) {
 				if (viewPortX <= 0) {
 					mLeftEdge.onPull(viewPortX / (-overflingDistance));
@@ -1270,7 +1283,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 							/ (-overflingDistance));
 				}
 			}
-//		}
+		}
 
 		LinkedHashMap<Object, FreeFlowItem> oldFrames = new LinkedHashMap<Object, FreeFlowItem>();
 		copyFrames(frames, oldFrames);
@@ -1294,6 +1307,7 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		}
 
 		invalidate();
+        LogUtil.d("freeflow","invalidateViewPortY="+viewPortY);
 
 	}
 
