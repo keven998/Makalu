@@ -1,25 +1,24 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.widget.FixedGridView;
-import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
-import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.RecDestBean;
@@ -27,21 +26,33 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer;
+import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowItem;
+import com.aizou.peachtravel.common.widget.freeflow.core.Section;
+import com.aizou.peachtravel.common.widget.freeflow.core.SectionedAdapter;
+import com.aizou.peachtravel.common.widget.freeflow.layouts.FreeFlowLayout;
+import com.aizou.peachtravel.common.widget.freeflow.layouts.FreeFlowLayoutBase;
+import com.aizou.peachtravel.common.widget.freeflow.utils.ViewUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Rjm on 2014/10/9.
  */
 public class RecDestFragment extends PeachBaseFragment {
-    private ListView recDestLv;
-    private ListViewDataAdapter<RecDestBean> recClassifyAdapter;
-
+    private FreeFlowContainer recDestContainer;
+    private WantToLayout wantToLayout;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
-        recDestLv = (ListView) rootView.findViewById(R.id.lv_rec_dest);
+        recDestContainer = (FreeFlowContainer) rootView.findViewById(R.id.rec_dest_container);
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("桃子旅行");
         titleHeaderBar.getRightTextView().setText("新Memo");
@@ -59,14 +70,6 @@ public class RecDestFragment extends PeachBaseFragment {
 
     private void initData() {
 
-         recClassifyAdapter = new ListViewDataAdapter<RecDestBean>(new ViewHolderCreator<RecDestBean>() {
-            @Override
-            public ViewHolderBase<RecDestBean> createViewHolder() {
-                return new RecClassifyViewHolder();
-
-            }
-        });
-        recDestLv.setAdapter(recClassifyAdapter);
         getRecDestData();
 //        String dataJson= AssetUtils.getFromAssets(getActivity(),"recdest.json");
 //        Gson gson = new Gson();
@@ -83,9 +86,7 @@ public class RecDestFragment extends PeachBaseFragment {
             public void doSucess(String result, String method) {
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result,RecDestBean.class);
                 if(destResult.code==0){
-                    recClassifyAdapter.getDataList().clear();
-                    recClassifyAdapter.getDataList().addAll(destResult.result);
-                    recClassifyAdapter.notifyDataSetChanged();
+                   bindView(destResult.result);
                 }
 
 
@@ -98,78 +99,310 @@ public class RecDestFragment extends PeachBaseFragment {
         });
     }
 
+    private void bindView(List<RecDestBean> recDestList){
+        wantToLayout =new WantToLayout();
+        recDestContainer.setEdgeEffectsEnabled(false);
+        wantToLayout.setLayoutParams(new LayoutParams(LocalDisplay.SCREEN_WIDTH_PIXELS, LocalDisplay.dp2px(40)));
+        recDestContainer.setLayout(wantToLayout);
+        recDestContainer.setAdapter(new RecDestAdapter(getActivity(), recDestList));
 
-    private class RecClassifyViewHolder extends ViewHolderBase<RecDestBean> {
-        private TextView nameTv;
-        private FixedGridView cityListGv;
-
-
-        @Override
-        public View createView(LayoutInflater layoutInflater) {
-            View contentView = layoutInflater.inflate(R.layout.row_rec_dest, null);
-            nameTv = (TextView) contentView.findViewById(R.id.tv_rec_title);
-            cityListGv = (FixedGridView) contentView.findViewById(R.id.gv_rec_dest);
-
-            return contentView;
-        }
-
-        @Override
-        public void showData(int position, final RecDestBean itemData) {
-            nameTv.setText(itemData.title);
-            final ListViewDataAdapter<RecDestBean.RecDestItem> adapter = new ListViewDataAdapter<RecDestBean.RecDestItem>(new ViewHolderCreator<RecDestBean.RecDestItem>() {
-                @Override
-                public ViewHolderBase<RecDestBean.RecDestItem> createViewHolder() {
-                    return new RecDestViewHolder();
-                }
-            });
-            cityListGv.setAdapter(adapter);
-            cityListGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    RecDestBean.RecDestItem destItem = adapter.getItem(position);
-                    if(destItem.linkType==1){
-                        Intent intent = new Intent(getActivity(),CityDetailActivity.class);
-                        intent.putExtra("id",destItem.id);
-                        startActivity(intent);
-                    }
-
-                }
-            });
-            adapter.getDataList().addAll(itemData.contents);
-            adapter.notifyDataSetChanged();
-
-        }
     }
 
-    private class RecDestViewHolder extends ViewHolderBase<RecDestBean.RecDestItem> {
-        private TextView nameTv,descTv;
-        private ImageView imageIv;
 
+    private class RecDestAdapter implements SectionedAdapter{
+        private Context context;
+        private ArrayList<Section> sections = new ArrayList<Section>();
+        public RecDestAdapter(Context context,List<RecDestBean> destBeanList){
+            this.context = context;
+            Section section;
+            for(RecDestBean recDestBean:destBeanList){
+                section = new Section();
+                section.setHeaderData(recDestBean.title);
+                for(RecDestBean.RecDestItem item : recDestBean.contents){
+                    section.getData().add(item);
+                }
+                sections.add(section);
 
-        @Override
-        public View createView(LayoutInflater layoutInflater) {
-            CardView contentView = (CardView) layoutInflater.inflate(R.layout.row_rec_dest_item, null);
-            nameTv = (TextView) contentView.findViewById(R.id.tv_dest_name);
-            descTv = (TextView) contentView.findViewById(R.id.tv_dest_desc);
-            imageIv = (ImageView) contentView.findViewById(R.id.iv_dest_pic);
-            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(38))/2;
-            int height = width * 3 / 4;
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    width, height);
-            imageIv.setLayoutParams(lp);
-            contentView.setShadowPadding(1,0,1,2);
-            return contentView;
+            }
         }
 
         @Override
-        public void showData(int position, RecDestBean.RecDestItem itemData) {
+        public long getItemId(int section, int position) {
+            return section*1000+position;
+        }
+
+        @Override
+        public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView = View.inflate(context,R.layout.row_rec_dest_item, null);
+            }
+            RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) sections.get(section).getDataAtIndex(position);
+            TextView nameTv = (TextView) convertView.findViewById(R.id.tv_dest_name);
+            TextView descTv = (TextView) convertView.findViewById(R.id.tv_dest_desc);
+            ImageView imageIv = (ImageView) convertView.findViewById(R.id.iv_dest_pic);
             nameTv.setText(TextUtils.isEmpty(itemData.zhName) ? itemData.enName : itemData.zhName);
             descTv.setText(itemData.desc);
             ImageLoader.getInstance().displayImage(itemData.cover, imageIv, UILUtils.getRadiusOption());
+            return convertView;
+        }
 
+        @Override
+        public View getHeaderViewForSection(int section, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView = View.inflate(context,R.layout.row_rec_dest_header,null);
+            }
+            TextView titleTv = (TextView) convertView.findViewById(R.id.tv_rec_title);
+            String title= (String) sections.get(section).getHeaderData();
+            titleTv.setText(title);
+            return convertView;
+        }
+
+        @Override
+        public int getNumberOfSections() {
+            return sections.size();
+        }
+
+        @Override
+        public Section getSection(int index) {
+            if (index < sections.size() && index >= 0)
+                return sections.get(index);
+
+            return null;
+        }
+
+        @Override
+        public Class[] getViewTypes() {
+            return new Class[]{LinearLayout.class,LinearLayout.class};
+        }
+
+        @Override
+        public Class getViewType(FreeFlowItem proxy) {
+            return LinearLayout.class;
+        }
+
+        @Override
+        public boolean shouldDisplaySectionHeaders() {
+            return true;
         }
     }
 
+    private class WantToLayout extends FreeFlowLayoutBase implements FreeFlowLayout {
 
+        private static final String TAG = "WantToLayout";
+
+        private int oneThirdItemSide;
+        private int oneTwoItemSide;
+        protected int headerWidth = -1;
+        protected int headerHeight = -1;
+        protected FreeFlowLayoutParams layoutParams;
+
+
+        @Override
+        public void setDimensions(int measuredWidth, int measuredHeight) {
+            super.setDimensions(measuredWidth, measuredHeight);
+            oneTwoItemSide  = measuredWidth / 2;
+            oneThirdItemSide = measuredWidth / 3;
+
+        }
+
+        private HashMap<Object, FreeFlowItem> map=new HashMap<>();
+
+        @Override
+        public void prepareLayout() {
+            Log.d(TAG, "prepare layout!!!");
+            map.clear();
+            int topStart = 0;
+            int rowCnt = itemsAdapter.getNumberOfSections();
+            for (int i = 0; i < rowCnt; i++) {
+                Section s = itemsAdapter.getSection(i);
+                if (itemsAdapter.shouldDisplaySectionHeaders()) {
+                    FreeFlowItem header = new FreeFlowItem();
+                    Rect hframe = new Rect();
+                    header.itemSection = i;
+                    header.itemIndex = -1;
+                    header.isHeader = true;
+                    hframe.left = 0;
+                    hframe.top = topStart;
+                    hframe.right = headerWidth;
+                    hframe.bottom = hframe.top + headerHeight;
+                    header.frame = hframe;
+                    header.data = s.getHeaderData();
+                    map.put(header.data, header);
+                    topStart += headerHeight;
+                }
+                int curRowIndex = 0;
+                if (i == 0) {
+                    for (int j = 0; j < s.getDataCount(); j++) {
+                        FreeFlowItem p = new FreeFlowItem();
+                        p.isHeader = false;
+                        p.itemIndex = j;
+                        p.itemSection = i;
+                        p.data = s.getDataAtIndex(j);
+                        Rect r = new Rect();
+                        int nextRowIndex = curRowIndex;
+                        if (j == 0) {
+                            r.left = 0;
+                            r.top = topStart;
+                            r.right = oneThirdItemSide * 2;
+                            r.bottom = r.top + LocalDisplay.dp2px(150);
+                            if (j == s.getDataCount() - 1) {
+                                nextRowIndex++;
+                            }
+                        } else if (j == 1) {
+                            r.left = oneThirdItemSide * 2;
+                            r.right = oneThirdItemSide * 2 + oneThirdItemSide;
+                            r.top = topStart;
+                            r.bottom = r.top + LocalDisplay.dp2px(150);
+                            nextRowIndex++;
+                        } else {
+                            int cols = 3;
+                            int gridCount = j - 2;
+                            r.left = (gridCount % cols) * oneThirdItemSide;
+                            r.top = topStart;
+                            r.right = r.left + oneThirdItemSide;
+                            r.bottom = r.top + oneThirdItemSide;
+                            if (gridCount % cols == cols - 1 || j == s.getDataCount() - 1) {
+                                nextRowIndex++;
+                            }
+                        }
+                        p.frame = r;
+                        map.put(p.data, p);
+                        if (curRowIndex != nextRowIndex) {
+                            if (j == 0 || j == 1) {
+                                topStart += LocalDisplay.dp2px(150);
+                            } else {
+                                topStart += oneThirdItemSide;
+                            }
+                            curRowIndex = nextRowIndex;
+                        }
+
+                    }
+                } else {
+                    int cols = 2;
+                    for (int j = 0; j < s.getDataCount(); j++) {
+                        int nextRowIndex = curRowIndex;
+                        FreeFlowItem p = new FreeFlowItem();
+                        p.isHeader = false;
+                        p.itemIndex = j;
+                        p.itemSection = i;
+                        p.data = s.getDataAtIndex(j);
+                        Rect r = new Rect();
+                        r.left = (j % cols) * oneTwoItemSide;
+                        r.top = topStart;
+                        r.right = r.left + oneTwoItemSide;
+                        r.bottom = r.top + oneTwoItemSide;
+                        p.frame = r;
+                        p.data = s.getDataAtIndex(j);
+                        map.put(p.data, p);
+                        if (j % cols == cols - 1) {
+                            nextRowIndex++;
+                        }
+                        if (curRowIndex != nextRowIndex || j == s.getDataCount() - 1) {
+                            topStart += oneTwoItemSide;
+                            curRowIndex = nextRowIndex;
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        @Override
+        public HashMap<Object, FreeFlowItem> getItemProxies(
+                int viewPortLeft, int viewPortTop) {
+
+            Rect viewport = new Rect(viewPortLeft,
+                    viewPortTop,
+                    viewPortLeft + width,
+                    viewPortTop + height);
+
+            //Log.d(TAG, "Viewport: "+viewPortLeft+", "+viewPortTop+", "+viewport.width()+","+viewport.height());
+            HashMap<Object, FreeFlowItem> ret = new HashMap<Object, FreeFlowItem>();
+
+            Iterator<Map.Entry<Object, FreeFlowItem>> it = map.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Object, FreeFlowItem> pairs = it.next();
+                FreeFlowItem p = (FreeFlowItem) pairs.getValue();
+                if (Rect.intersects(p.frame, viewport)) {
+                    ret.put(pairs.getKey(), p);
+                }
+            }
+            return ret;
+
+        }
+
+        @Override
+        public FreeFlowItem getFreeFlowItemForItem(Object item) {
+            Log.d(TAG, " returing item: " + map.get(item));
+            return map.get(item);
+        }
+
+        @Override
+        public int getContentWidth() {
+            return 0;
+        }
+
+        @Override
+        public int getContentHeight() {
+            if (itemsAdapter == null || itemsAdapter.getNumberOfSections() <= 0) {
+                return 0;
+            }
+
+            int sectionIndex = itemsAdapter.getNumberOfSections() - 1;
+            Section s = itemsAdapter.getSection(sectionIndex);
+
+            if (s.getDataCount() == 0)
+                return 0;
+
+            Object lastFrameData = s.getDataAtIndex(s.getDataCount() - 1);
+            FreeFlowItem fd = map.get(lastFrameData);
+            if (fd == null) {
+                return 0;
+            }
+            return (fd.frame.top + fd.frame.height());
+        }
+
+        @Override
+        public FreeFlowItem getItemAt(float x, float y) {
+            return (FreeFlowItem) ViewUtils.getItemAt(map, (int) x, (int) y);
+        }
+
+        @Override
+        public void setLayoutParams(FreeFlowLayoutParams params) {
+            if (params.equals(this.layoutParams)) {
+                return;
+            }
+            LayoutParams lp = (LayoutParams) params;
+            this.headerWidth = lp.headerWidth;
+            this.headerHeight = lp.headerHeight;
+        }
+
+        @Override
+        public boolean verticalScrollEnabled() {
+            return true;
+        }
+
+        @Override
+        public boolean horizontalScrollEnabled() {
+            return false;
+        }
+
+
+    }
+    public  class LayoutParams extends FreeFlowLayout.FreeFlowLayoutParams {
+        public int headerWidth = 0;
+        public int headerHeight = 0;
+
+
+        public LayoutParams(int headerWidth, int headerHeight) {
+            this.headerWidth = headerWidth;
+            this.headerHeight = headerHeight;
+        }
+
+    }
 
 }

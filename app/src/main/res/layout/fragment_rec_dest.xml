@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
     android:orientation="vertical">
 
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
@@ -10,15 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-    <ListView
-        android:id="@+id/lv_rec_dest"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="20dp"
-        android:fadingEdge="none"
-        android:listSelector="@android:color/transparent"
-        android:visibility="visible" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingRight="10dp"
+        android:paddingLeft="5dp">
+
+        <com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer
+            android:id="@+id/rec_dest_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </LinearLayout>
