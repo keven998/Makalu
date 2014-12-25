@@ -188,21 +188,19 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .callback(new MaterialDialog.Callback() {
                     @Override
                     public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                        View progressView = View.inflate(mContext, R.layout.view_progressbar,null);
                         dialog.setContentView(progressView);
-                        AccountManager.getInstance().logout(mContext,false, new EMCallBack() {
+                        AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
                             @Override
                             public void onSuccess() {
                                 dialog.dismiss();
-                                finish();
-
+                                AccountActvity.this.finish();
                             }
 
                             @Override
                             public void onError(int i, String s) {
-                                ToastUtil.getInstance(AccountActvity.this).showToast("退出失败，请重试");
+                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
                                 dialog.dismiss();
-
                             }
 
                             @Override
@@ -398,6 +396,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+//        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 }

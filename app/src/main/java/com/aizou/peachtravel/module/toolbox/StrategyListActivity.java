@@ -295,7 +295,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void onClick(View view) {
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+//                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                     }
                 });
             } else {

@@ -4,6 +4,7 @@ package com.aizou.peachtravel.module.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -223,15 +224,16 @@ public class LoginActivity extends PeachBaseActivity {
 
                         }
                     });
+
+                    ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到桃子旅行");
+
                     setResult(RESULT_OK);
                     finish();
-
-
                 } catch (Exception e) {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             DialogManager.getInstance().dissMissProgressDialog();
-                            Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -261,11 +263,11 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void signIn() {
         if (TextUtils.isEmpty(loginNameEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("请输入注册手机号或昵称");
+            ToastUtil.getInstance(mContext).showToast("亲，请告诉我你的手机号或昵称");
             return;
         }
         if (TextUtils.isEmpty(pwdEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("请输入密码");
+            ToastUtil.getInstance(mContext).showToast("亲，忘了输入密码了");
             return;
         }
         DialogManager.getInstance().showProgressDialog(this);
@@ -283,7 +285,8 @@ public class LoginActivity extends PeachBaseActivity {
 //                    imLogin("rjm4413","123456","小明");
                 } else {
                     DialogManager.getInstance().dissMissProgressDialog();
-                    ToastUtil.getInstance(mContext).showToast(userResult.err.message);
+//                    ToastUtil.getInstance(mContext).showToast(userResult.err.message);
+                    ToastUtil.getInstance(mContext).showToast("好像请求失败了");
                 }
 
             }

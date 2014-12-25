@@ -174,7 +174,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
     public void startChat(View view) {
         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+//        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 //        finish();
     }
 
