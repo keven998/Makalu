@@ -90,6 +90,8 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                     mPage = page;
                     bindView(detailResult.result);
 
+                } else {
+//                    ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
@@ -101,6 +103,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissProgressDialog();
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

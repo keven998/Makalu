@@ -1,20 +1,13 @@
 package com.aizou.peachtravel.module.my;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
@@ -28,7 +21,6 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.thirdpart.SnsAccountsUtils;
 import com.aizou.peachtravel.common.thirdpart.weixin.WeixinApi;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
@@ -41,16 +33,11 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.tencent.connect.UserInfo;
-import com.tencent.connect.auth.QQAuth;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,7 +213,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-
+                            ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                     // 进入主页面
@@ -304,6 +291,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
+                ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -332,7 +320,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-
+                        ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
             }

@@ -25,7 +25,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
-import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
@@ -39,8 +38,6 @@ import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -142,7 +139,8 @@ public class ShoppingFragment extends PeachBaseFragment {
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissProgressDialog();
-                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                         mEditBtn.setChecked(false);

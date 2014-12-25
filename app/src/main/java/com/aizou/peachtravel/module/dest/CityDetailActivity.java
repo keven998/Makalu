@@ -112,15 +112,17 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         TravelApi.getCityDetail(id,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson<LocBean> detailResult = CommonJson.fromJson(result,LocBean.class);
+                CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if(detailResult.code==0){
                     bindView(detailResult.result);
+                } else {
+//                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -134,13 +136,14 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
                     travelAdapter.notifyDataSetChanged();
+                } else {
+//                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
-
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+//                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -194,13 +197,15 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =false;
                                 refreshFav(detailBean);
+                            } else {
+                                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                             }
-
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
+                            ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 } else {

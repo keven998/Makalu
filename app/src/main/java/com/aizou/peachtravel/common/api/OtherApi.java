@@ -150,7 +150,7 @@ public class OtherApi extends BaseApi {
      * @param callBack
      * @return
      */
-    public static PTRequestHandler addFav(String id,String type,HttpCallBack callBack){
+    public static PTRequestHandler addFav(String id,String type, HttpCallBack callBack){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FAV);

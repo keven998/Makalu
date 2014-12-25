@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.prv.PullToRefreshBase;
@@ -125,6 +126,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             public void doFailure(Exception error, String msg, String method) {
                 mListView.onPullUpRefreshComplete();
                 mListView.onPullDownRefreshComplete();
+                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

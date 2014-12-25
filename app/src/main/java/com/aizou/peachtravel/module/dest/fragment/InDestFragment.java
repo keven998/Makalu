@@ -1,8 +1,6 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -10,18 +8,13 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.CheckedTextView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.GsonTools;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -34,7 +27,6 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
-import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.easemob.util.HanziToPinyin;
 
@@ -109,7 +101,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

@@ -1,13 +1,10 @@
 package com.aizou.peachtravel.module.my;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -15,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +32,6 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.config.Constant;
-import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -379,7 +373,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
-
                                                 }
 
                                             }
@@ -389,7 +382,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-
+                            ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
 

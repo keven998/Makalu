@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -117,6 +118,7 @@ public class SearchDestActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissProgressDialog();
                 mSearchResultLv.onPullUpRefreshComplete();
                 mSearchResultLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(SearchDestActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

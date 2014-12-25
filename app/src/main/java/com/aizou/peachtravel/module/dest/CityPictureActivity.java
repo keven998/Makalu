@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.HackyViewPager;
@@ -73,7 +74,7 @@ public class CityPictureActivity extends PeachBaseActivity {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result,LocAlbum.class);
-                if(imageReuslt.code==0){
+                if(imageReuslt.code == 0){
                     picAdapter= new PicAdapter(imageReuslt.result.album);
                     mCityPicGv.setAdapter(picAdapter);
                     zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageReuslt.result.album);
@@ -83,7 +84,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(CityPictureActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

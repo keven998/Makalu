@@ -85,7 +85,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
-
+                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
 
                     @Override

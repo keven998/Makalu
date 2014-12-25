@@ -137,13 +137,13 @@ public class RestaurantFragment extends PeachBaseFragment {
                                     mEditBtn.setChecked(false);
                                     addFooter.setVisibility(View.INVISIBLE);
                                 }
-
                             }
 
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissProgressDialog();
-                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
 

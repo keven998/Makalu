@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.HackyViewPager;
@@ -97,7 +98,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -135,12 +136,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
                                 spotDetailBean.isFavorite = false;
                                 refreshFav(spotDetailBean);
                             }
-
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
+                            ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }else{

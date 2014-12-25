@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.DotView;
@@ -158,7 +159,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

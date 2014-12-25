@@ -85,6 +85,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
+                        ToastUtil.getInstance(SetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
                 break;

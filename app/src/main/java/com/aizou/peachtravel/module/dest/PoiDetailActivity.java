@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -124,12 +125,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 if (detailBean.code == 0) {
                     poiDetailBean = detailBean.result;
                     bindView(detailBean.result);
+                } else {
+//                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -201,16 +204,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                            if(deleteResult.code==0){
+                            if (deleteResult.code == 0) {
                                 poiDetailBean.isFavorite =true;
                                 refreshFav(poiDetailBean);
+                            } else {
+                                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                             }
-
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissProgressDialog();
+                            ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }

@@ -138,12 +138,12 @@ public class SearchTypeActivity extends PeachBaseActivity {
     }
 
     private void searchSearchTypeData(final int page){
-        String locId="";
-        if(mLocBean!=null){
-            locId=mLocBean.id;
+        String locId = "";
+        if(mLocBean != null) {
+            locId = mLocBean.id;
 
         }
-        TravelApi.searchForType(keyWord,type,locId,page,new HttpCallBack<String>() {
+        TravelApi.searchForType(keyWord, type, locId, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
@@ -156,7 +156,6 @@ public class SearchTypeActivity extends PeachBaseActivity {
                     mSearchTypeLv.onPullUpRefreshComplete();
                     mSearchTypeLv.onPullDownRefreshComplete();
                 }
-
             }
 
             @Override
@@ -164,6 +163,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissProgressDialog();
                 mSearchTypeLv.onPullUpRefreshComplete();
                 mSearchTypeLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

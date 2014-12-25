@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -77,7 +78,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-
+                    ToastUtil.getInstance(SeachContactDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });
         }
@@ -104,6 +105,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                             @Override
                             public void doSucess(Object result, String method) {
                                 DialogManager.getInstance().dissMissProgressDialog();
+                                //TODO code == 0
                                     Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
                                     finish();
                             }
@@ -111,7 +113,8 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissProgressDialog();
-                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(SeachContactDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                     }

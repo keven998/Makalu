@@ -84,6 +84,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
+                        ToastUtil.getInstance(RegActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
 

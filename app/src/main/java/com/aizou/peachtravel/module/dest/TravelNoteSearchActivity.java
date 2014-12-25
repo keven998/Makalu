@@ -107,6 +107,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissProgressDialog();
                 mSearchTravelNoteLv.onPullUpRefreshComplete();
                 mSearchTravelNoteLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(TravelNoteSearchActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

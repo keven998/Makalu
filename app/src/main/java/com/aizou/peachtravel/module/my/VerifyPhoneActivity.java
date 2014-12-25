@@ -8,39 +8,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.ValidationBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
-import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.config.Constant;
-import com.aizou.peachtravel.db.IMUser;
-import com.aizou.peachtravel.db.respository.IMUserRepository;
-import com.easemob.EMCallBack;
-import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -132,6 +114,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissProgressDialog();
+                                ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                     }else if(actionCode.equals(UserApi.ValidationCode.FIND_PWD)){
@@ -168,6 +151,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissProgressDialog();
+                        ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
 

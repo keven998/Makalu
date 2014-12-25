@@ -1,13 +1,11 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -25,12 +23,8 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
-import com.aizou.peachtravel.common.share.ICreateShareDialog;
-import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
-import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
-import com.easemob.EMCallBack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -201,13 +195,15 @@ public class AddPoiActivity extends PeachBaseActivity {
                 if (poiListResult.code == 0) {
                     curPage = page;
                     bindView(poiListResult.result);
+                } else {
+                    ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
-                if (curPage == 0) {
-                    mLvPoiList.onPullUpRefreshComplete();
-                    mLvPoiList.onPullDownRefreshComplete();
-                }else{
-                    mLvPoiList.onPullDownRefreshComplete();
-                }
+//                if (curPage == 0) {
+//                    mLvPoiList.onPullUpRefreshComplete();
+//                    mLvPoiList.onPullDownRefreshComplete();
+//                } else {
+//                    mLvPoiList.onPullDownRefreshComplete();
+//                }
                 mLvPoiList.onPullUpRefreshComplete();
                 mLvPoiList.onPullDownRefreshComplete();
             }
@@ -215,6 +211,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissProgressDialog();
+                ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
