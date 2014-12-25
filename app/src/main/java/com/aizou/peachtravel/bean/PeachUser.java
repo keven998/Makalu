@@ -18,6 +18,14 @@ public class PeachUser implements Serializable{
     public String easemobPwd;
     public String memo="";
 
-
-
+    public String getGenderDesc() {
+        if ("F".equals(gender)) {
+            return "美女";
+        } else if ("M".equals(gender)) {
+            return "帅锅";
+        } else if ("U".equals(gender)) {
+            return "无可奉告";
+        }
+        return "";
+    }
 }

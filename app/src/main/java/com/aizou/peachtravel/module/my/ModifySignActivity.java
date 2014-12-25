@@ -44,14 +44,14 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                            @Override
                                                            public void onClick(View view) {
                                                                if(TextUtils.isEmpty(signEt.getText())){
-                                                                   ToastUtil.getInstance(mContext).showToast("请输入签名");
+                                                                   ToastUtil.getInstance(mContext).showToast("你的性感签名呢");
                                                                    return;
                                                                }
                                                                if(!CommonUtils.isNetWorkConnected(mContext)){
-                                                                   ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+                                                                   ToastUtil.getInstance(mContext).showToast("呃～好像没找到网络");
                                                                    return;
                                                                }
-                                                               DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
+                                                               DialogManager.getInstance().showProgressDialog(mContext, "请稍后");
                                                                UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
 
 
@@ -62,6 +62,7 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                        if (modifyResult.code == 0) {
                                                                            user.signature = signEt.getText().toString().trim();
                                                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                                                           ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                                                                            finish();
                                                                        }
                                                                    }
@@ -76,7 +77,7 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                    public void onStart() {
                                                                    }
                                                                });
-                                                               finish();
+//                                                               finish();
 
                                                            }
 

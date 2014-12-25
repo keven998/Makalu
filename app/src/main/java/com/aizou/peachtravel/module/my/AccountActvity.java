@@ -113,7 +113,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
-        tvGender.setText(user.gender);
+        tvGender.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
                .showImageForEmptyUri(R.drawable.avatar_placeholder)
                .showImageOnFail(R.drawable.avatar_placeholder)
@@ -281,6 +281,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         manBtn.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +290,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
-
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         unknown.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +299,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
-
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {

@@ -104,7 +104,6 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                         } else {
                             ToastUtil.getInstance(mContext).showToast(validationResult.err.message);
                         }
-
                     }
 
                     @Override
