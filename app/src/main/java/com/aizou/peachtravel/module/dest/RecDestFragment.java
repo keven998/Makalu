@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
@@ -320,7 +321,7 @@ public class RecDestFragment extends PeachBaseFragment {
                     viewPortLeft + width,
                     viewPortTop + height);
 
-            //Log.d(TAG, "Viewport: "+viewPortLeft+", "+viewPortTop+", "+viewport.width()+","+viewport.height());
+//            LogUtil.d("freeflow", "Viewport: " + viewPortLeft + ", " + viewPortTop + ", " + viewport.width() + "," + viewport.height());
             HashMap<Object, FreeFlowItem> ret = new HashMap<Object, FreeFlowItem>();
 
             Iterator<Map.Entry<Object, FreeFlowItem>> it = map.entrySet().iterator();
