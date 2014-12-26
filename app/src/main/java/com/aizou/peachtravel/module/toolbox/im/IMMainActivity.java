@@ -188,11 +188,11 @@ public class IMMainActivity extends BaseChatActivity {
                 Bundle args = new Bundle();
                 args.putInt(
                         SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-                        5
+                        4
                 );
                 args.putFloat(
                         SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-                        2
+                        5
                 );
 
                 fragment.setArguments(args);
@@ -632,6 +632,7 @@ public class IMMainActivity extends BaseChatActivity {
 		if (currentTabIndex == 1)
 			contactListFragment.refresh();
 	}
+
 	/**
 	 * 保存邀请等msg
 	 * @param msg
@@ -645,8 +646,6 @@ public class IMMainActivity extends BaseChatActivity {
         IMUserRepository.saveContact(mContext,user);
 
 	}
-
-	
 
 
 	/**
@@ -857,9 +856,9 @@ public class IMMainActivity extends BaseChatActivity {
 			try {
 				if (conflictBuilder == null)
 					conflictBuilder = new android.app.AlertDialog.Builder(IMMainActivity.this);
-				conflictBuilder.setTitle("下线通知");
-				conflictBuilder.setMessage(R.string.connect_conflict);
-				conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				    conflictBuilder.setTitle("下线通知");
+				    conflictBuilder.setMessage(R.string.connect_conflict);
+				    conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -920,6 +919,7 @@ public class IMMainActivity extends BaseChatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request",NEW_CHAT_REQUEST_CODE));
+                    dismiss();
                 }
             });
 
@@ -927,6 +927,7 @@ public class IMMainActivity extends BaseChatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getActivity(), AddContactActivity.class));
+                    dismiss();
                 }
             });
             return connectionDialog;

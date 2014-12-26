@@ -41,7 +41,7 @@
         android:protectionLevel="normal">
     </permission>
 
-
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".config.PeachApplication"

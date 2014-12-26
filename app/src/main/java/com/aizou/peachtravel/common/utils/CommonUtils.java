@@ -15,11 +15,15 @@ package com.aizou.peachtravel.common.utils;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.view.Display;
 
 public class CommonUtils {
 
@@ -62,5 +66,16 @@ public class CommonUtils {
 		else
 			return "";
 	}
+
+    public static int getScreenWidth(Activity context) {
+
+        Display display = context.getWindowManager().getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            display.getSize(size);
+            return size.x;
+        }
+        return display.getWidth();
+    }
 
 }

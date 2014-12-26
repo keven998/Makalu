@@ -118,10 +118,10 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //				});
 //			}
 //		}else{
-        ViewHolder vh;
+        ViewHolder1 vh;
 			if(convertView == null){
 				convertView = layoutInflater.inflate(res, null);
-                vh = new ViewHolder();
+                vh = new ViewHolder1();
                 vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
                 vh.nickView = (TextView) convertView.findViewById(R.id.name);
                 vh.phoneView = (TextView) convertView.findViewById(R.id.phone);
@@ -130,7 +130,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.headerDivider = (View)convertView.findViewById(R.id.header_divider);
                 convertView.setTag(vh);
 			} else {
-                vh = (ViewHolder)convertView.getTag();
+                vh = (ViewHolder1)convertView.getTag();
             }
 
 			IMUser user = getItem(position);
@@ -241,7 +241,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
         return sections;
 	}
 
-    class ViewHolder {
+    class ViewHolder1 {
         public View headerDivider;
         public TextView sectionHeader;
         public ImageView avatarView;
