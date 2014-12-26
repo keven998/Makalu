@@ -80,7 +80,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     ImageView mIvTalk;
     @InjectView(R.id.rl_talk)
     RelativeLayout mRlTalk;
-    private PeachUser user;
     private String[] weatherArray;
     private String weatherStr;
     private String city;
@@ -102,7 +101,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         mTvMyGuide.setOnClickListener(this);
         rootView.findViewById(R.id.tv_fav).setOnClickListener(this);
         mTvToolbox.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
-        user = AccountManager.getInstance().getLoginAccount(getActivity());
+
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
@@ -204,8 +203,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         switch (v.getId()) {
             case R.id.rl_talk:
+
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent intent = new Intent(getActivity(), IMMainActivity.class);
                     startActivity(intent);
@@ -225,12 +226,12 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 startActivity(intent);
 
 //                if (geoLat == null) {
-//                    DialogManager.getInstance().showProgressDialog(getActivity(), "正在定位");
+//                    DialogManager.getInstance().showLoadingDialog(getActivity(), "正在定位");
 //                    mLocationManagerProxy.requestLocationData(
 //                            LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
 //                                @Override
 //                                public void onLocationChanged(AMapLocation aMapLocation) {
-//                                    DialogManager.getInstance().dissMissProgressDialog();
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
 //                                    if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
 //                                        //获取位置信息
 //                                        geoLat = aMapLocation.getLatitude();
@@ -324,8 +325,11 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        user = AccountManager.getInstance().getLoginAccount(getActivity());
-        updateUnreadLabel();
+        PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+        if(user!=null){
+            updateUnreadLabel();
+        }
+
     }
 
     /**

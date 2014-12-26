@@ -7,8 +7,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -78,7 +77,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
-                DialogManager.getInstance().showProgressDialog(TravelNoteSearchActivity.this);
+                DialogManager.getInstance().showLoadingDialog(TravelNoteSearchActivity.this);
                 searchTravelNote(mKeyWord, 0);
             }
         });
@@ -91,7 +90,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         OtherApi.getTravelNoteByKeyword(keyWord,page,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
@@ -104,7 +103,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 mSearchTravelNoteLv.onPullUpRefreshComplete();
                 mSearchTravelNoteLv.onPullDownRefreshComplete();
             }

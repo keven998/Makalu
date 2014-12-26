@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
@@ -134,11 +134,11 @@ public class IMUtils {
                 showImShareDialog(context,iCreateShareDialog,new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
-                        DialogManager.getInstance().showProgressDialog(context);
+                        DialogManager.getInstance().showLoadingDialog(context);
                         sendExtMessage(context,type,content,chatType,toId,new EMCallBack() {
                             @Override
                             public void onSuccess() {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 ((Activity)context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("发送成功");
@@ -150,7 +150,7 @@ public class IMUtils {
 
                             @Override
                             public void onError(int i, String s) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 ((Activity)context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("发送失败");

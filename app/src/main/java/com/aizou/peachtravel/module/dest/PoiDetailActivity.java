@@ -16,7 +16,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -176,12 +176,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showProgressDialog(PoiDetailActivity.this);
+                DialogManager.getInstance().showLoadingDialog(PoiDetailActivity.this);
                 if(poiDetailBean.isFavorite){
                     OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 poiDetailBean.isFavorite = false;
@@ -192,14 +192,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }else{
                     OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 poiDetailBean.isFavorite =true;
@@ -210,7 +210,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }

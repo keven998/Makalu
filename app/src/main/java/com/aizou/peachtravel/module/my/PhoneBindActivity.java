@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
@@ -86,7 +86,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(PhoneBindActivity.this);
+                DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
 
                 String uid=null ;
                 if(user!=null){
@@ -95,7 +95,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE,uid, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {
                             countDown = validationResult.result.coolDown;
@@ -109,7 +109,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                     }
                 });
 
@@ -126,14 +126,14 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(PhoneBindActivity.this);
+                DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
                 UserApi.checkValidation(phoneEt.getText().toString().trim(),smsEt.getText().toString(),UserApi.ValidationCode.BIND_PHONE,user.userId+"",new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
                         if(chechResult.code==0){
                             if(TextUtils.isEmpty(user.tel)){
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 Intent intent = new Intent(mContext,SetPwdActivity.class);
                                 intent.putExtra("token",chechResult.result.token);
                                 intent.putExtra("phone",phoneEt.getText().toString().trim());
@@ -143,7 +143,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                 UserApi.bindPhone(phoneEt.getText().toString().trim(), user.userId+"", null, chechResult.result.token, new HttpCallBack<String>() {
                                     @Override
                                     public void doSucess(String result, String method) {
-                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (bindResult.code == 0) {
                                             user.tel = sendSuccessPhone;
@@ -158,12 +158,12 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                                     @Override
                                     public void doFailure(Exception error, String msg, String method) {
-                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        DialogManager.getInstance().dissMissLoadingDialog();
                                     }
                                 });
                             }
                         } else {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(mContext).showToast(chechResult.err.message);
                         }
 
@@ -171,7 +171,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
 
                     }
                 });

@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module.my;
 
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,9 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
@@ -46,7 +44,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 				if(TextUtils.isEmpty(contentEt.getText())){
 					ToastUtil.getInstance(mContext).showToast("请填写内容");
 				}else{
-					DialogManager.getInstance().showProgressDialog(mContext, "正在提交");
+					DialogManager.getInstance().showLoadingDialog(mContext, "正在提交");
 					feedback();
 				}
 				

@@ -1,4 +1,4 @@
-package com.aizou.peachtravel.common.widget;
+package com.aizou.peachtravel.common.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,14 +13,14 @@ import com.aizou.peachtravel.R;
 /**
  * Created by Rjm on 2014/12/16.
  */
-public class PeachDialog extends Dialog {
+public class PeachMessageDialog extends Dialog {
 
     private TextView mTitleTv;
     private TextView mContetTv;
     private Button mOkBtn;
     private Button mCancleBtn;
 
-    public PeachDialog(Context context) {
+    public PeachMessageDialog(Context context) {
         super(context, R.style.ComfirmDialog);
         initView();
     }

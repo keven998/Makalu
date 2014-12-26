@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -149,11 +149,11 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	 * @param msg
 	 */
 	private void acceptInvitation(final Button button, final InviteMessage msg) {
-        DialogManager.getInstance().showProgressDialog((Activity)context);
+        DialogManager.getInstance().showLoadingDialog((Activity) context);
         UserApi.addContact(msg.getUserId()+"",new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 button.setText("已同意");
                 button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
                 msg.setStatus(InviteStatus.AGREED);
@@ -186,7 +186,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
         });
 

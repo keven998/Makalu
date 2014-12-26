@@ -1,16 +1,14 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Intent;
-import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -20,15 +18,12 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.AddressBookbean;
 import com.aizou.peachtravel.bean.PeachUser;
-import com.aizou.peachtravel.bean.UploadAddrBookBean;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.PhoneContactUtils;
-import com.aizou.peachtravel.common.utils.SearchEngine;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +53,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
     }
 
     private void initData(){
-        DialogManager.getInstance().showProgressDialog(this);
+        DialogManager.getInstance().showLoadingDialog(this);
         contactListInMobile= PhoneContactUtils.getPhoneContact(mContext);
         UserApi.searchByAddressBook(contactListInMobile,new HttpCallBack<String>() {
             @Override
@@ -102,7 +97,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                     mListView.setAdapter(contactAdapter);
                     contactAdapter.getDataList().addAll(contactListInMobile);
                     contactAdapter.notifyDataSetChanged();
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                 }
 
             }
@@ -130,7 +125,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
 //                        mListView.setAdapter(contactAdapter);
 //                        contactAdapter.getDataList().addAll(contactListInMobile);
 //                        contactAdapter.notifyDataSetChanged();
-//                        DialogManager.getInstance().dissMissProgressDialog();
+//                        DialogManager.getInstance().dissMissLoadingDialog();
 //                    }
 //                });
 //            }
@@ -171,11 +166,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogManager.getInstance().showProgressDialog(AddPhoneContactActivity.this);
+                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
                        UserApi.getUserInfo(itemData.userId,new HttpCallBack<String>() {
                            @Override
                            public void doSucess(String result, String method) {
-                               DialogManager.getInstance().dissMissProgressDialog();
+                               DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<PeachUser> userResult = CommonJson.fromJson(result,PeachUser.class);
                                 if(userResult.code==0){
                                     Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
@@ -189,7 +184,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
 
                            @Override
                            public void doFailure(Exception error, String msg, String method) {
-                               DialogManager.getInstance().dissMissProgressDialog();
+                               DialogManager.getInstance().dissMissLoadingDialog();
                                ToastUtil.getInstance(mContext).showToast("获取用户信息失败");
                            }
                        });

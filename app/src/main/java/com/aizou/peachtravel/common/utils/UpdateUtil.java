@@ -1,19 +1,15 @@
 package com.aizou.peachtravel.common.utils;
 
 import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.aizou.core.utils.SharePrefUtil;
-import com.aizou.peachtravel.common.widget.ComfirmDialog;
+import com.aizou.peachtravel.common.dialog.ComfirmDialog;
 
 
 public class UpdateUtil {

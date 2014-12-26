@@ -35,6 +35,7 @@ import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
+import com.aizou.peachtravel.module.SplashActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.VoiceCallReceiver;
 import com.easemob.EMCallBack;
@@ -106,17 +107,22 @@ public class PeachHXSDKHelper extends HXSDKHelper {
 
             @Override
             public Intent onNotificationClick(EMMessage message) {
-                Intent intent = new Intent(appContext, ChatActivity.class);
-                ChatType chatType = message.getChatType();
-                if (chatType == ChatType.Chat) { // 单聊信息
-                    intent.putExtra("userId", message.getFrom());
-                    intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                } else { // 群聊信息
-                            // message.getTo()为群聊id
-                    intent.putExtra("groupId", message.getTo());
-                    intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                }
-                return intent;
+                final Intent notificationIntent = new Intent(appContext, SplashActivity.class);
+                notificationIntent.setAction(Intent.ACTION_MAIN);
+                notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                notificationIntent.putExtra("im_message",message);
+//                appContext.startActivity(notificationIntent);
+//                Intent intent = new Intent(appContext, ChatActivity.class);
+//                ChatType chatType = message.getChatType();
+//                if (chatType == ChatType.Chat) { // 单聊信息
+//                    intent.putExtra("userId", message.getFrom());
+//                    intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+//                } else { // 群聊信息
+//                            // message.getTo()为群聊id
+//                    intent.putExtra("groupId", message.getTo());
+//                    intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+//                }
+                return notificationIntent;
             }
         };
     }

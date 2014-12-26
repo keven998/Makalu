@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
@@ -58,13 +58,13 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
+                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
                 UserApi.editUserGender(user, gender, new HttpCallBack<String>() {
 
 
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
                         if(modifyResult.code==0){
                             user.gender = gender;
@@ -74,7 +74,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
 
                     }
 

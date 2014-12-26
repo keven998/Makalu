@@ -20,12 +20,12 @@
 
         <Button
             android:id="@+id/btn_ok"
-            android:layout_width="45dp"
-            android:layout_height="25dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_marginRight="10dp"
             android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_complete_selector"
@@ -78,7 +78,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="10dp">
+        >
 
 
         <com.aizou.core.widget.prv.PullToRefreshListView

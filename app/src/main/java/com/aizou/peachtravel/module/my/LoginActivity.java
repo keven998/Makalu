@@ -1,23 +1,18 @@
 package com.aizou.peachtravel.module.my;
 
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
@@ -28,7 +23,6 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.thirdpart.SnsAccountsUtils;
 import com.aizou.peachtravel.common.thirdpart.weixin.WeixinApi;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
@@ -41,16 +35,9 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.tencent.connect.UserInfo;
-import com.tencent.connect.auth.QQAuth;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +72,7 @@ public class LoginActivity extends PeachBaseActivity {
         findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 weixinLogin();
 //                UserApi.authSignUp("123456",new HttpCallBack() {
 //                    @Override
@@ -232,7 +219,7 @@ public class LoginActivity extends PeachBaseActivity {
                     // 进入主页面
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
 
                         }
                     });
@@ -243,7 +230,7 @@ public class LoginActivity extends PeachBaseActivity {
                 } catch (Exception e) {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
 
                         }
@@ -262,7 +249,7 @@ public class LoginActivity extends PeachBaseActivity {
             public void onError(int code, final String message) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         Toast.makeText(getApplicationContext(), "登录失败: " + message, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -281,7 +268,7 @@ public class LoginActivity extends PeachBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请输入密码");
             return;
         }
-        DialogManager.getInstance().showProgressDialog(this);
+        DialogManager.getInstance().showLoadingDialog(this);
         UserApi.signIn(loginNameEt.getText().toString().trim(), pwdEt.getText().toString().trim(), new HttpCallBack<String>() {
 
             @Override
@@ -295,7 +282,7 @@ public class LoginActivity extends PeachBaseActivity {
 
 //                    imLogin("rjm4413","123456","小明");
                 } else {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                 }
 
@@ -303,7 +290,7 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
         });
     }
@@ -318,7 +305,7 @@ public class LoginActivity extends PeachBaseActivity {
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";
@@ -339,14 +326,14 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void onError(int errCode) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权失败");
 
             }
 
             @Override
             public void onCancel() {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权取消");
             }
         });
@@ -373,7 +360,7 @@ public class LoginActivity extends PeachBaseActivity {
             }
         } else if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD){
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
-            DialogManager.getInstance().showProgressDialog(mContext, "正在登录");
+            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
             imLogin(user);
         }
     }

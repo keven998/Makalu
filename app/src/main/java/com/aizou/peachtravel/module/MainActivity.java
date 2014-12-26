@@ -59,9 +59,7 @@ public class MainActivity extends PeachBaseActivity {
         List<String> blacklist = null;
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(3);
-        registerReceiver(msgReceiver, intentFilter);
+
     }
 
     /**
@@ -99,6 +97,20 @@ public class MainActivity extends PeachBaseActivity {
 //        TextView textView = (TextView) view.findViewById(R.id.textview);
 //        textView.setText(mTextviewArray[index]);
         return view;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+        intentFilter.setPriority(3);
+        registerReceiver(msgReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(msgReceiver);
     }
 
     @Override

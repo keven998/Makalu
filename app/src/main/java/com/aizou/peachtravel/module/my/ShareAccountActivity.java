@@ -3,29 +3,23 @@ package com.aizou.peachtravel.module.my;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -194,7 +188,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 					final ShareAccount shareAccount = lists.get((Integer)v.getTag());
 					if (!OauthHelper
 							.isAuthenticated(mContext, shareAccount.platform)) {
-//						showProgressDialog("正在获取授权");
+//						showLoadingDialog("正在获取授权");
 						mController.doOauthVerify(mContext, shareAccount.platform,
 								new UMAuthListener() {
 
@@ -258,7 +252,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
                         DialogManager.getInstance().showMessageDialogWithDoubleButtonSelf(mContext,"确定","取消","提示","确定解除绑定账户吗？",new OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                DialogManager.getInstance().showProgressDialog(mContext,"解除绑定");
+                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
                                 mController.deleteOauth(mContext, shareAccount.platform,
 												new SocializeClientListener() {
 
@@ -271,7 +265,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 													@Override
 													public void onComplete(int arg0,
 															SocializeEntity arg1) {
-                                                        DialogManager.getInstance().dissMissProgressDialog();
+                                                        DialogManager.getInstance().dissMissLoadingDialog();
 														shareAccount.screen_name = null;
 														notifyDataSetChanged();
 
@@ -289,7 +283,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 //
 //									@Override
 //									public void onClick(View v) {
-//										showProgressDialog("解除绑定");
+//										showLoadingDialog("解除绑定");
 //										mController.deleteOauth(mContext, shareAccount.platform,
 //												new SocializeClientListener() {
 //

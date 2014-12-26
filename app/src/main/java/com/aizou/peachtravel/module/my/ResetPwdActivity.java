@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
@@ -54,11 +54,11 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                 if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-16位新密码");
                 } else {
-                    DialogManager.getInstance().showProgressDialog(this);
+                    DialogManager.getInstance().showLoadingDialog(this);
                     UserApi.resetPwd(mPhone,newPwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> resetResult = CommonJson.fromJson(result, ModifyResult.class);
                             if(resetResult.code == 0){
                                 AccountManager.getInstance().saveLoginAccount(mContext, user);
@@ -72,7 +72,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }

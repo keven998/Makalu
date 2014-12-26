@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -184,12 +184,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     startActivity(intent);
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(CityDetailActivity.this);
+                DialogManager.getInstance().showLoadingDialog(CityDetailActivity.this);
                 if(detailBean.isFavorite){
                     OtherApi.deleteFav(detailBean.id,new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =false;
@@ -200,14 +200,14 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 } else {
                     OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =true;
@@ -218,7 +218,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }

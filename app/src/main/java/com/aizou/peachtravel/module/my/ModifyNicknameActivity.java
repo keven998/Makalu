@@ -5,9 +5,8 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
@@ -63,11 +62,11 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     return;
                 }
 
-                DialogManager.getInstance().showProgressDialog(mContext,"请稍后");
+                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
                 UserApi.editUserNickName(user, nickEt.getText().toString().trim(), new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
                             user.nickName = nickEt.getText().toString().trim();
@@ -84,7 +83,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
 
                     }
 

@@ -44,7 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
@@ -54,7 +54,6 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.StretchAnimation;
-import com.aizou.peachtravel.common.widget.OnRecylerItemClickListener;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
@@ -218,7 +217,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
             //新建群组
             if (toBeAddContacts.size() > 1) {
-                DialogManager.getInstance().showProgressDialog(mContext, "正在新建群组");
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在新建群组");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -258,7 +257,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             });
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                     // 被邀请
                                     Intent intent = new Intent();
                                     // it is group chat
@@ -272,7 +271,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         } catch (final Exception e) {
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                 }
                             });
                         }
@@ -288,7 +287,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 finish();
             }
         } else if (groupId != null) {
-            DialogManager.getInstance().showProgressDialog(PickContactsWithCheckboxActivity.this);
+            DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
             new Thread(new Runnable() {
 
                 public void run() {
@@ -309,7 +308,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 // 被邀请
                                 EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                                 msg.setChatType(EMMessage.ChatType.GroupChat);
@@ -344,7 +343,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     } catch (final Exception e) {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });

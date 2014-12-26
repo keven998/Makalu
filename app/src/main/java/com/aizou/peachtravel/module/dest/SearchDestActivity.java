@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -82,7 +82,7 @@ public class SearchDestActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
-                DialogManager.getInstance().showProgressDialog(SearchDestActivity.this);
+                DialogManager.getInstance().showLoadingDialog(SearchDestActivity.this);
                 searchSearchLocData(mKeyWord, 0);
             }
         });
@@ -102,7 +102,7 @@ public class SearchDestActivity extends PeachBaseActivity {
         TravelApi.searchLoc(keyWord, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
                     curPage = page;
@@ -114,7 +114,7 @@ public class SearchDestActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 mSearchResultLv.onPullUpRefreshComplete();
                 mSearchResultLv.onPullDownRefreshComplete();
             }

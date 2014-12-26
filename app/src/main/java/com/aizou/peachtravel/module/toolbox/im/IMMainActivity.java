@@ -53,6 +53,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
@@ -227,6 +228,21 @@ public class IMMainActivity extends ChatBaseActivity {
 
         titleHeaderBar.getTitleTextView().setText("桃·Talk");
         titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(mContext, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showMoreMenu(View view) {

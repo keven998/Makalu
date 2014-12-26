@@ -23,7 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
@@ -112,11 +112,11 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             //服务器存在此用户，显示此用户和添加按钮
 //			searchedUserLayout.setVisibility(View.VISIBLE);
 //			nameText.setText(toAddUsername);
-            DialogManager.getInstance().showProgressDialog(this);
+            DialogManager.getInstance().showLoadingDialog(this);
             UserApi.seachContact(toAddUsername, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson4List<PeachUser> seachResult = CommonJson4List.fromJson(result, PeachUser.class);
                     if (seachResult.code == 0) {
                         if (seachResult.result.size() > 0) {
@@ -157,7 +157,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                 }
             });
 

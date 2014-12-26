@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -99,18 +99,18 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        DialogManager.getInstance().showProgressDialog(SeachContactDetailActivity.this);
+                        DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
                         UserApi.requestAddContact(user.userId+"",editText.getText().toString().trim(),new HttpCallBack() {
                             @Override
                             public void doSucess(Object result, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                     Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
                                     finish();
                             }
 
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                     Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -135,14 +135,14 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 //                    jsonObject.put("easemobUser",myUser.easemobUser);
 //                    jsonObject.put("attachMsg","加个桃友, 一起去旅行呗");
 //                    cmdMsg.setAttribute("content",jsonObject.toString());
-//                    DialogManager.getInstance().showProgressDialog(SeachContactDetailActivity.this);
+//                    DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
 //                    EMChatManager.getInstance().sendMessage(cmdMsg, new EMCallBack() {
 //                        @Override
 //                        public void onSuccess() {
 //                            runOnUiThread(new Runnable() {
 //                                @Override
 //                                public void run() {
-//                                    DialogManager.getInstance().dissMissProgressDialog();
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
 //                                    finish();
 //                                }
@@ -155,7 +155,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 //                            runOnUiThread(new Runnable() {
 //                                @Override
 //                                public void run() {
-//                                    DialogManager.getInstance().dissMissProgressDialog();
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败:" + s, Toast.LENGTH_SHORT).show();
 //                                }
 //                            });

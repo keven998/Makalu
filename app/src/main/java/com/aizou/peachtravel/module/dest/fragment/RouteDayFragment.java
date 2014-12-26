@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
@@ -148,12 +147,12 @@ public class RouteDayFragment extends PeachBaseFragment {
                         addDayFooter.setVisibility(View.VISIBLE);
                     } else {
                         //todo:保存路线
-                        DialogManager.getInstance().showProgressDialog(getActivity());
+                        DialogManager.getInstance().showLoadingDialog(getActivity());
                         String uploadJson = StrategyManager.getInstance().getSaveItineraryJson(getActivity(), strategy, routeDayMap);
                         TravelApi.saveGuide(strategy.id, uploadJson,new HttpCallBack<String>() {
                             @Override
                             public void doSucess(String result, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                                 if (saveResult.code == 0) {
                                     ToastUtil.getInstance(getActivity()).showToast("保存成功");
@@ -165,7 +164,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 ToastUtil.getInstance(getActivity()).showToast("保存失败");
                             }
                         });

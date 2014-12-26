@@ -12,7 +12,7 @@
         android:textSize="12sp"
         android:drawableTop="@drawable/ic_add_friend"
         android:drawablePadding="10dp"
-        android:text="添加加桃友"
+        android:text="添加桃友"
         android:padding="30dp"/>
 
     <TextView android:id="@+id/new_talk"

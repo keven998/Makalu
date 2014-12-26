@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
@@ -113,11 +113,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                     IMUtils.showImShareDialog(mContext, bean, new IMUtils.OnDialogShareCallBack() {
                         @Override
                         public void onDialogShareOk(Dialog dialog, int type, String content) {
-                            DialogManager.getInstance().showProgressDialog(mContext);
+                            DialogManager.getInstance().showLoadingDialog(mContext);
                             IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
                                 @Override
                                 public void onSuccess() {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("发送成功");
@@ -129,7 +129,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
                                 @Override
                                 public void onError(int i, String s) {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("发送失败");

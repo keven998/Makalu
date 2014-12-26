@@ -20,12 +20,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
-import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
@@ -39,8 +38,6 @@ import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -126,11 +123,11 @@ public class RestaurantFragment extends PeachBaseFragment {
                         addFooter.setVisibility(View.VISIBLE);
                     }else{
                         //todo: need to 保存路线
-                        DialogManager.getInstance().showProgressDialog(getActivity());
+                        DialogManager.getInstance().showLoadingDialog(getActivity());
                         TravelApi.saveGuide(strategy.id, StrategyManager.getSaveRestaurantJson(getActivity(),strategy),new HttpCallBack<String>() {
                             @Override
                             public void doSucess(String result, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<ModifyResult> saveResult= CommonJson.fromJson(result,ModifyResult.class);
                                 if(saveResult.code==0){
                                     ToastUtil.getInstance(getActivity()).showToast("保存成功");
@@ -142,7 +139,7 @@ public class RestaurantFragment extends PeachBaseFragment {
 
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
-                                DialogManager.getInstance().dissMissProgressDialog();
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 ToastUtil.getInstance(getActivity()).showToast("保存失败");
                             }
                         });

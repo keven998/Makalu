@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -30,9 +30,9 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.ShareUtils;
-import com.aizou.peachtravel.common.widget.PeachDialog;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
@@ -172,23 +172,23 @@ public class StrategyActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
-                    PeachDialog dialog = new PeachDialog(mContext);
+                    PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                     dialog.setTitle("提示");
                     dialog.setTitleIcon(R.drawable.ic_dialog_tip);
                     dialog.setMessage("复制这条攻略到我的攻略里面吗？");
                     dialog.setPositiveButton("确定",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DialogManager.getInstance().showProgressDialog(mContext);
+                            DialogManager.getInstance().showLoadingDialog(mContext);
                             TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
                                 @Override
                                 public void doSucess(String result, String method) {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                 }
 
                                 @Override
                                 public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissProgressDialog();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                 }
                             });
                         }

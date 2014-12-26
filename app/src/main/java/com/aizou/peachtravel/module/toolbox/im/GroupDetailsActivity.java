@@ -21,21 +21,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.http.HttpCallBack;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
-import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.easemob.EMCallBack;
@@ -389,13 +383,13 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					runOnUiThread(new Runnable() {
 						public void run() {
 //							adapter.notifyDataSetChanged();
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
 						}
 					});
 				} catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
 							Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});

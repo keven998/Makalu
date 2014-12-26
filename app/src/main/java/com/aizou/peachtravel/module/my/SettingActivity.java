@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -56,7 +55,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.ll_version_update:
-			DialogManager.getInstance().showProgressDialog(SettingActivity.this, "正在检查更新");
+			DialogManager.getInstance().showLoadingDialog(SettingActivity.this, "正在检查更新");
 			update();
 			break;
 
@@ -105,7 +104,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 //			@Override
 //			public void onFailure(int statusCode, Header[] headers,
 //					byte[] responseBody, Throwable error) {
-//				DialogManager.getInstance().dissMissProgressDialog();
+//				DialogManager.getInstance().dissMissLoadingDialog();
 //
 //			}
 //

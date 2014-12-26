@@ -9,17 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CheckValidationBean;
-import com.aizou.peachtravel.bean.ModifyResult;
-import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.ValidationBean;
-import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
@@ -85,12 +82,12 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(ForgetPwdActivity.this);
+                DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
 
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {
                             countDown = validationResult.result.coolDown;
@@ -104,7 +101,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                     }
                 });
 
@@ -123,13 +120,13 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(ForgetPwdActivity.this);
+                DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
                 UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
-                        if(chechResult.code == 0) {
+                        if(chechResult.code == 0&&chechResult.result.isValid) {
                                 Intent intent = new Intent(mContext,ResetPwdActivity.class);
                                 intent.putExtra("token", chechResult.result.token);
                                 intent.putExtra("phone", phoneEt.getText().toString().trim());
@@ -141,7 +138,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         Log.e("http", "error = " + msg);
                     }
                 });

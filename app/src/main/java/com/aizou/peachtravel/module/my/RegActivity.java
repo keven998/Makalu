@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
@@ -62,11 +62,11 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showProgressDialog(RegActivity.this);
+                DialogManager.getInstance().showLoadingDialog(RegActivity.this);
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE,null, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {
                             Intent intent = new Intent(mContext, VerifyPhoneActivity.class);
@@ -83,7 +83,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                     }
                 });
 

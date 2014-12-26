@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.HackyViewPager;
@@ -124,12 +124,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showProgressDialog(SpotDetailActivity.this);
+                DialogManager.getInstance().showLoadingDialog(SpotDetailActivity.this);
                 if(result.isFavorite){
                     OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 spotDetailBean.isFavorite = false;
@@ -140,14 +140,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }else{
                     OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 spotDetailBean.isFavorite =true;
@@ -158,7 +158,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissProgressDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }

@@ -1,18 +1,15 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.aizou.core.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
@@ -25,12 +22,8 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
-import com.aizou.peachtravel.common.share.ICreateShareDialog;
-import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
-import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
-import com.easemob.EMCallBack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +64,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAccountAbout(true);
         initView();
         initData();
 
@@ -177,7 +171,6 @@ public class AddPoiActivity extends PeachBaseActivity {
         locList = getIntent().getParcelableArrayListExtra("locList");
         List<String> cityStrList = new ArrayList<String>();
         for (LocBean locBean : locList) {
-            locBean.id = "53aa9a6410114e3fd47833bd";
             cityStrList.add(locBean.zhName);
         }
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
@@ -196,7 +189,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
                 if (poiListResult.code == 0) {
                     curPage = page;
@@ -214,7 +207,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
         });
     }
@@ -222,7 +215,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         TravelApi.searchForType(keyWord,type,locId,page,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result,SearchAllBean.class);
                 if(searchAllResult.code==0){
                     curPage = page;
@@ -239,7 +232,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 mLvPoiList.onPullUpRefreshComplete();
                 mLvPoiList.onPullDownRefreshComplete();
             }

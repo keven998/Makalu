@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
@@ -69,11 +68,11 @@ public class SearchAllActivity extends PeachBaseActivity {
 
 
     private void searchAll(final String keyword){
-        DialogManager.getInstance().showProgressDialog(this);
+        DialogManager.getInstance().showLoadingDialog(this);
         TravelApi.searchAll(keyword,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result,SearchAllBean.class);
                 if(searchAllResult.code==0){
                     bindView(keyword,searchAllResult.result);
@@ -82,7 +81,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissProgressDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
         });
 
@@ -137,11 +136,11 @@ public class SearchAllActivity extends PeachBaseActivity {
                IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
                    @Override
                    public void onDialogShareOk(Dialog dialog, int type, String content) {
-                       DialogManager.getInstance().showProgressDialog(mContext);
+                       DialogManager.getInstance().showLoadingDialog(mContext);
                        IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
                            @Override
                            public void onSuccess() {
-                               DialogManager.getInstance().dissMissProgressDialog();
+                               DialogManager.getInstance().dissMissLoadingDialog();
                               runOnUiThread(new Runnable() {
                                    public void run() {
                                        ToastUtil.getInstance(mContext).showToast("发送成功");
@@ -153,7 +152,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 
                            @Override
                            public void onError(int i, String s) {
-                               DialogManager.getInstance().dissMissProgressDialog();
+                               DialogManager.getInstance().dissMissLoadingDialog();
                                runOnUiThread(new Runnable() {
                                    public void run() {
                                        ToastUtil.getInstance(mContext).showToast("发送失败");

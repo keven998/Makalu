@@ -10,7 +10,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
@@ -220,11 +220,11 @@ public class ContactDetailActivity extends ChatBaseActivity {
          * @param tobeDeleteUser
          */
         public void deleteContact(final IMUser tobeDeleteUser) {
-            DialogManager.getInstance().showProgressDialog(getActivity(),"正在删除...");
+            DialogManager.getInstance().showLoadingDialog(getActivity(), "正在删除...");
             UserApi.deleteContact(tobeDeleteUser.getUserId()+"",new HttpCallBack() {
                 @Override
                 public void doSucess(Object result, String method) {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                     if(deleteResult.code==0){
                         IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
@@ -242,7 +242,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(getActivity()).showToast("删除失败");
                 }
             });

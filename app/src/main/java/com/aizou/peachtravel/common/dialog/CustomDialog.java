@@ -1,4 +1,4 @@
-package com.aizou.core.dialog;
+package com.aizou.peachtravel.common.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
