@@ -72,6 +72,20 @@ public class PoiListActivity extends PeachBaseActivity {
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         locList = getIntent().getParcelableArrayListExtra("locList");
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+        if (canAdd) {
+            mBtnOk.setVisibility(View.VISIBLE);
+            mBtnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putParcelableArrayListExtra("poiList", hasAddList);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        } else {
+            mBtnOk.setVisibility(View.INVISIBLE);
+        }
         mPoiAdapter = new PoiAdapter(this, canAdd);
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
@@ -141,20 +155,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id);
             }
         });
-        if (canAdd) {
-            mBtnOk.setVisibility(View.VISIBLE);
-            mBtnOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putParcelableArrayListExtra("poiList", hasAddList);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-        } else {
-            mBtnOk.setVisibility(View.INVISIBLE);
-        }
+
 
 
     }

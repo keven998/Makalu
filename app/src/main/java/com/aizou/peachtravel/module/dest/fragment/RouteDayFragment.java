@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -229,6 +230,7 @@ public class RouteDayFragment extends PeachBaseFragment {
 
         public SectionController(DragSortListView dslv, RouteDayAdapter adapter) {
             super(dslv, R.id.drag_handle, DragSortController.ON_DOWN, 0);
+            setBackgroundColor(Color.TRANSPARENT);
             setRemoveEnabled(false);
             mDslv = dslv;
             mAdapter = adapter;
@@ -238,6 +240,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         @Override
         public View onCreateFloatView(int position) {
             mPos = position;
+            LogUtil.d("dslv","pos="+mPos);
 
             View v = mAdapter.getView(position, null, mDslv);
             // v.setBackgroundDrawable(getResources().getDrawable(
@@ -257,11 +260,12 @@ public class RouteDayFragment extends PeachBaseFragment {
                 origHeight = floatView.getHeight();
             }
             //
-            View div = mDslv.getChildAt(0);
+            View div = mDslv.getChildAt(mDslv.getHeaderViewsCount());
             if (mPos > 0) {
                 // don't allow floating View to go above
                 // section divider
                 final int limit = div.getBottom() + lvDivHeight;
+                LogUtil.d("dslv","limit="+limit+"--y="+floatPoint.y);
                 if (floatPoint.y < limit) {
                     floatPoint.y = limit;
                 }

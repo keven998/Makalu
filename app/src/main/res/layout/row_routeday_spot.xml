@@ -11,8 +11,8 @@
     <LinearLayout
         android:id="@+id/ll_line"
         android:layout_width="9dp"
-        android:layout_marginRight="10dp"
         android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
 
         <View
@@ -51,17 +51,17 @@
                 android:layout_width="52dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/spot_name_tv"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/spot_image_iv"
                 android:layout_alignTop="@id/spot_image_iv"
-                android:textSize="14sp"
+                android:layout_toRightOf="@id/spot_image_iv"
+                android:maxLines="2"
                 android:textColor="@color/base_text_color_title"
-                android:maxLines="2"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/spot_time_cost_tv"
@@ -69,28 +69,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/spot_image_iv"
                 android:layout_toRightOf="@id/spot_image_iv"
+                android:drawableLeft="@drawable/ic_time"
+                android:drawablePadding="4dp"
                 android:paddingBottom="3dp"
                 android:paddingTop="3dp"
-                android:drawableLeft="@drawable/ic_time"
                 android:singleLine="true"
-                android:drawablePadding="4dp"
+                android:textColor="@color/base_text_color_text_placeholder"
                 android:textSize="12sp"
-                android:textStyle="italic"
-                android:textColor="@color/base_text_color_text_placeholder"/>
+                android:textStyle="italic" />
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/drag_nearby_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+        <RelativeLayout
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:textSize="12sp"
-            android:textColor="@color/main_botton_text_color"
-            android:background="@drawable/checker_cell_frame_bg"
-            android:text="周边" />
+            android:clickable="true"
+            >
+            <Button
+                android:id="@+id/drag_nearby_btn"
+                android:layout_width="55dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/checker_cell_frame_bg"
+                android:text="周边"
+                android:textColor="@color/main_botton_text_color"
+                android:textSize="12sp" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/drag_handle"
@@ -98,9 +102,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:scaleType="center"
             android:layout_marginLeft="5dp"
             android:paddingLeft="15dp"
+            android:scaleType="center"
             android:src="@drawable/ic_line_edit_drag"
             android:visibility="gone" />
     </LinearLayout>
