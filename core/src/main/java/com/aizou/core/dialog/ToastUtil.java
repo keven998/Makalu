@@ -29,7 +29,7 @@ public class ToastUtil {
     }
 
     public void showToast(String message) {
-        makeText(mContext, message, Toast.LENGTH_SHORT,false).show();
+        makeText(mContext, message, Toast.LENGTH_SHORT, true).show();
     }
     
     public void showToastCenter(String message) {

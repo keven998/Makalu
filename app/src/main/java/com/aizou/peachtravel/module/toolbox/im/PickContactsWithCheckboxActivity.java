@@ -344,7 +344,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
                             }
                         });
                     }

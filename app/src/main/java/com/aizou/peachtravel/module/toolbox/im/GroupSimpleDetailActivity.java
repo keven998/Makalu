@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMChatManager;
@@ -78,7 +79,8 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressBar.setVisibility(View.INVISIBLE);
-							Toast.makeText(GroupSimpleDetailActivity.this, "获取群聊信息失败: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+//							Toast.makeText(GroupSimpleDetailActivity.this, "获取群聊信息失败: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
 						}
 					});
 				}
@@ -106,10 +108,13 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							if(group.isMembersOnly())
-								Toast.makeText(GroupSimpleDetailActivity.this, "发送请求成功，等待群主同意", Toast.LENGTH_SHORT).show();
-							else
-								Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊成功", Toast.LENGTH_SHORT).show();
+							if(group.isMembersOnly()) {
+//                                Toast.makeText(GroupSimpleDetailActivity.this, "发送请求成功，等待群主同意", Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等候桃主通过");
+                            } else {
+//                                Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(getApplicationContext()).showToast("成功加入");
+                            }
 							btn_add_group.setEnabled(false);
 						}
 					});
@@ -118,7 +123,8 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊失败："+e.getMessage(), Toast.LENGTH_SHORT).show();
+//							Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊失败："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
 						}
 					});
 				}

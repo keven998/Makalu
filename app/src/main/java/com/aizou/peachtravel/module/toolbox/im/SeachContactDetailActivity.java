@@ -105,7 +105,8 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                             @Override
                             public void doSucess(Object result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
+                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，请耐心等待对方验证");
                                     finish();
                             }
 

@@ -125,9 +125,9 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mSearchTravelNoteLv.setHasMoreData(false);
             if (mPage == 0) {
-                Toast.makeText(TravelNoteSearchActivity.this, "没有结果", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("啥都没找到");
             } else {
-                Toast.makeText(TravelNoteSearchActivity.this, "已列出全部", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已列出全部");
             }
         } else {
             mSearchTravelNoteLv.setHasMoreData(true);

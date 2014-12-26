@@ -239,7 +239,7 @@ public class LoginActivity extends PeachBaseActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        Toast.makeText(getApplicationContext(), "登录失败: " + message, Toast.LENGTH_SHORT).show();
+                        ToastUtil.getInstance(getApplicationContext()).showToast("登录失败 " + message);
                     }
                 });
             }

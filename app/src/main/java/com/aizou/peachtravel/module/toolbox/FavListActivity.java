@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +65,8 @@ public class FavListActivity extends PeachBaseActivity {
     public final static int CONST_TYPE_STAY = 4;
     public final static int CONST_TYPE_NOTE = 5;
     public final static int CONST_TYPE_CITY = 6;
-    private final static String[] favTypeArray ={"全部","景点","酒店","餐厅","购物","游记","城市"};
-    private final static String[] favTypeValueArray ={"all","vs ","hotel","restaurant","shopping","travelNote","locality"};
+    private final static String[] favTypeArray = {"全部", "景点", "酒店", "美食", "购物", "游记", "城市"};
+    private final static String[] favTypeValueArray = {"all", "vs ", "hotel", "restaurant", "shopping", "travelNote", "locality"};
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
     @InjectView(R.id.tv_title_bar_title)
@@ -103,16 +104,17 @@ public class FavListActivity extends PeachBaseActivity {
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
         listView.setScrollLoadEnabled(false);
+        listView.setHasMoreData(false);
         listView.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(curType,0);
+                initData(curType, 0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(curType,currentPage + 1);
+                initData(curType, currentPage + 1);
             }
         });
 
@@ -126,7 +128,8 @@ public class FavListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 curType = favTypeValueArray[position];
-                initData(curType, 0);
+//                initData(curType, 0);
+                mFavLv.doPullRefreshing(true, 0);
             }
 
             @Override
@@ -161,6 +164,10 @@ public class FavListActivity extends PeachBaseActivity {
                     new TypeToken<List<FavoritesBean>>() {
                     });
             mAdapter.appendData(lists);
+            if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                mFavLv.setHasMoreData(true);
+                mFavLv.setScrollLoadEnabled(true);
+            }
         } else {
             mFavLv.doPullRefreshing(true, 0);
         }
@@ -184,10 +191,11 @@ public class FavListActivity extends PeachBaseActivity {
                 if (lists.code == 0) {
                     currentPage = page;
                     setupView(lists.result);
-                    if (page == 0) {
+                    if (page == 0 || mAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
                         cachePage();
                     }
                 }
+
                 mFavLv.onPullUpRefreshComplete();
                 mFavLv.onPullDownRefreshComplete();
             }
@@ -208,15 +216,18 @@ public class FavListActivity extends PeachBaseActivity {
         }
         mAdapter.appendData(datas);
 
-        if (datas == null || datas.size() ==0) {
+        if (datas == null || datas.size() == 0) {
             mFavLv.setHasMoreData(false);
+            Log.d("test", "page = " + currentPage);
             if (currentPage == 0) {
-                Toast.makeText(FavListActivity.this, "No收藏", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("No收藏");
             } else {
-                Toast.makeText(FavListActivity.this, "已加载全部", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已取完所有内容啦");
+                mFavLv.setHasMoreData(false);
+                mFavLv.setScrollLoadEnabled(false);
             }
             // ptrLv.setScrollLoadEnabled(false);
-        } else {
+        } else if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
             mFavLv.setScrollLoadEnabled(true);
             mFavLv.setHasMoreData(true);
         }

@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -919,9 +920,10 @@ public class MessageAdapter extends BaseAdapter {
                                     // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                                     // message.setProgress(0);
                                     holder.staus_iv.setVisibility(View.VISIBLE);
-                                    Toast.makeText(activity,
-                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-                                            .show();
+//                                    Toast.makeText(activity,
+//                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+//                                            .show();
+                                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
 
@@ -1045,9 +1047,10 @@ public class MessageAdapter extends BaseAdapter {
                                     // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                                     // message.setProgress(0);
                                     holder.staus_iv.setVisibility(View.VISIBLE);
-                                    Toast.makeText(activity,
-                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-                                            .show();
+//                                    Toast.makeText(activity,
+//                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+//                                            .show();
+                                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
 
@@ -1260,9 +1263,10 @@ public class MessageAdapter extends BaseAdapter {
                                     holder.pb.setVisibility(View.INVISIBLE);
                                     holder.tv.setVisibility(View.INVISIBLE);
                                     holder.staus_iv.setVisibility(View.VISIBLE);
-                                    Toast.makeText(activity,
-                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-                                            .show();
+//                                    Toast.makeText(activity,
+//                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+//                                            .show();
+                                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
 
@@ -1494,8 +1498,9 @@ public class MessageAdapter extends BaseAdapter {
                     holder.pb.setVisibility(View.GONE);
                     }
                     holder.staus_iv.setVisibility(View.VISIBLE);
-                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-                            .show();
+//                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+//                            .show();
+                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                 }
 
                 notifyDataSetChanged();

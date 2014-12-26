@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.BuildConfig;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.utils.video.ImageCache;
@@ -178,7 +179,8 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			VideoEntity vEntty=mList.get(position-1);
 			// 限制大小不能超过10M
 			if (vEntty.size > 1024 * 1024 * 10) {
-				Toast.makeText(getActivity(), "暂不支持大于10M的视频！", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getActivity(), "暂不支持大于10M的视频！", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(getActivity()).showToast("还不支持大于10M的视频");
 				return;
 			}
 			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);

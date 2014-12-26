@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMGroup;
@@ -114,7 +115,8 @@ public class NewGroupActivity extends ChatBaseActivity {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
-								Toast.makeText(NewGroupActivity.this, "创建群组失败:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//								Toast.makeText(NewGroupActivity.this, "创建群组失败:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(NewGroupActivity.this).showToast("呃~好像找不到网络");
 							}
 						});
 					}

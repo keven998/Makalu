@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
@@ -174,7 +175,8 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getActivity(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getActivity()).showToast("OK~成功移除桃友");
 						}
 					});
 				} catch (EaseMobException e) {
@@ -182,7 +184,8 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getActivity(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getActivity()).showToast("呃~好像找不到网络");
 						}
 					});
 				}
