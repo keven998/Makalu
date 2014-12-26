@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/menu_new_message"
-        android:title="开始Talk"
+        android:title="Talk"
         />
 
 

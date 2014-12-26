@@ -22,7 +22,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="@drawable/shape_white_bar"
+        android:background="@drawable/selector_frame_white_card"
         android:duplicateParentState="true" >
 
         <ImageView

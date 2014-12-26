@@ -3,6 +3,7 @@
 
     <item android:drawable="@drawable/ic_cell_item_chooesed" android:state_selected="true"/>
     <item android:drawable="@drawable/ic_cell_item_chooesed" android:state_checked="true"/>
+    <item android:drawable="@drawable/ic_cell_item_chooesed" android:state_pressed="true"/>
     <item android:drawable="@drawable/ic_view_add"/>
 
 </selector>

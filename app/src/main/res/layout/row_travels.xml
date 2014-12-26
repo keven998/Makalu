@@ -5,7 +5,7 @@
 
 <LinearLayout android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/shape_white_bar"
+    android:background="@drawable/selector_frame_white_card"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="13sp"
         android:padding="10dp"
-        android:background="@drawable/shape_white_bar"
+        android:background="@drawable/selector_frame_white_card"
         android:textColor="@color/base_text_color_subtitle"/>
 
 
