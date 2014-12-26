@@ -11,7 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
+import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.aizou.core.widget.prv.PullToRefreshBase;
+import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
@@ -19,9 +23,12 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.PoiListBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,6 +37,11 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class PoiListActivity extends PeachBaseActivity {
+    private PullToRefreshListView mPoiListLv;
+    private String type;
+    private List<String> cityIds;
+    private int page=0;
+    private String curCityId;
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
     @InjectView(R.id.iv_city_poi)
@@ -38,8 +50,9 @@ public class PoiListActivity extends PeachBaseActivity {
     TextView mTvCityName;
     @InjectView(R.id.tv_city_poi_desc)
     TextView mTvCityPoiDesc;
-    private ListView mPoiListLv;
-    private int page=0;
+    ListViewDataAdapter mPoiAdapter;
+
+
 
 
     @Override
@@ -50,24 +63,53 @@ public class PoiListActivity extends PeachBaseActivity {
     }
 
     private void initData() {
+        type = getIntent().getStringExtra("type");
+        cityIds = getIntent().getStringArrayListExtra("cityIds");
+        curCityId = cityIds.get(0);
+//        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
+//        mTvCityName.setText(result.zhName);
+//        mTvCityPoiDesc.setText(result.desc);
 
     }
 
     private void initView() {
         setContentView(R.layout.activity_poi_list);
-        mPoiListLv = (ListView) findViewById(R.id.lv_poi_list);
+        mPoiListLv = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
         View headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
-        mPoiListLv.addHeaderView(headerView);
+        mPoiListLv.getRefreshableView().addHeaderView(headerView);
+        mPoiListLv.setPullLoadEnabled(false);
+        mPoiListLv.setPullRefreshEnabled(false);
+        mPoiListLv.setScrollLoadEnabled(true);
         ButterKnife.inject(this);
+        mPoiAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
+            @Override
+            public ViewHolderBase createViewHolder() {
+                return new PoiListViewHolder();
+            }
+        });
+       mPoiListLv.getRefreshableView().setAdapter(mPoiAdapter);
+       mPoiListLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+           @Override
+           public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+               page=0;
+               getPoiListData(type,curCityId);
+           }
+
+           @Override
+           public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+               getPoiListData(type,curCityId);
+           }
+       });
+
+
 
     }
 
     private void getPoiListData(String type, String cityId) {
-        if (PoiDetailBean.RESTAURANT.equals(type)) {
-            TravelApi.getRESTList(cityId,page, new HttpCallBack<String>() {
+            TravelApi.getPoiListByLoc(type,cityId,page, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson<PoiListBean> poiListResult = CommonJson.fromJson(result, PoiListBean.class);
+                    CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
                     if (poiListResult.code == 0) {
                         bindView(poiListResult.result);
                         page++;
@@ -80,16 +122,16 @@ public class PoiListActivity extends PeachBaseActivity {
 
                 }
             });
+    }
+
+    private void bindView(List<PoiDetailBean> result) {
+        if(page==0){
+            mPoiAdapter.getDataList().clear();
         }
+        mPoiAdapter.getDataList().addAll(result);
+        mPoiAdapter.notifyDataSetChanged();
     }
 
-    private void bindView(PoiListBean result) {
-        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
-        mTvCityName.setText(result.zhName);
-        mTvCityPoiDesc.setText(result.desc);
-
-
-    }
 
     public class PoiListViewHolder extends ViewHolderBase<PoiDetailBean> {
 

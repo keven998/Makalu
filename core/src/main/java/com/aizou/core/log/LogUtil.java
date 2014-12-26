@@ -2,7 +2,6 @@ package com.aizou.core.log;
 
 import android.util.Log;
 
-import com.aizou.core.BuildConfig;
 import com.aizou.core.constant.LibConfig;
 
 public class LogUtil {
