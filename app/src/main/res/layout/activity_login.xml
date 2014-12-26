@@ -98,7 +98,8 @@
         android:layout_height="wrap_content"
         android:text="@string/forget_password"
         android:textSize="13sp"
-        android:textColor="@color/app_theme_color"
+        android:textColor="@color/theme_color"
+        android:clickable="true"
         android:layout_gravity="right"/>
 
     <FrameLayout

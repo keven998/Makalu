@@ -54,6 +54,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         TextView tips = (TextView)findViewById(R.id.tips);
         tips.setText(String.format("已发送短信验证码至 %s\n网络有延迟,请稍后", tel));
     }
+
     private void initData(){
         tel = getIntent().getStringExtra("tel");
         pwd = getIntent().getStringExtra("pwd");
