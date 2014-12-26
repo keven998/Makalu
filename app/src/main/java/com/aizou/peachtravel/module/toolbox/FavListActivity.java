@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,16 +104,19 @@ public class FavListActivity extends PeachBaseActivity {
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
         listView.setScrollLoadEnabled(false);
+        listView.setHasMoreData(false);
         listView.getRefreshableView().setAdapter(mAdapter = new CustomAdapter());
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(curType,0);
+                Log.d("test", "pull down to refreash");
+                initData(curType, 0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData(curType,currentPage + 1);
+                Log.d("test", "pull up to refreash");
+                initData(curType, currentPage + 1);
             }
         });
 
@@ -161,6 +165,10 @@ public class FavListActivity extends PeachBaseActivity {
                     new TypeToken<List<FavoritesBean>>() {
                     });
             mAdapter.appendData(lists);
+            if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                mFavLv.setHasMoreData(true);
+                mFavLv.setScrollLoadEnabled(true);
+            }
         } else {
             mFavLv.doPullRefreshing(true, 0);
         }
@@ -188,6 +196,7 @@ public class FavListActivity extends PeachBaseActivity {
                         cachePage();
                     }
                 }
+
                 mFavLv.onPullUpRefreshComplete();
                 mFavLv.onPullDownRefreshComplete();
             }
@@ -210,13 +219,16 @@ public class FavListActivity extends PeachBaseActivity {
 
         if (datas == null || datas.size() == 0) {
             mFavLv.setHasMoreData(false);
+            Log.d("test", "page = " + currentPage);
             if (currentPage == 0) {
                 ToastUtil.getInstance(this).showToast("No收藏");
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容啦");
+                mFavLv.setHasMoreData(false);
+                mFavLv.setScrollLoadEnabled(false);
             }
             // ptrLv.setScrollLoadEnabled(false);
-        } else {
+        } else if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
             mFavLv.setScrollLoadEnabled(true);
             mFavLv.setHasMoreData(true);
         }

@@ -84,7 +84,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
-        listView.setScrollLoadEnabled(true);
+        listView.setScrollLoadEnabled(false);
+        listView.setHasMoreData(false);
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -201,6 +202,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                     });
             mStrategyListAdapter.getDataList().addAll(lists);
             mStrategyListAdapter.notifyDataSetChanged();
+            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                mMyStrategyLv.setHasMoreData(true);
+                mMyStrategyLv.setScrollLoadEnabled(true);
+            }
         } else {
             mMyStrategyLv.doPullRefreshing(true, 0);
         }
@@ -281,6 +286,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             // ptrLv.setScrollLoadEnabled(false);
         } else {
             mMyStrategyLv.setHasMoreData(true);
+            mMyStrategyLv.setScrollLoadEnabled(true);
         }
 //        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
 //            mMyStrategyLv.setScrollLoadEnabled(true);
