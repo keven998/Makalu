@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.HackyViewPager;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
@@ -23,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -58,6 +61,14 @@ public class ImageZoomAnimator2 {
         zoomContainer.setVisibility(View.VISIBLE);
         zoomViewPager.setCurrentItem(position, false);
         SmoothPhotoView photeView =(SmoothPhotoView) zoomViewPager.findViewWithTag(position);
+        if(photeView.getDrawable()==null){
+            File file =ImageLoader.getInstance().getDiskCache().get(imageUrls.get(position).url);
+            if(file!=null){
+               Bitmap bitmap =ImageLoader.getInstance().loadImageSync(Uri.fromFile(file).toString());
+               photeView.setImageBitmap(bitmap);
+            }
+
+        }
         View view = fromViewGroup.findViewWithTag(position);
         if(view!=null){
             int[] location = new int[2];
@@ -82,14 +93,6 @@ public class ImageZoomAnimator2 {
             view.getLocationOnScreen(location);
             photeView.setOriginalInfo(view.getWidth(), view.getHeight(), location[0], location[1]);
         }
-        photeView.setOnTransformListener(new SmoothPhotoView.TransformListener() {
-            @Override
-            public void onTransformComplete(int mode) {
-                if (mode == 2) {
-                    zoomContainer.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
         photeView.transformOut();
     }
 
@@ -119,46 +122,66 @@ public class ImageZoomAnimator2 {
             View contentView = View.inflate(context, R.layout.item_view_pic, null);
             final SmoothPhotoView photeView =(SmoothPhotoView) contentView.findViewById(R.id.pv_view);
             photeView.setTag(position);
-            photeView.setOnAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            photeView.setOnTransformListener(new SmoothPhotoView.TransformListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    mBgAlpha = (Integer) valueAnimator.getAnimatedValue("alpha");
+                public void onTransformComplete(int mode) {
+                    if (mode == 2) {
+                        mBgAlpha=0;
+                        zoomContainer.setVisibility(View.INVISIBLE);
+                    }else{
+                        mBgAlpha=255;
+                    }
                     Drawable backgroudDrawable =  zoomContainer.getBackground();
                     if(backgroudDrawable==null){
                         backgroudDrawable = new ColorDrawable(Color.BLACK);
                         zoomContainer.setBackgroundDrawable(backgroudDrawable);
                     }
                     backgroudDrawable.setAlpha(mBgAlpha);
+                    LogUtil.d("Transform","transfromComplete--"+mBgAlpha);
+                }
 
+                @Override
+                public void onTransformProcess(int mode, int alpha) {
+                    mBgAlpha = alpha;
+                    Drawable backgroudDrawable =  zoomContainer.getBackground();
+                    if(backgroudDrawable==null){
+                        backgroudDrawable = new ColorDrawable(Color.BLACK);
+                        zoomContainer.setBackgroundDrawable(backgroudDrawable);
+                    }
+                    backgroudDrawable.setAlpha(mBgAlpha);
+                    LogUtil.d("Transform","transfromProcess--"+mBgAlpha);
                 }
             });
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-            ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
+            if(photeView.getDrawable()==null){
+                ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
 
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-                    loadingPb.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                        loadingPb.setVisibility(View.VISIBLE);
 
 
-                }
+                    }
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view,
-                                            FailReason failReason) {
-                    loadingPb.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view,
+                                                FailReason failReason) {
+                        loadingPb.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    loadingPb.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        loadingPb.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-                    loadingPb.setVisibility(View.GONE);
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        loadingPb.setVisibility(View.GONE);
 
-                }
-            });
+                    }
+                });
+            }
+
 
             photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
 
@@ -189,83 +212,6 @@ public class ImageZoomAnimator2 {
     }
 
 
-//    class ImagePagerAdapter extends PagerAdapter {
-//
-//
-//        @Override
-//        public int getCount() {
-//            return imageUrls.size();
-//        }
-//
-//        @Override
-//        public View instantiateItem(final ViewGroup container, final int position) {
-////			ImageView photoView = new ImageView(container.getContext());
-//////			photoView.setScaleType(ScaleType.FIT_CENTER);
-////			PhotoViewAttacher mAttacher=new PhotoViewAttacher(photoView);
-//            // Now just add PhotoView to ViewPager and return it
-//            View contentView = View.inflate(context, R.layout.item_view_pic, null);
-//            final SmoothPhotoView photeView =(SmoothPhotoView) contentView.findViewById(R.id.pv_view);
-//            photeView.setTag(position);
-//            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-//            ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(),new ImageLoadingListener() {
-//
-//                @Override
-//                public void onLoadingStarted(String imageUri, View view) {
-//                    loadingPb.setVisibility(View.VISIBLE);
-//
-//                }
-//
-//                @Override
-//                public void onLoadingFailed(String imageUri, View view,
-//                                            FailReason failReason) {
-//
-//                }
-//
-//                @Override
-//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                    loadingPb.setVisibility(View.GONE);
-//                }
-//
-//                @Override
-//                public void onLoadingCancelled(String imageUri, View view) {
-//                    // TODO Auto-generated method stub
-//
-//                }
-//            });
-//            container.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//
-//            photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-//
-//                @Override
-//                public void onViewTap(View view, float x, float y) {
-////                    photeView.clearZoom();
-//                    transformOut(position);
-//
-//
-//
-//                }
-//            });
-//            return contentView;
-//        }
-//
-//        @Override
-//        public void setPrimaryItem(ViewGroup container, int position, Object object) {
-//            super.setPrimaryItem(container, position, object);
-//        }
-//
-//        @Override
-//        public void destroyItem(ViewGroup container, int position, Object object) {
-//            container.removeView((View) object);
-//        }
-//
-//        @Override
-//        public boolean isViewFromObject(View view, Object object) {
-//            return view == object;
-//        }
-//
-//
-//
-//    }
 
 
 }

@@ -29,6 +29,7 @@
             android:listSelector="@android:color/transparent"
             android:numColumns="3"
             android:paddingLeft="10dp"
+            android:scrollbarStyle="outsideOverlay"
             android:paddingRight="10dp"
             android:verticalSpacing="10dp" />
     </LinearLayout>
