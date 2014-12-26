@@ -76,8 +76,5 @@ public class CustomDialog extends Dialog {
 		}
 
 	}
-	
 
-	
-	
 }

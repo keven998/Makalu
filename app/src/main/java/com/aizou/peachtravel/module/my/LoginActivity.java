@@ -132,7 +132,6 @@ public class LoginActivity extends PeachBaseActivity {
             public void onSuccess() {
 
                 // 登陆成功，保存用户名密码
-                try {
                     // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
@@ -221,24 +220,12 @@ public class LoginActivity extends PeachBaseActivity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到桃子旅行");
 
                         }
                     });
-
-                    ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到桃子旅行");
-
                     setResult(RESULT_OK);
                     finish();
-                } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
 
             }
 

@@ -28,6 +28,8 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.UploadTokenBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.dialog.CustomProgressDialog;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
@@ -40,7 +42,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +94,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initView() {
         setContentView(R.layout.activity_account);
         ViewUtils.inject(this);
-        tvGender = (TextView)findViewById(R.id.tv_gender);
+        tvGender = (TextView) findViewById(R.id.tv_gender);
         findViewById(R.id.ll_avatar).setOnClickListener(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_sign).setOnClickListener(this);
@@ -99,7 +103,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
 
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("个人信息");
         titleBar.enableBackKey(true);
     }
@@ -115,8 +119,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         nickNameTv.setText(user.nickName);
         tvGender.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
-               .showImageForEmptyUri(R.drawable.avatar_placeholder)
-               .showImageOnFail(R.drawable.avatar_placeholder)
+                .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -126,7 +130,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .build();
         ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
                 options);
-        idTv.setText(user.userId+"");
+        idTv.setText(user.userId + "");
         signTv.setText(user.signature);
         phoneTv.setText(user.tel);
 
@@ -188,7 +192,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .callback(new MaterialDialog.Callback() {
                     @Override
                     public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext, R.layout.view_progressbar,null);
+                        View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
                         dialog.setContentView(progressView);
                         AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
                             @Override
@@ -279,7 +283,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button)v).getText());
+                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
                 ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
@@ -288,7 +292,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button)v).getText());
+                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
                 ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
@@ -297,7 +301,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button)v).getText());
+                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
                 ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
@@ -342,54 +346,54 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
             if (data == null) return;
-            Bundle extras = data.getExtras();
-            if (extras != null){
-                Bitmap photo = extras.getParcelable("data");
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
-                String fileName = PathUtils.getInstance().getLocalImageCachePath()+"/"+user.userId+"_avatar.jpg";
-                try {
-                    final File imageFile = BitmapTools.saveBitmap(fileName,photo);
-                    OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-                            CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result,UploadTokenBean.class);
-                            if(tokenResult.code==0){
-                                String token = tokenResult.result.uploadToken;
-                                String key = tokenResult.result.key;
-                                UploadManager uploadManager = new UploadManager();
-                                uploadManager.put(imageFile, key, token,
-                                        new UpCompletionHandler() {
-                                            @Override
-                                            public void complete(String key, ResponseInfo info, JSONObject response) {
-                                                if(info.isOK()){
-                                                    LogUtil.d(response.toString());
-                                                    try {
-                                                        String imageUrl = response.getString("url");
-                                                        user.avatar = imageUrl;
-                                                        AccountManager.getInstance().saveLoginAccount(mContext,user);
-                                                        ImageLoader.getInstance().displayImage(user.avatar,avatarIv, options);
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-
+            final Uri zoomImage = data.getData();
+            final File file = SelectPicUtils.getPicFormUri(this, zoomImage);
+            final CustomProgressDialog progressDialog = DialogManager.getInstance().showProgressDialog(mContext);
+            OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
+                    if (tokenResult.code == 0) {
+                        String token = tokenResult.result.uploadToken;
+                        String key = tokenResult.result.key;
+                        UploadManager uploadManager = new UploadManager();
+                        uploadManager.put(file, key, token,
+                                new UpCompletionHandler() {
+                                    @Override
+                                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        if (info.isOK()) {
+                                            LogUtil.d(response.toString());
+                                            try {
+                                                String imageUrl = response.getString("url");
+                                                user.avatar = imageUrl;
+                                                AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                                ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
-                                        }, null);
-                            }
-                        }
+                                        }
 
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                                    }
+                                }, new UploadOptions(null, null, false,
+                                        new UpProgressHandler() {
+                                            public void progress(String key, double percent) {
+                                                progressDialog.setProgress((int) percent*100);
+                                                LogUtil.d("progress",percent+"");
+                                            }
+                                        }, null));
+                    } else {
+                        DialogManager.getInstance().dissMissProgressDialog();
+                    }
                 }
-                Toast.makeText(mContext, "上传图片", Toast.LENGTH_SHORT).show();
-            }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissProgressDialog();
+                    ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+            });
+
 
         }
     }

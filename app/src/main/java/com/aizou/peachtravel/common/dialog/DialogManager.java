@@ -5,6 +5,9 @@ import android.content.DialogInterface.OnCancelListener;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import com.aizou.core.utils.LocalDisplay;
+import com.aizou.peachtravel.R;
+
 
 /**
  * 描述:对话框管理类， 提供普通消息提示框（一个与两个按钮） 可自定义对话框布局
@@ -18,12 +21,12 @@ public class DialogManager {
     /**
      * Loading对话框
      */
-    private CustomProgressDialog mLoadingDialog;
+    private CustomLoadingDialog mLoadingDialog;
 
     /**
      * 进度对话框
      */
-    private CustomDialog mProgressDialog;
+    private CustomProgressDialog mProgressDialog;
 
     private DialogManager() {
     }
@@ -63,8 +66,9 @@ public class DialogManager {
      *
      * @param context 上下文
      */
-    public void showLoadingDialog(Context context, String message) {
+    public CustomLoadingDialog showLoadingDialog(Context context, String message) {
         mLoadingDialog = createLoadingDialog(context, message, null);
+        return mLoadingDialog;
     }
 
     /**
@@ -72,8 +76,9 @@ public class DialogManager {
      *
      * @param context 上下文
      */
-    public void showLoadingDialog(Context context) {
+    public CustomLoadingDialog showLoadingDialog(Context context) {
         mLoadingDialog = createLoadingDialog(context, null, null);
+        return  mLoadingDialog;
     }
 
     /**
@@ -90,14 +95,50 @@ public class DialogManager {
     }
 
     /**
-     * 通讯提示框
+     * 描述:显示通信框
+     *
+     * @param context 上下文
      */
-    public CustomProgressDialog createLoadingDialog(final Context con, String message, OnCancelListener cancleListener) {
-        CustomProgressDialog dlg = new CustomProgressDialog(con,message);
+    public CustomProgressDialog showProgressDialog(Context context) {
+        mProgressDialog = createProgressDialog(context);
+        return mProgressDialog;
+    }
+
+
+    /**
+     * 描述:隐藏通信框
+     */
+    public void dissMissProgressDialog() {
+        if (mProgressDialog != null) {
+            if (mProgressDialog.isShowing())
+                mProgressDialog.dismiss();
+
+        }
+        mProgressDialog =null;
+
+    }
+
+
+    /**
+     * 创建通讯提示框
+     */
+    private CustomLoadingDialog createLoadingDialog( Context con, String message, OnCancelListener cancleListener) {
+        CustomLoadingDialog dlg = new CustomLoadingDialog(con,message);
         dlg.show();
         dlg.setCancelable(true);
         return dlg;
     }
-
-
+    /**
+     * 创建进度框
+     */
+    private CustomProgressDialog createProgressDialog( Context con) {
+        CustomProgressDialog dlg = new CustomProgressDialog(con);
+        dlg.show();
+        dlg.setMax(100);
+        dlg.setTextColor(con.getResources().getColor(R.color.base_color_white));
+        dlg.setTextSize(LocalDisplay.dp2px(13));
+        dlg.setProgress(0);
+        dlg.setCancelable(true);
+        return dlg;
+    }
 }

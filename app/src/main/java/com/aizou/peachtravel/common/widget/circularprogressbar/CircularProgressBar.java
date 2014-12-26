@@ -8,6 +8,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.aizou.peachtravel.R;
+
 /**
  * 环形的进度条
  * 
@@ -22,10 +24,10 @@ public class CircularProgressBar extends View {
 	private RectF mRectF = new RectF();
 	
 	private int mBackgroundColor = Color.LTGRAY;
-	private int mPrimaryColor = Color.parseColor("#6DCAEC");
+	private int mPrimaryColor = Color.parseColor("#ee528c");
 	private float mStrokeWidth = 10F;
-	
-	/**
+
+    /**
 	 * 进度条改变监听
 	 * 
 	 * {@link #onChange( int duration, int progress, float rate)}

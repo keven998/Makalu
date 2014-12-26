@@ -141,9 +141,9 @@ public class SelectPicUtils {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        intent.putExtra("return-data", true);
+        intent.putExtra("outputX", 720);
+        intent.putExtra("outputY", 720);
+        intent.putExtra("return-data", false);
         activity.startActivityForResult(intent, REQUEST_CODE_ZOOM);
     }
 
