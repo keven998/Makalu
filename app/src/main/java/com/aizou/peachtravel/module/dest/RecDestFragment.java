@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.utils.LocalDisplay;android:layout_marginTop="4dp"
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.RecDestBean;
@@ -51,7 +51,7 @@ public class RecDestFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
         recDestContainer = (FreeFlowContainer) rootView.findViewById(R.id.rec_dest_container);
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("桃子旅行");
+        titleHeaderBar.getTitleTextView().setText("想去");
         titleHeaderBar.getRightTextView().setText("新Memo");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
