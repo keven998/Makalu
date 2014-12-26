@@ -1,13 +1,10 @@
 package com.aizou.peachtravel.module.my;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -15,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +32,6 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.config.Constant;
-import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -119,7 +113,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
         nickNameTv.setText(user.nickName);
-        tvGender.setText(user.gender);
+        tvGender.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
                .showImageForEmptyUri(R.drawable.avatar_placeholder)
                .showImageOnFail(R.drawable.avatar_placeholder)
@@ -194,21 +188,19 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .callback(new MaterialDialog.Callback() {
                     @Override
                     public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext,R.layout.view_progressbar,null);
+                        View progressView = View.inflate(mContext, R.layout.view_progressbar,null);
                         dialog.setContentView(progressView);
-                        AccountManager.getInstance().logout(mContext,false, new EMCallBack() {
+                        AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
                             @Override
                             public void onSuccess() {
                                 dialog.dismiss();
-                                finish();
-
+                                AccountActvity.this.finish();
                             }
 
                             @Override
                             public void onError(int i, String s) {
-                                ToastUtil.getInstance(AccountActvity.this).showToast("退出失败，请重试");
+                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
                                 dialog.dismiss();
-
                             }
 
                             @Override
@@ -289,6 +281,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         manBtn.setOnClickListener(new View.OnClickListener() {
@@ -297,7 +290,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
-
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         unknown.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +299,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 tvGender.setText(((Button)v).getText());
                 dialog.dismiss();
-
+                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +372,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
-
                                                 }
 
                                             }
@@ -389,7 +381,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-
+                            ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
 
@@ -405,6 +397,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+//        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 }

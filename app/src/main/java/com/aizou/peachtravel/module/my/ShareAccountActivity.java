@@ -249,31 +249,31 @@ public class ShareAccountActivity extends PeachBaseActivity {
 									}
 								});
 					} else {
-                        DialogManager.getInstance().showMessageDialogWithDoubleButtonSelf(mContext,"确定","取消","提示","确定解除绑定账户吗？",new OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
-                                mController.deleteOauth(mContext, shareAccount.platform,
-												new SocializeClientListener() {
-
-													@Override
-													public void onStart() {
-														// TODO Auto-generated method stub
-
-													}
-
-													@Override
-													public void onComplete(int arg0,
-															SocializeEntity arg1) {
-                                                        DialogManager.getInstance().dissMissLoadingDialog();
-														shareAccount.screen_name = null;
-														notifyDataSetChanged();
-
-													}
-
-												});
-                            }
-                        });
+//                        DialogManager.getInstance().showMessageDialogWithDoubleButtonSelf(mContext,"确定","取消","提示","确定解除绑定账户吗？",new OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
+//                                mController.deleteOauth(mContext, shareAccount.platform,
+//												new SocializeClientListener() {
+//
+//													@Override
+//													public void onStart() {
+//														// TODO Auto-generated method stub
+//
+//													}
+//
+//													@Override
+//													public void onComplete(int arg0,
+//															SocializeEntity arg1) {
+//                                                        DialogManager.getInstance().dissMissLoadingDialog();
+//														shareAccount.screen_name = null;
+//														notifyDataSetChanged();
+//
+//													}
+//
+//												});
+//                            }
+//                        });
 //						final ComfirmDialog dialog = new ComfirmDialog(mContext);
 //						dialog.setMessage(getResources().getString(
 //								R.string.comfirm_delete_account));

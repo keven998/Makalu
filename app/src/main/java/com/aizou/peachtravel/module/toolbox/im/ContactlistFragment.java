@@ -42,6 +42,7 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
 
+
 /**
  * 联系人列表页
  * 

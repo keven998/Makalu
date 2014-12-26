@@ -17,12 +17,13 @@ public class ToastUtil {
     private Toast mToastInstance;
     private Context mContext;
     private  static ToastUtil sInstance;
-    public static ToastUtil getInstance(Context ct){
-    	if(sInstance==null){
-    		sInstance=new ToastUtil(ct.getApplicationContext());
+    public static ToastUtil getInstance(Context ct) {
+    	if(sInstance == null){
+    		sInstance = new ToastUtil(ct.getApplicationContext());
     	}
     	return sInstance;
     }
+
     private ToastUtil(Context context) {
         mContext = context;
     }
@@ -41,7 +42,7 @@ public class ToastUtil {
 
    
 
-    private Toast makeText(Context context, String message, int showTime,boolean isCenter) {
+    private Toast makeText(Context context, String message, int showTime, boolean isCenter) {
         if (mToastInstance == null) {
 
             mToastInstance = new Toast(context);

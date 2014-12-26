@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -213,7 +214,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-
+                            ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                     // 进入主页面
@@ -223,16 +224,17 @@ public class LoginActivity extends PeachBaseActivity {
 
                         }
                     });
+
+                    ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到桃子旅行");
+
                     setResult(RESULT_OK);
                     finish();
-
-
                 } catch (Exception e) {
                     runOnUiThread(new Runnable() {
                         public void run() {
+
                             DialogManager.getInstance().dissMissLoadingDialog();
                             Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
-
                         }
                     });
 
@@ -261,11 +263,11 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void signIn() {
         if (TextUtils.isEmpty(loginNameEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("请输入注册手机号或昵称");
+            ToastUtil.getInstance(mContext).showToast("亲，请告诉我你的手机号或昵称");
             return;
         }
         if (TextUtils.isEmpty(pwdEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("请输入密码");
+            ToastUtil.getInstance(mContext).showToast("亲，忘了输入密码了");
             return;
         }
         DialogManager.getInstance().showLoadingDialog(this);
@@ -284,13 +286,17 @@ public class LoginActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
+
                 }
 
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+
                 DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+
             }
         });
     }
@@ -319,7 +325,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-
+                        ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
             }

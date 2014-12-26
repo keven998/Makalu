@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
@@ -187,6 +188,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(getContext()).showToast(getContext().getString(R.string.request_network_failed));
             }
         });
 

@@ -139,7 +139,8 @@ public class ShoppingFragment extends PeachBaseFragment {
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                         mEditBtn.setChecked(false);

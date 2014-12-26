@@ -43,11 +43,11 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                            @Override
                                                            public void onClick(View view) {
                                                                if(TextUtils.isEmpty(signEt.getText())){
-                                                                   ToastUtil.getInstance(mContext).showToast("请输入签名");
+                                                                   ToastUtil.getInstance(mContext).showToast("你的性感签名呢");
                                                                    return;
                                                                }
                                                                if(!CommonUtils.isNetWorkConnected(mContext)){
-                                                                   ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+                                                                   ToastUtil.getInstance(mContext).showToast("呃～好像没找到网络");
                                                                    return;
                                                                }
                                                                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
@@ -61,6 +61,7 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                        if (modifyResult.code == 0) {
                                                                            user.signature = signEt.getText().toString().trim();
                                                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                                                           ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                                                                            finish();
                                                                        }
                                                                    }
@@ -68,14 +69,14 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                    @Override
                                                                    public void doFailure(Exception error, String msg, String method) {
                                                                        DialogManager.getInstance().dissMissLoadingDialog();
-
+                                                                       ToastUtil.getInstance(ModifySignActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                                                    }
 
                                                                    @Override
                                                                    public void onStart() {
                                                                    }
                                                                });
-                                                               finish();
+//                                                               finish();
 
                                                            }
 

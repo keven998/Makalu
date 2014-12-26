@@ -223,16 +223,9 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         zoomExitAnimation(new Runnable() {
             @Override
             public void run() {
-                finish();
+                finishWithNoAnim();
             }
         });
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        // override transitions to skip the standard window animations
-        overridePendingTransition(0, 0);
     }
 
 

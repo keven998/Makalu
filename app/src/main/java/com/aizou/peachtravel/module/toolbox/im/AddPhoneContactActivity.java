@@ -104,7 +104,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(AddPhoneContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -172,14 +172,14 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                            public void doSucess(String result, String method) {
                                DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<PeachUser> userResult = CommonJson.fromJson(result,PeachUser.class);
-                                if(userResult.code==0){
+                                if (userResult.code == 0) {
                                     Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
                                     intent.putExtra("isSeach",true);
                                     intent.putExtra("user", userResult.result);
                                     startActivity(intent);
+                                } else {
 
                                 }
-
                            }
 
                            @Override

@@ -263,6 +263,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -294,7 +295,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void onClick(View view) {
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
+//                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                     }
                 });
             } else {
@@ -404,18 +405,21 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         if (mStrategyListAdapter.getCount() == 0) {
                                             mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                                         }
-                                        ToastUtil.getInstance(mContext).showToast("删除成功");
+//                                        ToastUtil.getInstance(mContext).showToast("删除成功");
+                                        ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功删除");
                                         if (index <= OtherApi.PAGE_SIZE) {
                                             cachePage();
                                         }
                                     } else {
-                                        ToastUtil.getInstance(mContext).showToast("删除失败");
+//                                        ToastUtil.getInstance(mContext).showToast("删除失败");
+                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                                     }
                                 }
 
                                 @Override
                                 public void doFailure(Exception error, String msg, String method) {
-                                    ToastUtil.getInstance(mContext).showToast("删除失败");
+//                                    ToastUtil.getInstance(mContext).showToast("删除失败");
+                                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                 }
                             });
 

@@ -95,6 +95,7 @@
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:drawablePadding="10dp"
+                    android:singleLine="true"
                     android:layout_marginRight="18dp"/>
 
             </LinearLayout>
@@ -194,6 +195,7 @@
                     android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
+                    android:singleLine="true"
                     android:textSize="14sp"
                     android:drawablePadding="10dp"
                     android:layout_marginRight="18dp" />

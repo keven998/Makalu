@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
@@ -194,13 +195,15 @@ public class AddPoiActivity extends PeachBaseActivity {
                 if (poiListResult.code == 0) {
                     curPage = page;
                     bindView(poiListResult.result);
+                } else {
+                    ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
-                if (curPage == 0) {
-                    mLvPoiList.onPullUpRefreshComplete();
-                    mLvPoiList.onPullDownRefreshComplete();
-                }else{
-                    mLvPoiList.onPullDownRefreshComplete();
-                }
+//                if (curPage == 0) {
+//                    mLvPoiList.onPullUpRefreshComplete();
+//                    mLvPoiList.onPullDownRefreshComplete();
+//                } else {
+//                    mLvPoiList.onPullDownRefreshComplete();
+//                }
                 mLvPoiList.onPullUpRefreshComplete();
                 mLvPoiList.onPullDownRefreshComplete();
             }
@@ -208,6 +211,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

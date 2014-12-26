@@ -114,6 +114,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
+                                ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                     }else if(actionCode.equals(UserApi.ValidationCode.FIND_PWD)){
@@ -150,6 +151,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
 

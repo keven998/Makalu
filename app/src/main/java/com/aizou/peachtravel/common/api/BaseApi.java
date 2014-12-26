@@ -39,8 +39,6 @@ public class BaseApi {
         }
         request.setHeader("Platform", "Android");
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);
-
-
     }
 
 }

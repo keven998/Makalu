@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -106,6 +107,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 mSearchTravelNoteLv.onPullUpRefreshComplete();
                 mSearchTravelNoteLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(TravelNoteSearchActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

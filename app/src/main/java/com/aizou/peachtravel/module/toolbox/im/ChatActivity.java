@@ -13,13 +13,6 @@
  */
 package com.aizou.peachtravel.module.toolbox.im;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -93,7 +86,6 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
-import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
@@ -126,8 +118,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 聊天页面
@@ -433,7 +429,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-
+                    ToastUtil.getInstance(ChatActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });
         }

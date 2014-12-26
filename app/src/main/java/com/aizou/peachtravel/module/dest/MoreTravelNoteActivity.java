@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -85,6 +86,8 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                     mPage = page;
                     bindView(detailResult.result);
 
+                } else {
+//                    ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
@@ -96,6 +99,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

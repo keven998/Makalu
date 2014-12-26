@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -132,6 +133,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -155,6 +157,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 mSearchResultLv.onPullUpRefreshComplete();
                 mSearchResultLv.onPullDownRefreshComplete();
+                ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

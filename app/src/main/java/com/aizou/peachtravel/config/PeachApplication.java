@@ -1,33 +1,17 @@
 package com.aizou.peachtravel.config;
 
-import android.app.ActivityManager;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.BuildConfig;
-import android.util.Log;
 
 import com.aizou.core.base.BaseApplication;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.DaoMaster;
 import com.aizou.peachtravel.db.DaoSession;
-import com.aizou.peachtravel.module.MainActivity;
-import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
-import com.aizou.peachtravel.module.toolbox.im.VoiceCallReceiver;
-import com.easemob.chat.ConnectionListener;
-import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.OnNotificationClickListener;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,8 +20,6 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Rjm on 2014/10/9.

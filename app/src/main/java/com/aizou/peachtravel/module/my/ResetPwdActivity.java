@@ -73,6 +73,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(ResetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }

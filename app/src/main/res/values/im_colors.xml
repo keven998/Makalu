@@ -27,8 +27,8 @@
     <color name="btn_blue_normal">#1e90ff</color>
     <color name="btn_blue_pressed">#0066FF</color>
      <color name="orange">#FFA500</color>
-     <color name="gray_pressed">#b5b5b6</color>
-     <color name="gray_normal">#666667</color>
+     <color name="gray_pressed">#cccccc</color>
+     <color name="gray_normal">#aaaaaa</color>
      <color name="grid_state_pressed">#1Affffff</color>
     <color name="grid_state_focused">#80000000</color>
     

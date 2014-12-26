@@ -63,7 +63,8 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("新密码不一致");
                 }else{
                     if(!CommonUtils.isNetWorkConnected(mContext)){
-                        ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+//                        ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                        ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         return;
                     }
                     DialogManager.getInstance().showLoadingDialog(ModifyPwdActivity.this);
@@ -73,6 +74,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
                             if (modifyResult.code == 0) {
+                                ToastUtil.getInstance(mContext).showToast("OK~修改成功");
                                 finish();
                             } else {
                                 ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
@@ -82,6 +84,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }

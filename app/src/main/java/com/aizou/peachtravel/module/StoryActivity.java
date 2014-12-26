@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.R;
@@ -82,12 +83,14 @@ public class StoryActivity extends SwipeBackActivity {
                 if(storyResult.code == 0) {
                     SharePrefUtil.saveString(StoryActivity.this, "story_image", storyResult.result.image);
                     ImageLoader.getInstance().displayImage(storyResult.result.image,storyIv, picOptions);
+                } else {
+//                    ToastUtil.getInstance(StoryActivity.this).showToast("请求也是失败了");
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(StoryActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
