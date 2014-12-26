@@ -44,7 +44,7 @@ public class MainActivity extends PeachBaseActivity {
     private Class fragmentArray[] = {ToolboxFragment.class, RecDestFragment.class, MyFragment.class,};
 
    // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.tab_tao_selector,R.drawable.tab_loc_selector,R.drawable.tab_my_selector,
+    private int mImageViewArray[] = {R.drawable.tab_tao_selector, R.drawable.tab_loc_selector, R.drawable.tab_my_selector,
             };
 
     //Tab选项卡的文字
@@ -60,7 +60,6 @@ public class MainActivity extends PeachBaseActivity {
         List<String> blacklist = null;
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
-
     }
 
     /**
@@ -73,7 +72,22 @@ public class MainActivity extends PeachBaseActivity {
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String s) {
+                if (s.equals(mTagArray[0])) {
+                    ToolboxFragment fg = (ToolboxFragment)getSupportFragmentManager().findFragmentByTag(s);
+                    if (fg != null) {
+                        fg.reloadData();
+                    }
+                } else if (s.equals(mTagArray[1])) {
+                    RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
+                    if (fg != null) {
+                        fg.reloadData();
+                    }
+                }
+            }
+        });
         //得到fragment的个数
         int count = fragmentArray.length;
 
@@ -82,6 +96,7 @@ public class MainActivity extends PeachBaseActivity {
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(getTabItemView(i));
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
+
         }
     }
 
@@ -178,9 +193,10 @@ public class MainActivity extends PeachBaseActivity {
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
     public void onDrivingLogout() {
         MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-        if(myFragment!=null){
+        if(myFragment != null){
             myFragment.refresh();
         }
     }

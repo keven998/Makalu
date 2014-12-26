@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,18 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
+//        requestWeather();
+        getOperateData();
+        return rootView;
+    }
+
+    public void reloadData() {
+        if (TextUtils.isEmpty(weatherStr)) {
+            requestWeather();
+        }
+    }
+
+    private void requestWeather() {
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override
@@ -142,8 +155,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
                     }
                 });
-        getOperateData();
-        return rootView;
     }
 
     private void getOperateData() {
@@ -330,7 +341,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         if(user!=null){
             updateUnreadLabel();
         }
-
+        reloadData();
     }
 
     /**

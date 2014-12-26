@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -66,8 +67,14 @@ public class RecDestFragment extends PeachBaseFragment {
             }
         });
         titleHeaderBar.enableBackKey(false);
-        initData();
+//        initData();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadData();
     }
 
     private void initData() {
@@ -101,8 +108,14 @@ public class RecDestFragment extends PeachBaseFragment {
         });
     }
 
+    public void reloadData() {
+        if (recDestContainer.getAdapter() == null || recDestContainer.getAdapter().getNumberOfSections() == 0) {
+            initData();
+        }
+    }
+
     private void bindView(List<RecDestBean> recDestList){
-        wantToLayout =new WantToLayout();
+        wantToLayout = new WantToLayout();
         recDestContainer.setEdgeEffectsEnabled(false);
         wantToLayout.setLayoutParams(new LayoutParams(LocalDisplay.SCREEN_WIDTH_PIXELS, LocalDisplay.dp2px(40)));
         recDestContainer.setLayout(wantToLayout);
