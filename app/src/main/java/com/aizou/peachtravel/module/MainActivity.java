@@ -21,6 +21,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
@@ -123,24 +124,19 @@ public class MainActivity extends PeachBaseActivity {
         }
         try {
             if (conflictDialog == null){
-                conflictBuilder = new MaterialDialog.Builder(this);
-                conflictBuilder.title("下线通知");
-                conflictBuilder.content(R.string.connect_conflict);
-                conflictBuilder.positiveText(R.string.ok);
-                conflictBuilder.callback(new MaterialDialog.Callback() {
+                conflictDialog= new PeachMessageDialog(mContext);
+                conflictDialog.setTitle("下线通知");
+                conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
+                conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
+                conflictDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-
-
-                    }
-
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        conflictBuilder = null;
+                    public void onClick(View v) {
+                        conflictDialog.dismiss();
+                        conflictDialog = null;
                     }
                 });
-                conflictBuilder.cancelable(false);
-                conflictDialog= conflictBuilder.build();
+                conflictDialog.show();
+                conflictDialog.setCancelable(false);
             }
             conflictDialog.show();
             isConflict=true;

@@ -7,11 +7,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
+import com.easemob.EMCallBack;
 
 /**
  * Created by Rjm on 2014/12/4.
@@ -86,8 +91,7 @@ public class BaseActivity extends FragmentActivity {
         this.isAccountAbout = isAccountAbout;
     }
 
-    protected MaterialDialog.Builder conflictBuilder;
-    protected MaterialDialog conflictDialog;
+    protected PeachMessageDialog conflictDialog;
     /**
      * 显示帐号在别处登录dialog
      */
@@ -96,28 +100,22 @@ public class BaseActivity extends FragmentActivity {
             return;
         try {
             if (conflictDialog == null){
-                conflictBuilder = new MaterialDialog.Builder(this);
-                conflictBuilder.title("下线通知");
-                conflictBuilder.content(R.string.connect_conflict);
-                conflictBuilder.positiveText(R.string.ok);
-                conflictBuilder.callback(new MaterialDialog.Callback() {
+                conflictDialog= new PeachMessageDialog(mContext);
+                conflictDialog.setTitle("下线通知");
+                conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
+                conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
+                conflictDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-
-
-                    }
-
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        dialog.dismiss();
-                        conflictBuilder = null;
+                    public void onClick(View v) {
+                        conflictDialog.dismiss();
+                        conflictDialog = null;
                         if(isAccountAbout){
                             finish();
                         }
                     }
                 });
-                conflictBuilder.cancelable(false);
-                conflictDialog= conflictBuilder.build();
+                conflictDialog.show();
+                conflictDialog.setCancelable(false);
             }
             conflictDialog.show();
             isConflict=true;

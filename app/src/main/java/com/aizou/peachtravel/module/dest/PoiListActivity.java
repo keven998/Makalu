@@ -142,6 +142,7 @@ public class PoiListActivity extends PeachBaseActivity {
             }
         });
         if (canAdd) {
+            mBtnOk.setVisibility(View.VISIBLE);
             mBtnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

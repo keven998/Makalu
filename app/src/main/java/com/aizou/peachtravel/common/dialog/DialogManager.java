@@ -136,7 +136,7 @@ public class DialogManager {
         dlg.show();
         dlg.setMax(100);
         dlg.setTextColor(con.getResources().getColor(R.color.base_color_white));
-        dlg.setTextSize(LocalDisplay.dp2px(13));
+        dlg.setTextSize(14);
         dlg.setProgress(0);
         dlg.setCancelable(true);
         return dlg;

@@ -24,14 +24,18 @@ public class OtherApi extends BaseApi {
     public static class Scenario{
          public final static String PORTRAIT="portrait";
     }
-
+    //封面图片
     public final static String COVER_STORY="/misc/cover-stories";
+    //获取上传token;
     public final static String UPLOAD_TOKEN="/misc/put-policy/";
+    //游记搜索
     public final static String TRAVEL_NOTES="/misc/notes/search";
     //收藏
     public final static String FAV="/misc/favorites";
     //运营
     public final static String OPERATE="/columns";
+    //反馈
+    public final static String FEEDBACK="/misc/feedback";
 
     /**
      * 获取封面故事
@@ -174,7 +178,34 @@ public class OtherApi extends BaseApi {
         return HttpManager.request(request, callBack);
     }
 
+    /**
+     * 反馈信息
+     * @param content
+     * @param callBack
+     * @return
+     */
+    public static PTRequestHandler feedback(String content,HttpCallBack callBack){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + FEEDBACK);
+        setDefaultParams(request);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("body", content);
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString());
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        return HttpManager.request(request, callBack);
+    }
 
 
 }

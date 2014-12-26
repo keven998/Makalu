@@ -91,7 +91,7 @@ public class CircularProgressBar extends View {
 		if( mOnChangeListener != null ) {
 			mOnChangeListener.onChange(mDuration, progress, getRateOfProgress());
 		}
-		invalidate();
+		postInvalidateOnAnimation();
 	}
 	
 	/**

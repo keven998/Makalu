@@ -10,11 +10,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.aizou.core.http.HttpCallBack;
+import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 
@@ -44,7 +48,6 @@ public class FeedbackActivity extends PeachBaseActivity {
 				if(TextUtils.isEmpty(contentEt.getText())){
 					ToastUtil.getInstance(mContext).showToast("你的吐槽呢，我读书少不要骗我");
 				} else {
-					DialogManager.getInstance().showLoadingDialog(mContext, "正在提交");
 					feedback();
 				}
 				
@@ -61,57 +64,29 @@ public class FeedbackActivity extends PeachBaseActivity {
 	
 	@Override
 	public void finish() {
-		// TODO Auto-generated method stub
 		super.finish();
 	}
 
 	private void feedback() {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			jsonObject.put("body", contentEt.getText().toString());
-//			jsonObject.put("title", "test");
-//			JSONObject contactJson = new JSONObject();
-//			contactJson.put("tel", phoneEt.getText().toString());
-//			contactJson.put("email", emailEt.getText().toString());
-//			jsonObject.put("contact", contactJson);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		LogUtil.d("put params", jsonObject.toString());
-//		LxpRequest.feedback(mContext, jsonObject.toString(), new AsyncHttpResponseHandler(){
-//
-//
-//			@Override
-//			public void onSuccess(int statusCode, Header[] headers,
-//					byte[] responseBody) {
-//				closeProgressDialog();
-//				FeedbackActivity.this.finish();
-//
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers,
-//					byte[] responseBody, Throwable error) {
-//				closeProgressDialog();
-//				ToastUtil.getInstance(mContext).showToast("提交失败，请稍后重试");
-//				error.printStackTrace();
-//
-//			}
-//
-//			@Override
-//			public void setRequestHeaders(Header[] requestHeaders) {
-//				for(Header header: requestHeaders){
-//					LogUtil.d("header",header.getName()+"--"+header.getValue()+"");
-//				}
-//				super.setRequestHeaders(requestHeaders);
-//			}
-//
-//
-//
-//
-//
-//		});
+        DialogManager.getInstance().showLoadingDialog(mContext,"正在提交");
+        OtherApi.feedback(contentEt.getText().toString().trim(),new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> feedbackResult = CommonJson.fromJson(result,ModifyResult.class);
+                if(feedbackResult.code==0){
+                    ToastUtil.getInstance(mContext).showToast("提交成功");
+                }else {
+                    ToastUtil.getInstance(mContext).showToast("提交失败");
+                }
+            }
 
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(FeedbackActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
 	}
 
 }

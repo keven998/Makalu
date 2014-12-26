@@ -2,7 +2,6 @@ package com.aizou.peachtravel.module.my;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
@@ -13,24 +12,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
-import com.aizou.core.utils.BitmapTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.UploadTokenBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.CustomProgressDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -49,9 +47,7 @@ import com.qiniu.android.storage.UploadOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -88,6 +84,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
+        refreshUserInfo();
 
     }
 
@@ -114,8 +111,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         initData();
     }
 
-    private void initData() {
-        user = AccountManager.getInstance().getLoginAccount(this);
+    private void bindView(PeachUser user){
         nickNameTv.setText(user.nickName);
         tvGender.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
@@ -133,6 +129,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         idTv.setText(user.userId + "");
         signTv.setText(user.signature);
         phoneTv.setText(user.tel);
+    }
+
+    private void initData() {
+        user = AccountManager.getInstance().getLoginAccount(this);
+        bindView(user);
+
 
 //        if(TextUtils.isEmpty(user.tel)){
 //            modifPwdLl.setVisibility(View.GONE);
@@ -180,47 +182,78 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
         }
     }
+    private void refreshUserInfo(){
+        PeachUser user = AccountManager.getInstance().getLoginAccount(this);
+        if(user!=null){
+            UserApi.getUserInfo(user.userId + "", new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                    if (userResult.code == 0) {
+                        AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
+                        bindView(userResult.result);
+                    }
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+            });
+        }
+    }
 
     private void warnLogout() {
-        new MaterialDialog.Builder(this)
-
-                .title(null)
-                .content("确定退出已登陆账号")
-                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                .positiveText("确定")
-                .negativeText("取消")
-                .callback(new MaterialDialog.Callback() {
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage("确定退出已登陆账号吗？");
+        dialog.setPositiveButton("确定",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                DialogManager.getInstance().showLoadingDialog(mContext,"正在登出");
+                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
                     @Override
-                    public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
-                        dialog.setContentView(progressView);
-                        AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
+                    public void onSuccess() {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onSuccess() {
-                                dialog.dismiss();
+                            public void run() {
+                                DialogManager.getInstance().dissMissLoadingDialog();
                                 AccountActvity.this.finish();
-                            }
-
-                            @Override
-                            public void onError(int i, String s) {
-                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onProgress(int i, String s) {
-
                             }
                         });
 
                     }
 
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
+                    public void onError(int i, String s) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
+                                dialog.dismiss();
+                            }
+                        });
+
                     }
-                })
-                .show();
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            }
+        });
+        dialog.setNegativeButton("取消",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
 
@@ -272,6 +305,39 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
+    private void modifyGender(final String gender){
+        if(!CommonUtils.isNetWorkConnected(mContext)){
+            ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        UserApi.editUserGender(user, gender, new HttpCallBack<String>() {
+
+
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                if(modifyResult.code==0){
+                    user.gender = gender;
+                    AccountManager.getInstance().saveLoginAccount(mContext,user);
+                    tvGender.setText(user.getGenderDesc());
+                    ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void onStart() {
+            }
+        });
+    }
+
     private void showSelectGenderDialog() {
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
         View contentView = View.inflate(this, R.layout.dialog_select_gender, null);
@@ -283,27 +349,25 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
-                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                modifyGender("F");
             }
         });
         manBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
-                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                modifyGender("M");
+
             }
         });
         unknown.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                tvGender.setText(((Button) v).getText());
                 dialog.dismiss();
-                ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                modifyGender("U");
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -368,7 +432,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                                 String imageUrl = response.getString("url");
                                                 user.avatar = imageUrl;
                                                 AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                                ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
+                                                ImageLoader.getInstance().displayImage(zoomImage.toString(), avatarIv, options);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -378,7 +442,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 }, new UploadOptions(null, null, false,
                                         new UpProgressHandler() {
                                             public void progress(String key, double percent) {
-                                                progressDialog.setProgress((int) percent*100);
+                                                progressDialog.setProgress((int) (percent*100));
                                                 LogUtil.d("progress",percent+"");
                                             }
                                         }, null));

@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.UpdateResult;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
@@ -70,6 +72,22 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 			break;
 
         case R.id.ll_clear_cache:
+            DialogManager.getInstance().showLoadingDialog(mContext,"请稍后");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageLoader.getInstance().clearDiskCache();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(mContext).showToast("清除成功");
+                        }
+                    });
+                }
+            }).start();
+
+
             break;
 
 		default:

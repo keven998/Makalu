@@ -19,10 +19,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -249,75 +253,44 @@ public class ShareAccountActivity extends PeachBaseActivity {
 									}
 								});
 					} else {
-//                        DialogManager.getInstance().showMessageDialogWithDoubleButtonSelf(mContext,"确定","取消","提示","确定解除绑定账户吗？",new OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
-//                                mController.deleteOauth(mContext, shareAccount.platform,
-//												new SocializeClientListener() {
-//
-//													@Override
-//													public void onStart() {
-//														// TODO Auto-generated method stub
-//
-//													}
-//
-//													@Override
-//													public void onComplete(int arg0,
-//															SocializeEntity arg1) {
-//                                                        DialogManager.getInstance().dissMissLoadingDialog();
-//														shareAccount.screen_name = null;
-//														notifyDataSetChanged();
-//
-//													}
-//
-//												});
-//                            }
-//                        });
-//						final ComfirmDialog dialog = new ComfirmDialog(mContext);
-//						dialog.setMessage(getResources().getString(
-//								R.string.comfirm_delete_account));
-//						dialog.setPositiveButton(
-//								getResources().getString(R.string.ok),
-//								new OnClickListener() {
-//
-//									@Override
-//									public void onClick(View v) {
-//										showLoadingDialog("解除绑定");
-//										mController.deleteOauth(mContext, shareAccount.platform,
-//												new SocializeClientListener() {
-//
-//													@Override
-//													public void onStart() {
-//														// TODO Auto-generated method stub
-//
-//													}
-//
-//													@Override
-//													public void onComplete(int arg0,
-//															SocializeEntity arg1) {
-//														closeProgressDialog();
-//														shareAccount.screen_name = null;
-//														notifyDataSetChanged();
-//
-//													}
-//
-//												});
-//										dialog.dismiss();
-//
-//									}
-//								});
-//						dialog.setNegativeButton(
-//								getResources().getString(R.string.cancle),
-//								new OnClickListener() {
-//
-//									@Override
-//									public void onClick(View v) {
-//										dialog.dismiss();
-//
-//									}
-//								});
-//						dialog.show();
+                        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+                        dialog.setTitle("提示");
+                        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+                        dialog.setMessage("确定解除绑定账户吗？");
+                        dialog.setPositiveButton("确定",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
+                                mController.deleteOauth(mContext, shareAccount.platform,
+												new SocializeClientListener() {
+
+													@Override
+													public void onStart() {
+														// TODO Auto-generated method stub
+
+													}
+
+													@Override
+													public void onComplete(int arg0,
+															SocializeEntity arg1) {
+                                                        DialogManager.getInstance().dissMissLoadingDialog();
+														shareAccount.screen_name = null;
+														notifyDataSetChanged();
+
+													}
+
+												});
+                            }
+                        });
+                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+
 
 						
 						

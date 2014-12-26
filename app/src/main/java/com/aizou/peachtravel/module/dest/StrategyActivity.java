@@ -173,13 +173,14 @@ public class StrategyActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
-                    PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                     dialog.setTitle("提示");
                     dialog.setTitleIcon(R.drawable.ic_dialog_tip);
                     dialog.setMessage("复制这条攻略到我的攻略里面吗？");
                     dialog.setPositiveButton("确定",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog.dismiss();
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
                                 @Override
@@ -198,7 +199,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     dialog.setNegativeButton("取消",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            dialog.dismiss();
                         }
                     });
 

@@ -24,7 +24,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public String id;
     public String zhName;
     public String enName;
-    public String priceDesc;
+    public String priceDesc="";
     public String desc;
     public String timeCostDesc;
     public float rating;
