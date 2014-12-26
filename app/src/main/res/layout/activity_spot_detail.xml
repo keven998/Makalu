@@ -94,7 +94,9 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
                         expandableTextView:animDuration="200"
                         expandableTextView:maxCollapsedLines="2">
 
@@ -105,8 +107,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:textColor="#666666"
-                            android:textSize="16sp" />
+                            android:textColor="@color/base_text_color_subtitle"
+                            android:lineSpacingExtra="3dp"
+                            android:textSize="14sp" />
 
                         <ImageButton
                             android:id="@id/expand_collapse"

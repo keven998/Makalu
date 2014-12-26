@@ -31,8 +31,8 @@ public class RegexUtils {
     public static boolean checkNickName(String nickname){
 //        只支持中英文、数字和下划线
 //        用户名唯一
-//        16位一下
-        Pattern p = Pattern.compile("^[\\u4E00-\\u9FA5|0-9a-zA-Z|_]{1,16}$");
+//        12位一下
+        Pattern p = Pattern.compile("^[\\u4E00-\\u9FA5|0-9a-zA-Z|_]{1,12}$");
         Matcher m = p.matcher(nickname);
         return m.matches();
     }
