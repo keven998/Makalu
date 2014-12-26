@@ -65,8 +65,8 @@ public class FavListActivity extends PeachBaseActivity {
     public final static int CONST_TYPE_STAY = 4;
     public final static int CONST_TYPE_NOTE = 5;
     public final static int CONST_TYPE_CITY = 6;
-    private final static String[] favTypeArray ={"全部","景点","酒店","餐厅","购物","游记","城市"};
-    private final static String[] favTypeValueArray ={"all","vs ","hotel","restaurant","shopping","travelNote","locality"};
+    private final static String[] favTypeArray = {"全部", "景点", "酒店", "美食", "购物", "游记", "城市"};
+    private final static String[] favTypeValueArray = {"all", "vs ", "hotel", "restaurant", "shopping", "travelNote", "locality"};
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
     @InjectView(R.id.tv_title_bar_title)
@@ -109,13 +109,11 @@ public class FavListActivity extends PeachBaseActivity {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Log.d("test", "pull down to refreash");
                 initData(curType, 0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Log.d("test", "pull up to refreash");
                 initData(curType, currentPage + 1);
             }
         });
@@ -130,7 +128,8 @@ public class FavListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 curType = favTypeValueArray[position];
-                initData(curType, 0);
+//                initData(curType, 0);
+                mFavLv.doPullRefreshing(true, 0);
             }
 
             @Override
