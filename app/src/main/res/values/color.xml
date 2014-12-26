@@ -31,7 +31,7 @@
 
     <color name="base_border_color">#b3b3b3</color>
     <color name="base_divider_color">#dcdcdc</color>
-    <color name="base_highlight_color">#eaeaea</color>
+    <color name="base_highlight_color">#f4f4f4</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">#eeeeee</drawable>

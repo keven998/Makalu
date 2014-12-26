@@ -22,7 +22,7 @@
         android:textSize="12sp"
         android:drawableTop="@drawable/ic_new_talk"
         android:drawablePadding="10dp"
-        android:text="开始Talk"
+        android:text="Talk"
         android:padding="30dp"/>
 
 
