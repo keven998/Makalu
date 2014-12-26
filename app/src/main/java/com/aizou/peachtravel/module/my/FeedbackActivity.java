@@ -42,8 +42,8 @@ public class FeedbackActivity extends PeachBaseActivity {
 			@Override
 			public void onClick(View v) {
 				if(TextUtils.isEmpty(contentEt.getText())){
-					ToastUtil.getInstance(mContext).showToast("请填写内容");
-				}else{
+					ToastUtil.getInstance(mContext).showToast("你的吐槽呢，我读书少不要骗我");
+				} else {
 					DialogManager.getInstance().showLoadingDialog(mContext, "正在提交");
 					feedback();
 				}

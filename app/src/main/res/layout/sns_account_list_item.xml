@@ -30,7 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:padding="7dp"
+        android:button="@drawable/checker_for_checkbox"
+        android:paddingRight="20dp"
+        android:clickable="false"
         android:checked="false"/>
 
     <View
