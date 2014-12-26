@@ -1,27 +1,21 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.RecDestBean;
@@ -103,7 +97,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

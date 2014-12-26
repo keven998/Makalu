@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.DotView;
@@ -169,7 +167,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 

@@ -10,8 +10,8 @@
         android:background="@drawable/bg_toast_content_view"
         android:layout_gravity="center"
         android:textSize="14sp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
         android:textColor="#ffffff" />

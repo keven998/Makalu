@@ -142,6 +142,7 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mSpotNameTv.setText(poiDetailBean.zhName);
             spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间："+poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotDescTv.setText(poiDetailBean.desc);
+            spotViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
             if(mIsCanAdd) {
                 if(poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已选择");
@@ -235,7 +236,7 @@ public class PoiAdapter extends BaseAdapter {
             } else {
                 poiViewHolder.mIvPoiImage.setImageResource(R.drawable.default_image);
             }
-            poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.rating);
+            poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
             if(poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
                 poiViewHolder.mRlComment.setVisibility(View.GONE);
             } else {
@@ -271,7 +272,8 @@ public class PoiAdapter extends BaseAdapter {
         CheckedTextView mBtnAdd;
         @InjectView(R.id.spot_desc_tv)
         TextView mSpotDescTv;
-
+        @InjectView(R.id.ratingBar_poi)
+        RatingBar mRatingBarPoi;
         public SpotViewHolder(View view) {
 //            view = View.inflate(mContext, R.layout.row_poi_list, null);
             ButterKnife.inject(this, view);

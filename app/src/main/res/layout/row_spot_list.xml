@@ -55,6 +55,23 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_alignTop="@id/spot_image_iv"/>
 
+        <FrameLayout android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:background="#bbffffff"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/spot_image_iv"
+            android:layout_below="@id/spot_name_tv"
+            android:layout_marginTop="4dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
+            <RatingBar
+                android:id="@+id/ratingBar_poi"
+                style="@style/custom_small_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
         <TextView android:id="@id/spot_time_cost_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,7 +99,7 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/base_text_color_subtitle"
-            android:lineSpacingExtra="1dp"
+            android:lineSpacingExtra="3dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:paddingRight="10dp"

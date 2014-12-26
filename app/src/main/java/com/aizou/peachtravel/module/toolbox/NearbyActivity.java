@@ -123,6 +123,15 @@ public class NearbyActivity extends PeachBaseActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAnim != null) {
+            mAnim.cancel();
+            mAnim = null;
+        }
+    }
+
     private void resetLocation() {
         mLng = -1;
         mLat = -1;
@@ -136,11 +145,12 @@ public class NearbyActivity extends PeachBaseActivity {
         resetLocation();
         mTvAddress.setText("正在定位...");
         mBtnRefresh.startAnimation(mAnim);
+
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override
                     public void onLocationChanged(AMapLocation aMapLocation) {
-                        mAnim.cancel();
+
                         if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
                             //获取位置信息
                             mLat = aMapLocation.getLatitude();
@@ -154,12 +164,13 @@ public class NearbyActivity extends PeachBaseActivity {
                                 public void run() {
                                     mTvAddress.setText(address);
                                     updateContent();
+                                    mAnim.cancel();
                                 }
                             });
 
                         } else {
 //            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
-                            mTvAddress.setText("获取位置信息失败");
+
 //                            if(mLat==-1){
 //                                init2PreLocData();
 //                                runOnUiThread(new Runnable() {
@@ -169,6 +180,14 @@ public class NearbyActivity extends PeachBaseActivity {
 //                                    }
 //                                });
 //                            }
+
+                            mBtnRefresh.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAnim.cancel();
+                                    mTvAddress.setText("获取位置信息失败");
+                                }
+                            }, 800);
                         }
                     }
 

@@ -32,7 +32,7 @@
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
-        android:background="#60000000">
+        android:background="#a0000000">
 
         <TextView
             android:id="@+id/tv_address"
@@ -51,11 +51,11 @@
         <ImageButton android:id="@+id/btn_refresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingRight="12dp"
-            android:paddingLeft="12dp"
+            android:paddingRight="14dp"
+            android:paddingLeft="14dp"
             android:scaleType="center"
             android:background="@null"
-            android:src="@drawable/ic_refresh_white_18dp"/>
+            android:src="@drawable/selecter_ic_refreash_18"/>
 
         <!--<ProgressBar-->
             <!--android:id="@+id/pb_location"-->
