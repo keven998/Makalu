@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.EMCallBack;
@@ -104,8 +105,8 @@ public class DiagnoseActivity extends ChatBaseActivity implements OnClickListene
 					@Override
 					public void run() {
 						progressDialog.dismiss();
-						Toast.makeText(DiagnoseActivity.this, "日志上传成功",
-								Toast.LENGTH_SHORT).show();
+//						Toast.makeText(DiagnoseActivity.this, "日志上传成功", Toast.LENGTH_SHORT).show();
+                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("上传成功");
 					}
 				});
 			}
@@ -131,8 +132,8 @@ public class DiagnoseActivity extends ChatBaseActivity implements OnClickListene
 					@Override
 					public void run() {
 						progressDialog.dismiss();
-						Toast.makeText(DiagnoseActivity.this, "log上传失败",
-								Toast.LENGTH_SHORT).show();
+//						Toast.makeText(DiagnoseActivity.this, "log上传失败", Toast.LENGTH_SHORT).show();
+                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("log上传失败");
 					}
 				});
 

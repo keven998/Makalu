@@ -184,7 +184,7 @@ public class FavListActivity extends PeachBaseActivity {
                 if (lists.code == 0) {
                     currentPage = page;
                     setupView(lists.result);
-                    if (page == 0) {
+                    if (page == 0 || mAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
                         cachePage();
                     }
                 }
@@ -208,12 +208,12 @@ public class FavListActivity extends PeachBaseActivity {
         }
         mAdapter.appendData(datas);
 
-        if (datas == null || datas.size() ==0) {
+        if (datas == null || datas.size() == 0) {
             mFavLv.setHasMoreData(false);
             if (currentPage == 0) {
-                Toast.makeText(FavListActivity.this, "No收藏", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("No收藏");
             } else {
-                Toast.makeText(FavListActivity.this, "已加载全部", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已取完所有内容啦");
             }
             // ptrLv.setScrollLoadEnabled(false);
         } else {

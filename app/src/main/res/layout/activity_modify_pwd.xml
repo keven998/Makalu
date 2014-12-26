@@ -67,7 +67,7 @@
             android:imeOptions="actionNext"
             android:background="@null"
             android:textColor="@color/base_text_color_title"
-            android:hint="输入新密码"
+            android:hint="设置新密码"
             android:textColorHint="@color/base_text_color_text_placeholder"
             android:singleLine="true"
             android:paddingLeft="6dp"

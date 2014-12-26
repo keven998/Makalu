@@ -136,9 +136,9 @@ public class SearchDestActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mSearchResultLv.setHasMoreData(false);
             if (curPage == 0) {
-                Toast.makeText(SearchDestActivity.this, "没有结果", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("好像没找到啥");
             } else {
-                Toast.makeText(SearchDestActivity.this, "已列出全部", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已列出全部了");
             }
         } else {
             mSearchResultLv.setHasMoreData(true);

@@ -180,7 +180,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        mTitleBar.getRightTextView().setText("新建");
+        mTitleBar.getRightTextView().setText("新Memo");
         mTitleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,7 +251,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (strategyListResult.code == 0) {
                     mCurrentPage = page;
                     bindView(strategyListResult.result);
-                    if (page == 0) {
+                    if (page == 0 || mStrategyListAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
                         cachePage();
                     }
                 }
@@ -295,11 +295,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void onClick(View view) {
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivity(intent);
-//                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
                     }
                 });
             } else {
-                Toast.makeText(this, "已加载全部", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已取完所有内容啦");
             }
             return;
         }
@@ -404,6 +403,13 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         mStrategyListAdapter.notifyDataSetChanged();
                                         if (mStrategyListAdapter.getCount() == 0) {
                                             mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                                            findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
                                         }
 //                                        ToastUtil.getInstance(mContext).showToast("删除成功");
                                         ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功删除");

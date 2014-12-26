@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
@@ -326,7 +327,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					runOnUiThread(new Runnable() {
 						public void run() {
                             dialog.dismiss();
-							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
 						}
 					});
 				}
@@ -355,7 +357,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					runOnUiThread(new Runnable() {
 						public void run() {
                             dialog.dismiss();
-							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
 						}
 					});
 				}
@@ -390,7 +393,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 					runOnUiThread(new Runnable() {
 						public void run() {
                             DialogManager.getInstance().dissMissLoadingDialog();
-							Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
 						}
 					});
 				}

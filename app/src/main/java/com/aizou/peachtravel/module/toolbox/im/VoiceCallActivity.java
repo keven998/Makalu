@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.config.Constant;
@@ -141,7 +142,8 @@ public class VoiceCallActivity extends ChatBaseActivity implements OnClickListen
 					e.printStackTrace();
 					runOnUiThread(new Runnable() {
 						public void run() {
-							Toast.makeText(VoiceCallActivity.this, "尚未连接至服务器", Toast.LENGTH_SHORT);
+//							Toast.makeText(VoiceCallActivity.this, "尚未连接至服务器", Toast.LENGTH_SHORT);
+                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像没找到网络");
 						}
 					});
 				}

@@ -46,6 +46,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.db.IMUser;
@@ -97,7 +98,8 @@ public class ChatHistoryFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				EMContact emContact = adapter.getItem(position);
 				if (adapter.getItem(position).getUsername().equals(AccountManager.getInstance().getLoginAccount(getActivity()).nickName))
-					Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
+//					Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
+                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持自己一个人聊啦");
 				else {
 					// 进入聊天页面
 					  Intent intent = new Intent(getActivity(), ChatActivity.class);

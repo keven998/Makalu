@@ -419,8 +419,7 @@ public class StrategyActivity extends PeachBaseActivity {
 //                        Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
 //                        intent.setAction("plan.flow"); //magic number in stand of being start in plan flow
 //                        startActivity(intent);
-//                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
-                        Toast.makeText(StrategyActivity.this, "已保存到\"旅行Memo\"", Toast.LENGTH_LONG).show();
+                        ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到 \"旅行Memo\"");
                         finish();
                     }
                 })

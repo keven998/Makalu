@@ -737,7 +737,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                         deleteDialog.dismiss();
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "删除失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "删除失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.getInstance(getApplicationContext()).showToast("请求也是失败了");
                             }
                         });
                     }
@@ -1001,7 +1002,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 					more(more);
 					sendLocationMsg(latitude, longitude, "", locationAddress);
 				} else {
-					Toast.makeText(this, "无法获取到您的位置信息！", Toast.LENGTH_SHORT).show();
+//					Toast.makeText(this, "无法获取到您的位置信息！", Toast.LENGTH_SHORT).show();
+                    ToastUtil.getInstance(getApplicationContext()).showToast("找不到你在哪");
 				}
 				// 重发消息
 			} else if (requestCode == REQUEST_CODE_TEXT) {
@@ -1341,9 +1343,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			cursor = null;
 
 			if (picturePath == null || picturePath.equals("null")) {
-				Toast toast = Toast.makeText(this, "找不到图片", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+//				Toast toast = Toast.makeText(this, "找不到图片", Toast.LENGTH_SHORT);
+//				toast.setGravity(Gravity.CENTER, 0, 0);
+//				toast.show();
+                ToastUtil.getInstance(getApplicationContext()).showToast("找不到图片");
 				return;
 			}
 			sendPicture(picturePath);
@@ -1411,11 +1414,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		}
 		File file = new File(filePath);
 		if (file == null || !file.exists()) {
-			Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance(getApplicationContext()).showToast("文件不存在");
 			return;
 		}
 		if (file.length() > 10 * 1024 * 1024) {
-			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance(getApplicationContext()).showToast("文件太大太大了");
 			return;
 		}
 
@@ -1725,11 +1730,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 							sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername),
 									Integer.toString(length), false);
 						} else {
-							Toast.makeText(getApplicationContext(), "录音时间太短", Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();
+//						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();
+                        ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
 					}
 
 				}
@@ -1891,10 +1897,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	private void addUserToBlacklist(String username) {
 		try {
 			EMContactManager.getInstance().addUserToBlackList(username, true);
-			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance(this).showToast("OK～成功移除桃友");
 		} catch (EaseMobException e) {
 			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance(this).showToast("呃～好像找不到网络");
 		}
 	}
 
@@ -2005,7 +2013,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 int cmdType=message.getIntAttribute("CMDType");
                 String content = message.getStringAttribute("content");
                 //删除好友
-                if(cmdType==3){
+                if (cmdType == 3) {
                     CmdDeleteBean deleteBean = GsonTools.parseJsonToBean(content,CmdDeleteBean.class);
                     final IMUser imUser = IMUserRepository.getContactByUserId(mContext,deleteBean.userId);
                     if(imUser!=null){

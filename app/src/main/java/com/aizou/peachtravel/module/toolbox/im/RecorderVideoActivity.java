@@ -109,7 +109,7 @@ public class RecorderVideoActivity extends ChatBaseActivity implements OnClickLi
 		try {
 			mCamera.reconnect();
 		} catch (IOException e) {
-			Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
 		}
 		finish();
 	}

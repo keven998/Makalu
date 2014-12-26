@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.easemob.chat.EMChatConfig;
@@ -71,7 +72,8 @@ public class ShowNormalFileActivity extends ChatBaseActivity {
 									public void run() {
 										if(file != null && file.exists())
 											file.delete();
-										Toast.makeText(ShowNormalFileActivity.this, "下载文件失败: "+msg,Toast.LENGTH_SHORT).show();
+//										Toast.makeText(ShowNormalFileActivity.this, "下载文件失败: "+msg,Toast.LENGTH_SHORT).show();
+                                        ToastUtil.getInstance(getApplicationContext()).showToast("下载失败");
 										finish();
 									}
 								});

@@ -109,9 +109,9 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mMoreTravelNoteLv.setHasMoreData(false);
             if (mPage == 0) {
-                Toast.makeText(MoreTravelNoteActivity.this, "没有任何收藏", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("好像没找到收藏");
             } else {
-                Toast.makeText(MoreTravelNoteActivity.this, "已列出全部收藏", Toast.LENGTH_SHORT).show();
+                ToastUtil.getInstance(this).showToast("已取完全部收藏啦");
             }
             return;
         } else {
