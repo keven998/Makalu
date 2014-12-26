@@ -94,14 +94,14 @@
         android:textSize="15sp"
         android:textColor="@color/base_color_white"
         android:background="@drawable/theme_button_selctor"
-        android:text="@string/register"/>
+        android:text="提交"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="14dp"
-        android:text="点击“注册”表明你已阅读并同意 桃子旅行用户协议"
+        android:text="点击“提交”表明你已阅读并同意 桃子旅行用户协议"
         android:textSize="13sp"
         android:textColor="@color/base_text_color_text_hint"/>
 

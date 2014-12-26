@@ -234,7 +234,7 @@ public class LoginActivity extends PeachBaseActivity {
                         public void run() {
 
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            Toast.makeText(getApplicationContext(), "登录失败: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -262,14 +262,11 @@ public class LoginActivity extends PeachBaseActivity {
 }
 
     private void signIn() {
-        if (TextUtils.isEmpty(loginNameEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("亲，请告诉我你的手机号或昵称");
+        if (TextUtils.isEmpty(loginNameEt.getText()) || TextUtils.isEmpty(pwdEt.getText())) {
+            ToastUtil.getInstance(mContext).showToast("我要账号和密码");
             return;
         }
-        if (TextUtils.isEmpty(pwdEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("亲，忘了输入密码了");
-            return;
-        }
+
         DialogManager.getInstance().showLoadingDialog(this);
         UserApi.signIn(loginNameEt.getText().toString().trim(), pwdEt.getText().toString().trim(), new HttpCallBack<String>() {
 
