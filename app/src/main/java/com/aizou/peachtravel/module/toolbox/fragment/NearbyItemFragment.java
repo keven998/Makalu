@@ -89,6 +89,11 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         return rootView;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     public void updateLocation(double lat, double lng) {
         mLat = lat;
         mLng = lng;

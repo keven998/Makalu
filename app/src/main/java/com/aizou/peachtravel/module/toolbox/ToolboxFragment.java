@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.DotView;
@@ -106,6 +105,18 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
+//        requestWeather();
+        getOperateData();
+        return rootView;
+    }
+
+    public void reloadData() {
+        if (TextUtils.isEmpty(weatherStr)) {
+            requestWeather();
+        }
+    }
+
+    private void requestWeather() {
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override
@@ -142,8 +153,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
                     }
                 });
-        getOperateData();
-        return rootView;
     }
 
     private void getOperateData() {
@@ -158,7 +167,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -330,7 +339,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         if(user!=null){
             updateUnreadLabel();
         }
-
+        reloadData();
     }
 
     /**

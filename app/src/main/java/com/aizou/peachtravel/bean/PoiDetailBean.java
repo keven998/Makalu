@@ -41,6 +41,10 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public PoiDetailBean() {
     }
 
+    public float getRating() {
+        return rating * 5;
+    }
+
     @Override
     public int describeContents() {
         return 0;

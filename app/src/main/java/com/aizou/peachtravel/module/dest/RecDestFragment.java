@@ -5,22 +5,17 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.RecDestBean;
@@ -66,8 +61,14 @@ public class RecDestFragment extends PeachBaseFragment {
             }
         });
         titleHeaderBar.enableBackKey(false);
-        initData();
+//        initData();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadData();
     }
 
     private void initData() {
@@ -96,13 +97,19 @@ public class RecDestFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
+    public void reloadData() {
+        if (recDestContainer.getAdapter() == null || recDestContainer.getAdapter().getNumberOfSections() == 0) {
+            initData();
+        }
+    }
+
     private void bindView(List<RecDestBean> recDestList){
-        wantToLayout =new WantToLayout();
+        wantToLayout = new WantToLayout();
         recDestContainer.setEdgeEffectsEnabled(false);
         wantToLayout.setLayoutParams(new LayoutParams(LocalDisplay.SCREEN_WIDTH_PIXELS, LocalDisplay.dp2px(40)));
         recDestContainer.setLayout(wantToLayout);
