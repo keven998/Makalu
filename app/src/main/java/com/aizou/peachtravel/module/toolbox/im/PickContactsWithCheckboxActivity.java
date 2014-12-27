@@ -183,7 +183,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("选择联系人");
+        titleHeaderBar.getTitleTextView().setText("选择Talk桃友");
         titleHeaderBar.enableBackKey(true);
     }
 
@@ -194,7 +194,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      */
     public void save(View v) {
         if (toBeAddContacts.size() == 0) {
-            ToastUtil.getInstance(mContext).showToast("请选择联系人");
+            ToastUtil.getInstance(mContext).showToast("呃~我还不知道你想和谁Talk");
             return;
         }
         final StringBuffer groupName = new StringBuffer();
@@ -264,14 +264,14 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                                     intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
                                     intent.putExtra("groupId", group.getGroupId());
                                     setResult(RESULT_OK, intent);
-                                    finish();
-
+                                    finishWithNoAnim();
                                 }
                             });
                         } catch (final Exception e) {
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     DialogManager.getInstance().dissMissLoadingDialog();
+                                    ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
                                 }
                             });
                         }
@@ -284,7 +284,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
                 intent.putExtra("userId", toBeAddContacts.get(0).getUsername());
                 setResult(RESULT_OK, intent);
-                finish();
+                finishWithNoAnim();
             }
         } else if (groupId != null) {
             DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
@@ -336,7 +336,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                                     }
                                 });
                                 setResult(RESULT_OK);
-                                finish();
+                                finishWithNoAnim();
                             }
                         });
 

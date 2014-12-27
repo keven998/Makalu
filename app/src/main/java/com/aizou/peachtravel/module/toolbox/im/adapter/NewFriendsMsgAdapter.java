@@ -117,7 +117,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				}
 				// 设置点击事件
 				holder.status.setOnClickListener(new OnClickListener() {
-
 					@Override
 					public void onClick(View v) {
 						// 同意别人发的好友请求
