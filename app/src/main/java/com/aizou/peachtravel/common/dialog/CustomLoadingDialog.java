@@ -15,7 +15,7 @@ import com.aizou.peachtravel.R;
 /**
  * 自定义圆形进度条对话框
  */
-public class CustomLoadingDialog extends ProgressDialog{
+public class CustomLoadingDialog extends ProgressDialog {
 
 	private String content;
 	private TextView progress_dialog_content;

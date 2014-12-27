@@ -1,16 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
-    android:layout_height="120dp"
-    android:layout_centerInParent="true"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:layout_gravity="center"
-    android:background="@drawable/bg_progress_dialog" >
+    android:background="@drawable/bg_toast_content_view" >
 
     <com.aizou.peachtravel.common.widget.circularprogressbar.RateTextCircularProgressBar
         android:id="@+id/pb_rate"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerInParent="true"/>
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"/>
 
-
-
-</RelativeLayout>
+</FrameLayout>
