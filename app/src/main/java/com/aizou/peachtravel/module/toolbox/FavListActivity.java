@@ -218,7 +218,6 @@ public class FavListActivity extends PeachBaseActivity {
 
         if (datas == null || datas.size() == 0) {
             mFavLv.setHasMoreData(false);
-            Log.d("test", "page = " + currentPage);
             if (currentPage == 0) {
                 ToastUtil.getInstance(this).showToast("No收藏");
             } else {
