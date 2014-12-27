@@ -19,9 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
-        android:textSize="12sp"
-        android:textColor="#aaaaaa"
-        android:text="快邀爱旅行的蜜蜜们加入Talk吧~"/>
+        android:textSize="13sp"
+        android:textColor="@color/base_text_color_text_hint"
+        android:text="快邀爱旅行的蜜蜜们成为桃友吧~"/>
 
     <ImageView
         android:layout_width="wrap_content"

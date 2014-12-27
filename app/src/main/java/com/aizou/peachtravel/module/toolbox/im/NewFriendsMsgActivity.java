@@ -42,10 +42,17 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_friends_msg);
 
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 		listView = (ListView) findViewById(R.id.list);
 		List<InviteMessage> msgs = InviteMsgRepository.getMessagesList(mContext);
-        for(InviteMessage msg:msgs){
-            if(msg.getStatus()== InviteStatus.BEINVITEED&&IMUserRepository.isMyFriend(mContext,msg.getFrom())){
+        for (InviteMessage msg : msgs) {
+            if (msg.getStatus() == InviteStatus.BEINVITEED&&IMUserRepository.isMyFriend(mContext,msg.getFrom())) {
                 msg.setStatus(InviteStatus.AGREED);
                 InviteMsgRepository.saveMessage(mContext,msg);
             }
@@ -56,7 +63,6 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
         imUser.setUnreadMsgCount(0);
         IMUserRepository.saveContact(this,imUser);
-
 	}
 
 	public void back(View view) {

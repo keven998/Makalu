@@ -51,8 +51,8 @@
             android:gravity="center"
             android:text="木有任何旅行Memo\n这么好的旅行助手不用可惜了"
             android:textColor="@color/base_text_color_text_hint"
-            android:lineSpacingExtra="3dp"
-            android:textSize="15sp" />
+            android:lineSpacingExtra="2dp"
+            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"

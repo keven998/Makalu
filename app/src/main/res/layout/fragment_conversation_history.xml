@@ -32,13 +32,13 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <ImageView
+        <ImageView android:id="@+id/start_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="90dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_new_talk" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,21 +48,8 @@
             android:gravity="center"
             android:text="聊旅行\n还有比Talk更方便的么"
             android:textColor="@color/base_text_color_text_hint"
-            android:lineSpacingExtra="3dp"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/start_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/app_theme_button_selector"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:text="Talk"
-            android:textColor="@color/base_color_white"
-            android:textSize="14sp" />
+            android:lineSpacingExtra="2dp"
+            android:textSize="13sp" />
 
     </LinearLayout>
 

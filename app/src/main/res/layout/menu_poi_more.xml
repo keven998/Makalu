@@ -10,9 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/base_color_white"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:drawableTop="@drawable/ic_launcher"
         android:drawablePadding="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
         android:text="收藏"
         android:padding="30dp"/>
 
@@ -20,9 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/base_color_white"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:drawableTop="@drawable/ic_launcher"
         android:drawablePadding="10dp"
+        android:textStyle="bold"
+        android:gravity="center"
         android:text="分享给朋友"
         android:padding="30dp"/>
 

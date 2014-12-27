@@ -183,15 +183,15 @@ public class FavListActivity extends PeachBaseActivity {
         PreferenceUtils.cacheData(FavListActivity.this, String.format("%s_favorites", account.user.userId), GsonTools.createGsonString(cd));
     }
 
-    private void initData(String type, final int page) {
-        OtherApi.getFavist(type,page, new HttpCallBack() {
+    private void initData(final String type, final int page) {
+        OtherApi.getFavist(type, page, new HttpCallBack() {
             @Override
             public void doSucess(Object result, String method) {
                 CommonJson4List<FavoritesBean> lists = CommonJson4List.fromJson(result.toString(), FavoritesBean.class);
                 if (lists.code == 0) {
                     currentPage = page;
                     setupView(lists.result);
-                    if (page == 0 || mAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
+                    if ((page == 0 || mAdapter.getCount() < OtherApi.PAGE_SIZE * 2) && favTypeValueArray[0].equals(type)) {
                         cachePage();
                     }
                 }

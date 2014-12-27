@@ -9,20 +9,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/base_color_white"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:drawableTop="@drawable/ic_add_friend"
         android:drawablePadding="10dp"
-        android:text="添加桃友"
+        android:gravity="center"
+        android:text="加桃友"
+        android:textStyle="bold"
         android:padding="30dp"/>
 
     <TextView android:id="@+id/new_talk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/base_color_white"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:drawableTop="@drawable/ic_new_talk"
         android:drawablePadding="10dp"
+        android:gravity="center"
         android:text="Talk"
+        android:textStyle="bold"
         android:padding="30dp"/>
 
 
