@@ -206,6 +206,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.setHasMoreData(true);
                 mMyStrategyLv.setScrollLoadEnabled(true);
             }
+            getStrategyListData(0);
         } else {
             mMyStrategyLv.doPullRefreshing(true, 0);
         }
@@ -424,7 +425,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         }
                                     } else {
 //                                        ToastUtil.getInstance(mContext).showToast("删除失败");
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+//                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                                     }
                                 }
 

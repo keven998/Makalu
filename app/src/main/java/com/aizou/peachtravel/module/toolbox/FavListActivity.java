@@ -168,6 +168,7 @@ public class FavListActivity extends PeachBaseActivity {
                 mFavLv.setHasMoreData(true);
                 mFavLv.setScrollLoadEnabled(true);
             }
+            initData(curType, 0);
         } else {
             mFavLv.doPullRefreshing(true, 0);
         }
@@ -310,7 +311,6 @@ public class FavListActivity extends PeachBaseActivity {
                                         runOnUiThread(new Runnable() {
                                             public void run() {
                                                 ToastUtil.getInstance(mContext).showToast("发送成功");
-
                                             }
                                         });
 
