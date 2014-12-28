@@ -1,6 +1,9 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,7 +57,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                TravelNoteViewHolder viewHolder =  new TravelNoteViewHolder(false,false);
+                TravelNoteViewHolder viewHolder =  new TravelNoteViewHolder(MoreTravelNoteActivity.this,false,false);
                 return viewHolder;
             }
         });
@@ -87,7 +90,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                     bindView(detailResult.result);
 
                 } else {
-//                    ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+//                  ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();

@@ -31,6 +31,8 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.PeachEditDialog;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -369,6 +371,39 @@ public class StrategyListActivity extends PeachBaseActivity {
                     @Override
                     public void onClick(View v) {
                         //todo:修改攻略名称
+                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                        editDialog.setTitle("修改攻略名称");
+                        editDialog.setMessage(itemData.title);
+                        editDialog.setPositiveButton("确定",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                editDialog.dismiss();
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                TravelApi.modifyGuideTitle(itemData.id,editDialog.getMessage(),new HttpCallBack<String>() {
+                                    @Override
+                                    public void doSucess(String result, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                                        if(modifyResult.code==0){
+                                            ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功修改");
+                                            itemData.title = editDialog.getMessage();
+                                            mStrategyListAdapter.notifyDataSetChanged();
+                                            cachePage();
+                                        }else{
+                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                    }
+                                });
+                            }
+                        });
+                        editDialog.show();
                     }
                 });
                 mDeleteIv.setOnClickListener(new View.OnClickListener() {
@@ -384,65 +419,61 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
 
         private void deleteItem(final StrategyBean itemData) {
-            new MaterialDialog.Builder(StrategyListActivity.this)
-                    .title(null)
-                    .content("删除后就找不到了")
-                    .positiveText("删除")
-                    .negativeText("取消")
-                    .autoDismiss(false)
-                    .positiveColor(getResources().getColor(R.color.app_theme_color))
-                    .negativeColor(getResources().getColor(R.color.app_theme_color))
-                    .callback(new MaterialDialog.Callback() {
+            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            dialog.setTitle("提示");
+            dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+            dialog.setMessage("删除后就找不到了");
+            dialog.setPositiveButton("确定",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    DialogManager.getInstance().showLoadingDialog(mContext);
+                    TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
                         @Override
-                        public void onPositive(final MaterialDialog dialog) {
-                            View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
-                            dialog.setContentView(progressView);
-
-                            TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
-                                @Override
-                                public void doSucess(String result, String method) {
-                                    dialog.dismiss();
-                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                                    if (deleteResult.code == 0) {
-                                        int index = mStrategyListAdapter.getDataList().indexOf(itemData);
-                                        mStrategyListAdapter.getDataList().remove(index);
-                                        mStrategyListAdapter.notifyDataSetChanged();
-                                        if (mStrategyListAdapter.getCount() == 0) {
-                                            mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                                            findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            });
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
+                                int index = mStrategyListAdapter.getDataList().indexOf(itemData);
+                                mStrategyListAdapter.getDataList().remove(index);
+                                mStrategyListAdapter.notifyDataSetChanged();
+                                if (mStrategyListAdapter.getCount() == 0) {
+                                    mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                                    findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                                            startActivity(intent);
                                         }
+                                    });
+                                }
 //                                        ToastUtil.getInstance(mContext).showToast("删除成功");
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功删除");
-                                        if (index <= OtherApi.PAGE_SIZE) {
-                                            cachePage();
-                                        }
-                                    } else {
-//                                        ToastUtil.getInstance(mContext).showToast("删除失败");
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
-                                    }
+                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功删除");
+                                if (index <= OtherApi.PAGE_SIZE) {
+                                    cachePage();
                                 }
-
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-//                                    ToastUtil.getInstance(mContext).showToast("删除失败");
-                                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                }
-                            });
-
+                            } else {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                            }
                         }
 
                         @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            dialog.dismiss();
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
-                    })
-                    .show();
+                    });
+                }
+            });
+            dialog.setNegativeButton("取消",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
         }
 
     }

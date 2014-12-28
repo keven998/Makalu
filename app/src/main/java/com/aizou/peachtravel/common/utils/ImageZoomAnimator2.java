@@ -63,7 +63,7 @@ public class ImageZoomAnimator2 {
         SmoothPhotoView photeView =(SmoothPhotoView) zoomViewPager.findViewWithTag(position);
         if(photeView.getDrawable()==null){
             File file =ImageLoader.getInstance().getDiskCache().get(imageUrls.get(position).url);
-            if(file!=null){
+            if(file!=null&&file.exists()){
                Bitmap bitmap =ImageLoader.getInstance().loadImageSync(Uri.fromFile(file).toString());
                photeView.setImageBitmap(bitmap);
             }
