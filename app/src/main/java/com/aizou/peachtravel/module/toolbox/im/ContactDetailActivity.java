@@ -111,7 +111,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("桃友信息");
+        titleHeaderBar.getTitleTextView().setText(getIntent().getStringExtra("userNick"));
         titleHeaderBar.enableBackKey(true);
     }
 

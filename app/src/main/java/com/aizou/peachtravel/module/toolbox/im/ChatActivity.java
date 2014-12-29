@@ -650,6 +650,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                         if(IMUserRepository.isMyFriend(mContext,itemData.getUsername())){
                             Intent intent = new Intent(mContext, ContactDetailActivity.class);
                             intent.putExtra("userId", itemData.getUserId());
+                            intent.putExtra("userNick", itemData.getNick());
                             startActivity(intent);
                         }else{
                             PeachUser user = new PeachUser();

@@ -611,6 +611,7 @@ public class MessageAdapter extends BaseAdapter {
                         Intent intent = new Intent(context, ContactDetailActivity.class);
                         IMUser user=IMUserRepository.getContactByUserName(context,message.getFrom());
                         intent.putExtra("userId", user.getUserId());
+                        intent.putExtra("userNick", user.getNick());
                         context.startActivity(intent);
                     } else {
                         IMUser itemData=IMUserRepository.getContactByUserName(context,message.getFrom());
