@@ -15,7 +15,10 @@
         android:drawablePadding="8dp"
         android:gravity="center"
         android:text="Talk"
-        android:padding="30dp"/>
+        android:paddingLeft="40dp"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:paddingRight="20dp"/>
 
     <TextView android:id="@+id/add_friend"
         android:layout_width="wrap_content"
@@ -26,6 +29,9 @@
         android:drawablePadding="8dp"
         android:gravity="center"
         android:text="加桃友"
-        android:padding="30dp"/>
+        android:paddingLeft="20dp"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:paddingRight="40dp"/>
 
 </LinearLayout>

@@ -1,10 +1,12 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -58,10 +60,12 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 if(TextUtils.isEmpty(mEtSearch.getText())){
-                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
+                    ToastUtil.getInstance(mContext).showToast("你要查什么呢");
                 }else{
                     searchAll(mEtSearch.getText().toString().trim());
                 }
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
     }
@@ -120,7 +124,7 @@ public class SearchAllActivity extends PeachBaseActivity {
             searchTypeBean.resultList = result.shopping;
             typeBeans.add(searchTypeBean);
         }
-        SearchAllAdapter searchAllAdapter = new SearchAllAdapter(mContext,typeBeans,true);
+        SearchAllAdapter searchAllAdapter = new SearchAllAdapter(mContext, typeBeans, true);
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
