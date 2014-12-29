@@ -117,6 +117,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     }
 
     private void requestWeather() {
+        if(mLocationManagerProxy==null){
+            mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
+            mLocationManagerProxy.setGpsEnable(false);
+        }
         mLocationManagerProxy.requestLocationData(
                 LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override

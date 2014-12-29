@@ -93,7 +93,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(false, true);
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(CityDetailActivity.this,false, true);
                 viewHolder.setOnMoreClickListener(new TravelNoteViewHolder.OnMoreClickListener() {
                     @Override
                     public void onMoreClick(View view) {
@@ -246,7 +246,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //        Intent intent = new Intent(mContext,SpotDetailActivity.class);
 //        startActivity(intent);
         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-        intent.putExtra("url", H5Url.LOC_TRAVEL);
+        intent.putExtra("url", H5Url.LOC_TRAVEL+locId);
+        intent.putExtra("title","游玩攻略");
         startActivity(intent);
         //todo:跳转html
     }
@@ -264,6 +265,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
     public void intentToShopping(View view){
         //todo:跳转购物
+        Intent intent = new Intent(mContext,PoiListActivity.class);
+        ArrayList<LocBean> locList =new ArrayList<LocBean>();
+        locList.add(locDetailBean);
+        intent.putParcelableArrayListExtra("locList", locList);
+        intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+        startActivity(intent);
     }
 
 

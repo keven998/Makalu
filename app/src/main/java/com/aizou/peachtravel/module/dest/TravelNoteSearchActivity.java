@@ -59,7 +59,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelNoteViewHolder(true,false);
+                return new TravelNoteViewHolder(TravelNoteSearchActivity.this,true,false);
             }
         });
         mSearchTravelNoteLv.getRefreshableView().setAdapter(mTravelNoteAdapter);

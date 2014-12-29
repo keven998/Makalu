@@ -1,5 +1,8 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -35,13 +39,15 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     TextView mTimeTv;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     OnMoreClickListener mOnMoreClickListener;
+    Activity activity;
 
     private boolean mIsShowSend;
     private boolean mIsShowMore;
 
-    public TravelNoteViewHolder(boolean isShowSend,boolean isShowMore){
+    public TravelNoteViewHolder(Activity context,boolean isShowSend,boolean isShowMore){
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
+        activity= context;
     }
 
     public void setOnMoreClickListener(OnMoreClickListener onMoreClickListener){
@@ -67,7 +73,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     }
 
     @Override
-    public void showData(int position, TravelNoteBean itemData) {
+    public void showData(int position, final TravelNoteBean itemData) {
         if(position==0&&mIsShowMore){
             mMoreRl.setVisibility(View.VISIBLE);
             mMoreTv.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +87,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         }else{
             mMoreRl.setVisibility(View.GONE);
         }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         if(mIsShowSend){
             mSendBtn.setVisibility(View.VISIBLE);
             mSendBtn.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +108,19 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             }
         }
         mNoteDescTv.setText(maxLengthStr);
-        ImageLoader.getInstance().displayImage(itemData.authorAvatar, mAvatarIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(18)));
-        mAuthorNameTv.setText(itemData.authorName);
+        ImageLoader.getInstance().displayImage(itemData.avatar, mAvatarIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(18)));
+        mAuthorNameTv.setText(itemData.author);
         mFromTv.setText("from:"+itemData.source);
         mFromTv.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
         mTimeTv.setText(simpleDateFormat.format(new Date(itemData.publishDate)));
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity,TravelNoteDetailActivity.class);
+                intent.putExtra("travelNote",itemData);
+                activity.startActivity(intent);
+            }
+        });
 
     }
 

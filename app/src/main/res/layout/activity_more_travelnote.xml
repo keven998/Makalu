@@ -17,19 +17,16 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-
         <com.aizou.core.widget.prv.PullToRefreshListView
             android:id="@+id/more_travel_note_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:scrollbarStyle="outsideOverlay"
+            android:listSelector="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
-            android:dividerHeight="10dp"
+            android:dividerHeight="0dp"
             android:fadingEdge="none" />
-
 
     </FrameLayout>
 </LinearLayout>

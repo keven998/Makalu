@@ -16,8 +16,8 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
     public String title;
     public String summary;
     public String cover;
-    public String authorName;
-    public String authorAvatar;
+    public String author;
+    public String avatar;
     public String source;
     public String sourceUrl;
     public long publishDate;
@@ -33,8 +33,8 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         dest.writeString(this.title);
         dest.writeString(this.summary);
         dest.writeString(this.cover);
-        dest.writeString(this.authorName);
-        dest.writeString(this.authorAvatar);
+        dest.writeString(this.author);
+        dest.writeString(this.avatar);
         dest.writeString(this.source);
         dest.writeString(this.sourceUrl);
         dest.writeLong(this.publishDate);
@@ -48,8 +48,8 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         this.title = in.readString();
         this.summary = in.readString();
         this.cover = in.readString();
-        this.authorName = in.readString();
-        this.authorAvatar = in.readString();
+        this.author = in.readString();
+        this.avatar = in.readString();
         this.source = in.readString();
         this.sourceUrl = in.readString();
         this.publishDate = in.readLong();
@@ -72,7 +72,7 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         extMessageBean.id = id;
         extMessageBean.image= cover;
         extMessageBean.name = title;
-        if(TextUtils.isEmpty(summary)){
+        if(!TextUtils.isEmpty(summary)){
             String[] strArray=summary.split("\n");
             String maxLengthStr=strArray[0];
             for(String str:strArray){
