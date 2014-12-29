@@ -318,7 +318,7 @@ public class FavListActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("发送成功");
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
 
@@ -329,7 +329,7 @@ public class FavListActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("发送失败");
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
                                             }
                                         });
 

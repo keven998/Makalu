@@ -141,7 +141,7 @@ public class IMUtils {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 ((Activity)context).runOnUiThread(new Runnable() {
                                     public void run() {
-                                        ToastUtil.getInstance(context).showToast("发送成功");
+                                        ToastUtil.getInstance(context).showToast("已发送~");
 
                                     }
                                 });
@@ -153,7 +153,7 @@ public class IMUtils {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 ((Activity)context).runOnUiThread(new Runnable() {
                                     public void run() {
-                                        ToastUtil.getInstance(context).showToast("发送失败");
+                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
 
                                     }
                                 });
