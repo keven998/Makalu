@@ -208,6 +208,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.setHasMoreData(true);
                 mMyStrategyLv.setScrollLoadEnabled(true);
             }
+            getStrategyListData(0);
         } else {
             mMyStrategyLv.doPullRefreshing(true, 0);
         }

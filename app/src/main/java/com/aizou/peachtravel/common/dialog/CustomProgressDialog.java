@@ -1,12 +1,8 @@
 package com.aizou.peachtravel.common.dialog;
 
-
-
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.widget.circularprogressbar.RateTextCircularProgressBar;
