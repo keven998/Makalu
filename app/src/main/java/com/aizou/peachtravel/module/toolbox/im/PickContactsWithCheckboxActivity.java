@@ -175,6 +175,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 //        titleHeaderBar.setRightViewImageRes(R.drawable.add);
+        titleHeaderBar.getLeftTextView().setText("取消");
+
         titleHeaderBar.getRightTextView().setText("确定");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +196,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      */
     public void save(View v) {
         if (toBeAddContacts.size() == 0) {
-            ToastUtil.getInstance(mContext).showToast("呃~我还不知道你想和谁Talk");
+            ToastUtil.getInstance(mContext).showToast("我还不知道你想和谁Talk");
             return;
         }
         final StringBuffer groupName = new StringBuffer();

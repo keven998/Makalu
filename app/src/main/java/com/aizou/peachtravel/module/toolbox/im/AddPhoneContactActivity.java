@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -200,7 +201,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         intent.setAction(Intent.ACTION_SENDTO);
                         //需要发短息的号码
                         intent.setData(Uri.parse("smsto:" + itemData.tel));
-                        intent.putExtra("sms_body","快来桃子Talk吧");
+                        intent.putExtra("sms_body", String.format("Hi, 我是桃友%s", AccountManager.getInstance().getLoginAccount(AddPhoneContactActivity.this).nickName));
                         startActivity(intent);
                     }
                 });

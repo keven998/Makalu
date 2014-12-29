@@ -34,7 +34,7 @@
     <color name="base_highlight_color">#f4f4f4</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
-    <drawable name="list_cell_item_clicked">#eeeeee</drawable>
+    <drawable name="list_cell_item_clicked">#f8f8f8</drawable>
 
     <drawable name="sub_list_cell_item">#f8f9f9</drawable>
     <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>

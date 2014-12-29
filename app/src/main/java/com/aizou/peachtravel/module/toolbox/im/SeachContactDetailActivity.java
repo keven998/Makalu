@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -53,9 +54,9 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
-        initTitleBar();
         boolean isSeach = getIntent().getBooleanExtra("isSeach", false);
         user = (PeachUser) getIntent().getSerializableExtra("user");
+        initTitleBar();
         if (isSeach) {
             bindView();
         } else {
@@ -87,8 +88,9 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
             @Override
             public void onClick(View v) {
                 MaterialDialog.Builder builder= new MaterialDialog.Builder(mContext);
-                builder.title("请输入验证信息");
+                builder.title("输入验证信息");
                 final EditText editText = new EditText(mContext);
+                editText.setText(String.format("\"Hi, 我是桃友%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).nickName));
                 builder.customView(editText);
                 builder.positiveText("确定");
                 builder.negativeText("取消");
@@ -106,7 +108,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                             public void doSucess(Object result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，请耐心等待对方验证");
+                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
                                     finish();
                             }
 
@@ -182,7 +184,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
     private void initTitleBar(){
         TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText("查找桃友");
+        thbar.getTitleTextView().setText(user.nickName);
         thbar.enableBackKey(true);
     }
 
