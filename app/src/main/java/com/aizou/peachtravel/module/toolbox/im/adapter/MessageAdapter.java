@@ -611,6 +611,7 @@ public class MessageAdapter extends BaseAdapter {
                         Intent intent = new Intent(context, ContactDetailActivity.class);
                         IMUser user=IMUserRepository.getContactByUserName(context,message.getFrom());
                         intent.putExtra("userId", user.getUserId());
+                        intent.putExtra("userNick", user.getNick());
                         context.startActivity(intent);
                     } else {
                         IMUser itemData=IMUserRepository.getContactByUserName(context,message.getFrom());
@@ -700,7 +701,6 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.tv_type.setText("Memo");
-
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -744,10 +744,12 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_type.setText("美食");
                     holder.tv_attr.setText(bean.rating+"星 "+bean.price);
                     break;
+
                 case Constant.ExtType.HOTEL:
                     holder.tv_type.setText("酒店");
                     holder.tv_attr.setText(bean.rating+"星 "+bean.price);
                     break;
+
                 case Constant.ExtType.SHOPPING:
                     holder.tv_type.setText("购物");
                     holder.tv_attr.setText(bean.rating+"星 ");
@@ -763,9 +765,11 @@ public class MessageAdapter extends BaseAdapter {
                         case Constant.ExtType.FOOD:
                             intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                             break;
+
                         case Constant.ExtType.HOTEL:
                             intent.putExtra("type", TravelApi.PeachType.HOTEL);
                             break;
+
                         case Constant.ExtType.SHOPPING:
                             intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                             break;

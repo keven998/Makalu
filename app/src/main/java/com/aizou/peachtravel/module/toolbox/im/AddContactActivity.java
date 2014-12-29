@@ -140,6 +140,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                                 IMUserRepository.saveContact(mContext,imUser);
                                 Intent intent = new Intent(mContext, ContactDetailActivity.class);
                                 intent.putExtra("userId", user.userId);
+                                intent.putExtra("userNick", user.nickName);
                                 startActivity(intent);
                                 return;
                             }

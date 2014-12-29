@@ -26,7 +26,7 @@
             android:layout_marginLeft="17dp"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
-            android:text="贴心消息推送"/>
+            android:text="贴心旅行相关推送"/>
 
         <CheckBox android:id="@+id/lxq_nofity_status"
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
             android:layout_marginLeft="17dp"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
-            android:text="Tao·Talk提醒"/>
+            android:text="桃·Talk提醒"/>
 
         <CheckBox android:id="@+id/content_nofity_status"
             android:layout_width="wrap_content"

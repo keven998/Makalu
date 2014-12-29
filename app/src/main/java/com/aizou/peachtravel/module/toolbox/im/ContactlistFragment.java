@@ -91,7 +91,7 @@ public class ContactlistFragment extends Fragment {
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
-					startActivity(new Intent(getActivity(), ContactDetailActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
+					startActivity(new Intent(getActivity(), ContactDetailActivity.class).putExtra("userId", adapter.getItem(position).getUserId()).putExtra("userNick", adapter.getItem(position).getNick()));
 				}
 			}
 		});

@@ -650,6 +650,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                         if(IMUserRepository.isMyFriend(mContext,itemData.getUsername())){
                             Intent intent = new Intent(mContext, ContactDetailActivity.class);
                             intent.putExtra("userId", itemData.getUserId());
+                            intent.putExtra("userNick", itemData.getNick());
                             startActivity(intent);
                         }else{
                             PeachUser user = new PeachUser();
@@ -1055,6 +1056,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
             intent.putExtra("isShare",true);
+            intent.setAction("action.chat");
             startActivity(intent);
         } else if (id == R.id.btn_fav) {
             // 点击我的收藏图标
@@ -1062,11 +1064,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
             intent.putExtra("isShare",true);
+            intent.setAction("action.chat");
             startActivity(intent);
         }  else if (id == R.id.btn_dest) {
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
+            intent.setAction("action.chat");
             startActivity(intent);
             // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
@@ -1084,6 +1088,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
+            intent.setAction("action.chat");
             startActivity(intent);
 //            // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();

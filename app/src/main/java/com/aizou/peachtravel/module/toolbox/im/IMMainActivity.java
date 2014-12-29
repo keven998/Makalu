@@ -218,8 +218,8 @@ public class IMMainActivity extends ChatBaseActivity {
             public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
                 Bundle args = new Bundle();
-                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
-                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
+                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
                 fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "blur_menu");
             }
@@ -279,7 +279,7 @@ public class IMMainActivity extends ChatBaseActivity {
                     // 添加user"申请与通知"
                     IMUser newFriends = new IMUser();
                     newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                    newFriends.setNick("申请与通知");
+                    newFriends.setNick("桃友申请");
                     newFriends.setHeader("");
                     newFriends.setIsMyFriends(true);
                     userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
@@ -318,7 +318,7 @@ public class IMMainActivity extends ChatBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(IMMainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                ToastUtil.getInstance(IMMainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -694,9 +694,6 @@ public class IMMainActivity extends ChatBaseActivity {
         }
 
     }
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

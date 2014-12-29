@@ -39,6 +39,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
@@ -95,13 +96,20 @@ public class FavListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
 
-        mTvTitleBarTitle.setText("收藏夹");
+        String action = getIntent().getAction();
+        if ("action.chat".equals(action)) {
+            mTvTitleBarTitle.setText("发送收藏");
+        } else {
+            mTvTitleBarTitle.setText("收藏夹");
+        }
         mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
 
         PullToRefreshListView listView = mFavLv;
         listView.setPullLoadEnabled(false);
@@ -313,7 +321,7 @@ public class FavListActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("发送成功");
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
 
@@ -324,7 +332,7 @@ public class FavListActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("发送失败");
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
                                             }
                                         });
 

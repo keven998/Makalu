@@ -149,7 +149,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 
 			//显示申请与通知item
 			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-                vh.nickView.setText("请求与通知");
+                vh.nickView.setText("桃友申请");
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.phoneView.setVisibility(View.GONE);
@@ -178,7 +178,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
                 vh.phoneView.setVisibility(View.VISIBLE);
                if(TextUtils.isEmpty(user.getSignature())) {
-                   vh.phoneView.setText("没有签名");
+                   vh.phoneView.setText("no签名");
                }else{
                    vh.phoneView.setText(user.getSignature());
                }

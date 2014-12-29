@@ -97,7 +97,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
             idTv.setText("ID: " + user.userId);
             if (TextUtils.isEmpty(user.signature)) {
-                signTv.setText("没有签名");
+                signTv.setText("no签名");
             } else {
                 signTv.setText(user.signature);
             }
@@ -108,13 +108,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         refresh();
-
-
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch(view.getId()) {
             case R.id.rl_user_info:
                 PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) return;
@@ -123,7 +121,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_share_account:
-                Intent intent = new Intent(getActivity(),ShareAccountActivity.class);
+                Intent intent = new Intent(getActivity(), ShareAccountActivity.class);
                 startActivity(intent);
                 break;
 
@@ -133,17 +131,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_setting:
-                Intent settingIntent = new Intent(getActivity(),SettingActivity.class);
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
                 startActivity(settingIntent);
                 break;
 
             case R.id.btn_login:
-                Intent loginintent = new Intent(getActivity(),LoginActivity.class);
+                Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(loginintent);
                 break;
 
             case R.id.btn_reg:
-                Intent regintent = new Intent(getActivity(),RegActivity.class);
+                Intent regintent = new Intent(getActivity(), RegActivity.class);
                 startActivity(regintent);
                 break;
 
