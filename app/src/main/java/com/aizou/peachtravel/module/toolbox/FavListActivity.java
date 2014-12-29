@@ -37,6 +37,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
@@ -92,13 +93,20 @@ public class FavListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
 
-        mTvTitleBarTitle.setText("收藏夹");
+        String action = getIntent().getAction();
+        if ("action.chat".equals(action)) {
+            mTvTitleBarTitle.setText("发送收藏");
+        } else {
+            mTvTitleBarTitle.setText("收藏夹");
+        }
         mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
 
         PullToRefreshListView listView = mFavLv;
         listView.setPullLoadEnabled(false);

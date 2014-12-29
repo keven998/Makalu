@@ -124,7 +124,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("发送成功");
-
                                         }
                                     });
 
@@ -176,23 +175,24 @@ public class StrategyListActivity extends PeachBaseActivity {
         });
 
 //        mTitleBar.enableBackKey(true);
-        mTitleBar.getTitleTextView().setText("旅行Memo");
-        mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        mTitleBar.getRightTextView().setText("新Memo");
-        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                startActivity(intent);
-            }
-        });
 
+        String action = getIntent().getAction();
+        TitleHeaderBar tbar = mTitleBar;
+        tbar.enableBackKey(true);
+        if ("action.chat".equals(action)) {
+            tbar.getTitleTextView().setText("发送Memo");
 
+        } else {
+            tbar.getTitleTextView().setText("旅行Memo");
+            tbar.getRightTextView().setText("新Memo");
+            tbar.setRightOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private void setupViewFromCache() {
@@ -449,7 +449,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                     });
                                 }
 //                                        ToastUtil.getInstance(mContext).showToast("删除成功");
-                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功删除");
+                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK~成功删除");
                                 if (index <= OtherApi.PAGE_SIZE) {
                                     cachePage();
                                 }

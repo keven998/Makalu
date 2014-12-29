@@ -1055,6 +1055,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
             intent.putExtra("isShare",true);
+            intent.setAction("action.chat");
             startActivity(intent);
         } else if (id == R.id.btn_fav) {
             // 点击我的收藏图标
@@ -1062,11 +1063,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
             intent.putExtra("isShare",true);
+            intent.setAction("action.chat");
             startActivity(intent);
         }  else if (id == R.id.btn_dest) {
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
+            intent.setAction("action.chat");
             startActivity(intent);
             // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
@@ -1084,6 +1087,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
+            intent.setAction("action.chat");
             startActivity(intent);
 //            // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
