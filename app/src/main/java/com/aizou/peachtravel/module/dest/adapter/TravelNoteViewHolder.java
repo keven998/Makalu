@@ -118,6 +118,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             public void onClick(View v) {
                 Intent intent = new Intent(activity,TravelNoteDetailActivity.class);
                 intent.putExtra("travelNote",itemData);
+                intent.putExtra("id",itemData.id);
                 activity.startActivity(intent);
             }
         });

@@ -127,7 +127,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     public void doSucess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
-                        if(chechResult.code == 0&&chechResult.result.isValid) {
+                        if(chechResult.code == 0) {
                                 Intent intent = new Intent(mContext,ResetPwdActivity.class);
                                 intent.putExtra("token", chechResult.result.token);
                                 intent.putExtra("phone", phoneEt.getText().toString().trim());

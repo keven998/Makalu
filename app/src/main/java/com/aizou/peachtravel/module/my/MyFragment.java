@@ -16,6 +16,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -82,7 +83,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             } else if (user.gender.equalsIgnoreCase("F")) {
                 genderIv.setImageResource(R.drawable.ic_gender_lady);
             } else {
-                genderIv.setImageResource(R.drawable.avatar_placeholder);
+                genderIv.setImageDrawable(null);
             }
             nickNameTv.setText(user.nickName);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -152,7 +153,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_push_friends:
-
+                ShareUtils.shareAppToWx(getActivity());
                 break;
 
             default:

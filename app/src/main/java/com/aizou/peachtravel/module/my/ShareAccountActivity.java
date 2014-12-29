@@ -67,7 +67,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 			account.title = accounts[i];
 			int iconId = typedArray.getResourceId(i, 0);
 			account.iconId = iconId;
-			if (account.title.equals("qq")) {
+			if (account.title.equals("QQ")) {
 				account.platform = SHARE_MEDIA.QQ;
 			} else if (account.title.equals("新浪微博")) {
 				account.platform = SHARE_MEDIA.SINA;

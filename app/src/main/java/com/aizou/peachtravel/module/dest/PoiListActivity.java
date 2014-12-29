@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -53,6 +55,10 @@ public class PoiListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
+    @InjectView(R.id.et_search)
+    EditText mEtSearch;
+    @InjectView(R.id.btn_search)
+    Button mBtnSearch;
     private PullToRefreshListView mPoiListLv;
     private String type;
     private boolean canAdd;
@@ -60,6 +66,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private ArrayList<PoiDetailBean> hasAddList;
     private int page = 0;
     private LocBean curLoc;
+    private String mKeyWord;
 
 
     @Override
@@ -114,12 +121,12 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                if(type.equals(TravelApi.PeachType.RESTAURANTS)){
-                    intent.putExtra("url", H5Url.FOOD+curLoc.id);
-                    intent.putExtra("title","美食介绍");
-                }else if(type.equals(TravelApi.PeachType.SHOPPING)){
-                    intent.putExtra("url", H5Url.SHOPPING+curLoc.id);
-                    intent.putExtra("title","购物介绍");
+                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    intent.putExtra("url", H5Url.FOOD + curLoc.id);
+                    intent.putExtra("title", "美食介绍");
+                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    intent.putExtra("url", H5Url.SHOPPING + curLoc.id);
+                    intent.putExtra("title", "购物介绍");
                 }
                 startActivity(intent);
 
@@ -136,6 +143,18 @@ public class PoiListActivity extends PeachBaseActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mKeyWord = mEtSearch.getText().toString().trim();
+                Intent intent = new Intent(mContext,SearchPoiActivity.class);
+                intent.putExtra("keyword",mKeyWord);
+                intent.putExtra("type",type);
+                intent.putParcelableArrayListExtra("poiList", hasAddList);
+                intent.putExtra("loc",curLoc);
+                startActivityForResult(intent,AddPoiActivity.REQUEST_CODE_SEARCH_POI);
             }
         });
 //        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
@@ -173,7 +192,6 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id);
             }
         });
-
 
 
     }
@@ -250,6 +268,24 @@ public class PoiListActivity extends PeachBaseActivity {
         if (page == 0) {
             mPoiListLv.onPullUpRefreshComplete();
             mPoiListLv.onPullDownRefreshComplete();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==AddPoiActivity.REQUEST_CODE_SEARCH_POI){
+                hasAddList = data.getParcelableArrayListExtra("poiList");
+                for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
+                    if (hasAddList.contains(detailBean)) {
+                        detailBean.hasAdded = true;
+                    } else {
+                        detailBean.hasAdded = false;
+                    }
+                }
+                mPoiAdapter.notifyDataSetChanged();
+            }
         }
     }
 

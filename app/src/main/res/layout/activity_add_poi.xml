@@ -57,7 +57,7 @@
             android:paddingLeft="10dp"
             android:textSize="14sp"
             android:textColorHint="@color/base_text_color_text_placeholder"
-            android:hint="输入城市名或拼音"
+            android:hint="输入关键字"
             android:textColor="@color/base_text_color_title"
             android:drawablePadding="10dp"
             android:background="@drawable/button_normal_shape"

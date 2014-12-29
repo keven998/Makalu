@@ -37,6 +37,7 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/27.
  */
 public class AddPoiActivity extends PeachBaseActivity {
+    public final static int REQUEST_CODE_SEARCH_POI=101;
     @InjectView(R.id.lv_poi_list)
     PullToRefreshListView mLvPoiList;
     @InjectView(R.id.loc_spinner)
@@ -60,7 +61,6 @@ public class AddPoiActivity extends PeachBaseActivity {
     private PoiAdapter mPoiAdapter;
     private StringSpinnerAdapter mLocSpinnerAdapter, mTypeSpinnerAdapter;
     private String mKeyWord="";
-    private boolean isInSearchMode=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,22 +94,13 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLvPoiList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if(isInSearchMode){
-                    searchSearchTypeData(mKeyWord,mType,curLoc.id,0);
-
-                }else{
                     getPoiListByLoc(mType, curLoc.id, 0);
-                }
 
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if(isInSearchMode){
-                    searchSearchTypeData(mKeyWord,mType,curLoc.id,curPage+1);
-                }else{
                     getPoiListByLoc(mType, curLoc.id, curPage + 1);
-                }
 
             }
         });
@@ -126,9 +117,14 @@ public class AddPoiActivity extends PeachBaseActivity {
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isInSearchMode =true;
                 mKeyWord = mEtSearch.getText().toString().trim();
-                searchSearchTypeData(mKeyWord,mType,curLoc.id,0);
+                Intent intent = new Intent(mContext,SearchPoiActivity.class);
+                intent.putExtra("keyword",mKeyWord);
+                intent.putExtra("type",mType);
+                intent.putExtra("dayIndex",dayIndex);
+                intent.putParcelableArrayListExtra("poiList", hasAddList);
+                intent.putExtra("loc",curLoc);
+                startActivityForResult(intent,REQUEST_CODE_SEARCH_POI);
             }
         });
     }
@@ -137,9 +133,11 @@ public class AddPoiActivity extends PeachBaseActivity {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isInSearchMode = false;
                 mType = poiTypeValueArray[position];
-                getPoiListByLoc(mType, curLoc.id, 0);
+                mPoiAdapter.getDataList().clear();
+                mPoiAdapter.notifyDataSetChanged();
+                mLvPoiList.doPullRefreshing(true,500);
+//                getPoiListByLoc(mType, curLoc.id, 0);
             }
 
             @Override
@@ -150,9 +148,11 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                isInSearchMode = false;
                 curLoc = locList.get(position);
-                getPoiListByLoc(mType, curLoc.id, 0);
+                mPoiAdapter.getDataList().clear();
+                mPoiAdapter.notifyDataSetChanged();
+                mLvPoiList.doPullRefreshing(true,500);
+//                getPoiListByLoc(mType, curLoc.id, 0);
             }
 
             @Override
@@ -181,7 +181,8 @@ public class AddPoiActivity extends PeachBaseActivity {
         initSpinnerListener();
         curLoc = locList.get(0);
         mType = poiTypeValueArray[0];
-        getPoiListByLoc(mType, curLoc.id, 0);
+        mLvPoiList.doPullRefreshing(true,500);
+//        getPoiListByLoc(mType, curLoc.id, 0);
 
     }
 
@@ -215,69 +216,6 @@ public class AddPoiActivity extends PeachBaseActivity {
             }
         });
     }
-    private void searchSearchTypeData(String keyWord, final String type,String locId,final int page){
-        TravelApi.searchForType(keyWord,type,locId,page,new HttpCallBack<String>() {
-            @Override
-            public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result,SearchAllBean.class);
-                if(searchAllResult.code==0){
-                    curPage = page;
-                    bindSearchView(type, searchAllResult.result);
-                }
-                if (curPage == 0) {
-                    mLvPoiList.onPullUpRefreshComplete();
-                    mLvPoiList.onPullDownRefreshComplete();
-                }else{
-                    mLvPoiList.onPullDownRefreshComplete();
-                }
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                mLvPoiList.onPullUpRefreshComplete();
-                mLvPoiList.onPullDownRefreshComplete();
-            }
-        });
-    }
-    private void bindSearchView(String type,SearchAllBean result) {
-        if (curPage == 0) {
-            mPoiAdapter.getDataList().clear();
-        }
-        boolean hasMore = true;
-        if (type.equals("vs")) {
-            mPoiAdapter.getDataList().addAll(result.vs);
-            if (result.vs.size() < BaseApi.PAGE_SIZE) {
-                hasMore = false;
-            }
-        } else if (type.equals("hotel")) {
-            mPoiAdapter.getDataList().addAll(result.hotel);
-            if (result.hotel.size() < BaseApi.PAGE_SIZE) {
-                hasMore = false;
-            }
-        } else if (type.equals("restaurants")) {
-            mPoiAdapter.getDataList().addAll(result.restaurant);
-            if (result.restaurant.size() < BaseApi.PAGE_SIZE) {
-                hasMore = false;
-            }
-        } else if (type.equals("shopping")) {
-            mPoiAdapter.getDataList().addAll(result.shopping);
-            if (result.shopping.size() < BaseApi.PAGE_SIZE) {
-                hasMore = false;
-            }
-        }
-        if (result == null
-                || !hasMore) {
-            mLvPoiList.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
-        } else {
-            mLvPoiList.setHasMoreData(true);
-            mLvPoiList.onPullUpRefreshComplete();
-        }
-        mPoiAdapter.notifyDataSetChanged();
-    }
 
     private void bindView(List<PoiDetailBean> result) {
         if (curPage == 0) {
@@ -306,5 +244,21 @@ public class AddPoiActivity extends PeachBaseActivity {
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==REQUEST_CODE_SEARCH_POI){
+                hasAddList = data.getParcelableArrayListExtra("poiList");
+                for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
+                    if (hasAddList.contains(detailBean)) {
+                        detailBean.hasAdded = true;
+                    } else {
+                        detailBean.hasAdded = false;
+                    }
+                }
+                mPoiAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

@@ -12,9 +12,10 @@ public class RecDestBean {
 
     public class RecDestItem{
         public String id;
-        public String zhName;
-        public String enName;
-        public int linkType;
+        public String itemType;
+        public String itemId;
+        public String title;
+        public String linkType;
         public String linkUrl;
         public String cover;
         public String desc;

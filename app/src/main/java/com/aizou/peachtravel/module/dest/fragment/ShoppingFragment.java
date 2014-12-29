@@ -39,6 +39,8 @@ import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONObject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -71,6 +73,15 @@ public class ShoppingFragment extends PeachBaseFragment {
         mEditDslv.addFooterView(addFooter);
         initData();
         return rootView;
+    }
+    public boolean  isEditableMode(){
+        if(mRestAdapter!=null){
+            return mRestAdapter.isEditableMode;
+        }
+        return false;
+    }
+    public StrategyBean getStrategy(){
+        return  strategy;
     }
 
     private void initData() {
@@ -117,14 +128,19 @@ public class ShoppingFragment extends PeachBaseFragment {
             mEditBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
-                    if(mRestAdapter.isEditableMode){
+
+                    if(!mRestAdapter.isEditableMode){
                         mEditBtn.setChecked(true);
                         addFooter.setVisibility(View.VISIBLE);
+                        mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
+                        mRestAdapter.notifyDataSetChanged();
                     }else{
                         //todo: need to 保存路线
                         DialogManager.getInstance().showLoadingDialog(getActivity());
-                        TravelApi.saveGuide(strategy.id, StrategyManager.getSaveShoppingJson(getActivity(),strategy),new HttpCallBack<String>() {
+                        JSONObject jsonObject = new JSONObject();
+                        StrategyManager.putSaveGuideBaseInfo(jsonObject,getActivity(),strategy);
+                        StrategyManager.putShoppingJson(getActivity(),jsonObject,strategy);
+                        TravelApi.saveGuide(strategy.id, jsonObject.toString(),new HttpCallBack<String>() {
                             @Override
                             public void doSucess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -133,6 +149,8 @@ public class ShoppingFragment extends PeachBaseFragment {
                                     ToastUtil.getInstance(getActivity()).showToast("保存成功");
                                     mEditBtn.setChecked(false);
                                     addFooter.setVisibility(View.INVISIBLE);
+                                    mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;
+                                    mRestAdapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -143,10 +161,8 @@ public class ShoppingFragment extends PeachBaseFragment {
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
-                        mEditBtn.setChecked(false);
-                        addFooter.setVisibility(View.INVISIBLE);
                     }
-                    mRestAdapter.notifyDataSetChanged();
+
                 }
             });
             if (mRestAdapter.getCount() == 0) {

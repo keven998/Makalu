@@ -34,6 +34,7 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
@@ -45,6 +46,8 @@ import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -94,21 +97,33 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     }
 
+    public boolean  isEditableMode(){
+        if(routeDayAdpater!=null){
+            return routeDayAdpater.isEditableMode;
+        }
+        return false;
+    }
+    public ArrayList<ArrayList<PoiDetailBean>> getRouteDayMap(){
+        if(routeDayMap==null){
+            resizeData(strategy.itinerary);
+        }
+        return  routeDayMap;
+    }
+    public StrategyBean getStrategy(){
+        return  strategy;
+    }
+
     private void initData() {
         strategy = getArguments().getParcelable("strategy");
         canEdit = getArguments().getBoolean("canEdit");
         resizeData(strategy.itinerary);
-
         final RouteDayAdapter adapter = new RouteDayAdapter();
         routeDayAdpater = adapter;
-
         final DragSortListView listView = mEditDslv;
         listView.setDropListener(adapter);
-
         View view = new View(getActivity());
         view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.panel_margin)));
         listView.addHeaderView(view);
-
         // make and set controller on dslv
         SectionController c = new SectionController(listView, adapter);
         listView.setFloatViewManager(c);
@@ -141,16 +156,19 @@ public class RouteDayFragment extends PeachBaseFragment {
             mEditBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapter.isEditableMode = !adapter.isEditableMode;
-                    if (adapter.isEditableMode) {
+                    if (!adapter.isEditableMode) {
                         mEditBtn.setChecked(true);
                         lineLl.setVisibility(View.GONE);
                         addDayFooter.setVisibility(View.VISIBLE);
+                        adapter.isEditableMode = !adapter.isEditableMode;
+                        adapter.notifyDataSetChanged();
                     } else {
                         //todo:保存路线
                         DialogManager.getInstance().showLoadingDialog(getActivity());
-                        String uploadJson = StrategyManager.getInstance().getSaveItineraryJson(getActivity(), strategy, routeDayMap);
-                        TravelApi.saveGuide(strategy.id, uploadJson,new HttpCallBack<String>() {
+                        JSONObject jsonObject = new JSONObject();
+                        StrategyManager.putSaveGuideBaseInfo(jsonObject,getActivity(),strategy);
+                        StrategyManager.putItineraryJson(getActivity(), jsonObject, strategy, routeDayMap);
+                        TravelApi.saveGuide(strategy.id, jsonObject.toString(),new HttpCallBack<String>() {
                             @Override
                             public void doSucess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -160,6 +178,8 @@ public class RouteDayFragment extends PeachBaseFragment {
                                     mEditBtn.setChecked(false);
                                     lineLl.setVisibility(View.GONE);
                                     addDayFooter.setVisibility(View.INVISIBLE);
+                                    adapter.isEditableMode = !adapter.isEditableMode;
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -172,7 +192,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                         });
 
                     }
-                    adapter.notifyDataSetChanged();
+
                 }
             });
             int count = adapter.getCount();
@@ -378,27 +398,24 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new MaterialDialog.Builder(getActivity())
-
-                                        .title(null)
-                                        .content("确定删除")
-                                        .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                                        .positiveText("确定")
-                                        .negativeText("取消")
-                                        .callback(new MaterialDialog.Callback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                routeDayMap.get(section).remove(poiDetailBean);
-                                                notifyDataSetChanged();
-                                                dialog.dismiss();
-                                            }
-
-                                            @Override
-                                            public void onNegative(MaterialDialog dialog) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .show();
+                                final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
+                                deleteDialog.setTitle("提示");
+                                deleteDialog.setMessage("确定删除？");
+                                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.show();
                             }
                         });
                     } else {
@@ -437,26 +454,24 @@ public class RouteDayFragment extends PeachBaseFragment {
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new MaterialDialog.Builder(getActivity())
-                                        .title(null)
-                                        .content("确定删除")
-                                        .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                                        .positiveText("确定")
-                                        .negativeText("取消")
-                                        .callback(new MaterialDialog.Callback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                routeDayMap.get(section).remove(poiDetailBean);
-                                                notifyDataSetChanged();
-                                                dialog.dismiss();
-                                            }
-
-                                            @Override
-                                            public void onNegative(MaterialDialog dialog) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .show();
+                                final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
+                                deleteDialog.setTitle("提示");
+                                deleteDialog.setMessage("确定删除？");
+                                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.show();
                             }
                         });
                     } else {
@@ -571,27 +586,25 @@ public class RouteDayFragment extends PeachBaseFragment {
                 holder.deleteDayIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(null)
-                                .content("确定删除")
-                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                                .positiveText("确定")
-                                .negativeText("取消")
-                                .callback(new MaterialDialog.Callback() {
-                                    @Override
-                                    public void onPositive(MaterialDialog dialog) {
-                                        routeDayMap.remove(section);
-                                        strategy.itineraryDays--;
-                                        notifyDataSetChanged();
-                                        dialog.dismiss();
-                                    }
-
-                                    @Override
-                                    public void onNegative(MaterialDialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
+                        final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
+                        deleteDialog.setTitle("提示");
+                        deleteDialog.setMessage("确定删除这一天吗？");
+                        deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                routeDayMap.remove(section);
+                                strategy.itineraryDays--;
+                                notifyDataSetChanged();
+                                deleteDialog.dismiss();
+                            }
+                        });
+                        deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                deleteDialog.dismiss();
+                            }
+                        });
+                        deleteDialog.show();
                     }
                 });
 

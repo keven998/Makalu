@@ -33,6 +33,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.amap.api.location.AMapLocation;
@@ -406,6 +407,14 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     operateBeans.get(getPosition(position)).cover, imageView,
                     UILUtils.getDefaultOption());
             imageView.setTag(position);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
+                    intent.putExtra("url",operateBeans.get(getPosition(position)).link);
+                    startActivity(intent);
+                }
+            });
             return imageView;
         }
 

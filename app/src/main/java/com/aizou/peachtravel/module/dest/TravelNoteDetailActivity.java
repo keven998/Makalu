@@ -23,6 +23,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar titleBar;
     TravelNoteBean noteBean;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,9 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         initWebView();
         titleBar.getTitleTextView().setText("游记详情");
         titleBar.setRightViewImageRes(R.drawable.ic_share);
+        id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
-        mWebView.loadUrl(H5Url.TRAVEL_NOTE+noteBean.id);
+        mWebView.loadUrl(H5Url.TRAVEL_NOTE+id);
         titleBar.enableBackKey(true);
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override

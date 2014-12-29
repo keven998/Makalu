@@ -41,7 +41,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class ShareUtils {
-    public static void showSelectPlatformDialog(Activity act){
+    public class PlatfromSetting {
+        public final static String WX_APPID = "wx26b58c7173483529";
+        public final static String WX_APPSECRET = "28daa05c021ebebe6d3cf06645b0c5ac";
+
+        public final static String QQ_APPID = "1103275581";
+        public final static String QQ_APPKEY = "VW1VnrywTEnK3vgw";
+
+    }
+
+    public static void showSelectPlatformDialog(Activity act) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
                 .inflate(act, R.layout.view_share_bar, null);
@@ -118,11 +127,41 @@ public class ShareUtils {
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()) ; // 设置宽度
+        lp.width = (int) (display.getWidth()); // 设置宽度
         // lp.horizontalMargin=20;
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    public static void shareAppToWx(final Activity act) {
+        final UMSocialService mController = UMServiceFactory
+                .getUMSocialService("com.umeng.share");
+        // 设置分享内容
+        mController.getConfig().closeToast();
+        UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
+        wxHandler.addToSocialSDK();
+        WeiXinShareContent circleMedia = new WeiXinShareContent();
+        circleMedia.setShareContent("给你推荐个桃子旅行，专为美女们旅行服务的贴心小助手：http://****");
+        circleMedia.setTargetUrl("");
+        mController.setShareMedia(circleMedia);
+        mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
+            @Override
+            public void onStart() {
+//					Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete(SHARE_MEDIA platform, int eCode,
+                                   SocializeEntity entity) {
+                if (eCode == 200) {
+                    Toast.makeText(act, "分享成功.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                }
+            }
+
+        });
     }
 
 //	public static UMSocialService shareRoute(final SHARE_MEDIA platform,
@@ -526,30 +565,30 @@ public class ShareUtils {
 //
 //		return mController;
 //	}
-	
-	public static void configPlatforms(Activity act){
+
+    public static void configPlatforms(Activity act) {
         String appId = "wx26b58c7173483529";
         String appSecret = "28daa05c021ebebe6d3cf06645b0c5ac";
 // 添加微信平台
-        UMWXHandler wxHandler = new UMWXHandler(act,appId,appSecret);
+        UMWXHandler wxHandler = new UMWXHandler(act, appId, appSecret);
         wxHandler.addToSocialSDK();
 // 添加微信朋友圈
-        UMWXHandler wxCircleHandler = new UMWXHandler(act,appId,appSecret);
+        UMWXHandler wxCircleHandler = new UMWXHandler(act, appId, appSecret);
         wxCircleHandler.setToCircle(true);
         wxCircleHandler.addToSocialSDK();
 
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, "1103275581",
-				"VW1VnrywTEnK3vgw");
-		qqSsoHandler.addToSocialSDK();
-		
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
-				"1103275581", "VW1VnrywTEnK3vgw");
-		qZoneSsoHandler.addToSocialSDK();
-		
-		SmsHandler smsHandler = new SmsHandler();
-		smsHandler.addToSocialSDK();
-		
-	}
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, "1103275581",
+                "VW1VnrywTEnK3vgw");
+        qqSsoHandler.addToSocialSDK();
+
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
+                "1103275581", "VW1VnrywTEnK3vgw");
+        qZoneSsoHandler.addToSocialSDK();
+
+        SmsHandler smsHandler = new SmsHandler();
+        smsHandler.addToSocialSDK();
+
+    }
 
 
 }

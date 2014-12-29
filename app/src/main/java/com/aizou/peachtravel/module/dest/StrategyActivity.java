@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -39,6 +41,8 @@ import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,9 +63,13 @@ public class StrategyActivity extends PeachBaseActivity {
     @InjectView(R.id.strategy_indicator)
     FixedIndicatorView mStrategyIndicator;
     private String id;
+    private StrategyBean strategy;
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
     private boolean canEdit;
+    RouteDayFragment routeDayFragment;
+    RestaurantFragment restFragment;
+    ShoppingFragment shoppingFragment;
 
     private boolean isAniming = false, isRVVisable = true;
     private Animation inAnim, outAnim;
@@ -97,7 +105,11 @@ public class StrategyActivity extends PeachBaseActivity {
         mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if(checkIsEditableMode()){
+                    warnCancel();
+                }else {
+                    finish();
+            }
             }
         });
 
@@ -164,6 +176,7 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private void bindView(final StrategyBean result) {
+        strategy = result;
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
@@ -361,25 +374,33 @@ public class StrategyActivity extends PeachBaseActivity {
         @Override
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
-                RouteDayFragment routeDayFragment = new RouteDayFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("strategy", strategyBean);
-                bundle.putBoolean("canEdit",canEdit);
-                routeDayFragment.setArguments(bundle);
+                if(routeDayFragment==null){
+                    routeDayFragment = new RouteDayFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("strategy", strategyBean);
+                    bundle.putBoolean("canEdit",canEdit);
+                    routeDayFragment.setArguments(bundle);
+                }
                 return routeDayFragment;
             } else if (position == 1) {
-                RestaurantFragment restFragment = new RestaurantFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("strategy", strategyBean);
-                bundle.putBoolean("canEdit",canEdit);
-                restFragment.setArguments(bundle);
+                if(restFragment==null){
+                    restFragment = new RestaurantFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("strategy", strategyBean);
+                    bundle.putBoolean("canEdit",canEdit);
+                    restFragment.setArguments(bundle);
+                }
+
                 return restFragment;
             } else {
-                ShoppingFragment shoppingFragment = new ShoppingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("strategy", strategyBean);
-                bundle.putBoolean("canEdit",canEdit);
-                shoppingFragment.setArguments(bundle);
+                if(shoppingFragment==null){
+                    shoppingFragment = new ShoppingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("strategy", strategyBean);
+                    bundle.putBoolean("canEdit",canEdit);
+                    shoppingFragment.setArguments(bundle);
+                }
+
                 return shoppingFragment;
             }
         }
@@ -400,31 +421,71 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        warnCancel();
+        if(checkIsEditableMode()){
+            warnCancel();
+        }else {
+            super.onBackPressed();
+        }
+
+    }
+
+    private boolean checkIsEditableMode(){
+        if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
+            return true;
+        }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
+            return true;
+        }else if(restFragment!=null&&restFragment.isEditableMode()){
+            return true;
+        }
+        return  false;
     }
 
     private void warnCancel() {
-        new MaterialDialog.Builder(this)
-                .title("提示")
-                .content("是否先保存已完成的清单")
-                .positiveText("保存")
-                .negativeText("直接返回")
-                .callback(new MaterialDialog.Callback() {
+        final JSONObject jsonObject = new JSONObject();
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext,strategy);
+        if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
+            StrategyManager.putItineraryJson(mContext,jsonObject,routeDayFragment.getStrategy(),routeDayFragment.getRouteDayMap());
+        }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
+            StrategyManager.putShoppingJson(mContext,jsonObject,shoppingFragment.getStrategy());
+        }else if(restFragment!=null&&restFragment.isEditableMode()){
+            StrategyManager.putRestaurantJson(mContext, jsonObject, shoppingFragment.getStrategy());
+        }
+
+        final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
+        messageDialog.setTitle("提示");
+        messageDialog.setMessage("是否先保存已完成的清单");
+        messageDialog.setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+                DialogManager.getInstance().showLoadingDialog(mContext);
+                TravelApi.saveGuide(strategy.id, jsonObject.toString(),new HttpCallBack<String>() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        finish();
+                    public void doSucess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
+                        if (saveResult.code == 0) {
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到 \"旅行Memo\"");
+                            finish();
+                        }
                     }
 
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-//                        Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
-//                        intent.setAction("plan.flow"); //magic number in stand of being start in plan flow
-//                        startActivity(intent);
-                        ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到 \"旅行Memo\"");
-                        finish();
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                        ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
                     }
-                })
-                .show();
+                });
+            }
+        });
+        messageDialog.setNegativeButton("取消",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 }
 

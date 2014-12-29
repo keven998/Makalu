@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -32,6 +33,7 @@ import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -39,6 +41,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
+import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
@@ -429,45 +432,44 @@ public class FavListActivity extends PeachBaseActivity {
         }
 
         private void deleteItem(final FavoritesBean itemData) {
-            new MaterialDialog.Builder(FavListActivity.this)
-                    .title(null)
-                    .content("删除后就找不到了")
-                    .positiveText("删除")
-                    .negativeText("取消")
-                    .autoDismiss(false)
-                    .positiveColor(getResources().getColor(R.color.app_theme_color))
-                    .negativeColor(getResources().getColor(R.color.app_theme_color))
-                    .callback(new MaterialDialog.Callback() {
+            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            dialog.setTitle("提示");
+            dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+            dialog.setMessage("删除后就找不到了");
+            dialog.setPositiveButton("确定",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
+                    OtherApi.deleteFav(itemData.itemId, new HttpCallBack<String>() {
                         @Override
-                        public void onPositive(final MaterialDialog dialog) {
-                            DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
-                            OtherApi.deleteFav(itemData.itemId, new HttpCallBack<String>() {
-                                @Override
-                                public void doSucess(String result, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                                    if (deleteResult.code == 0) {
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
 //                                        mItemDataList.remove(i);
-                                        mItemDataList.remove(itemData);
-                                        notifyDataSetChanged();
-                                        cachePage();
-                                    }
-                                }
-
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                }
-                            });
+                                mItemDataList.remove(itemData);
+                                notifyDataSetChanged();
+                                cachePage();
+                            }
                         }
 
                         @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            dialog.dismiss();
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
-                    })
-                    .show();
+                    });
+                }
+            });
+            dialog.setNegativeButton("取消",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
         }
 
     }

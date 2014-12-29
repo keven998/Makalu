@@ -30,10 +30,8 @@ public class StrategyManager {
 
     }
 
-    public static String getSaveItineraryJson(Context context, StrategyBean strategy, ArrayList<ArrayList<PoiDetailBean>> routeDayMap) {
-        JSONObject rootJson = new JSONObject();
+    public static String putItineraryJson(Context context,JSONObject rootJson, StrategyBean strategy, ArrayList<ArrayList<PoiDetailBean>> routeDayMap) {
         try {
-            setSaveGuideBaseInfo(rootJson, context, strategy);
             int i = 0;
             JSONArray itineraryArray = new JSONArray();
             for (ArrayList<PoiDetailBean> dayList : routeDayMap) {
@@ -50,6 +48,7 @@ public class StrategyManager {
                 }
                 i++;
             }
+            rootJson.put("itineraryDays", strategy.itineraryDays);
             rootJson.put("itinerary", itineraryArray);
             return rootJson.toString();
         } catch (JSONException e) {
@@ -59,10 +58,8 @@ public class StrategyManager {
 
     }
 
-    public static String getSaveRestaurantJson(Context context, StrategyBean strategy) {
-        JSONObject rootJson = new JSONObject();
+    public static String putRestaurantJson(Context context,JSONObject rootJson, StrategyBean strategy) {
         try {
-            setSaveGuideBaseInfo(rootJson, context, strategy);
             JSONArray restaurantArray = new JSONArray();
             JSONObject poiObject;
             for (PoiDetailBean poiDetailBean : strategy.restaurant) {
@@ -79,10 +76,8 @@ public class StrategyManager {
         return null;
 
     }
-    public static String getSaveShoppingJson(Context context, StrategyBean strategy) {
-        JSONObject rootJson = new JSONObject();
+    public static String putShoppingJson(Context context,JSONObject rootJson, StrategyBean strategy) {
         try {
-            setSaveGuideBaseInfo(rootJson, context, strategy);
             JSONArray shoppingArray = new JSONArray();
             JSONObject poiObject;
             for (PoiDetailBean poiDetailBean : strategy.shopping) {
@@ -100,23 +95,28 @@ public class StrategyManager {
 
     }
 
-    private static void setSaveGuideBaseInfo(JSONObject rootJson, Context context, StrategyBean strategy) throws JSONException {
+    public static void putSaveGuideBaseInfo(JSONObject rootJson, Context context, StrategyBean strategy){
 
-        rootJson.put("id", strategy.id);
-        rootJson.put("title", strategy.title);
-        PeachUser user = AccountManager.getInstance().getLoginAccount(context);
-        rootJson.put("userId", user.userId);
-        rootJson.put("itineraryDays", strategy.itineraryDays);
-        JSONArray locArray = new JSONArray();
-        JSONObject locObject;
-        for (LocBean loc : strategy.localities) {
-            locObject = new JSONObject();
-            locObject.put("id", loc.id);
-            locObject.put("zhName", loc.zhName);
-            locObject.put("enName", loc.enName);
-            locArray.put(locObject);
+        try {
+            rootJson.put("id", strategy.id);
+            rootJson.put("title", strategy.title);
+            PeachUser user = AccountManager.getInstance().getLoginAccount(context);
+            rootJson.put("userId", user.userId);
+            rootJson.put("itineraryDays", strategy.itineraryDays);
+            JSONArray locArray = new JSONArray();
+            JSONObject locObject;
+            for (LocBean loc : strategy.localities) {
+                locObject = new JSONObject();
+                locObject.put("id", loc.id);
+                locObject.put("zhName", loc.zhName);
+                locObject.put("enName", loc.enName);
+                locArray.put(locObject);
+            }
+            rootJson.put("localities", locArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        rootJson.put("localities", locArray);
+
     }
 
 

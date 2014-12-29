@@ -1,0 +1,1025 @@
+-- Merging decision tree log ---
+manifest
+ADDED from AndroidManifest.xml:2:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
+	package
+		ADDED from AndroidManifest.xml:3:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionName
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionCode
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:5:5
+	android:name
+		ADDED from AndroidManifest.xml:5:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:8:5
+	android:name
+		ADDED from AndroidManifest.xml:8:22
+uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:9:5
+	android:name
+		ADDED from AndroidManifest.xml:9:22
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from AndroidManifest.xml:10:5
+	android:name
+		ADDED from AndroidManifest.xml:10:22
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from AndroidManifest.xml:11:5
+	android:name
+		ADDED from AndroidManifest.xml:11:22
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
+uses-permission#android.permission.WRITE_SETTINGS
+ADDED from AndroidManifest.xml:14:5
+	android:name
+		ADDED from AndroidManifest.xml:14:22
+uses-permission#android.permission.READ_CONTACTS
+ADDED from AndroidManifest.xml:17:5
+	android:name
+		ADDED from AndroidManifest.xml:17:22
+uses-permission#android.permission.VIBRATE
+ADDED from AndroidManifest.xml:19:5
+	android:name
+		ADDED from AndroidManifest.xml:19:22
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from AndroidManifest.xml:21:5
+	android:name
+		ADDED from AndroidManifest.xml:21:22
+uses-permission#android.permission.CALL_PHONE
+ADDED from AndroidManifest.xml:22:5
+	android:name
+		ADDED from AndroidManifest.xml:22:22
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from AndroidManifest.xml:24:5
+	android:name
+		ADDED from AndroidManifest.xml:24:22
+permission#android.permission.BAIDU_LOCATION_SERVICE
+ADDED from AndroidManifest.xml:26:5
+	android:name
+		ADDED from AndroidManifest.xml:26:17
+uses-permission#android.permission.BAIDU_LOCATION_SERVICE
+ADDED from AndroidManifest.xml:28:5
+	android:name
+		ADDED from AndroidManifest.xml:28:22
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from AndroidManifest.xml:29:5
+	android:name
+		ADDED from AndroidManifest.xml:29:22
+uses-permission#android.permission.ACCESS_GPS
+ADDED from AndroidManifest.xml:30:5
+	android:name
+		ADDED from AndroidManifest.xml:30:22
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from AndroidManifest.xml:31:5
+	android:name
+		ADDED from AndroidManifest.xml:31:22
+uses-permission#android.permission.CAMERA
+ADDED from AndroidManifest.xml:32:5
+	android:name
+		ADDED from AndroidManifest.xml:32:22
+uses-permission#android.permission.GET_TASKS
+ADDED from AndroidManifest.xml:33:5
+	android:name
+		ADDED from AndroidManifest.xml:33:22
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from AndroidManifest.xml:34:5
+	android:name
+		ADDED from AndroidManifest.xml:34:22
+uses-permission#android.permission.MODIFY_AUDIO_SETTINGS
+ADDED from AndroidManifest.xml:35:5
+	android:name
+		ADDED from AndroidManifest.xml:35:22
+uses-permission#android.permission.WAKE_LOCK
+ADDED from AndroidManifest.xml:36:5
+	android:name
+		ADDED from AndroidManifest.xml:36:22
+uses-permission#getui.permission.GetuiService.com.aizou.peachtravel
+ADDED from AndroidManifest.xml:37:5
+	android:name
+		ADDED from AndroidManifest.xml:37:22
+permission#getui.permission.GetuiService.com.aizou.peachtravel
+ADDED from AndroidManifest.xml:39:5
+	android:protectionLevel
+		ADDED from AndroidManifest.xml:41:9
+	android:name
+		ADDED from AndroidManifest.xml:40:9
+uses-feature#android.hardware.camera
+ADDED from AndroidManifest.xml:44:5
+	android:name
+		ADDED from AndroidManifest.xml:44:19
+application
+ADDED from AndroidManifest.xml:46:5
+MERGED from PeachTravel:core:unspecified:11:5
+MERGED from com.android.support:appcompat-v7:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from PeachTravel:social_sdk_library_project:unspecified:11:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:appcompat-v7:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:appcompat-v7:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:cardview-v7:21.0.2:16:5
+MERGED from com.android.support:recyclerview-v7:21.0.0:17:5
+MERGED from com.android.support:support-v4:21.0.2:16:5
+	android:label
+		ADDED from AndroidManifest.xml:50:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:48:9
+	android:icon
+		ADDED from AndroidManifest.xml:49:9
+	android:theme
+		ADDED from AndroidManifest.xml:51:9
+	android:name
+		ADDED from AndroidManifest.xml:47:9
+activity#com.aizou.peachtravel.module.SplashActivity
+ADDED from AndroidManifest.xml:52:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:56:13
+	android:noHistory
+		ADDED from AndroidManifest.xml:55:13
+	android:label
+		ADDED from AndroidManifest.xml:54:13
+	android:name
+		ADDED from AndroidManifest.xml:53:13
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:57:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:58:17
+	android:name
+		ADDED from AndroidManifest.xml:58:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:59:17
+	android:name
+		ADDED from AndroidManifest.xml:59:27
+activity#com.aizou.peachtravel.module.StoryActivity
+ADDED from AndroidManifest.xml:62:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:66:13
+	android:noHistory
+		ADDED from AndroidManifest.xml:65:13
+	android:theme
+		ADDED from AndroidManifest.xml:64:13
+	android:name
+		ADDED from AndroidManifest.xml:63:13
+activity#com.aizou.peachtravel.module.MainActivity
+ADDED from AndroidManifest.xml:68:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:72:13
+	android:label
+		ADDED from AndroidManifest.xml:70:13
+	android:name
+		ADDED from AndroidManifest.xml:69:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:71:13
+activity#com.aizou.peachtravel.module.GuideActivity
+ADDED from AndroidManifest.xml:75:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:78:13
+	android:label
+		ADDED from AndroidManifest.xml:77:13
+	android:name
+		ADDED from AndroidManifest.xml:76:13
+activity#com.aizou.peachtravel.module.PeachWebViewActivity
+ADDED from AndroidManifest.xml:80:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:83:13
+	android:label
+		ADDED from AndroidManifest.xml:82:13
+	android:name
+		ADDED from AndroidManifest.xml:81:13
+activity#com.aizou.peachtravel.module.dest.SelectDestActivity
+ADDED from AndroidManifest.xml:85:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:88:13
+	android:label
+		ADDED from AndroidManifest.xml:87:13
+	android:name
+		ADDED from AndroidManifest.xml:86:13
+activity#com.aizou.peachtravel.module.dest.SearchDestActivity
+ADDED from AndroidManifest.xml:90:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:93:13
+	android:label
+		ADDED from AndroidManifest.xml:92:13
+	android:name
+		ADDED from AndroidManifest.xml:91:13
+activity#com.aizou.peachtravel.module.dest.SearchDestForPoiActivity
+ADDED from AndroidManifest.xml:95:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:98:13
+	android:label
+		ADDED from AndroidManifest.xml:97:13
+	android:name
+		ADDED from AndroidManifest.xml:96:13
+activity#com.aizou.peachtravel.module.dest.StrategyActivity
+ADDED from AndroidManifest.xml:100:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:103:13
+	android:label
+		ADDED from AndroidManifest.xml:102:13
+	android:name
+		ADDED from AndroidManifest.xml:101:13
+activity#com.aizou.peachtravel.module.dest.AddPoiActivity
+ADDED from AndroidManifest.xml:105:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:108:13
+	android:label
+		ADDED from AndroidManifest.xml:107:13
+	android:name
+		ADDED from AndroidManifest.xml:106:13
+activity#com.aizou.peachtravel.module.dest.PoiListActivity
+ADDED from AndroidManifest.xml:110:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:113:13
+	android:label
+		ADDED from AndroidManifest.xml:112:13
+	android:name
+		ADDED from AndroidManifest.xml:111:13
+activity#com.aizou.peachtravel.module.dest.CityDetailActivity
+ADDED from AndroidManifest.xml:115:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:118:13
+	android:label
+		ADDED from AndroidManifest.xml:117:13
+	android:name
+		ADDED from AndroidManifest.xml:116:13
+activity#com.aizou.peachtravel.module.dest.MoreTravelNoteActivity
+ADDED from AndroidManifest.xml:120:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:123:13
+	android:label
+		ADDED from AndroidManifest.xml:122:13
+	android:name
+		ADDED from AndroidManifest.xml:121:13
+activity#com.aizou.peachtravel.module.dest.TravelNoteDetailActivity
+ADDED from AndroidManifest.xml:125:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:128:13
+	android:label
+		ADDED from AndroidManifest.xml:127:13
+	android:name
+		ADDED from AndroidManifest.xml:126:13
+activity#com.aizou.peachtravel.module.dest.CityPictureActivity
+ADDED from AndroidManifest.xml:130:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:133:13
+	android:label
+		ADDED from AndroidManifest.xml:132:13
+	android:name
+		ADDED from AndroidManifest.xml:131:13
+activity#com.aizou.peachtravel.module.my.MessageContents
+ADDED from AndroidManifest.xml:135:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:138:13
+	android:label
+		ADDED from AndroidManifest.xml:137:13
+	android:name
+		ADDED from AndroidManifest.xml:136:13
+activity#com.aizou.peachtravel.module.dest.PoiDetailActivity
+ADDED from AndroidManifest.xml:140:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:143:13
+	android:label
+		ADDED from AndroidManifest.xml:142:13
+	android:name
+		ADDED from AndroidManifest.xml:141:13
+activity#com.aizou.peachtravel.module.dest.SpotDetailActivity
+ADDED from AndroidManifest.xml:145:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:148:13
+	android:label
+		ADDED from AndroidManifest.xml:147:13
+	android:name
+		ADDED from AndroidManifest.xml:146:13
+activity#com.aizou.peachtravel.module.dest.SearchAllActivity
+ADDED from AndroidManifest.xml:150:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:153:13
+	android:label
+		ADDED from AndroidManifest.xml:152:13
+	android:name
+		ADDED from AndroidManifest.xml:151:13
+activity#com.aizou.peachtravel.module.dest.TravelNoteSearchActivity
+ADDED from AndroidManifest.xml:155:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:158:13
+	android:label
+		ADDED from AndroidManifest.xml:157:13
+	android:name
+		ADDED from AndroidManifest.xml:156:13
+activity#com.aizou.peachtravel.module.dest.SearchTypeActivity
+ADDED from AndroidManifest.xml:160:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:163:13
+	android:label
+		ADDED from AndroidManifest.xml:162:13
+	android:name
+		ADDED from AndroidManifest.xml:161:13
+activity#com.aizou.peachtravel.module.ImageViewPagerActivity
+ADDED from AndroidManifest.xml:165:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:168:13
+	android:label
+		ADDED from AndroidManifest.xml:167:13
+	android:theme
+		ADDED from AndroidManifest.xml:169:13
+	android:name
+		ADDED from AndroidManifest.xml:166:13
+activity#com.aizou.peachtravel.module.my.ShareAccountActivity
+ADDED from AndroidManifest.xml:172:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:175:13
+	android:label
+		ADDED from AndroidManifest.xml:174:13
+	android:name
+		ADDED from AndroidManifest.xml:173:13
+activity#com.aizou.peachtravel.wxapi.WXEntryActivity
+ADDED from AndroidManifest.xml:177:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:181:13
+	android:label
+		ADDED from AndroidManifest.xml:180:13
+	android:exported
+		ADDED from AndroidManifest.xml:179:13
+	android:name
+		ADDED from AndroidManifest.xml:178:13
+activity#com.aizou.peachtravel.module.my.SettingActivity
+ADDED from AndroidManifest.xml:183:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:186:13
+	android:label
+		ADDED from AndroidManifest.xml:185:13
+	android:name
+		ADDED from AndroidManifest.xml:184:13
+activity#com.aizou.peachtravel.module.my.PushSettingActivity
+ADDED from AndroidManifest.xml:188:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:191:13
+	android:label
+		ADDED from AndroidManifest.xml:190:13
+	android:name
+		ADDED from AndroidManifest.xml:189:13
+activity#com.aizou.peachtravel.module.my.AboutActivity
+ADDED from AndroidManifest.xml:193:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:196:13
+	android:label
+		ADDED from AndroidManifest.xml:195:13
+	android:name
+		ADDED from AndroidManifest.xml:194:13
+activity#com.aizou.peachtravel.module.my.FeedbackActivity
+ADDED from AndroidManifest.xml:198:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:201:13
+	android:label
+		ADDED from AndroidManifest.xml:200:13
+	android:name
+		ADDED from AndroidManifest.xml:199:13
+activity#com.aizou.peachtravel.module.my.LoginActivity
+ADDED from AndroidManifest.xml:203:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:207:13
+	android:label
+		ADDED from AndroidManifest.xml:205:13
+	android:name
+		ADDED from AndroidManifest.xml:204:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:206:13
+activity#com.aizou.peachtravel.module.my.ForgetPwdActivity
+ADDED from AndroidManifest.xml:209:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:212:13
+	android:label
+		ADDED from AndroidManifest.xml:211:13
+	android:name
+		ADDED from AndroidManifest.xml:210:13
+activity#com.aizou.peachtravel.module.my.VerifyPhoneActivity
+ADDED from AndroidManifest.xml:214:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:217:13
+	android:label
+		ADDED from AndroidManifest.xml:216:13
+	android:name
+		ADDED from AndroidManifest.xml:215:13
+activity#com.aizou.peachtravel.module.my.ResetPwdActivity
+ADDED from AndroidManifest.xml:219:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:222:13
+	android:label
+		ADDED from AndroidManifest.xml:221:13
+	android:name
+		ADDED from AndroidManifest.xml:220:13
+activity#com.aizou.peachtravel.module.my.RegActivity
+ADDED from AndroidManifest.xml:224:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:227:13
+	android:label
+		ADDED from AndroidManifest.xml:226:13
+	android:name
+		ADDED from AndroidManifest.xml:225:13
+activity#com.aizou.peachtravel.module.my.AccountActvity
+ADDED from AndroidManifest.xml:229:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:233:13
+	android:label
+		ADDED from AndroidManifest.xml:231:13
+	android:name
+		ADDED from AndroidManifest.xml:230:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:232:13
+activity#com.aizou.peachtravel.module.my.ModifyNicknameActivity
+ADDED from AndroidManifest.xml:235:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:238:13
+	android:label
+		ADDED from AndroidManifest.xml:237:13
+	android:name
+		ADDED from AndroidManifest.xml:236:13
+activity#com.aizou.peachtravel.module.my.ModifySignActivity
+ADDED from AndroidManifest.xml:240:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:243:13
+	android:label
+		ADDED from AndroidManifest.xml:242:13
+	android:name
+		ADDED from AndroidManifest.xml:241:13
+activity#com.aizou.peachtravel.module.my.ModifyGenderActivity
+ADDED from AndroidManifest.xml:245:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:248:13
+	android:label
+		ADDED from AndroidManifest.xml:247:13
+	android:name
+		ADDED from AndroidManifest.xml:246:13
+activity#com.aizou.peachtravel.module.my.ModifyPwdActivity
+ADDED from AndroidManifest.xml:250:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:253:13
+	android:label
+		ADDED from AndroidManifest.xml:252:13
+	android:name
+		ADDED from AndroidManifest.xml:251:13
+activity#com.aizou.peachtravel.module.my.PhoneBindActivity
+ADDED from AndroidManifest.xml:255:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:258:13
+	android:label
+		ADDED from AndroidManifest.xml:257:13
+	android:name
+		ADDED from AndroidManifest.xml:256:13
+activity#com.aizou.peachtravel.module.my.SetPwdActivity
+ADDED from AndroidManifest.xml:260:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:263:13
+	android:label
+		ADDED from AndroidManifest.xml:262:13
+	android:name
+		ADDED from AndroidManifest.xml:261:13
+activity#com.aizou.peachtravel.module.toolbox.im.IMMainActivity
+ADDED from AndroidManifest.xml:267:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:272:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:270:13
+	android:theme
+		ADDED from AndroidManifest.xml:271:13
+	android:name
+		ADDED from AndroidManifest.xml:268:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:269:13
+activity#com.aizou.peachtravel.module.toolbox.im.IMShareActivity
+ADDED from AndroidManifest.xml:274:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:276:13
+	android:theme
+		ADDED from AndroidManifest.xml:277:13
+	android:name
+		ADDED from AndroidManifest.xml:275:13
+activity#com.aizou.peachtravel.module.toolbox.im.ChatActivity
+ADDED from AndroidManifest.xml:281:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:286:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:284:13
+	android:theme
+		ADDED from AndroidManifest.xml:285:13
+	android:name
+		ADDED from AndroidManifest.xml:282:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:283:13
+activity#com.aizou.peachtravel.module.toolbox.im.AddContactActivity
+ADDED from AndroidManifest.xml:289:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:291:13
+	android:theme
+		ADDED from AndroidManifest.xml:292:13
+	android:name
+		ADDED from AndroidManifest.xml:290:13
+activity#com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity
+ADDED from AndroidManifest.xml:295:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:297:13
+	android:theme
+		ADDED from AndroidManifest.xml:298:13
+	android:name
+		ADDED from AndroidManifest.xml:296:13
+activity#com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity
+ADDED from AndroidManifest.xml:301:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:303:13
+	android:theme
+		ADDED from AndroidManifest.xml:304:13
+	android:name
+		ADDED from AndroidManifest.xml:302:13
+activity#com.aizou.peachtravel.module.toolbox.im.AddPhoneContactActivity
+ADDED from AndroidManifest.xml:307:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:309:13
+	android:theme
+		ADDED from AndroidManifest.xml:310:13
+	android:name
+		ADDED from AndroidManifest.xml:308:13
+activity#com.aizou.peachtravel.module.toolbox.im.GroupDetailsActivity
+ADDED from AndroidManifest.xml:313:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:315:13
+	android:theme
+		ADDED from AndroidManifest.xml:316:13
+	android:name
+		ADDED from AndroidManifest.xml:314:13
+activity#com.aizou.peachtravel.module.toolbox.im.ModifyGroupNameActivity
+ADDED from AndroidManifest.xml:319:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:321:13
+	android:theme
+		ADDED from AndroidManifest.xml:322:13
+	android:name
+		ADDED from AndroidManifest.xml:320:13
+activity#com.aizou.peachtravel.module.toolbox.FavListActivity
+ADDED from AndroidManifest.xml:325:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:327:13
+	android:name
+		ADDED from AndroidManifest.xml:326:13
+activity#com.aizou.peachtravel.module.toolbox.im.GroupsActivity
+ADDED from AndroidManifest.xml:330:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:334:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:332:13
+	android:theme
+		ADDED from AndroidManifest.xml:333:13
+	android:name
+		ADDED from AndroidManifest.xml:331:13
+activity#com.aizou.peachtravel.module.toolbox.im.NewGroupActivity
+ADDED from AndroidManifest.xml:337:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:341:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:339:13
+	android:theme
+		ADDED from AndroidManifest.xml:340:13
+	android:name
+		ADDED from AndroidManifest.xml:338:13
+activity#com.aizou.peachtravel.module.toolbox.im.ExitGroupDialog
+ADDED from AndroidManifest.xml:344:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:346:13
+	android:theme
+		ADDED from AndroidManifest.xml:347:13
+	android:name
+		ADDED from AndroidManifest.xml:345:13
+activity#com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity
+ADDED from AndroidManifest.xml:350:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:354:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:352:13
+	android:theme
+		ADDED from AndroidManifest.xml:353:13
+	android:name
+		ADDED from AndroidManifest.xml:351:13
+activity#com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity
+ADDED from AndroidManifest.xml:357:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:359:13
+	android:theme
+		ADDED from AndroidManifest.xml:360:13
+	android:name
+		ADDED from AndroidManifest.xml:358:13
+activity#com.aizou.peachtravel.module.toolbox.im.NewFriendsMsgActivity
+ADDED from AndroidManifest.xml:364:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:366:13
+	android:theme
+		ADDED from AndroidManifest.xml:367:13
+	android:name
+		ADDED from AndroidManifest.xml:365:13
+activity#com.aizou.peachtravel.module.toolbox.im.ForwardMessageActivity
+ADDED from AndroidManifest.xml:370:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:374:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:372:13
+	android:theme
+		ADDED from AndroidManifest.xml:373:13
+	android:name
+		ADDED from AndroidManifest.xml:371:13
+activity#com.aizou.peachtravel.module.toolbox.im.ContextMenu
+ADDED from AndroidManifest.xml:377:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:379:13
+	android:theme
+		ADDED from AndroidManifest.xml:380:13
+	android:name
+		ADDED from AndroidManifest.xml:378:13
+activity#com.aizou.peachtravel.module.toolbox.im.IMAlertDialog
+ADDED from AndroidManifest.xml:383:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:385:13
+	android:theme
+		ADDED from AndroidManifest.xml:386:13
+	android:name
+		ADDED from AndroidManifest.xml:384:13
+activity#com.aizou.peachtravel.module.toolbox.im.ShowBigImage
+ADDED from AndroidManifest.xml:389:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:391:13
+	android:theme
+		ADDED from AndroidManifest.xml:392:13
+	android:name
+		ADDED from AndroidManifest.xml:390:13
+activity#com.aizou.peachtravel.module.toolbox.im.ShowNormalFileActivity
+ADDED from AndroidManifest.xml:395:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:397:13
+	android:theme
+		ADDED from AndroidManifest.xml:398:13
+	android:name
+		ADDED from AndroidManifest.xml:396:13
+activity#com.aizou.peachtravel.module.toolbox.im.BlacklistActivity
+ADDED from AndroidManifest.xml:401:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:403:13
+	android:theme
+		ADDED from AndroidManifest.xml:404:13
+	android:name
+		ADDED from AndroidManifest.xml:402:13
+activity#com.aizou.peachtravel.module.toolbox.im.PublicGroupsActivity
+ADDED from AndroidManifest.xml:408:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:412:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:410:13
+	android:theme
+		ADDED from AndroidManifest.xml:411:13
+	android:name
+		ADDED from AndroidManifest.xml:409:13
+activity#com.aizou.peachtravel.module.toolbox.im.VoiceCallActivity
+ADDED from AndroidManifest.xml:415:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:417:13
+	android:theme
+		ADDED from AndroidManifest.xml:418:13
+	android:name
+		ADDED from AndroidManifest.xml:416:13
+activity#com.aizou.peachtravel.module.toolbox.im.GroupSimpleDetailActivity
+ADDED from AndroidManifest.xml:421:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:423:13
+	android:theme
+		ADDED from AndroidManifest.xml:424:13
+	android:name
+		ADDED from AndroidManifest.xml:422:13
+activity#com.aizou.peachtravel.module.toolbox.im.ShowVideoActivity
+ADDED from AndroidManifest.xml:426:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:430:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:428:13
+	android:theme
+		ADDED from AndroidManifest.xml:429:13
+	android:name
+		ADDED from AndroidManifest.xml:427:13
+activity#com.aizou.peachtravel.module.toolbox.im.ImageGridActivity
+ADDED from AndroidManifest.xml:433:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:437:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:435:13
+	android:theme
+		ADDED from AndroidManifest.xml:436:13
+	android:name
+		ADDED from AndroidManifest.xml:434:13
+activity#com.aizou.peachtravel.module.toolbox.im.RecorderVideoActivity
+ADDED from AndroidManifest.xml:439:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:443:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:441:13
+	android:theme
+		ADDED from AndroidManifest.xml:442:13
+	android:name
+		ADDED from AndroidManifest.xml:440:13
+activity#com.aizou.peachtravel.module.toolbox.im.DiagnoseActivity
+ADDED from AndroidManifest.xml:446:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:450:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:448:13
+	android:theme
+		ADDED from AndroidManifest.xml:449:13
+	android:name
+		ADDED from AndroidManifest.xml:447:13
+activity#com.aizou.peachtravel.module.toolbox.NearbyActivity
+ADDED from AndroidManifest.xml:452:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:454:13
+	android:theme
+		ADDED from AndroidManifest.xml:455:13
+	android:name
+		ADDED from AndroidManifest.xml:453:13
+activity#com.aizou.peachtravel.module.toolbox.StrategyListActivity
+ADDED from AndroidManifest.xml:457:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:459:13
+	android:theme
+		ADDED from AndroidManifest.xml:460:13
+	android:name
+		ADDED from AndroidManifest.xml:458:13
+receiver#com.easemob.chat.StartServiceReceiver
+ADDED from AndroidManifest.xml:465:9
+	android:name
+		ADDED from AndroidManifest.xml:465:19
+intent-filter#android.intent.action.BOOT_COMPLETED+android.intent.action.QUICKBOOT_POWERON+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:466:13
+	android:priority
+		ADDED from AndroidManifest.xml:466:28
+action#android.intent.action.BOOT_COMPLETED
+ADDED from AndroidManifest.xml:467:17
+	android:name
+		ADDED from AndroidManifest.xml:467:25
+action#android.intent.action.QUICKBOOT_POWERON
+ADDED from AndroidManifest.xml:468:17
+	android:name
+		ADDED from AndroidManifest.xml:468:25
+meta-data#EASEMOB_APPKEY
+ADDED from AndroidManifest.xml:475:9
+	android:name
+		ADDED from AndroidManifest.xml:476:13
+	android:value
+		ADDED from AndroidManifest.xml:477:13
+service#com.easemob.chat.EMChatService
+ADDED from AndroidManifest.xml:479:9
+	android:name
+		ADDED from AndroidManifest.xml:479:18
+service#com.baidu.location.f
+ADDED from AndroidManifest.xml:480:9
+	android:process
+		ADDED from AndroidManifest.xml:483:13
+	android:enabled
+		ADDED from AndroidManifest.xml:482:13
+	android:name
+		ADDED from AndroidManifest.xml:481:13
+activity#com.umeng.socialize.view.ShareActivity
+ADDED from AndroidManifest.xml:489:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:495:13
+	android:noHistory
+		ADDED from AndroidManifest.xml:493:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:491:13
+	android:theme
+		ADDED from AndroidManifest.xml:494:13
+	android:name
+		ADDED from AndroidManifest.xml:490:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:492:13
+activity#com.tencent.tauth.AuthActivity
+ADDED from AndroidManifest.xml:499:9
+	android:noHistory
+		ADDED from AndroidManifest.xml:502:13
+	android:name
+		ADDED from AndroidManifest.xml:500:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:501:13
+intent-filter#android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:503:13
+action#android.intent.action.VIEW
+ADDED from AndroidManifest.xml:504:17
+	android:name
+		ADDED from AndroidManifest.xml:504:25
+category#android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:506:17
+	android:name
+		ADDED from AndroidManifest.xml:506:27
+category#android.intent.category.BROWSABLE
+ADDED from AndroidManifest.xml:507:17
+	android:name
+		ADDED from AndroidManifest.xml:507:27
+data
+ADDED from AndroidManifest.xml:509:17
+	android:scheme
+		ADDED from AndroidManifest.xml:509:23
+activity#com.tencent.connect.common.AssistActivity
+ADDED from AndroidManifest.xml:512:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:514:13
+	android:theme
+		ADDED from AndroidManifest.xml:515:13
+	android:name
+		ADDED from AndroidManifest.xml:513:13
+meta-data#UMENG_APPKEY
+ADDED from AndroidManifest.xml:519:9
+	android:name
+		ADDED from AndroidManifest.xml:520:13
+	android:value
+		ADDED from AndroidManifest.xml:521:13
+meta-data#PUSH_APPID
+ADDED from AndroidManifest.xml:527:9
+	android:name
+		ADDED from AndroidManifest.xml:528:13
+	android:value
+		ADDED from AndroidManifest.xml:529:13
+meta-data#PUSH_APPKEY
+ADDED from AndroidManifest.xml:530:9
+	android:name
+		ADDED from AndroidManifest.xml:531:13
+	android:value
+		ADDED from AndroidManifest.xml:532:13
+meta-data#PUSH_APPSECRET
+ADDED from AndroidManifest.xml:533:9
+	android:name
+		ADDED from AndroidManifest.xml:534:13
+	android:value
+		ADDED from AndroidManifest.xml:535:13
+meta-data#PUSH_GROUPID
+ADDED from AndroidManifest.xml:536:9
+	android:name
+		ADDED from AndroidManifest.xml:537:13
+	android:value
+		ADDED from AndroidManifest.xml:538:13
+service#com.igexin.sdk.PushService
+ADDED from AndroidManifest.xml:541:9
+	android:label
+		ADDED from AndroidManifest.xml:544:13
+	android:process
+		ADDED from AndroidManifest.xml:545:13
+	android:exported
+		ADDED from AndroidManifest.xml:543:13
+	android:name
+		ADDED from AndroidManifest.xml:542:13
+receiver#com.igexin.sdk.PushReceiver
+ADDED from AndroidManifest.xml:547:9
+	android:name
+		ADDED from AndroidManifest.xml:548:13
+intent-filter#android.intent.action.BOOT_COMPLETED+android.intent.action.USER_PRESENT+android.net.conn.CONNECTIVITY_CHANGE+com.igexin.sdk.action.refreshls
+ADDED from AndroidManifest.xml:549:13
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from AndroidManifest.xml:551:17
+	android:name
+		ADDED from AndroidManifest.xml:551:25
+action#android.intent.action.USER_PRESENT
+ADDED from AndroidManifest.xml:552:17
+	android:name
+		ADDED from AndroidManifest.xml:552:25
+action#com.igexin.sdk.action.refreshls
+ADDED from AndroidManifest.xml:553:17
+	android:name
+		ADDED from AndroidManifest.xml:553:25
+receiver#com.igexin.sdk.PushManagerReceiver
+ADDED from AndroidManifest.xml:556:9
+	android:exported
+		ADDED from AndroidManifest.xml:558:13
+	android:name
+		ADDED from AndroidManifest.xml:557:13
+intent-filter#com.igexin.sdk.action.pushmanager
+ADDED from AndroidManifest.xml:559:13
+action#com.igexin.sdk.action.pushmanager
+ADDED from AndroidManifest.xml:560:17
+	android:name
+		ADDED from AndroidManifest.xml:560:25
+activity#com.igexin.sdk.PushActivity
+ADDED from AndroidManifest.xml:563:9
+	android:theme
+		ADDED from AndroidManifest.xml:569:13
+	android:process
+		ADDED from AndroidManifest.xml:567:13
+	android:exported
+		ADDED from AndroidManifest.xml:566:13
+	android:excludeFromRecents
+		ADDED from AndroidManifest.xml:565:13
+	android:taskAffinity
+		ADDED from AndroidManifest.xml:568:13
+	android:name
+		ADDED from AndroidManifest.xml:564:13
+activity#com.igexin.getuiext.activity.GetuiExtActivity
+ADDED from AndroidManifest.xml:572:9
+	android:configChanges
+		ADDED from AndroidManifest.xml:574:13
+	android:theme
+		ADDED from AndroidManifest.xml:578:13
+	android:process
+		ADDED from AndroidManifest.xml:576:13
+	android:exported
+		ADDED from AndroidManifest.xml:579:13
+	android:excludeFromRecents
+		ADDED from AndroidManifest.xml:575:13
+	android:taskAffinity
+		ADDED from AndroidManifest.xml:577:13
+	android:name
+		ADDED from AndroidManifest.xml:573:13
+receiver#com.igexin.getuiext.service.PayloadReceiver
+ADDED from AndroidManifest.xml:580:9
+	android:exported
+		ADDED from AndroidManifest.xml:582:13
+	android:name
+		ADDED from AndroidManifest.xml:581:13
+intent-filter#com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4+com.igexin.sdk.action.dajFCa9UMt7Ezo6kqOZ4C9
+ADDED from AndroidManifest.xml:583:13
+action#com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4
+ADDED from AndroidManifest.xml:585:17
+	android:name
+		ADDED from AndroidManifest.xml:585:25
+action#com.igexin.sdk.action.dajFCa9UMt7Ezo6kqOZ4C9
+ADDED from AndroidManifest.xml:587:17
+	android:name
+		ADDED from AndroidManifest.xml:587:25
+receiver#com.aizou.peachtravel.common.push.PeachPushReceiver
+ADDED from AndroidManifest.xml:592:9
+	android:exported
+		ADDED from AndroidManifest.xml:594:13
+	android:name
+		ADDED from AndroidManifest.xml:593:13
+intent-filter#com.igexin.sdk.action.dajFCa9UMt7Ezo6kqOZ4C9
+ADDED from AndroidManifest.xml:595:13
+service#com.igexin.getuiext.service.GetuiExtService
+ADDED from AndroidManifest.xml:600:9
+	android:process
+		ADDED from AndroidManifest.xml:602:13
+	android:name
+		ADDED from AndroidManifest.xml:601:13
+service#com.igexin.download.DownloadService
+ADDED from AndroidManifest.xml:604:9
+	android:process
+		ADDED from AndroidManifest.xml:606:13
+	android:name
+		ADDED from AndroidManifest.xml:605:13
+receiver#com.igexin.download.DownloadReceiver
+ADDED from AndroidManifest.xml:607:9
+	android:name
+		ADDED from AndroidManifest.xml:608:13
+intent-filter#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from AndroidManifest.xml:609:13
+provider#com.igexin.download.DownloadProvider
+ADDED from AndroidManifest.xml:613:9
+	android:process
+		ADDED from AndroidManifest.xml:615:13
+	android:authorities
+		ADDED from AndroidManifest.xml:616:13
+	android:name
+		ADDED from AndroidManifest.xml:614:13
+meta-data#com.amap.api.v2.apikey
+ADDED from AndroidManifest.xml:620:9
+	android:name
+		ADDED from AndroidManifest.xml:621:13
+	android:value
+		ADDED from AndroidManifest.xml:622:13
+uses-sdk
+INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
+MERGED from PeachTravel:core:unspecified:7:5
+MERGED from com.android.support:appcompat-v7:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from PeachTravel:social_sdk_library_project:unspecified:7:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from PeachTravel:MaterialDialoglibrary:unspecified:8:5
+MERGED from com.android.support:appcompat-v7:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:appcompat-v7:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:cardview-v7:21.0.2:15:5
+MERGED from com.android.support:recyclerview-v7:21.0.0:15:5
+MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.daimajia.swipelayout:library:1.1.7:6:5
+	android:targetSdkVersion
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:minSdkVersion
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+activity#android.support.v7.widget.TestActivity
+ADDED from com.android.support:recyclerview-v7:21.0.0:18:9
+	android:label
+		ADDED from com.android.support:recyclerview-v7:21.0.0:18:19
+	android:name
+		ADDED from com.android.support:recyclerview-v7:21.0.0:18:60

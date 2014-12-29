@@ -121,7 +121,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         extMessageBean.type = type;
         extMessageBean.image = images.size()>0?images.get(0).url:"";
         extMessageBean.name = zhName;
-        DecimalFormat df=new   java.text.DecimalFormat("#.#");
+        DecimalFormat df= new   java.text.DecimalFormat("#.#");
         extMessageBean.rating=df.format(rating*5);
         extMessageBean.price = priceDesc;
         extMessageBean.address = address;
