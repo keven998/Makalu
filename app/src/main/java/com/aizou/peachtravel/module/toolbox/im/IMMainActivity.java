@@ -218,8 +218,8 @@ public class IMMainActivity extends ChatBaseActivity {
             public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
                 Bundle args = new Bundle();
-                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
-                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
+                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
                 fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "blur_menu");
             }

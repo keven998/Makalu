@@ -9,25 +9,23 @@
     <TextView android:id="@+id/new_talk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_color_white"
+        android:textColor="@color/main_menu_text_color"
         android:textSize="13sp"
         android:drawableTop="@drawable/ic_new_talk"
-        android:drawablePadding="10dp"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="Talk"
-        android:textStyle="bold"
         android:padding="30dp"/>
 
     <TextView android:id="@+id/add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_color_white"
+        android:textColor="@color/main_menu_text_color"
         android:textSize="13sp"
         android:drawableTop="@drawable/ic_add_friend"
-        android:drawablePadding="10dp"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="加桃友"
-        android:textStyle="bold"
         android:padding="30dp"/>
 
 </LinearLayout>
