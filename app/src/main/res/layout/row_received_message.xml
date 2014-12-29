@@ -26,6 +26,7 @@
             android:layout_marginRight="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/avatar_placeholder" />
+
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
@@ -41,10 +42,9 @@
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="3dp"
             android:layout_marginTop="3dp"
+            android:paddingRight="10dp"
             android:autoLink="web"
-            android:textColor="@color/base_text_color_subtitle"
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@drawable/chatfrom_bg_normal" />
 
