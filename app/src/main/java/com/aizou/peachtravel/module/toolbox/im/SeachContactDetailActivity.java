@@ -8,18 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
@@ -54,10 +53,10 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
-        boolean isSeach = getIntent().getBooleanExtra("isSeach", false);
+        boolean isSearch = getIntent().getBooleanExtra("isSeach", false);
         user = (PeachUser) getIntent().getSerializableExtra("user");
         initTitleBar();
-        if (isSeach) {
+        if (isSearch) {
             bindView();
         } else {
             if (!TextUtils.isEmpty(user.nickName)) {
