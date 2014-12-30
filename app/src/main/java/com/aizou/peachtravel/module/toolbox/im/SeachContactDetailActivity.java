@@ -15,10 +15,14 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachEditDialog;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
@@ -86,29 +90,22 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MaterialDialog.Builder builder= new MaterialDialog.Builder(mContext);
-                builder.title("输入验证信息");
-                final EditText editText = new EditText(mContext);
-                editText.setText(String.format("\"Hi, 我是桃友%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).nickName));
-                builder.customView(editText);
-                builder.positiveText("确定");
-                builder.negativeText("取消");
-                builder.callback(new MaterialDialog.Callback() {
+                //todo:修改攻略名称
+                final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                editDialog.setTitle("输入验证信息");
+                editDialog.setMessage(String.format("\"Hi, 我是桃友%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).nickName));
+                editDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-
-                    }
-
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(View v) {
+                        editDialog.dismiss();
                         DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
-                        UserApi.requestAddContact(user.userId+"",editText.getText().toString().trim(),new HttpCallBack() {
+                        UserApi.requestAddContact(user.userId+"",editDialog.getMessage(),new HttpCallBack() {
                             @Override
                             public void doSucess(Object result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
-                                    finish();
+                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
+                                finish();
                             }
 
                             @Override
@@ -120,7 +117,8 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                         });
                     }
                 });
-                builder.show();
+
+                editDialog.show();
 //                EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
 //                //目前只支持单聊
 //                String action="taozi_cmd";//action可以自定义，在广播接收时可以收到

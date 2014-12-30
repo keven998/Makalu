@@ -169,7 +169,7 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -198,7 +198,7 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

@@ -96,9 +96,9 @@
         android:paddingBottom="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="14dp"
-        android:paddingTop="4dp"
+        android:paddingTop="10dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_line_edit_delete"
+        android:src="@drawable/ic_delete"
         android:visibility="gone" />
 
 

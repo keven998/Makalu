@@ -59,6 +59,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         UserApi.searchByAddressBook(contactListInMobile,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<AddressBookbean> contactResult = CommonJson4List.fromJson(result,AddressBookbean.class);
                 if(contactResult.code==0){
                     int size = contactListInMobile.size();
@@ -98,13 +99,13 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                     mListView.setAdapter(contactAdapter);
                     contactAdapter.getDataList().addAll(contactListInMobile);
                     contactAdapter.notifyDataSetChanged();
-                    DialogManager.getInstance().dissMissLoadingDialog();
                 }
 
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(AddPhoneContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });

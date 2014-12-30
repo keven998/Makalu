@@ -152,6 +152,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             case R.id.ll_push_friends:
                 ShareUtils.shareAppToWx(getActivity());
+
                 break;
 
             default:

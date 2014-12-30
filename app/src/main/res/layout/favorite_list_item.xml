@@ -65,7 +65,7 @@
                 android:background="@android:color/transparent"
                 android:paddingBottom="30dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_line_edit_delete"
+                android:src="@drawable/ic_delete"
                 android:visibility="gone"/>
 
         </RelativeLayout>

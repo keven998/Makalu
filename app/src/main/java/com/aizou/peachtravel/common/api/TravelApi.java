@@ -44,7 +44,7 @@ public class TravelApi extends BaseApi{
     //目的地图集
     public final static String CITY_GALLEY="/geo/localities/%1$s/album";
     //目的地美食、购物介绍
-    public final static String LOC_POI_GUIDE="/guides/localities/%1$s/%2$s";
+    public final static String LOC_POI_GUIDE="/guides/locality/%1$s/%2$s";
     //poi相关
     //景点
     public final static String SPOT_DETAIL="/poi/vs/";
@@ -231,7 +231,7 @@ public class TravelApi extends BaseApi{
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -256,7 +256,7 @@ public class TravelApi extends BaseApi{
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         try {
-            StringEntity entity = new StringEntity(guideJson);
+            StringEntity entity = new StringEntity(guideJson,"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -327,7 +327,7 @@ public class TravelApi extends BaseApi{
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -432,6 +432,4 @@ public class TravelApi extends BaseApi{
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-
-
 }
