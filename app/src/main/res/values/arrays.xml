@@ -18,10 +18,10 @@
         <item>豆瓣</item>
     </string-array>
     <string-array name="local_type_title">
-        <item>桃·玩</item>
-        <item>桃·吃</item>
-        <item>桃·买</item>
-        <item>桃·住</item>
+        <item>玩</item>
+        <item>吃</item>
+        <item>买</item>
+        <item>住</item>
     </string-array>
     <string-array name="sns_icons">
         <item>@drawable/ic_share_qq</item>
