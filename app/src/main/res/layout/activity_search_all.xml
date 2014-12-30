@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingLeft="8dp"
             android:textSize="14sp"
             android:textColorHint="@color/base_text_color_text_hint"
             android:hint="景点、美食店、购物店酒店、等"
