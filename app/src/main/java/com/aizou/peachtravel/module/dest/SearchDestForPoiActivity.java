@@ -1,15 +1,20 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.common.dialog.DialogManager;
@@ -42,13 +47,13 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     TitleHeaderBar mTitleBar;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
-    @InjectView(R.id.btn_search)
-    Button mBtnSearch;
     @InjectView(R.id.search_result_lv)
     PullToRefreshListView mSearchResultLv;
+    @InjectView(R.id.ll_loading)
+    ProgressBar mProgressBar;
     private ListViewDataAdapter mSearchResultAdapter;
     private int curPage;
-    private String mKeyWord ="";
+    private String mKeyWord = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_search_dest_for_poi);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("搜索想去的城市");
+        mTitleBar.getTitleTextView().setText("选择所在城市");
         mTitleBar.enableBackKey(true);
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
@@ -76,13 +81,37 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 searchSearchLocData(mKeyWord, curPage + 1);
             }
         });
-        mBtnSearch.setVisibility(View.GONE);
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+//        mBtnSearch.setVisibility(View.GONE);
+//        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mKeyWord = mEtSearch.getText().toString().trim();
+//                if (TextUtils.isEmpty(mKeyWord)) {
+//                    return;
+//                }
+//                DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
+//                searchSearchLocData(mKeyWord, 0);
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//            }
+//        });
+
+        mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 mKeyWord = mEtSearch.getText().toString().trim();
-                DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
-                searchSearchLocData(mKeyWord, 0);
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    if (TextUtils.isEmpty(mKeyWord)) {
+//                        ToastUtil.getInstance(mContext).showToast("你要找什么");
+                        return true;
+                    } else {
+                        DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
+                        searchSearchLocData(mKeyWord, 0);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    }
+                }
+                return false;
             }
         });
 
@@ -109,14 +138,13 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s)){
+                if (TextUtils.isEmpty(s)) {
                     mSearchResultAdapter.getDataList().clear();
                     mSearchResultAdapter.notifyDataSetChanged();
                 }else{
+                    mProgressBar.setVisibility(View.VISIBLE);
                     suggestSearchLocData(s.toString().trim());
                 }
-
-
             }
         });
     }
@@ -129,11 +157,14 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 if (searchAllResult.code == 0) {
                     bindView(searchAllResult.result.locality);
                 }
+
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

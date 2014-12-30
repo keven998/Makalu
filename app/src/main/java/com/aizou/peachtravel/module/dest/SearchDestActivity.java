@@ -1,9 +1,14 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,10 +88,33 @@ public class SearchDestActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
+                if (TextUtils.isEmpty(mKeyWord)) {
+                    return;
+                }
                 DialogManager.getInstance().showLoadingDialog(SearchDestActivity.this);
                 searchSearchLocData(mKeyWord, 0);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
+
+        mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                mKeyWord = mEtSearch.getText().toString().trim();
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    if (TextUtils.isEmpty(mKeyWord)) {
+//                        ToastUtil.getInstance(mContext).showToast("你要找什么");
+                        return true;
+                    } else {
+                        DialogManager.getInstance().showLoadingDialog(SearchDestActivity.this);
+                        searchSearchLocData(mKeyWord, 0);
+                    }
+                }
+                return false;
+            }
+        });
+
     }
 
     private void initData() {
