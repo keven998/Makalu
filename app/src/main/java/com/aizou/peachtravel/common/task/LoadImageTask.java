@@ -20,9 +20,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.module.toolbox.im.ShowBigImage;
@@ -99,7 +101,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 								e.printStackTrace();
 							}
 						}
-						activity.startActivity(intent);
+                        ((BaseActivity)activity).startActivityWithNoAnim(intent);
 					}
 				}
 			});

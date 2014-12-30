@@ -26,6 +26,7 @@ public class CustomProgressDialog extends ProgressDialog{
 	}
 
 	private void initData() {
+
 	}
 
     public void setProgress(int progress){

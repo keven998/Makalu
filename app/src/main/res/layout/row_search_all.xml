@@ -35,7 +35,7 @@
                 android:layout_marginTop="3dp"
                 android:maxLines="2"
                 android:layout_height="wrap_content"
-                android:textColor="@color/base_text_color_text_hint"
+                android:textColor="@color/base_text_color_text_placeholder"
                 android:singleLine="true"
                 android:textSize="12sp"/>
         </RelativeLayout>
@@ -51,12 +51,13 @@
             android:background="@drawable/selector_frame_white_card"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
-            android:drawablePadding="9dp"
+            android:drawablePadding="10dp"
             android:textColor="@color/app_theme_color"
             android:drawableLeft="@drawable/ic_search"
             android:textSize="13sp"
-            android:paddingBottom="10dp"
-            android:layout_marginBottom="9dp"
+            android:paddingBottom="11dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp"
             android:text="查看全部结果"/>
 
 

@@ -332,6 +332,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
 			}
 
 			@Override
@@ -346,8 +347,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         deleteIv = (ImageView) findViewById(R.id.iv_del_member);
         closeIv = (ImageView) findViewById(R.id.iv_close);
 //        expandIv = (ImageView) findViewById(R.id.iv_expend);
-
-
 	}
 
     protected void updateGroup() {
@@ -379,27 +378,27 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         final List<String> members=group.getMembers();
         final List<String> unkownMembers= new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        for(String username : members){
-            IMUser user = IMUserRepository.getContactByUserName(mContext,username);
-            if(user==null){
+        for(String username : members) {
+            IMUser user = IMUserRepository.getContactByUserName(mContext, username);
+            if(user == null) {
                 unkownMembers.add(username);
                 user = new IMUser();
                 user.setUsername(username);
             }
-            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
                 memberAdapter.getDataList().add(user);
             }
 
         }
         titleHeaderBar.getTitleTextView().setText(group.getGroupName());
         memberAdapter.notifyDataSetChanged();
-        if(unkownMembers.size()>0){
+        if(unkownMembers.size() > 0) {
             UserApi.getContactByHx(unkownMembers,new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
                     CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result,PeachUser.class);
-                    if(userResult.code==0){
-                        for(PeachUser user:userResult.result){
+                    if(userResult.code == 0) {
+                        for (PeachUser user:userResult.result) {
                             IMUser imUser = new IMUser();
                             imUser.setUserId(user.userId);
                             imUser.setNick(user.nickName);
@@ -412,14 +411,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                         }
                         unkownMembers.clear();
                         memberAdapter.getDataList().clear();
-                        for(String username : members){
+                        for(String username : members) {
                             IMUser user = IMUserRepository.getContactByUserName(mContext,username);
-                            if(user==null){
+                            if(user == null) {
                                 unkownMembers.add(username);
                                 user = new IMUser();
                                 user.setUsername(username);
                             }
-                            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+                            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
                                 memberAdapter.getDataList().add(user);
                             }
                         }
@@ -433,7 +432,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                 }
             });
         }
-        if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())){
+        if(EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
             deleteIv.setVisibility(View.VISIBLE);
             deleteIv.setOnClickListener(new OnClickListener() {
                 @Override
@@ -504,8 +503,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         tbar.setRightOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,GroupDetailsActivity.class );
-                intent.putExtra("groupId",group.getGroupId());
+                Intent intent = new Intent(mContext, GroupDetailsActivity.class );
+                intent.putExtra("groupId", group.getGroupId());
                 startActivity(intent);
 
             }
@@ -517,14 +516,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             public void onClick(View v) {
                 // 进入选人页面
                 startActivityForResult(
-                        (new Intent(mContext, PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())),
-                        REQUEST_CODE_ADD_USER);
+                        (new Intent(mContext, PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())), REQUEST_CODE_ADD_USER);
             }
         });
         membersLl.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(isInDeleteMode){
+                if(isInDeleteMode) {
                     isInDeleteMode=false;
                     addIv.setVisibility(View.VISIBLE);
                     deleteIv.setVisibility(View.VISIBLE);
@@ -851,7 +849,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			// 显示发送要转发的消息
 			forwardMessage(forward_msg_id);
 		}
-
 
 	}
 
@@ -1930,7 +1927,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			iv_emoticons_normal.setVisibility(View.VISIBLE);
 			iv_emoticons_checked.setVisibility(View.INVISIBLE);
 		} else {
-			super.onBackPressed();
+            Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityWithNoAnim(intent);
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 		}
 	}
 
@@ -1994,8 +1994,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		if (toChatUsername.equals(username))
 			super.onNewIntent(intent);
 		else {
-			finish();
 			startActivity(intent);
+            finish();
 		}
 
 	}
@@ -2079,8 +2079,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 	}
 
-	public String getToChatUsername(){
+	public String getToChatUsername() {
 		return toChatUsername;
 	}
-	
+
 }

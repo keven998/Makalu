@@ -100,7 +100,7 @@ public class StrategyActivity extends PeachBaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
 //        mTitleBar.enableBackKey(true);
-        mTitleBar.getLeftTextView().setText("完成");
+        mTitleBar.getLeftTextView().setText(" 完成");
         mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
             @Override

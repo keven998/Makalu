@@ -35,6 +35,7 @@ import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.task.LoadLocalBigImgTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.widget.photoview.PhotoView;
+import com.aizou.peachtravel.common.widget.photoview.PhotoViewAttacher;
 import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.EMChatManager;
 import com.easemob.cloud.CloudOperationCallback;
@@ -77,11 +78,11 @@ public class ShowBigImage extends ChatBaseActivity {
 		Uri uri = getIntent().getParcelableExtra("uri");
 		String remotepath = getIntent().getExtras().getString("remotepath");
 		String secret = getIntent().getExtras().getString("secret");
-		System.err.println("show big image uri:" + uri + " remotepath:" + remotepath);
+//		System.err.println("show big image uri:" + uri + " remotepath:" + remotepath);
 
 		//本地存在，直接显示本地的图片
 		if (uri != null && new File(uri.getPath()).exists()) {
-			System.err.println("showbigimage file exists. directly show it");
+//			System.err.println("showbigimage file exists. directly show it");
 			DisplayMetrics metrics = new DisplayMetrics();
 			getWindowManager().getDefaultDisplay().getMetrics(metrics);
 			// int screenWidth = metrics.widthPixels;
@@ -99,7 +100,7 @@ public class ShowBigImage extends ChatBaseActivity {
 				image.setImageBitmap(bitmap);
 			}
 		} else if (remotepath != null) { //去服务器下载图片
-			System.err.println("download remote image");
+//			System.err.println("download remote image");
 			Map<String, String> maps = new HashMap<String, String>();
 			String accessToken = EMChatManager.getInstance().getAccessToken();
 			maps.put("Authorization", "Bearer " + accessToken);
@@ -112,12 +113,12 @@ public class ShowBigImage extends ChatBaseActivity {
 			image.setImageResource(default_res);
 		}
 
-		image.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                finishWithNoAnim();
+            }
+        });
 	}
 
 	/**

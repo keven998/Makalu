@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
@@ -59,13 +62,29 @@ public class SearchAllActivity extends PeachBaseActivity {
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(mEtSearch.getText())){
-                    ToastUtil.getInstance(mContext).showToast("你要查什么呢");
-                }else{
+                if (TextUtils.isEmpty(mEtSearch.getText())) {
+//                    ToastUtil.getInstance(mContext).showToast("你要找什么");
+                    return;
+                } else {
                     searchAll(mEtSearch.getText().toString().trim());
                 }
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        });
+
+        mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    if (TextUtils.isEmpty(mEtSearch.getText())) {
+//                        ToastUtil.getInstance(mContext).showToast("你要找什么");
+                        return true;
+                    } else {
+                        searchAll(mEtSearch.getText().toString().trim());
+                    }
+                }
+                return false;
             }
         });
     }

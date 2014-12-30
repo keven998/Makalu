@@ -31,7 +31,7 @@
             android:hint="输入游记标题、城市或景点名等"
             android:singleLine="true"
             android:textColor="@color/base_text_color_title"
-            android:drawablePadding="10dp"
+            android:drawablePadding="8dp"
             android:background="@drawable/button_normal_shape"
             android:imeOptions="actionSearch"
             android:drawableLeft="@drawable/ic_search" />

@@ -1,10 +1,16 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -59,35 +65,55 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelNoteViewHolder(TravelNoteSearchActivity.this,true,false);
+                return new TravelNoteViewHolder(TravelNoteSearchActivity.this, true, false);
             }
         });
         mSearchTravelNoteLv.getRefreshableView().setAdapter(mTravelNoteAdapter);
         mSearchTravelNoteLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                searchTravelNote(mKeyWord,0);
+                searchTravelNote(mKeyWord, 0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                searchTravelNote(mKeyWord,mPage+1);
+                searchTravelNote(mKeyWord, mPage+1);
             }
         });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mKeyWord = mEtSearch.getText().toString().trim();
+                mKeyWord = mEtSearch.getText().toString();
+                if (TextUtils.isEmpty(mKeyWord) || TextUtils.isEmpty(mKeyWord.trim())) {
+                    return;
+                }
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 DialogManager.getInstance().showLoadingDialog(TravelNoteSearchActivity.this);
                 searchTravelNote(mKeyWord, 0);
             }
         });
 
+        mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    mKeyWord = mEtSearch.getText().toString();
+                    if (TextUtils.isEmpty(mKeyWord) || TextUtils.isEmpty(mKeyWord.trim())) {
+                        return true;
+                    } else {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                        DialogManager.getInstance().showLoadingDialog(TravelNoteSearchActivity.this);
+                        searchTravelNote(mKeyWord, 0);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-
-
-    private void searchTravelNote(String keyWord, final int page){
+    private void searchTravelNote(String keyWord, final int page) {
         OtherApi.getTravelNoteByKeyword(keyWord,page,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -99,7 +125,6 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                 }
                 mSearchTravelNoteLv.onPullUpRefreshComplete();
                 mSearchTravelNoteLv.onPullDownRefreshComplete();
-
             }
 
             @Override

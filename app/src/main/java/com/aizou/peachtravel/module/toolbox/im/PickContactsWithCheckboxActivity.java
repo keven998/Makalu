@@ -175,7 +175,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 //        titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.getLeftTextView().setText("取消");
+        titleHeaderBar.getLeftTextView().setText(" 取消");
+        titleHeaderBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
         titleHeaderBar.getRightTextView().setText("确定");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
