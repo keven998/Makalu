@@ -30,6 +30,7 @@ public class PTHeader implements Serializable {
     public List<Header> headers =new ArrayList<Header>();
 
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
+    public static final String HEADER_CHARSET="Charset";
 
 	private static final long serialVersionUID = -2654425717222491543L;
 

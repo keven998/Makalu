@@ -25,6 +25,7 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.exceptions.EaseMobException;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -120,15 +122,40 @@ public class IMShareActivity extends PeachBaseActivity {
         Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
         List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
         //过滤掉messages seize为0的conversation
-        for (EMConversation conversation : conversations.values()) {
-            if (conversation.getAllMessages().size() != 0) {
+        Iterator<EMConversation> conversationIt = conversations.values().iterator();
+        while (conversationIt.hasNext()){
+            final EMConversation conversation = conversationIt.next();
+            if(conversation.getLastMessage()==null)
+                continue;
+            if(conversation.getIsGroup()){
                 PeachConversation peachConversation = new PeachConversation();
                 peachConversation.emConversation = conversation;
-                if (!TextUtils.isEmpty(conversation.getUserName())) {
-                    IMUser user = IMUserRepository.getContactByUserName(mContext, conversation.getUserName());
-                    peachConversation.imUser = user;
-                }
                 conversationList.add(peachConversation);
+                EMGroup group=EMGroupManager.getInstance().getGroup(conversation.getUserName());
+                if(group==null){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
+                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
+                            } catch (EaseMobException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+
+            }else if(!TextUtils.isEmpty(conversation.getUserName())){
+                IMUser user = IMUserRepository.getMyFriendByUserName(mContext, conversation.getUserName());
+                if(user!=null){
+                    PeachConversation peachConversation = new PeachConversation();
+                    peachConversation.emConversation = conversation;
+                    peachConversation.imUser = user;
+                    conversationList.add(peachConversation);
+                }else{
+                    conversationIt.remove();
+                }
             }
         }
         // 排序

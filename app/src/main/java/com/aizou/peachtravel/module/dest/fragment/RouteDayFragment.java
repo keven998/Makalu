@@ -261,7 +261,6 @@ public class RouteDayFragment extends PeachBaseFragment {
         public View onCreateFloatView(int position) {
             mPos = position;
             LogUtil.d("dslv","pos="+mPos);
-
             View v = mAdapter.getView(position, null, mDslv);
             // v.setBackgroundDrawable(getResources().getDrawable(
             // R.drawable.bg_handle_section1));
@@ -284,11 +283,14 @@ public class RouteDayFragment extends PeachBaseFragment {
             if (mPos > 0) {
                 // don't allow floating View to go above
                 // section divider
-                final int limit = div.getBottom() + lvDivHeight;
-                LogUtil.d("dslv","limit="+limit+"--y="+floatPoint.y);
-                if (floatPoint.y < limit) {
-                    floatPoint.y = limit;
+                if( mDslv.getFirstVisiblePosition()==0){
+                    final int limit = div.getBottom() + lvDivHeight;
+                    LogUtil.d("dslv","limit="+limit+"--y="+floatPoint.y);
+                    if (floatPoint.y < limit) {
+                        floatPoint.y = limit;
+                    }
                 }
+
             } else {
 
             }

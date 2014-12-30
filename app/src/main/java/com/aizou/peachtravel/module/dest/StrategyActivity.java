@@ -448,7 +448,7 @@ public class StrategyActivity extends PeachBaseActivity {
         }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
             StrategyManager.putShoppingJson(mContext,jsonObject,shoppingFragment.getStrategy());
         }else if(restFragment!=null&&restFragment.isEditableMode()){
-            StrategyManager.putRestaurantJson(mContext, jsonObject, shoppingFragment.getStrategy());
+            StrategyManager.putRestaurantJson(mContext, jsonObject, restFragment.getStrategy());
         }
 
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);

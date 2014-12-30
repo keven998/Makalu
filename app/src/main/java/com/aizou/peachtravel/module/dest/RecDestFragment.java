@@ -122,15 +122,18 @@ public class RecDestFragment extends PeachBaseFragment {
         recDestContainer.setOnItemClickListener(new AbsLayoutContainer.OnItemClickListener() {
             @Override
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-                RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
-                if(TextUtils.isEmpty(itemData.itemType)){
-                    Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
-                    intent.putExtra("title",itemData.title);
-                    intent.putExtra("url",itemData.linkUrl);
-                    startActivity(intent);
-                }else{
-                    IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
+                if(!proxy.isHeader){
+                    RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
+                    if(TextUtils.isEmpty(itemData.itemType)){
+                        Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
+                        intent.putExtra("title",itemData.title);
+                        intent.putExtra("url",itemData.linkUrl);
+                        startActivity(intent);
+                    }else{
+                        IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
+                    }
                 }
+
             }
         });
 

@@ -83,7 +83,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -112,7 +112,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -166,7 +166,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -194,7 +194,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -219,7 +219,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -268,7 +268,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -309,6 +309,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + USERINFO + user.userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+//        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
@@ -329,7 +330,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -373,7 +374,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -401,7 +402,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -469,7 +470,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -505,7 +506,7 @@ public class UserApi extends BaseApi {
                 jsonObject.put("name", addressBookbean.name);
                 jsonArray.put(jsonObject);
             }
-            rootObject.put("contants", jsonArray);
+            rootObject.put("contacts", jsonArray);
             try {
                 StringEntity entity = new StringEntity(rootObject.toString());
                 request.setBodyEntity(entity);
