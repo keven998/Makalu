@@ -13,14 +13,6 @@
  */
 package com.aizou.peachtravel.module.toolbox.im.adapter;
 
-import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -49,28 +41,29 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.bean.ExtMessageBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.task.LoadImageTask;
 import com.aizou.peachtravel.common.task.LoadVideoImageTask;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.utils.ImageUtils;
 import com.aizou.peachtravel.common.utils.SmileUtils;
-import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
-import com.aizou.peachtravel.module.toolbox.im.IMAlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContextMenu;
+import com.aizou.peachtravel.module.toolbox.im.IMAlertDialog;
 import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.ShowBigImage;
 import com.aizou.peachtravel.module.toolbox.im.ShowNormalFileActivity;
@@ -99,6 +92,14 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -1120,10 +1121,10 @@ public class MessageAdapter extends BaseAdapter {
             } else {
                 holder.iv_read_status.setVisibility(View.VISIBLE);
             }
-            System.err.println("it is receive msg");
+//            System.err.println("it is receive msg");
             if (message.status == EMMessage.Status.INPROGRESS) {
                 holder.pb.setVisibility(View.VISIBLE);
-                System.err.println("!!!! back receive");
+//                System.err.println("!!!! back receive");
                 ((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
 
                     @Override
@@ -1220,7 +1221,7 @@ public class MessageAdapter extends BaseAdapter {
         });
 
         if (message.direct == EMMessage.Direct.RECEIVE) { // 接收的消息
-            System.err.println("it is receive msg");
+//            System.err.println("it is receive msg");
             File file = new File(filePath);
             if (file != null && file.exists()) {
                 holder.tv_file_download_state.setText("已下载");
@@ -1368,7 +1369,7 @@ public class MessageAdapter extends BaseAdapter {
      * need to register callback show the download progress
      */
     private void showDownloadImageProgress(final EMMessage message, final ViewHolder holder) {
-        System.err.println("!!! show download image progress");
+//        System.err.println("!!! show download image progress");
         // final ImageMessageBody msgbody = (ImageMessageBody)
         // message.getBody();
         final FileMessageBody msgbody = (FileMessageBody) message.getBody();
@@ -1537,13 +1538,13 @@ public class MessageAdapter extends BaseAdapter {
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.err.println("image view on click");
+//                    System.err.println("image view on click");
                     Intent intent = new Intent(activity, ShowBigImage.class);
                     File file = new File(localFullSizePath);
                     if (file.exists()) {
                         Uri uri = Uri.fromFile(file);
                         intent.putExtra("uri", uri);
-                        System.err.println("here need to check why download everytime");
+//                        System.err.println("here need to check why download everytime");
                     } else {
                         // The local full size pic does not exist yet.
                         // ShowBigImage needs to download it from the server
@@ -1562,7 +1563,7 @@ public class MessageAdapter extends BaseAdapter {
                             e.printStackTrace();
                         }
                     }
-                    activity.startActivity(intent);
+                    ((BaseActivity)activity).startActivityWithNoAnim(intent);
                 }
             });
             return true;
@@ -1594,7 +1595,7 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
-                    System.err.println("video view is on click");
+//                    System.err.println("video view is on click");
                     Intent intent = new Intent(activity, ShowVideoActivity.class);
                     intent.putExtra("localpath", videoBody.getLocalUrl());
                     intent.putExtra("secret", videoBody.getSecret());
