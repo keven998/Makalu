@@ -111,17 +111,28 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             }
         }
         if(mIsShowMore){
-            if(position==4){
+            if(position == 4) {
                 holder.mAllResultTv.setVisibility(View.VISIBLE);
+                if (typeBean.type.equals("loc")) {
+                    holder.mAllResultTv.setText("查看全部相关城市");
+                } else if (typeBean.type.equals("vs")) {
+                    holder.mAllResultTv.setText("查看全部相关景点");
+                } else if (typeBean.type.equals("hotel")) {
+                    holder.mAllResultTv.setText("查看全部相关酒店");
+                } else if (typeBean.type.equals("restaurant")) {
+                    holder.mAllResultTv.setText("查看全部相关美食");
+                } else if (typeBean.type.equals("shopping")) {
+                    holder.mAllResultTv.setText("查看全部相关购物");
+                }
                 holder.mAllResultTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mOnSearchResultClickListener !=null){
+                        if(mOnSearchResultClickListener != null) {
                             mOnSearchResultClickListener.onMoreResultClick(typeBean.type);
                         }
                     }
                 });
-            }else{
+            } else {
                 holder.mAllResultTv.setVisibility(View.GONE);
             }
         }else{
