@@ -44,23 +44,26 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         mWebView = (WebView) findViewById(R.id.web_view);
         initWebView();
         titleBar.getTitleTextView().setText("游记详情");
-        titleBar.setRightViewImageRes(R.drawable.ic_more);
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         mWebView.loadUrl(H5Url.TRAVEL_NOTE+id);
         titleBar.enableBackKey(true);
-        titleBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MoreMenu fragment = new MoreMenu();
-                Bundle args = new Bundle();
-                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
-                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
-                args.putString("id",id);
-                fragment.setArguments(args);
-                fragment.show(getSupportFragmentManager(), "more_menu");
-            }
-        });
+        if(noteBean!=null){
+            titleBar.setRightViewImageRes(R.drawable.ic_more);
+            titleBar.setRightOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MoreMenu fragment = new MoreMenu();
+                    Bundle args = new Bundle();
+                    args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
+                    args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
+                    args.putString("id",id);
+                    fragment.setArguments(args);
+                    fragment.show(getSupportFragmentManager(), "more_menu");
+                }
+            });
+        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

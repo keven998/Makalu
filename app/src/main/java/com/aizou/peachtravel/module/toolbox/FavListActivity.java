@@ -44,6 +44,7 @@ import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
+import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
@@ -360,6 +361,9 @@ public class FavListActivity extends PeachBaseActivity {
                             intent.putExtra("type",item.type);
                         }else if(item.type.equals("locality")){
                             intent.setClass(mContext, CityDetailActivity.class);
+                            intent.putExtra("id",item.itemId);
+                        }else if(item.type.equals("travelNote")){
+                            intent.setClass(mContext, TravelNoteDetailActivity.class);
                             intent.putExtra("id",item.itemId);
                         }
                         startActivity(intent);

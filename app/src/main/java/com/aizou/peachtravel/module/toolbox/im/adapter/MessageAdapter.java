@@ -130,6 +130,8 @@ public class MessageAdapter extends BaseAdapter {
     private static final int MESSAGE_TYPE_SENT_FSH = 22;
     private static final int MESSAGE_TYPE_RECV_FSH = 23;
     private static final int MESSAGE_TYPE_TIPS = 24;
+    private static final int MESSAGE_TYPE_SENT_UNKOWN = 25;
+    private static final int MESSAGE_TYPE_RECV_UNKOWN = 26;
 
     public static final String IMAGE_DIR = "chat/image/";
     public static final String VOICE_DIR = "chat/audio/";
@@ -215,6 +217,8 @@ public class MessageAdapter extends BaseAdapter {
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_FSH : MESSAGE_TYPE_SENT_FSH;
                 } else if (extType == Constant.ExtType.TIPS) {
                     return MESSAGE_TYPE_TIPS;
+                }else{
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_UNKOWN : MESSAGE_TYPE_SENT_UNKOWN;
                 }
             }
             return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
@@ -240,7 +244,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     public int getViewTypeCount() {
-        return 25;
+        return 27;
     }
 
     private View createViewByMessage(EMMessage message, int position) {
@@ -288,11 +292,13 @@ public class MessageAdapter extends BaseAdapter {
                                 R.layout.row_sent_fsh, null);
                     } else if (extType == Constant.ExtType.TIPS) {
                         return inflater.inflate(R.layout.row_chat_tips, null);
+                    }else{
+                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
+                                R.layout.row_sent_message, null);
                     }
                 }
 
         }
-        return null;
     }
 
     @SuppressLint("NewApi")
@@ -349,6 +355,8 @@ public class MessageAdapter extends BaseAdapter {
                             holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.TIPS) {
                             holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
+                        } else {
+                            holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                         }
                     }
                 } catch (Exception e) {
@@ -780,6 +788,8 @@ public class MessageAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                 }
             });
+        }else{
+             holder.tv.setText("本版本不支持此消息类型，请升级最新版本！");
         }
         holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
             @Override

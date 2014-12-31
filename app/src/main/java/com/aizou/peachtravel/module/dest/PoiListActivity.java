@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.dest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -45,10 +46,6 @@ public class PoiListActivity extends PeachBaseActivity {
     Spinner mLocSpinner;
     @InjectView(R.id.btn_ok)
     TextView mBtnOk;
-    @InjectView(R.id.iv_city_poi)
-    ImageView mIvCityPoi;
-    @InjectView(R.id.tv_city_name)
-    TextView mTvCityName;
     @InjectView(R.id.tv_city_poi_desc)
     TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
@@ -60,6 +57,7 @@ public class PoiListActivity extends PeachBaseActivity {
     @InjectView(R.id.btn_search)
     Button mBtnSearch;
     private PullToRefreshListView mPoiListLv;
+    private View headerView;
     private String type;
     private boolean canAdd;
     private List<LocBean> locList;
@@ -116,22 +114,6 @@ public class PoiListActivity extends PeachBaseActivity {
         mLocSpinner.setAdapter(mLocSpinnerAdapter);
         mLocSpinner.setSelection(0, true);
         curLoc = locList.get(0);
-        mTvCityName.setText(curLoc.zhName);
-        mTvCityPoiDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    intent.putExtra("url", H5Url.FOOD + curLoc.id);
-                    intent.putExtra("title", "美食介绍");
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    intent.putExtra("url", H5Url.SHOPPING + curLoc.id);
-                    intent.putExtra("title", "购物介绍");
-                }
-                startActivity(intent);
-
-            }
-        });
         mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
@@ -165,7 +147,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_poi_list);
         mPoiListLv = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
-        View headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
+        headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         mPoiListLv.getRefreshableView().addHeaderView(headerView);
         mPoiListLv.setPullLoadEnabled(false);
         mPoiListLv.setPullRefreshEnabled(false);
@@ -213,11 +195,27 @@ public class PoiListActivity extends PeachBaseActivity {
     }
 
     private void bindGuideView(PoiGuideBean result) {
-        mTvCityName.setText(curLoc.zhName);
-        mTvCityPoiDesc.setText(result.desc);
-        if (result.images != null && result.images.size() > 0) {
-            ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
+        if(TextUtils.isEmpty(result.desc)){
+            headerView.setVisibility(View.GONE);
+        }else{
+            mTvCityPoiDesc.setText(result.desc);
         }
+        mTvCityPoiDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    intent.putExtra("url", H5Url.FOOD + curLoc.id);
+                    intent.putExtra("title", "美食介绍");
+                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    intent.putExtra("url", H5Url.SHOPPING + curLoc.id);
+                    intent.putExtra("title", "购物介绍");
+                }
+                startActivity(intent);
+
+            }
+        });
+
     }
 
     private void getPoiListData(String type, String cityId, final int page) {

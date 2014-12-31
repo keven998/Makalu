@@ -544,9 +544,9 @@ public class RouteDayFragment extends PeachBaseFragment {
                     }
                 }
 
-                holder.dayTv.setText("D" + (section+1) + "  " + citySet.toString());
+                holder.dayTv.setText("第" + (section+1) + "天  " + citySet.toString());
             }else{
-                holder.dayTv.setText("D" + (section+1) + "  未安排");
+                holder.dayTv.setText("第" + (section+1) + "天  未安排");
                 if(isEditableMode){
                     holder.nullLl.setVisibility(View.GONE);
                 }else{

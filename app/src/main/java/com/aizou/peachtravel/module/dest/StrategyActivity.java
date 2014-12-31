@@ -112,8 +112,6 @@ public class StrategyActivity extends PeachBaseActivity {
             }
             }
         });
-
-        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
         mTitleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,6 +178,7 @@ public class StrategyActivity extends PeachBaseActivity {
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
+            mTitleBar.setRightViewImageRes(0);
             mTitleBar.getRightTextView().setText("复制路线");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
@@ -219,6 +218,8 @@ public class StrategyActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
+            mTitleBar.getRightTextView().setText("");
             canEdit = true;
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
