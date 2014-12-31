@@ -14,10 +14,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
             android:id="@+id/vp_travel"
             android:layout_width="fill_parent"
-            android:layout_height="176dp"/>
+            android:layout_height="170dp"/>
 
         <LinearLayout android:id="@+id/ll_weather"
             android:layout_width="fill_parent"
@@ -62,74 +63,86 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_home_mid"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="@color/base_color_white">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:scaleType="center"
+            android:src="@drawable/bg_home_mid"/>
 
         <TextView
             android:id="@+id/tv_toolbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="37dp"
             android:gravity="center"
             android:text="@string/tool_title"
             android:drawableLeft="@drawable/ic_toolbox_left"
             android:drawableRight="@drawable/ic_toolbox_right"
             android:drawablePadding="10dp"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textColor="@color/base_text_color_title"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_below="@id/tv_toolbox"
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/tv_my_guide"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="旅行Memo"
-                android:textSize="13sp"
-                android:drawablePadding="13dp"
+                android:textSize="12sp"
+                android:drawablePadding="10dp"
                 android:gravity="center"
+                android:singleLine="true"
                 android:drawableTop="@drawable/ic_home_guide"
                 android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_fav"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="28dp"
-                android:layout_marginRight="28dp"
+                android:layout_weight="1"
                 android:text="收藏夹"
-                android:textSize="13sp"
-                android:drawablePadding="13dp"
+                android:textSize="12sp"
+                android:drawablePadding="10dp"
                 android:gravity="center"
+                android:singleLine="true"
                 android:drawableTop="@drawable/ic_home_fav"
                 android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_nearby"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="我身边"
-                android:textSize="13sp"
-                android:drawablePadding="13dp"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:drawablePadding="10dp"
                 android:drawableTop="@drawable/ic_home_around"
                 android:gravity="center"
                 android:textColor="@color/base_text_color_subtitle"/>
 
         </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/rl_talk"
-            android:layout_width="300dp"
+
+        <RelativeLayout android:id="@+id/rl_talk"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="12dp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/btn_toolbox_talk"
-            >
+            android:background="@drawable/btn_toolbox_talk">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,11 +153,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:scaleType="center"
-                android:src="@drawable/ic_toolbox_talk_normal"
-                />
+                android:src="@drawable/ic_toolbox_talk_normal"/>
 
             <ImageView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -155,9 +166,5 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
-
-
-
 
 </LinearLayout>
