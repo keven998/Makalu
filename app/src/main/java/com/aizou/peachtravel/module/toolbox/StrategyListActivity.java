@@ -438,16 +438,16 @@ public class StrategyListActivity extends PeachBaseActivity {
                                 int index = mStrategyListAdapter.getDataList().indexOf(itemData);
                                 mStrategyListAdapter.getDataList().remove(index);
                                 mStrategyListAdapter.notifyDataSetChanged();
-                                if (mStrategyListAdapter.getCount() == 0) {
-                                    mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                                    findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                }
+//                                if (mStrategyListAdapter.getCount() == 0) {
+//                                    mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+//                                    findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//                                            Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+//                                            startActivity(intent);
+//                                        }
+//                                    });
+//                                }
 //                                        ToastUtil.getInstance(mContext).showToast("删除成功");
                                 ToastUtil.getInstance(StrategyListActivity.this).showToast("OK~成功删除");
                                 if (index <= OtherApi.PAGE_SIZE) {
