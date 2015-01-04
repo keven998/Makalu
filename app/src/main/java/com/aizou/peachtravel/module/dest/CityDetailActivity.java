@@ -187,24 +187,24 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     startActivity(intent);
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(CityDetailActivity.this);
+//                DialogManager.getInstance().showLoadingDialog(CityDetailActivity.this);
                 if(detailBean.isFavorite){
                     OtherApi.deleteFav(detailBean.id,new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =false;
                                 refreshFav(detailBean);
                             } else {
-                                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+//                                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                             }
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
@@ -212,7 +212,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =true;
@@ -223,7 +223,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }
