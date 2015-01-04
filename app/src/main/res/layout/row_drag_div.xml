@@ -39,26 +39,30 @@
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/selector_frame_white_card">
-
-            <ImageView
-                android:id="@+id/iv_add_poi"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:scaleType="center"
-                android:visibility="invisible"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_phone_contact"/>
-
-            <ImageView
+            <Button
                 android:id="@+id/iv_delete_day"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:scaleType="center"
-                android:visibility="invisible"
-                android:layout_toLeftOf="@id/iv_add_poi"
-                android:src="@drawable/ic_line_edit_delete"/>
+                android:visibility="visible"
+                android:text="删除"
+                android:textSize="10sp"
+                android:textColor="@color/base_color_white"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_theme_normal_shape"/>
+
+            <Button
+                android:id="@+id/iv_add_poi"
+                android:layout_width="52dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:text="添加景点"
+                android:textSize="10sp"
+                android:textColor="@color/base_color_white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_theme_normal_shape"/>
 
             <TextView
                 android:id="@+id/tv_div"
@@ -70,8 +74,8 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="15sp"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/iv_delete_day"
+                android:layout_toRightOf="@id/iv_delete_day"
+                android:layout_toLeftOf="@id/iv_add_poi"
                 android:layout_alignWithParentIfMissing="true"
                 android:textColor="@color/base_text_color_title"/>
 

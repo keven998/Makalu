@@ -57,6 +57,7 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
+import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
@@ -769,7 +770,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context, SpotDetailActivity.class);
+                    Intent intent =new Intent(context, PoiDetailActivity.class);
                     switch (extType) {
                         case Constant.ExtType.FOOD:
                             intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);

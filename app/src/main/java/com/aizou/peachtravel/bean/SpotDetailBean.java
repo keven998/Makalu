@@ -13,15 +13,15 @@ public class SpotDetailBean implements ICreateShareDialog{
     public boolean isFavorite;
     public String type;
     public String id;
-    public CoordsBean coords;
     public String zhName;
     public String enName;
     public String desc;
     public String priceDesc;
     public String travelMonth;
+    public LocationBean location;
     public ArrayList<ImageBean> images=new ArrayList<>();
     public String openTime;
-    public String timeCostStr;
+    public String timeCostDesc;
     public String address;
     public String trafficInfoUrl;
     public String guideUrl;
@@ -35,7 +35,7 @@ public class SpotDetailBean implements ICreateShareDialog{
         extMessageBean.image = images.size()>0?images.get(0).url:"";
         extMessageBean.name = zhName;
         extMessageBean.desc = desc;
-        extMessageBean.timeCost = timeCostStr;
+        extMessageBean.timeCost = timeCostDesc;
         return new ShareDialogBean(extMessageBean);
     }
 }

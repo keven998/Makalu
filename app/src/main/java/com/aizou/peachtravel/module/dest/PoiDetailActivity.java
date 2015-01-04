@@ -153,7 +153,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTvPoiName.setText(bean.zhName);
         mTitleBar.getTitleTextView().setText(bean.zhName);
         mTvPoiPrice.setText(bean.priceDesc);
-        mPoiStar.setRating(bean.rating);
+        mPoiStar.setRating(bean.getRating());
         mTvTel.setText("电话:" + bean.telephone);
         mTvAddr.setText(bean.address);
         refreshFav(bean);

@@ -69,6 +69,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.squareup.picasso.Picasso;
 
 public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private LinearLayout contentLl;
@@ -548,6 +550,21 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
 
             vh.nickView.setText(user.getNick());
+            vh.avatarView.setTag(user.getAvatar());
+//            Picasso.with(mContext)
+//                    .load(user.getAvatar())
+//                    .placeholder(R.drawable.avatar_placeholder)
+//                    .into(vh.avatarView);
+//            ImageLoader.getInstance().loadImage(user.getAvatar(),picOptions,new SimpleImageLoadingListener(){
+//                @Override
+//                public void onLoadingComplete(String imageUrl, View view,
+//                                              Bitmap loadedImage) {
+////                    super.onLoadingComplete(imageUrl, view, loadedImage);
+//                    if (imageUrl.equals( vh.avatarView.getTag())) {
+//                        vh.avatarView.setImageBitmap(loadedImage);
+//                    }
+//                }
+//            });
             ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
 
             if (vh.checkBox != null) {

@@ -1,6 +1,8 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -118,8 +120,19 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mPriceDescTv.setText(result.priceDesc);
         mBestMonthTv.setText(result.travelMonth);
         mOpenTimeTv.setText(result.openTime);
-        mTimeCostTv.setText(result.timeCostStr);
+        mTimeCostTv.setText(result.timeCostDesc);
         mAddressTv.setText(result.address);
+        mAddressTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(result.location!=null&&result.location.coordinates!=null){
+                    Uri mUri = Uri.parse("geo:"+result.location.coordinates[1]+","+result.location.coordinates[0]+"?q="+result.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+                    startActivity(mIntent);
+                }
+
+            }
+        });
         refreshFav(spotDetailBean);
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override

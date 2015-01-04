@@ -14,7 +14,7 @@ public class CustomProgressDialog extends ProgressDialog{
 
     private RateTextCircularProgressBar progressBar;
 	public CustomProgressDialog(Context context) {
-		super(context);
+        super(context, R.style.ComfirmDialog);
 		setCanceledOnTouchOutside(false);
 	}
 	

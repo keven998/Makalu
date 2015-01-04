@@ -15,7 +15,6 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:padding="10dp"
         android:layout_weight="1">
 
 
@@ -26,6 +25,8 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
+            android:padding="10dp"
+            android:scrollbarStyle="insideOverlay"
             android:headerDividersEnabled="true"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"

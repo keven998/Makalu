@@ -21,7 +21,7 @@ public class CustomLoadingDialog extends ProgressDialog {
 	private TextView progress_dialog_content;
 	
 	public CustomLoadingDialog(Context context, String content) {
-		super(context);
+        super(context, R.style.ComfirmDialog);
 		this.content = content;
 		setCanceledOnTouchOutside(false);
 	}
