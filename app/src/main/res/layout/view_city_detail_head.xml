@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
-                android:text="最佳游玩时间："
+                android:text="推荐游玩时间："
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/base_text_color_title"/>
             <TextView

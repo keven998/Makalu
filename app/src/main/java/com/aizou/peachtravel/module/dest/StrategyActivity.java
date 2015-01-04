@@ -466,7 +466,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                         if (saveResult.code == 0) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到 \"旅行Memo\"");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到\"旅行Memo\"");
                             finish();
                         }
                     }

@@ -7,6 +7,7 @@ import android.webkit.WebView;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseWebViewActivity;
+import com.aizou.peachtravel.common.widget.NumberProgressBar;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity {
         ButterKnife.inject(this);
         titleHeaderBar.enableBackKey(true);
         mWebView = (WebView) findViewById(R.id.web_view);
+        mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();
         mCurrentUrl = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");

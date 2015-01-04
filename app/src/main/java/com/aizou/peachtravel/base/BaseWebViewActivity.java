@@ -2,11 +2,15 @@ package com.aizou.peachtravel.base;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.aizou.peachtravel.common.widget.NumberProgressBar;
 
 /**
  * Created by Rjm on 2014/11/20.
@@ -15,6 +19,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
     /** 浏览器的webview，你可以在子类中使用 */
     protected WebView mWebView;
     protected String mCurrentUrl;
+    protected NumberProgressBar mProgressBar;
 
 
 
@@ -100,6 +105,13 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
             super.onReceivedIcon(view, icon);
             getWebIcon(view, icon);
         }
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            mProgressBar.setProgress(newProgress);
+        }
+
     }
 
     private class PeachWebViewClient extends WebViewClient {
@@ -112,9 +124,16 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
         }
 
         @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             onUrlFinished(view, url);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

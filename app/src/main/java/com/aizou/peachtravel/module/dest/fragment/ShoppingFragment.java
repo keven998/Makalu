@@ -67,7 +67,7 @@ public class ShoppingFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_shopping_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
-        addBtn.setText("备忘想逛的shopping");
+        addBtn.setText("添加想逛备忘");
         lineLl = addFooter.findViewById(R.id.ll_line);
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addFooter);
