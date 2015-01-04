@@ -455,7 +455,7 @@ public class StrategyActivity extends PeachBaseActivity {
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
         messageDialog.setMessage("是否先保存已完成的清单");
-        messageDialog.setPositiveButton("确定", new View.OnClickListener() {
+        messageDialog.setPositiveButton("保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
@@ -480,10 +480,11 @@ public class StrategyActivity extends PeachBaseActivity {
                 });
             }
         });
-        messageDialog.setNegativeButton("取消",new View.OnClickListener() {
+        messageDialog.setNegativeButton("不保存",new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
+                finish();
             }
         });
         messageDialog.show();

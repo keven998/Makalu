@@ -26,6 +26,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -133,6 +134,10 @@ public class CityPictureActivity extends PeachBaseActivity {
                     width, height);
             picIv.setLayoutParams(lp);
             ImageLoader.getInstance().displayImage(itemData.url,picIv, UILUtils.getDefaultOption());
+//            Picasso.with(mContext)
+//                    .load(itemData.url)
+////                    .placeholder(R.drawable.avatar_placeholder)
+//                    .into(picIv);
             picIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

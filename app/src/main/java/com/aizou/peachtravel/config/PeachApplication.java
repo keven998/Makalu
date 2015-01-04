@@ -64,7 +64,6 @@ public class PeachApplication extends BaseApplication {
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .diskCacheSize(40 * 1024 * 1024)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .denyCacheImageMultipleSizesInMemory()
                         .writeDebugLogs() // Remove for release app
                 .build();
 

@@ -234,7 +234,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mPicNumTv.setText(detailBean.imageCnt+"");
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
-        mCostTimeTv.setText(detailBean.timeCost+"天");
+        mCostTimeTv.setText(detailBean.timeCostDesc);
         bestMonthTv.setText(detailBean.travelMonth);
         travelTv.setOnClickListener(this);
         foodTv.setOnClickListener(this);

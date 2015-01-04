@@ -442,8 +442,12 @@ public class RouteDayFragment extends PeachBaseFragment {
                     break;
 
                 case POI:
-                    if(poiDetailBean.images.size()>0)
-                    ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+                    if(poiDetailBean.images.size()>0){
+                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+                    }else{
+//                        holder.poiImageIv.setImageDrawable(null);
+                    }
+
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
                     holder.poiRating.setRating(poiDetailBean.rating);
@@ -521,8 +525,8 @@ public class RouteDayFragment extends PeachBaseFragment {
             holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
             holder.topLineVw = convertView.findViewById(R.id.line_top);
             holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
-            holder.addPoiIv = (ImageView) convertView.findViewById(R.id.iv_add_poi);
-            holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);
+            holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
+            holder.deleteDayIv = (Button) convertView.findViewById(R.id.iv_delete_day);
             holder.nullLl = (LinearLayout) convertView.findViewById(R.id.ll_null);
             if(isEditableMode){
                 holder.lineLl.setVisibility(View.GONE);
@@ -710,8 +714,8 @@ public class RouteDayFragment extends PeachBaseFragment {
             public LinearLayout nullLl;
             public View topLineVw;
             public TextView dayTv;
-            public ImageView deleteDayIv;
-            public ImageView addPoiIv;
+            public Button deleteDayIv;
+            public Button addPoiIv;
         }
     }
 

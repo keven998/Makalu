@@ -42,6 +42,9 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     }
 
     public float getRating() {
+        if(rating>1){
+            return rating;
+        }
         return rating * 5;
     }
 
@@ -122,7 +125,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         extMessageBean.image = images.size()>0?images.get(0).url:"";
         extMessageBean.name = zhName;
         DecimalFormat df= new   java.text.DecimalFormat("#.#");
-        extMessageBean.rating=df.format(rating*5);
+        extMessageBean.rating=df.format(getRating());
         extMessageBean.price = priceDesc;
         extMessageBean.address = address;
         extMessageBean.timeCost = timeCostDesc;

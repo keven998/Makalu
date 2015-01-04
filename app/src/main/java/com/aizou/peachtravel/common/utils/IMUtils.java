@@ -227,7 +227,7 @@ public class IMUtils {
             contentJson.put("image",detailBean.images.size()>0?detailBean.images.get(0).url:"");
             contentJson.put("name",detailBean.zhName);
             contentJson.put("desc", detailBean.desc);
-            contentJson.put("timeCost",detailBean.timeCostStr);
+            contentJson.put("timeCost",detailBean.timeCostDesc);
         } catch (JSONException e) {
             e.printStackTrace();
         }

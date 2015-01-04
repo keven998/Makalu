@@ -34,6 +34,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.easemob.EMCallBack;
+import com.easemob.analytics.EMMessageCollector;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMGroup;
@@ -79,6 +80,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 	
 	//清空所有聊天记录
 	private RelativeLayout clearAllHistory;
+    private EMChatOptions options ;
 	
 
 	@Override
@@ -108,6 +110,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 		// 获取传过来的groupid
 		groupId = getIntent().getStringExtra("groupId");
 		group = EMGroupManager.getInstance().getGroup(groupId);
+        options = EMChatManager.getInstance().getChatOptions();
         bindView();
 
 
@@ -428,12 +431,13 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         groupNameTv.setText(group.getGroupName());
         //update block
         System.out.println("group msg is blocked:" + group.getMsgBlocked());
-        if (group.getMsgBlocked()) {
-            iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-            iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-        } else {
+        List<String> notReceiveNotifyGroups =options.getReceiveNoNotifyGroup();
+        if(notReceiveNotifyGroups==null||!notReceiveNotifyGroups.contains(groupId)){
             iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
             iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
+        }else if(notReceiveNotifyGroups.contains(groupId)){
+            iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
+            iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
         }
     }
 	
@@ -490,7 +494,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 				System.out.println("change to unblock group msg");
 				try {
 //				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
-                    EMChatOptions options = new EMChatOptions();
                     List<String> notReceiveNotifyGroups =options.getReceiveNoNotifyGroup();
                     if(notReceiveNotifyGroups==null){
                         notReceiveNotifyGroups=new ArrayList<String>();
@@ -507,7 +510,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 				System.out.println("change to block group msg");
 				try {
 //				    EMGroupManager.getInstance().blockGroupMessage(groupId);
-                    EMChatOptions options = new EMChatOptions();
                     List<String> notReceiveNotifyGroups =options.getReceiveNoNotifyGroup();
                     if(notReceiveNotifyGroups==null){
                         notReceiveNotifyGroups=new ArrayList<String>();

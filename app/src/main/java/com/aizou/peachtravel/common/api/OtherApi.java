@@ -149,7 +149,7 @@ public class OtherApi extends BaseApi {
     }
 
     /**
-     * 删除收藏
+     * 添加收藏
      * @param id
      * @param callBack
      * @return
