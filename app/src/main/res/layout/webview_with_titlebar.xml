@@ -18,7 +18,7 @@
         custom:progress="0"
         custom:progress_text_visibility="invisible"
         style="@style/NumberProgressBar_Default"
-        android:layout_height="2dp" />
+        android:layout_height="1.5dp" />
 
     <WebView android:id="@+id/web_view"
         android:layout_width="match_parent"
