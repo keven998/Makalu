@@ -19,6 +19,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
+import com.aizou.peachtravel.common.widget.NumberProgressBar;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
 import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
@@ -42,8 +43,9 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         setContentView(R.layout.webview_with_titlebar);
         ButterKnife.inject(this);
         mWebView = (WebView) findViewById(R.id.web_view);
+        mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();
-        titleBar.getTitleTextView().setText("游记详情");
+//        titleBar.getTitleTextView().setText("游记详情");
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         mWebView.loadUrl(H5Url.TRAVEL_NOTE+id);
