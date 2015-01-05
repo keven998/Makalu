@@ -3,6 +3,8 @@ package com.aizou.peachtravel.module.dest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,16 +102,16 @@ public class StrategyActivity extends PeachBaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLocListRv.setLayoutManager(linearLayoutManager);
 //        mTitleBar.enableBackKey(true);
-        mTitleBar.getLeftTextView().setText(" 完成");
-        mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//        mTitleBar.getLeftTextView().setText(" 完成");
+//        mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkIsEditableMode()){
+                if(checkIsEditableMode()) {
                     warnCancel();
-                }else {
+                } else {
                     finish();
-            }
+                }
             }
         });
         mTitleBar.setRightOnClickListener(new View.OnClickListener() {
@@ -144,6 +146,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
                     bindView(strategyResult.result);
+//                    StrategyActivity.this.po
                 }
 
             }
@@ -163,6 +166,15 @@ public class StrategyActivity extends PeachBaseActivity {
                 if (strategyResult.code == 0) {
 //                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
+
+                    new Handler() {
+                        @Override
+                        public void handleMessage(Message msg) {
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
+                        }
+                    }.sendEmptyMessageDelayed(0, 1000);
+                } else {
+                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -480,8 +492,10 @@ public class StrategyActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                         if (saveResult.code == 0) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
+//                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
                             finish();
+                        } else {
+                            ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
                         }
                     }
 
