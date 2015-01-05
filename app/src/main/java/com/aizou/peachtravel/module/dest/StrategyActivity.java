@@ -177,7 +177,7 @@ public class StrategyActivity extends PeachBaseActivity {
         strategy = result;
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
-        if(user.userId!=result.userId){
+        if(user.userId != result.userId){
             mTitleBar.setRightViewImageRes(0);
             mTitleBar.getRightTextView().setText("复制Memo");
             canEdit = false;
@@ -229,7 +229,6 @@ public class StrategyActivity extends PeachBaseActivity {
 //                            dialog.dismiss();
 //                        }
 //                    });
-
                 }
             });
         } else {
@@ -244,7 +243,6 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     public void setRVVisiable(boolean visiable) {
-        Log.d("test", "visiable = " + visiable + ", isRVVisable = " + isRVVisable + ", isAniming = " + isAniming);
         if (isAniming) {
             return;
         }

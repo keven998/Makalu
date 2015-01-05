@@ -105,6 +105,7 @@ public class RestaurantFragment extends PeachBaseFragment {
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
+                if (mEditBtn.isChecked()) return;
                 if (i == SCROLL_STATE_IDLE) {
                     if (absListView.getFirstVisiblePosition() <= 1) {
                         ((StrategyActivity) getActivity()).setRVVisiable(true);
@@ -116,6 +117,7 @@ public class RestaurantFragment extends PeachBaseFragment {
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int i2, int i3) {
+                if (mEditBtn.isChecked()) return;
                 if (firstVisibleItem <= 1) {
                     ((StrategyActivity)getActivity()).setRVVisiable(true);
                 } else {
