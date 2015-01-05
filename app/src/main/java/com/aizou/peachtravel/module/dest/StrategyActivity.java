@@ -166,7 +166,6 @@ public class StrategyActivity extends PeachBaseActivity {
                 if (strategyResult.code == 0) {
 //                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
-
                     new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
@@ -202,7 +201,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已复制到我的Memo");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为我的Memo");
                         }
 
                         @Override

@@ -157,7 +157,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTvTel.setText("电话:" + bean.telephone);
         mTvAddr.setText(bean.address);
         refreshFav(bean);
-        mTitleBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IMUtils.onClickImShare(mContext);

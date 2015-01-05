@@ -213,7 +213,7 @@ public class IMMainActivity extends ChatBaseActivity {
 //            }
 //        });
 
-        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
@@ -226,8 +226,8 @@ public class IMMainActivity extends ChatBaseActivity {
         });
 
         titleHeaderBar.getTitleTextView().setText("桃·Talk");
-        titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+//        titleHeaderBar.enableBackKey(true);
+        findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MainActivity.class);
