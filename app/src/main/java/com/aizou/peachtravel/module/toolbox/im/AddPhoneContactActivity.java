@@ -69,6 +69,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         bookbean.isUser = bookResult.isUser;
                         bookbean.isContact = bookResult.isContact;
                         bookbean.userId = bookResult.userId;
+
                     }
 //                    contactListInMobile = contactResult.result;
                     contactAdapter = new ListViewDataAdapter<AddressBookbean>(new ViewHolderCreator<AddressBookbean>() {
@@ -82,17 +83,8 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         public int compare(AddressBookbean lhs, AddressBookbean rhs) {
                             if(lhs==null||rhs==null){
                                 return 0;
-                            }
-                            if (rhs.isContact==lhs.isContact) {
-                                return 0;
-                            } else if (rhs.isUser) {
-                                if(lhs.isUser){
-                                    return 0;
-                                }else{
-                                    return -1;
-                                }
-                            } else {
-                                return 1;
+                            }else{
+                                return rhs.getSort()-lhs.getSort();
                             }
                         }
                     });
@@ -168,8 +160,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
-                       UserApi.getUserInfo(itemData.userId,new HttpCallBack<String>() {
+                       if(itemData.userId==AccountManager.getInstance().getLoginAccount(mContext).userId){
+                            ToastUtil.getInstance(mContext).showToast("");
+                       }
+                       DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
+                       UserApi.getUserInfo(itemData.userId+"",new HttpCallBack<String>() {
                            @Override
                            public void doSucess(String result, String method) {
                                DialogManager.getInstance().dissMissLoadingDialog();

@@ -7,7 +7,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.aizou.peachtravel.bean.AddressBookbean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PhoneContactBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 
 import java.util.ArrayList;
 
@@ -40,9 +42,13 @@ public class PhoneContactUtils {
                 String lastContactIdString="";
                 int entryId=0;
                 int sourceId=0;
+                PeachUser user = AccountManager.getInstance().getLoginAccount(context);
                 while (phones.moveToNext()) {
                     bean= new AddressBookbean();
                     phoneString = phones.getString(phoneIndex);
+                    if(phoneString.equals(user.tel)){
+                        continue;
+                    }
                     displayNameString = phones.getString(displayNameIndex);
                     contactIdString = phones.getString(contactIdIndex);
                     if(!lastContactIdString.equals(contactIdString)){

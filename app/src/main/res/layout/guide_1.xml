@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/base_color_white"
+    android:gravity="center"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <ImageView
@@ -20,11 +20,41 @@
             android:background="@color/app_theme_color" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="320dp"
+            android:layout_height="270dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/ic_guide_phone"
-            android:layout_height="wrap_content">
+            android:background="@drawable/ic_guide_phone">
 
-         </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_guide_earth"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-70dp"
+                android:background="@drawable/ic_guide_earth" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="3dp"
+                android:background="@drawable/ic_guide_plan" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="60dp"
+                android:layout_marginLeft="70dp"
+                android:background="@drawable/ic_guide_plane" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_divider_color" />
     </LinearLayout>
 </RelativeLayout>

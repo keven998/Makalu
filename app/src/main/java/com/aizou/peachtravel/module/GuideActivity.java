@@ -23,6 +23,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,26 +72,11 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 		// 初始化引导图片列表
 		for (int i = 0; i < pics.length; i++) {
 			if (i == 3) {
-				View view = View.inflate(this, R.layout.guide_last, null);
-				Button btn = (Button) view.findViewById(R.id.btn_goto);
-				btn.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						if (TextUtils.isEmpty(type)) {
-							SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
-                            Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
-                            startActivity(mainActivity);
-                            Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
-                            startActivity(storyIntent);
-                            overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_left);
-						} else if (type.equals("setting")) {
-
-						}
-						finish();
-					}
-				});
-				views.add(view);
+				View view = View.inflate(this, R.layout.guide_1, null);
+				ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
+                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+                earthIv.startAnimation(operatingAnim);
+                views.add(view);
 			} else {
 				View view = View.inflate(this, R.layout.item_guide, null);
 				// view.setBackgroundResource(backgrouds[i]);

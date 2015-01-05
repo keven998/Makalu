@@ -13,5 +13,16 @@ public class AddressBookbean {
     public String tel;
     public boolean isUser;
     public boolean isContact;
-    public String userId;
+    public long userId;
+
+
+    public int getSort(){
+        if(isContact){
+            return 0;
+        }else if(isUser){
+            return 2;
+        }else{
+            return 1;
+        }
+    }
 }
