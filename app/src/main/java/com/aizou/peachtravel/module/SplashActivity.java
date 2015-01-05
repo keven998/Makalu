@@ -43,22 +43,22 @@ public class SplashActivity extends PeachBaseActivity {
 
 			@Override
 			public void run() {
-                if(emMessage!=null&&user!=null){
+                if(emMessage != null && user != null){
                     Intent intent = new Intent(mContext, IMMainActivity.class);
-                    startActivity(intent);
+                    startActivityWithNoAnim(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }else{
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
                     hasLoad=false;
                     if (showSplash && !hasLoad) {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
-                        startActivity(mainIntent);
+                        startActivityWithNoAnim(mainIntent);
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     } else {
                         Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
-                        startActivity(mainActivity);
+                        startActivityWithNoAnim(mainActivity);
                         Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
-                        startActivity(storyIntent);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        startActivityWithNoAnim(storyIntent);
                     }
                 }
 

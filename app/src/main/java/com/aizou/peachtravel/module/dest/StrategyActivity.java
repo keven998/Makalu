@@ -102,7 +102,7 @@ public class StrategyActivity extends PeachBaseActivity {
 //        mTitleBar.enableBackKey(true);
         mTitleBar.getLeftTextView().setText(" 完成");
         mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        mTitleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(checkIsEditableMode()){
