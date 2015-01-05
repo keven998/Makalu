@@ -75,7 +75,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                             if (!updatenick) {
                                 EMLog.e("ModifyNicknameActivity", "update current user nick fail");
                             }
-                            ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
                         }else{
                             ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));

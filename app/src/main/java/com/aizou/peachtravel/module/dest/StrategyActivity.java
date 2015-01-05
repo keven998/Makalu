@@ -467,7 +467,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                         if (saveResult.code == 0) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到\"旅行Memo\"");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
                             finish();
                         }
                     }
@@ -481,7 +481,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 });
             }
         });
-        messageDialog.setNegativeButton("不保存",new View.OnClickListener() {
+        messageDialog.setNegativeButton("直接返回",new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();

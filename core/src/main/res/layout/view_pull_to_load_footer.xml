@@ -28,7 +28,8 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:indeterminate="false"
-                android:indeterminateDuration="700"
+                android:interpolator="@android:anim/decelerate_interpolator"
+                android:indeterminateDuration="1500"
                 android:indeterminateDrawable="@anim/update_loading_progressbar_anim"
                 android:visibility="visible" />
         </FrameLayout>
