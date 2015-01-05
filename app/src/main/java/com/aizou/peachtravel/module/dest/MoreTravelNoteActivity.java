@@ -1,11 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;

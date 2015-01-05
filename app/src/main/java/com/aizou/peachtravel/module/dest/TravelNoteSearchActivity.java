@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ import com.aizou.core.R;
  */
 public class FooterLoadingLayout extends LoadingLayout {
     /**进度条*/
-    private ProgressBar mProgressBar;
+    private FrameLayout mProgressBar;
     /** 显示的文本 */
     private TextView mHintView;
     
@@ -53,7 +54,7 @@ public class FooterLoadingLayout extends LoadingLayout {
      * @param context context
      */
     private void init(Context context) {
-        mProgressBar = (ProgressBar) findViewById(R.id.pull_to_load_footer_progressbar);
+        mProgressBar = (FrameLayout) findViewById(R.id.pull_to_load_footer_progressbar);
         mHintView = (TextView) findViewById(R.id.pull_to_load_footer_hint_textview);
         
         setState(State.RESET);

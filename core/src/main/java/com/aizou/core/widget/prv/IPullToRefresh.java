@@ -3,8 +3,6 @@ package com.aizou.core.widget.prv;
 
 
 
-import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 
 

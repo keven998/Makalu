@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -33,7 +34,7 @@ public class HeaderLoadingLayout extends LoadingLayout {
     /**箭头图片*/
     private ImageView mArrowImageView;
     /**进度条*/
-    private ProgressBar mProgressBar;
+    private FrameLayout mProgressBar;
     /**状态提示TextView*/
     private TextView mHintTextView;
     /**最后更新时间的TextView*/
@@ -75,7 +76,7 @@ public class HeaderLoadingLayout extends LoadingLayout {
         mHeaderContainer = (RelativeLayout) findViewById(R.id.pull_to_refresh_header_content);
         mArrowImageView = (ImageView) findViewById(R.id.pull_to_refresh_header_arrow);
         mHintTextView = (TextView) findViewById(R.id.pull_to_refresh_header_hint_textview);
-        mProgressBar = (ProgressBar) findViewById(R.id.pull_to_refresh_header_progressbar);
+        mProgressBar = (FrameLayout) findViewById(R.id.pull_to_refresh_header_progressbar);
         mHeaderTimeView = (TextView) findViewById(R.id.pull_to_refresh_header_time);
         mHeaderTimeViewTitle = (TextView) findViewById(R.id.pull_to_refresh_last_update_time_text);
         

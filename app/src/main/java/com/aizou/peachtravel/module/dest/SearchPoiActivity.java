@@ -3,10 +3,8 @@ package com.aizou.peachtravel.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
@@ -19,14 +17,10 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
-import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

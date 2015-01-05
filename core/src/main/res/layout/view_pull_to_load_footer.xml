@@ -10,15 +10,29 @@
         android:layout_height="40dp"
         android:padding="0dp"
         android:gravity="center" >
-
-        <ProgressBar
+        <FrameLayout
             android:id="@+id/pull_to_load_footer_progressbar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:visibility="visible"
-            android:indeterminateDrawable="@anim/update_loading_progressbar_anim"
-            android:gravity="center"
-            android:layout_marginRight="8dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_pb_earth"/>
+
+            <ProgressBar
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:indeterminateDuration="700"
+                android:indeterminateDrawable="@anim/update_loading_progressbar_anim"
+                android:visibility="visible" />
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/pull_to_load_footer_hint_textview"

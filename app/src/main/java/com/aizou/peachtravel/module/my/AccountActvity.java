@@ -24,6 +24,7 @@ import com.aizou.peachtravel.bean.UploadTokenBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
 import com.aizou.peachtravel.common.dialog.CustomProgressDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
@@ -412,7 +413,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             if (data == null) return;
             final Uri zoomImage = data.getData();
             final File file = SelectPicUtils.getPicFormUri(this, zoomImage);
-            final CustomProgressDialog progressDialog = DialogManager.getInstance().showProgressDialog(mContext);
+            final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
             OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
@@ -425,7 +426,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 new UpCompletionHandler() {
                                     @Override
                                     public void complete(String key, ResponseInfo info, JSONObject response) {
-                                        DialogManager.getInstance().dissMissProgressDialog();
+                                        DialogManager.getInstance().dissMissLoadingDialog();
                                         if (info.isOK()) {
                                             LogUtil.d(response.toString());
                                             try {
@@ -442,18 +443,18 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 }, new UploadOptions(null, null, false,
                                         new UpProgressHandler() {
                                             public void progress(String key, double percent) {
-                                                progressDialog.setProgress((int) (percent*100));
+                                                progressDialog.setContent((int) (percent*100)+"%");
                                                 LogUtil.d("progress",percent+"");
                                             }
                                         }, null));
                     } else {
-                        DialogManager.getInstance().dissMissProgressDialog();
+                        DialogManager.getInstance().dissMissLoadingDialog();
                     }
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissProgressDialog();
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });
