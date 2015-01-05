@@ -179,7 +179,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         tbar.enableBackKey(true);
         if ("action.chat".equals(action)) {
             tbar.getTitleTextView().setText("发送Memo");
-
         } else {
             tbar.getTitleTextView().setText("旅行Memo");
             tbar.getRightTextView().setText("新Memo");

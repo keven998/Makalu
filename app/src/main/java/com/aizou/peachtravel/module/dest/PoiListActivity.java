@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +42,6 @@ import butterknife.InjectView;
 public class PoiListActivity extends PeachBaseActivity {
     @InjectView(R.id.loc_spinner)
     Spinner mLocSpinner;
-    @InjectView(R.id.btn_ok)
-    TextView mBtnOk;
     @InjectView(R.id.tv_city_poi_desc)
     TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
@@ -53,6 +52,8 @@ public class PoiListActivity extends PeachBaseActivity {
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
     Button mBtnSearch;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView mTitle;
     private PullToRefreshListView mPoiListLv;
     private View headerView;
     private String type;
@@ -73,12 +74,28 @@ public class PoiListActivity extends PeachBaseActivity {
 
     private void initData() {
         type = getIntent().getStringExtra("type");
+
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         locList = getIntent().getParcelableArrayListExtra("locList");
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+//        if (canAdd) {
+//            mBtnOk.setVisibility(View.VISIBLE);
+//            mBtnOk.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent();
+//                    intent.putParcelableArrayListExtra("poiList", hasAddList);
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                }
+//            });
+//        } else {
+//            mBtnOk.setVisibility(View.INVISIBLE);
+//        }
+
         if (canAdd) {
-            mBtnOk.setVisibility(View.VISIBLE);
-            mBtnOk.setOnClickListener(new View.OnClickListener() {
+            mTvTitleBarLeft.setText("完成");
+            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
@@ -88,8 +105,14 @@ public class PoiListActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            mBtnOk.setVisibility(View.INVISIBLE);
+            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
+
         mPoiAdapter = new PoiAdapter(this, canAdd);
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
@@ -115,11 +138,18 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
-                mPoiListLv.doPullRefreshing(true,200);
+                mPoiListLv.doPullRefreshing(true, 200);
+
+                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
+                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    mTitle.setText(String.format("买在%s", curLoc.zhName));
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -137,26 +167,27 @@ public class PoiListActivity extends PeachBaseActivity {
 //        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
 //        mTvCityName.setText(result.zhName);
 //        mTvCityPoiDesc.setText(result.desc);
-        mPoiListLv.doPullRefreshing(true,200);
+        mPoiListLv.doPullRefreshing(true, 200);
 
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            mTitle.setText(String.format("吃在%s", curLoc.zhName));
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+            mTitle.setText(String.format("买在%s", curLoc.zhName));
+        }
     }
 
     private void initView() {
         setContentView(R.layout.activity_poi_list);
-        mPoiListLv = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
+        PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
+        mPoiListLv = listView;
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
-        mPoiListLv.getRefreshableView().addHeaderView(headerView);
-        mPoiListLv.setPullLoadEnabled(false);
-        mPoiListLv.setPullRefreshEnabled(false);
-        mPoiListLv.setScrollLoadEnabled(true);
+        listView.getRefreshableView().addHeaderView(headerView);
+        listView.setPullLoadEnabled(false);
+        listView.setPullRefreshEnabled(false);
+        listView.setScrollLoadEnabled(true);
         ButterKnife.inject(this);
-        mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        mPoiListLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 getPoiGuide(type, curLoc.id);
@@ -168,8 +199,6 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id,curPage+1);
             }
         });
-
-
     }
 
     private void getPoiGuide(final String type, String cityId) {
@@ -180,7 +209,6 @@ public class PoiListActivity extends PeachBaseActivity {
                 if (poiGuideResult.code == 0) {
                     bindGuideView(poiGuideResult.result);
                 }
-
 
             }
 
@@ -197,16 +225,16 @@ public class PoiListActivity extends PeachBaseActivity {
         }else{
             mTvCityPoiDesc.setText(result.desc);
         }
-        mTvCityPoiDesc.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     intent.putExtra("url", H5Url.FOOD + curLoc.id);
-                    intent.putExtra("title", "美食介绍");
+                    intent.putExtra("title", "吃什么");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     intent.putExtra("url", H5Url.SHOPPING + curLoc.id);
-                    intent.putExtra("title", "购物介绍");
+                    intent.putExtra("title", "买什么");
                 }
                 startActivity(intent);
 
@@ -237,6 +265,8 @@ public class PoiListActivity extends PeachBaseActivity {
                 ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
+
+        mEtSearch.clearFocus();
     }
 
     private void bindView(List<PoiDetailBean> result) {

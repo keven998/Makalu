@@ -179,41 +179,56 @@ public class StrategyActivity extends PeachBaseActivity {
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId!=result.userId){
             mTitleBar.setRightViewImageRes(0);
-            mTitleBar.getRightTextView().setText("复制路线");
+            mTitleBar.getRightTextView().setText("复制Memo");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
-                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-                    dialog.setTitle("提示");
-                    dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-                    dialog.setMessage("复制这条攻略到我的攻略里面吗？");
-                    dialog.setPositiveButton("确定",new View.OnClickListener() {
+                    DialogManager.getInstance().showLoadingDialog(mContext);
+                    TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
                         @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            DialogManager.getInstance().showLoadingDialog(mContext);
-                            TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
-                                @Override
-                                public void doSucess(String result, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                }
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已复制到我的Memo");
+                        }
 
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                }
-                            });
-                        }
-                    });
-                    dialog.setNegativeButton("取消",new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
+
+//                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+//                    dialog.setTitle("提示");
+//                    dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+//                    dialog.setMessage("复制这条攻略到我的攻略里面吗？");
+//                    dialog.setPositiveButton("确定", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            dialog.dismiss();
+//                            DialogManager.getInstance().showLoadingDialog(mContext);
+//                            TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
+//                                @Override
+//                                public void doSucess(String result, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                }
+//
+//                                @Override
+//                                public void doFailure(Exception error, String msg, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                                }
+//                            });
+//                        }
+//                    });
+//                    dialog.setNegativeButton("取消",new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            dialog.dismiss();
+//                        }
+//                    });
 
                 }
             });
@@ -467,7 +482,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                         if (saveResult.code == 0) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到\"旅行Memo\"");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
                             finish();
                         }
                     }
@@ -481,7 +496,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 });
             }
         });
-        messageDialog.setNegativeButton("不保存",new View.OnClickListener() {
+        messageDialog.setNegativeButton("直接返回",new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();

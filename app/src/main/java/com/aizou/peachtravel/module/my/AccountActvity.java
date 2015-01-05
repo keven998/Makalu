@@ -323,7 +323,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.gender = gender;
                     AccountManager.getInstance().saveLoginAccount(mContext,user);
                     tvGender.setText(user.getGenderDesc());
-                    ToastUtil.getInstance(mContext).showToast("OK!成功修改");
+                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 
