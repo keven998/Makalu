@@ -137,12 +137,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showLoadingDialog(SpotDetailActivity.this);
+//                DialogManager.getInstance().showLoadingDialog(SpotDetailActivity.this);
                 if(result.isFavorite){
                     OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 spotDetailBean.isFavorite = false;
@@ -152,26 +152,25 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
-                }else{
+                } else {
                     OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                            if(deleteResult.code==0){
-                                spotDetailBean.isFavorite =true;
+                            if(deleteResult.code == 0){
+                                spotDetailBean.isFavorite = true;
                                 refreshFav(spotDetailBean);
                             }
-
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }

@@ -446,11 +446,11 @@ public class FavListActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
+//                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
                     OtherApi.deleteFav(itemData.itemId, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
 //                                        mItemDataList.remove(i);
@@ -462,7 +462,7 @@ public class FavListActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

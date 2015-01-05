@@ -179,12 +179,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showLoadingDialog(PoiDetailActivity.this);
+//                DialogManager.getInstance().showLoadingDialog(PoiDetailActivity.this);
                 if(poiDetailBean.isFavorite){
                     OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 poiDetailBean.isFavorite = false;
@@ -195,14 +195,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
                 }else{
                     OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 poiDetailBean.isFavorite =true;
@@ -214,7 +214,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

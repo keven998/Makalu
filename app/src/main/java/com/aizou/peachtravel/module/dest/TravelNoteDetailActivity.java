@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -32,8 +34,8 @@ import butterknife.InjectView;
  */
 public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
-    @InjectView(R.id.ly_header_bar_title_wrap)
-    TitleHeaderBar titleBar;
+//    @InjectView(R.id.ly_header_bar_title_wrap)
+//    TitleHeaderBar titleBar;
     TravelNoteBean noteBean;
     String id;
 
@@ -49,29 +51,95 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         mWebView.loadUrl(H5Url.TRAVEL_NOTE+id);
-        titleBar.enableBackKey(true);
-        if(noteBean!=null){
-            titleBar.setRightViewImageRes(R.drawable.ic_more);
-            titleBar.setRightOnClickListener(new View.OnClickListener() {
+//        titleBar.enableBackKey(true);
+        findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        if (noteBean != null) {
+            CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right);
+            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_title_ic_favorite, 0);
+            txtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MoreMenu fragment = new MoreMenu();
-                    Bundle args = new Bundle();
-                    args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
-                    args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
-                    args.putString("id",id);
-                    fragment.setArguments(args);
-                    fragment.show(getSupportFragmentManager(), "more_menu");
+//                    MoreMenu fragment = new MoreMenu();
+//                    Bundle args = new Bundle();
+//                    args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
+//                    args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
+//                    args.putString("id", id);
+//                    fragment.setArguments(args);
+//                    fragment.show(getSupportFragmentManager(), "more_menu");
+                    favorite((CheckedTextView) v);
+                }
+            });
+
+            TextView txtView2 = (TextView) findViewById(R.id.tv_title_bar_right_1);
+            txtView2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share , 0);
+            txtView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IMUtils.onClickImShare(TravelNoteDetailActivity.this);
                 }
             });
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IMUtils.onShareResult(mContext,noteBean,requestCode,resultCode,data,null);
     }
+
+    private void favorite(final CheckedTextView ct) {
+//        DialogManager.getInstance().showLoadingDialog(getActivity());
+        final boolean isFav = ct.isChecked();
+        ct.setChecked(!isFav);
+        if (!isFav) {
+            OtherApi.addFav(id, "travelNote", new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0) {
+                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("已收藏");
+                    } else {
+                        //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                        ct.setChecked(isFav);
+                    }
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    ct.setChecked(isFav);
+                    ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+            });
+        } else {
+            OtherApi.deleteFav(id, new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0) {
+                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("收藏取消");
+                    } else {
+                        //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                        ct.setChecked(isFav);
+                    }
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    ct.setChecked(isFav);
+                    ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+            });
+        }
+    }
+
     public static class MoreMenu extends BlurDialogFragment {
         String id;
         TravelNoteBean noteBean;
