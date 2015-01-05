@@ -48,6 +48,7 @@ public class SplashActivity extends PeachBaseActivity {
                     startActivity(intent);
                 }else{
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
+                    hasLoad=false;
                     if (showSplash && !hasLoad) {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
                         startActivity(mainIntent);
