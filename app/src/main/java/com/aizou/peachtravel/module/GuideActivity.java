@@ -5,13 +5,11 @@ import java.util.List;
 
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.DotView;
-import com.aizou.core.widget.pagetransformer.ZoomOutTranformer;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,14 +20,12 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class GuideActivity extends Activity implements OnPageChangeListener {
+public class GuideActivity extends PeachBaseActivity implements OnPageChangeListener {
 	private ViewPager vp;
 	private ViewPagerAdapter vpAdapter;
 	private List<View> views;
@@ -42,15 +38,11 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 	// 记录当前选中位置
 	private int currentIndex;
 
-	// 引导图片资源
-	private static final int[] pics = {
-            R.drawable.guide_1,
-            R.drawable.guide_2,
-			R.drawable.guide_3,
-            R.drawable.guide_4 };
+    //引导页第二页小图动画index
+    private int guide2IvIndex;
+    //引导页第三页小图动画index
+    private int guide3IvIndex;
 
-	// private static final int[] backgrouds = { R.drawable.guide_1_bg,
-	// R.drawable.guide_2_bg, R.drawable.guide_3_bg, R.drawable.guide_4_bg };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +62,17 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 
 		// 初始化引导图片列表
-		for (int i = 0; i < pics.length; i++) {
-			if (i == 3) {
+		for (int i = 0; i <3; i++) {
+			if (i == 0) {
 				View view = View.inflate(this, R.layout.guide_1, null);
-				ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
-                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
-                earthIv.startAnimation(operatingAnim);
                 views.add(view);
-			} else {
-				View view = View.inflate(this, R.layout.item_guide, null);
-				// view.setBackgroundResource(backgrouds[i]);
-				ImageView iv = (ImageView) view.findViewById(R.id.iv_guide);
-				iv.setImageResource(pics[i]);
-				views.add(view);
-			}
+			} else if(i==1){
+                View view = View.inflate(this,R.layout.guide_2,null);
+                views.add(view);
+			}else if(i==2){
+                View view = View.inflate(this,R.layout.guide_3,null);
+                views.add(view);
+            }
 
 		}
 
@@ -101,20 +90,10 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 
 	}
 
-	/**
-	 * 设置当前的引导页
-	 */
-	private void setCurView(int position) {
-		if (position < 0 || position >= pics.length) {
-			return;
-		}
-
-		vp.setCurrentItem(position);
-	}
 
 	private void initDots() {
         dotView = (DotView) findViewById(R.id.dot_view);
-        dotView.setNum(pics.length);
+        dotView.setNum(views.size());
 
 		currentIndex = 0;
 		dotView.setSelected(currentIndex);
@@ -160,6 +139,132 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 		// 设置底部小点选中状态
         currentIndex=arg0;
 		dotView.setSelected(arg0);
+        if(arg0==0){
+            ImageView earthIv = (ImageView) views.get(arg0).findViewById(R.id.iv_guide_earth);
+            Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+            earthIv.startAnimation(operatingAnim);
+        }else if(arg0==1){
+            View view = views.get(arg0);
+            guide2IvIndex=1;
+            final ImageView dis1Iv = (ImageView) view.findViewById(R.id.iv_guide2_1);
+            final ImageView dis2Iv = (ImageView) view.findViewById(R.id.iv_guide2_2);
+            final ImageView dis3Iv = (ImageView) view.findViewById(R.id.iv_guide2_3);
+            final ImageView dis4Iv = (ImageView) view.findViewById(R.id.iv_guide2_4);
+            final ImageView dis5Iv = (ImageView) view.findViewById(R.id.iv_guide2_5);
+            final ImageView dis6Iv = (ImageView) view.findViewById(R.id.iv_guide2_6);
+            final ImageView dis7Iv = (ImageView) view.findViewById(R.id.iv_guide2_7);
+            final ImageView dis8Iv = (ImageView) view.findViewById(R.id.iv_guide2_8);
+            dis1Iv.setBackgroundResource(R.drawable.ic_guide2_1_normal);
+            dis2Iv.setBackgroundResource(R.drawable.ic_guide2_2_normal);
+            dis3Iv.setBackgroundResource(R.drawable.ic_guide2_3_normal);
+            dis4Iv.setBackgroundResource(R.drawable.ic_guide2_4_normal);
+            dis5Iv.setBackgroundResource(R.drawable.ic_guide2_5_normal);
+            dis6Iv.setBackgroundResource(R.drawable.ic_guide2_6_normal);
+            dis7Iv.setBackgroundResource(R.drawable.ic_guide2_7_normal);
+            dis8Iv.setBackgroundResource(R.drawable.ic_guide2_8_normal);
+
+            final Animation disAnim = AnimationUtils.loadAnimation(mContext,R.anim.scale_as_event);
+            disAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if(guide2IvIndex==1){
+                        guide2IvIndex=2;
+                        dis1Iv.setBackgroundResource(R.drawable.ic_guide2_1_select);
+                        dis1Iv.setAnimation(null);
+                        dis2Iv.startAnimation(disAnim);
+
+                    }else if(guide2IvIndex==2){
+                        guide2IvIndex=3;
+                        dis2Iv.setBackgroundResource(R.drawable.ic_guide2_2_select);
+                        dis2Iv.setAnimation(null);
+                        dis3Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==3){
+                        guide2IvIndex=4;
+                        dis3Iv.setBackgroundResource(R.drawable.ic_guide2_3_select);
+                        dis3Iv.setAnimation(null);
+                        dis4Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==4){
+                        guide2IvIndex=5;
+                        dis4Iv.setBackgroundResource(R.drawable.ic_guide2_4_select);
+                        dis4Iv.setAnimation(null);
+                        dis5Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==5){
+                        guide2IvIndex=6;
+                        dis5Iv.setBackgroundResource(R.drawable.ic_guide2_5_select);
+                        dis5Iv.setAnimation(null);
+                        dis6Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==6){
+                        guide2IvIndex=7;
+                        dis6Iv.setBackgroundResource(R.drawable.ic_guide2_6_select);
+                        dis6Iv.setAnimation(null);
+                        dis7Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==7){
+                        guide2IvIndex=8;
+                        dis7Iv.setBackgroundResource(R.drawable.ic_guide2_7_select);
+                        dis7Iv.setAnimation(null);
+                        dis8Iv.startAnimation(disAnim);
+                    }else if(guide2IvIndex==8){
+                        dis8Iv.setBackgroundResource(R.drawable.ic_guide2_8_select);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            dis1Iv.startAnimation(disAnim);
+
+        }else if(arg0==2){
+            View view = views.get(arg0);
+            guide3IvIndex=1;
+            final ImageView talkIv1= (ImageView) view.findViewById(R.id.iv_talk_1);
+            final ImageView talkIv2= (ImageView) view.findViewById(R.id.iv_talk_2);
+            final ImageView talkIv3= (ImageView) view.findViewById(R.id.iv_talk_3);
+            talkIv1.setVisibility(View.INVISIBLE);
+            talkIv2.setVisibility(View.INVISIBLE);
+            talkIv3.setVisibility(View.INVISIBLE);
+            final Animation alphaAnimation = AnimationUtils.loadAnimation(mContext,R.anim.fade_in);
+            alphaAnimation.setDuration(600);
+            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if(guide3IvIndex==1){
+                        talkIv1.setVisibility(View.VISIBLE);
+                    }else if(guide3IvIndex==2){
+                        talkIv2.setVisibility(View.VISIBLE);
+                    }else if(guide3IvIndex==3){
+                        talkIv3.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if(guide3IvIndex==1){
+                        guide3IvIndex=2;
+                        talkIv1.setAnimation(null);
+                        talkIv2.startAnimation(alphaAnimation);
+                    }else if(guide3IvIndex==2){
+                        guide3IvIndex=3;
+                        talkIv2.setAnimation(null);
+                        talkIv3.startAnimation(alphaAnimation);
+                    }else if(guide3IvIndex==3){
+                        guide3IvIndex=1;
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            talkIv1.startAnimation(alphaAnimation);
+        }
 	}
 
 	class ViewPagerAdapter extends PagerAdapter {
