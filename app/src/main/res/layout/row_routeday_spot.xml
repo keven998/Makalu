@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:duplicateParentState="true"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
@@ -27,6 +28,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_frame_white_card"
+        android:duplicateParentState="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -93,6 +95,7 @@
                 android:background="@drawable/checker_cell_frame_bg"
                 android:text="周边"
                 android:textColor="@color/main_botton_text_color"
+                android:visibility="gone"
                 android:textSize="12sp" />
         </RelativeLayout>
 

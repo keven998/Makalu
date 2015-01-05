@@ -146,7 +146,7 @@ public class ShoppingFragment extends PeachBaseFragment {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<ModifyResult> saveResult= CommonJson.fromJson(result,ModifyResult.class);
                                 if(saveResult.code==0){
-                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
+//                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
                                     mEditBtn.setChecked(false);
                                     addFooter.setVisibility(View.INVISIBLE);
                                     mRestAdapter.isEditableMode =!mRestAdapter.isEditableMode;

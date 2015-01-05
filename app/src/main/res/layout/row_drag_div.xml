@@ -38,27 +38,27 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_frame_white_card">
+            android:background="@drawable/shape_white_bar">
             <Button
                 android:id="@+id/iv_delete_day"
-                android:layout_width="35dp"
-                android:layout_height="20dp"
+                android:layout_width="38dp"
+                android:layout_height="24dp"
                 android:layout_centerVertical="true"
                 android:visibility="visible"
                 android:text="删除"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textColor="@color/base_color_white"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/btn_theme_normal_shape"/>
 
             <Button
                 android:id="@+id/iv_add_poi"
-                android:layout_width="52dp"
-                android:layout_height="20dp"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
                 android:layout_centerVertical="true"
                 android:visibility="visible"
-                android:text="添加景点"
-                android:textSize="10sp"
+                android:text="添加安排"
+                android:textSize="12sp"
                 android:textColor="@color/base_color_white"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
@@ -69,8 +69,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="15sp"
@@ -78,7 +78,6 @@
                 android:layout_toLeftOf="@id/iv_add_poi"
                 android:layout_alignWithParentIfMissing="true"
                 android:textColor="@color/base_text_color_title"/>
-
 
         </RelativeLayout>
 

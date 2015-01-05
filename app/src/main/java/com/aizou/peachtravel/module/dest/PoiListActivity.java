@@ -92,6 +92,27 @@ public class PoiListActivity extends PeachBaseActivity {
 //        } else {
 //            mBtnOk.setVisibility(View.INVISIBLE);
 //        }
+
+        if (canAdd) {
+            mTvTitleBarLeft.setText("完成");
+            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putParcelableArrayListExtra("poiList", hasAddList);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        } else {
+            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
         mPoiAdapter = new PoiAdapter(this, canAdd);
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
@@ -165,25 +186,6 @@ public class PoiListActivity extends PeachBaseActivity {
         listView.setPullRefreshEnabled(false);
         listView.setScrollLoadEnabled(true);
         ButterKnife.inject(this);
-        if (canAdd) {
-            mTvTitleBarLeft.setText("完成");
-            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putParcelableArrayListExtra("poiList", hasAddList);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-        } else {
-            mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override

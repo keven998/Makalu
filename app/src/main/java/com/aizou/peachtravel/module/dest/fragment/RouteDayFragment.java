@@ -174,7 +174,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                                 if (saveResult.code == 0) {
-                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
+//                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
                                     mEditBtn.setChecked(false);
                                     lineLl.setVisibility(View.GONE);
                                     addDayFooter.setVisibility(View.INVISIBLE);
@@ -395,7 +395,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
-                        holder.nearByTv.setVisibility(View.GONE);
+//                        holder.nearByTv.setVisibility(View.GONE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -422,13 +422,13 @@ public class RouteDayFragment extends PeachBaseFragment {
                         });
                     } else {
                         holder.deleteIv.setVisibility(View.GONE);
-                        holder.nearByTv.setVisibility(View.VISIBLE);
+//                        holder.nearByTv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.GONE);
-                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        });
+//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                            }
+//                        });
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -455,7 +455,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                     holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
-                        holder.nearByTv.setVisibility(View.GONE);
+//                        holder.nearByTv.setVisibility(View.GONE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -482,14 +482,14 @@ public class RouteDayFragment extends PeachBaseFragment {
                         });
                     } else {
                         holder.deleteIv.setVisibility(View.GONE);
-                        holder.nearByTv.setVisibility(View.VISIBLE);
+//                        holder.nearByTv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.GONE);
-                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
+//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//
+//                            }
+//                        });
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
