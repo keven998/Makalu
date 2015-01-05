@@ -336,6 +336,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, CityDetailActivity.class);
                     intent.putExtra("id", mDatas.get(i).id);
+//                    intent.putExtra("name", mDatas.get(i).zhName);
                     startActivity(intent);
                 }
             });

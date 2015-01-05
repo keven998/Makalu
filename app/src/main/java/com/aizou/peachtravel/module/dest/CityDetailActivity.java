@@ -231,7 +231,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
 
         titleHeaderBar.getTitleTextView().setText(detailBean.zhName);
-        mPicNumTv.setText(detailBean.imageCnt+"");
+        mPicNumTv.setText(String.valueOf(detailBean.imageCnt));
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
         mCostTimeTv.setText(detailBean.timeCostDesc);
@@ -247,7 +247,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //        startActivity(intent);
         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
         intent.putExtra("url", H5Url.LOC_TRAVEL+locId);
-        intent.putExtra("title","游玩攻略");
+        intent.putExtra("title", String.format("玩转%s", mCityNameTv.getText()));
         startActivity(intent);
         //todo:跳转html
     }
