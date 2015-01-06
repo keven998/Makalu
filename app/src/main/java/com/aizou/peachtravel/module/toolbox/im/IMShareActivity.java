@@ -1,7 +1,10 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -17,6 +21,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.PeachConversation;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.circluaravatar.JoinBitmaps;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.easemob.chat.EMChatManager;
@@ -28,6 +33,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
@@ -50,6 +56,7 @@ public class IMShareActivity extends PeachBaseActivity {
     TextView mCreateNewTalk;
     private ListView mImShareLv;
     private ListViewDataAdapter mImShareAdapter;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +214,7 @@ public class IMShareActivity extends PeachBaseActivity {
         TextView mName;
         View contentView;
         DisplayImageOptions options;
+        ImageSize avatarSize;
 
         public ShareChatViewHolder(){
             super();
@@ -218,6 +226,8 @@ public class IMShareActivity extends PeachBaseActivity {
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
                     .build();
+            avatarSize =new ImageSize(LocalDisplay.dp2px(45),LocalDisplay.dp2px(45));
+            handler = new Handler();
         }
 
 
@@ -238,8 +248,47 @@ public class IMShareActivity extends PeachBaseActivity {
             List<EMGroup> groups = EMGroupManager.getInstance().getAllGroups();
             EMContact contact = EMGroupManager.getInstance().getGroup(username);
             if (conversation.getIsGroup()) {
+                final EMGroup group = (EMGroup) contact;
                 // 群聊消息，显示群聊头像
-                mAvatar.setImageResource(R.drawable.group_icon);
+                final List<String> members = new ArrayList<>();
+                final List<Bitmap> membersAvatars = new ArrayList<>();
+                final int size = Math.min(group.getMembers().size(), 4);
+                // 群聊消息，显示群聊头像
+
+                if(size!=0){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < size; i++) {
+                                String username = group.getMembers().get(i);
+                                IMUser user = IMUserRepository.getContactByUserName(mContext, username);
+                                if (user != null) {
+                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatar(),avatarSize);
+
+                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
+                                    if(bitmap==null){
+                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder);
+                                    }
+                                    membersAvatars.add(bitmap);
+                                }else{
+                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder);
+                                    membersAvatars.add(bitmap);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAvatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
+                                            LocalDisplay.dp2px(45), membersAvatars));
+                                }
+                            });
+
+
+                        }
+                    }).start();
+                }else{
+                    mAvatar.setImageResource(R.drawable.group_icon);
+                }
                 mName.setText(contact.getNick() != null ? contact.getNick() : username);
             } else {
                 if(imUser!=null){

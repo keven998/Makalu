@@ -170,7 +170,7 @@ public class ChatAllHistoryFragment extends Fragment {
             getActivity().findViewById(R.id.start_chat).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                    getActivity().startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                 }
             });
         }
@@ -192,8 +192,7 @@ public class ChatAllHistoryFragment extends Fragment {
             // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
             InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
-            adapter.remove(peachConversation);
-            adapter.notifyDataSetChanged();
+            refresh();
 
             // 更新消息未读数
 //			((MainActivity) getActivity()).updateUnreadLabel();

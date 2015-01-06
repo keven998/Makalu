@@ -13,10 +13,14 @@
  */
 package com.aizou.peachtravel.module.toolbox.im.adapter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +30,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachConversation;
 import com.aizou.peachtravel.common.utils.SmileUtils;
+import com.aizou.peachtravel.common.widget.circluaravatar.JoinBitmaps;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.easemob.chat.EMContact;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
@@ -43,7 +51,9 @@ import com.easemob.chat.TextMessageBody;
 import com.easemob.util.DateUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
  * 显示所有聊天记录adpater
@@ -52,10 +62,13 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
     private LayoutInflater inflater;
     DisplayImageOptions options;
+    private Handler handler;
+    private ImageSize avatarSize;
 
     public ChatAllHistoryAdapter(Context context, int textViewResourceId, List<PeachConversation> objects) {
         super(context, textViewResourceId, objects);
         inflater = LayoutInflater.from(context);
+        handler =new Handler();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .showImageForEmptyUri(R.drawable.avatar_placeholder)
@@ -64,10 +77,11 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
                 .build();
+        avatarSize =new ImageSize(LocalDisplay.dp2px(45),LocalDisplay.dp2px(45));
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.row_chat_history, parent, false);
         }
@@ -99,17 +113,75 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         boolean isGroup = conversation.getIsGroup();
         if (isGroup) {
             contact = EMGroupManager.getInstance().getGroup(username);
+            final EMGroup group = (EMGroup) contact;
+            final List<String> members = new ArrayList<>();
+            final List<Bitmap> membersAvatars = new ArrayList<>();
+            final int size = Math.min(group.getMembers().size(), 4);
             // 群聊消息，显示群聊头像
-            holder.avatar.setImageResource(R.drawable.group_icon);
-            if(contact!=null){
+
+            final ViewHolder finalHolder1 = holder;
+            if(size!=0){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < size; i++) {
+                            String username = group.getMembers().get(i);
+                            IMUser user = IMUserRepository.getContactByUserName(getContext(), username);
+                            if (user != null) {
+                                Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatar(),avatarSize);
+
+                                LogUtil.d("load_bitmap",user.getAvatar()+"="+bitmap);
+                                if(bitmap==null){
+                                    bitmap=BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+                                }
+                                membersAvatars.add(bitmap);
+                            }else{
+                                Bitmap bitmap=BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+                                membersAvatars.add(bitmap);
+                            }
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
+                                        LocalDisplay.dp2px(45), membersAvatars));
+                            }
+                        });
+
+
+                    }
+                }).start();
+            }else{
+                holder.avatar.setImageResource(R.drawable.group_icon);
+            }
+            if (contact != null) {
                 holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
             }
 
         } else {
-            if(imUser != null){
+            if (imUser != null) {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
-                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, options);
+                final ViewHolder finalHolder = holder;
+                finalHolder.avatar.setTag(imUser.getAvatar());
+                ImageLoader.getInstance().loadImage(imUser.getAvatar(),avatarSize, new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        if(imageUri.equals(finalHolder.avatar.getTag())){
+                            if (loadedImage == null) {
+                                loadedImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+                            }
+                            ArrayList<Bitmap> bmps = new ArrayList<Bitmap>();
+                            bmps.add(loadedImage);
+                            finalHolder.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
+                                    LocalDisplay.dp2px(45), bmps));
+                        }
+
+
+                    }
+                });
+//                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, options);
 //                if (username.equals(Constant.GROUP_USERNAME)) {
 //                    holder.name.setText("群聊");
 //
@@ -122,7 +194,6 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                     holder.name.setText(imUser.getMemo());
                 }
             }
-
 
 
         }
@@ -160,15 +231,15 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
      * @param context
      * @return
      */
-    private String getMessageDigest(EMMessage message, Context context,boolean isGroup) {
+    private String getMessageDigest(EMMessage message, Context context, boolean isGroup) {
         String digest = "";
-        int extType = message.getIntAttribute(Constant.EXT_TYPE,0);
-        if(isGroup){
-            if(extType!=Constant.ExtType.TIPS){
-                String fromUserJson = message.getStringAttribute("fromUser","");
-                ExtFromUser fromUser = GsonTools.parseJsonToBean(fromUserJson,ExtFromUser.class);
-                if(fromUser!=null&&!TextUtils.isEmpty(fromUser.nickName)){
-                    digest =fromUser.nickName+":";
+        int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
+        if (isGroup) {
+            if (extType != Constant.ExtType.TIPS) {
+                String fromUserJson = message.getStringAttribute("fromUser", "");
+                ExtFromUser fromUser = GsonTools.parseJsonToBean(fromUserJson, ExtFromUser.class);
+                if (fromUser != null && !TextUtils.isEmpty(fromUser.nickName)) {
+                    digest = fromUser.nickName + ":";
                 }
 
             }
@@ -190,26 +261,26 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 break;
             case IMAGE: // 图片消息
                 ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
-                digest =digest+ getStrng(context, R.string.picture) + imageBody.getFileName();
+                digest = digest + getStrng(context, R.string.picture) + imageBody.getFileName();
                 break;
             case VOICE:// 语音消息
-                digest = digest+getStrng(context, R.string.voice);
+                digest = digest + getStrng(context, R.string.voice);
                 break;
             case VIDEO: // 视频消息
-                digest = digest+getStrng(context, R.string.video);
+                digest = digest + getStrng(context, R.string.video);
                 break;
             case TXT: // 文本消息
                 if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 
-                        String content = message.getStringAttribute(Constant.MSG_CONTENT,"");
-                        if(extType==0){
-                            TextMessageBody txtBody = (TextMessageBody) message.getBody();
-                            digest = digest+txtBody.getMessage();
-                        }else if(extType==Constant.ExtType.TIPS){
-                            digest = content;
-                        }else{
-                            digest=digest+"[链接]";
-                        }
+                    String content = message.getStringAttribute(Constant.MSG_CONTENT, "");
+                    if (extType == 0) {
+                        TextMessageBody txtBody = (TextMessageBody) message.getBody();
+                        digest = digest + txtBody.getMessage();
+                    } else if (extType == Constant.ExtType.TIPS) {
+                        digest = content;
+                    } else {
+                        digest = digest + "[链接]";
+                    }
 
                 } else {
                     TextMessageBody txtBody = (TextMessageBody) message.getBody();
@@ -217,7 +288,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 }
                 break;
             case FILE: // 普通文件消息
-                digest = digest+getStrng(context, R.string.file);
+                digest = digest + getStrng(context, R.string.file);
                 break;
             default:
                 System.err.println("error, unknow type");

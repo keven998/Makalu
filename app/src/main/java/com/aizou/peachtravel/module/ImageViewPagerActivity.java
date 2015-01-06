@@ -58,7 +58,8 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
 		int pos = getIntent().getIntExtra("pos",0);
 		mViewPager.setAdapter(new ImagePagerAdapter());
 		mViewPager.setCurrentItem(pos);
-		if (savedInstanceState != null) {
+
+        if (savedInstanceState != null) {
 		}
         mBackground = new ColorDrawable(Color.BLACK);
         contentView.setBackgroundDrawable(mBackground);

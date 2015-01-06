@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
+            android:paddingRight="10dp"
             android:background="@drawable/shape_white_bar">
             <Button
                 android:id="@+id/iv_delete_day"
@@ -61,7 +62,6 @@
                 android:textSize="12sp"
                 android:textColor="@color/base_color_white"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
                 android:background="@drawable/btn_theme_normal_shape"/>
 
             <TextView
@@ -120,7 +120,5 @@
                 android:textSize="13sp"
                 android:textColor="@color/base_text_color_subtitle"/>
         </FrameLayout>
-
-
     </LinearLayout>
 </LinearLayout>

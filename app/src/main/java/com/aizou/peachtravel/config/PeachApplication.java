@@ -4,15 +4,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.BuildConfig;
 
 import com.aizou.core.base.BaseApplication;
-import com.aizou.core.http.HttpCallBack;
-import com.aizou.peachtravel.bean.PeachUser;
-import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.api.UserApi;
-import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.DaoMaster;
 import com.aizou.peachtravel.db.DaoSession;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -61,7 +56,7 @@ public class PeachApplication extends BaseApplication {
                 .threadPriority(Thread.NORM_PRIORITY - 2).threadPoolSize(3)
                 .memoryCacheSizePercentage(20)
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCache(new UnlimitedDiscCache(cacheDir))
+                .diskCache(new UnlimitedDiskCache(cacheDir))
                 .diskCacheSize(40 * 1024 * 1024)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                         .writeDebugLogs() // Remove for release app

@@ -65,6 +65,9 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 		for (int i = 0; i <3; i++) {
 			if (i == 0) {
 				View view = View.inflate(this, R.layout.guide_1, null);
+                ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
+                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+                earthIv.startAnimation(operatingAnim);
                 views.add(view);
 			} else if(i==1){
                 View view = View.inflate(this,R.layout.guide_2,null);
