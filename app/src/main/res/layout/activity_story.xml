@@ -10,13 +10,14 @@
         android:id="@+id/iv_story"
         android:layout_width="fill_parent"
         android:scaleType="centerCrop"
+        android:src="@drawable/story_default"
         android:layout_height="fill_parent" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/app_theme_color">
+        android:background="#80ee528c">
         <com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView
             android:id="@+id/start"
             android:layout_width="wrap_content"

@@ -214,7 +214,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
             otherIv.setImageResource(R.drawable.spot_guide_btn_normal);
-            otherTv.setText("游玩指南");
+            otherTv.setText("游玩贴士");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -228,7 +228,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
             otherIv.setImageResource(R.drawable.spot_fangken_btn_normal);
-            otherTv.setText("防坑攻略");
+            otherTv.setText("注意事项");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -242,7 +242,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
             otherIv.setImageResource(R.drawable.spot_traffic_btn_normal);
-            otherTv.setText("交通指南");
+            otherTv.setText("交通");
             mOtherLl.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
