@@ -56,6 +56,8 @@ import butterknife.InjectView;
  */
 public class StrategyListActivity extends PeachBaseActivity {
 
+    public static final int RESULT_PLAN_DETAIL = 1;
+
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
     @InjectView(R.id.my_strategy_lv)
@@ -150,12 +152,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                         public void onDialogShareCancle(Dialog dialog, int type, String content) {
                         }
                     });
-                }else{
+                } else {
                     Intent intent = new Intent(mContext, StrategyActivity.class);
                     intent.putExtra("id", bean.id);
-                    startActivity(intent);
+                    startActivityForResult(intent, RESULT_PLAN_DETAIL);
                 }
-
             }
         });
 
@@ -237,6 +238,12 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_PLAN_DETAIL) {
+                StrategyBean sb = data.getParcelableExtra("strategy");
+                PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+            }
+        }
     }
 
     private void initData() {
@@ -370,7 +377,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void onClick(View v) {
                         //todo:修改攻略名称
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                        editDialog.setTitle("修改攻略名称");
+                        editDialog.setTitle("给Memo取个名");
                         editDialog.setMessage(itemData.title);
                         editDialog.setPositiveButton("确定",new View.OnClickListener() {
                             @Override
@@ -383,11 +390,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
                                         if(modifyResult.code==0){
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功修改");
+//                                            ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功修改");
                                             itemData.title = editDialog.getMessage();
                                             mStrategyListAdapter.notifyDataSetChanged();
                                             cachePage();
-                                        }else{
+                                        } else {
                                             ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
 

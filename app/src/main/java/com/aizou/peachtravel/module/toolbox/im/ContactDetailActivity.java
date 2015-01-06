@@ -98,7 +98,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
-        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ContactDetailMenu fragment = new ContactDetailMenu();

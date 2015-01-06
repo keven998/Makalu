@@ -124,10 +124,9 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 			if (TextUtils.isEmpty(type)) {
 				SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
                 Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
-                startActivity(mainActivity);
+                startActivityWithNoAnim(mainActivity);
                 Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
-                startActivity(storyIntent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startActivityWithNoAnim(storyIntent);
 			} else if (type.equals("setting")) {
 
 			}
@@ -136,7 +135,17 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 
 	}
 
-	// 当新的页面被选中时调用
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
+        Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
+        startActivityWithNoAnim(mainActivity);
+        Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
+        startActivityWithNoAnim(storyIntent);
+    }
+
+    // 当新的页面被选中时调用
 	@Override
 	public void onPageSelected(int arg0) {
 		// 设置底部小点选中状态
