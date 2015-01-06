@@ -16,11 +16,14 @@ package com.aizou.peachtravel.module.toolbox.im;
 import java.util.List;
 
 import android.os.Bundle;
-import android.view.View;
+import android.view.*;
+import android.view.ContextMenu;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.bean.PeachConversation;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
@@ -29,6 +32,8 @@ import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.toolbox.im.adapter.NewFriendsMsgAdapter;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 
 /**
  * 申请与通知
@@ -36,8 +41,11 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.NewFriendsMsgAdapter;
  */
 public class NewFriendsMsgActivity extends ChatBaseActivity {
 	private ListView listView;
+    private List<InviteMessage> msgs;
+    private NewFriendsMsgAdapter adapter;
 
-	@Override
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_friends_msg);
@@ -50,7 +58,7 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         });
 
 		listView = (ListView) findViewById(R.id.list);
-		List<InviteMessage> msgs = InviteMsgRepository.getMessagesList(mContext);
+	    msgs = InviteMsgRepository.getMessagesList(mContext);
         for (InviteMessage msg : msgs) {
             if (msg.getStatus() == InviteStatus.BEINVITEED&&IMUserRepository.isMyFriend(mContext,msg.getFrom())) {
                 msg.setStatus(InviteStatus.AGREED);
@@ -58,12 +66,34 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
             }
         }
 		//设置adapter
-		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs);
+	    adapter = new NewFriendsMsgAdapter(this, 1, msgs);
 		listView.setAdapter(adapter);
+        registerForContextMenu(listView);
         IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
         imUser.setUnreadMsgCount(0);
         IMUserRepository.saveContact(this,imUser);
+
 	}
+
+    @Override
+    public void onCreateContextMenu(android.view.ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        // if(((AdapterContextMenuInfo)menuInfo).position > 0){ m,
+       getMenuInflater().inflate(R.menu.delete_request, menu);
+        // }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_request) {
+            InviteMessage message = msgs.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
+            InviteMsgRepository.deleteInviteMsg(mContext,message.getFrom());
+            msgs.remove(message);
+            adapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
 	public void back(View view) {
 		finish();

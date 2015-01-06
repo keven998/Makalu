@@ -64,14 +64,13 @@ public class StoryActivity extends SwipeBackActivity {
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
-                .resetViewBeforeLoading(true)
 //                .showImageOnFail(R.drawable.ic_launcher)
 //                .showImageForEmptyUri(R.drawable.ic_launcher)
 //				.decodingOptions(D)
-                .displayer(new FadeInBitmapDisplayer(180, true, true, false))
+//                .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
-        String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
+        final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
 //        if(!TextUtils.isEmpty(storyImageUrl)){
 //
 //        }
@@ -81,8 +80,11 @@ public class StoryActivity extends SwipeBackActivity {
             public void doSucess(String result, String method) {
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result,CoverStoryBean.class);
                 if(storyResult.code == 0) {
-                    SharePrefUtil.saveString(StoryActivity.this, "story_image", storyResult.result.image);
-                    ImageLoader.getInstance().displayImage(storyResult.result.image,storyIv, picOptions);
+                    if(!storyResult.result.image.equals(storyImageUrl)){
+                        SharePrefUtil.saveString(StoryActivity.this, "story_image", storyResult.result.image);
+                        ImageLoader.getInstance().displayImage(storyResult.result.image,storyIv, picOptions);
+                    }
+
                 } else {
 //                    ToastUtil.getInstance(StoryActivity.this).showToast("请求也是失败了");
                 }

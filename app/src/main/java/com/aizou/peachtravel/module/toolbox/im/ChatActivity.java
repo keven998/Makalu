@@ -608,7 +608,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                     .showImageOnFail(R.drawable.avatar_placeholder)
                     .showImageOnLoading(R.drawable.avatar_placeholder)
                     .showImageForEmptyUri(R.drawable.avatar_placeholder)
-//				.decodingOptions(D)
+//				    .decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
@@ -749,7 +749,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
     private void setUpView() {
         activityInstance = this;
-//        titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.enableBackKey(true);
 
         findViewById(R.id.ly_title_bar_right).setOnClickListener(new OnClickListener() {
             @Override
@@ -1594,9 +1594,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                         IMUser imUser = IMUserRepository.getContactByUserName(mContext, finalUsername);
                         if(imUser!=null){
                             imUser.setNick(user.nickName);
-                            imUser.setSignature(user.avatar);
+                            imUser.setAvatar(user.avatar);
                         }else{
-                            imUser = new IMUser();
+
                             imUser.setUsername(finalUsername);
                             imUser.setNick(user.nickName);
                             imUser.setUserId(user.userId);

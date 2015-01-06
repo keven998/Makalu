@@ -28,6 +28,10 @@ public class MapUtils {
 
     }
 
+    private static String getBDMapNaviUri(){
+        return null;
+    }
+
     private static boolean isInstallByread(String packageName) {
         return new File("/data/data/" + packageName).exists();
     }

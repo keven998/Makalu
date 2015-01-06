@@ -36,6 +36,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachConversation;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.SmileUtils;
 import com.aizou.peachtravel.common.widget.circluaravatar.JoinBitmaps;
 import com.aizou.peachtravel.config.Constant;
@@ -128,9 +129,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                             String username = group.getMembers().get(i);
                             IMUser user = IMUserRepository.getContactByUserName(getContext(), username);
                             if (user != null) {
-                                Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatar(),avatarSize);
+                                Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatar(),avatarSize, UILUtils.getDefaultOption());
 
-                                LogUtil.d("load_bitmap",user.getAvatar()+"="+bitmap);
+                                LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                 if(bitmap==null){
                                     bitmap=BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
                                 }
@@ -164,7 +165,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
                 finalHolder.avatar.setTag(imUser.getAvatar());
-                ImageLoader.getInstance().loadImage(imUser.getAvatar(),avatarSize, new SimpleImageLoadingListener() {
+                ImageLoader.getInstance().loadImage(imUser.getAvatar(),avatarSize, UILUtils.getDefaultOption(),new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         super.onLoadingComplete(imageUri, view, loadedImage);

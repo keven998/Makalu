@@ -49,7 +49,7 @@ public class SplashActivity extends PeachBaseActivity {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }else{
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
-                    hasLoad=false;
+//                    hasLoad=false;
                     if (showSplash && !hasLoad) {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
                         startActivityWithNoAnim(mainIntent);

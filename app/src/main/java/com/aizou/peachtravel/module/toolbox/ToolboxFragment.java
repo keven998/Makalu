@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.toolbox;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -210,7 +211,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                     return;
                 }
                 weatherStr = DateUtil.getCurrentMonthDay() + "   " + city + "   " + weatherArray[weatherInfo.getCurrentCode()];
-                ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
+//                ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
                 mTvWeather.setText(weatherStr);
             }
         });
@@ -395,6 +396,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         public View getView(final int position, View view, ViewGroup container) {
             ImageView imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setBackgroundColor(Color.parseColor("#f3d4df"));
             imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
