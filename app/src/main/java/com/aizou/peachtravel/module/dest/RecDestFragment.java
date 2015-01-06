@@ -17,14 +17,19 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.RecDestBean;
+import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
 import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer;
@@ -35,6 +40,7 @@ import com.aizou.peachtravel.common.widget.freeflow.layouts.FreeFlowLayout;
 import com.aizou.peachtravel.common.widget.freeflow.layouts.FreeFlowLayoutBase;
 import com.aizou.peachtravel.common.widget.freeflow.utils.ViewUtils;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -67,13 +73,25 @@ public class RecDestFragment extends PeachBaseFragment {
         });
         titleHeaderBar.enableBackKey(false);
 //        initData();
+        setupViewFromCache();
+        reloadData();
         return rootView;
+    }
+
+    private void setupViewFromCache() {
+        AccountManager account = AccountManager.getInstance();
+        String data = PreferenceUtils.getCacheData(getActivity(), "recommend_content");
+        if (!TextUtils.isEmpty(data)) {
+            List<RecDestBean> lists = GsonTools.parseJsonToBean(data,
+                    new TypeToken<List<RecDestBean>>() {
+                    });
+            bindView(lists);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        reloadData();
     }
 
     private void initData() {
@@ -92,12 +110,11 @@ public class RecDestFragment extends PeachBaseFragment {
         TravelApi.getRecDest(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result,RecDestBean.class);
-                if(destResult.code==0){
+                CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);
+                if(destResult.code == 0) {
                    bindView(destResult.result);
+                   PreferenceUtils.cacheData(getActivity(), "recommend_content", GsonTools.createGsonString(destResult.result));
                 }
-
-
             }
 
             @Override
@@ -129,11 +146,10 @@ public class RecDestFragment extends PeachBaseFragment {
                         intent.putExtra("title",itemData.title);
                         intent.putExtra("url",itemData.linkUrl);
                         startActivity(intent);
-                    }else{
+                    } else {
                         IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
                     }
                 }
-
             }
         });
 

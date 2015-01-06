@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.aizou.core.utils.GsonTools;
+import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.common.account.StrategyManager;
+import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -37,11 +41,13 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
@@ -134,13 +140,25 @@ public class StrategyActivity extends PeachBaseActivity {
 //            cityIdList.add("5473ccddb8ce043a64108d22");
             createStrategyByCityIds(cityIdList);
         } else {
-            getStrategyDataById();
+            setupViewFromCache(id);
+            getStrategyDataById(id);
+
         }
 
     }
 
-    public void getStrategyDataById() {
-        TravelApi.getGuideDetail(id, new HttpCallBack<String>() {
+    private void setupViewFromCache(String itemId) {
+        String data = PreferenceUtils.getCacheData(this, "last_strategy");
+        if (!TextUtils.isEmpty(data)) {
+            StrategyBean item = GsonTools.parseJsonToBean(data, StrategyBean.class);
+            if (item.id.equals(itemId)) {
+                bindView(item);
+            }
+        }
+    }
+
+    public void getStrategyDataById(String itemId) {
+        TravelApi.getGuideDetail(itemId, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
@@ -248,9 +266,17 @@ public class StrategyActivity extends PeachBaseActivity {
             canEdit = true;
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result,canEdit));
+        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result, canEdit));
         mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
 //        setRVVisiable(false);
+    }
+
+    @Override
+    public void finish() {
+        Intent intent = getIntent();
+        intent.putExtra("strategy", strategy);
+        setResult(RESULT_OK, intent);
+        super.finish();
     }
 
     public void setRVVisiable(boolean visiable) {
@@ -374,7 +400,7 @@ public class StrategyActivity extends PeachBaseActivity {
         private StrategyBean strategyBean;
         private boolean canEdit;
 
-        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean,boolean canEdit) {
+        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean, boolean canEdit) {
             super(fragmentManager);
             inflater = LayoutInflater.from(getApplicationContext());
             this.strategyBean = strategyBean;
@@ -468,7 +494,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
     private void warnCancel() {
         final JSONObject jsonObject = new JSONObject();
-        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext,strategy);
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
             StrategyManager.putItineraryJson(mContext,jsonObject,routeDayFragment.getStrategy(),routeDayFragment.getRouteDayMap());
         }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
