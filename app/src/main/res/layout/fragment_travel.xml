@@ -26,8 +26,9 @@
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:paddingTop="5dp"
+            android:background="@drawable/ic_text_cover_bg"
             android:paddingBottom="5dp"
-            android:background="#88000000">
+            >
             <ImageView
                 android:id="@+id/iv_weather"
                 android:layout_width="18dp"
@@ -35,6 +36,7 @@
                 android:layout_marginLeft="17dp"
                 android:scaleType="fitCenter"
                 android:layout_marginTop="4dp"
+                android:visibility="gone"
                 android:layout_marginBottom="4dp"
                 />
             <TextView android:id="@+id/tv_weather"
@@ -105,7 +107,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:drawableTop="@drawable/ic_home_guide"
+                android:drawableTop="@drawable/btn_home_guide"
                 android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_fav"
@@ -117,7 +119,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:drawableTop="@drawable/ic_home_fav"
+                android:drawableTop="@drawable/btn_home_fav"
                 android:textColor="@color/base_text_color_subtitle"/>
             <TextView
                 android:id="@+id/tv_nearby"
@@ -128,7 +130,7 @@
                 android:textSize="12sp"
                 android:singleLine="true"
                 android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_home_around"
+                android:drawableTop="@drawable/btn_home_around"
                 android:gravity="center"
                 android:textColor="@color/base_text_color_subtitle"/>
 

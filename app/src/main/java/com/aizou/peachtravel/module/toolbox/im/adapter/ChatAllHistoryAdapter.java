@@ -169,6 +169,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         super.onLoadingComplete(imageUri, view, loadedImage);
+                        if(imageUri==null){
+                            return;
+                        }
                         if(imageUri.equals(finalHolder.avatar.getTag())){
                             if (loadedImage == null) {
                                 loadedImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);

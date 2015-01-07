@@ -548,14 +548,14 @@ public class MessageAdapter extends BaseAdapter {
                     if (holder.tv_delivered != null) {
                         holder.tv_delivered.setVisibility(View.INVISIBLE);
                     }
-                    holder.tv_ack.setVisibility(View.VISIBLE);
+                    holder.tv_ack.setVisibility(View.INVISIBLE);
                 } else {
                     holder.tv_ack.setVisibility(View.INVISIBLE);
 
                     // check and display msg delivered ack status
                     if (holder.tv_delivered != null) {
                         if (message.isDelivered) {
-                            holder.tv_delivered.setVisibility(View.VISIBLE);
+                            holder.tv_delivered.setVisibility(View.INVISIBLE);
                         } else {
                             holder.tv_delivered.setVisibility(View.INVISIBLE);
                         }
@@ -1387,7 +1387,7 @@ public class MessageAdapter extends BaseAdapter {
         if (holder.pb != null)
             holder.pb.setVisibility(View.VISIBLE);
         if (holder.tv != null)
-            holder.tv.setVisibility(View.VISIBLE);
+            holder.tv.setVisibility(View.INVISIBLE);
 
         msgbody.setDownloadCallback(new EMCallBack() {
 
@@ -1414,13 +1414,13 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public void onProgress(final int progress, String status) {
                 if (message.getType() == Type.IMAGE) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.tv.setText(progress + "%");
-
-                        }
-                    });
+//                    activity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            holder.tv.setText(progress + "%");
+//
+//                        }
+//                    });
                 }
 
             }
@@ -1438,7 +1438,7 @@ public class MessageAdapter extends BaseAdapter {
             // before send, update ui
             holder.staus_iv.setVisibility(View.GONE);
             holder.pb.setVisibility(View.VISIBLE);
-            holder.tv.setVisibility(View.VISIBLE);
+            holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
             EMChatManager.getInstance().sendMessage(message, new EMCallBack() {

@@ -33,6 +33,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
@@ -181,7 +182,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 break;
 
             case R.id.tv_weixin_contacts:
-
+                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，有些旅行相关的事儿想跟你八八。桃子旅行搜索：%s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
                 break;
         }
     }

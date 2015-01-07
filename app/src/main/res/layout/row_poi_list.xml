@@ -58,6 +58,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/dot_divider"
             android:layout_marginTop="15dp"
+            android:background="@drawable/bg_common_default"
             android:layout_marginRight="20dp"
             android:scaleType="centerCrop"/>
 

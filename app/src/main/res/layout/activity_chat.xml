@@ -124,7 +124,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="1dp"
-                android:src="@drawable/ic_tao"
+                android:src="@drawable/btn_chat_tao"
                 android:scaleType="fitCenter"
                 android:onClick="more" />
 
@@ -195,7 +195,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_my_guide"
+                        android:drawableTop="@drawable/btn_chat_my_guide"
                         android:drawablePadding="3dp"
                         />
 
@@ -209,7 +209,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_fav"
+                        android:drawableTop="@drawable/btn_chat_fav"
                         android:drawablePadding="3dp"
                         />
 
@@ -223,7 +223,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_loc"
+                        android:drawableTop="@drawable/btn_chat_loc"
                         android:drawablePadding="3dp"
                         />
 
@@ -247,7 +247,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_travels"
+                        android:drawableTop="@drawable/btn_chat_travels"
                         android:drawablePadding="3dp"
                        />
 
@@ -261,7 +261,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_photos"
+                        android:drawableTop="@drawable/btn_chat_photos"
                         android:drawablePadding="3dp"
                         />
 
@@ -275,7 +275,7 @@
                         android:onClick="onClick"
                         android:textColor="@color/base_text_color_subtitle"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/chat_takephoto"
+                        android:drawableTop="@drawable/btn_chat_takephoto"
                         android:drawablePadding="3dp"
                        />
 

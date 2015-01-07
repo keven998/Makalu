@@ -57,14 +57,13 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<InviteMessage> objects) {
 		super(context, textViewResourceId, objects);
 		this.context = context;
-
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .showImageForEmptyUri(R.drawable.avatar_placeholder)
                 .showImageOnFail(R.drawable.avatar_placeholder)
-                .cacheOnDisc(true)
+                .cacheOnDisk(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(39))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
                 .build();
 	}
 

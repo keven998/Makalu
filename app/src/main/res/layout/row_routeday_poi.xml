@@ -50,9 +50,10 @@
 
             <ImageView
                 android:id="@+id/poi_image_iv"
-                android:layout_width="52dp"
+                android:layout_width="54dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
+                android:background="@drawable/bg_common_default"
                 android:scaleType="centerCrop"/>
 
             <FrameLayout

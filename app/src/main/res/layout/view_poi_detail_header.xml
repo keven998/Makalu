@@ -20,6 +20,7 @@
                 android:id="@+id/iv_poi"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@drawable/bg_common_default"
                 android:scaleType="centerCrop" />
 
             <ImageView

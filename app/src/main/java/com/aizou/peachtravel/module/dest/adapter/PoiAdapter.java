@@ -138,7 +138,7 @@ public class PoiAdapter extends BaseAdapter {
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, spotViewHolder.mSpotImageIv, picOptions);
             } else {
-                spotViewHolder.mSpotImageIv.setImageResource(R.drawable.default_image);
+                spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mSpotNameTv.setText(poiDetailBean.zhName);
             spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间："+poiDetailBean.timeCostDesc);
@@ -240,7 +240,7 @@ public class PoiAdapter extends BaseAdapter {
             if(poiDetailBean.images != null&&poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mIvPoiImage, picOptions);
             } else {
-                poiViewHolder.mIvPoiImage.setImageResource(R.drawable.default_image);
+                poiViewHolder.mIvPoiImage.setImageDrawable(null);
             }
             poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
             if(poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {

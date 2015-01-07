@@ -16,8 +16,8 @@ public class MessageContents extends PeachBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.webview_with_titlebar);
-        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        setContentView(R.layout.activity_push_message);
+        TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.title_bar);
         thb.getTitleTextView().setText("我收到的消息");
         thb.enableBackKey(true);
     }
