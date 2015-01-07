@@ -950,6 +950,7 @@ public class MessageAdapter extends BaseAdapter {
                     }
                 }, 0, 500);
                 break;
+
             default:
                 sendPictureMessage(message, holder);
         }
