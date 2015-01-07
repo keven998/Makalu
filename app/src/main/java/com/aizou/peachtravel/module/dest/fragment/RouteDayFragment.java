@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,6 +190,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
 //                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                                if (isAdded())
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
@@ -515,7 +517,6 @@ public class RouteDayFragment extends PeachBaseFragment {
         @Override
         public View getHeaderView(final int section, View convertView, ViewGroup parent) {
             HeaderViewHolder holder=null;
-            LogUtils.d("header---section:"+section+"--globle_postion"+getGlobalPositionForHeader(section));
             if(convertView==null){
                 holder = new HeaderViewHolder();
                 convertView = View.inflate(getActivity(), R.layout.row_drag_div,null);
@@ -530,12 +531,12 @@ public class RouteDayFragment extends PeachBaseFragment {
             holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
             holder.deleteDayIv = (Button) convertView.findViewById(R.id.iv_delete_day);
             holder.nullLl = (LinearLayout) convertView.findViewById(R.id.ll_null);
-            if(isEditableMode){
+            if (isEditableMode) {
                 holder.lineLl.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.lineLl.setVisibility(View.VISIBLE);
             }
-            if(section==0){
+            if(section==0) {
                 holder.topLineVw.setVisibility(View.INVISIBLE);
             }else{
                 holder.topLineVw.setVisibility(View.VISIBLE);
@@ -549,10 +550,21 @@ public class RouteDayFragment extends PeachBaseFragment {
                         citySet.add(detailBean.locality.zhName);
                     }
                 }
-
-                holder.dayTv.setText("第" + (section+1) + "天  " + citySet.toString());
+                if (!citySet.isEmpty()) {
+                    String des = "";
+                    for (String str : citySet) {
+                        if (TextUtils.isEmpty(des)) {
+                            des += String.format("-%s", str);
+                        } else {
+                            des = str;
+                        }
+                    }
+                    holder.dayTv.setText("第" + (section + 1) + "天  " + citySet.toString());
+                } else {
+                    holder.dayTv.setText("第" + (section + 1) + "天");
+                }
             }else{
-                holder.dayTv.setText("第" + (section+1) + "天  未安排");
+                holder.dayTv.setText("第" + (section + 1) + "天  未安排");
                 if(isEditableMode){
                     holder.nullLl.setVisibility(View.GONE);
                 }else{
@@ -560,14 +572,14 @@ public class RouteDayFragment extends PeachBaseFragment {
                 }
 
             }
-            if(isEditableMode){
+            if(isEditableMode) {
                 holder.addPoiIv.setVisibility(View.VISIBLE);
                 holder.deleteDayIv.setVisibility(View.VISIBLE);
                 holder.addPoiIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), AddPoiActivity.class);
-                        intent.putParcelableArrayListExtra("locList",strategy.localities);
+                        intent.putParcelableArrayListExtra("locList", strategy.localities);
                         intent.putExtra("dayIndex", section);
                         intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
                         getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);

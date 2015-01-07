@@ -330,6 +330,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
                 ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
             }
 
@@ -455,6 +456,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing())
                     ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });

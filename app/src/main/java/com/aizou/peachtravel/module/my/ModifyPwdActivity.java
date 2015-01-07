@@ -84,6 +84,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
                             ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

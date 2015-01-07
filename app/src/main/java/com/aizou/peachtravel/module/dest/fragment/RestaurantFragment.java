@@ -162,6 +162,7 @@ public class RestaurantFragment extends PeachBaseFragment {
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
 //                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                                if (isAdded())
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });

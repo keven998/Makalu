@@ -77,7 +77,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                             }
                             ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
-                        }else{
+                        } else {
                             ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
                         }
                     }
@@ -85,6 +85,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
                         ToastUtil.getInstance(ModifyNicknameActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
 

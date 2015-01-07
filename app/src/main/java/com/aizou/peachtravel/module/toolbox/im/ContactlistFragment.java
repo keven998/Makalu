@@ -172,15 +172,17 @@ public class ContactlistFragment extends Fragment {
 				try {
 					//加入到黑名单
 					EMContactManager.getInstance().addUserToBlackList(username,true);
+                    if (isAdded())
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
 //							Toast.makeText(getActivity(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
-                            ToastUtil.getInstance(getActivity()).showToast("OK~成功移除桃友");
+                            ToastUtil.getInstance(getActivity()).showToast("成功移除她");
 						}
 					});
 				} catch (EaseMobException e) {
 					e.printStackTrace();
+                    if (isAdded())
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();

@@ -273,6 +273,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                                 }
                             });
                         } catch (final Exception e) {
+                            if (!isFinishing())
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     DialogManager.getInstance().dissMissLoadingDialog();
@@ -346,6 +347,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         });
 
                     } catch (final Exception e) {
+                        if (!isFinishing())
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();

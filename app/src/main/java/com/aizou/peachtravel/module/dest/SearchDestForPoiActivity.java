@@ -162,8 +162,10 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                mProgressBar.setVisibility(View.INVISIBLE);
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
@@ -185,9 +187,11 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                mSearchResultLv.onPullUpRefreshComplete();
-                mSearchResultLv.onPullDownRefreshComplete();
-                ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    mSearchResultLv.onPullUpRefreshComplete();
+                    mSearchResultLv.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
 

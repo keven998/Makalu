@@ -75,6 +75,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
                         ToastUtil.getInstance(ModifyGenderActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
 

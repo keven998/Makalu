@@ -171,6 +171,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                if (!isFinishing())
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -191,12 +192,14 @@ public class StrategyActivity extends PeachBaseActivity {
                         }
                     }.sendEmptyMessageDelayed(0, 1000);
                 } else {
+                    if (!isFinishing())
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                if (!isFinishing())
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -219,12 +222,14 @@ public class StrategyActivity extends PeachBaseActivity {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
                             ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为我的Memo");
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
@@ -520,6 +525,7 @@ public class StrategyActivity extends PeachBaseActivity {
 //                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
                             finish();
                         } else {
+                            if (!isFinishing())
                             ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
                         }
                     }
@@ -528,6 +534,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
 //                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                        if (!isFinishing())
                         ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

@@ -51,7 +51,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     public void onDestAdded(final LocBean locBean) {
         if(allAddCityList.contains(locBean)){
-            ToastUtil.getInstance(mContext).showToast("已添加该景点");
+            ToastUtil.getInstance(mContext).showToast("已添加");
             return;
         }
         View cityView = View.inflate(mContext, R.layout.dest_add_item, null);

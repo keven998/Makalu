@@ -327,6 +327,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     });
 
 				} catch (final Exception e) {
+                    if (!isFinishing())
 					runOnUiThread(new Runnable() {
 						public void run() {
                             dialog.dismiss();
@@ -357,6 +358,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 						}
 					});
 				} catch (final Exception e) {
+                    if (!isFinishing())
 					runOnUiThread(new Runnable() {
 						public void run() {
                             dialog.dismiss();
@@ -393,6 +395,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 						}
 					});
 				} catch (final Exception e) {
+                    if (!isFinishing())
 					runOnUiThread(new Runnable() {
 						public void run() {
                             DialogManager.getInstance().dissMissLoadingDialog();

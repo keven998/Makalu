@@ -278,6 +278,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
+                if (!isFinishing())
                 ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -398,6 +399,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                             mStrategyListAdapter.notifyDataSetChanged();
                                             cachePage();
                                         } else {
+                                            if (!isFinishing())
                                             ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
 
@@ -406,6 +408,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                     @Override
                                     public void doFailure(Exception error, String msg, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
+                                        if (!isFinishing())
                                         ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                     }
                                 });
@@ -462,6 +465,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                 }
                             } else {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
+                                if (!isFinishing())
                                 ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                             }
                         }
@@ -469,6 +473,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
                             ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

@@ -99,6 +99,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                if (!isFinishing())
                 ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -153,7 +154,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            if (!isFinishing())
+                                ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
                 } else {

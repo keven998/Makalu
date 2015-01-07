@@ -428,6 +428,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
+                    if (!isFinishing())
                     ToastUtil.getInstance(ChatActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });
@@ -1422,7 +1423,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		}
 		if (file.length() > 10 * 1024 * 1024) {
 //			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(getApplicationContext()).showToast("文件太大太大了");
+            ToastUtil.getInstance(getApplicationContext()).showToast("文件太太太大了");
 			return;
 		}
 
@@ -1737,6 +1738,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 					} catch (Exception e) {
 						e.printStackTrace();
 //						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();
+                        if (!isFinishing())
                         ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
 					}
 
@@ -1900,10 +1902,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		try {
 			EMContactManager.getInstance().addUserToBlackList(username, true);
 //			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(this).showToast("OK～成功移除桃友");
+            if (!isFinishing())
+            ToastUtil.getInstance(this).showToast("成功删除她");
 		} catch (EaseMobException e) {
 			e.printStackTrace();
 //			Toast.makeText(getApplicationContext(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
+            if (!isFinishing())
             ToastUtil.getInstance(this).showToast("呃～好像找不到网络");
 		}
 	}

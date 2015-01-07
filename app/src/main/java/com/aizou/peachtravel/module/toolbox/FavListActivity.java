@@ -211,6 +211,7 @@ public class FavListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 mFavLv.onPullUpRefreshComplete();
                 mFavLv.onPullDownRefreshComplete();
+                if (!isFinishing())
                 ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -463,6 +464,7 @@ public class FavListActivity extends PeachBaseActivity {
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
                             ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

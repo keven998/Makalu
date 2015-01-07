@@ -127,6 +127,7 @@ public class DiagnoseActivity extends ChatBaseActivity implements OnClickListene
 			@Override
 			public void onError(int code, String message) {
 				EMLog.e("###", message);
+                if (!isFinishing())
 				runOnUiThread(new Runnable() {
 
 					@Override

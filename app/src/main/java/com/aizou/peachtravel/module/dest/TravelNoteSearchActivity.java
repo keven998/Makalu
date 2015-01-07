@@ -131,6 +131,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 mSearchTravelNoteLv.onPullUpRefreshComplete();
                 mSearchTravelNoteLv.onPullDownRefreshComplete();
+                if (!isFinishing())
                 ToastUtil.getInstance(TravelNoteSearchActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -149,7 +150,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mSearchTravelNoteLv.setHasMoreData(false);
             if (mPage == 0) {
-                ToastUtil.getInstance(this).showToast("啥都没找到");
+                ToastUtil.getInstance(this).showToast("没找到相关游记");
             } else {
                 ToastUtil.getInstance(this).showToast("已列出全部");
             }

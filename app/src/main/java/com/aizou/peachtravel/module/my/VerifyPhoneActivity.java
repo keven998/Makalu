@@ -152,6 +152,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
                         ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

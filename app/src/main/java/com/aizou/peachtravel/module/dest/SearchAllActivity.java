@@ -105,7 +105,9 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
 

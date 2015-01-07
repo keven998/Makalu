@@ -112,6 +112,7 @@ public class NewGroupActivity extends ChatBaseActivity {
 							}
 						});
 					} catch (final Exception e) {
+                        if (!isFinishing())
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();

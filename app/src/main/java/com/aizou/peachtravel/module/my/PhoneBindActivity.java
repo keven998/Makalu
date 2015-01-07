@@ -172,6 +172,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
                         ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

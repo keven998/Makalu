@@ -96,9 +96,11 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                mMoreTravelNoteLv.onPullUpRefreshComplete();
-                mMoreTravelNoteLv.onPullDownRefreshComplete();
-                ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    mMoreTravelNoteLv.onPullUpRefreshComplete();
+                    mMoreTravelNoteLv.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
 
@@ -108,9 +110,13 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mMoreTravelNoteLv.setHasMoreData(false);
             if (mPage == 0) {
-                ToastUtil.getInstance(this).showToast("好像没找到收藏");
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(this).showToast("好像没找到收藏");
+                }
             } else {
-                ToastUtil.getInstance(this).showToast("已取完全部收藏啦");
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(this).showToast("已取完全部收藏啦");
+                }
             }
             return;
         } else {

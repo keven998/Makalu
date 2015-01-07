@@ -132,7 +132,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
 
@@ -208,14 +210,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
                                 poiDetailBean.isFavorite =true;
                                 refreshFav(poiDetailBean);
                             } else {
-                                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                                if (!isFinishing()) {
+                                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                                }
                             }
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            if (!isFinishing()) {
+                                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            }
                         }
                     });
                 }
