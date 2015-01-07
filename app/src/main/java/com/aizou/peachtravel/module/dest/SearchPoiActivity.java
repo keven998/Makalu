@@ -113,6 +113,11 @@ public class SearchPoiActivity extends PeachBaseActivity {
                 hasAddList.remove(poi);
 
             }
+
+            @Override
+            public void onPoiNavi(PoiDetailBean poi) {
+
+            }
         });
         mLvPoiList.getRefreshableView().setAdapter(mPoiAdapter);
 //        getPoiListByLoc(mType, curLoc.id, 0);

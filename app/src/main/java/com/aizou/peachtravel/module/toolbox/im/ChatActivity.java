@@ -1596,7 +1596,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                             imUser.setNick(user.nickName);
                             imUser.setAvatar(user.avatar);
                         }else{
-
+                            imUser = new IMUser();
                             imUser.setUsername(finalUsername);
                             imUser.setNick(user.nickName);
                             imUser.setUserId(user.userId);

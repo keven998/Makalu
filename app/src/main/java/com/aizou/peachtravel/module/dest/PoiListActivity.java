@@ -124,6 +124,11 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onPoiRemoved(PoiDetailBean poi) {
                 hasAddList.remove(poi);
             }
+
+            @Override
+            public void onPoiNavi(PoiDetailBean poi) {
+
+            }
         });
         mPoiListLv.getRefreshableView().setAdapter(mPoiAdapter);
         List<String> cityStrList = new ArrayList<String>();

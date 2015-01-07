@@ -87,6 +87,11 @@ public class AddPoiActivity extends PeachBaseActivity {
                 hasAddList.remove(poi);
 
             }
+
+            @Override
+            public void onPoiNavi(PoiDetailBean poi) {
+
+            }
         });
         mLvPoiList.getRefreshableView().setAdapter(mPoiAdapter);
         mLvPoiList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {

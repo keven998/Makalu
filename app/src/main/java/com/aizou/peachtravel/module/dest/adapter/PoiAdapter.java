@@ -20,6 +20,7 @@ import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.MapUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -171,7 +172,9 @@ public class PoiAdapter extends BaseAdapter {
                 ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //TODO
+                        if (mOnPoiActionListener != null) {
+                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
+                        }
                     }
                 });
             }
@@ -226,6 +229,9 @@ public class PoiAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View view) {
                         //TODO
+                        if (mOnPoiActionListener != null) {
+                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
+                        }
                     }
                 });
             }
@@ -314,6 +320,7 @@ public class PoiAdapter extends BaseAdapter {
     public interface  OnPoiActionListener{
         void onPoiAdded(PoiDetailBean poi);
         void onPoiRemoved(PoiDetailBean poi);
+        void onPoiNavi(PoiDetailBean poi);
 
     }
 }

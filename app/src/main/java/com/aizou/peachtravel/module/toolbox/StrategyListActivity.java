@@ -241,7 +241,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
-                PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                if(sb!=null){
+                    PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                }
+
             }
         }
     }

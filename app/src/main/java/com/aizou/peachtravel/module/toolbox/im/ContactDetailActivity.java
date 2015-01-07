@@ -164,7 +164,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         } else if (imUser.getGender().equalsIgnoreCase("F")) {
             genderIv.setImageResource(R.drawable.ic_gender_lady);
         } else {
-            genderIv.setImageResource(R.drawable.avatar_placeholder);
+            genderIv.setImageDrawable(null);
         }
 
         nickNameTv.setText("昵称：" + imUser.getNick());

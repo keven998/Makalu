@@ -20,6 +20,7 @@ import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.MapUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
 
@@ -58,6 +59,22 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         listView.setPullRefreshEnabled(false);
         listView.setScrollLoadEnabled(false);
         poiAdapter = new PoiAdapter(getActivity(), false);
+        poiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
+            @Override
+            public void onPoiAdded(PoiDetailBean poi) {
+
+            }
+
+            @Override
+            public void onPoiRemoved(PoiDetailBean poi) {
+
+            }
+
+            @Override
+            public void onPoiNavi(PoiDetailBean poi) {
+                MapUtils.showSelectMapDialog(getActivity(),mLat,mLng,"我的位置",poi.location.coordinates[1],poi.location.coordinates[0],poi.zhName);
+            }
+        });
         listView.getRefreshableView().setAdapter(poiAdapter);
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -151,6 +168,22 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         }
         if (mPage == 0) {
             poiAdapter = new PoiAdapter(getActivity(), false);
+            poiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
+                @Override
+                public void onPoiAdded(PoiDetailBean poi) {
+
+                }
+
+                @Override
+                public void onPoiRemoved(PoiDetailBean poi) {
+
+                }
+
+                @Override
+                public void onPoiNavi(PoiDetailBean poi) {
+                    MapUtils.showSelectMapDialog(getActivity(),mLat,mLng,"我的位置",poi.location.coordinates[1],poi.location.coordinates[0],poi.zhName);
+                }
+            });
             mPoiList.clear();
             mListView.getRefreshableView().setAdapter(poiAdapter);
         }
