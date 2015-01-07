@@ -30,7 +30,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 	private ViewPagerAdapter vpAdapter;
 	private List<View> views;
 	private String type;
-    private DotView dotView;
+//    private DotView dotView;
 
 	// 底部小店图片
 	private ImageView[] dots;
@@ -89,18 +89,18 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
             vp.setPageTransformer(true, new ZoomOutPageTransformer());
         }
 		// 初始化底部小点
-		initDots();
+//		initDots();
 
 	}
 
 
-	private void initDots() {
-        dotView = (DotView) findViewById(R.id.dot_view);
-        dotView.setNum(views.size());
-
-		currentIndex = 0;
-		dotView.setSelected(currentIndex);
-	}
+//	private void initDots() {
+//        dotView = (DotView) findViewById(R.id.dot_view);
+//        dotView.setNum(views.size());
+//
+//		currentIndex = 0;
+//		dotView.setSelected(currentIndex);
+//	}
 
 
 	boolean isScrolling;
@@ -150,7 +150,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 	public void onPageSelected(int arg0) {
 		// 设置底部小点选中状态
         currentIndex=arg0;
-		dotView.setSelected(arg0);
+//		dotView.setSelected(arg0);
         if(arg0==0){
             ImageView earthIv = (ImageView) views.get(arg0).findViewById(R.id.iv_guide_earth);
             Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);

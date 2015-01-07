@@ -199,7 +199,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         intent.setAction(Intent.ACTION_SENDTO);
                         //需要发短息的号码
                         intent.setData(Uri.parse("smsto:" + itemData.tel));
-                        intent.putExtra("sms_body", String.format("Hi, 我是桃友%s", AccountManager.getInstance().getLoginAccount(AddPhoneContactActivity.this).nickName));
+                        intent.putExtra("sms_body", String.format("我正在用桃子旅行，有些旅行相关的事儿想跟你八八。桃子旅行搜索：%s 加我", AccountManager.getInstance().getLoginAccount(AddPhoneContactActivity.this).nickName));
                         startActivity(intent);
                     }
                 });

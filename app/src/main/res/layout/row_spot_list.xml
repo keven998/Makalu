@@ -17,6 +17,7 @@
             android:layout_height="56dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="10dp"
+            android:background="@drawable/bg_common_default"
             android:layout_marginLeft="10dp"/>
 
         <FrameLayout android:id="@+id/action_frame"

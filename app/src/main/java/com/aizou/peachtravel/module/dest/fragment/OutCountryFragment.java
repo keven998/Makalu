@@ -163,8 +163,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
-                    .showImageForEmptyUri(R.drawable.ic_launcher)
-                    .showImageOnFail(R.drawable.ic_launcher)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
 //				.decodingOptions(D)

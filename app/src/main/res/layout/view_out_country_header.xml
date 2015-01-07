@@ -7,6 +7,7 @@
     <ImageView android:id="@+id/iv_country"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
+        android:background="@drawable/bg_common_default"
         android:scaleType="centerCrop"/>
 
     <TextView

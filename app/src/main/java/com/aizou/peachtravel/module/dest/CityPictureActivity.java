@@ -26,7 +26,6 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -129,6 +128,7 @@ public class CityPictureActivity extends PeachBaseActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ImageBean itemData = imageBeanList.get(position);
             ImageView picIv = new ImageView(mContext);
+            picIv.setBackgroundResource(R.drawable.bg_common_default);
             picIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(40))/3;
             int height = width;

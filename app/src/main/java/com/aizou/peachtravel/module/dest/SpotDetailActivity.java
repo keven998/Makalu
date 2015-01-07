@@ -293,6 +293,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         public View getView(final int position, View view, ViewGroup container) {
                 ImageView imageView = new ImageView(context);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setBackgroundResource(R.drawable.bg_common_default);
                imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override

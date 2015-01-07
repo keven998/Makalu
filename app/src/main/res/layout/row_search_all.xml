@@ -18,6 +18,7 @@
                 android:layout_marginRight="13dp"
                 android:layout_marginLeft="5dp"
                 android:paddingTop="2dp"
+                android:background="@drawable/bg_common_default"
                 android:paddingBottom="2dp"
                 android:scaleType="centerCrop"/>
 

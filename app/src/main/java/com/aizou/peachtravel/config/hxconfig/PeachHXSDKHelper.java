@@ -176,6 +176,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                     // 设置相应status
                     msg.setStatus(InviteStatus.BEINVITEED);
                     msg.setNickname(invateBean.nickName);
+                    msg.setAvatar(invateBean.avatar);
                     msg.setUserId(invateBean.userId);
                     msg.setGender(invateBean.gender);
                     // 保存msg

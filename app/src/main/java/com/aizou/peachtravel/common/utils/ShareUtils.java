@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -134,7 +135,7 @@ public class ShareUtils {
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    public static void shareAppToWx(final Activity act) {
+    public static void shareAppToWx(final Activity act,String content) {
         final UMSocialService mController = UMServiceFactory
                 .getUMSocialService("com.umeng.share");
         // 设置分享内容
@@ -142,7 +143,12 @@ public class ShareUtils {
         UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
-        circleMedia.setShareContent("给你推荐个桃子旅行，专为美女们旅行服务的贴心小助手：http://****");
+        if(TextUtils.isEmpty(content)){
+            circleMedia.setShareContent("给你推荐个桃子旅行，专为美女们旅行服务的贴心小助手：http://****");
+        }else{
+            circleMedia.setShareContent(content);
+        }
+
         circleMedia.setTargetUrl("");
         mController.setShareMedia(circleMedia);
         mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {

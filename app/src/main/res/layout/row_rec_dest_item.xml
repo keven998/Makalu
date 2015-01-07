@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/bg_rec_destl"
+        android:background="@drawable/bg_common_default"
         android:foreground="@drawable/ic_text_cover_bg">
 
         <ImageView
