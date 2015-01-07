@@ -122,7 +122,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }
@@ -205,7 +207,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            if (!isFinishing()) {
+                                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            }
                         }
                     });
                 } else {

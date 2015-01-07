@@ -158,9 +158,11 @@ public class SearchTypeActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                mSearchTypeLv.onPullUpRefreshComplete();
-                mSearchTypeLv.onPullDownRefreshComplete();
-                ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    if (!isFinishing()) {
+                        mSearchTypeLv.onPullUpRefreshComplete();
+                        mSearchTypeLv.onPullDownRefreshComplete();
+                        ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
             }
         });
 

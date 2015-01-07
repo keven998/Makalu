@@ -939,6 +939,7 @@ public class MessageAdapter extends BaseAdapter {
 //                                    Toast.makeText(activity,
 //                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                                            .show();
+                                    if (activity != null && !activity.isFinishing())
                                     ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
@@ -1066,6 +1067,7 @@ public class MessageAdapter extends BaseAdapter {
 //                                    Toast.makeText(activity,
 //                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                                            .show();
+                                    if (activity != null && !activity.isFinishing())
                                     ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
@@ -1516,6 +1518,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.staus_iv.setVisibility(View.VISIBLE);
 //                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                            .show();
+                    if (activity != null && !activity.isFinishing())
                     ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                 }
 

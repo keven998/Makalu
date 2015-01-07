@@ -90,6 +90,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                if (!isFinishing())
                 ToastUtil.getInstance(ContactDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -235,6 +236,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                         dismiss();
                         getActivity().finish();
                     }else if(!TextUtils.isEmpty(deleteResult.err.message)){
+                        if (isAdded())
                         ToastUtil.getInstance(getActivity()).showToast(deleteResult.err.message);
                     }
 
@@ -243,6 +245,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
+                    if (isAdded())
                     ToastUtil.getInstance(getActivity()).showToast("删除失败");
                 }
             });

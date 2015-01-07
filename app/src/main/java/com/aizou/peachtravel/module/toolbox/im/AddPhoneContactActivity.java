@@ -160,8 +160,9 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       if(itemData.userId==AccountManager.getInstance().getLoginAccount(mContext).userId){
-                            ToastUtil.getInstance(mContext).showToast("");
+                       if(itemData.userId == AccountManager.getInstance().getLoginAccount(mContext).userId){
+                            ToastUtil.getInstance(mContext).showToast("那是自己");
+                           return;
                        }
                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
                        UserApi.getUserInfo(itemData.userId+"",new HttpCallBack<String>() {
@@ -182,6 +183,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                            @Override
                            public void doFailure(Exception error, String msg, String method) {
                                DialogManager.getInstance().dissMissLoadingDialog();
+                               if (!isFinishing())
                                ToastUtil.getInstance(mContext).showToast("获取用户信息失败");
                            }
                        });

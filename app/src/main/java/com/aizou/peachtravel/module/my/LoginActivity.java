@@ -213,6 +213,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
+                            if (!isFinishing())
                             ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
@@ -279,6 +280,7 @@ public class LoginActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
 
                 DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
                 ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
 
             }

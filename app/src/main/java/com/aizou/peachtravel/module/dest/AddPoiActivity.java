@@ -200,7 +200,9 @@ public class AddPoiActivity extends PeachBaseActivity {
                     curPage = page;
                     bindView(poiListResult.result);
                 } else {
-                    ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                    }
                 }
 //                if (curPage == 0) {
 //                    mLvPoiList.onPullUpRefreshComplete();
@@ -215,7 +217,9 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }

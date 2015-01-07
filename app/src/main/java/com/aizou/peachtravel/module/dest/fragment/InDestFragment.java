@@ -101,7 +101,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                if (isAdded()) {
+                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }

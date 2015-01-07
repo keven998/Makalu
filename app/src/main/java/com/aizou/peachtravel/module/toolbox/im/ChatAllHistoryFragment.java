@@ -98,7 +98,7 @@ public class ChatAllHistoryFragment extends Fragment {
                 String username = conversation.getUserName();
                 if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
-                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持自己一个人聊啦");
+                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);

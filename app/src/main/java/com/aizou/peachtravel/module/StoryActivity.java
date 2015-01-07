@@ -92,7 +92,9 @@ public class StoryActivity extends SwipeBackActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                ToastUtil.getInstance(StoryActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(StoryActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }

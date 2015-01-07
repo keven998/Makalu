@@ -68,6 +68,7 @@ public class ShowNormalFileActivity extends ChatBaseActivity {
 							
 							@Override
 							public void onError(final String msg) {
+                                if (!isFinishing())
 								runOnUiThread(new Runnable() {
 									public void run() {
 										if(file != null && file.exists())

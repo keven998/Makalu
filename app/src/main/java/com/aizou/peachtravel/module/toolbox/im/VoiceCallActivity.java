@@ -140,6 +140,7 @@ public class VoiceCallActivity extends ChatBaseActivity implements OnClickListen
 					EMChatManager.getInstance().makeVoiceCall(username);
 				} catch (EMServiceNotReadyException e) {
 					e.printStackTrace();
+                    if (!isFinishing())
 					runOnUiThread(new Runnable() {
 						public void run() {
 //							Toast.makeText(VoiceCallActivity.this, "尚未连接至服务器", Toast.LENGTH_SHORT);

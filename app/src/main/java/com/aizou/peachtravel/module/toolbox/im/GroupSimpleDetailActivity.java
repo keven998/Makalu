@@ -76,6 +76,7 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 					});
 				} catch (final EaseMobException e) {
 					e.printStackTrace();
+                    if (!isFinishing())
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressBar.setVisibility(View.INVISIBLE);
@@ -110,7 +111,7 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 							pd.dismiss();
 							if(group.isMembersOnly()) {
 //                                Toast.makeText(GroupSimpleDetailActivity.this, "发送请求成功，等待群主同意", Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等候桃主通过");
+                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等候群主通过");
                             } else {
 //                                Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊成功", Toast.LENGTH_SHORT).show();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("成功加入");
@@ -124,6 +125,7 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 						public void run() {
 							pd.dismiss();
 //							Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊失败："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!isFinishing())
                             ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
 						}
 					});

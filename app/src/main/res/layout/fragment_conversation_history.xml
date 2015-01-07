@@ -48,8 +48,8 @@
             android:gravity="center"
             android:text="聊旅行\n还有比Talk更方便的么"
             android:textColor="@color/base_text_color_text_hint"
-            android:lineSpacingExtra="2dp"
-            android:textSize="13sp" />
+            android:lineSpacingExtra="3dp"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

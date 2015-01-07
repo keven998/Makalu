@@ -141,6 +141,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         Log.e("http", "error = " + msg);
+                        if (!isFinishing())
                         ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

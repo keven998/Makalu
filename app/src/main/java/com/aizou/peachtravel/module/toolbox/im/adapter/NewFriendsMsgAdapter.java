@@ -187,6 +187,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                if (!((Activity) context).isFinishing())
                 ToastUtil.getInstance(getContext()).showToast(getContext().getString(R.string.request_network_failed));
             }
         });

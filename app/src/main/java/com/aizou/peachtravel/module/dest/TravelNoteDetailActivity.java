@@ -113,8 +113,10 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-                    ct.setChecked(isFav);
-                    ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    if (!isFinishing()) {
+                        ct.setChecked(isFav);
+                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
                 }
             });
         } else {
@@ -133,8 +135,10 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-                    ct.setChecked(isFav);
-                    ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    if (!isFinishing()) {
+                        ct.setChecked(isFav);
+                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
                 }
             });
         }
@@ -181,6 +185,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                                 dismiss();
                                 ToastUtil.getInstance(getActivity()).showToast("收藏成功");
                             } else {
+                                if (isAdded())
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
                             }
 
@@ -189,6 +194,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            if (isAdded())
                             ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

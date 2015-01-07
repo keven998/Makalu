@@ -143,9 +143,11 @@ public class SearchDestActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                mSearchResultLv.onPullUpRefreshComplete();
-                mSearchResultLv.onPullDownRefreshComplete();
-                ToastUtil.getInstance(SearchDestActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                if (!isFinishing()) {
+                    mSearchResultLv.onPullUpRefreshComplete();
+                    mSearchResultLv.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(SearchDestActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }
@@ -163,9 +165,13 @@ public class SearchDestActivity extends PeachBaseActivity {
         if (result == null || result.size() == 0) {
             mSearchResultLv.setHasMoreData(false);
             if (curPage == 0) {
-                ToastUtil.getInstance(this).showToast("好像没找到啥");
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(this).showToast("什么都没找到");
+                }
             } else {
-                ToastUtil.getInstance(this).showToast("已列出全部了");
+                if (!isFinishing()) {
+                    ToastUtil.getInstance(this).showToast("已列出全部了");
+                }
             }
         } else {
             mSearchResultLv.setHasMoreData(true);

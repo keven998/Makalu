@@ -146,9 +146,12 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                mListView.onPullUpRefreshComplete();
-                mListView.onPullDownRefreshComplete();
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                if (isAdded()) {
+                    mListView.onPullUpRefreshComplete();
+                    mListView.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+
+                }
             }
         });
 
