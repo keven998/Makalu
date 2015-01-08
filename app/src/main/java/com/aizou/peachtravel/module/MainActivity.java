@@ -180,8 +180,8 @@ public class MainActivity extends PeachBaseActivity {
             if(toolboxFragment!=null){
                 toolboxFragment.updateUnreadLabel();
             }
-            // 提示有新消息
-            EMNotifier.getInstance(mContext).notifyOnNewMsg();
+//            // 提示有新消息
+//            EMNotifier.getInstance(mContext).notifyOnNewMsg();
             // 注销广播，否则在ChatActivity中会收到这个广播
             abortBroadcast();
         }

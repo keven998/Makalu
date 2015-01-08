@@ -213,7 +213,7 @@ public class TravelApi extends BaseApi{
      * @return
      */
     public static PTRequestHandler createGuide
-            (List<String> locList, HttpCallBack callback) {
+            (List<String> locList,boolean recommend, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + CREATE_GUIDE);
@@ -226,6 +226,11 @@ public class TravelApi extends BaseApi{
                 jsonArray.put(locId);
             }
             jsonObject.put("locId", jsonArray);
+            if(recommend){
+                jsonObject.put("action","recommend");
+            }else{
+                jsonObject.put("action","");
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

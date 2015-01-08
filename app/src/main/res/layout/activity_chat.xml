@@ -57,7 +57,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/chat_press_speak_btn"
                 android:gravity="center"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/editor_with_border"
                 android:gravity="center"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_weight="1"
                 >
 
@@ -343,7 +343,7 @@
     <RelativeLayout
         android:id="@+id/ll_group_members"
         android:layout_width="fill_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:padding="10dp"
         android:background="#eeffffff"
         android:orientation="vertical"
@@ -390,6 +390,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:scaleType="centerInside"
+            android:visibility="gone"
 
             />
 

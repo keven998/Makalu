@@ -83,9 +83,6 @@ public class PreferenceUtils {
 		editor.commit();
 	}
 
-	public boolean getSettingMsgSpeaker() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
-	}
 
     public static String getCacheData(Context context, String key) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(key, null);

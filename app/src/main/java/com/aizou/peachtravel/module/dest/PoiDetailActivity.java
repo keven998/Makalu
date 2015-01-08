@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -148,7 +149,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    private void bindView(PoiDetailBean bean) {
+    private void bindView(final PoiDetailBean bean) {
         if (bean.images != null && bean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
@@ -158,6 +159,16 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mPoiStar.setRating(bean.getRating());
         mTvTel.setText("电话:" + bean.telephone);
         mTvAddr.setText(bean.address);
+        mTvAddr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bean.location!=null&&bean.location.coordinates!=null){
+                    Uri mUri = Uri.parse("geo:"+bean.location.coordinates[1]+","+bean.location.coordinates[0]+"?q="+bean.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+                    startActivity(mIntent);
+                }
+            }
+        });
         refreshFav(bean);
         mTitleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
