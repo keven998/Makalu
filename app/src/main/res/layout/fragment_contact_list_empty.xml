@@ -21,7 +21,7 @@
         android:layout_marginLeft="50dp"
         android:textSize="13sp"
         android:textColor="@color/base_text_color_text_hint"
-        android:text="快邀爱旅行的蜜蜜们加入Talk成为桃友吧~"/>
+        android:text="爱旅行的蜜蜜们之间的专属小天地~"/>
 
     <ImageView
         android:layout_width="wrap_content"
