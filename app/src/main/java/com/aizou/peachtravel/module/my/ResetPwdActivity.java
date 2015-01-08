@@ -57,12 +57,14 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> resetResult = CommonJson.fromJson(result, ModifyResult.class);
+                            CommonJson<PeachUser> resetResult = CommonJson.fromJson(result, PeachUser.class);
                             if(resetResult.code == 0){
 //                                AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                Intent intent = new Intent(mContext, LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
+                                ToastUtil.getInstance(mContext).showToast("设置成功");
+                                Intent intent = new Intent();
+                                intent.putExtra("user",resetResult.result);
+                                setResult(RESULT_OK,intent);
+                                finish();
                             } else {
                                 ToastUtil.getInstance(mContext).showToast(resetResult.err.message);
                             }

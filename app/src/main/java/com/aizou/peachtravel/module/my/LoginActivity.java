@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.my;
 
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -59,11 +61,17 @@ public class LoginActivity extends PeachBaseActivity {
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleBar;
     public JSONObject uploadJson;
+    private int request_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        request_code=getIntent().getIntExtra("request_code",0);
+        if(request_code==REQUEST_CODE_REG){
+            Intent intent = new Intent(mContext, RegActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_REG);
+        }
     }
 
     private void initView() {
@@ -73,7 +81,6 @@ public class LoginActivity extends PeachBaseActivity {
         findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 weixinLogin();
 //                UserApi.authSignUp("123456",new HttpCallBack() {
 //                    @Override
@@ -290,14 +297,15 @@ public class LoginActivity extends PeachBaseActivity {
 
     public void weixinLogin() {
         ShareUtils.configPlatforms(this);
+        final CustomLoadingDialog dialog =DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
         WeixinApi.getInstance().auth(this, new WeixinApi.WeixinAuthListener() {
             @Override
             public void onComplete(String code) {
                 ToastUtil.getInstance(mContext).showToast("授权成功");
+                dialog.setContent("正在登录");
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";
@@ -311,6 +319,7 @@ public class LoginActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
@@ -344,14 +353,19 @@ public class LoginActivity extends PeachBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_REG) {
+        if (requestCode == REQUEST_CODE_REG) {
+            if(resultCode==RESULT_OK){
+                PeachUser user = (PeachUser) data.getSerializableExtra("user");
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+                imLogin(user);
+            }else if(request_code==REQUEST_CODE_REG){
+                finish();
+            }
+
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
             DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
             imLogin(user);
-        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
-//            PeachUser user = (PeachUser) data.getSerializableExtra("user");
-//            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
-//            imLogin(user);
         }
     }
 

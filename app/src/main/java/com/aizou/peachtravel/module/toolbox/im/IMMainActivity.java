@@ -48,6 +48,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
@@ -416,9 +417,13 @@ public class IMMainActivity extends ChatBaseActivity {
      */
     public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
-        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null)
+        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null){
+            IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
+            imUser.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(this));
+            IMUserRepository.saveContact(this,imUser);
             unreadAddressCountTotal = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME)
-                    .getUnreadMsgCount();
+            .getUnreadMsgCount();
+        }
         return unreadAddressCountTotal;
     }
 

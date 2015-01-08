@@ -69,9 +69,6 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
 	    adapter = new NewFriendsMsgAdapter(this, 1, msgs);
 		listView.setAdapter(adapter);
         registerForContextMenu(listView);
-        IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
-        imUser.setUnreadMsgCount(0);
-        IMUserRepository.saveContact(this,imUser);
 
 	}
 
