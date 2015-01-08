@@ -283,6 +283,7 @@ public class IMMainActivity extends ChatBaseActivity {
                     newFriends.setNick("桃友申请");
                     newFriends.setHeader("");
                     newFriends.setIsMyFriends(true);
+                    newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
                     userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 //                    // 添加"群聊"
 //                    IMUser groupUser = new IMUser();
@@ -417,12 +418,12 @@ public class IMMainActivity extends ChatBaseActivity {
      */
     public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
+        unreadAddressCountTotal= (int) InviteMsgRepository.getUnAcceptMsgCount(this);
         if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null){
+
             IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
-            imUser.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(this));
+            imUser.setUnreadMsgCount(unreadAddressCountTotal);
             IMUserRepository.saveContact(this,imUser);
-            unreadAddressCountTotal = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME)
-            .getUnreadMsgCount();
         }
         return unreadAddressCountTotal;
     }
