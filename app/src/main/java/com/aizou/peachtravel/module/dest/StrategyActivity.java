@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -138,7 +139,31 @@ public class StrategyActivity extends PeachBaseActivity {
             //test
 //            cityIdList.add("5473ccd7b8ce043a64108c46");
 //            cityIdList.add("5473ccddb8ce043a64108d22");
-            createStrategyByCityIds(cityIdList);
+            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            dialog.setTitle("提示");
+            dialog.setMessage("是否需要为你推荐行程模版，制作memo更简单");
+            dialog.setNegativeButton("不，谢谢",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    createStrategyByCityIds(cityIdList,false);
+                }
+            });
+            dialog.setPositiveButton("为我推荐",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    createStrategyByCityIds(cityIdList,true);
+                }
+            });
+            dialog.show();
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    createStrategyByCityIds(cityIdList,false);
+                }
+            });
+
         } else {
             setupViewFromCache(id);
             getStrategyDataById(id);
@@ -177,10 +202,12 @@ public class StrategyActivity extends PeachBaseActivity {
         });
     }
 
-    public void createStrategyByCityIds(List<String> cityIds) {
-        TravelApi.createGuide(cityIds, new HttpCallBack<String>() {
+    public void createStrategyByCityIds(List<String> cityIds,boolean recommend) {
+        DialogManager.getInstance().showLoadingDialog(mContext,"请稍后");
+        TravelApi.createGuide(cityIds,recommend, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
 //                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
@@ -199,6 +226,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }

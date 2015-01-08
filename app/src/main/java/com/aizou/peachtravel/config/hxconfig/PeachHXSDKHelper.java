@@ -18,6 +18,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.text.TextUtils;
 
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
@@ -25,10 +26,12 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CmdAgreeBean;
 import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.CmdInvateBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.hxsdk.controller.HXSDKHelper;
 import com.aizou.peachtravel.common.hxsdk.model.HXSDKModel;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
@@ -42,6 +45,7 @@ import com.easemob.EMCallBack;
 
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMNotifier;
@@ -49,7 +53,9 @@ import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -63,42 +69,51 @@ public class PeachHXSDKHelper extends HXSDKHelper {
     protected void initHXOptions(){
         super.initHXOptions();
         // you can also get EMChatOptions to set related SDK options
-        // EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        PeachUser user = AccountManager.getInstance().getLoginAccount(appContext);
+        if(user!=null){
+            String data= PreferenceUtils.getCacheData(appContext, String.format("%s_not_notify",user.userId ));
+            if(!TextUtils.isEmpty(data)){
+                List<String> notNotifyList = GsonTools.parseJsonToBean(data,new TypeToken<List<String>>(){});
+                options.setReceiveNotNoifyGroup(notNotifyList);
+            }
+        }
+
     }
 
     @Override
     protected OnMessageNotifyListener getMessageNotifyListener(){
         // 取消注释，app在后台，有新消息来时，状态栏的消息提示换成自己写的
-        return null;
-//      return new OnMessageNotifyListener() {
-//
-//          @Override
-//          public String onNewMessageNotify(EMMessage message) {
-//              // 设置状态栏的消息提示，可以根据message的类型做相应提示
+//        return null;
+      return new OnMessageNotifyListener() {
+
+          @Override
+          public String onNewMessageNotify(EMMessage message) {
+              // 设置状态栏的消息提示，可以根据message的类型做相应提示
 //              String ticker = IMUtils.getMessageDigest(message, appContext);
-//              if(message.getType() == Type.TXT)
+//              if(message.getType() == EMMessage.Type.TXT)
 //                  ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
-//              return message.getFrom() + ": " + ticker;
-//          }
-//
-//          @Override
-//          public String onLatestMessageNotify(EMMessage message, int fromUsersNum, int messageNum) {
-//              return null;
-//             // return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
-//          }
-//
-//          @Override
-//          public String onSetNotificationTitle(EMMessage message) {
-//              //修改标题,这里使用默认
-//              return null;
-//          }
-//
-//          @Override
-//          public int onSetSmallIcon(EMMessage message) {
-//              //设置小图标
-//              return 0;
-//          }
-//      };
+              return "收到一条新消息";
+          }
+
+          @Override
+          public String onLatestMessageNotify(EMMessage message, int fromUsersNum, int messageNum) {
+              return null;
+//             return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
+          }
+
+          @Override
+          public String onSetNotificationTitle(EMMessage message) {
+              //修改标题,这里使用默认
+              return null;
+          }
+
+          @Override
+          public int onSetSmallIcon(EMMessage message) {
+              //设置小图标
+              return 0;
+          }
+      };
     }
     
     @Override

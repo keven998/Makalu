@@ -26,6 +26,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.easemob.chat.EMChatDB;
 import com.easemob.chat.EMChatManager;
@@ -161,18 +162,20 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			// for sent msg, we will try to play the voice file directly
 			playVoice(voiceBody.getLocalUrl());
 		} else {
-			if(message.status==EMMessage.Status.SUCCESS)
-			{
+            LogUtil.d("voiceFile",message.status.toString());
+			if(message.status==EMMessage.Status.SUCCESS){
 				File file = new File(voiceBody.getLocalUrl());
-				if (file.exists() && file.isFile())
-					playVoice(voiceBody.getLocalUrl());
-				else
-					System.err.println("file not exist");
-				
+				if (file.exists() && file.isFile()){
+                    LogUtil.d("voiceFile","playVoice");
+                    playVoice(voiceBody.getLocalUrl());
+                }else{
+                    LogUtil.d("voiceFile","file not exist");
+                }
+
 			}else if(message.status==EMMessage.Status.INPROGRESS)
 			{
 				Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
-			}else if(message.status==EMMessage.Status.FAIL)
+			}else if(message.status==EMMessage.Status.FAIL||message.status==EMMessage.Status.CREATE)
 			{
 				Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
 				new AsyncTask<Void, Void, Void>() {
