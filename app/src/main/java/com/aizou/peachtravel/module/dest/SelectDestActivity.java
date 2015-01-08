@@ -168,7 +168,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             }
         });
         titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.getTitleTextView().setText("选择想去的城市");
+        titleHeaderBar.getTitleTextView().setText("选择目的地");
     }
 
     private void initData() {
