@@ -538,7 +538,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
-        messageDialog.setMessage("是否先保存已完成的清单");
+        messageDialog.setMessage("Memo已编辑，是否保存");
         messageDialog.setPositiveButton("保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
