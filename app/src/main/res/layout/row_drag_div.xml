@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:background="@color/base_border_color" />
+                android:background="@color/app_theme_color" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/base_border_color" />
+                android:background="@color/app_theme_color" />
 
         </FrameLayout>
 

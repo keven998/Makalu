@@ -165,7 +165,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,CityPictureActivity.class);
-                intent.putExtra("id",locDetailBean.id);
+                intent.putExtra("id", locDetailBean.id);
                 startActivity(intent);
 
             }
@@ -195,7 +195,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         @Override
                         public void doSucess(String result, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if(deleteResult.code==0){
                                 detailBean.isFavorite =false;
                                 refreshFav(detailBean);
@@ -222,7 +222,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                                 detailBean.isFavorite =true;
                                 refreshFav(detailBean);
                             }
-
                         }
 
                         @Override
@@ -243,7 +242,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         travelTv.setOnClickListener(this);
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
-
     }
 
     public void intentToTravel(View view){
@@ -267,6 +265,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //          startActivity(intent);
         //todo:跳转美食
     }
+
     public void intentToShopping(View view){
         //todo:跳转购物
         Intent intent = new Intent(mContext, PoiListActivity.class);
@@ -284,9 +283,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             case R.id.tv_travel:
                 intentToTravel(v);
                 break;
+
             case R.id.tv_restaurant:
                 intentToFood(v);
                 break;
+
             case R.id.tv_shopping:
                 intentToShopping(v);
                 break;
