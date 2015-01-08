@@ -40,8 +40,6 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
         findViewById(R.id.btn_ok).setOnClickListener(this);
         mToken = getIntent().getStringExtra("token");
         mPhone = getIntent().getStringExtra("phone");
-        user = AccountManager.getInstance().getLoginAccount(this);
-
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("设置新密码");
         titleBar.enableBackKey(true);
@@ -61,7 +59,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> resetResult = CommonJson.fromJson(result, ModifyResult.class);
                             if(resetResult.code == 0){
-                                AccountManager.getInstance().saveLoginAccount(mContext, user);
+//                                AccountManager.getInstance().saveLoginAccount(mContext, user);
                                 Intent intent = new Intent(mContext, LoginActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);

@@ -165,6 +165,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
     }
 
+
     private void initData() {
         dayIndex = getIntent().getIntExtra("dayIndex", -1);
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
