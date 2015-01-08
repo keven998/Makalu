@@ -201,7 +201,9 @@ public class RouteDayFragment extends PeachBaseFragment {
             });
             int count = adapter.getCount();
             if (count == 0) {
-                mEditBtn.performClick();
+                if (!mEditBtn.isChecked()) {
+                    mEditBtn.performClick();
+                }
             } else {
                 boolean ed = true;
                 for (int i = 0; i < count; i++) {
@@ -211,7 +213,9 @@ public class RouteDayFragment extends PeachBaseFragment {
                     }
                 }
                 if (ed) {
-                    mEditBtn.performClick();
+                    if (!mEditBtn.isChecked()) {
+                        mEditBtn.performClick();
+                    }
                 }
             }
         } else {

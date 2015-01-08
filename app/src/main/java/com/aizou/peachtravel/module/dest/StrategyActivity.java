@@ -141,15 +141,15 @@ public class StrategyActivity extends PeachBaseActivity {
 //            cityIdList.add("5473ccddb8ce043a64108d22");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
-            dialog.setMessage("是否需要为你推荐行程模版，制作memo更简单");
-            dialog.setNegativeButton("不，谢谢",new View.OnClickListener() {
+            dialog.setMessage("是否需要小桃为你推荐行程，制作memo更简单");
+            dialog.setNegativeButton("不需要",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                     createStrategyByCityIds(cityIdList,false);
                 }
             });
-            dialog.setPositiveButton("为我推荐",new View.OnClickListener() {
+            dialog.setPositiveButton("给我推荐",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();

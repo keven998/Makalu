@@ -10,33 +10,49 @@
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/mm_listitem_simple">
 
-        <Spinner
-            android:id="@+id/loc_spinner"
+        <FrameLayout android:id="@+id/lyt_btn_ok"
             android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_bar_height"
+            android:paddingLeft="5dp"
+            android:paddingRight="15dp">
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"
+                android:duplicateParentState="true"
+                android:textColor="@color/app_theme_color"
+                android:background="@drawable/btn_complete_selector"
+                android:text="完成" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-
-            />
-
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:textSize="14sp"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/app_theme_color"
-            android:background="@drawable/btn_complete_selector"
-            android:text="完成" />
+            android:layout_centerInParent="true"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="15sp"
+            android:textColor="@color/base_text_color_title"/>
 
         <Spinner
             android:id="@+id/type_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/btn_ok"
-            android:minHeight="48dp" />
+            android:layout_height="match_parent"
+            android:layout_marginRight="-5dp"
+            android:layout_alignParentRight="true"/>
+
+        <Spinner
+            android:id="@+id/loc_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="-24dp"
+            android:layout_toLeftOf="@id/type_spinner"/>
 
     </RelativeLayout>
 
