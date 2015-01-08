@@ -438,26 +438,31 @@ public class FavListActivity extends PeachBaseActivity {
             return view;
         }
 
-        private void deleteItem(final FavoritesBean itemData) {
+        private void deleteItem(final FavoritesBean item) {
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-            dialog.setMessage("删除后就找不到了");
+            dialog.setMessage("确定移除收藏");
             dialog.setPositiveButton("确定",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
 //                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
-                    OtherApi.deleteFav(itemData.itemId, new HttpCallBack<String>() {
+                    OtherApi.deleteFav(item.itemId, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
 //                                        mItemDataList.remove(i);
-                                mItemDataList.remove(itemData);
+                                int index = mItemDataList.indexOf(item);
+                                mItemDataList.remove(index);
                                 notifyDataSetChanged();
-                                cachePage();
+                                if (mItemDataList.size() == 0) {
+                                    mFavLv.doPullRefreshing(true, 0);
+                                } if (index < OtherApi.PAGE_SIZE) {
+                                    cachePage();
+                                }
                             }
                         }
 
