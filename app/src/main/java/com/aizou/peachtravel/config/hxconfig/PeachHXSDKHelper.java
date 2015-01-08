@@ -46,6 +46,7 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMNotifier;
@@ -217,17 +218,21 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                     IMUtils.setUserHead(imUser);
                     IMUserRepository.saveContact(appContext, imUser);
                     AccountManager.getInstance().getContactList(appContext).put(imUser.getUsername(),imUser);
-                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                    TextMessageBody body = new TextMessageBody(appContext.getResources().getString(R.string.agree_add_contact));
-                    msg.addBody(body);
-                    msg.setMsgId(UUID.randomUUID().toString());
-                    msg.setFrom(agreeBean.easemobUser);
-                    msg.setTo(AccountManager.getInstance().getLoginAccount(context).easemobUser);
-                    msg.setMsgTime(System.currentTimeMillis());
-                    msg.setUnread(true);
-                    EMChatManager.getInstance().saveMessage(msg);
-                    // 提示有新消息
-                    EMNotifier.getInstance(appContext).notifyOnNewMsg();
+                    EMConversation conversation = EMChatManager.getInstance().getConversation(imUser.getUsername());
+                    if(conversation.getMsgCount()==0){
+                        EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+                        TextMessageBody body = new TextMessageBody(appContext.getResources().getString(R.string.agree_add_contact));
+                        msg.addBody(body);
+                        msg.setMsgId(UUID.randomUUID().toString());
+                        msg.setFrom(agreeBean.easemobUser);
+                        msg.setTo(AccountManager.getInstance().getLoginAccount(context).easemobUser);
+                        msg.setMsgTime(System.currentTimeMillis());
+                        msg.setUnread(true);
+                        EMChatManager.getInstance().saveMessage(msg);
+                        // 提示有新消息
+                        EMNotifier.getInstance(appContext).notifyOnNewMsg();
+                    }
+
 
 
                 }
