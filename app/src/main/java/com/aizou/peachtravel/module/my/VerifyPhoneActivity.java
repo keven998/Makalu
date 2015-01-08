@@ -100,7 +100,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             public void doSucess(String result, String method) {
                                 CommonJson<PeachUser> userResult = CommonJson.fromJson(result,PeachUser.class);
                                 if(userResult.code==0){
-                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
+//                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                                     ToastUtil.getInstance(mContext).showToast("注册成功");
                                     Intent intent = new Intent();
                                     intent.putExtra("user",userResult.result);
