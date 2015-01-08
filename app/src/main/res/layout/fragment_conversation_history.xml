@@ -46,7 +46,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="聊旅行\n还有比Talk更方便的么"
+            android:text="桃·Talk\n你的旅行交流集"
             android:textColor="@color/base_text_color_text_hint"
             android:lineSpacingExtra="3dp"
             android:textSize="14sp" />
