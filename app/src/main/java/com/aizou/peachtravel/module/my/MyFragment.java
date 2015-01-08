@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.my;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -142,7 +143,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             case R.id.btn_reg:
                 Intent regintent = new Intent(getActivity(), RegActivity.class);
-                startActivity(regintent);
+                startActivityForResult(regintent, LoginActivity.REQUEST_CODE_REG);
                 break;
 
             case R.id.ll_message_center:
@@ -157,6 +158,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== Activity.RESULT_OK&&requestCode==LoginActivity.REQUEST_CODE_REG){
+
         }
     }
 }

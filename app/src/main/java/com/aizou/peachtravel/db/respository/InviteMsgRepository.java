@@ -5,9 +5,11 @@ import android.content.Context;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteMessageDao;
+import com.aizou.peachtravel.db.InviteStatus;
 
 import java.util.List;
 
+import de.greenrobot.dao.query.CountQuery;
 import de.greenrobot.dao.query.DeleteQuery;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
@@ -31,6 +33,10 @@ public class InviteMsgRepository {
 
     public static List<InviteMessage> getMessagesList(Context c){
         return getInviteMsgDao(c).loadAll();
+    }
+    public static long getUnAcceptMsgCount(Context c){
+        CountQuery<InviteMessage> cq= getInviteMsgDao(c).queryBuilder().where(InviteMessageDao.Properties.Status.eq(InviteStatus.BEINVITEED)).buildCount();
+        return cq.count();
     }
 
     public static void clearAllInviteMsg(Context c){

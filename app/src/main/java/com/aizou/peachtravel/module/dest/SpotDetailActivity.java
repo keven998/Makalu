@@ -58,6 +58,15 @@ public class SpotDetailActivity extends PeachBaseActivity {
         initData();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(zoomContainer.getVisibility()==View.VISIBLE){
+            zoomAnimator.transformOut(mSpotImagesVp.getCurrentItem());
+        }else{
+            super.onBackPressed();
+        }
+    }
+
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
         mTitleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);

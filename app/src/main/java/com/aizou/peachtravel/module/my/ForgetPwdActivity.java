@@ -28,6 +28,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
  * Created by Rjm on 2014/10/13.
  */
 public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
+    public final static int REQUEST_CODE_RESET_PWD=300;
     @ViewInject(R.id.et_phone)
     private EditText phoneEt;
     @ViewInject(R.id.et_sms)
@@ -40,6 +41,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     private CountDownTimer countDownTimer;
     private int countDown;
     private String sendSuccessPhone;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +133,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                                 Intent intent = new Intent(mContext,ResetPwdActivity.class);
                                 intent.putExtra("token", chechResult.result.token);
                                 intent.putExtra("phone", phoneEt.getText().toString().trim());
-                                startActivity(intent);
+                                startActivityForResult(intent, REQUEST_CODE_RESET_PWD);
                         } else {
                             ToastUtil.getInstance(mContext).showToast(chechResult.err.message);
                         }
@@ -147,6 +149,15 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                 });
 
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_RESET_PWD){
+            setResult(RESULT_OK,data);
+            finish();
         }
     }
 }

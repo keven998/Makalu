@@ -45,11 +45,16 @@ public class PoiAdapter extends BaseAdapter {
     private OnPoiActionListener mOnPoiActionListener;
 
     private DisplayImageOptions picOptions;
+    private String mAddStr="添加";
 
-    public PoiAdapter(Context context, boolean isCanAdd) {
+    public PoiAdapter(Context context, boolean isCanAdd ) {
         mContext = context;
         mIsCanAdd = isCanAdd;
         picOptions = UILUtils.getRadiusOption();
+    }
+
+    public void setAddStr(String addStr){
+        mAddStr = addStr;
     }
 
     public void reset() {
@@ -147,9 +152,9 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
             if(mIsCanAdd) {
                 if(poiDetailBean.hasAdded) {
-                    spotViewHolder.mBtnAdd.setText("已添加");
+                    spotViewHolder.mBtnAdd.setText("已"+mAddStr);
                 } else {
-                    spotViewHolder.mBtnAdd.setText("选择");
+                    spotViewHolder.mBtnAdd.setText(mAddStr);
                 }
                 ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -164,7 +169,7 @@ public class PoiAdapter extends BaseAdapter {
                             if(mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
-                            ToastUtil.getInstance(mContext).showToast("已添加");
+                            ToastUtil.getInstance(mContext).showToast("已"+mAddStr);
                         }
                         notifyDataSetChanged();
                     }
@@ -203,9 +208,9 @@ public class PoiAdapter extends BaseAdapter {
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
-                    poiViewHolder.mBtnAdd.setText("已添加");
+                    poiViewHolder.mBtnAdd.setText("已"+mAddStr);
                 } else {
-                    poiViewHolder.mBtnAdd.setText("选择");
+                    poiViewHolder.mBtnAdd.setText(mAddStr);
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -220,7 +225,7 @@ public class PoiAdapter extends BaseAdapter {
                             if(mOnPoiActionListener!=null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
-                            ToastUtil.getInstance(mContext).showToast("已添加");
+                            ToastUtil.getInstance(mContext).showToast("已"+mAddStr);
                         }
                         notifyDataSetChanged();
                     }

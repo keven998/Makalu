@@ -48,6 +48,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
@@ -282,6 +283,7 @@ public class IMMainActivity extends ChatBaseActivity {
                     newFriends.setNick("桃友申请");
                     newFriends.setHeader("");
                     newFriends.setIsMyFriends(true);
+                    newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
                     userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 //                    // 添加"群聊"
 //                    IMUser groupUser = new IMUser();
@@ -416,9 +418,13 @@ public class IMMainActivity extends ChatBaseActivity {
      */
     public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
-        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null)
-            unreadAddressCountTotal = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME)
-                    .getUnreadMsgCount();
+        unreadAddressCountTotal= (int) InviteMsgRepository.getUnAcceptMsgCount(this);
+        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null){
+
+            IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
+            imUser.setUnreadMsgCount(unreadAddressCountTotal);
+            IMUserRepository.saveContact(this,imUser);
+        }
         return unreadAddressCountTotal;
     }
 
