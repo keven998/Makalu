@@ -557,13 +557,13 @@ public class RouteDayFragment extends PeachBaseFragment {
                 if (!citySet.isEmpty()) {
                     String des = "";
                     for (String str : citySet) {
-                        if (TextUtils.isEmpty(des)) {
-                            des += String.format("-%s", str);
+                        if (!TextUtils.isEmpty(des)) {
+                            des += String.format("—%s", str);
                         } else {
                             des = str;
                         }
                     }
-                    holder.dayTv.setText("第" + (section + 1) + "天  " + citySet.toString());
+                    holder.dayTv.setText("第" + (section + 1) + "天  " + des);
                 } else {
                     holder.dayTv.setText("第" + (section + 1) + "天");
                 }
