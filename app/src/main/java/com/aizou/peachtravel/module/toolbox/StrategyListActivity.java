@@ -459,8 +459,10 @@ public class StrategyListActivity extends PeachBaseActivity {
 //                                    });
 //                                }
 //                                        ToastUtil.getInstance(mContext).showToast("删除成功");
-                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK~成功删除");
-                                if (index <= OtherApi.PAGE_SIZE) {
+//                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK~成功删除");
+                                if (mStrategyListAdapter.getCount() == 0) {
+                                    mMyStrategyLv.doPullRefreshing(true, 0);
+                                } else if (index <= OtherApi.PAGE_SIZE) {
                                     cachePage();
                                 }
                             } else {
