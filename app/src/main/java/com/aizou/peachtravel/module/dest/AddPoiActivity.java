@@ -135,6 +135,14 @@ public class AddPoiActivity extends PeachBaseActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("poiList", hasAddList);
+        intent.putExtra("dayIndex", dayIndex);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
     private void initSpinnerListener() {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
