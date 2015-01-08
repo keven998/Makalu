@@ -95,7 +95,6 @@
                         android:orientation="vertical"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:paddingBottom="10dp"
                         expandableTextView:animDuration="200"
                         expandableTextView:maxCollapsedLines="2">
 
@@ -114,8 +113,11 @@
                             android:id="@id/expand_collapse"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingBottom="10dp"
                             android:layout_gravity="right|bottom"
-                            android:background="@android:color/transparent" />
+                            android:paddingLeft="100dp"
+                            android:scaleType="center"
+                            android:background="@null" />
                     </com.aizou.core.widget.expandabletextview.ExpandableTextView>
                 </LinearLayout>
 
