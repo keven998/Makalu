@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
@@ -40,14 +41,16 @@ public class AddPoiActivity extends PeachBaseActivity {
     PullToRefreshListView mLvPoiList;
     @InjectView(R.id.loc_spinner)
     Spinner mLocSpinner;
-    @InjectView(R.id.btn_ok)
-    Button mBtnOk;
+//    @InjectView(R.id.btn_ok)
+//    Button mBtnOk;
     @InjectView(R.id.type_spinner)
     Spinner mTypeSpinner;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
     Button mBtnSearch;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView mTilteView;
     private String mType;
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
@@ -80,12 +83,13 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void onPoiAdded(PoiDetailBean poi) {
                 hasAddList.add(poi);
+                mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
             }
 
             @Override
             public void onPoiRemoved(PoiDetailBean poi) {
                 hasAddList.remove(poi);
-
+                mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
             }
 
             @Override
@@ -107,7 +111,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             }
         });
-        mBtnOk.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.lyt_btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -187,6 +191,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLvPoiList.doPullRefreshing(true,500);
 //        getPoiListByLoc(mType, curLoc.id, 0);
 
+        mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
     }
 
     private void getPoiListByLoc(String type, String cityId, final int page) {

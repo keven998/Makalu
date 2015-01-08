@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
@@ -146,7 +147,7 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
             if(mIsCanAdd) {
                 if(poiDetailBean.hasAdded) {
-                    spotViewHolder.mBtnAdd.setText("已选择");
+                    spotViewHolder.mBtnAdd.setText("已添加");
                 } else {
                     spotViewHolder.mBtnAdd.setText("选择");
                 }
@@ -163,6 +164,7 @@ public class PoiAdapter extends BaseAdapter {
                             if(mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
+                            ToastUtil.getInstance(mContext).showToast("已添加");
                         }
                         notifyDataSetChanged();
                     }
@@ -201,8 +203,7 @@ public class PoiAdapter extends BaseAdapter {
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
-                    poiViewHolder.mBtnAdd.setText("已选择");
-
+                    poiViewHolder.mBtnAdd.setText("已添加");
                 } else {
                     poiViewHolder.mBtnAdd.setText("选择");
                 }
@@ -219,6 +220,7 @@ public class PoiAdapter extends BaseAdapter {
                             if(mOnPoiActionListener!=null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
+                            ToastUtil.getInstance(mContext).showToast("已添加");
                         }
                         notifyDataSetChanged();
                     }
