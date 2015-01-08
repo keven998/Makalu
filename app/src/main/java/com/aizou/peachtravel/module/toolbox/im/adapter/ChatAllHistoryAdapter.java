@@ -20,6 +20,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -115,11 +116,13 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         if (isGroup) {
             contact = EMGroupManager.getInstance().getGroup(username);
             final EMGroup group = (EMGroup) contact;
-            final List<String> members = new ArrayList<>();
+            List<String> members = group.getMembers();
+            if(members==null){
+                members = new ArrayList<>();
+            }
             final List<Bitmap> membersAvatars = new ArrayList<>();
-            final int size = Math.min(group.getMembers().size(), 4);
+            final int size = Math.min(members.size(), 4);
             // 群聊消息，显示群聊头像
-
             final ViewHolder finalHolder1 = holder;
             if(size!=0){
                 new Thread(new Runnable() {
@@ -216,7 +219,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.FAIL) {
 //                holder.msgState.setVisibility(View.VISIBLE);
-                holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.msg_state_fail_resend, 0);
+                Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_send_fail);
+                drawable.setBounds(1,1,LocalDisplay.dp2px(15),LocalDisplay.dp2px(15));
+                holder.message.setCompoundDrawables(null,null,drawable,null);
             } else {
 //                holder.msgState.setVisibility(View.GONE);
                 holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

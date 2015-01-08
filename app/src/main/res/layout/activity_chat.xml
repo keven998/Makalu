@@ -53,12 +53,11 @@
             <LinearLayout
                 android:id="@+id/btn_press_to_speak"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
+                android:layout_height="32dp"
                 android:layout_weight="1"
                 android:background="@drawable/chat_press_speak_btn"
                 android:gravity="center"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -75,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/editor_with_border"
                 android:gravity="center"
+                android:visibility="gone"
                 android:layout_weight="1"
                 >
 

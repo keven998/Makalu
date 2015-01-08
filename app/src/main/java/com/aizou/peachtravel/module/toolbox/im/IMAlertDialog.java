@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.task.DownloadImageTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.easemob.util.ImageUtils;
@@ -64,36 +65,33 @@ public class IMAlertDialog extends ChatBaseActivity {
 		//转发复制的图片的path
 		String path = getIntent().getStringExtra("forwardImage");
 
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+//        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+        final PeachMessageDialog dialog = new PeachMessageDialog(this);
 //        builder.title(title)
 		if(msg != null)
-            builder.content(msg);
+            dialog.setMessage(msg);
 //		    ((TextView)findViewById(R.id.alert_message)).setText(msg);
 		if(title != null)
-            builder.title(title);
+            dialog.setTitle(title);
 //			mTextView.setText(title);
 		if(isCanceTitle){
 //			mTextView.setVisibility(View.GONE);
 		}
 		if(isCanceShow){
-            builder.negativeText("取消");
+            dialog.setNegativeButton("取消",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cancel();
+                }
+            });
         }
-        builder.cancelable(false);
-        builder.positiveText("确定");
-        builder.positiveColorRes(R.color.app_theme_color)
-                .negativeColorRes(R.color.app_theme_color);
-        builder.callback(new MaterialDialog.Callback() {
+        dialog.setPositiveButton("确定",new View.OnClickListener() {
             @Override
-            public void onNegative(MaterialDialog dialog) {
-                cancel();
-            }
-
-            @Override
-            public void onPositive(MaterialDialog dialog) {
+            public void onClick(View v) {
                 ok();
             }
         });
-        builder.show();
+        dialog.show();
 
 
 

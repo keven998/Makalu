@@ -396,7 +396,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         public View getView(final int position, View view, ViewGroup container) {
             ImageView imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setBackgroundColor(Color.parseColor("#f3d4df"));
             imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
