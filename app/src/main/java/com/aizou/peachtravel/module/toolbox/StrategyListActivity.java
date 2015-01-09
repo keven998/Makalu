@@ -357,7 +357,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (itemData.images != null && itemData.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, poptions);
             } else {
-                mStrategyIv.setImageResource(R.drawable.guide_1);
+                mStrategyIv.setImageDrawable(null);
             }
             mDayTv.setText(itemData.dayCnt + "天");
 //            String city = "";

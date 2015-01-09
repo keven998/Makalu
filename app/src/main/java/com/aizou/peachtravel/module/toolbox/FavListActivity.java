@@ -381,7 +381,7 @@ public class FavListActivity extends PeachBaseActivity {
             if (item.images != null && item.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(item.images.get(0).url, vh.imgView, poptions);
             } else {
-                vh.imgView.setImageResource(R.drawable.guide_1);
+                vh.imgView.setImageDrawable(null);
             }
 
             vh.titleView.setText(item.zhName);

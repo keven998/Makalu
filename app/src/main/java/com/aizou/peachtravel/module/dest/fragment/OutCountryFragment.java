@@ -25,6 +25,7 @@ import com.aizou.peachtravel.bean.CountryBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
@@ -194,7 +195,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            nameTv.append(impress);
             if(itemData.images!=null&&itemData.images.size()>0) {
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, picOptions);
+                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, UILUtils.getDefaultOption());
             } else {
                 imageIv.setImageDrawable(null);
             }
