@@ -157,19 +157,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             descTv = (TextView) headRl.findViewById(R.id.tv_country_desc);
             imageIv = (ImageView) headRl.findViewById(R.id.iv_country);
             cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
-            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
-            int height = width * 240 / 640;
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-            imageIv.setLayoutParams(lp);
-            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
+//            int height = width * 240 / 640;
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
+//            imageIv.setLayoutParams(lp);
+//            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            picOptions = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
-                    .resetViewBeforeLoading(true)
-//				.decodingOptions(D)
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
-                    .build();
+//            picOptions = new DisplayImageOptions.Builder()
+//                    .cacheInMemory(true)
+//                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+//                    .resetViewBeforeLoading(true)
+////				.decodingOptions(D)
+//                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
+//                    .build();
+            picOptions = UILUtils.getRadiusOption();
 
             return contentView;
         }

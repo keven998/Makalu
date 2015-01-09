@@ -5,8 +5,8 @@
     android:layout_height="wrap_content">
 
     <ImageView android:id="@+id/iv_country"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
         android:background="@drawable/bg_common_default"
         android:scaleType="centerCrop"/>
 
