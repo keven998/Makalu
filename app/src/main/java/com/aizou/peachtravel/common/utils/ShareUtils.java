@@ -144,7 +144,7 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         if(TextUtils.isEmpty(content)){
-            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App，安全下载: http://****");
+            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App，官方下载: http://****");
         }else{
             circleMedia.setShareContent(content);
         }
