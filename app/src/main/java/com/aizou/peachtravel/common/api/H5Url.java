@@ -12,4 +12,6 @@ public class H5Url {
     public static final String FOOD="http://h5.taozilvxing.com/dining.php?tid=";
     //购物
     public static final String SHOPPING="http://h5.taozilvxing.com/shopping.php?tid=";
+    //更多点评
+    public static final String MORE_COMMENT="http://h5.taozilvxing.com/morecomment.php?pid=";
 }

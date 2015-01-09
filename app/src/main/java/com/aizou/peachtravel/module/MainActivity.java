@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.FragmentTabHost;

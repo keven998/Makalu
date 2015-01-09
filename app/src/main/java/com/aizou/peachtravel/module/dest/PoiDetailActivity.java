@@ -290,13 +290,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         @Override
-        public void showData(int position, CommentBean itemData) {
+        public void showData(int position, final CommentBean itemData) {
             if (position == 0) {
                 mLlCommentIndex.setVisibility(View.VISIBLE);
                 mTvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //
+                        Intent intent = new Intent(mContext,MoreCommentActivity.class);
+                        intent.putExtra("id",id);
+                        startActivity(intent);
                     }
                 });
                 mTvCommentNum.setText("网友点评");
@@ -314,7 +316,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvUsername.setText(itemData.userName);
             mTvDate.setText(dateFormat.format(new Date(itemData.cTime)));
             mTvComment.setText(Html.fromHtml(itemData.contents));
-            mCommentStar.setRating(itemData.rating);
+            mCommentStar.setRating(itemData.getRating());
 
         }
     }

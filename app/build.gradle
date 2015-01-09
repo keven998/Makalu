@@ -25,7 +25,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':core')
     compile project(':social_sdk_library_project')
-    compile project(':MaterialDialoglibrary')
     compile files('libs/baidumapapi_v2_1_1.jar')
     compile files('libs/easemobchat_2.1.1.jar')
     compile files('libs/locSDK_3.3.jar')

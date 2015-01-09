@@ -195,10 +195,9 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             if(itemData.image!=null&&itemData.image.size()>0) {
                 ImageLoader.getInstance().displayImage(itemData.image.get(0).url, imageIv, picOptions);
             } else {
-                imageIv.setImageResource(R.drawable.ic_launcher);
+                imageIv.setImageDrawable(null);
             }
             descTv.setText(itemData.desc);
-            descTv.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
             cityListFl.removeAllViews();
             for(final LocBean bean:itemData.destinations){
                 View view = View.inflate(getActivity(),R.layout.dest_select_city,null);

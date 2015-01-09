@@ -25,7 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
@@ -34,6 +33,7 @@ import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -151,30 +151,23 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(GroupDetailsActivity.this)
-
-                        .title(null)
-                        .content("确定清空此群的聊天记录吗？")
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .autoDismiss(false)
-                        .positiveColor(getResources().getColor(R.color.app_theme_color))
-                        .negativeColor(getResources().getColor(R.color.app_theme_color))
-                        .callback(new MaterialDialog.Callback() {
-                            @Override
-                            public void onPositive(final MaterialDialog dialog) {
-                                View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
-                                dialog.setContentView(progressView);
-                                clearGroupHistory(dialog);
-
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
+                final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+                dialog.setTitle("提示");
+                dialog.setMessage("确定清空此群的聊天记录吗？");
+                dialog.setPositiveButton("确定", new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearGroupHistory();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setNegativeButton("取消", new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -208,31 +201,23 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
      * @param view
      */
     public void exitGroup(View view) {
-        new MaterialDialog.Builder(this)
-
-                .title(null)
-                .content("退出后，将不再接收此群聊消息")
-                .positiveText("退出")
-                .negativeText("取消")
-                .autoDismiss(false)
-                .positiveColor(getResources().getColor(R.color.app_theme_color))
-                .negativeColor(getResources().getColor(R.color.app_theme_color))
-                .callback(new MaterialDialog.Callback() {
-                    @Override
-                    public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
-                        dialog.setContentView(progressView);
-                        exitGroup(dialog);
-
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setMessage("退出后，将不再接收此群聊消息");
+        dialog.setPositiveButton("退出", new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                exitGroup();
+            }
+        });
+        dialog.setNegativeButton("取消", new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -241,42 +226,33 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
      * @param view
      */
     public void exitDeleteGroup(View view) {
-        new MaterialDialog.Builder(this)
-
-                .title(null)
-                .content(getString(R.string.dissolution_group_hint))
-                .positiveText("退出")
-                .negativeText("取消")
-                .autoDismiss(false)
-                .positiveColor(getResources().getColor(R.color.app_theme_color))
-                .negativeColor(getResources().getColor(R.color.app_theme_color))
-                .callback(new MaterialDialog.Callback() {
-                    @Override
-                    public void onPositive(final MaterialDialog dialog) {
-                        View progressView = View.inflate(mContext, R.layout.view_progressbar, null);
-                        dialog.setContentView(progressView);
-                        deleteGrop(dialog);
-
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setMessage(getString(R.string.dissolution_group_hint));
+        dialog.setPositiveButton("退出", new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                deleteGrop();
+            }
+        });
+        dialog.setNegativeButton("取消",new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 
     /**
      * 清空群聊天记录
      */
-    public void clearGroupHistory(MaterialDialog dialog) {
+    public void clearGroupHistory() {
 
 
         EMChatManager.getInstance().clearConversation(group.getGroupId());
-        dialog.dismiss();
 //		adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 
 
@@ -286,10 +262,12 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     /**
      * 退出群组
      */
-    public void exitGroup(final MaterialDialog dialog) {
+    public void exitGroup() {
+        DialogManager.getInstance().showLoadingDialog(mContext);
         new Thread(new Runnable() {
             public void run() {
                 try {
+
                     EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                     msg.setChatType(EMMessage.ChatType.GroupChat);
                     msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
@@ -309,7 +287,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                             }
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    dialog.dismiss();
+                                    DialogManager.getInstance().dissMissLoadingDialog();
                                     setResult(RESULT_OK);
                                     finish();
                                     ChatActivity.activityInstance.finish();
@@ -319,7 +297,13 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                         @Override
                         public void onError(int i, String s) {
-                            dialog.dismiss();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    ToastUtil.getInstance(getApplicationContext()).showToast("退出群聊失败");
+                                }
+                            });
                         }
 
                         @Override
@@ -332,7 +316,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     if (!isFinishing())
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                dialog.dismiss();
+                                DialogManager.getInstance().dissMissLoadingDialog();
 //							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
                             }
@@ -345,14 +329,15 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     /**
      * 解散群组
      */
-    private void deleteGrop(final MaterialDialog dialog) {
+    private void deleteGrop() {
+        DialogManager.getInstance().showLoadingDialog(mContext);
         new Thread(new Runnable() {
             public void run() {
                 try {
                     EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            dialog.dismiss();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             setResult(RESULT_OK);
                             finish();
                             ChatActivity.activityInstance.finish();
@@ -362,7 +347,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     if (!isFinishing())
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                dialog.dismiss();
+                                DialogManager.getInstance().dissMissLoadingDialog();
 //							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
                             }

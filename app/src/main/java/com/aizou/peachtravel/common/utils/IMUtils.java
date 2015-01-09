@@ -186,7 +186,7 @@ public class IMUtils {
 
     public static void showImShareDialog(Context context, final ICreateShareDialog iCreateShareDialog, final OnDialogShareCallBack callback){
         final ShareDialogBean dialogBean = iCreateShareDialog.createShareBean();
-        final Dialog dialog  = new Dialog(context,R.style.TransparentDialog);
+        final Dialog dialog  = new Dialog(context,R.style.ComfirmDialog);
         View contentView = View.inflate(context, R.layout.dialog_im_share,null);
         TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
         ImageView vsIv = (ImageView) contentView.findViewById(R.id.image_iv);

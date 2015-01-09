@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;

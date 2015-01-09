@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;

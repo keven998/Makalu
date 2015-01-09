@@ -19,6 +19,13 @@ public class CommentBean implements Parcelable {
     public List<ImageBean> images=new ArrayList<ImageBean>();
 
 
+    public float getRating(){
+        if(rating>1){
+            return rating;
+        }
+        return rating*5;
+    }
+
     @Override
     public int describeContents() {
         return 0;

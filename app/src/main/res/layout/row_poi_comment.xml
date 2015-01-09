@@ -82,6 +82,7 @@
         android:layout_marginLeft="30dp"
         android:textSize="11sp"
         android:layout_marginRight="10dp"
+        android:paddingBottom="10dp"
         android:textColor="@color/base_text_color_subtitle"
         android:layout_below="@id/comment_star" />
 

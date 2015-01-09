@@ -20,8 +20,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -647,18 +645,18 @@ public class RouteDayFragment extends PeachBaseFragment {
             return convertView;
         }
 
-        private void showMenu() {
-            new MaterialDialog.Builder(getActivity())
-                    .title(null)
-                    .items(new String[]{"添加地点", "删除这天"})
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        }
-                    })
-                    .show();
-        }
+//        private void showMenu() {
+//            new MaterialDialog.Builder(getActivity())
+//                    .title(null)
+//                    .items(new String[]{"添加地点", "删除这天"})
+//                    .itemsCallback(new MaterialDialog.ListCallback() {
+//                        @Override
+//                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//
+//                        }
+//                    })
+//                    .show();
+//        }
 
         @Override
         public int getSectionCount() {

@@ -120,6 +120,12 @@
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
+            android:name=".module.dest.MoreCommentActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity
             android:name=".module.dest.CityDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

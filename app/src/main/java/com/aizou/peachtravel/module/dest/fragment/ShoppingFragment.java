@@ -18,8 +18,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -30,6 +28,7 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
@@ -250,26 +249,24 @@ public class ShoppingFragment extends PeachBaseFragment {
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(null)
-                                .content("确定删除")
-                                .theme(Theme.LIGHT)  // the default is light, so you don't need this line
-                                .positiveText("确定")
-                                .negativeText("取消")
-                                .callback(new MaterialDialog.Callback() {
-                                    @Override
-                                    public void onPositive(MaterialDialog dialog) {
-                                        strategy.shopping.remove(poiDetailBean);
-                                        notifyDataSetChanged();
-                                        dialog.dismiss();
-                                    }
-
-                                    @Override
-                                    public void onNegative(MaterialDialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
+                        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+                        dialog.setTitle("提示");
+                        dialog.setMessage("确定删除？");
+                        dialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                strategy.shopping.remove(poiDetailBean);
+                                notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
 
                     }
                 });
