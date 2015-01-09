@@ -1140,7 +1140,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 */
 	public void selectPicFromCamera() {
 		if (!CommonUtils.isExitsSdcard()) {
-			Toast.makeText(getApplicationContext(), "SD卡不存在，不能拍照", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "SD卡不存在，不能拍照", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance(ChatActivity.this).showToast("系统不支持拍照");
 			return;
 		}
 
@@ -1356,9 +1357,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		} else {
 			File file = new File(selectedImage.getPath());
 			if (!file.exists()) {
-				Toast toast = Toast.makeText(this, "找不到图片", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+//				Toast toast = Toast.makeText(this, "找不到图片", Toast.LENGTH_SHORT);
+//				toast.setGravity(Gravity.CENTER, 0, 0);
+//				toast.show();
+                ToastUtil.getInstance(ChatActivity.this).showToast("找不到图片");
 				return;
 
 			}
@@ -2030,7 +2032,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                             public void run() {
                                 //如果正在与此用户的聊天页面
                                 if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
-                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他桃友列表里移除", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他桃友列表里移除", Toast.LENGTH_SHORT).show();
+                                    ToastUtil.getInstance(ChatActivity.this).showToast("聊天已被中断");
                                     ChatActivity.activityInstance.finish();
                                 }
                             }
@@ -2057,7 +2060,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			runOnUiThread(new Runnable() {
 				public void run() {
 					if (toChatUsername.equals(groupId)) {
-						Toast.makeText(ChatActivity.this, "你被群创建者从此群中移除", Toast.LENGTH_SHORT).show();
+//						Toast.makeText(ChatActivity.this, "你被群创建者从此群中移除", Toast.LENGTH_SHORT).show();
 						if (GroupDetailsActivity.instance != null)
 							GroupDetailsActivity.instance.finish();
 						finish();
@@ -2072,7 +2075,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			runOnUiThread(new Runnable() {
 				public void run() {
 					if (toChatUsername.equals(groupId)) {
-						Toast.makeText(ChatActivity.this, "当前群聊已被群创建者解散", Toast.LENGTH_SHORT).show();
+//						Toast.makeText(ChatActivity.this, "当前群聊已被群创建者解散", Toast.LENGTH_SHORT).show();
+                        ToastUtil.getInstance(ChatActivity.this).showToast("该群已被群主解散");
 						if (GroupDetailsActivity.instance != null)
 							GroupDetailsActivity.instance.finish();
 						finish();
