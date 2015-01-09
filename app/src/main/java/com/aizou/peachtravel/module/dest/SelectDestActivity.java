@@ -159,14 +159,15 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     private void initTitleBar(){
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SearchDestActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
-            }
-        });
+        //UNUSED
+//        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
+//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, SearchDestActivity.class);
+//                startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
+//            }
+//        });
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getTitleTextView().setText("选择目的地");
     }

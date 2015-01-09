@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -144,7 +145,7 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         if(TextUtils.isEmpty(content)){
-            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App，安全下载: http://****");
+            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App。官方下载: http://****");
         }else{
             circleMedia.setShareContent(content);
         }
@@ -161,9 +162,11 @@ public class ShareUtils {
             public void onComplete(SHARE_MEDIA platform, int eCode,
                                    SocializeEntity entity) {
                 if (eCode == 200) {
-                    Toast.makeText(act, "分享成功.",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(act, "分享成功.",
+//                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.getInstance(act).showToast("已分享");
                 } else {
+
                 }
             }
 

@@ -15,6 +15,8 @@ import android.provider.MediaStore;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -50,18 +52,20 @@ public class SelectPicUtils {
             cursor = null;
 
             if (picturePath == null || picturePath.equals("null")) {
-                Toast toast = Toast.makeText(activity, "找不到图片", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+//                Toast toast = Toast.makeText(activity, "找不到图片", Toast.LENGTH_SHORT);
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.show();
+                ToastUtil.getInstance(activity).showToast("找不到图片");
                 return null;
             }
             return new File(picturePath);
         } else {
             File file = new File(selectedImage.getPath());
             if (!file.exists()) {
-                Toast toast = Toast.makeText(activity, "找不到图片", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+//                Toast toast = Toast.makeText(activity, "找不到图片", Toast.LENGTH_SHORT);
+                ToastUtil.getInstance(activity).showToast("找不到图片");
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.show();
                 return null;
 
             }
@@ -74,7 +78,8 @@ public class SelectPicUtils {
      */
     public File selectPicFromCamera(Activity activity) {
         if (!CommonUtils.isExitsSdcard()) {
-            Toast.makeText(activity, "SD卡不存在，不能拍照", Toast.LENGTH_LONG).show();
+//            Toast.makeText(activity, "SD卡不存在，不能拍照", Toast.LENGTH_LONG).show();
+            ToastUtil.getInstance(activity).showToast("系统无法拍照");
             return null;
         }
 

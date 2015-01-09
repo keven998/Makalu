@@ -1466,8 +1466,9 @@ public class MessageAdapter extends BaseAdapter {
                             holder.tv.setVisibility(View.GONE);
                             // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                             holder.staus_iv.setVisibility(View.VISIBLE);
-                            Toast.makeText(activity,
-                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(activity,
+//                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
+                            ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }

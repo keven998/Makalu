@@ -329,7 +329,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
 		}
 
 		if (!mBMapManager.init(strKey, new MyGeneralListener())) {
-			Toast.makeText(this.getApplicationContext(), "BMapManager  初始化错误!", Toast.LENGTH_LONG).show();
+//			Toast.makeText(this.getApplicationContext(), "BMapManager  初始化错误!", Toast.LENGTH_LONG).show();
 		}
 	}
 
