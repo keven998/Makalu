@@ -17,8 +17,8 @@ public class JoinLayout {
     }
 
     private static final float[][] sizes = { new float[] { 0.9f, 0.9f },
-            new float[] { 0.5f, 0.65f }, new float[] { 0.45f, 0.8f },
-            new float[] { 0.45f, 0.91f }, new float[] { 0.38f, 0.80f } };
+            new float[] { 0.5f, 0.65f }, new float[] { 0.5f, 0.8f },
+            new float[] { 0.5f, 0.91f }, new float[] { 0.38f, 0.80f } };
 
     public static float[] size(int count) {
         return count > 0 && count <= sizes.length ? sizes[count - 1] : null;
