@@ -25,6 +25,7 @@ import com.aizou.peachtravel.bean.CountryBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
@@ -156,19 +157,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             descTv = (TextView) headRl.findViewById(R.id.tv_country_desc);
             imageIv = (ImageView) headRl.findViewById(R.id.iv_country);
             cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
-            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
-            int height = width * 240 / 640;
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-            imageIv.setLayoutParams(lp);
-            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
+//            int height = width * 240 / 640;
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
+//            imageIv.setLayoutParams(lp);
+//            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            picOptions = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
-                    .resetViewBeforeLoading(true)
-//				.decodingOptions(D)
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
-                    .build();
+//            picOptions = new DisplayImageOptions.Builder()
+//                    .cacheInMemory(true)
+//                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+//                    .resetViewBeforeLoading(true)
+////				.decodingOptions(D)
+//                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
+//                    .build();
+            picOptions = UILUtils.getRadiusOption();
 
             return contentView;
         }
@@ -193,7 +195,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            nameTv.append(impress);
-            if(itemData.images!=null&&itemData.images.size()>0) {
+            if (itemData.images != null && itemData.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, picOptions);
             } else {
                 imageIv.setImageDrawable(null);
