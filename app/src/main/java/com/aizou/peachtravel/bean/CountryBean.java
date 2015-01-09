@@ -14,7 +14,7 @@ public class CountryBean implements Parcelable {
     public String zhName;
     public String enName;
     public String desc;
-    public ArrayList<ImageBean> image = new ArrayList<ImageBean>();
+    public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
     public ArrayList<LocBean> destinations= new ArrayList<LocBean>();
 
     @Override
@@ -29,7 +29,7 @@ public class CountryBean implements Parcelable {
         dest.writeString(this.zhName);
         dest.writeString(this.enName);
         dest.writeString(this.desc);
-        dest.writeSerializable(this.image);
+        dest.writeSerializable(this.images);
         dest.writeSerializable(this.destinations);
     }
 
@@ -42,7 +42,7 @@ public class CountryBean implements Parcelable {
         this.zhName = in.readString();
         this.enName = in.readString();
         this.desc = in.readString();
-        this.image = (ArrayList<ImageBean>) in.readSerializable();
+        this.images = (ArrayList<ImageBean>) in.readSerializable();
         this.destinations = (ArrayList<LocBean>) in.readSerializable();
     }
 

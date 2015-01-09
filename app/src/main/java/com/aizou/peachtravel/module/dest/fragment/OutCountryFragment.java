@@ -160,6 +160,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             int height = width * 240 / 640;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
             imageIv.setLayoutParams(lp);
+            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
@@ -167,7 +168,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                     .resetViewBeforeLoading(true)
 //				.decodingOptions(D)
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
-                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+                    .build();
 
             return contentView;
         }
@@ -192,8 +193,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            nameTv.append(impress);
-            if(itemData.image!=null&&itemData.image.size()>0) {
-                ImageLoader.getInstance().displayImage(itemData.image.get(0).url, imageIv, picOptions);
+            if(itemData.images!=null&&itemData.images.size()>0) {
+                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, picOptions);
             } else {
                 imageIv.setImageDrawable(null);
             }
