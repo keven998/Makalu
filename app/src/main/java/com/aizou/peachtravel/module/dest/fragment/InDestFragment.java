@@ -44,8 +44,8 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/3.
  */
 public class InDestFragment extends PeachBaseFragment implements OnDestActionListener {
-    @InjectView(R.id.section_bar)
-    TopSectionBar mSectionBar;
+//    @InjectView(R.id.section_bar)
+//    TopSectionBar mSectionBar;
     @InjectView(R.id.lv_in_city)
     ListView mLvInCity;
     private List<InDestBean> incityList = new ArrayList<InDestBean>();
@@ -71,7 +71,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 //        mLvInCity.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.padding_footer, null));
 
         mLvInCity.setAdapter(inCityAdapter);
-        mSectionBar.setListView(mLvInCity);
+//        mSectionBar.setListView(mLvInCity);
 //        getInLocList();
         initData();
         return rootView;
@@ -244,10 +244,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
             initSections();
-            if (mSectionBar != null) {
-                mSectionBar.notifyDataSetChanged();
-            }
-
+//            if (mSectionBar != null) {
+//                mSectionBar.notifyDataSetChanged();
+//            }
         }
 
     }
