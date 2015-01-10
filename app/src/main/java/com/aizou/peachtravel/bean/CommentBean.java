@@ -15,7 +15,7 @@ public class CommentBean implements Parcelable {
     public String userName;
     public float rating;
     public String contents;
-    public long cTime;
+    public long publishTime;
     public List<ImageBean> images=new ArrayList<ImageBean>();
 
 
@@ -38,7 +38,7 @@ public class CommentBean implements Parcelable {
         dest.writeString(this.userName);
         dest.writeFloat(this.rating);
         dest.writeString(this.contents);
-        dest.writeLong(this.cTime);
+        dest.writeLong(this.publishTime);
         dest.writeTypedList(images);
     }
 
@@ -51,7 +51,7 @@ public class CommentBean implements Parcelable {
         this.userName = in.readString();
         this.rating = in.readFloat();
         this.contents = in.readString();
-        this.cTime = in.readLong();
+        this.publishTime = in.readLong();
         in.readTypedList(images, ImageBean.CREATOR);
     }
 

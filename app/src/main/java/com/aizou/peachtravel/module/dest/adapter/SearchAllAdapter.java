@@ -107,7 +107,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             if(poiBean.images!=null&&poiBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{
-                holder.mImageIv.setImageResource(R.drawable.ic_launcher);
+                holder.mImageIv.setImageDrawable(null);
             }
         }
         if(mIsShowMore){

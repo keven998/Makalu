@@ -33,7 +33,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public List<LocBean> locList = new ArrayList<LocBean>();
     public LocBean locality;
     public String address="";
-    public String telephone="";
+    public ArrayList<String> tel=new ArrayList<>();
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
     public List<CommentBean> comments= new ArrayList<CommentBean>();
 
@@ -101,7 +101,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         dest.writeTypedList(locList);
         dest.writeParcelable(this.locality, 0);
         dest.writeString(this.address);
-        dest.writeString(this.telephone);
+        dest.writeSerializable(this.tel);
         dest.writeTypedList(recommends);
         dest.writeTypedList(comments);
     }
@@ -124,7 +124,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         in.readTypedList(locList, LocBean.CREATOR);
         this.locality = in.readParcelable(LocBean.class.getClassLoader());
         this.address = in.readString();
-        this.telephone = in.readString();
+        this.tel = (ArrayList<String>) in.readSerializable();
         in.readTypedList(recommends, RecommendBean.CREATOR);
         in.readTypedList(comments, CommentBean.CREATOR);
     }

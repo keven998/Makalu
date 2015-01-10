@@ -20,6 +20,8 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -99,6 +101,17 @@ public class CommonUtils {
             return (int) distance + "m";
         }
 
+    }
+
+    public static boolean checkIntent(Context context,Intent intent){
+        PackageManager packageManager = context.getPackageManager();
+        //在系统中查询指定的Activity Action
+        List resolveInfo = packageManager.queryIntentActivities(intent, PackageManager.GET_INTENT_FILTERS);
+        if(resolveInfo.size() == 0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 

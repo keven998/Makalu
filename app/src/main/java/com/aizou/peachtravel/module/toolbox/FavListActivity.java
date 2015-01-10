@@ -65,7 +65,7 @@ public class FavListActivity extends PeachBaseActivity {
     public final static int CONST_TYPE_NOTE = 5;
     public final static int CONST_TYPE_CITY = 6;
     private final static String[] favTypeArray = {"全部", "景点", "酒店", "美食", "购物", "游记", "城市"};
-    private final static String[] favTypeValueArray = {"all", "vs ", "hotel", "restaurant", "shopping", "travelNote", "locality"};
+    private final static String[] favTypeValueArray = {"all", "vs", "hotel", "restaurant", "shopping", "travelNote", "locality"};
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
     @InjectView(R.id.tv_title_bar_title)

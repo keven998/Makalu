@@ -26,6 +26,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CmdAgreeBean;
 import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.CmdInvateBean;
+import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.hxsdk.controller.HXSDKHelper;
@@ -162,6 +163,11 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         cmdIntentFilter.setPriority(3);
         appContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 
+        NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+        intentFilter.setPriority(3);
+        appContext.registerReceiver(msgReceiver, intentFilter);
+
     }
 
     /**
@@ -255,6 +261,41 @@ public class PeachHXSDKHelper extends HXSDKHelper {
             }
         }
     };
+
+    /**
+     * 新消息广播接收者
+     */
+    private class NewMessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 消息id
+            String username = intent.getStringExtra("from");
+            String msgid = intent.getStringExtra("msgid");
+            EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+            final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
+            final String finalUsername = username;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(!TextUtils.isEmpty(fromUser)){
+                        ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
+                        IMUser imUser = IMUserRepository.getContactByUserName(appContext, finalUsername);
+                        if(imUser!=null){
+                            imUser.setNick(user.nickName);
+                            imUser.setAvatar(user.avatar);
+                        }else{
+                            imUser = new IMUser();
+                            imUser.setUsername(finalUsername);
+                            imUser.setNick(user.nickName);
+                            imUser.setUserId(user.userId);
+                            imUser.setAvatar(user.avatar);
+                        }
+                        IMUserRepository.saveContact(appContext,imUser);
+                    }
+                }
+            }).start();
+        }
+    }
 
 
     @Override

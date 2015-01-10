@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.my;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -69,6 +70,9 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                         if(modifyResult.code==0){
                             user.gender = gender;
                             AccountManager.getInstance().saveLoginAccount(mContext,user);
+                        }else{
+                            if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
+                                ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
                         }
                     }
 

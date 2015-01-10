@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 
@@ -32,17 +30,18 @@ public class SelectPicUtils {
     public static final int REQUEST_CODE_LOCAL_ZOOM = 20;
     public static final int REQUEST_CODE_ZOOM = 21;
 
-    private File cameraFile;
+    private File tempImage;
 
     private static SelectPicUtils instance;
-    public static SelectPicUtils getInstance(){
-        if(instance==null){
+
+    public static SelectPicUtils getInstance() {
+        if (instance == null) {
             instance = new SelectPicUtils();
         }
-        return  instance;
+        return instance;
     }
 
-    public static File getPicFormUri(Activity activity,Uri selectedImage){
+    public static File getPicFormUri(Activity activity, Uri selectedImage) {
         Cursor cursor = activity.getContentResolver().query(selectedImage, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -73,6 +72,7 @@ public class SelectPicUtils {
         }
 
     }
+
     /**
      * 照相获取图片
      */
@@ -83,12 +83,12 @@ public class SelectPicUtils {
             return null;
         }
 
-        cameraFile = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
-        cameraFile.getParentFile().mkdirs();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile));
+        tempImage = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
+        tempImage.getParentFile().mkdirs();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempImage));
         activity.startActivityForResult(intent,
                 REQUEST_CODE_CAMERA);
-        return cameraFile;
+        return tempImage;
 
     }
 
@@ -108,29 +108,34 @@ public class SelectPicUtils {
         activity.startActivityForResult(intent, REQUEST_CODE_LOCAL);
     }
 
-    public void selectZoomPicFromLocal(Activity activity){
+    public File selectZoomPicFromLocal(Activity activity) {
+        tempImage = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
+        tempImage.getParentFile().mkdirs();
         Intent intent;
-        if (Build.VERSION.SDK_INT < 19) {
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        intent.putExtra("crop", "true");// 才能出剪辑的小方框，不然没有剪辑功能，只能选取图片
-        intent.putExtra("aspectX", 1);//裁剪框比例
+        intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);//输出图片大小
-        intent.putExtra("outputY", 150);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 720);
+        intent.putExtra("outputY", 720);
+        intent.putExtra("scale", true);//黑边
+        intent.putExtra("scaleUpIfNeeded", true);//黑边
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempImage));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         activity.startActivityForResult(intent, REQUEST_CODE_LOCAL_ZOOM);
+        return tempImage;
 
     }
 
     /**
      * 裁剪图片方法实现
+     *
      * @param uri
      */
-    public void startPhotoZoom(Activity activity,Uri uri) {
+    public void startPhotoZoom(Activity activity, Uri uri) {
         /*
          * 至于下面这个Intent的ACTION是怎么知道的，大家可以看下自己路径下的如下网页
          * yourself_sdk_path/docs/reference/android/content/Intent.html
@@ -148,11 +153,15 @@ public class SelectPicUtils {
         // outputX outputY 是裁剪图片宽高
         intent.putExtra("outputX", 720);
         intent.putExtra("outputY", 720);
+        intent.putExtra("scale", true);//黑边
+        intent.putExtra("scaleUpIfNeeded", true);//黑边
         intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         activity.startActivityForResult(intent, REQUEST_CODE_ZOOM);
     }
 
-    private void saveBitmapToFile(Context context,Bitmap bitmap) {
+    private void saveBitmapToFile(Context context, Bitmap bitmap) {
         File target = getTempImageFile(context);
         try {
             FileOutputStream fos = new FileOutputStream(target, false);
@@ -174,14 +183,14 @@ public class SelectPicUtils {
         return file;
     }
 
-    private void correctCameraOrientation(Context context,File imgFile) {
+    private void correctCameraOrientation(Context context, File imgFile) {
         Bitmap bitmap = loadImageWithSampleSize(imgFile);
         try {
             ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
             int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             int exifRotateDegree = exifOrientationToDegrees(exifOrientation);
             bitmap = rotateImage(bitmap, exifRotateDegree);
-            saveBitmapToFile(context,bitmap);
+            saveBitmapToFile(context, bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -213,7 +222,9 @@ public class SelectPicUtils {
         }
         return bitmap;
     }
+
     private int mImageSizeBoundary = 500;
+
     private Bitmap loadImageWithSampleSize(File file) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;

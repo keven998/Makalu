@@ -27,6 +27,7 @@ import com.aizou.peachtravel.bean.SpotDetailBean;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -138,7 +139,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 if(result.location!=null&&result.location.coordinates!=null){
                     Uri mUri = Uri.parse("geo:"+result.location.coordinates[1]+","+result.location.coordinates[0]+"?q="+result.zhName);
                     Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    startActivity(mIntent);
+                    if (CommonUtils.checkIntent(mContext, mIntent)){
+                        startActivity(mIntent);
+                    }else{
+                        ToastUtil.getInstance(mContext).showToast("手机里没有地图软件哦");
+                    }
+
                 }
 
             }

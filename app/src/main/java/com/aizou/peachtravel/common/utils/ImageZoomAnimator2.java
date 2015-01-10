@@ -166,7 +166,6 @@ public class ImageZoomAnimator2 {
                     @Override
                     public void onLoadingFailed(String imageUri, View view,
                                                 FailReason failReason) {
-                        loadingPb.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -176,7 +175,6 @@ public class ImageZoomAnimator2 {
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
-                        loadingPb.setVisibility(View.GONE);
 
                     }
                 });

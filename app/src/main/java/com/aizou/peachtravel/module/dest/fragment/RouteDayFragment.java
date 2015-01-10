@@ -395,8 +395,12 @@ public class RouteDayFragment extends PeachBaseFragment {
             final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
             switch (type){
                 case SPOT:
-                    if(poiDetailBean.images.size()>0)
-                    ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
+                    if(poiDetailBean.images.size()>0){
+                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
+                    }else{
+                        holder.spotImageIv.setImageDrawable(null);
+                    }
+
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
                     if (isEditableMode) {
@@ -451,12 +455,12 @@ public class RouteDayFragment extends PeachBaseFragment {
                     if(poiDetailBean.images.size()>0){
                         ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
                     }else{
-//                        holder.poiImageIv.setImageDrawable(null);
+                        holder.poiImageIv.setImageDrawable(null);
                     }
 
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
-                    holder.poiRating.setRating(poiDetailBean.rating);
+                    holder.poiRating.setRating(poiDetailBean.getRating());
 
                     holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {

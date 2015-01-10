@@ -1212,7 +1212,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			message.addBody(txtBody);
 			// 设置要发给谁,用户username或者群聊groupid
 			message.setReceipt(toChatUsername);
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            if(chatType==CHATTYPE_GROUP){
+                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            }
 //            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
 //                @Override
 //                public void onSuccess() {
@@ -1235,7 +1237,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			mEditTextContent.setText("");
-
 			setResult(RESULT_OK);
 
 		}
@@ -1262,7 +1263,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			int len = Integer.parseInt(length);
 			VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
 			message.addBody(body);
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            if(chatType==CHATTYPE_GROUP){
+                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            }
 			conversation.addMessage(message);
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
@@ -1292,7 +1295,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
 //		 body.setSendOriginalImage(true);
 		message.addBody(body);
-        IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        if(chatType==CHATTYPE_GROUP){
+            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        }
 		conversation.addMessage(message);
 
 		listView.setAdapter(adapter);
@@ -1319,7 +1324,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			message.setReceipt(to);
 			VideoMessageBody body = new VideoMessageBody(videoFile, thumbPath, length, videoFile.length());
 			message.addBody(body);
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            if(chatType==CHATTYPE_GROUP){
+                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+            }
 			conversation.addMessage(message);
 			listView.setAdapter(adapter);
 			adapter.refresh();
@@ -1385,7 +1392,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
 		message.addBody(locBody);
 		message.setReceipt(toChatUsername);
-        IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        if(chatType==CHATTYPE_GROUP){
+            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        }
 		conversation.addMessage(message);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -1439,7 +1448,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		// add message body
 		NormalFileMessageBody body = new NormalFileMessageBody(new File(filePath));
 		message.addBody(body);
-        IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        if(chatType==CHATTYPE_GROUP){
+            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+        }
 		conversation.addMessage(message);
 		listView.setAdapter(adapter);
 		adapter.refresh();
@@ -1606,12 +1617,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                             imUser.setAvatar(user.avatar);
                         }
                         IMUserRepository.saveContact(mContext,imUser);
-
                     }
                 }
             }).start();
-
-
 			// 如果是群聊消息，获取到group id
 			if (message.getChatType() == ChatType.GroupChat) {
 				username = message.getTo();

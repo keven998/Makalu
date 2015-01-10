@@ -17,7 +17,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -33,6 +32,7 @@ import com.aizou.peachtravel.bean.RecommendBean;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
@@ -141,10 +141,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     }
 
-    private void refreshFav(PoiDetailBean detailBean){
-        if(detailBean.isFavorite){
+    private void refreshFav(PoiDetailBean detailBean) {
+        if (detailBean.isFavorite) {
             mIvFav.setImageResource(R.drawable.ic_fav);
-        }else{
+        } else {
             mIvFav.setImageResource(R.drawable.ic_unfav);
         }
     }
@@ -157,15 +157,21 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTitleBar.getTitleTextView().setText(bean.zhName);
         mTvPoiPrice.setText(bean.priceDesc);
         mPoiStar.setRating(bean.getRating());
-        mTvTel.setText("电话:" + bean.telephone);
+        if(bean.tel!=null&&bean.tel.size()>0){
+            mTvTel.setText("电话:" + bean.tel.get(0));
+        }
         mTvAddr.setText(bean.address);
         mTvAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bean.location!=null&&bean.location.coordinates!=null){
-                    Uri mUri = Uri.parse("geo:"+bean.location.coordinates[1]+","+bean.location.coordinates[0]+"?q="+bean.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    startActivity(mIntent);
+                if (bean.location != null && bean.location.coordinates != null) {
+                    Uri mUri = Uri.parse("geo:" + bean.location.coordinates[1] + "," + bean.location.coordinates[0] + "?q=" + bean.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                    if (CommonUtils.checkIntent(mContext, mIntent)){
+                        startActivity(mIntent);
+                    }else{
+                        ToastUtil.getInstance(mContext).showToast("手机里没有地图软件哦");
+                    }
                 }
             }
         });
@@ -193,7 +199,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
 //                DialogManager.getInstance().showLoadingDialog(PoiDetailActivity.this);
-                if(poiDetailBean.isFavorite){
+                if (poiDetailBean.isFavorite) {
                     OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -211,14 +217,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
                         }
                     });
-                }else{
+                } else {
                     OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
-                                poiDetailBean.isFavorite =true;
+                                poiDetailBean.isFavorite = true;
                                 refreshFav(poiDetailBean);
                             } else {
                                 if (!isFinishing()) {
@@ -262,7 +268,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareResult(mContext,poiDetailBean,requestCode,resultCode,data,null);
+        IMUtils.onShareResult(mContext, poiDetailBean, requestCode, resultCode, data, null);
     }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
@@ -296,8 +302,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 mTvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext,MoreCommentActivity.class);
-                        intent.putExtra("id",id);
+                        Intent intent = new Intent(mContext, MoreCommentActivity.class);
+                        intent.putExtra("id", id);
                         startActivity(intent);
                     }
                 });
@@ -314,7 +320,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 mLlCommentIndex.setVisibility(View.GONE);
             }
             mTvUsername.setText(itemData.userName);
-            mTvDate.setText(dateFormat.format(new Date(itemData.cTime)));
+            mTvDate.setText(dateFormat.format(new Date(itemData.publishTime)));
             mTvComment.setText(Html.fromHtml(itemData.contents));
             mCommentStar.setRating(itemData.getRating());
 

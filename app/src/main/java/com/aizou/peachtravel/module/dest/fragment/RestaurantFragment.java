@@ -240,10 +240,14 @@ public class RestaurantFragment extends PeachBaseFragment {
             }else{
                 holder = (ItemViewHolder) convertView.getTag();
             }
-            ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+            if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+            }else{
+                holder.poiImageIv.setImageDrawable(null);
+            }
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.poiAddressTv.setText(poiDetailBean.address);
-            holder.poiRating.setRating(poiDetailBean.rating);
+            holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
             if (isEditableMode) {
                 holder.deleteIv.setVisibility(View.VISIBLE);

@@ -21,6 +21,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,10 +31,12 @@ import android.widget.RelativeLayout;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.popupmenu.PopupMenuCompat;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.ContactListBean;
+import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
@@ -498,10 +501,32 @@ public class IMMainActivity extends ChatBaseActivity {
             //主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看
 
             // 消息id
-            String msgId = intent.getStringExtra("msgid");
+            String username = intent.getStringExtra("from");
+            String msgid = intent.getStringExtra("msgid");
             // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-            // EMMessage message =
-            // EMChatManager.getInstance().getMessage(msgId);
+            EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+            final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
+            final String finalUsername = username;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(!TextUtils.isEmpty(fromUser)){
+                        ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
+                        IMUser imUser = IMUserRepository.getContactByUserName(mContext, finalUsername);
+                        if(imUser!=null){
+                            imUser.setNick(user.nickName);
+                            imUser.setAvatar(user.avatar);
+                        }else{
+                            imUser = new IMUser();
+                            imUser.setUsername(finalUsername);
+                            imUser.setNick(user.nickName);
+                            imUser.setUserId(user.userId);
+                            imUser.setAvatar(user.avatar);
+                        }
+                        IMUserRepository.saveContact(mContext,imUser);
+                    }
+                }
+            }).start();
 
             // 刷新bottom bar消息未读数
             updateUnreadLabel();

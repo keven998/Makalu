@@ -25,12 +25,10 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
-import com.aizou.peachtravel.common.dialog.CustomProgressDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
-import com.aizou.peachtravel.common.utils.PathUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.easemob.EMCallBack;
@@ -75,7 +73,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView bindPhoneTv;
     @ViewInject(R.id.tv_phone)
     private TextView phoneTv;
-    private File cameraFile;
+    private File tempImage;
     private PeachUser user;
     DisplayImageOptions options;
     private TextView tvGender;
@@ -270,7 +268,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                cameraFile = SelectPicUtils.getInstance().selectPicFromCamera(AccountActvity.this);
+                tempImage = SelectPicUtils.getInstance().selectPicFromCamera(AccountActvity.this);
                 dialog.dismiss();
 
             }
@@ -279,7 +277,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                SelectPicUtils.getInstance().selectPicFromLocal(AccountActvity.this);
+                tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
                 dialog.dismiss();
 
             }
@@ -391,75 +389,77 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
+    private void uploadAvatar(final File file){
+        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
+        OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
+                if (tokenResult.code == 0) {
+                    String token = tokenResult.result.uploadToken;
+                    String key = tokenResult.result.key;
+                    UploadManager uploadManager = new UploadManager();
+                    uploadManager.put(file, key, token,
+                            new UpCompletionHandler() {
+                                @Override
+                                public void complete(String key, ResponseInfo info, JSONObject response) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    if (info.isOK()) {
+                                        LogUtil.d(response.toString());
+                                        try {
+                                            String imageUrl = response.getString("url");
+                                            user.avatar = imageUrl;
+                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                            ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
 
+                                }
+                            }, new UploadOptions(null, null, false,
+                                    new UpProgressHandler() {
+                                        public void progress(String key, double percent) {
+                                            progressDialog.setContent((int) (percent*100)+"%");
+                                            LogUtil.d("progress",percent+"");
+                                        }
+                                    }, null));
+                } else {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULT_OK){
+            return;
+        }
         if (requestCode == SelectPicUtils.REQUEST_CODE_CAMERA) { // 发送照片
-            if (cameraFile != null && cameraFile.exists()) {
-                SelectPicUtils.getInstance().startPhotoZoom(this, Uri.fromFile(cameraFile));
+            if (tempImage != null && tempImage.exists()) {
+                SelectPicUtils.getInstance().startPhotoZoom(this, Uri.fromFile(tempImage));
 
             }
-        } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL) {
-            if (data != null) {
-                Uri selectedImage = data.getData();
-                if (selectedImage != null) {
-                    File file = SelectPicUtils.getPicFormUri(this, selectedImage);
-                    SelectPicUtils.getInstance().startPhotoZoom(this, Uri.fromFile(file));
-
-                }
+        } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
+            if(tempImage!=null){
+                uploadAvatar(tempImage);
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
-            if (data == null) return;
-            final Uri zoomImage = data.getData();
-            final File file = SelectPicUtils.getPicFormUri(this, zoomImage);
-            final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
-            OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
-                @Override
-                public void doSucess(String result, String method) {
-                    CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
-                    if (tokenResult.code == 0) {
-                        String token = tokenResult.result.uploadToken;
-                        String key = tokenResult.result.key;
-                        UploadManager uploadManager = new UploadManager();
-                        uploadManager.put(file, key, token,
-                                new UpCompletionHandler() {
-                                    @Override
-                                    public void complete(String key, ResponseInfo info, JSONObject response) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (info.isOK()) {
-                                            LogUtil.d(response.toString());
-                                            try {
-                                                String imageUrl = response.getString("url");
-                                                user.avatar = imageUrl;
-                                                AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                                ImageLoader.getInstance().displayImage(zoomImage.toString(), avatarIv, options);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
+            if(tempImage!=null){
+                    uploadAvatar(tempImage);
 
-                                    }
-                                }, new UploadOptions(null, null, false,
-                                        new UpProgressHandler() {
-                                            public void progress(String key, double percent) {
-                                                progressDialog.setContent((int) (percent*100)+"%");
-                                                LogUtil.d("progress",percent+"");
-                                            }
-                                        }, null));
-                    } else {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                    }
-                }
+            }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                    if (!isFinishing())
-                    ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
-                }
-            });
+
 
 
         }

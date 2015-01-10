@@ -63,6 +63,9 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
                                                                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                                                                            finish();
+                                                                       }else{
+                                                                           if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
+                                                                               ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
                                                                        }
                                                                    }
 

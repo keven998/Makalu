@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.my;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -50,14 +51,14 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!RegexUtils.checkNickName(nickEt.getText().toString().trim())){
+                if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
                     ToastUtil.getInstance(mContext).showToast("请输入1-12位中英文昵称");
                     return;
-                } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())){
+                } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())) {
                     ToastUtil.getInstance(mContext).showToast("昵称不能连续超过6位数字");
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
@@ -78,7 +79,8 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                             ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
                         } else {
-                            ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
+                            if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
+                                ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
                         }
                     }
 
@@ -86,7 +88,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
-                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            ToastUtil.getInstance(ModifyNicknameActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
 
                     @Override
