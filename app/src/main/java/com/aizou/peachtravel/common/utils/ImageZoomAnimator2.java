@@ -168,7 +168,7 @@ public class ImageZoomAnimator2 {
                 }
             });
 
-//            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
+            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
             final TextView progressText = (TextView) contentView.findViewById(R.id.progress_text);
             if (photeView.getDrawable() == null) {
                 ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, picOptions, new ImageLoadingListener() {
@@ -176,27 +176,33 @@ public class ImageZoomAnimator2 {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
                         progressText.setVisibility(View.VISIBLE);
+                        loadingPb.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view,
                                                 FailReason failReason) {
                         progressText.setVisibility(View.GONE);
+                        loadingPb.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         progressText.setVisibility(View.GONE);
+                        loadingPb.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
                         progressText.setVisibility(View.GONE);
-
+                        loadingPb.setVisibility(View.GONE);
                     }
                 }, new ImageLoadingProgressListener() {
                     @Override
                     public void onProgressUpdate(String imageUri, View view, int current, int total) {
+                        if (loadingPb.isShown()) {
+                            loadingPb.setVisibility(View.GONE);
+                        }
                         progressText.setText(String.format("%d%%", current*100/total));
                     }
                 });
