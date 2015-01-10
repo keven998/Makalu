@@ -58,7 +58,7 @@ public class PeachApplication extends BaseApplication {
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(cacheDir))
                 .diskCacheSize(40 * 1024 * 1024)
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .tasksProcessingOrder(QueueProcessingType.FIFO)
                         .writeDebugLogs() // Remove for release app
                 .build();
 
