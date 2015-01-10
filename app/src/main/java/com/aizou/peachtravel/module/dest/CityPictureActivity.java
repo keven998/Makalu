@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,10 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.List;
 
@@ -41,8 +45,8 @@ public class CityPictureActivity extends PeachBaseActivity {
     private RelativeLayout zoomContainer;
     @ViewInject(R.id.vp_zoom_pic)
     private HackyViewPager zoomPicVp;
-    @ViewInject(R.id.ll_container)
-    private LinearLayout containView;
+//    @ViewInject(R.id.ll_container)
+//    private LinearLayout containView;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
@@ -59,8 +63,7 @@ public class CityPictureActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_city_picture);
         ViewUtils.inject(this);
         titleBar.enableBackKey(true);
-        titleBar.getTitleTextView().setText("图集");
-
+        titleBar.getTitleTextView().setText(getIntent().getStringExtra("title"));
     }
 
     private void initData() {
@@ -77,7 +80,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                 if(imageReuslt.code == 0){
                     picAdapter= new PicAdapter(imageReuslt.result.album);
                     mCityPicGv.setAdapter(picAdapter);
-                    zoomAnimator = new ImageZoomAnimator2(mContext,mCityPicGv,zoomContainer,imageReuslt.result.album);
+                    zoomAnimator = new ImageZoomAnimator2(mContext, mCityPicGv, zoomContainer, imageReuslt.result.album);
                 }
 
             }
@@ -89,24 +92,34 @@ public class CityPictureActivity extends PeachBaseActivity {
                 }
             }
         });
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoader.getInstance().stop();
+        zoomContainer = null;
+        picAdapter = null;
+        zoomPicVp = null;
+        mCityPicGv = null;
     }
 
     @Override
     public void onBackPressed() {
-
-        if(zoomContainer.getVisibility()==View.VISIBLE){
+        if (zoomContainer.getVisibility() == View.VISIBLE) {
             zoomAnimator.transformOut(zoomPicVp.getCurrentItem());
-        }else{
+        } else {
             super.onBackPressed();
         }
-
     }
+
     private class PicAdapter extends BaseAdapter{
         private List<ImageBean> imageBeanList;
+        private DisplayImageOptions picOptions;
+
         public PicAdapter(List<ImageBean> imageBeanList){
             this.imageBeanList= imageBeanList;
+            picOptions = UILUtils.getDefaultOption();
         }
 
         @Override
@@ -135,7 +148,7 @@ public class CityPictureActivity extends PeachBaseActivity {
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
                     width, height);
             picIv.setLayoutParams(lp);
-            ImageLoader.getInstance().displayImage(itemData.url,picIv, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(itemData.url, picIv, picOptions);
 //            Picasso.with(mContext)
 //                    .load(itemData.url)
 ////                    .placeholder(R.drawable.avatar_placeholder)

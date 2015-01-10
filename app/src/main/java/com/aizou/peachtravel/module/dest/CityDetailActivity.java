@@ -164,8 +164,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,CityPictureActivity.class);
+                Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
+                intent.putExtra("title", locDetailBean.zhName);
                 startActivity(intent);
 
             }
