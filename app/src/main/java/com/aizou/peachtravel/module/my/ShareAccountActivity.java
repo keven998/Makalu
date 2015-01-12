@@ -93,7 +93,7 @@ public class ShareAccountActivity extends PeachBaseActivity {
 
 	private void initTitlebar() {
         TitleHeaderBar thb = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thb.getTitleTextView().setText("分享账户管理");
+        thb.getTitleTextView().setText("分享绑定");
         thb.enableBackKey(true);
 	}
 
