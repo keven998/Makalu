@@ -66,7 +66,7 @@ public class RestaurantFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_rest_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
-        addBtn.setText("收集想吃的");
+        addBtn.setText("吃货收集");
         lineLl = addFooter.findViewById(R.id.ll_line);
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addFooter);
