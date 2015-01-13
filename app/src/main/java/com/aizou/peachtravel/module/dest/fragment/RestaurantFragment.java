@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
@@ -283,7 +285,16 @@ public class RestaurantFragment extends PeachBaseFragment {
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(poiDetailBean.location!=null&&poiDetailBean.location.coordinates!=null){
+                            Uri mUri = Uri.parse("geo:"+poiDetailBean.location.coordinates[1]+","+poiDetailBean.location.coordinates[0]+"?q="+poiDetailBean.zhName);
+                            Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+                            if (CommonUtils.checkIntent(getActivity(), mIntent)){
+                                startActivity(mIntent);
+                            }else{
+                                ToastUtil.getInstance(getActivity()).showToast("手机里没有地图软件哦");
+                            }
 
+                        }
                     }
                 });
             }

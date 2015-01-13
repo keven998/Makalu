@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.toolbox.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +74,17 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
-                MapUtils.showSelectMapDialog(getActivity(),mLat,mLng,"我的位置",poi.location.coordinates[1],poi.location.coordinates[0],poi.zhName);
+                if(poi.location!=null&&poi.location.coordinates!=null){
+                    Uri mUri = Uri.parse("geo:"+poi.location.coordinates[1]+","+poi.location.coordinates[0]+"?q="+poi.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+                    if (CommonUtils.checkIntent(getActivity(), mIntent)){
+                        startActivity(mIntent);
+                    }else{
+                        ToastUtil.getInstance(getActivity()).showToast("手机里没有地图软件哦");
+                    }
+
+                }
+//                MapUtils.showSelectMapDialog(getActivity(),mLat,mLng,"我的位置",poi.location.coordinates[1],poi.location.coordinates[0],poi.zhName);
             }
         });
         listView.getRefreshableView().setAdapter(poiAdapter);

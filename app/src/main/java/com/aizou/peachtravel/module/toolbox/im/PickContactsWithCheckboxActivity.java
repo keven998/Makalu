@@ -405,27 +405,81 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 //
 //                    }
 //                });
+
             }
 
             View contentView;
             ImageView mImg;
             TextView mTxt;
 
+
+        }
+
+        public void checkToBeAddContacts(){
+            if (toBeAddContacts.size() > 0) {
+                if (showing) {
+                    return;
+                }
+                if (toBeAddContactsRv.getVisibility() == View.INVISIBLE) {
+
+                    showing = true;
+                    toBeAddContactsRv.setVisibility(View.VISIBLE);
+                    AnimationSimple.move(contentLl, 300, 0, toBeAddContactsRv.getHeight(), new AccelerateDecelerateInterpolator());
+                    toBeAddContactsRv.setLayoutAnimation(contentShow);
+                    toBeAddContactsRv.startLayoutAnimation();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) contentLl.getLayoutParams();
+                            lp.addRule(RelativeLayout.BELOW, toBeAddContactsRv.getId());
+                            contentLl.setLayoutParams(lp);
+                            contentLl.clearAnimation();
+                            showing = false;
+                        }
+                    }, 300);
+
+//                                    stretchanimation.startAnimation(toBeAddContactsRv);
+                }
+            } else {
+                showing=true;
+                AnimationSimple.move(contentLl, 300, 0, -toBeAddContactsRv.getHeight(), new AccelerateDecelerateInterpolator());
+                toBeAddContactsRv.setLayoutAnimation(contentHide);
+                toBeAddContactsRv.startLayoutAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) contentLl.getLayoutParams();
+                        lp.addRule(RelativeLayout.BELOW, R.id.ly_header_bar_title_wrap);
+                        toBeAddContactsRv.setVisibility(View.INVISIBLE);
+                        contentLl.setLayoutParams(lp);
+                        contentLl.clearAnimation();
+                        showing = false;
+                    }
+                }, 300);
+//                                    stretchanimation.startAnimation(toBeAddContactsRv);
+            }
         }
 
         public void add(IMUser item) {
             mDatas.add(item);
-            notifyItemInserted(mDatas.size()-1);
             notifyDataSetChanged();
+            notifyItemInserted(mDatas.size()-1);
+            checkToBeAddContacts();
+//            notifyItemRangeChanged(0, mDatas.size());
             LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
         }
 
         public void remove(IMUser item) {
-            int position = mDatas.indexOf(item);
-            mDatas.remove(item);
-            notifyItemRemoved(position);
-            notifyDataSetChanged();
-            LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNick());
+            if(mDatas.contains(item)){
+                int position = mDatas.indexOf(item);
+                mDatas.remove(item);
+                notifyDataSetChanged();
+                notifyItemRemoved(position);
+                checkToBeAddContacts();
+//            notifyItemRangeChanged(0, mDatas.size());
+                LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNick());
+            }
+
         }
         public void remove(int pos){
             mDatas.remove(pos);
@@ -445,13 +499,30 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view = mInflater.inflate(R.layout.item_select_contact,
                     viewGroup, false);
-            ViewHolder viewHolder = new ViewHolder(view);
+            final ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.contentView = view;
             viewHolder.mImg = (ImageView) view
                     .findViewById(R.id.iv_avatar);
             viewHolder.mTxt = (TextView) view
                     .findViewById(R.id.tv_nickname);
+            viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(showing){
+                        return;
+                    }
+                    int p = viewHolder.getPosition();
+                    if(p<mDatas.size()){
+                        IMUser user = mDatas.get(p);
+                        int index = alluserList.indexOf(user);
+                        contactAdapter.isCheckedArray[index]=false;
+                        remove(user);
+                        contactAdapter.notifyDataSetChanged();
+                    }
 
+
+                }
+            });
             return viewHolder;
         }
 
@@ -464,19 +535,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             final IMUser user = mDatas.get(i);
             ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatar(), viewHolder.mImg, picOptions);
             viewHolder.mTxt.setText(mDatas.get(i).getNick());
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(showing){
-                        return;
-                    }
-                    int index = alluserList.indexOf(user);
-//                    remove(mDatas.get(i));
-                    contactAdapter.isCheckedArray[index]=false;
-                    contactAdapter.notifyDataSetChanged();
-                }
-            });
-            LogUtil.d("onItemClick"+"onBindViewHolder--"+i+"--mData.size="+mDatas.size());
+
 
         }
 
@@ -589,48 +648,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
                             } else {
                                 toBeAddAdapter.remove(user);
-                            }
-                            if (toBeAddContacts.size() > 0) {
-                                if (showing) {
-                                    return;
-                                }
-                                if (toBeAddContactsRv.getVisibility() == View.INVISIBLE) {
-
-                                    showing = true;
-                                    toBeAddContactsRv.setVisibility(View.VISIBLE);
-                                    AnimationSimple.move(contentLl, 300, 0, toBeAddContactsRv.getHeight(), new AccelerateDecelerateInterpolator());
-                                    toBeAddContactsRv.setLayoutAnimation(contentShow);
-                                    toBeAddContactsRv.startLayoutAnimation();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) contentLl.getLayoutParams();
-                                            lp.addRule(RelativeLayout.BELOW, toBeAddContactsRv.getId());
-                                            contentLl.setLayoutParams(lp);
-                                            contentLl.clearAnimation();
-                                            showing = false;
-                                        }
-                                    }, 300);
-
-//                                    stretchanimation.startAnimation(toBeAddContactsRv);
-                                }
-                            } else {
-                                showing=true;
-                                AnimationSimple.move(contentLl, 300, 0, -toBeAddContactsRv.getHeight(), new AccelerateDecelerateInterpolator());
-                                toBeAddContactsRv.setLayoutAnimation(contentHide);
-                                toBeAddContactsRv.startLayoutAnimation();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) contentLl.getLayoutParams();
-                                        lp.addRule(RelativeLayout.BELOW, R.id.ly_header_bar_title_wrap);
-                                        toBeAddContactsRv.setVisibility(View.INVISIBLE);
-                                        contentLl.setLayoutParams(lp);
-                                        contentLl.clearAnimation();
-                                        showing = false;
-                                    }
-                                }, 300);
-//                                    stretchanimation.startAnimation(toBeAddContactsRv);
                             }
 
                         }
