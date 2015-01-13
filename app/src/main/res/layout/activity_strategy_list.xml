@@ -49,7 +49,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="28dp"
             android:gravity="center"
-            android:text="旅行Memo\n你最贴心的行程助手"
+            android:text="为旅行准备memo，让你的旅行更精彩～"
             android:textColor="@color/base_text_color_text_hint"
             android:lineSpacingExtra="2dp"
             android:textSize="13sp" />
