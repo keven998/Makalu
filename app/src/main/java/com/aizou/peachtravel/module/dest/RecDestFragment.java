@@ -63,7 +63,7 @@ public class RecDestFragment extends PeachBaseFragment {
         recDestContainer = (FreeFlowContainer) rootView.findViewById(R.id.rec_dest_container);
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("想去");
-        titleHeaderBar.getRightTextView().setText("新Memo");
+        titleHeaderBar.getRightTextView().setText("新计划");
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,7 +49,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="28dp"
             android:gravity="center"
-            android:text="为旅行准备memo，让你的旅行更精彩～"
+            android:text="为旅行准备计划\n让你的旅行更精彩～"
             android:textColor="@color/base_text_color_text_hint"
             android:lineSpacingExtra="2dp"
             android:textSize="13sp" />
@@ -71,7 +71,7 @@
             android:background="@drawable/app_theme_button_selector"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
-            android:text="新Memo"
+            android:text="新计划"
             android:textColor="@color/base_color_white"
             android:textSize="14sp" />
 

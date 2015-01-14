@@ -179,10 +179,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         TitleHeaderBar tbar = mTitleBar;
         tbar.enableBackKey(true);
         if ("action.chat".equals(action)) {
-            tbar.getTitleTextView().setText("发送Memo");
+            tbar.getTitleTextView().setText("发送计划");
         } else {
-            tbar.getTitleTextView().setText("旅行Memo");
-            tbar.getRightTextView().setText("新Memo");
+            tbar.getTitleTextView().setText("旅行计划");
+            tbar.getRightTextView().setText("新计划");
             tbar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -381,7 +381,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void onClick(View v) {
                         //todo:修改攻略名称
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                        editDialog.setTitle("给Memo取个名");
+                        editDialog.setTitle("给计划取个名");
                         editDialog.setMessage(itemData.title);
                         editDialog.setPositiveButton("确定",new View.OnClickListener() {
                             @Override
