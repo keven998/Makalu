@@ -55,7 +55,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(mContext).showToast("请输入1-12位中英文昵称");
                     return;
                 } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())) {
-                    ToastUtil.getInstance(mContext).showToast("昵称不能连续超过6位数字");
+                    ToastUtil.getInstance(mContext).showToast("昵称不能为纯数字");
                     return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {

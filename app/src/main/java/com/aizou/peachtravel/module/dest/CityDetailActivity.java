@@ -238,7 +238,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         if(detailBean.imageCnt>100){
             detailBean.imageCnt=100;
         }
-        mPicNumTv.setText(String.valueOf(detailBean.imageCnt));
+        mPicNumTv.setText("画册");
         mCityNameTv.setText(detailBean.zhName);
         mCityDescTv.setText(detailBean.desc);
         mCostTimeTv.setText(detailBean.timeCostDesc);

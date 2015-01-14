@@ -74,7 +74,7 @@ public class RecDestFragment extends PeachBaseFragment {
         titleHeaderBar.enableBackKey(false);
 //        initData();
         setupViewFromCache();
-        reloadData();
+        initData();
         return rootView;
     }
 
@@ -141,12 +141,12 @@ public class RecDestFragment extends PeachBaseFragment {
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
                 if(!proxy.isHeader){
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
-                    if(TextUtils.isEmpty(itemData.itemType)){
+                    if(itemData.linkType.equals("html")){
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                         intent.putExtra("title",itemData.title);
                         intent.putExtra("url",itemData.linkUrl);
                         startActivity(intent);
-                    } else {
+                    } else if(itemData.linkType.equals("app")){
                         IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
                     }
                 }

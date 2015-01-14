@@ -61,6 +61,7 @@
                 android:layout_height="35dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="6dp"
+                android:background="@drawable/bg_common_default"
                 android:scaleType="centerCrop"
                 android:layout_below="@id/tv_type"/>
             <TextView

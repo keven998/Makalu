@@ -92,6 +92,7 @@ public class IMMainActivity extends ChatBaseActivity {
     // 当前fragment的index
     private int currentTabIndex;
     private NewMessageBroadcastReceiver msgReceiver;
+    private MyGroupChangeListener groupChangeListener;
     // 账号在别处登录
     private boolean isConflict = false;
 
@@ -107,14 +108,20 @@ public class IMMainActivity extends ChatBaseActivity {
         //这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
         //显示所有人消息记录的fragment
-        chatHistoryFragment = new ChatAllHistoryFragment();
-        contactListFragment = new ContactlistFragment();
-        settingFragment = new SettingsFragment();
-        fragments = new Fragment[]{chatHistoryFragment, contactListFragment, settingFragment};
-        // 添加显示第一个fragment
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
-                .add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment)
-                .commit();
+        if (savedInstanceState == null) {
+            chatHistoryFragment = new ChatAllHistoryFragment();
+            contactListFragment = new ContactlistFragment();
+            settingFragment = new SettingsFragment();
+            fragments = new Fragment[]{chatHistoryFragment, contactListFragment, settingFragment};
+            // 添加显示第一个fragment
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment,"ChatHistory")
+                    .add(R.id.fragment_container, contactListFragment,"ContactList").hide(contactListFragment).show(chatHistoryFragment)
+                    .commit();
+
+        }else{
+            chatHistoryFragment = (ChatAllHistoryFragment) getSupportFragmentManager().findFragmentByTag("ChatHistory");
+            contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
+        }
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
 //            @Override
@@ -155,7 +162,8 @@ public class IMMainActivity extends ChatBaseActivity {
 //		registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
 
         // 注册群聊相关的listener
-        EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
+        groupChangeListener =new MyGroupChangeListener();
+        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
     }
@@ -380,7 +388,11 @@ public class IMMainActivity extends ChatBaseActivity {
             unregisterReceiver(cmdMessageReceiver);
         } catch (Exception e) {
         }
-
+        try {
+            // 注册群聊相关的listener
+            EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
+        } catch (Exception e) {
+        }
 
     }
 

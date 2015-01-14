@@ -33,7 +33,12 @@ public class PeachWebViewActivity extends BaseWebViewActivity {
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if(mWebView.canGoBack()){
+                    mWebView.goBack();
+                }else{
+                    finish();
+                }
+
             }
         });
         mWebView = (WebView) findViewById(R.id.web_view);

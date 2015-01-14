@@ -37,7 +37,7 @@ public class BaseApi {
         if(user!=null){
             request.setHeader("UserId", user.userId+"");
         }
-        request.setHeader("Platform", "Android");
+        request.setHeader("Platform", "Android "+android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);
     }
 
