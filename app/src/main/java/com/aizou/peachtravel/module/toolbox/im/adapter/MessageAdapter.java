@@ -710,7 +710,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
-            holder.tv_type.setText("Memo");
+            holder.tv_type.setText("计划");
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

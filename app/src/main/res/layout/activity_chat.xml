@@ -188,7 +188,7 @@
                     <TextView android:id="@+id/btn_my_guide"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="旅行Memo"
+                        android:text="旅行计划"
                         android:textSize="13sp"
                         android:layout_weight="1"
                         android:clickable="true"

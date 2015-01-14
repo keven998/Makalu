@@ -136,7 +136,7 @@ public class StrategyActivity extends PeachBaseActivity {
 //            cityIdList.add("5473ccddb8ce043a64108d22");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
-            dialog.setMessage("小桃可为你创建行程模版，制作memo更简单");
+            dialog.setMessage("小桃可为你创建行程模版，制作计划更简单");
             dialog.setNegativeButton("不需要",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,7 +210,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行计划");
                         }
                     }.sendEmptyMessageDelayed(0, 1000);
                 } else {
@@ -234,7 +234,7 @@ public class StrategyActivity extends PeachBaseActivity {
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user.userId != result.userId){
             mTitleBar.setRightViewImageRes(0);
-            mTitleBar.getRightTextView().setText("复制Memo");
+            mTitleBar.getRightTextView().setText("复制计划");
             canEdit = false;
             mTitleBar.setRightOnClickListener(new View.OnClickListener() {
                 @Override
@@ -246,7 +246,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             if (!isFinishing())
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为我的Memo");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为旅行计划");
                         }
 
                         @Override
@@ -533,7 +533,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
-        messageDialog.setMessage("Memo已编辑，是否保存");
+        messageDialog.setMessage("计划已编辑，是否保存");
         messageDialog.setPositiveButton("保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
