@@ -61,6 +61,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         mSearchTravelNoteLv.setPullLoadEnabled(false);
         mSearchTravelNoteLv.setPullRefreshEnabled(false);
         mSearchTravelNoteLv.setScrollLoadEnabled(true);
+        mSearchTravelNoteLv.setHasMoreData(false);
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {

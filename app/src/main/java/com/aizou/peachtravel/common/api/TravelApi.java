@@ -130,11 +130,12 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getCityDetail(String id,HttpCallBack callback) {
+    public static PTRequestHandler getCityDetail(String id,int imgWidth,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + CITY_DETAIL+id);
         request.putUrlParams("noteCnt","3");
+        request.putUrlParams("imgWidth",imgWidth+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

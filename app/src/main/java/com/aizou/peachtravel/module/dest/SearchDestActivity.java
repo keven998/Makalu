@@ -72,6 +72,7 @@ public class SearchDestActivity extends PeachBaseActivity {
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
         mSearchResultLv.setScrollLoadEnabled(true);
+        mSearchResultLv.setHasMoreData(false);
         mSearchResultLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

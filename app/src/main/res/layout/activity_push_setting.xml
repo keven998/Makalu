@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"/>
 
-    <LinearLayout android:id="@+id/ll_lxq"
+    <LinearLayout android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:background="@drawable/option_cell_selector"
@@ -28,7 +28,7 @@
             android:paddingBottom="14dp"
             android:text="贴心旅行相关推送"/>
 
-        <CheckBox android:id="@+id/lxq_nofity_status"
+        <CheckBox android:id="@+id/content_nofity_status"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -38,7 +38,7 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/ll_content"
+    <LinearLayout android:id="@+id/ll_lxq"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:background="@drawable/option_cell_selector"
@@ -56,7 +56,7 @@
             android:paddingBottom="14dp"
             android:text="桃·Talk提醒"/>
 
-        <CheckBox android:id="@+id/content_nofity_status"
+        <CheckBox android:id="@+id/lxq_nofity_status"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

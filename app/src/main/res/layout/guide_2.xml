@@ -15,9 +15,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="200dp"
+            android:layout_width="220dp"
             android:layout_height="60dp"
-            android:background="@color/app_theme_color" />
+            android:scaleType="centerInside"
+            android:src="@drawable/guide_text_2" />
 
         <RelativeLayout
             android:layout_width="320dp"

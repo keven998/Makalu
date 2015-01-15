@@ -57,6 +57,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         mLvPoiList.setPullLoadEnabled(false);
         mLvPoiList.setPullRefreshEnabled(false);
         mLvPoiList.setScrollLoadEnabled(true);
+        mLvPoiList.setHasMoreData(false);
         mLvPoiList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

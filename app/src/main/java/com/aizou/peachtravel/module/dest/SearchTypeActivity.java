@@ -69,6 +69,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         mSearchTypeLv.setPullLoadEnabled(false);
         mSearchTypeLv.setPullRefreshEnabled(false);
         mSearchTypeLv.setScrollLoadEnabled(true);
+        mSearchTypeLv.setHasMoreData(false);
         mSearchTypeLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

@@ -78,6 +78,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLvPoiList.setPullLoadEnabled(false);
         mLvPoiList.setPullRefreshEnabled(false);
         mLvPoiList.setScrollLoadEnabled(true);
+        mLvPoiList.setHasMoreData(false);
         mPoiAdapter = new PoiAdapter(mContext, true);
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override

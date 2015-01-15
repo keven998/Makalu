@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -109,7 +110,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void getCityDetailData(String id){
-        TravelApi.getCityDetail(id,new HttpCallBack<String>() {
+        TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS/1.5),new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
