@@ -57,6 +57,7 @@ import butterknife.InjectView;
 public class StrategyListActivity extends PeachBaseActivity {
 
     public static final int RESULT_PLAN_DETAIL = 1;
+    public static final int REQUEST_CODE_NEW_PLAN=2;
 
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
@@ -187,7 +188,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
                 }
             });
         }
@@ -245,6 +246,12 @@ public class StrategyListActivity extends PeachBaseActivity {
                     PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
 
+            }else if(requestCode==REQUEST_CODE_NEW_PLAN){
+                StrategyBean sb = data.getParcelableExtra("strategy");
+                if(sb!=null){
+                    PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                }
+                mMyStrategyLv.doPullRefreshing(true, 0);
             }
         }
     }

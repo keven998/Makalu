@@ -390,6 +390,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
     private void uploadAvatar(final File file){
+        LogUtil.d("file",file.toString());
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
@@ -455,7 +456,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
             if(tempImage!=null){
-                    uploadAvatar(tempImage);
+               uploadAvatar(tempImage);
 
             }
 

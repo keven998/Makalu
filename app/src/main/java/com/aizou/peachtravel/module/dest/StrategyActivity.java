@@ -37,6 +37,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -57,6 +58,9 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class StrategyActivity extends PeachBaseActivity {
+    public static final int RESULT_NEW_PLAN=100;
+    public static final int RESULT_COMPLETE=101;
+
     @InjectView(R.id.loc_list_rv)
     RecyclerView mLocListRv;
     @InjectView(R.id.title_bar)
@@ -112,14 +116,9 @@ public class StrategyActivity extends PeachBaseActivity {
                 if(checkIsEditableMode()) {
                     warnCancel();
                 } else {
-                    finish();
+                        finish();
+
                 }
-            }
-        });
-        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareUtils.showSelectPlatformDialog(StrategyActivity.this);
             }
         });
     }
@@ -232,6 +231,7 @@ public class StrategyActivity extends PeachBaseActivity {
         strategy = result;
         mTitleBar.getTitleTextView().setText(result.title);
         PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+
         if(user.userId != result.userId){
             mTitleBar.setRightViewImageRes(0);
             mTitleBar.getRightTextView().setText("复制计划");
@@ -291,6 +291,12 @@ public class StrategyActivity extends PeachBaseActivity {
         } else {
             mTitleBar.setRightViewImageRes(R.drawable.ic_share);
             mTitleBar.getRightTextView().setText("");
+            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this,strategy);
+                }
+            });
             canEdit = true;
         }
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
@@ -301,9 +307,15 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     public void finish() {
-        Intent intent = getIntent();
-        intent.putExtra("strategy", strategy);
-        setResult(RESULT_OK, intent);
+        if(TextUtils.isEmpty(getIntent().getStringExtra("id"))){
+            Intent intent = getIntent();
+            intent.putExtra("strategy", strategy);
+            setResult(RESULT_OK, intent);
+        }else{
+            Intent intent = getIntent();
+            intent.putExtra("strategy", strategy);
+            setResult(RESULT_OK, intent);
+        }
         super.finish();
     }
 
@@ -488,6 +500,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IMUtils.onShareResult(mContext, strategy, requestCode, resultCode, data, null);
         if (resultCode == RESULT_OK) {
             for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                 if (fragment != null) {
@@ -504,7 +517,7 @@ public class StrategyActivity extends PeachBaseActivity {
         if(checkIsEditableMode()){
             warnCancel();
         }else {
-            super.onBackPressed();
+           finish();
         }
 
     }

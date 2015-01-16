@@ -109,9 +109,9 @@ public class ImageZoomAnimator2 {
                     .cacheOnDisk(true)
                     .bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
-                    .showImageForEmptyUri(R.drawable.all_black_bg)
-                    .showImageOnFail(R.drawable.all_black_bg)
-                    .showImageOnLoading(R.drawable.all_black_bg)
+//                    .showImageForEmptyUri(R.drawable.all_black_bg)
+//                    .showImageOnFail(R.drawable.all_black_bg)
+//                    .showImageOnLoading(R.drawable.all_black_bg)
                     .displayer(new FadeInBitmapDisplayer(300, true, true, false))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
@@ -170,8 +170,8 @@ public class ImageZoomAnimator2 {
 
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
             final TextView progressText = (TextView) contentView.findViewById(R.id.progress_text);
-            if (photeView.getDrawable() == null) {
-                ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, picOptions, new ImageLoadingListener() {
+//            if (photeView.getDrawable() == null) {
+                ImageLoader.getInstance().displayImage(imageUrls.get(position).originUrl, photeView, picOptions, new ImageLoadingListener() {
 
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
@@ -206,7 +206,7 @@ public class ImageZoomAnimator2 {
                         progressText.setText(String.format("%d%%", current*100/total));
                     }
                 });
-            }
+//            }
 
 
             photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {

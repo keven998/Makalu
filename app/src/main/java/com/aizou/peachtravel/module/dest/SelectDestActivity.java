@@ -36,6 +36,7 @@ import java.util.Set;
 public class SelectDestActivity extends PeachBaseActivity implements OnDestActionListener {
     public final static int REQUEST_CODE_SEARCH_LOC = 101;
     public final static int REQUEST_CODE_LOGIN = 102;
+    public final static int REQUEST_CODE_NEW_PLAN=103;
 
 //    private RadioGroup inOutRg;
     private LinearLayout citysLl;
@@ -126,8 +127,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 if (user != null) {
                     Intent intent = new Intent(mContext, StrategyActivity.class);
                     intent.putParcelableArrayListExtra("destinations", allAddCityList);
-                    startActivity(intent);
-                    finishWithNoAnim();
+                    startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
                 } else {
                     ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);
@@ -229,6 +229,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 Intent intent = new Intent(mContext, StrategyActivity.class);
                 intent.putParcelableArrayListExtra("destinations", allAddCityList);
                 startActivityWithNoAnim(intent);
+                finishWithNoAnim();
+            }else if(requestCode==REQUEST_CODE_NEW_PLAN){
+                setResult(RESULT_OK,data);
                 finishWithNoAnim();
             }
         }

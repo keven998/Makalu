@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
-        android:src="@drawable/ic_launcher"/>
+        />
     
     <RelativeLayout 
         android:id="@+id/pull_to_refresh_header_content"

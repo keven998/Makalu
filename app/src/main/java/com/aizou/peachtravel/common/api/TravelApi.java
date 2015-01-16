@@ -9,6 +9,7 @@ import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.config.SystemConfig;
 
 import org.apache.http.entity.StringEntity;
@@ -148,6 +149,7 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + String.format(CITY_GALLEY,id));
+        request.putUrlParams("imgWidth", (int)(LocalDisplay.SCREEN_HEIGHT_PIXELS/3/1.5)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

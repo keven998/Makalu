@@ -112,7 +112,13 @@ public class SelectPicUtils {
         tempImage = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
         tempImage.getParentFile().mkdirs();
         Intent intent;
-        intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
         intent.setType("image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);

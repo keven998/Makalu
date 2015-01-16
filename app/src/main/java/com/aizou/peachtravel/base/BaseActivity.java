@@ -16,6 +16,7 @@ import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.easemob.EMCallBack;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Rjm on 2014/12/4.
@@ -46,12 +47,14 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         isFroground=true;
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isFroground=false;
+        MobclickAgent.onPause(this);
     }
 
     @Override

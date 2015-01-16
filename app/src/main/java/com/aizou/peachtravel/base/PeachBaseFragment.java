@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aizou.peachtravel.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 
@@ -52,4 +53,15 @@ public class PeachBaseFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getName());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getName());
+    }
 }
