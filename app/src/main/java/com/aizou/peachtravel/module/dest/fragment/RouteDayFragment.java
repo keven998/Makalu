@@ -96,6 +96,22 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     }
 
+    public void resumeItinerary(){
+        ArrayList<StrategyBean.IndexPoi> poiList = new ArrayList<>();
+        int dayIndex=0;
+        StrategyBean.IndexPoi indexPoi;
+        for(ArrayList<PoiDetailBean> poiDayList:routeDayMap){
+            for(PoiDetailBean poiDetailBean:poiDayList){
+                indexPoi=new StrategyBean.IndexPoi();
+                indexPoi.dayIndex= dayIndex;
+                indexPoi.poi= poiDetailBean;
+                poiList.add(indexPoi);
+            }
+            dayIndex++;
+        }
+        strategy.itinerary = poiList;
+    }
+
     public boolean  isEditableMode(){
         if(routeDayAdpater!=null){
             return routeDayAdpater.isEditableMode;
@@ -179,6 +195,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                     mEditBtn.setChecked(false);
                                     lineLl.setVisibility(View.GONE);
                                     addDayFooter.setVisibility(View.INVISIBLE);
+                                    resumeItinerary();
                                     adapter.isEditableMode = !adapter.isEditableMode;
                                     adapter.notifyDataSetChanged();
                                 }

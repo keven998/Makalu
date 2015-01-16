@@ -125,8 +125,8 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 				SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
                 Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
                 startActivityWithNoAnim(mainActivity);
-                Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
-                startActivityWithNoAnim(storyIntent);
+//                Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
+//                startActivityWithNoAnim(storyIntent);
 			} else if (type.equals("setting")) {
 
 			}
@@ -141,8 +141,8 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
         SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
         Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
         startActivityWithNoAnim(mainActivity);
-        Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
-        startActivityWithNoAnim(storyIntent);
+//        Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
+//        startActivityWithNoAnim(storyIntent);
     }
 
     // 当新的页面被选中时调用

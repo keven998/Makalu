@@ -4,9 +4,10 @@
     android:layout_height="match_parent" >
 
     <ImageView
+        android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/base_color_white"
-        android:scaleType="fitXY"/>
+        android:scaleType="centerCrop"/>
 
 </FrameLayout>

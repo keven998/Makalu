@@ -307,16 +307,29 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     public void finish() {
-        if(TextUtils.isEmpty(getIntent().getStringExtra("id"))){
+//        if(TextUtils.isEmpty(getIntent().getStringExtra("id"))){
+//            Intent intent = getIntent();
+//            intent.putExtra("strategy", strategy);
+//            setResult(RESULT_OK, intent);
+//        }else{
             Intent intent = getIntent();
-            intent.putExtra("strategy", strategy);
+            intent.putExtra("strategy", getSaveStrategy());
             setResult(RESULT_OK, intent);
-        }else{
-            Intent intent = getIntent();
-            intent.putExtra("strategy", strategy);
-            setResult(RESULT_OK, intent);
-        }
+//        }
         super.finish();
+    }
+
+    private StrategyBean getSaveStrategy(){
+        if(routeDayFragment!=null){
+            strategy = routeDayFragment.getStrategy();
+        }
+        if(restFragment!=null){
+            strategy.restaurant = restFragment.getStrategy().restaurant;
+        }
+        if(shoppingFragment!=null){
+            strategy.shopping = restFragment.getStrategy().shopping;
+        }
+        return strategy;
     }
 
     public void setRVVisiable(boolean visiable) {
@@ -538,6 +551,7 @@ public class StrategyActivity extends PeachBaseActivity {
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
             StrategyManager.putItineraryJson(mContext,jsonObject,routeDayFragment.getStrategy(),routeDayFragment.getRouteDayMap());
+            routeDayFragment.resumeItinerary();
         }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
             StrategyManager.putShoppingJson(mContext,jsonObject,shoppingFragment.getStrategy());
         }else if(restFragment!=null&&restFragment.isEditableMode()){
