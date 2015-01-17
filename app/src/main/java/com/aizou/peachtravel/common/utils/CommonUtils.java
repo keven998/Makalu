@@ -29,6 +29,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.Display;
 
+import org.apache.http.Header;
+
 public class CommonUtils {
 
     /**
@@ -114,5 +116,15 @@ public class CommonUtils {
         }
     }
 
+
+    public static String getLastModifyForHeader(Header[] headers){
+        for(Header header:headers){
+            if(header.getName().equals("Last-Modified")){
+                return header.getValue();
+            }
+        }
+        return null;
+
+    }
 
 }

@@ -1,6 +1,8 @@
 package com.aizou.core.http;
 
 
+import org.apache.http.Header;
+
 import java.util.Map;
 
 /**
@@ -16,6 +18,15 @@ public abstract class HttpCallBack<T> {
 	 * @return
 	 */
 	public abstract void doSucess(T result, String method);
+
+
+    /**
+     * 描述：通信成功的回调
+     * @param result 回调数据
+     * @param method 请求标示
+     * @return
+     */
+    public void doSucess(T result, String method,Header[] headers){};
 	
 	/**
 	 * 描述：通信异常的回调
@@ -53,6 +64,8 @@ public abstract class HttpCallBack<T> {
     public void onStart(){
 
     }
+
+
 	
 
 }

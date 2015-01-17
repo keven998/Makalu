@@ -43,6 +43,8 @@ import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.apache.http.Header;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -108,6 +110,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
     private void getRecDestData(){
         TravelApi.getRecDest(new HttpCallBack<String>() {
+
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);

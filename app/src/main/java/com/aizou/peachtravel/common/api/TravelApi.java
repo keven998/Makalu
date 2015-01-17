@@ -93,11 +93,15 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getInDestList(HttpCallBack callback) {
+    public static PTRequestHandler getInDestList(String lastModeify,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
         setDefaultParams(request);
+        if(!TextUtils.isEmpty(lastModeify)){
+            request.addHeader("Cache-Control","private");
+            request.addHeader("If-Modified-Since",lastModeify);
+        }
         return HttpManager.request(request, callback);
     }
     /**
@@ -105,11 +109,15 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getOutDestList(HttpCallBack callback) {
+    public static PTRequestHandler getOutDestList(String lastModeify,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + OUT_DESTINATIONS);
         setDefaultParams(request);
+        if(!TextUtils.isEmpty(lastModeify)){
+            request.addHeader("Cache-Control","private");
+            request.addHeader("If-Modified-Since",lastModeify);
+        }
         return HttpManager.request(request, callback);
     }
 

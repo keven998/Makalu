@@ -111,7 +111,8 @@ public class IMMainActivity extends ChatBaseActivity {
         if (savedInstanceState == null) {
             chatHistoryFragment = new ChatAllHistoryFragment();
             contactListFragment = new ContactlistFragment();
-            fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
+            settingFragment = new SettingsFragment();
+            fragments = new Fragment[]{chatHistoryFragment, contactListFragment, settingFragment};
             // 添加显示第一个fragment
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment,"ChatHistory")
                     .add(R.id.fragment_container, contactListFragment,"ContactList").hide(contactListFragment).show(chatHistoryFragment)
@@ -121,6 +122,8 @@ public class IMMainActivity extends ChatBaseActivity {
             chatHistoryFragment = (ChatAllHistoryFragment) getSupportFragmentManager().findFragmentByTag("ChatHistory");
             contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
             fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
+            currentTabIndex = savedInstanceState.getInt("currentTabIndex");
+                mTabs[currentTabIndex].performClick();
         }
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
@@ -726,7 +729,11 @@ public class IMMainActivity extends ChatBaseActivity {
         }
 
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("currentTabIndex",currentTabIndex);
+        super.onSaveInstanceState(outState);
+    }
     @Override
     protected void onResume() {
         super.onResume();

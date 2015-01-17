@@ -24,6 +24,7 @@
                 android:textSize="14sp"
                 android:layout_gravity="center_vertical"
                 android:duplicateParentState="true"
+                android:clickable="false"
                 android:textColor="@color/app_theme_color"
                 android:background="@drawable/btn_complete_selector"
                 android:text="完成" />

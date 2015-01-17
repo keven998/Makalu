@@ -26,6 +26,7 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
@@ -35,6 +36,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+import org.apache.http.Header;
 
 import java.util.List;
 
@@ -77,13 +80,18 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     private void getOutCountryList(){
-        TravelApi.getOutDestList(new HttpCallBack<String>() {
+        String lastModify=PreferenceUtils.getCacheData(getActivity(), "outcountry_last_modify");
+        TravelApi.getOutDestList(lastModify,new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+            }
+            @Override
+            public void doSucess(String result, String method,Header[] headers) {
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);
+                    PreferenceUtils.cacheData(getActivity(), "outcountry_last_modify", CommonUtils.getLastModifyForHeader(headers));
                 }
             }
 

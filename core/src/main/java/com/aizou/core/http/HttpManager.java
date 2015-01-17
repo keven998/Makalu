@@ -118,6 +118,8 @@ public class HttpManager {
                             if (!callBack.httpCallBackPreFilter(result,
                                     url)) {// 拦截过滤
                                 callBack.doSucess(result,url);
+                                callBack.doSucess(result,url,responseInfo.getAllHeaders());
+
                             }
                         }
                     } catch (Exception e) {
