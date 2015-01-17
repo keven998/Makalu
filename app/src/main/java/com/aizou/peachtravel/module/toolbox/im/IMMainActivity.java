@@ -121,6 +121,9 @@ public class IMMainActivity extends ChatBaseActivity {
         }else{
             chatHistoryFragment = (ChatAllHistoryFragment) getSupportFragmentManager().findFragmentByTag("ChatHistory");
             contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
+            fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
+            currentTabIndex = savedInstanceState.getInt("currentTabIndex");
+                mTabs[currentTabIndex].performClick();
         }
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
@@ -726,7 +729,11 @@ public class IMMainActivity extends ChatBaseActivity {
         }
 
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("currentTabIndex",currentTabIndex);
+        super.onSaveInstanceState(outState);
+    }
     @Override
     protected void onResume() {
         super.onResume();

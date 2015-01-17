@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -23,12 +24,16 @@ import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.InDestBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.easemob.util.HanziToPinyin;
+
+import org.apache.http.Header;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,21 +94,29 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     private void getInLocList() {
-        TravelApi.getInDestList( new HttpCallBack<String>() {
+        String lastModify=PreferenceUtils.getCacheData(getActivity(), "indest_last_modify");
+        TravelApi.getInDestList(lastModify, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+
+            }
+
+            @Override
+            public void doSucess(String result, String method,Header[] headers) {
                 CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_indest", result);
+                    PreferenceUtils.cacheData(getActivity(), "indest_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    LogUtil.d("last_modify",CommonUtils.getLastModifyForHeader(headers));
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (isAdded()) {
-                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-                }
+//                if (isAdded()) {
+//                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                }
             }
         });
     }

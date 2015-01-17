@@ -153,6 +153,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.phoneView.setVisibility(View.GONE);
+                vh.avatarView.setImageResource(R.drawable.avatar_placeholder);
 				if(user.getUnreadMsgCount() > 0){
 					vh.unreadMsgView.setVisibility(View.VISIBLE);
 //					unreadMsgView.setText(user.getUnreadMsgCount()+"");

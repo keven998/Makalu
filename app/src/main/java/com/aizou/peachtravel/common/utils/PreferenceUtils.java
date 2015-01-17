@@ -16,6 +16,7 @@ package com.aizou.peachtravel.common.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 public class PreferenceUtils {
 
@@ -89,7 +90,10 @@ public class PreferenceUtils {
     }
 
     public static void cacheData(Context context, String key, String value) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, value).commit();
+        if(!TextUtils.isEmpty(value)){
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, value).commit();
+        }
+
     }
 
 }

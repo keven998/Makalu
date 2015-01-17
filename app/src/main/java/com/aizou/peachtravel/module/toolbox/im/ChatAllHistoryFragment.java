@@ -85,6 +85,9 @@ public class ChatAllHistoryFragment extends Fragment {
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         // contact list
         contactList = AccountManager.getInstance().getContactList(getActivity());
+//        if(EMGroupManager.getInstance().getAllGroups()==null){
+            EMGroupManager.getInstance().loadAllGroups();
+//        }
         listView = (ListView) getView().findViewById(R.id.list);
         loadConversationsWithRecentChat();
         adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
@@ -243,6 +246,14 @@ public class ChatAllHistoryFragment extends Fragment {
                             try {
                                 EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
                                 EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
+                                if(isAdded()&&adapter!=null){
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
+
+                                }
                             } catch (EaseMobException e) {
                                 e.printStackTrace();
                             }
