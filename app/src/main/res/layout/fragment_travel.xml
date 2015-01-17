@@ -18,124 +18,155 @@
         <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
             android:id="@+id/vp_travel"
             android:layout_width="fill_parent"
+            android:layout_margin="10dp"
             android:background="#f3d4df"
             android:layout_height="170dp"/>
-
-        <LinearLayout android:id="@+id/ll_weather"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:paddingTop="5dp"
-            android:background="@drawable/ic_text_cover_bg"
-            android:paddingBottom="5dp"
-            >
-            <ImageView
-                android:id="@+id/iv_weather"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginLeft="17dp"
-                android:scaleType="fitCenter"
-                android:layout_marginTop="4dp"
-                android:visibility="gone"
-                android:layout_marginBottom="4dp"
-                />
-            <TextView android:id="@+id/tv_weather"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="11dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="12sp"
-                android:textColor="@color/base_color_white"/>
-        </LinearLayout>
 
         <com.aizou.core.widget.DotView
             android:id="@+id/dot_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="18dp"
             cube_dotview:dot_radius="3dp"
             cube_dotview:dot_selected_color="0xffee528c"
-            cube_dotview:dot_span="8dp"
-            cube_dotview:dot_unselected_color="0xFFffffff"
+            cube_dotview:dot_span="10dp"
+            cube_dotview:dot_unselected_color="0xffffffff"
             />
 
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/base_color_white">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:scaleType="center"
-            android:src="@drawable/bg_home_mid"/>
+        <View android:id="@+id/vv"
+            android:layout_width="4dp"
+            android:layout_height="14dp"
+            android:background="@color/app_theme_color"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"></View>
 
         <TextView
             android:id="@+id/tv_toolbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="37dp"
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_toRightOf="@id/vv"
+            android:layout_marginLeft="4dp"
             android:text="@string/tool_title"
-            android:drawableLeft="@drawable/ic_toolbox_left"
-            android:drawableRight="@drawable/ic_toolbox_right"
             android:drawablePadding="10dp"
-            android:textSize="17sp"
-            android:textColor="@color/base_text_color_title"/>
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/app_theme_color"/>
 
-        <LinearLayout
-            android:layout_below="@id/tv_toolbox"
-            android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tv_my_guide"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="旅行计划"
-                android:textSize="12sp"
-                android:drawablePadding="10dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:drawableTop="@drawable/btn_home_guide"
-                android:textColor="@color/base_text_color_subtitle"/>
-            <TextView
-                android:id="@+id/tv_fav"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="收藏夹"
-                android:textSize="12sp"
-                android:drawablePadding="10dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:drawableTop="@drawable/btn_home_fav"
-                android:textColor="@color/base_text_color_subtitle"/>
-            <TextView
-                android:id="@+id/tv_nearby"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="我身边"
-                android:textSize="12sp"
-                android:singleLine="true"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/btn_home_around"
-                android:gravity="center"
-                android:textColor="@color/base_text_color_subtitle"/>
+            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:textSize="9sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/base_text_color_text_placeholder"/>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_city"
+            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="4dp"
+            android:textSize="9sp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/base_text_color_text_placeholder"/>
+
+        <RelativeLayout android:id="@+id/my_guides"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/vv"
+            android:padding="10dp"
+            android:background="@color/base_color_white">
+
+            <TextView android:id="@+id/titleview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_theme_color"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="旅程助手"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_text_color_text_hint"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="5dp"
+                android:layout_below="@id/titleview"
+                android:text="最贴心的旅行计划助手\n专为美眉们打造"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/app_theme_color"
+                android:textColor="@color/base_color_white"
+                android:layout_margin="2dp"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="我的旅程"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout android:id="@+id/my_around"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/vv"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/base_color_white">
+
+            <TextView android:id="@+id/titleview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_theme_color"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="身边发现"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_text_color_text_hint"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="4dp"
+                android:layout_below="@id/titleview1"
+                android:text="旅途有发现\n发现途中的灵感\n发现当下的乐趣"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/app_theme_color"
+                android:textColor="@color/base_color_white"
+                android:layout_margin="2dp"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="去发现"/>
+
+        </RelativeLayout>
 
         <RelativeLayout android:id="@+id/rl_talk"
             android:layout_width="wrap_content"

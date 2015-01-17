@@ -81,6 +81,7 @@ public class SplashActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
             }
         });
+
 		new Handler().postDelayed(new Runnable() {
 
 			@Override
@@ -99,6 +100,7 @@ public class SplashActivity extends PeachBaseActivity {
                     } else {
                         Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
                         startActivityWithNoAnim(mainActivity);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 //                        Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
 //                        startActivityWithNoAnim(storyIntent);
                     }

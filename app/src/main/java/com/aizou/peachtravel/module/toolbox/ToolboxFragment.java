@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
@@ -30,6 +32,7 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
@@ -60,20 +63,12 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar mLyHeaderBarTitleWrap;
-    @InjectView(R.id.iv_weather)
-    ImageView mIvWeather;
     @InjectView(R.id.tv_weather)
     TextView mTvWeather;
+    @InjectView(R.id.tv_city)
+    TextView mTvCity;
     @InjectView(R.id.vp_travel)
     AutoScrollViewPager mVpTravel;
-    @InjectView(R.id.tv_my_guide)
-    TextView mTvMyGuide;
-    @InjectView(R.id.tv_fav)
-    TextView mTvFav;
-    @InjectView(R.id.tv_nearby)
-    TextView mTvNearby;
-    @InjectView(R.id.ll_weather)
-    LinearLayout mLlWeather;
     @InjectView(R.id.dot_view)
     DotView mDotView;
     @InjectView(R.id.tv_toolbox)
@@ -82,6 +77,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     ImageView mIvTalk;
     @InjectView(R.id.rl_talk)
     RelativeLayout mRlTalk;
+    @InjectView(R.id.my_guides)
+    RelativeLayout mRLMyGuides;
+    @InjectView(R.id.my_around)
+    RelativeLayout mRLMyAround;
     private String[] weatherArray;
     private String weatherStr;
     private String city;
@@ -99,10 +98,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         mLyHeaderBarTitleWrap.getTitleTextView().setText("桃子旅行");
         mLyHeaderBarTitleWrap.enableBackKey(false);
         mRlTalk.setOnClickListener(this);
-        mTvNearby.setOnClickListener(this);
-        mTvMyGuide.setOnClickListener(this);
-        rootView.findViewById(R.id.tv_fav).setOnClickListener(this);
-        mTvToolbox.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
 
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
@@ -110,6 +105,23 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 //        requestWeather();
         getOperateData();
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        int cellSize = (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(10) * 3)/2;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRLMyGuides.getLayoutParams();
+        params.width = cellSize;
+        params.height = cellSize;
+        mRLMyGuides.setLayoutParams(params);
+        mRLMyGuides.setOnClickListener(this);
+
+        params = (RelativeLayout.LayoutParams) mRLMyAround.getLayoutParams();
+        params.width = cellSize;
+        params.height = cellSize;
+        mRLMyAround.setLayoutParams(params);
+        mRLMyAround.setOnClickListener(this);
     }
 
     public void reloadData() {
@@ -210,9 +222,10 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 if (weatherInfo == null) {
                     return;
                 }
-                weatherStr = DateUtil.getCurrentMonthDay() + "   " + city + "   " + weatherArray[weatherInfo.getCurrentCode()];
+                weatherStr = DateUtil.getCurrentMonthDay() + "   " + city;
 //                ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
-                mTvWeather.setText(weatherStr);
+                mTvWeather.setText(weatherArray[weatherInfo.getCurrentCode()]);
+                mTvCity.setText(weatherStr);
             }
         });
     }
@@ -232,7 +245,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 }
                 break;
 
-            case R.id.tv_nearby:
+            case R.id.my_around:
                 Intent intent = new Intent(getActivity(), NearbyActivity.class);
                 intent.putExtra("lat", geoLat);
                 intent.putExtra("lng", geoLng);
@@ -292,7 +305,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
                 break;
 
-            case R.id.tv_my_guide:
+            case R.id.my_guides:
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent strategyIntent = new Intent(getActivity(), StrategyListActivity.class);
                     startActivity(strategyIntent);
@@ -302,16 +315,15 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 }
                 break;
 
-            case R.id.tv_fav:
-                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
-                    Intent fIntent = new Intent(getActivity(), FavListActivity.class);
-                    startActivity(fIntent);
-                } else {
-                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(loginIntent, CODE_FAVORITE);
-                }
-
-                break;
+//            case R.id.tv_fav:
+//                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+//                    Intent fIntent = new Intent(getActivity(), FavListActivity.class);
+//                    startActivity(fIntent);
+//                } else {
+//                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+//                    startActivityForResult(loginIntent, CODE_FAVORITE);
+//                }
+//                break;
 
             default:
                 break;
