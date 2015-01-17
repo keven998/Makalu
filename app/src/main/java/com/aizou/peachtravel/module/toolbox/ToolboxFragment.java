@@ -3,10 +3,10 @@ package com.aizou.peachtravel.module.toolbox;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,7 +31,6 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
-import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
@@ -45,6 +43,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.easemob.chat.EMChatManager;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -91,6 +90,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
     private LocationManagerProxy mLocationManagerProxy;
 
+    private Handler scrollHandler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_travel, null);
@@ -131,7 +132,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     }
 
     private void requestWeather() {
-        if(mLocationManagerProxy==null){
+        if(mLocationManagerProxy == null){
             mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
             mLocationManagerProxy.setGpsEnable(false);
         }
@@ -213,6 +214,18 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
             }
         });
+
+        scrollHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                int nextItem = mVpTravel.getCurrentItem() + 1;
+                nextItem = (nextItem >= mVpTravel.getAdapter().getCount() ? 0 : nextItem);
+                mVpTravel.setCurrentItem(nextItem);
+                scrollHandler.sendEmptyMessageDelayed(0, 6000);
+            }
+        };
+        scrollHandler.sendEmptyMessageDelayed(0, 6000);
     }
 
     private void getYahooWeather(double lat, double lon) {
@@ -226,6 +239,9 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 //                ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
                 mTvWeather.setText(weatherArray[weatherInfo.getCurrentCode()]);
                 mTvCity.setText(weatherStr);
+
+                mLocationManagerProxy.destroy();
+                mLocationManagerProxy = null;
             }
         });
     }
@@ -358,6 +374,22 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             updateUnreadLabel();
         }
         reloadData();
+        if (scrollHandler != null) {
+            scrollHandler.removeMessages(0);
+            scrollHandler.sendEmptyMessageDelayed(0, 6000);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        scrollHandler.removeMessages(0);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        scrollHandler = null;
     }
 
     /**
@@ -381,11 +413,15 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         private int size;
         private boolean isInfiniteLoop;
 
+        private DisplayImageOptions options;
+
         public ImagePagerAdapter(Context context, List<OperateBean> operateBeans) {
             this.context = context;
             this.operateBeans = operateBeans;
             this.size = operateBeans.size();
             isInfiniteLoop = false;
+
+            options = UILUtils.getRadiusOption();
         }
 
         @Override
@@ -417,8 +453,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             });
 
             ImageLoader.getInstance().displayImage(
-                    operateBeans.get(getPosition(position)).cover, imageView,
-                    UILUtils.getDefaultOption());
+                    operateBeans.get(getPosition(position)).cover, imageView, options
+                    );
             imageView.setTag(position);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
