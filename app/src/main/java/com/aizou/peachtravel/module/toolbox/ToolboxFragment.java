@@ -379,7 +379,9 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        scrollHandler.removeMessages(0);
+        if (scrollHandler != null) {
+            scrollHandler.removeMessages(0);
+        }
     }
 
     @Override
