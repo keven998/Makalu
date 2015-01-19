@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
@@ -19,6 +20,7 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.toolbox.FavListActivity;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -29,6 +31,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
  * Created by Rjm on 2014/10/9.
  */
 public class MyFragment extends PeachBaseFragment implements View.OnClickListener {
+    public final static int CODE_FAVORITE = 102;
+
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
     @ViewInject(R.id.iv_gender)
@@ -147,8 +151,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_message_center:
-                Intent msgIntent = new Intent(getActivity(), MessageContents.class);
-                startActivity(msgIntent);
+//                Intent msgIntent = new Intent(getActivity(), MessageContents.class);
+//                startActivity(msgIntent);
+                PeachUser user1 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user1 != null && !TextUtils.isEmpty(user1.easemobUser)) {
+                    Intent fIntent = new Intent(getActivity(), FavListActivity.class);
+                    startActivity(fIntent);
+                } else {
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(loginIntent, CODE_FAVORITE);
+                    ToastUtil.getInstance(getActivity()).showToast("请先登录");
+                }
                 break;
 
             case R.id.ll_push_friends:
@@ -164,8 +177,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== Activity.RESULT_OK&&requestCode==LoginActivity.REQUEST_CODE_REG){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == LoginActivity.REQUEST_CODE_REG) {
 
+            } else if (requestCode == CODE_FAVORITE) {
+                startActivity(new Intent(getActivity(), FavListActivity.class));
+            }
         }
     }
 }

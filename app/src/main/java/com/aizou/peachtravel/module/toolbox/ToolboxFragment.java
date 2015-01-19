@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.utils.LocalDisplay;
@@ -56,7 +57,6 @@ import butterknife.InjectView;
  */
 public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener {
     public final static int CODE_IM_LOGIN = 101;
-    public final static int CODE_FAVORITE = 102;
     public final static int CODE_PLAN = 103;
 
 
@@ -258,6 +258,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(intent, CODE_IM_LOGIN);
+                    ToastUtil.getInstance(getActivity()).showToast("请先登录");
                 }
                 break;
 
@@ -328,6 +329,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 } else {
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(loginIntent, CODE_PLAN);
+                    ToastUtil.getInstance(getActivity()).showToast("请先登录");
                 }
                 break;
 
@@ -353,10 +355,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             switch (requestCode) {
                 case CODE_IM_LOGIN:
                     startActivity(new Intent(getActivity(), IMMainActivity.class));
-                    break;
-
-                case CODE_FAVORITE:
-                    startActivity(new Intent(getActivity(), FavListActivity.class));
                     break;
 
                 case CODE_PLAN:
