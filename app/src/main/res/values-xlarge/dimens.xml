@@ -20,4 +20,7 @@
     <dimen name="image_thumbnail_size">198dp</dimen>
     <dimen name="image_thumbnail_spacing">2dp</dimen>
 
+    <dimen name="my_plan_img_height">132dp</dimen>
+    <dimen name="my_plan_title_width">225dp</dimen>
+
 </resources>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,9 +65,8 @@ public class StrategyListActivity extends PeachBaseActivity {
     @InjectView(R.id.my_strategy_lv)
     PullToRefreshListView mMyStrategyLv;
     @InjectView(R.id.edit_btn)
-    CheckedTextView mEditBtn;
+    ImageButton mEditBtn;
     ListViewDataAdapter mStrategyListAdapter;
-    public boolean isEditableMode;
     boolean isShare;
     int mCurrentPage = 0;
     int chatType;
@@ -164,13 +164,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         mEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isEditableMode = !isEditableMode;
-                if (isEditableMode) {
-                    mEditBtn.setChecked(true);
-                } else {
-                    mEditBtn.setChecked(false);
-                }
-                mStrategyListAdapter.notifyDataSetChanged();
+                Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
             }
         });
 
@@ -179,19 +174,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         String action = getIntent().getAction();
         TitleHeaderBar tbar = mTitleBar;
         tbar.enableBackKey(true);
-        if ("action.chat".equals(action)) {
-            tbar.getTitleTextView().setText("发送计划");
-        } else {
-            tbar.getTitleTextView().setText("旅行计划");
-            tbar.getRightTextView().setText("新计划");
-            tbar.setRightOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                    startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
-                }
-            });
-        }
+        tbar.getTitleTextView().setText("我的旅程");
     }
 
     private void setupViewFromCache() {
@@ -314,13 +297,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                        startActivity(intent);
-                    }
-                });
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容啦");
             }
@@ -329,9 +305,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     public class StrategyListViewHolder extends ViewHolderBase<StrategyBean> {
-
-        @InjectView(R.id.delete_iv)
-        ImageView mDeleteIv;
         @InjectView(R.id.strategy_iv)
         ImageView mStrategyIv;
         @InjectView(R.id.day_tv)
@@ -342,6 +315,12 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView mNameTv;
         @InjectView(R.id.time_tv)
         TextView mTimeTv;
+
+        @InjectView(R.id.edit_title)
+        TextView mEditTtitle;
+        @InjectView(R.id.delete_item)
+        TextView mDeleteItem;
+
 
         DisplayImageOptions poptions;
 
@@ -366,81 +345,63 @@ public class StrategyListActivity extends PeachBaseActivity {
             } else {
                 mStrategyIv.setImageDrawable(null);
             }
-            mDayTv.setText(itemData.dayCnt + "天");
-//            String city = "";
-//            int size = itemData.localities.size();
-//            for (int i = 0; i < size; ++i) {
-//                LocBean loc = itemData.localities.get(i);
-//                if (i > 0) {
-//                    city += "、" + loc.zhName;
-//                } else {
-//                    city += loc.zhName;
-//                }
-//            }
+            mDayTv.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isEditableMode) {
-                mDeleteIv.setVisibility(View.VISIBLE);
-                mNameTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_title_edit, 0, 0, 0);
-                mNameTv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //todo:修改攻略名称
-                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                        editDialog.setTitle("给计划取个名");
-                        editDialog.setMessage(itemData.title);
-                        editDialog.setPositiveButton("确定",new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                editDialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                TravelApi.modifyGuideTitle(itemData.id,editDialog.getMessage(),new HttpCallBack<String>() {
-                                    @Override
-                                    public void doSucess(String result, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
-                                        if(modifyResult.code==0){
-//                                            ToastUtil.getInstance(StrategyListActivity.this).showToast("OK!成功修改");
-                                            itemData.title = editDialog.getMessage();
-                                            mStrategyListAdapter.notifyDataSetChanged();
-                                            cachePage();
-                                        } else {
-                                            if (!isFinishing())
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                        }
 
-                                    }
-
-                                    @Override
-                                    public void doFailure(Exception error, String msg, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
+            mEditTtitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                    editDialog.setTitle("修改标题");
+                    editDialog.setMessage(itemData.title);
+                    editDialog.setPositiveButton("确定",new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editDialog.dismiss();
+                            DialogManager.getInstance().showLoadingDialog(mContext);
+                            TravelApi.modifyGuideTitle(itemData.id,editDialog.getMessage(),new HttpCallBack<String>() {
+                                @Override
+                                public void doSucess(String result, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                                    if(modifyResult.code==0){
+                                        itemData.title = editDialog.getMessage();
+                                        mStrategyListAdapter.notifyDataSetChanged();
+                                        cachePage();
+                                    } else {
                                         if (!isFinishing())
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                     }
-                                });
-                            }
-                        });
-                        editDialog.show();
-                    }
-                });
-                mDeleteIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteItem(itemData);
-                    }
-                });
-            } else {
-                mDeleteIv.setVisibility(View.GONE);
-                mNameTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    if (!isFinishing())
+                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                }
+                            });
+                        }
+                    });
+                    editDialog.show();
+                }
+            });
+
+            mDeleteItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteItem(itemData);
+                }
+            });
         }
 
         private void deleteItem(final StrategyBean itemData) {
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-            dialog.setMessage("删除后就找不到了");
+            dialog.setMessage("确定删除这条行程");
             dialog.setPositiveButton("确定",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -455,18 +416,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                                 int index = mStrategyListAdapter.getDataList().indexOf(itemData);
                                 mStrategyListAdapter.getDataList().remove(index);
                                 mStrategyListAdapter.notifyDataSetChanged();
-//                                if (mStrategyListAdapter.getCount() == 0) {
-//                                    mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-//                                    findViewById(R.id.start_create).setOnClickListener(new View.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(View view) {
-//                                            Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-//                                            startActivity(intent);
-//                                        }
-//                                    });
-//                                }
-//                                        ToastUtil.getInstance(mContext).showToast("删除成功");
-//                                ToastUtil.getInstance(StrategyListActivity.this).showToast("OK~成功删除");
                                 if (mStrategyListAdapter.getCount() == 0) {
                                     mMyStrategyLv.doPullRefreshing(true, 0);
                                 } else if (index <= OtherApi.PAGE_SIZE) {
