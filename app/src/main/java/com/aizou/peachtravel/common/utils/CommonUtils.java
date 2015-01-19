@@ -119,7 +119,7 @@ public class CommonUtils {
 
     public static String getLastModifyForHeader(Header[] headers){
         for(Header header:headers){
-            if(header.getName().equals("Last-Modified")){
+            if(header.getName().equals("Last-Modify")){
                 return header.getValue();
             }
         }

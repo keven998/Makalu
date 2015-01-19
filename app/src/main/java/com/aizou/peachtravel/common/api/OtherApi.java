@@ -36,6 +36,7 @@ public class OtherApi extends BaseApi {
     public final static String OPERATE="/columns";
     //反馈
     public final static String FEEDBACK="/misc/feedback";
+    public final static String UPDATE="/misc/updates";
 
     /**
      * 获取封面故事
@@ -204,6 +205,19 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        return HttpManager.request(request, callBack);
+    }
+
+    /**
+     * 检查更新
+     * @param callBack
+     * @return
+     */
+    public static PTRequestHandler checkUpdate( HttpCallBack callBack){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + UPDATE);
+        setDefaultParams(request);
         return HttpManager.request(request, callBack);
     }
 

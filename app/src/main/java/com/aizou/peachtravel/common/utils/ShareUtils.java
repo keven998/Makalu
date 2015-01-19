@@ -54,6 +54,8 @@ public class ShareUtils {
 
     }
 
+    public static final String downloadUrl="http://fir.im/xgas";
+
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
@@ -161,12 +163,13 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App。官方下载: http://****");
+
+            circleMedia.setShareContent("我是桃子旅行，专为各位爱旅行的美眉们提供服务的贴心小App");
         } else {
             circleMedia.setShareContent(content);
         }
-
-        circleMedia.setTargetUrl("");
+        circleMedia.setShareImage(new UMImage(act,R.drawable.ic_launcher));
+        circleMedia.setTargetUrl(downloadUrl);
         mController.setShareMedia(circleMedia);
         mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
             @Override

@@ -123,7 +123,7 @@ public class IMMainActivity extends ChatBaseActivity {
             contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
             fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
             currentTabIndex = savedInstanceState.getInt("currentTabIndex");
-                mTabs[currentTabIndex].performClick();
+            mTabs[currentTabIndex].performClick();
         }
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
@@ -141,7 +141,6 @@ public class IMMainActivity extends ChatBaseActivity {
 //        });
         //网络更新好友列表
         getContactFromServer();
-
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);

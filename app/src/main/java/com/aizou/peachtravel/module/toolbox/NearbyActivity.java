@@ -164,7 +164,9 @@ public class NearbyActivity extends PeachBaseActivity {
                                 public void run() {
                                     mTvAddress.setText(address);
                                     updateContent();
-                                    mAnim.cancel();
+                                    if (mAnim != null) {
+                                        mAnim.cancel();
+                                    }
                                 }
                             });
 
@@ -184,7 +186,9 @@ public class NearbyActivity extends PeachBaseActivity {
                             mBtnRefresh.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mAnim.cancel();
+                                    if (mAnim != null) {
+                                        mAnim.cancel();
+                                    }
                                     mTvAddress.setText("获取位置信息失败");
                                 }
                             }, 800);
