@@ -136,4 +136,9 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
             mProgressBar.setVisibility(View.GONE);
         }
     }
+    @Override
+    protected void onDestroy() {
+        mWebView.destroy();
+        super.onDestroy();
+    }
 }
