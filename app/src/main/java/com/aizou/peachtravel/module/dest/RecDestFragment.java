@@ -64,17 +64,8 @@ public class RecDestFragment extends PeachBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
         recDestContainer = (FreeFlowContainer) rootView.findViewById(R.id.rec_dest_container);
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("想去");
-        titleHeaderBar.getRightTextView().setText("新计划");
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
-                startActivity(intent);
-            }
-        });
+        titleHeaderBar.getTitleTextView().setText("目的地");
         titleHeaderBar.enableBackKey(false);
-//        initData();
         setupViewFromCache();
         initData();
         return rootView;

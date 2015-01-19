@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_go_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/app_theme_color"
+        android:background="@drawable/option_cell_selector"
+        android:textSize="18sp"
+        android:text="新建旅程计划" />
+
+    <Button
+        android:id="@+id/btn_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/app_theme_color"
+        android:background="@drawable/option_cell_selector"
+        android:textSize="18sp"
+        android:text="取消" />
+
+</LinearLayout>

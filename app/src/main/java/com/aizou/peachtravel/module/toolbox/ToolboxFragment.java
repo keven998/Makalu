@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.toolbox;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -10,9 +11,14 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,11 +38,13 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
+import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.amap.api.location.AMapLocation;
@@ -98,6 +106,14 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         ButterKnife.inject(this, rootView);
         mLyHeaderBarTitleWrap.getTitleTextView().setText("桃子旅行");
         mLyHeaderBarTitleWrap.enableBackKey(false);
+        mLyHeaderBarTitleWrap.setRightViewImageRes(R.drawable.ic_add_phone_contact);
+        mLyHeaderBarTitleWrap.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showActionDialog();
+            }
+        });
+
         mRlTalk.setOnClickListener(this);
 
         weatherArray = getResources().getStringArray(R.array.weather);
@@ -129,6 +145,35 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         if (TextUtils.isEmpty(weatherStr)) {
             requestWeather();
         }
+    }
+
+    private void showActionDialog() {
+        Activity act = getActivity();
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
+        contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
+                startActivity(intent);
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = getActivity().getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
     private void requestWeather() {
