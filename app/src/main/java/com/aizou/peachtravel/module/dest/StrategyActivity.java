@@ -198,7 +198,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
     public void createStrategyByCityIds(List<String> cityIds,boolean recommend) {
         DialogManager.getInstance().showLoadingDialog(mContext,"请稍后");
-        TravelApi.createGuide(cityIds,recommend, new HttpCallBack<String>() {
+        TravelApi.createGuide(cityIds, recommend, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -214,7 +214,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     }.sendEmptyMessageDelayed(0, 1000);
                 } else {
                     if (!isFinishing())
-                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -222,7 +222,7 @@ public class StrategyActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -320,13 +320,13 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private StrategyBean getSaveStrategy(){
-        if(routeDayFragment!=null){
+        if(routeDayFragment!=null&&routeDayFragment.getStrategy()!=null){
             strategy = routeDayFragment.getStrategy();
         }
-        if(restFragment!=null){
+        if(restFragment!=null&&restFragment.getStrategy()!=null){
             strategy.restaurant = restFragment.getStrategy().restaurant;
         }
-        if(shoppingFragment!=null){
+        if(shoppingFragment!=null&&restFragment.getStrategy()!=null){
             strategy.shopping = restFragment.getStrategy().shopping;
         }
         return strategy;
@@ -551,7 +551,6 @@ public class StrategyActivity extends PeachBaseActivity {
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
             StrategyManager.putItineraryJson(mContext,jsonObject,routeDayFragment.getStrategy(),routeDayFragment.getRouteDayMap());
-            routeDayFragment.resumeItinerary();
         }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
             StrategyManager.putShoppingJson(mContext,jsonObject,shoppingFragment.getStrategy());
         }else if(restFragment!=null&&restFragment.isEditableMode()){
@@ -572,6 +571,8 @@ public class StrategyActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
                         if (saveResult.code == 0) {
+                            if(routeDayFragment!=null)
+                            routeDayFragment.resumeItinerary();
 //                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
                             finish();
                         } else {

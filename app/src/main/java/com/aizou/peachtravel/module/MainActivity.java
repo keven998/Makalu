@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,12 +19,15 @@ import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
+import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMNotifier;
@@ -33,7 +37,7 @@ import java.util.List;
 
 
 public class MainActivity extends PeachBaseActivity {
-
+    public final static int CODE_IM_LOGIN = 101;
     //定义FragmentTabHost对象
     private FragmentTabHost mTabHost;
     //定义一个布局
@@ -45,6 +49,8 @@ public class MainActivity extends PeachBaseActivity {
    // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_tao_selector, R.drawable.tab_loc_selector, R.drawable.tab_my_selector,
             };
+
+    private TextView talkBtn,unreadMsg;
 
     //Tab选项卡的文字
 //    private String mTextviewArray[] = {"首页", "想去", "我"};
@@ -71,6 +77,21 @@ public class MainActivity extends PeachBaseActivity {
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        talkBtn = (TextView) findViewById(R.id.tv_start_talk);
+        unreadMsg = (TextView) findViewById(R.id.unread_msg_notify);
+        talkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PeachUser user = AccountManager.getInstance().getLoginAccount(MainActivity.this);
+                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, CODE_IM_LOGIN);
+                }
+            }
+        });
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
@@ -174,15 +195,26 @@ public class MainActivity extends PeachBaseActivity {
             // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
             // EMMessage message =
             // EMChatManager.getInstance().getMessage(msgId);
-
-            ToolboxFragment toolboxFragment = (ToolboxFragment) getSupportFragmentManager().findFragmentByTag("Home");
-            if(toolboxFragment!=null){
-                toolboxFragment.updateUnreadLabel();
-            }
+//
+//            ToolboxFragment toolboxFragment = (ToolboxFragment) getSupportFragmentManager().findFragmentByTag("Home");
+//            if(toolboxFragment!=null){
+//                toolboxFragment.updateUnreadLabel();
+//            }
+            updateUnreadMsgCount();
 //            // 提示有新消息
 //            EMNotifier.getInstance(mContext).notifyOnNewMsg();
             // 注销广播，否则在ChatActivity中会收到这个广播
             abortBroadcast();
+        }
+    }
+
+    private void updateUnreadMsgCount(){
+        int unreadMsgCountTotal = 0;
+        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
+        if (unreadMsgCountTotal > 0) {
+            unreadMsg.setVisibility(View.VISIBLE);
+        } else {
+            unreadMsg.setVisibility(View.GONE);
         }
     }
 
@@ -200,4 +232,13 @@ public class MainActivity extends PeachBaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+         if(requestCode==CODE_IM_LOGIN){
+             startActivity(new Intent(this, IMMainActivity.class));
+         }
+        }
+    }
 }

@@ -55,7 +55,6 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/10/9.
  */
 public class ToolboxFragment extends PeachBaseFragment implements View.OnClickListener {
-    public final static int CODE_IM_LOGIN = 101;
     public final static int CODE_FAVORITE = 102;
     public final static int CODE_PLAN = 103;
 
@@ -250,16 +249,16 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public void onClick(View v) {
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         switch (v.getId()) {
-            case R.id.rl_talk:
-
-                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
-                    Intent intent = new Intent(getActivity(), IMMainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent, CODE_IM_LOGIN);
-                }
-                break;
+//            case R.id.rl_talk:
+//
+//                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+//                    Intent intent = new Intent(getActivity(), IMMainActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                    startActivityForResult(intent, CODE_IM_LOGIN);
+//                }
+//                break;
 
             case R.id.my_around:
                 Intent intent = new Intent(getActivity(), NearbyActivity.class);
@@ -351,9 +350,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case CODE_IM_LOGIN:
-                    startActivity(new Intent(getActivity(), IMMainActivity.class));
-                    break;
 
                 case CODE_FAVORITE:
                     startActivity(new Intent(getActivity(), FavListActivity.class));

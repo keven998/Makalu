@@ -9,27 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
+import com.aizou.core.widget.SideBar;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.aizou.core.widget.section.BaseSectionAdapter;
+import com.aizou.core.widget.section.SectionListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.InDestBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
-import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.easemob.util.HanziToPinyin;
 
@@ -49,24 +48,37 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/3.
  */
 public class InDestFragment extends PeachBaseFragment implements OnDestActionListener {
-//    @InjectView(R.id.section_bar)
+    //    @InjectView(R.id.section_bar)
 //    TopSectionBar mSectionBar;
     @InjectView(R.id.lv_in_city)
-    ListView mLvInCity;
+    SectionListView mLvInCity;
+    @InjectView(R.id.sb_index)
+    SideBar mSbIndex;
+    @InjectView(R.id.dialog)
+    TextView mDialog;
     private List<InDestBean> incityList = new ArrayList<InDestBean>();
-    InCityAdapter inCityAdapter;
+    InCityAdapter2 inCityAdapter;
+
+
     OnDestActionListener mOnDestActionListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_in_dest, container, false);
         ButterKnife.inject(this, rootView);
-        inCityAdapter = new InCityAdapter(new ViewHolderCreator<InDestBean>() {
+        inCityAdapter = new InCityAdapter2(incityList);
+        mLvInCity.setAdapter(inCityAdapter);
+        mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
-            public ViewHolderBase<InDestBean> createViewHolder() {
-                return new InCityViewHolder();
+            public void onTouchingLetterChanged(String s) {
+                int position = inCityAdapter.getPositionForIndex(s);
+                if (position != -1) {
+                    mLvInCity.setSelection(position);
+                }
             }
         });
+        mSbIndex.setTextView(mDialog);
+        mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color));
 //        LinearLayout footer = new LinearLayout(getActivity());
 //        footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(64)));
 //        footer.setBackgroundColor(getResources().getColor(R.color.app_backgroud));
@@ -75,7 +87,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 //        footer.setLayoutParams(params);
 //        mLvInCity.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.padding_footer, null));
 
-        mLvInCity.setAdapter(inCityAdapter);
 //        mSectionBar.setListView(mLvInCity);
 //        getInLocList();
         initData();
@@ -94,7 +105,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     private void getInLocList() {
-        String lastModify=PreferenceUtils.getCacheData(getActivity(), "indest_last_modify");
+        String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_last_modify");
         TravelApi.getInDestList(lastModify, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -102,13 +113,13 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
 
             @Override
-            public void doSucess(String result, String method,Header[] headers) {
+            public void doSucess(String result, String method, Header[] headers) {
                 CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_indest", result);
                     PreferenceUtils.cacheData(getActivity(), "indest_last_modify", CommonUtils.getLastModifyForHeader(headers));
-                    LogUtil.d("last_modify",CommonUtils.getLastModifyForHeader(headers));
+                    LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
                 }
             }
 
@@ -133,15 +144,16 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
     private void bindInView(List<LocBean> result) {
         HashMap<String, List<LocBean>> locMap = new HashMap<String, List<LocBean>>();
+        ArrayList<String> sections = new ArrayList<>();
         for (LocBean locBean : result) {
             if (Character.isDigit(locBean.zhName.charAt(0))) {
                 locBean.header = "#";
             } else {
-                if(TextUtils.isEmpty(locBean.pinyin)){
+                if (TextUtils.isEmpty(locBean.pinyin)) {
                     locBean.header = HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
                             0, 1).toUpperCase();
-                }else{
-                    locBean.header = locBean.pinyin.substring(0,1).toUpperCase();
+                } else {
+                    locBean.header = locBean.pinyin.substring(0, 1).toUpperCase();
                 }
 
                 char header = locBean.header.toLowerCase().charAt(0);
@@ -149,6 +161,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                     locBean.header = "#";
                 }
             }
+            sections.add(locBean.header);
             if (locMap.get(locBean.header) != null) {
                 locMap.get(locBean.header).add(locBean);
             } else {
@@ -156,6 +169,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 locList.add(locBean);
                 locMap.put(locBean.header, locList);
             }
+
         }
         incityList.clear();
         for (Map.Entry<String, List<LocBean>> entry : locMap.entrySet()) {
@@ -172,18 +186,17 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return lhs.section.compareTo(rhs.section);
             }
         });
-        inCityAdapter.getDataList().clear();
-        inCityAdapter.getDataList().addAll(incityList);
         inCityAdapter.notifyDataSetChanged();
+
 
     }
 
     @Override
     public void onDestAdded(LocBean locBean) {
-        for(InDestBean inDestBean:inCityAdapter.getDataList()){
-            for(LocBean kLocBean:inDestBean.locList){
-                if(locBean.id.equals(kLocBean.id)){
-                    kLocBean.isAdded=true;
+        for (InDestBean inDestBean : incityList) {
+            for (LocBean kLocBean : inDestBean.locList) {
+                if (locBean.id.equals(kLocBean.id)) {
+                    kLocBean.isAdded = true;
                 }
             }
         }
@@ -193,15 +206,135 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
     @Override
     public void onDestRemoved(LocBean locBean) {
-        for(InDestBean inDestBean:inCityAdapter.getDataList()){
-            for(LocBean kLocBean:inDestBean.locList){
-                if(locBean.id.equals(kLocBean.id)){
-                    kLocBean.isAdded=false;
+        for (InDestBean inDestBean : incityList) {
+            for (LocBean kLocBean : inDestBean.locList) {
+                if (locBean.id.equals(kLocBean.id)) {
+                    kLocBean.isAdded = false;
                 }
             }
         }
         inCityAdapter.notifyDataSetChanged();
 
+    }
+
+    private class InCityAdapter2 extends BaseSectionAdapter {
+        private List<InDestBean> mInDestBeanList;
+
+        public InCityAdapter2(List<InDestBean> inDestBeanList) {
+            mInDestBeanList = inDestBeanList;
+        }
+
+
+        @Override
+        public int getContentItemViewType(int section, int position) {
+            return 0;
+        }
+
+        @Override
+        public int getHeaderItemViewType(int section) {
+            return 0;
+        }
+
+        @Override
+        public int getItemViewTypeCount() {
+            return 1;
+        }
+
+        @Override
+        public int getHeaderViewTypeCount() {
+            return 1;
+        }
+
+        @Override
+        public Object getItem(int section, int position) {
+            return mInDestBeanList.get(section).locList.get(position);
+        }
+
+        @Override
+        public long getItemId(int section, int position) {
+            return section * 10000 + position;
+        }
+
+        @Override
+        public String getSectionStr(int section) {
+            return mInDestBeanList.get(section).section;
+        }
+
+        @Override
+        public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = View.inflate(getActivity(), R.layout.dest_in_item, null);
+            }
+            FlowLayout cityListFl = (FlowLayout) convertView.findViewById(R.id.fl_city_list);
+            cityListFl.removeAllViews();
+            InDestBean itemData = mInDestBeanList.get(section);
+            for (final LocBean bean : itemData.locList) {
+                View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
+                CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+                cityNameTv.setText(bean.zhName);
+                cityNameTv.setChecked(bean.isAdded);
+                cityNameTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bean.isAdded = !bean.isAdded;
+                        if (mOnDestActionListener != null) {
+                            if (bean.isAdded) {
+                                mOnDestActionListener.onDestAdded(bean);
+                            } else {
+                                mOnDestActionListener.onDestRemoved(bean);
+                            }
+                        }
+                        inCityAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                cityListFl.addView(contentView);
+            }
+            return convertView;
+        }
+
+        @Override
+        public View getHeaderView(int section, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = View.inflate(getActivity(), R.layout.item_indest_section, null);
+            }
+            TextView sectionTv = (TextView) convertView.findViewById(R.id.tv_section);
+            sectionTv.setText(mInDestBeanList.get(section).section);
+            return convertView;
+        }
+
+        @Override
+        public int getSectionCount() {
+            return mInDestBeanList.size();
+        }
+
+        /**
+         * 根据分类的首字母获取其第一次出现该首字母的位置
+         */
+        public int getPositionForIndex(String indexStr) {
+            for (int i = 0; i < getSectionCount(); i++) {
+                String sortStr = mInDestBeanList.get(i).section;
+                if (indexStr.equals(sortStr)) {
+                    return getGlobalPositionForHeader(i);
+                }
+            }
+            return -1;
+        }
+
+        @Override
+        public int getCountInSection(int section) {
+            return 1;
+        }
+
+        @Override
+        public boolean doesSectionHaveHeader(int section) {
+            return true;
+        }
+
+        @Override
+        public boolean shouldListHeaderFloat(int headerIndex) {
+            return false;
+        }
     }
 
     private class InCityAdapter extends ListViewDataAdapter<InDestBean> implements SectionIndexer {

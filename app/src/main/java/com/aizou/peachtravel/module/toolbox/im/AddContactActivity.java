@@ -183,7 +183,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 break;
 
             case R.id.tv_weixin_contacts:
-                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，美眉们专属的旅行APP。桃子旅行搜索: %@ 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
+                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，美眉们专属的旅行APP。桃子旅行搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
                 break;
         }
     }

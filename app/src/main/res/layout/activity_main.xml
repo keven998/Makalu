@@ -1,25 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/realtabcontent"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="50dp"
         android:layout_weight="1" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:background="@color/base_divider_color"></View>
-
-    <com.aizou.core.widget.FragmentTabHost
-        android:id="@android:id/tabhost"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/white">
-    </com.aizou.core.widget.FragmentTabHost>
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_tab_bg"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="6dp">
+
+            <TextView
+                android:id="@+id/tv_start_talk"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/theme_round_bg"
+                android:gravity="center"
+                android:text="Talk"
+                android:textColor="@color/base_color_white" />
+
+            <TextView android:id="@+id/unread_msg_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_talk_new_message"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+
+        <com.aizou.core.widget.FragmentTabHost
+            android:id="@android:id/tabhost"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"></com.aizou.core.widget.FragmentTabHost>
+    </LinearLayout>
+
+</RelativeLayout>

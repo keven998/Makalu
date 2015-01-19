@@ -5,20 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_section"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="13sp"
-        android:background="@drawable/shape_white_bar"
-        android:paddingLeft="13dp"
-        android:paddingTop="7dp"
-        android:paddingBottom="7dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-
     <com.aizou.peachtravel.common.widget.FlowLayout
         android:id="@+id/fl_city_list"
         android:layout_width="fill_parent"

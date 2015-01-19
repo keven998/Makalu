@@ -42,6 +42,8 @@ abstract public class BaseSectionAdapter extends BaseAdapter implements SectionA
 
     abstract public View getHeaderView(int section, View convertView, ViewGroup parent);
 
+    public String getSectionStr(int section){return "";}
+
     abstract public int getSectionCount();
 
     abstract public int getCountInSection(int section);
