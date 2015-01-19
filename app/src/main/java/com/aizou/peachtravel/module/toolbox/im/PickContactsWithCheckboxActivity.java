@@ -461,12 +461,15 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         }
 
         public void add(IMUser item) {
-            mDatas.add(item);
-            notifyDataSetChanged();
-            notifyItemInserted(mDatas.size()-1);
-            checkToBeAddContacts();
+            if(!mDatas.contains(item)){
+                mDatas.add(item);
+                notifyDataSetChanged();
+                notifyItemInserted(mDatas.size()-1);
+                checkToBeAddContacts();
 //            notifyItemRangeChanged(0, mDatas.size());
-            LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
+                LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
+            }
+
         }
 
         public void remove(IMUser item) {

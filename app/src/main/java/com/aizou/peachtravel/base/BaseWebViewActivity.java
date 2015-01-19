@@ -78,6 +78,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new PeachWebViewClient());
         mWebView.setWebChromeClient(new PeachWebChromeClient());
+        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     /**

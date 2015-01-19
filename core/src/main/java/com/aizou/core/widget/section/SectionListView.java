@@ -385,7 +385,7 @@ public class SectionListView extends ListView implements AbsListView.OnScrollLis
 	}
 
 	protected View getFloatingSectionHeader ( int section, View currentFloatingHeader ) {
-		if (section >= 0 && sectionedAdapter.doesSectionHaveHeader(section)) {
+		if (sectionedAdapter.getGlobalCount()>0&&section >= 0 && sectionedAdapter.doesSectionHaveHeader(section)) {
 			View headerView = sectionedAdapter.getHeaderView(section, currentFloatingHeader, this);
 			if (section != floatingHeaderSection || currentFloatingHeader == null) {
 				updateDimensionsForHeader(headerView);

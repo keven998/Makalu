@@ -196,6 +196,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         imagePagerAdapter.setInfiniteLoop(true);
         mVpTravel.setAdapter(imagePagerAdapter);
         mVpTravel.setStopScrollWhenTouch(true);
+        mVpTravel.setAutoScrollDurationFactor(6000);
         mDotView.setNum(result.size());
         mVpTravel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -214,17 +215,17 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             }
         });
 
-        scrollHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                int nextItem = mVpTravel.getCurrentItem() + 1;
-                nextItem = (nextItem >= mVpTravel.getAdapter().getCount() ? 0 : nextItem);
-                mVpTravel.setCurrentItem(nextItem);
-                scrollHandler.sendEmptyMessageDelayed(0, 6000);
-            }
-        };
-        scrollHandler.sendEmptyMessageDelayed(0, 6000);
+//        scrollHandler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                int nextItem = mVpTravel.getCurrentItem() + 1;
+//                nextItem = (nextItem >= mVpTravel.getAdapter().getCount() ? 0 : nextItem);
+//                mVpTravel.setCurrentItem(nextItem);
+//                scrollHandler.sendEmptyMessageDelayed(0, 6000);
+//            }
+//        };
+//        scrollHandler.sendEmptyMessageDelayed(0, 6000);
     }
 
     private void getYahooWeather(double lat, double lon) {

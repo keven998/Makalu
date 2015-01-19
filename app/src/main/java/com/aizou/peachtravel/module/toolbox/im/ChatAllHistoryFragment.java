@@ -232,8 +232,6 @@ public class ChatAllHistoryFragment extends Fragment {
         Iterator<EMConversation> conversationIt = conversations.values().iterator();
         while (conversationIt.hasNext()){
             final EMConversation conversation = conversationIt.next();
-            if(conversation.getLastMessage()==null)
-                continue;
             if(conversation.getIsGroup()){
                 PeachConversation peachConversation = new PeachConversation();
                 peachConversation.emConversation = conversation;

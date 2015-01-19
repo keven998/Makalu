@@ -232,7 +232,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
         @Override
         public int getHeaderItemViewType(int section) {
-            return 0;
+            return 1;
         }
 
         @Override
