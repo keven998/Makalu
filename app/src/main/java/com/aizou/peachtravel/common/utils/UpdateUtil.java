@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.common.dialog.ComfirmDialog;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 
 
 public class UpdateUtil {
@@ -18,7 +19,8 @@ public class UpdateUtil {
 
 	public static void showUpdateDialog(final Context context, String content,
 			final String downloadUrl) {
-		final ComfirmDialog dialog = new ComfirmDialog(context);
+		final PeachMessageDialog dialog = new PeachMessageDialog(context);
+        dialog.setTitle("提示");
 		dialog.setMessage(content);
 		dialog.setPositiveButton("下载更新", new OnClickListener() {
 
@@ -64,10 +66,10 @@ public class UpdateUtil {
 //		down.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 		down.setVisibleInDownloadsUi(true);
 		down.setTitle("更新") // 用于信息查看
-				.setDescription("正在下载旅行派"); // 用于信息查看
+				.setDescription("正在下载桃子旅行"); // 用于信息查看
 		// 设置下载后文件存放的位置
 		down.setDestinationInExternalFilesDir(context,
-				Environment.DIRECTORY_DOWNLOADS, "Lxp.apk");
+				Environment.DIRECTORY_DOWNLOADS, "TaoziLvxing.apk");
 
 		// 将下载请求放入队列
 		long id = manager.enqueue(down);
