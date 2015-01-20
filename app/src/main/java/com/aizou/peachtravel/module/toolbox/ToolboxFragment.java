@@ -156,6 +156,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SelectDestActivity.class);
                 startActivity(intent);
+                dialog.dismiss();
             }
         });
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
