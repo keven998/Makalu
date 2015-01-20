@@ -66,13 +66,19 @@ public class RecDestFragment extends PeachBaseFragment {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("目的地");
         titleHeaderBar.enableBackKey(false);
+        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
+        titleHeaderBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         setupViewFromCache();
         initData();
         return rootView;
     }
 
     private void setupViewFromCache() {
-        AccountManager account = AccountManager.getInstance();
         String data = PreferenceUtils.getCacheData(getActivity(), "recommend_content");
         if (!TextUtils.isEmpty(data)) {
             List<RecDestBean> lists = GsonTools.parseJsonToBean(data,
