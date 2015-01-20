@@ -41,6 +41,7 @@ import com.aizou.peachtravel.common.widget.freeflow.layouts.FreeFlowLayoutBase;
 import com.aizou.peachtravel.common.widget.freeflow.utils.ViewUtils;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.google.gson.reflect.TypeToken;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.apache.http.Header;
@@ -159,6 +160,7 @@ public class RecDestFragment extends PeachBaseFragment {
     private class RecDestAdapter implements SectionedAdapter{
         private Context context;
         private ArrayList<Section> sections = new ArrayList<Section>();
+        private DisplayImageOptions options;
         public RecDestAdapter(Context context,List<RecDestBean> destBeanList){
             this.context = context;
             Section section;
@@ -171,6 +173,7 @@ public class RecDestFragment extends PeachBaseFragment {
                 sections.add(section);
 
             }
+            options =UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         }
 
         @Override
@@ -188,7 +191,7 @@ public class RecDestFragment extends PeachBaseFragment {
             ImageView imageIv = (ImageView) convertView.findViewById(R.id.iv_pic);
             nameTv.setText(itemData.title);
             descTv.setText(itemData.desc);
-            ImageLoader.getInstance().displayImage(itemData.cover, imageIv, UILUtils.getRadiusOption());
+            ImageLoader.getInstance().displayImage(itemData.cover, imageIv, options);
             return convertView;
         }
 

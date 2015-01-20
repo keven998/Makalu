@@ -33,23 +33,18 @@
         android:layout_height="match_parent"
         android:layout_below="@id/indicator"/>
 
-    <FrameLayout android:id="@+id/bottom_panel"
+    <LinearLayout android:id="@+id/bottom_panel"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
+        android:background="@color/app_theme_color_trans"
         android:layout_alignParentBottom="true"
         android:visibility="gone">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/select_city_container_bg"></View>
-
         <HorizontalScrollView android:id="@+id/scroll_panel"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="49dp"
-            android:layout_marginRight="72dp"
             android:layout_gravity="bottom"
             android:scrollbars="none">
 
@@ -60,22 +55,21 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="6dp"
-                android:layout_marginRight="8dp"
+                android:paddingRight="10dp"
                 android:layout_marginBottom="5dp"/>
 
         </HorizontalScrollView>
 
         <TextView
             android:id="@+id/tv_start"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:layout_marginRight="6dp"
             android:textColor="@color/base_color_white"
-            android:background="@drawable/theme_round_bg"
+            android:background="@color/app_theme_color"
             android:text="确定"
             android:layout_gravity="right"/>
-    </FrameLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

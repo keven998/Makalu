@@ -4,12 +4,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.aizou.core.widget.section.SectionListView
+    <ListView
         android:id="@+id/lv_in_city"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@null"
         android:divider="@null"
+        android:dividerHeight="10dp"
         android:layout_marginTop="10dp"
         android:overScrollMode="never"
         android:fadingEdge="none"
@@ -20,7 +21,7 @@
         android:id="@+id/sb_index"
         android:layout_width="25dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="60dp"
         android:layout_marginRight="5dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"

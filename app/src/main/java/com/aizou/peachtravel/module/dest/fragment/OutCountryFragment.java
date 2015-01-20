@@ -76,7 +76,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 bindOutView(countryListResult.result);
             }
         }
-            getOutCountryList();
+        getOutCountryList();
     }
 
     private void getOutCountryList(){
@@ -97,8 +97,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (isAdded())
-                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                if (isAdded())
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -117,6 +117,14 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         outCountryAdapter.getDataList().clear();
         outCountryAdapter.getDataList().addAll(result);
         outCountryAdapter.notifyDataSetChanged();
+        mLvOutCountry.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLvOutCountry.performItemClick(mLvOutCountry.getChildAt(0),0,0);
+            }
+        },200);
+
+
     }
 
     @Override
@@ -149,8 +157,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
-        private TextView nameTv,descTv;
-        private ImageView imageIv;
+        private ExpandableLayoutItem itemView;
+        private CheckedTextView nameTv;
         private FlowLayout cityListFl;
         private View contentView;
         DisplayImageOptions picOptions;
@@ -158,12 +166,10 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         @Override
         public View createView(LayoutInflater layoutInflater) {
             contentView = layoutInflater.inflate(R.layout.dest_out_country, null);
-            ExpandableLayoutItem itemView = (ExpandableLayoutItem) contentView.findViewById(R.id.row_country);
+            itemView = (ExpandableLayoutItem) contentView.findViewById(R.id.row_country);
             RelativeLayout headRl = itemView.getHeaderRelativeLayout();
             RelativeLayout contentRl=itemView.getContentRelativeLayout();
-            nameTv = (TextView) headRl.findViewById(R.id.tv_country_name);
-            descTv = (TextView) headRl.findViewById(R.id.tv_country_desc);
-            imageIv = (ImageView) headRl.findViewById(R.id.iv_country);
+            nameTv = (CheckedTextView) headRl.findViewById(R.id.tv_country_name);
             cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
 //            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
 //            int height = width * 240 / 640;
@@ -196,19 +202,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //                }
 //            });
             nameTv.setText(itemData.zhName);
-//            SpannableString impress = new SpannableString("|"+itemData.desc);
-//            impress.setSpan(
-//                    new ForegroundColorSpan(getResources().getColor(
-//                            R.color.route_price_color)), 0, impress.length(),
-//                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(15)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            nameTv.append(impress);
-            if(itemData.images!=null&&itemData.images.size()>0) {
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, UILUtils.getDefaultOption());
-            } else {
-                imageIv.setImageDrawable(null);
-            }
-            descTv.setText(itemData.desc);
+            nameTv.setChecked(itemData.isOpened);
+            itemView.setOnExpandedListener(new ExpandableLayoutItem.OnExpandedListener() {
+                @Override
+                public void onExpanded(boolean isOpen) {
+                    itemData.isOpened=isOpen;
+                    outCountryAdapter.notifyDataSetChanged();
+                }
+            });
+//            if(itemData.images!=null&&itemData.images.size()>0) {
+//                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, UILUtils.getDefaultOption());
+//            } else {
+//                imageIv.setImageDrawable(null);
+//            }
+//            descTv.setText(itemData.desc);
             cityListFl.removeAllViews();
             for(final LocBean bean:itemData.destinations){
                 View view = View.inflate(getActivity(),R.layout.dest_select_city,null);

@@ -4,6 +4,7 @@
     <color name="title_bar_background">#ffffff</color>
 
     <color name="app_theme_color">#ee528c</color>
+    <color name="app_theme_color_trans">#aaee528c</color>
 
     <drawable name="highlight_btn_color">#ee528c</drawable>
     <drawable name="highlight_btn_color_selected">#aaee528c</drawable>

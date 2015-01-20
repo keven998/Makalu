@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import java.lang.reflect.Method;
@@ -73,14 +74,13 @@ public class ExpandableLayoutListView extends ListView
         }
 
         ExpandableLayoutItem expandableLayout = (ExpandableLayoutItem) getChildAt(position - getFirstVisiblePosition()).findViewWithTag(ExpandableLayoutItem.class.getName());
-
         if (expandableLayout.isOpened())
             expandableLayout.hide();
         else
             expandableLayout.show();
 
-
         return super.performItemClick(view, position, id);
+
     }
 
     @Override

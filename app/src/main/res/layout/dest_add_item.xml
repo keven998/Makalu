@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/them_botton_text_color"
-        android:background="@drawable/btn_login_button"
+        android:background="@drawable/btn_has_add_city"
         android:clickable="true"
         android:textSize="13sp"
         android:paddingLeft="9dp"

@@ -8,12 +8,15 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.CheckedTextView;
+import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.SideBar;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -51,13 +54,13 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     //    @InjectView(R.id.section_bar)
 //    TopSectionBar mSectionBar;
     @InjectView(R.id.lv_in_city)
-    SectionListView mLvInCity;
+    ListView mLvInCity;
     @InjectView(R.id.sb_index)
     SideBar mSbIndex;
     @InjectView(R.id.dialog)
     TextView mDialog;
     private List<InDestBean> incityList = new ArrayList<InDestBean>();
-    InCityAdapter2 inCityAdapter;
+    InCityAdapter inCityAdapter;
 
 
     OnDestActionListener mOnDestActionListener;
@@ -66,7 +69,15 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_in_dest, container, false);
         ButterKnife.inject(this, rootView);
-        inCityAdapter = new InCityAdapter2(incityList);
+        inCityAdapter = new InCityAdapter(new ViewHolderCreator() {
+            @Override
+            public ViewHolderBase createViewHolder() {
+                return new InCityViewHolder();
+            }
+        });
+        View view =new View(getActivity());
+        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(50)));
+        mLvInCity.addFooterView(view);
         mLvInCity.setAdapter(inCityAdapter);
         mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
@@ -186,6 +197,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return lhs.section.compareTo(rhs.section);
             }
         });
+        inCityAdapter.getDataList().clear();
+        inCityAdapter.getDataList().addAll(incityList);
         inCityAdapter.notifyDataSetChanged();
 
 
@@ -227,12 +240,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
         @Override
         public int getContentItemViewType(int section, int position) {
-            return 0;
+            return 1;
         }
 
         @Override
         public int getHeaderItemViewType(int section) {
-            return 1;
+            return 0;
         }
 
         @Override
@@ -363,6 +376,19 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         @Override
         public int getSectionForPosition(int position) {
             return sectionOfPosition.get(position);
+        }
+
+        /**
+         * 根据分类的首字母获取其第一次出现该首字母的位置
+         */
+        public int getPositionForIndex(String indexStr) {
+            for (int i = 0; i < sections.size(); i++) {
+                String sortStr = sections.get(i);
+                if (indexStr.equals(sortStr)) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         public void initSections() {

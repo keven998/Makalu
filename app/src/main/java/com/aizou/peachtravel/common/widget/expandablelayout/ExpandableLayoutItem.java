@@ -50,6 +50,7 @@ public class ExpandableLayoutItem extends RelativeLayout
     private RelativeLayout contentRelativeLayout;
     private RelativeLayout headerRelativeLayout;
     private Boolean closeByUser = true;
+    private OnExpandedListener mOnExpandedListener;
 
     public ExpandableLayoutItem(Context context)
     {
@@ -106,11 +107,17 @@ public class ExpandableLayoutItem extends RelativeLayout
         });
 
     }
+    public void setOnExpandedListener(OnExpandedListener onExpandedListener){
+        mOnExpandedListener = onExpandedListener;
+    }
 
     private void expand(final View v)
     {
         isOpened = true;
 //        this.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        if(mOnExpandedListener!=null){
+            mOnExpandedListener.onExpanded(isOpened);
+        }
         v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
         v.getLayoutParams().height = 0;
@@ -138,6 +145,9 @@ public class ExpandableLayoutItem extends RelativeLayout
     private void collapse(final View v)
     {
         isOpened = false;
+        if(mOnExpandedListener!=null){
+            mOnExpandedListener.onExpanded(isOpened);
+        }
         final int initialHeight = v.getMeasuredHeight();
         Animation animation = new Animation()
         {
@@ -236,5 +246,9 @@ public class ExpandableLayoutItem extends RelativeLayout
     public Boolean getCloseByUser()
     {
         return closeByUser;
+    }
+
+    public interface OnExpandedListener{
+        void onExpanded(boolean isOpen);
     }
 }

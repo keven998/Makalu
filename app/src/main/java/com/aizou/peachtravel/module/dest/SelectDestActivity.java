@@ -38,9 +38,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     public final static int REQUEST_CODE_LOGIN = 102;
     public final static int REQUEST_CODE_NEW_PLAN=103;
 
-//    private RadioGroup inOutRg;
+    //    private RadioGroup inOutRg;
     private LinearLayout citysLl;
-    private FrameLayout mBottomPanel;
+    private LinearLayout mBottomPanel;
     private TextView startTv;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
@@ -116,7 +116,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         initTitleBar();
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
-        mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
+        mBottomPanel = (LinearLayout) rootView.findViewById(R.id.bottom_panel);
         startTv = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
@@ -149,8 +149,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     public void onAttachFragment(Fragment fragment) {
         try {
-           OnDestActionListener listener = (OnDestActionListener)fragment;
-           mOnDestActionListeners.add(listener);
+            OnDestActionListener listener = (OnDestActionListener)fragment;
+            mOnDestActionListeners.add(listener);
         } catch (Exception e) {
             e.printStackTrace();
         }

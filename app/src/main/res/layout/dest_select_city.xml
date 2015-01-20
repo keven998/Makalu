@@ -8,15 +8,14 @@
         android:id="@+id/tv_cell_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/radio_colors"
-        android:background="@drawable/checker_cell_frame_bg"
+        android:textColor="@color/select_dest_text_color"
+        android:background="@drawable/checker_cell_select_bg"
         android:clickable="true"
         android:textSize="13sp"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:drawablePadding="6dp"
-        android:drawableRight="@drawable/checker_cell_add_city"/>
+       />
 
 </FrameLayout>
