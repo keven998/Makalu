@@ -231,6 +231,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         mButton = (ImageButton) findViewById(R.id.expand_collapse);
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mButton.setOnClickListener(this);
+        mButton.setVisibility(View.GONE);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -250,6 +251,12 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         mRelayout = true;
         mTv.setText(text);
         setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
+
+        if (mTv.getLineCount() > mMaxCollapsedLines) {
+//            mTv.getLayoutParams().height = getHeight() + mTextHeightWithMaxLines - mTv.getHeight() - mMarginBetweenTxtAndBottom;
+//            mTv.requestLayout();
+            mButton.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setText(CharSequence text, SparseBooleanArray collapsedStatus, int position) {

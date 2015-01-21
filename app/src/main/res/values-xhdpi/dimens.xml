@@ -23,4 +23,5 @@
     <dimen name="my_plan_img_height">108dp</dimen>
     <dimen name="my_plan_title_width">224dp</dimen>
 
+    <dimen name="city_picture_collection_height">172dp</dimen>
 </resources>

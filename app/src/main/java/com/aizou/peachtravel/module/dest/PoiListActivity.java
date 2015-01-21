@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -40,8 +37,8 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class PoiListActivity extends PeachBaseActivity {
-    @InjectView(R.id.loc_spinner)
-    Spinner mLocSpinner;
+//    @InjectView(R.id.loc_spinner)
+//    Spinner mLocSpinner;
     @InjectView(R.id.tv_city_poi_desc)
     TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
@@ -137,27 +134,28 @@ public class PoiListActivity extends PeachBaseActivity {
             cityStrList.add(locBean.zhName);
         }
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
-        mLocSpinner.setAdapter(mLocSpinnerAdapter);
-        mLocSpinner.setSelection(0, true);
         curLoc = locList.get(0);
-        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                curLoc = locList.get(position);
-                mPoiListLv.doPullRefreshing(true, 200);
 
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    mTitle.setText(String.format("买在%s", curLoc.zhName));
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        mLocSpinner.setAdapter(mLocSpinnerAdapter);
+//        mLocSpinner.setSelection(0, true);
+//        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
+//                curLoc = locList.get(position);
+//                mPoiListLv.doPullRefreshing(true, 200);
+//
+//                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
+//                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//                    mTitle.setText(String.format("买在%s", curLoc.zhName));
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

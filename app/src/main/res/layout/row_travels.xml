@@ -11,39 +11,6 @@
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp">
 
-    <RelativeLayout
-        android:id="@+id/rl_more"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="精选游记"
-            android:layout_marginLeft="8dp"
-            android:drawablePadding="5dp"
-            android:drawableLeft="@drawable/ic_standard_tnote"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="13sp"/>
-        <TextView
-            android:id="@+id/tv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="12dp"
-            android:gravity="center"
-            android:layout_alignParentRight="true"
-            android:text="更多游记"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="12sp"/>
-        <View
-            android:layout_alignParentBottom="true"
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/base_divider_color"
-            />
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:paddingLeft="8dp"
