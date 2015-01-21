@@ -267,7 +267,7 @@ public class IMUtils {
         JSONObject contentJson = new JSONObject();
         try {
             contentJson.put("id",noteBean.id);
-            contentJson.put("image",noteBean.cover);
+            contentJson.put("image",noteBean.images.get(0).url);
             contentJson.put("name",noteBean.title);
             String[] strArray=noteBean.summary.split("\n");
             String maxLengthStr=strArray[0];

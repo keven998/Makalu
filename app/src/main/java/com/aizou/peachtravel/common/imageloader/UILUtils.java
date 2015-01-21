@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.common.imageloader;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 import com.aizou.core.utils.LocalDisplay;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -42,7 +43,6 @@ public class UILUtils {
 //				.decodingOptions(D)
                 .displayer(new RoundedBitmapDisplayer(radius))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
-
         return picOptions;
     }
     public static DisplayImageOptions getRadiusOption(int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius) {

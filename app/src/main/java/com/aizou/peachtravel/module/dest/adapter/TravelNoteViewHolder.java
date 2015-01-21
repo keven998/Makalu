@@ -1,14 +1,12 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -81,7 +79,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         }else{
             mSendBtn.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(itemData.cover,mTravelIv, UILUtils.getRadiusOption());
+        ImageLoader.getInstance().displayImage(itemData.getNoteImage(),mTravelIv, UILUtils.getRadiusOption());
         mNoteNameTv.setText(itemData.title);
         String[] strArray=itemData.summary.split("\n");
         String maxLengthStr=strArray[0];
@@ -91,11 +89,11 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             }
         }
         mNoteDescTv.setText(maxLengthStr);
-        ImageLoader.getInstance().displayImage(itemData.avatar, mAvatarIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(18)));
-        mAuthorNameTv.setText(itemData.author);
+        ImageLoader.getInstance().displayImage(itemData.authorAvatar, mAvatarIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(18)));
+        mAuthorNameTv.setText(itemData.authorName);
         mFromTv.setText("from:"+itemData.source);
         mFromTv.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
-        mTimeTv.setText(simpleDateFormat.format(new Date(itemData.publishDate)));
+        mTimeTv.setText(simpleDateFormat.format(new Date(itemData.publishTime*1000)));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

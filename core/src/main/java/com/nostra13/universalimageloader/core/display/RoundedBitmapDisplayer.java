@@ -70,11 +70,12 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer {
 				mBitmapRect;
 		protected final BitmapShader bitmapShader;
 		protected final Paint paint;
+        protected Bitmap oBitmap;//原图
 
 		public RoundedDrawable(Bitmap bitmap, int cornerRadius, int margin) {
 			this.cornerRadius = cornerRadius;
 			this.margin = margin;
-
+            this.oBitmap = bitmap;
 			bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 			mBitmapRect = new RectF (margin, margin, bitmap.getWidth() - margin, bitmap.getHeight() - margin);
 			
@@ -88,14 +89,64 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer {
 			super.onBoundsChange(bounds);
 			mRect.set(margin, margin, bounds.width() - margin, bounds.height() - margin);
 			
-			// Resize the original bitmap to fit the new bound
-			Matrix shaderMatrix = new Matrix();
-			shaderMatrix.setRectToRect(mBitmapRect, mRect, Matrix.ScaleToFit.FILL);
-			bitmapShader.setLocalMatrix(shaderMatrix);
+//			Resize the original bitmap to fit the new bound
+//			Matrix shaderMatrix = new Matrix();
+//			shaderMatrix.setRectToRect(mBitmapRect, mRect, Matrix.ScaleToFit.FILL);
+//			bitmapShader.setLocalMatrix(shaderMatrix);
+            computeBitmapShaderSize();
 			
 		}
 
-		@Override
+        /**
+
+         * 策画Bitmap shader 大小
+
+         */
+
+        public void computeBitmapShaderSize(){
+
+
+            if(mRect == null) return;
+
+            //选择缩放斗劲多的缩放，如许就不会有拉伸失衡
+
+            Matrix matrix = new Matrix();
+
+            float scaleX = mRect.width() / (float)oBitmap.getWidth();
+
+            float scaleY = mRect.height() / (float)oBitmap.getHeight();
+
+            float scale = scaleX > scaleY? scaleX : scaleY;
+            float dx = 0, dy = 0;
+//            if(scaleX>scaleY){
+//                dy = (mRect.height() - oBitmap.getHeight() * scale) * 0.5f;
+//            }else{
+//                dx = ( mRect.width() - oBitmap.getWidth() * scale) * 0.5f;
+//            }
+
+//            float scale;
+//            float dx = 0, dy = 0;
+//
+//            if (oBitmap.getWidth() * mRect.height() > mRect.width() * oBitmap.getHeight()) {
+//                scale = (float) mRect.height() / (float) oBitmap.getHeight();
+//                dx = ( mRect.width() - oBitmap.getWidth() * scale) * 0.5f;
+//            } else {
+//                scale = (float) mRect.width()/ (float) oBitmap.getWidth();
+//                dy = (mRect.height() - oBitmap.getHeight() * scale) * 0.5f;
+//            }
+
+            matrix.setScale(scale, scale);
+
+
+            matrix.postScale(scale,scale);
+//            matrix.postTranslate((int) dx , dy);
+
+            bitmapShader.setLocalMatrix(matrix);
+
+        }
+
+
+        @Override
 		public void draw(Canvas canvas) {
 			canvas.drawRoundRect(mRect, cornerRadius, cornerRadius, paint);
 		}

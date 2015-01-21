@@ -29,7 +29,7 @@ public class OtherApi extends BaseApi {
     //获取上传token;
     public final static String UPLOAD_TOKEN="/misc/put-policy/";
     //游记搜索
-    public final static String TRAVEL_NOTES="/misc/notes/search";
+    public final static String TRAVEL_NOTES="/travel-notes/search";
     //收藏
     public final static String FAV="/misc/favorites";
     //运营
