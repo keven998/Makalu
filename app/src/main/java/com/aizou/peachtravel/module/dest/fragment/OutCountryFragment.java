@@ -185,7 +185,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 //                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
 //                    .build();
             picOptions = UILUtils.getRadiusOption();
-
             return contentView;
         }
 

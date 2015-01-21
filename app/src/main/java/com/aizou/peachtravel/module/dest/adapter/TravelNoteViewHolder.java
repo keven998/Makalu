@@ -27,8 +27,6 @@ import java.util.Date;
  */
 public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     View view;
-    RelativeLayout mMoreRl;
-    TextView mMoreTv;
     Button mSendBtn;
     ImageView mTravelIv;
     TextView mNoteNameTv;
@@ -44,7 +42,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     private boolean mIsShowSend;
     private boolean mIsShowMore;
 
-    public TravelNoteViewHolder(Activity context,boolean isShowSend,boolean isShowMore){
+    public TravelNoteViewHolder(Activity context, boolean isShowSend, boolean isShowMore){
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
         activity= context;
@@ -58,9 +56,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     @Override
     public View createView(LayoutInflater layoutInflater) {
-        view = layoutInflater.inflate(R.layout.row_travels,null);
-        mMoreRl = (RelativeLayout) view.findViewById(R.id.rl_more);
-        mMoreTv = (TextView) view.findViewById(R.id.tv_more);
+        view = layoutInflater.inflate(R.layout.row_travels, null);
         mSendBtn = (Button) view.findViewById(R.id.btn_send);
         mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
         mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
@@ -74,19 +70,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     @Override
     public void showData(int position, final TravelNoteBean itemData) {
-        if(position==0&&mIsShowMore){
-            mMoreRl.setVisibility(View.VISIBLE);
-            mMoreTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mOnMoreClickListener!=null){
-                        mOnMoreClickListener.onMoreClick(v);
-                    }
-                }
-            });
-        }else{
-            mMoreRl.setVisibility(View.GONE);
-        }
         if(mIsShowSend){
             mSendBtn.setVisibility(View.VISIBLE);
             mSendBtn.setOnClickListener(new View.OnClickListener() {
