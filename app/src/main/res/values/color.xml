@@ -25,6 +25,7 @@
 
 
     <color name="base_content_color">#22b59a</color>
+    <color name="base_gary_bg">#EAEAEA</color>
     <color name="route_price_color">#E9625F</color>
     <color name="base_menu_color">#767E86</color>
 

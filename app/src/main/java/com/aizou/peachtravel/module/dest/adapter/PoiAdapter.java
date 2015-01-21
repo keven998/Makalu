@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -21,7 +21,6 @@ import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
-import com.aizou.peachtravel.common.utils.MapUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -45,15 +44,15 @@ public class PoiAdapter extends BaseAdapter {
     private OnPoiActionListener mOnPoiActionListener;
 
     private DisplayImageOptions picOptions;
-    private String mAddStr="添加";
+    private String mAddStr = "添加";
 
-    public PoiAdapter(Context context, boolean isCanAdd ) {
+    public PoiAdapter(Context context, boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
         picOptions = UILUtils.getRadiusOption();
     }
 
-    public void setAddStr(String addStr){
+    public void setAddStr(String addStr) {
         mAddStr = addStr;
     }
 
@@ -66,11 +65,11 @@ public class PoiAdapter extends BaseAdapter {
         mPoiList.addAll(ds);
     }
 
-    public void setOnPoiActionListener(OnPoiActionListener onPoiActionListener){
+    public void setOnPoiActionListener(OnPoiActionListener onPoiActionListener) {
         mOnPoiActionListener = onPoiActionListener;
     }
 
-    public List<PoiDetailBean> getDataList(){
+    public List<PoiDetailBean> getDataList() {
         return mPoiList;
     }
 
@@ -117,8 +116,8 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
-                    spotViewHolder.mBtnAdd.setBackgroundColor(Color.WHITE);
-                    spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+                    spotViewHolder.mBtnAdd.setBackgroundColor(Color.TRANSPARENT);
+                    spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_text_color_subtitle));
                     spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.selector_ic_navigation, 0);
                 }
@@ -127,16 +126,16 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder = new PoiViewHolder(convertView);
                 convertView.setTag(poiViewHolder);
                 if (!mIsCanAdd) {
-                    poiViewHolder.mBtnAdd.setBackgroundColor(Color.WHITE);
+                    poiViewHolder.mBtnAdd.setBackgroundColor(Color.TRANSPARENT);
                     poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_text_color_subtitle));
                     poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.selector_ic_navigation, 0);
                 }
             }
         } else {
-            if(type == SPOT){
-               spotViewHolder = (SpotViewHolder) convertView.getTag();
+            if (type == SPOT) {
+                spotViewHolder = (SpotViewHolder) convertView.getTag();
             } else {
-               poiViewHolder = (PoiViewHolder) convertView.getTag();
+                poiViewHolder = (PoiViewHolder) convertView.getTag();
             }
         }
 
@@ -147,36 +146,36 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mSpotNameTv.setText(poiDetailBean.zhName);
-            spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间："+poiDetailBean.timeCostDesc);
+            spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间：" + poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotDescTv.setText(poiDetailBean.desc);
             spotViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
-            if(mIsCanAdd) {
-                if(poiDetailBean.hasAdded) {
-                    spotViewHolder.mBtnAdd.setText("已"+mAddStr);
+            if (mIsCanAdd) {
+                if (poiDetailBean.hasAdded) {
+                    spotViewHolder.mBtnAdd.setText("已" + mAddStr);
                 } else {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
                 }
-                ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
+                ((ViewGroup) spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.hasAdded) {
+                        if (poiDetailBean.hasAdded) {
                             poiDetailBean.hasAdded = false;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
                             poiDetailBean.hasAdded = true;
-                            if(mOnPoiActionListener != null) {
+                            if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
-                            ToastUtil.getInstance(mContext).showToast("已"+mAddStr);
+                            ToastUtil.getInstance(mContext).showToast("已" + mAddStr);
                         }
                         notifyDataSetChanged();
                     }
                 });
             } else {
                 spotViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离
-                ((ViewGroup)spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
+                ((ViewGroup) spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (mOnPoiActionListener != null) {
@@ -190,7 +189,7 @@ public class PoiAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Activity act = (Activity) context;
                     Intent intent = new Intent(act, SpotDetailActivity.class);
-                    intent.putExtra("id",poiDetailBean.id);
+                    intent.putExtra("id", poiDetailBean.id);
                     act.startActivity(intent);
                 }
             });
@@ -208,24 +207,24 @@ public class PoiAdapter extends BaseAdapter {
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
-                    poiViewHolder.mBtnAdd.setText("已"+mAddStr);
+                    poiViewHolder.mBtnAdd.setText("已" + mAddStr);
                 } else {
                     poiViewHolder.mBtnAdd.setText(mAddStr);
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.hasAdded) {
-                            poiDetailBean.hasAdded=false;
-                            if(mOnPoiActionListener!=null) {
+                        if (poiDetailBean.hasAdded) {
+                            poiDetailBean.hasAdded = false;
+                            if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
-                            poiDetailBean.hasAdded=true;
-                            if(mOnPoiActionListener!=null) {
+                            poiDetailBean.hasAdded = true;
+                            if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
                             }
-                            ToastUtil.getInstance(mContext).showToast("已"+mAddStr);
+                            ToastUtil.getInstance(mContext).showToast("已" + mAddStr);
                         }
                         notifyDataSetChanged();
                     }
@@ -242,22 +241,22 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             }
-            poiViewHolder.mTvPrice.setText(poiDetailBean.priceDesc);
-            poiViewHolder.mTvAddr.setText(poiDetailBean.address);
-            if(poiDetailBean.images != null&&poiDetailBean.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mIvPoiImage, picOptions);
+            poiViewHolder.mPoiPriceTv.setText(poiDetailBean.priceDesc);
+            poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
+            if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mPoiImageIv, picOptions);
             } else {
-                poiViewHolder.mIvPoiImage.setImageDrawable(null);
+                poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
-            poiViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
-            if(poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
-                poiViewHolder.mRlComment.setVisibility(View.GONE);
+            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
+            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
+//                poiViewHolder.mRlComment.setVisibility(View.GONE);
             } else {
-                poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
+//                poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
                 CommentBean commentBean = poiDetailBean.comments.get(0);
-                poiViewHolder.mTvCommentName.setText(commentBean.userName);
-                poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
-                poiViewHolder.mTvCommentContent.setText(Html.fromHtml(commentBean.contents));
+                poiViewHolder.mPoiCommentUsername.setText(commentBean.userName);
+//                poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
+                poiViewHolder.mPoiCommentContent.setText(Html.fromHtml(commentBean.contents));
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -287,6 +286,7 @@ public class PoiAdapter extends BaseAdapter {
         TextView mSpotDescTv;
         @InjectView(R.id.ratingBar_poi)
         RatingBar mRatingBarPoi;
+
         public SpotViewHolder(View view) {
 //            view = View.inflate(mContext, R.layout.row_poi_list, null);
             ButterKnife.inject(this, view);
@@ -296,26 +296,27 @@ public class PoiAdapter extends BaseAdapter {
 
     class PoiViewHolder {
 
+
         @InjectView(R.id.tv_poi_name)
         TextView mTvPoiName;
         @InjectView(R.id.btn_add)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.tv_price)
-        TextView mTvPrice;
-        @InjectView(R.id.tv_addr)
-        TextView mTvAddr;
-        @InjectView(R.id.iv_poi_image)
-        ImageView mIvPoiImage;
-        @InjectView(R.id.ratingBar_poi)
-        RatingBar mRatingBarPoi;
-        @InjectView(R.id.tv_comment_name)
-        TextView mTvCommentName;
-        @InjectView(R.id.tv_comment_num)
-        TextView mTvCommentNum;
-        @InjectView(R.id.tv_comment_content)
-        TextView mTvCommentContent;
-        @InjectView(R.id.rl_comment)
-        RelativeLayout mRlComment;
+        @InjectView(R.id.ll_title)
+        LinearLayout mLlTitle;
+        @InjectView(R.id.poi_image_iv)
+        ImageView mPoiImageIv;
+        @InjectView(R.id.poi_address_tv)
+        TextView mPoiAddressTv;
+        @InjectView(R.id.poi_price_tv)
+        TextView mPoiPriceTv;
+        @InjectView(R.id.poi_rating)
+        RatingBar mPoiRating;
+        @InjectView(R.id.poi_rank_tv)
+        TextView mPoiRankTv;
+        @InjectView(R.id.poi_comment_username)
+        TextView mPoiCommentUsername;
+        @InjectView(R.id.poi_comment_content)
+        TextView mPoiCommentContent;
 
         public PoiViewHolder(View view) {
 //            view = View.inflate(mContext, R.layout.row_poi_list, null);
@@ -324,9 +325,11 @@ public class PoiAdapter extends BaseAdapter {
 
     }
 
-    public interface  OnPoiActionListener{
+    public interface OnPoiActionListener {
         void onPoiAdded(PoiDetailBean poi);
+
         void onPoiRemoved(PoiDetailBean poi);
+
         void onPoiNavi(PoiDetailBean poi);
 
     }

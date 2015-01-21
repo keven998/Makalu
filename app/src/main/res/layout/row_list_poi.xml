@@ -126,7 +126,7 @@
                     android:layout_height="1dp"
                     android:layout_below="@id/poi_rating"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/poi_image_iv"
                     android:background="@color/base_divider_color" />
 

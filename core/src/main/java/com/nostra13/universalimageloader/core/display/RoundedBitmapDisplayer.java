@@ -112,34 +112,34 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer {
 
             Matrix matrix = new Matrix();
 
-            float scaleX = mRect.width() / (float)oBitmap.getWidth();
-
-            float scaleY = mRect.height() / (float)oBitmap.getHeight();
-
-            float scale = scaleX > scaleY? scaleX : scaleY;
-            float dx = 0, dy = 0;
+//            float scaleX = mRect.width() / (float)oBitmap.getWidth();
+//
+//            float scaleY = mRect.height() / (float)oBitmap.getHeight();
+//
+//            float scale = scaleX > scaleY? scaleX : scaleY;
+//            float dx = 0, dy = 0;
 //            if(scaleX>scaleY){
 //                dy = (mRect.height() - oBitmap.getHeight() * scale) * 0.5f;
 //            }else{
 //                dx = ( mRect.width() - oBitmap.getWidth() * scale) * 0.5f;
 //            }
 
-//            float scale;
-//            float dx = 0, dy = 0;
+            float scale;
+            float dx = 0, dy = 0;
 //
-//            if (oBitmap.getWidth() * mRect.height() > mRect.width() * oBitmap.getHeight()) {
-//                scale = (float) mRect.height() / (float) oBitmap.getHeight();
-//                dx = ( mRect.width() - oBitmap.getWidth() * scale) * 0.5f;
-//            } else {
-//                scale = (float) mRect.width()/ (float) oBitmap.getWidth();
-//                dy = (mRect.height() - oBitmap.getHeight() * scale) * 0.5f;
-//            }
+            if (oBitmap.getWidth() * mRect.height() > mRect.width() * oBitmap.getHeight()) {
+                scale = (float) mRect.height() / (float) oBitmap.getHeight();
+                dx = ( mRect.width() - oBitmap.getWidth() * scale) * 0.5f;
+            } else {
+                scale = (float) mRect.width()/ (float) oBitmap.getWidth();
+                dy = (mRect.height() - oBitmap.getHeight() * scale) * 0.5f;
+            }
 
-            matrix.setScale(scale, scale);
+//            matrix.setScale(scale, scale);
 
 
             matrix.postScale(scale,scale);
-//            matrix.postTranslate((int) dx , dy);
+            matrix.postTranslate((int) dx , dy);
 
             bitmapShader.setLocalMatrix(matrix);
 
