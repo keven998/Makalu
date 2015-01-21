@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,37 +18,38 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.utils.GsonTools;
-import com.aizou.peachtravel.bean.ModifyResult;
-import com.aizou.peachtravel.common.account.StrategyManager;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.CopyStrategyBean;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -57,14 +57,24 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class StrategyActivity extends PeachBaseActivity {
-    public static final int RESULT_NEW_PLAN=100;
-    public static final int RESULT_COMPLETE=101;
+public class StrategyActivity extends PeachBaseActivity implements OnEditModeChangeListener{
+    public static final int RESULT_NEW_PLAN = 100;
+    public static final int RESULT_COMPLETE = 101;
 
-    @InjectView(R.id.loc_list_rv)
-    RecyclerView mLocListRv;
-    @InjectView(R.id.title_bar)
-    TitleHeaderBar mTitleBar;
+    @InjectView(R.id.tv_title_back)
+    TextView mTvTitleBack;
+    @InjectView(R.id.tv_title_complete)
+    TextView mTvTitleComplete;
+    @InjectView(R.id.tv_title)
+    TextView mTvTitle;
+    @InjectView(R.id.iv_edit)
+    ImageView mIvEdit;
+    @InjectView(R.id.iv_loc_list)
+    ImageView mIvLocList;
+    @InjectView(R.id.iv_more)
+    ImageView mIvMore;
+    @InjectView(R.id.tv_copy_guide)
+    TextView mTvCopyGuide;
     private IndicatorViewPager indicatorViewPager;
     @InjectView(R.id.strategy_viewpager)
     FixedViewPager mStrategyViewpager;
@@ -74,10 +84,12 @@ public class StrategyActivity extends PeachBaseActivity {
     private StrategyBean strategy;
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
-    private boolean canEdit;
+    private boolean isInEditMode;
+    private int curIndex=0;
     RouteDayFragment routeDayFragment;
     RestaurantFragment restFragment;
     ShoppingFragment shoppingFragment;
+    private Set<OnEditModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
 
     private boolean isAniming = false, isRVVisable = true;
     private Animation inAnim, outAnim;
@@ -103,24 +115,59 @@ public class StrategyActivity extends PeachBaseActivity {
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(0);
-        //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mLocListRv.setLayoutManager(linearLayoutManager);
-//        mTitleBar.enableBackKey(true);
-//        mTitleBar.getLeftTextView().setText(" 完成");
-//        mTitleBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
-            public void onClick(View view) {
-                if(checkIsEditableMode()) {
-                    warnCancel();
-                } else {
-                        finish();
-
-                }
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                curIndex = currentItem;
             }
         });
+        mTvTitleBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mTvTitleComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveStrategy();
+            }
+        });
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        try {
+            OnEditModeChangeListener listener = (OnEditModeChangeListener)fragment;
+            mOnEditModeChangeListeners.add(listener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onAttachFragment(fragment);
+    }
+
+
+
+    private void gotoEditMode(){
+        isInEditMode =true;
+        onEditModeChange(isInEditMode);
+        for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
+            onEditModeChangeListener.onEditModeChange(isInEditMode);
+        }
+    }
+
+    public void onEditModeChange(boolean inEditMode){
+        isInEditMode = inEditMode;
+        if(inEditMode){
+            mTvTitleBack.setVisibility(View.GONE);
+            mTvTitleComplete.setVisibility(View.VISIBLE);
+            mIvEdit.setVisibility(View.GONE);
+        }else{
+            mTvTitleBack.setVisibility(View.VISIBLE);
+            mTvTitleComplete.setVisibility(View.GONE);
+            mIvEdit.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -128,7 +175,7 @@ public class StrategyActivity extends PeachBaseActivity {
         if (id == null) {
             cityIdList = new ArrayList<String>();
             for (LocBean loc : destinations) {
-            cityIdList.add(loc.id);
+                cityIdList.add(loc.id);
             }
             //test
 //            cityIdList.add("5473ccd7b8ce043a64108c46");
@@ -136,25 +183,25 @@ public class StrategyActivity extends PeachBaseActivity {
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setMessage("小桃可为你创建行程模版，制作计划更简单");
-            dialog.setNegativeButton("不需要",new View.OnClickListener() {
+            dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    createStrategyByCityIds(cityIdList,false);
+                    createStrategyByCityIds(cityIdList, false);
                 }
             });
-            dialog.setPositiveButton("创建",new View.OnClickListener() {
+            dialog.setPositiveButton("创建", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    createStrategyByCityIds(cityIdList,true);
+                    createStrategyByCityIds(cityIdList, true);
                 }
             });
             dialog.show();
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    createStrategyByCityIds(cityIdList,false);
+                    createStrategyByCityIds(cityIdList, false);
                 }
             });
 
@@ -191,13 +238,13 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing())
-                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
-    public void createStrategyByCityIds(List<String> cityIds,boolean recommend) {
-        DialogManager.getInstance().showLoadingDialog(mContext,"请稍后");
+    public void createStrategyByCityIds(List<String> cityIds, boolean recommend) {
+        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
         TravelApi.createGuide(cityIds, recommend, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -227,33 +274,45 @@ public class StrategyActivity extends PeachBaseActivity {
         });
     }
 
+    private void copyGuide(){
+
+    }
+
     private void bindView(final StrategyBean result) {
         strategy = result;
-        mTitleBar.getTitleTextView().setText(result.title);
-        PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+//        mTitleBar.getTitleTextView().setText(result.title);
+        final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
 
-        if(user.userId != result.userId){
-            mTitleBar.setRightViewImageRes(0);
-            mTitleBar.getRightTextView().setText("复制计划");
-            canEdit = false;
-            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+        if (user.userId != result.userId) {
+            mIvEdit.setVisibility(View.GONE);
+            mIvLocList.setVisibility(View.GONE);
+            mIvMore.setVisibility(View.GONE);
+            mTvCopyGuide.setVisibility(View.VISIBLE);
+            mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //todo:复制路线
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSucess(String resultStr, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            if (!isFinishing())
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为旅行计划");
+                            CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
+                            if (modifyResult.code == 0) {
+                                strategy.id = modifyResult.result.id;
+                                strategy.userId = user.userId;
+                                bindView(strategy);
+                                if (!isFinishing())
+                                    ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为旅行计划");
+                            }
+
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             if (!isFinishing())
-                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });
 
@@ -289,19 +348,35 @@ public class StrategyActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-            mTitleBar.getRightTextView().setText("");
-            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+            mIvEdit.setVisibility(View.VISIBLE);
+            mIvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this,strategy);
+                    gotoEditMode();
                 }
             });
-            canEdit = true;
+            mIvLocList.setVisibility(View.VISIBLE);
+            mIvLocList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            mIvMore.setVisibility(View.VISIBLE);
+            mTvCopyGuide.setVisibility(View.GONE);
+//            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
+//            mTitleBar.getRightTextView().setText("");
+//            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
+//                }
+//            });
         }
-        indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result, canEdit));
-        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
+
+        indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
+        indicatorViewPager.setCurrentItem(curIndex,false);
+//        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
 //        setRVVisiable(false);
     }
 
@@ -312,75 +387,25 @@ public class StrategyActivity extends PeachBaseActivity {
 //            intent.putExtra("strategy", strategy);
 //            setResult(RESULT_OK, intent);
 //        }else{
-            Intent intent = getIntent();
-            intent.putExtra("strategy", getSaveStrategy());
-            setResult(RESULT_OK, intent);
+        Intent intent = getIntent();
+        intent.putExtra("strategy", getSaveStrategy());
+        setResult(RESULT_OK, intent);
 //        }
         super.finish();
     }
 
-    private StrategyBean getSaveStrategy(){
-        if(routeDayFragment!=null&&routeDayFragment.getStrategy()!=null){
+    private StrategyBean getSaveStrategy() {
+        if (routeDayFragment != null && routeDayFragment.getStrategy() != null) {
             strategy = routeDayFragment.getStrategy();
         }
-        if(restFragment!=null&&restFragment.getStrategy()!=null){
+        if (restFragment != null && restFragment.getStrategy() != null) {
             strategy.restaurant = restFragment.getStrategy().restaurant;
         }
-        if(shoppingFragment!=null&&restFragment.getStrategy()!=null){
-            strategy.shopping = restFragment.getStrategy().shopping;
+        if (shoppingFragment != null && shoppingFragment.getStrategy() != null) {
+            strategy.shopping = shoppingFragment.getStrategy().shopping;
         }
         return strategy;
     }
-
-    public void setRVVisiable(boolean visiable) {
-        if (isAniming) {
-            return;
-        }
-
-        if (visiable && !isRVVisable) {
-            isAniming = true;
-            mLocListRv.startAnimation(inAnim);
-            inAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    isAniming = false;
-                    isRVVisable = true;
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-        } else if (!visiable && isRVVisable) {
-            isAniming = true;
-            mLocListRv.startAnimation(outAnim);
-            outAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    isAniming = false;
-                    isRVVisable = false;
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-        }
-    }
-
-
 
     public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {
 
@@ -451,13 +476,11 @@ public class StrategyActivity extends PeachBaseActivity {
         private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
-        private boolean canEdit;
 
-        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean, boolean canEdit) {
+        public StrategyAdapter(FragmentManager fragmentManager, StrategyBean strategyBean) {
             super(fragmentManager);
             inflater = LayoutInflater.from(getApplicationContext());
             this.strategyBean = strategyBean;
-            this.canEdit = canEdit;
         }
 
         @Override
@@ -479,30 +502,30 @@ public class StrategyActivity extends PeachBaseActivity {
         @Override
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
-                if(routeDayFragment==null){
+                if (routeDayFragment == null) {
                     routeDayFragment = new RouteDayFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("canEdit",canEdit);
+                    bundle.putBoolean("isInEditMode", isInEditMode);
                     routeDayFragment.setArguments(bundle);
                 }
                 return routeDayFragment;
             } else if (position == 1) {
-                if(restFragment==null){
+                if (restFragment == null) {
                     restFragment = new RestaurantFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("canEdit",canEdit);
+                    bundle.putBoolean("isInEditMode", isInEditMode);
                     restFragment.setArguments(bundle);
                 }
 
                 return restFragment;
             } else {
-                if(shoppingFragment==null){
+                if (shoppingFragment == null) {
                     shoppingFragment = new ShoppingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("canEdit",canEdit);
+                    bundle.putBoolean("isInEditMode", isInEditMode);
                     shoppingFragment.setArguments(bundle);
                 }
 
@@ -527,33 +550,78 @@ public class StrategyActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(checkIsEditableMode()){
+        if (checkIsEditableMode()) {
             warnCancel();
-        }else {
-           finish();
+        } else {
+            finish();
         }
 
     }
 
-    private boolean checkIsEditableMode(){
-        if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
+    private boolean checkIsEditableMode() {
+        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
             return true;
-        }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
+        } else if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
             return true;
-        }else if(restFragment!=null&&restFragment.isEditableMode()){
+        } else if (restFragment != null && restFragment.isEditableMode()) {
             return true;
         }
-        return  false;
+        return false;
+    }
+
+    private void saveStrategy(){
+        final JSONObject jsonObject = new JSONObject();
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
+        if (routeDayFragment != null&&routeDayFragment.getStrategy()!=null) {
+            StrategyManager.putItineraryJson(mContext, jsonObject, routeDayFragment.getStrategy(), routeDayFragment.getRouteDayMap());
+        }
+        if (shoppingFragment != null&&shoppingFragment.getStrategy()!=null) {
+            StrategyManager.putShoppingJson(mContext, jsonObject, shoppingFragment.getStrategy());
+        }
+        if (restFragment != null&&restFragment.getStrategy()!=null) {
+            StrategyManager.putRestaurantJson(mContext, jsonObject, restFragment.getStrategy());
+        }
+        DialogManager.getInstance().showLoadingDialog(mContext);
+        TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
+                if (saveResult.code == 0) {
+                    isInEditMode=false;
+                    onEditModeChange(isInEditMode);
+                    for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
+                        onEditModeChangeListener.onEditModeChange(isInEditMode);
+                    }
+                    if (routeDayFragment != null)
+                        routeDayFragment.resumeItinerary();
+
+//                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
+//                    finish();
+                } else {
+                    if (!isFinishing())
+                        ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                if (!isFinishing())
+                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
     }
 
     private void warnCancel() {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
-        if(routeDayFragment!=null&&routeDayFragment.isEditableMode()){
-            StrategyManager.putItineraryJson(mContext,jsonObject,routeDayFragment.getStrategy(),routeDayFragment.getRouteDayMap());
-        }else if(shoppingFragment!=null&&shoppingFragment.isEditableMode()){
-            StrategyManager.putShoppingJson(mContext,jsonObject,shoppingFragment.getStrategy());
-        }else if(restFragment!=null&&restFragment.isEditableMode()){
+        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
+            StrategyManager.putItineraryJson(mContext, jsonObject, routeDayFragment.getStrategy(), routeDayFragment.getRouteDayMap());
+        } else if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
+            StrategyManager.putShoppingJson(mContext, jsonObject, shoppingFragment.getStrategy());
+        } else if (restFragment != null && restFragment.isEditableMode()) {
             StrategyManager.putRestaurantJson(mContext, jsonObject, restFragment.getStrategy());
         }
 
@@ -564,34 +632,11 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext);
-                TravelApi.saveGuide(strategy.id, jsonObject.toString(),new HttpCallBack<String>() {
-                    @Override
-                    public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
-                        if (saveResult.code == 0) {
-                            if(routeDayFragment!=null)
-                            routeDayFragment.resumeItinerary();
-//                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
-                            finish();
-                        } else {
-                            if (!isFinishing())
-                            ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
-                        }
-                    }
+                saveStrategy();
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
-                        if (!isFinishing())
-                        ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                });
             }
         });
-        messageDialog.setNegativeButton("直接返回",new View.OnClickListener() {
+        messageDialog.setNegativeButton("直接返回", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();

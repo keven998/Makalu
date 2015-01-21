@@ -33,6 +33,7 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
+                android:visibility="gone"
                 android:background="@drawable/checker_ic_layer_edit"
                 />
     </FrameLayout>

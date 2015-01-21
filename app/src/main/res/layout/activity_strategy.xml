@@ -5,6 +5,132 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/app_theme_color" >
+
+        <RelativeLayout
+            android:id="@+id/ly_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:id="@+id/tv_title_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="8dp"
+                android:paddingRight="12dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:singleLine="true"
+                android:duplicateParentState="true"
+                android:drawableLeft="@drawable/ic_navigation_back"
+                android:text="返回"
+                android:gravity="center"
+                android:textColor="@color/base_color_white"
+                android:background="@drawable/btn_navigation_back_selector"
+                android:drawablePadding="3dp"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_title_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:duplicateParentState="true"
+                android:text="完成"
+                android:gravity="center"
+                android:textColor="@color/base_color_white"
+                android:background="@drawable/btn_guide_complete_selector"
+                android:drawablePadding="3dp"
+                android:visibility="gone"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ly_title_bar_center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/ly_title_bar_left"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:textColor="@color/base_text_color_title"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_title_bar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/ly_title_bar_center"
+            android:gravity="right|center_vertical"
+            android:layout_alignParentRight="true">
+            <ImageView
+                android:id="@+id/iv_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                android:src="@drawable/ic_guide_edit"/>
+            <ImageView
+                android:id="@+id/iv_loc_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:visibility="gone"
+                android:paddingRight="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_guide_loclist"/>
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_guide_more"/>
+
+
+            <TextView
+                android:id="@+id/tv_copy_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/btn_guide_complete_selector"
+                android:textColor="@color/base_color_white"
+                android:layout_marginRight="8dp"
+                android:singleLine="true"
+                android:duplicateParentState="true"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:text="复制路线"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/strategy_viewpager"
@@ -13,20 +139,7 @@
         android:layout_marginTop="@dimen/title_bar_height"
         android:layout_marginBottom="62dp"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/loc_list_rv"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="@dimen/title_bar_height"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/mm_listitem_simple"
-        android:scrollbars="none" />
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
 
     <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
         android:background="@drawable/shape_rectangle_white_with_border"

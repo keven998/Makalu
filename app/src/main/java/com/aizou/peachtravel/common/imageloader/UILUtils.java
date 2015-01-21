@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 public class UILUtils {
 	public static final String QINIU_URL_FORMART="?imageView/1/w/%1$d/h/%2$d/q/70/format/jpg/interlace/1";

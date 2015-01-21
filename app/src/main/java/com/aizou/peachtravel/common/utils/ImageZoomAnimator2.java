@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -170,8 +171,14 @@ public class ImageZoomAnimator2 {
 
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
             final TextView progressText = (TextView) contentView.findViewById(R.id.progress_text);
+            String url;
+            if(TextUtils.isEmpty(imageUrls.get(position).originUrl)){
+                url = imageUrls.get(position).url;
+            }else{
+                url = imageUrls.get(position).originUrl;
+            }
 //            if (photeView.getDrawable() == null) {
-                ImageLoader.getInstance().displayImage(imageUrls.get(position).originUrl, photeView, picOptions, new ImageLoadingListener() {
+                ImageLoader.getInstance().displayImage(url, photeView, picOptions, new ImageLoadingListener() {
 
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {

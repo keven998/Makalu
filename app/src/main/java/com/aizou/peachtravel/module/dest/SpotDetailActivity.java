@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -226,7 +227,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
         mOtherLl.removeAllViews();
-        if(!TextUtils.isEmpty(result.guideUrl)){
+        if(!TextUtils.isEmpty(result.tipsUrl)){
             View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
             ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
             TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
@@ -236,6 +237,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    intent.putExtra("title","游玩贴士");
+                    intent.putExtra("url",result.tipsUrl);
+                    startActivity(intent);
 
                 }
             });

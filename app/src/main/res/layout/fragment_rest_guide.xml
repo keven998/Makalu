@@ -10,7 +10,6 @@
             android:id="@+id/edit_dslv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:dividerHeight="10dp"
             android:divider="@null"
             android:fastScrollEnabled="false"
             dslv:collapsed_height="10dp"
@@ -27,13 +26,4 @@
             dslv:track_drag_sort="false"
             dslv:use_default_controller="false" />
 
-            <CheckedTextView
-                android:id="@+id/edit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/checker_ic_layer_edit"
-                />
     </FrameLayout>

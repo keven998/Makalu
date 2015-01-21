@@ -20,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -40,10 +41,13 @@ import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
+import com.aizou.peachtravel.module.dest.OnDestActionListener;
+import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.lidroid.xutils.util.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
@@ -58,35 +62,44 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class RouteDayFragment extends PeachBaseFragment {
+public class RouteDayFragment extends PeachBaseFragment implements OnEditModeChangeListener {
     public static final int ADD_POI_REQUEST_CODE = 101;
     private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
+    private OnEditModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
     @InjectView(R.id.edit_btn)
     CheckedTextView mEditBtn;
     View addDayFooter;
-    View lineLl;
     Button addDayBtn;
-    boolean canEdit;
+    boolean isInEditMode;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
         addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
-        lineLl = addDayFooter.findViewById(R.id.ll_line);
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
     }
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mOnEditModeChangeListener = (OnEditModeChangeListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement On OnDestActionListener");
+        }
+        super.onAttach(activity);
+    }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary){
+    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
-        for(int i = 0; i < strategy.itineraryDays; i++){
+        for (int i = 0; i < strategy.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
@@ -96,15 +109,15 @@ public class RouteDayFragment extends PeachBaseFragment {
 
     }
 
-    public void resumeItinerary(){
+    public void resumeItinerary() {
         ArrayList<StrategyBean.IndexPoi> poiList = new ArrayList<>();
-        int dayIndex=0;
+        int dayIndex = 0;
         StrategyBean.IndexPoi indexPoi;
-        for(ArrayList<PoiDetailBean> poiDayList:routeDayMap){
-            for(PoiDetailBean poiDetailBean:poiDayList){
-                indexPoi=new StrategyBean.IndexPoi();
-                indexPoi.dayIndex= dayIndex;
-                indexPoi.poi= poiDetailBean;
+        for (ArrayList<PoiDetailBean> poiDayList : routeDayMap) {
+            for (PoiDetailBean poiDetailBean : poiDayList) {
+                indexPoi = new StrategyBean.IndexPoi();
+                indexPoi.dayIndex = dayIndex;
+                indexPoi.poi = poiDetailBean;
                 poiList.add(indexPoi);
             }
             dayIndex++;
@@ -112,129 +125,99 @@ public class RouteDayFragment extends PeachBaseFragment {
         strategy.itinerary = poiList;
     }
 
-    public boolean  isEditableMode(){
-        if(routeDayAdpater!=null){
+    public boolean isEditableMode() {
+        if (routeDayAdpater != null) {
             return routeDayAdpater.isEditableMode;
         }
         return false;
     }
-    public ArrayList<ArrayList<PoiDetailBean>> getRouteDayMap(){
-        if(routeDayMap==null){
+
+    public ArrayList<ArrayList<PoiDetailBean>> getRouteDayMap() {
+        if (routeDayMap == null) {
             resizeData(strategy.itinerary);
         }
-        return  routeDayMap;
+        return routeDayMap;
     }
-    public StrategyBean getStrategy(){
-        return  strategy;
+
+    public StrategyBean getStrategy() {
+        return strategy;
     }
 
     private void initData() {
         strategy = getArguments().getParcelable("strategy");
-        canEdit = getArguments().getBoolean("canEdit");
+        isInEditMode = getArguments().getBoolean("isInEditMode");
         resizeData(strategy.itinerary);
         final RouteDayAdapter adapter = new RouteDayAdapter();
         routeDayAdpater = adapter;
         final DragSortListView listView = mEditDslv;
+        routeDayAdpater.isEditableMode = isInEditMode;
         listView.setDropListener(adapter);
-        View view = new View(getActivity());
-        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.panel_margin)));
-        listView.addHeaderView(view);
         // make and set controller on dslv
         SectionController c = new SectionController(listView, adapter);
         listView.setFloatViewManager(c);
         listView.setOnTouchListener(c);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (mEditBtn.isChecked()) return;
-                if (i == SCROLL_STATE_IDLE) {
-                    if (absListView.getFirstVisiblePosition() <= 1) {
-                        ((StrategyActivity) getActivity()).setRVVisiable(true);
-                    } else {
-                        ((StrategyActivity) getActivity()).setRVVisiable(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int i2, int i3) {
-                if (mEditBtn.isChecked()) return;
-                if (firstVisibleItem <= 1) {
-                    ((StrategyActivity)getActivity()).setRVVisiable(true);
-                } else {
-                    ((StrategyActivity)getActivity()).setRVVisiable(false);
-                }
-            }
-        });
         listView.setAdapter(adapter);
 
-        if (canEdit) {
-            mEditBtn.setVisibility(View.VISIBLE);
-            mEditBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!adapter.isEditableMode) {
-                        mEditBtn.setChecked(true);
-                        lineLl.setVisibility(View.GONE);
-                        addDayFooter.setVisibility(View.VISIBLE);
-                        adapter.isEditableMode = !adapter.isEditableMode;
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        //todo:保存路线
-                        DialogManager.getInstance().showLoadingDialog(getActivity());
-                        JSONObject jsonObject = new JSONObject();
-                        StrategyManager.putSaveGuideBaseInfo(jsonObject,getActivity(),strategy);
-                        StrategyManager.putItineraryJson(getActivity(), jsonObject, strategy, routeDayMap);
-                        TravelApi.saveGuide(strategy.id, jsonObject.toString(),new HttpCallBack<String>() {
-                            @Override
-                            public void doSucess(String result, String method) {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result,ModifyResult.class);
-                                if (saveResult.code == 0) {
+        mEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!adapter.isEditableMode) {
+                    mEditBtn.setChecked(true);
+                    addDayFooter.setVisibility(View.VISIBLE);
+                    adapter.isEditableMode = !adapter.isEditableMode;
+                    adapter.notifyDataSetChanged();
+                } else {
+                    //todo:保存路线
+                    DialogManager.getInstance().showLoadingDialog(getActivity());
+                    JSONObject jsonObject = new JSONObject();
+                    StrategyManager.putSaveGuideBaseInfo(jsonObject, getActivity(), strategy);
+                    StrategyManager.putItineraryJson(getActivity(), jsonObject, strategy, routeDayMap);
+                    TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
+                        @Override
+                        public void doSucess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (saveResult.code == 0) {
 //                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
-                                    mEditBtn.setChecked(false);
-                                    lineLl.setVisibility(View.GONE);
-                                    addDayFooter.setVisibility(View.INVISIBLE);
-                                    resumeItinerary();
-                                    adapter.isEditableMode = !adapter.isEditableMode;
-                                    adapter.notifyDataSetChanged();
-                                }
+                                mEditBtn.setChecked(false);
+                                addDayFooter.setVisibility(View.INVISIBLE);
+                                resumeItinerary();
+                                adapter.isEditableMode = !adapter.isEditableMode;
+                                adapter.notifyDataSetChanged();
                             }
+                        }
 
-                            @Override
-                            public void doFailure(Exception error, String msg, String method) {
-                                DialogManager.getInstance().dissMissLoadingDialog();
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
 //                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
-                                if (isAdded())
+                            if (isAdded())
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-                            }
-                        });
-
-                    }
+                        }
+                    });
 
                 }
-            });
-            int count = adapter.getCount();
-            if (count == 0) {
+
+            }
+        });
+        int count = adapter.getCount();
+        if (count == 0) {
+            if (!mEditBtn.isChecked()) {
+                mEditBtn.performClick();
+            }
+        } else {
+            boolean ed = true;
+            for (int i = 0; i < count; i++) {
+                if (adapter.getCountInSection(i) > 0) {
+                    ed = false;
+                    break;
+                }
+            }
+            if (ed) {
                 if (!mEditBtn.isChecked()) {
                     mEditBtn.performClick();
                 }
-            } else {
-                boolean ed = true;
-                for (int i = 0; i < count; i++) {
-                    if (adapter.getCountInSection(i) > 0) {
-                        ed = false;
-                        break;
-                    }
-                }
-                if (ed) {
-                    if (!mEditBtn.isChecked()) {
-                        mEditBtn.performClick();
-                    }
-                }
             }
-        } else {
-            mEditBtn.setVisibility(View.GONE);
         }
 
 
@@ -250,20 +233,38 @@ public class RouteDayFragment extends PeachBaseFragment {
                         listView.setSelection(adapter.getCount() - 1);
                     }
                 }, 50);
+                if(mOnEditModeChangeListener!=null){
+                    if(!isInEditMode){
+                        isInEditMode = true;
+                        routeDayAdpater.isEditableMode=true;
+                        routeDayAdpater.notifyDataSetChanged();
+                        mOnEditModeChangeListener.onEditModeChange(true);
+                    }
+                }
             }
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==ADD_POI_REQUEST_CODE){
-               ArrayList<PoiDetailBean> poiList= data.getParcelableArrayListExtra("poiList");
-               int dayIndex = data.getIntExtra("dayIndex", -1);
-               routeDayMap.set(dayIndex, poiList);
-               routeDayAdpater.notifyDataSetChanged();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ADD_POI_REQUEST_CODE) {
+                ArrayList<PoiDetailBean> poiList = data.getParcelableArrayListExtra("poiList");
+                int dayIndex = data.getIntExtra("dayIndex", -1);
+                routeDayMap.set(dayIndex, poiList);
+                routeDayAdpater.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onEditModeChange(boolean isInEdit) {
+        this.isInEditMode = isInEdit;
+        if (routeDayAdpater != null) {
+            routeDayAdpater.isEditableMode = isInEdit;
+            routeDayAdpater.notifyDataSetChanged();
+        }
+
     }
 
     private class SectionController extends DragSortController {
@@ -283,7 +284,7 @@ public class RouteDayFragment extends PeachBaseFragment {
         @Override
         public View onCreateFloatView(int position) {
             mPos = position;
-            LogUtil.d("dslv","pos="+mPos);
+            LogUtil.d("dslv", "pos=" + mPos);
             View v = mAdapter.getView(position, null, mDslv);
             // v.setBackgroundDrawable(getResources().getDrawable(
             // R.drawable.bg_handle_section1));
@@ -306,9 +307,9 @@ public class RouteDayFragment extends PeachBaseFragment {
             if (mPos > 0) {
                 // don't allow floating View to go above
                 // section divider
-                if( mDslv.getFirstVisiblePosition()==0){
+                if (mDslv.getFirstVisiblePosition() == 0) {
                     final int limit = div.getBottom() + lvDivHeight;
-                    LogUtil.d("dslv","limit="+limit+"--y="+floatPoint.y);
+                    LogUtil.d("dslv", "limit=" + limit + "--y=" + floatPoint.y);
                     if (floatPoint.y < limit) {
                         floatPoint.y = limit;
                     }
@@ -327,21 +328,24 @@ public class RouteDayFragment extends PeachBaseFragment {
     }
 
     public class RouteDayAdapter extends BaseSectionAdapter implements
-            DragSortListView.DropListener{
-        public static final int SPOT=0;
-        public static final int POI=1;
+            DragSortListView.DropListener {
+        public static final int SPOT = 0;
+        public static final int POI = 1;
         public boolean isEditableMode;
-        public RouteDayAdapter(){
+        private DisplayImageOptions options;
+
+        public RouteDayAdapter() {
             super();
+            options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         }
 
         @Override
         public int getContentItemViewType(int section, int position) {
-            String type =routeDayMap.get(section).get(position).type;
-            if(type.equals(TravelApi.PeachType.SPOT)){
-                return SPOT ;
-            }else{
-                return POI ;
+            String type = routeDayMap.get(section).get(position).type;
+            if (type.equals(TravelApi.PeachType.SPOT)) {
+                return SPOT;
+            } else {
+                return POI;
             }
 
         }
@@ -368,13 +372,13 @@ public class RouteDayFragment extends PeachBaseFragment {
 
         @Override
         public long getItemId(int section, int position) {
-            return getGlobalPositionForItem(section,position);
+            return getGlobalPositionForItem(section, position);
         }
 
         @Override
         public View getItemView(final int section, int position, View convertView, ViewGroup parent) {
             int type = getContentItemViewType(section, position);
-            LogUtils.d("item---section:"+section+"--postion:"+position+"--globle_postion"+getGlobalPositionForItem(section,position));
+            LogUtils.d("item---section:" + section + "--postion:" + position + "--globle_postion" + getGlobalPositionForItem(section, position));
             ItemViewHolder holder = null;
             if (convertView == null) {
                 holder = new ItemViewHolder();
@@ -382,7 +386,6 @@ public class RouteDayFragment extends PeachBaseFragment {
                     case SPOT:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_spot, null);
                         holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
-                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
                         holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
@@ -393,7 +396,6 @@ public class RouteDayFragment extends PeachBaseFragment {
                     case POI:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
                         holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
-                        holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
                         holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
@@ -405,21 +407,20 @@ public class RouteDayFragment extends PeachBaseFragment {
                         break;
                 }
                 convertView.setTag(holder);
-            }
-            else {
+            } else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
-            final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section,position);
-            switch (type){
+            final PoiDetailBean poiDetailBean = (PoiDetailBean) getItem(section, position);
+            switch (type) {
                 case SPOT:
-                    if(poiDetailBean.images.size()>0){
-                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, UILUtils.getDefaultOption());
-                    }else{
+                    if (poiDetailBean.images.size() > 0) {
+                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.spotImageIv, options);
+                    } else {
                         holder.spotImageIv.setImageDrawable(null);
                     }
 
                     holder.spotNameTv.setText(poiDetailBean.zhName);
-                    holder.spotCostTimeTv.setText(poiDetailBean.timeCostDesc);
+                    holder.spotCostTimeTv.setText("参考游玩  "+poiDetailBean.timeCostDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
 //                        holder.nearByTv.setVisibility(View.GONE);
@@ -438,7 +439,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                         deleteDialog.dismiss();
                                     }
                                 });
-                                deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         deleteDialog.dismiss();
@@ -461,7 +462,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), SpotDetailActivity.class);
-                            intent.putExtra("id",poiDetailBean.id);
+                            intent.putExtra("id", poiDetailBean.id);
                             startActivity(intent);
                         }
                     });
@@ -469,9 +470,9 @@ public class RouteDayFragment extends PeachBaseFragment {
                     break;
 
                 case POI:
-                    if(poiDetailBean.images.size()>0){
-                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
-                    }else{
+                    if (poiDetailBean.images.size() > 0) {
+                        ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, options);
+                    } else {
                         holder.poiImageIv.setImageDrawable(null);
                     }
 
@@ -498,7 +499,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                         deleteDialog.dismiss();
                                     }
                                 });
-                                deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         deleteDialog.dismiss();
@@ -522,80 +523,64 @@ public class RouteDayFragment extends PeachBaseFragment {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
-                            intent.putExtra("id",poiDetailBean.id);
-                            intent.putExtra("type",poiDetailBean.type);
+                            intent.putExtra("id", poiDetailBean.id);
+                            intent.putExtra("type", poiDetailBean.type);
                             startActivity(intent);
                         }
                     });
                     break;
-            }
-            if(isEditableMode){
-                holder.lineLl.setVisibility(View.GONE);
-            }else{
-                holder.lineLl.setVisibility(View.VISIBLE);
             }
             return convertView;
         }
 
         @Override
         public View getHeaderView(final int section, View convertView, ViewGroup parent) {
-            HeaderViewHolder holder=null;
-            if(convertView==null){
+            HeaderViewHolder holder = null;
+            if (convertView == null) {
                 holder = new HeaderViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.row_drag_div,null);
+                convertView = View.inflate(getActivity(), R.layout.row_drag_div, null);
                 convertView.setTag(holder);
-            }
-            else{
+            } else {
                 holder = (HeaderViewHolder) convertView.getTag();
             }
-            holder.lineLl = (LinearLayout) convertView.findViewById(R.id.ll_line);
-            holder.topLineVw = convertView.findViewById(R.id.line_top);
             holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
             holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
             holder.deleteDayIv = (Button) convertView.findViewById(R.id.iv_delete_day);
             holder.nullLl = (LinearLayout) convertView.findViewById(R.id.ll_null);
-            if (isEditableMode) {
-                holder.lineLl.setVisibility(View.GONE);
-            } else {
-                holder.lineLl.setVisibility(View.VISIBLE);
-            }
-            if(section==0) {
-                holder.topLineVw.setVisibility(View.INVISIBLE);
-            }else{
-                holder.topLineVw.setVisibility(View.VISIBLE);
-            }
+            holder.citysLl = (LinearLayout) convertView.findViewById(R.id.ll_citys);
             List<PoiDetailBean> poiList = routeDayMap.get(section);
-            if(poiList.size()>0){
+            holder.citysLl.removeAllViews();
+            if (poiList.size() > 0) {
                 holder.nullLl.setVisibility(View.GONE);
                 LinkedHashSet<String> citySet = new LinkedHashSet<String>();
-                for(PoiDetailBean detailBean:poiList){
-                    if(detailBean.locality!=null){
+                for (PoiDetailBean detailBean : poiList) {
+                    if (detailBean.locality != null) {
                         citySet.add(detailBean.locality.zhName);
                     }
                 }
+
                 if (!citySet.isEmpty()) {
                     String des = "";
                     for (String str : citySet) {
-                        if (!TextUtils.isEmpty(des)) {
-                            des += String.format("—%s", str);
-                        } else {
-                            des = str;
-                        }
+                        View cityView = View.inflate(getActivity(), R.layout.item_route_day_loc, null);
+                        holder.citysLl.addView(cityView);
+                        TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
+                        cityNameTv.setText(str);
                     }
                     holder.dayTv.setText("第" + (section + 1) + "天  " + des);
                 } else {
                     holder.dayTv.setText("第" + (section + 1) + "天");
                 }
-            }else{
+            } else {
                 holder.dayTv.setText("第" + (section + 1) + "天  未安排");
-                if(isEditableMode){
+                if (isEditableMode) {
                     holder.nullLl.setVisibility(View.GONE);
-                }else{
+                } else {
                     holder.nullLl.setVisibility(View.GONE);
                 }
 
             }
-            if(isEditableMode) {
+            if (isEditableMode) {
                 holder.addPoiIv.setVisibility(View.VISIBLE);
                 holder.deleteDayIv.setVisibility(View.VISIBLE);
                 holder.addPoiIv.setOnClickListener(new View.OnClickListener() {
@@ -641,7 +626,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                                 deleteDialog.dismiss();
                             }
                         });
-                        deleteDialog.setNegativeButton("取消",new View.OnClickListener() {
+                        deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 deleteDialog.dismiss();
@@ -706,19 +691,19 @@ public class RouteDayFragment extends PeachBaseFragment {
             int fromPostion = getPositionInSection(from);
             int toSection = getSection(to);
             int toPostion = getPositionInSection(to);
-            if(toPostion==-1){
-                if(from>to){
-                    toSection-=1;
+            if (toPostion == -1) {
+                if (from > to) {
+                    toSection -= 1;
                     toPostion = routeDayMap.get(toSection).size();
-                }else{
-                    toPostion+=1;
+                } else {
+                    toPostion += 1;
                 }
             }
             List<PoiDetailBean> fromList = routeDayMap.get(fromSection);
             List<PoiDetailBean> toList = routeDayMap.get(toSection);
             PoiDetailBean bean = fromList.get(fromPostion);
             fromList.remove(bean);
-            toList.add(toPostion,bean);
+            toList.add(toPostion, bean);
 
             notifyDataSetChanged();
 
@@ -735,7 +720,6 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
 
         private class ItemViewHolder {
-            public LinearLayout lineLl;
             public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
             public Button nearByTv;
@@ -747,9 +731,8 @@ public class RouteDayFragment extends PeachBaseFragment {
         }
 
         private class HeaderViewHolder {
-            public LinearLayout lineLl;
+            public LinearLayout citysLl;
             public LinearLayout nullLl;
-            public View topLineVw;
             public TextView dayTv;
             public Button deleteDayIv;
             public Button addPoiIv;
@@ -760,13 +743,15 @@ public class RouteDayFragment extends PeachBaseFragment {
         public int dayIndex;
         private ArrayList<LocBean> locList;
         private ArrayList<PoiDetailBean> poiList;
-        private ArrayList< ArrayList<PoiDetailBean>> mRouteDayMap;
+        private ArrayList<ArrayList<PoiDetailBean>> mRouteDayMap;
         private RouteDayAdapter mRouteDayAdapter;
-        public RouteDayMenu(){
+
+        public RouteDayMenu() {
             super();
         }
-        public void setRouteDay(ArrayList< ArrayList<PoiDetailBean>> RouteDayMap,RouteDayAdapter routeDayAdapter){
-            mRouteDayMap =RouteDayMap;
+
+        public void setRouteDay(ArrayList<ArrayList<PoiDetailBean>> RouteDayMap, RouteDayAdapter routeDayAdapter) {
+            mRouteDayMap = RouteDayMap;
             mRouteDayAdapter = routeDayAdapter;
         }
 
@@ -775,7 +760,7 @@ public class RouteDayFragment extends PeachBaseFragment {
             super.onCreate(savedInstanceState);
             dayIndex = getArguments().getInt("dayIndex");
             locList = getArguments().getParcelableArrayList("locList");
-            poiList= getArguments().getParcelableArrayList("poiList");
+            poiList = getArguments().getParcelableArrayList("poiList");
             LogUtil.d(locList.toString());
         }
 
@@ -794,7 +779,7 @@ public class RouteDayFragment extends PeachBaseFragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), AddPoiActivity.class);
-                    intent.putParcelableArrayListExtra("locList",locList);
+                    intent.putParcelableArrayListExtra("locList", locList);
                     intent.putExtra("dayIndex", dayIndex);
                     intent.putParcelableArrayListExtra("poiList", mRouteDayMap.get(dayIndex));
                     getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);

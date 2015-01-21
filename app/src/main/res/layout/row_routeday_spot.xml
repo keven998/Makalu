@@ -9,20 +9,6 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <LinearLayout
-        android:id="@+id/ll_line"
-        android:layout_width="9dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/line_top"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/app_theme_color" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -50,7 +36,7 @@
 
             <ImageView
                 android:id="@+id/spot_image_iv"
-                android:layout_width="54dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/bg_common_default"
@@ -83,10 +69,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="65dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:clickable="true"
             >
             <Button
                 android:id="@+id/drag_nearby_btn"
@@ -102,12 +87,13 @@
 
         <ImageView
             android:id="@+id/drag_handle"
-            android:layout_width="64dp"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:paddingLeft="15dp"
+            android:layout_marginRight="10dp"
             android:scaleType="center"
             android:src="@drawable/ic_line_edit_drag"
             android:visibility="gone" />

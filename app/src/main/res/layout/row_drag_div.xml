@@ -3,98 +3,105 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/ll_line"
-            android:layout_width="9dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:id="@+id/line_top"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:background="@color/app_theme_color" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_time_point" />
-        </LinearLayout>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/shape_white_bar">
+            android:background="@color/section_bg_color"
+            android:paddingRight="10dp">
+
             <Button
                 android:id="@+id/iv_delete_day"
                 android:layout_width="38dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:visibility="visible"
-                android:text="删除"
-                android:textSize="12sp"
-                android:textColor="@color/base_color_white"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/btn_theme_normal_shape"/>
-
-            <Button
-                android:id="@+id/iv_add_poi"
-                android:layout_width="60dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:visibility="visible"
-                android:text="添加安排"
-                android:textSize="12sp"
+                android:background="@drawable/btn_theme_normal_shape"
+                android:text="删除"
                 android:textColor="@color/base_color_white"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/btn_theme_normal_shape"/>
+                android:textSize="12sp"
+                android:visibility="visible" />
+
 
             <TextView
                 android:id="@+id/tv_div"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@id/iv_delete_day"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:layout_marginTop="3dp"
                 android:paddingRight="12dp"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:textSize="15sp"
-                android:layout_toRightOf="@id/iv_delete_day"
-                android:layout_toLeftOf="@id/iv_add_poi"
-                android:layout_alignWithParentIfMissing="true"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_title"
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/base_color_white"
+        android:orientation="horizontal">
+
+        <HorizontalScrollView
+            android:id="@+id/scroll_panel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/ll_citys"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:orientation="horizontal"
+                android:paddingRight="10dp" />
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/iv_add_poi"
+            android:layout_width="60dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_add_poil_shape"
+            android:text="添加安排"
+            android:textColor="@color/base_color_white"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_null"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="9dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp">
 
             <View
                 android:layout_width="1dp"
@@ -113,13 +120,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:drawablePadding="7dp"
                 android:drawableLeft="@drawable/ic_launcher"
-                android:text="今天木有任何安排"
+                android:drawablePadding="7dp"
+                android:gravity="center"
                 android:padding="15dp"
-                android:textSize="13sp"
-                android:textColor="@color/base_text_color_subtitle"/>
+                android:text="今天木有任何安排"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="13sp" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

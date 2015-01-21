@@ -26,6 +26,7 @@ public class SpotDetailBean implements ICreateShareDialog{
     public String trafficInfoUrl;
     public String guideUrl;
     public String kengdieUrl;
+    public String tipsUrl;
 
     @Override
     public ShareDialogBean createShareBean() {

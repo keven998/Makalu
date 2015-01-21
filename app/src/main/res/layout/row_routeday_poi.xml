@@ -9,20 +9,6 @@
     android:duplicateParentState="true"
     android:paddingRight="10dp">
 
-    <LinearLayout
-        android:id="@+id/ll_line"
-        android:layout_width="9dp"
-        android:layout_marginRight="10dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/line_top"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/app_theme_color" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -50,9 +36,10 @@
 
             <ImageView
                 android:id="@+id/poi_image_iv"
-                android:layout_width="54dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
+
                 android:background="@drawable/bg_common_default"
                 android:scaleType="centerCrop"/>
 
@@ -63,6 +50,7 @@
                 android:layout_alignLeft="@id/poi_image_iv"
                 android:layout_alignBottom="@id/poi_image_iv"
                 android:paddingTop="3dp"
+                android:visibility="gone"
                 android:paddingBottom="3dp">
                 <RatingBar
                     android:id="@+id/poi_rating"
@@ -101,8 +89,8 @@
                 android:layout_alignBottom="@id/poi_image_iv"
                 android:layout_toRightOf="@id/poi_image_iv"
                 android:paddingTop="3dp"
-                android:drawableLeft="@drawable/ic_time"
                 android:singleLine="true"
+                android:paddingRight="10dp"
                 android:drawablePadding="4dp"
                 android:textSize="12sp"
                 android:textStyle="italic"
@@ -112,7 +100,7 @@
 
         <Button
             android:id="@+id/drag_nearby_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="55dp"
             android:layout_height="28dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -126,13 +114,14 @@
 
         <ImageView
             android:id="@+id/drag_handle"
-            android:layout_width="64dp"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:scaleType="center"
             android:layout_marginLeft="5dp"
             android:paddingLeft="15dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/ic_line_edit_drag"
             android:visibility="gone" />
     </LinearLayout>
