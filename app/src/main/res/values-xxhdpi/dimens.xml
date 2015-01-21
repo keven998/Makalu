@@ -25,4 +25,6 @@
 
     <dimen name="city_picture_collection_height">200dp</dimen>
 
+    <dimen name="note_picture_size">100dp</dimen>
+
 </resources>

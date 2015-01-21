@@ -148,13 +148,13 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     }
 
     private void showActionDialog() {
-        Activity act = getActivity();
+        final Activity act = getActivity();
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
         contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
+                Intent intent = new Intent(act, SelectDestActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
             }
@@ -166,7 +166,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             }
         });
         dialog.show();
-        WindowManager windowManager = getActivity().getWindowManager();
+        WindowManager windowManager = act.getWindowManager();
         Window window = dialog.getWindow();
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();

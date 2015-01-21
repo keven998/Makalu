@@ -15,6 +15,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -29,10 +30,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     ImageView mTravelIv;
     TextView mNoteNameTv;
     TextView mNoteDescTv;
-    ImageView mAvatarIv;
-    TextView mAuthorNameTv;
-    TextView mFromTv;
-    TextView mTimeTv;
+    TextView mPropertyTv;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     OnMoreClickListener mOnMoreClickListener;
     Activity activity;
@@ -40,10 +38,13 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     private boolean mIsShowSend;
     private boolean mIsShowMore;
 
+    private DisplayImageOptions picOptions;
+
     public TravelNoteViewHolder(Activity context, boolean isShowSend, boolean isShowMore){
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
         activity= context;
+        picOptions = UILUtils.getRadiusOption();
     }
 
     public void setOnMoreClickListener(OnMoreClickListener onMoreClickListener){
@@ -59,10 +60,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
         mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
         mNoteDescTv = (TextView) view.findViewById(R.id.tv_travels_desc);
-        mAvatarIv = (ImageView) view.findViewById(R.id.iv_avatar);
-        mAuthorNameTv = (TextView) view.findViewById(R.id.tv_username);
-        mFromTv = (TextView) view.findViewById(R.id.tv_from);
-        mTimeTv = (TextView) view.findViewById(R.id.tv_time);
+        mPropertyTv = (TextView) view.findViewById(R.id.tv_property);
         return view;
     }
 
@@ -76,10 +74,10 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
                 }
             });
-        }else{
+        } else {
             mSendBtn.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(itemData.getNoteImage(),mTravelIv, UILUtils.getRadiusOption());
+        ImageLoader.getInstance().displayImage(itemData.getNoteImage(),mTravelIv, picOptions);
         mNoteNameTv.setText(itemData.title);
         String[] strArray=itemData.summary.split("\n");
         String maxLengthStr=strArray[0];
@@ -89,11 +87,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             }
         }
         mNoteDescTv.setText(maxLengthStr);
-        ImageLoader.getInstance().displayImage(itemData.authorAvatar, mAvatarIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(18)));
-        mAuthorNameTv.setText(itemData.authorName);
-        mFromTv.setText("from:"+itemData.source);
-        mFromTv.setTypeface(Typeface.MONOSPACE, Typeface.ITALIC);
-        mTimeTv.setText(simpleDateFormat.format(new Date(itemData.publishTime*1000)));
+        mPropertyTv.setText(String.format("%s  %s  %s", itemData.authorName, itemData.source, simpleDateFormat.format(new Date(itemData.publishTime*1000))));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

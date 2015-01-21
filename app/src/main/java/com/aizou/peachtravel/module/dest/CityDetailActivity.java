@@ -1,9 +1,15 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -78,8 +84,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void initView(){
         mTravelLv = (ListView) findViewById(R.id.lv_city_detail);
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_share);
+        titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
         titleHeaderBar.enableBackKey(true);
+
         View hv;
         hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
         headerView = hv;
@@ -114,7 +121,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void getCityDetailData(String id){
-        TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS/1.5),new HttpCallBack<String>() {
+        TravelApi.getCityDetail(id, (int)(LocalDisplay.SCREEN_WIDTH_PIXELS/1.5), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
@@ -172,8 +179,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMUtils.onClickImShare(mContext);
-
+                showActionDialog();
             }
         });
 
@@ -292,4 +298,42 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         super.onActivityResult(requestCode, resultCode, data);
         IMUtils.onShareResult(mContext,locDetailBean,requestCode,resultCode,data,null);
     }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
+        contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(act, SelectDestActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_go_share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMUtils.onClickImShare(act);
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
 }
