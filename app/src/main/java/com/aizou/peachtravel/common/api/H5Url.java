@@ -5,7 +5,7 @@ package com.aizou.peachtravel.common.api;
  */
 public class H5Url {
     //游记
-    public static final String TRAVEL_NOTE="http://h5.taozilvxing.com/detail.php?id=";
+    public static final String TRAVEL_NOTE="http://h5.taozilvxing.com/dayDetail.php?id=";
     //城市游玩
     public static final String LOC_TRAVEL="http://h5.taozilvxing.com/play.php?tid=";
     //美食
