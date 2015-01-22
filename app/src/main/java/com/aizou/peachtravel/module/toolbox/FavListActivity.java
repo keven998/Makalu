@@ -361,7 +361,7 @@ public class FavListActivity extends PeachBaseActivity {
                             intent.setClass(mContext, TravelNoteDetailActivity.class);
                             intent.putExtra("id",item.itemId);
                         }
-                        startActivity(intent);
+                        startActivityWithNoAnim(intent);
                     }
                 }
             });

@@ -786,7 +786,7 @@ public class MessageAdapter extends BaseAdapter {
                     }
 
                     intent.putExtra("id", finalBean.id);
-                    activity.startActivity(intent);
+                    ((BaseActivity)activity).startActivityWithNoAnim(intent);
                 }
             });
         }else{

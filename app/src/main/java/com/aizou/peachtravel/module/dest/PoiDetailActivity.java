@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -95,12 +98,26 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_poi_detail);
+        WindowManager m = getWindowManager();
+        Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
+        WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
+        p.height = (int) (d.getHeight()- LocalDisplay.dp2px(40));
+        p.width = (int) (d.getWidth() -LocalDisplay.dp2px(30));
+//        p.alpha = 1.0f;      //设置本身透明度
+//        p.dimAmount = 0.0f;      //设置黑暗度
+        getWindow().setAttributes(p);
         View headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         ButterKnife.inject(this);
         mTitleBar.setRightViewImageRes(R.drawable.ic_share);
         mTitleBar.enableBackKey(true);
+        mTitleBar.setLeftOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithNoAnim();
+            }
+        });
 
     }
 
@@ -139,6 +156,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishWithNoAnim();
     }
 
     private void refreshFav(PoiDetailBean detailBean) {

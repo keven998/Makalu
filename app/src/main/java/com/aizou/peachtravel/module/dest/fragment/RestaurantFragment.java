@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -258,7 +259,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                     Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
                     intent.putExtra("id",poiDetailBean.id);
                     intent.putExtra("type",poiDetailBean.type);
-                    getActivity().startActivity(intent);
+                    ((BaseActivity)getActivity()).startActivityWithNoAnim(intent);
                 }
             });
             return convertView;

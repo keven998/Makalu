@@ -117,8 +117,9 @@ public class IMUtils {
         if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
             Intent intent = new Intent(context, IMShareActivity.class);
             ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
-            ToastUtil.getInstance(context).showToast("请先登录");
+
         } else {
+            ToastUtil.getInstance(context).showToast("请先登录");
             Intent intent = new Intent(context, LoginActivity.class);
             ((Activity)context).startActivityForResult(intent, IM_LOGIN_REQUEST_CODE);
         }

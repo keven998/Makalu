@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
@@ -145,10 +145,10 @@ public class PoiAdapter extends BaseAdapter {
             } else {
                 spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
-            spotViewHolder.mSpotNameTv.setText(poiDetailBean.zhName);
-            spotViewHolder.mSpotTimeCostTv.setText("参考游玩时间：" + poiDetailBean.timeCostDesc);
-            spotViewHolder.mSpotDescTv.setText(poiDetailBean.desc);
-            spotViewHolder.mRatingBarPoi.setRating(poiDetailBean.getRating());
+            spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
+            spotViewHolder.mSpotCosttimeTv.setText("参考游玩时间：" + poiDetailBean.timeCostDesc);
+            spotViewHolder.mSpotDesc.setText(poiDetailBean.desc);
+            spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已" + mAddStr);
@@ -187,10 +187,10 @@ public class PoiAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Activity act = (Activity) context;
+                    BaseActivity act = (BaseActivity) context;
                     Intent intent = new Intent(act, SpotDetailActivity.class);
                     intent.putExtra("id", poiDetailBean.id);
-                    act.startActivity(intent);
+                    act.startActivityWithNoAnim(intent);
                 }
             });
         } else {
@@ -261,11 +261,12 @@ public class PoiAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Activity act = (Activity) context;
+                    BaseActivity act = (BaseActivity) context;
                     Intent intent = new Intent(act, PoiDetailActivity.class);
                     intent.putExtra("id", poiDetailBean.id);
                     intent.putExtra("type", poiDetailBean.type);
-                    act.startActivity(intent);
+                    act.startActivityWithNoAnim(intent);
+                    act.overridePendingTransition(0, R.anim.fade_in);
                 }
             });
 
@@ -274,21 +275,26 @@ public class PoiAdapter extends BaseAdapter {
     }
 
     class SpotViewHolder {
-        @InjectView(R.id.spot_image_iv)
-        ImageView mSpotImageIv;
-        @InjectView(R.id.spot_name_tv)
-        TextView mSpotNameTv;
-        @InjectView(R.id.spot_time_cost_tv)
-        TextView mSpotTimeCostTv;
+
+        @InjectView(R.id.tv_spot_name)
+        TextView mTvSpotName;
         @InjectView(R.id.btn_add)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.spot_desc_tv)
-        TextView mSpotDescTv;
-        @InjectView(R.id.ratingBar_poi)
-        RatingBar mRatingBarPoi;
+        @InjectView(R.id.spot_image_iv)
+        ImageView mSpotImageIv;
+        @InjectView(R.id.spot_address_tv)
+        TextView mSpotAddressTv;
+        @InjectView(R.id.spot_costtime_tv)
+        TextView mSpotCosttimeTv;
+        @InjectView(R.id.spot_rating)
+        RatingBar mSpotRating;
+        @InjectView(R.id.spot_rank_tv)
+        TextView mSpotRankTv;
+        @InjectView(R.id.spot_desc)
+        TextView mSpotDesc;
 
         public SpotViewHolder(View view) {
-//            view = View.inflate(mContext, R.layout.row_poi_list, null);
+//            view = View.inflate(mContext, R.layout.row_spot_list, null);
             ButterKnife.inject(this, view);
         }
 

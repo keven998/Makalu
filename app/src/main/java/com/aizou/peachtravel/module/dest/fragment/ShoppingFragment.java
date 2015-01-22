@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
+import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
@@ -252,7 +253,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                     Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
                     intent.putExtra("id",poiDetailBean.id);
                     intent.putExtra("type",poiDetailBean.type);
-                    getActivity().startActivity(intent);
+                    ((BaseActivity)getActivity()).startActivityWithNoAnim(intent);
                 }
             });
             return convertView;

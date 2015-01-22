@@ -356,10 +356,9 @@ public class LoginActivity extends PeachBaseActivity {
         if (requestCode == REQUEST_CODE_REG) {
             if(resultCode==RESULT_OK){
                 PeachUser user = (PeachUser) data.getSerializableExtra("user");
+                loginNameEt.setText(user.tel);
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 imLogin(user);
-            }else if(request_code==REQUEST_CODE_REG){
-                finish();
             }
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
