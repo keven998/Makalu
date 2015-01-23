@@ -3,19 +3,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_white_bar"
     android:orientation="vertical">
-
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
-
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
+        android:layout_height="fill_parent">
 
         <ListView
             android:id="@+id/lv_poi_detail"
@@ -24,11 +17,11 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
-            android:padding="10dp"
-            android:scrollbarStyle="insideOverlay"
-            android:headerDividersEnabled="true"
             android:fadingEdge="none"
+            android:headerDividersEnabled="true"
+            android:overScrollMode="never"
             android:listSelector="@android:color/transparent"
+            android:scrollbarStyle="outsideOverlay"
             android:visibility="visible" />
 
     </FrameLayout>

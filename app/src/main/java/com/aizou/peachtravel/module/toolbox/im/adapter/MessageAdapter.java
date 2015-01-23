@@ -52,6 +52,7 @@ import com.aizou.peachtravel.common.task.LoadVideoImageTask;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.utils.ImageUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.SmileUtils;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
@@ -770,23 +771,20 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context, PoiDetailActivity.class);
                     switch (extType) {
                         case Constant.ExtType.FOOD:
-                            intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.RESTAURANTS,finalBean.id);
                             break;
 
                         case Constant.ExtType.HOTEL:
-                            intent.putExtra("type", TravelApi.PeachType.HOTEL);
+                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.HOTEL,finalBean.id);
                             break;
 
                         case Constant.ExtType.SHOPPING:
-                            intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.SHOPPING,finalBean.id);
                             break;
                     }
 
-                    intent.putExtra("id", finalBean.id);
-                    ((BaseActivity)activity).startActivityWithNoAnim(intent);
                 }
             });
         }else{

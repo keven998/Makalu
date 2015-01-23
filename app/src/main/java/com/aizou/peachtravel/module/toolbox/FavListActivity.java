@@ -34,6 +34,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
@@ -346,22 +347,23 @@ public class FavListActivity extends PeachBaseActivity {
                             }
                         });
                     }else{
-                        Intent intent = new Intent();
-                        if(item.type.equals("vs")){
-                            intent.setClass(mContext, SpotDetailActivity.class);
-                            intent.putExtra("id",item.itemId);
-                        }else if(item.type.equals("hotel")||item.type.equals("restaurant")||item.type.equals("shopping")){
-                            intent.setClass(mContext, PoiDetailActivity.class);
-                            intent.putExtra("id",item.itemId);
-                            intent.putExtra("type",item.type);
-                        }else if(item.type.equals("locality")){
-                            intent.setClass(mContext, CityDetailActivity.class);
-                            intent.putExtra("id",item.itemId);
-                        }else if(item.type.equals("travelNote")){
-                            intent.setClass(mContext, TravelNoteDetailActivity.class);
-                            intent.putExtra("id",item.itemId);
-                        }
-                        startActivityWithNoAnim(intent);
+                        IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
+//                        Intent intent = new Intent();
+//                        if(item.type.equals("vs")){
+//                            intent.setClass(mContext, SpotDetailActivity.class);
+//                            intent.putExtra("id",item.itemId);
+//                        }else if(item.type.equals("hotel")||item.type.equals("restaurant")||item.type.equals("shopping")){
+//                            intent.setClass(mContext, PoiDetailActivity.class);
+//                            intent.putExtra("id",item.itemId);
+//                            intent.putExtra("type",item.type);
+//                        }else if(item.type.equals("locality")){
+//                            intent.setClass(mContext, CityDetailActivity.class);
+//                            intent.putExtra("id",item.itemId);
+//                        }else if(item.type.equals("travelNote")){
+//                            intent.setClass(mContext, TravelNoteDetailActivity.class);
+//                            intent.putExtra("id",item.itemId);
+//                        }
+//                        startActivityWithNoAnim(intent);
                     }
                 }
             });

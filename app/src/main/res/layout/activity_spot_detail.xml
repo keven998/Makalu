@@ -1,83 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
     xmlns:cube_dotview="http://schemas.android.com/apk/res-auto"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/container"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:layout_height="fill_parent">
 
-        <com.aizou.peachtravel.common.widget.TitleHeaderBar
-            android:id="@+id/ly_header_bar_title_wrap"
-            android:layout_width="match_parent"
-            android:layout_height="44dp" />
-
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:background="@drawable/shape_white_bar"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:foreground="@drawable/foreground_round1">
+
+                    <ImageView
+                        android:id="@+id/iv_spot"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/bg_common_default"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tv_pic_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/shape_black_panel" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/shape_white_bar"
+                    android:gravity="center_vertical"
                     android:orientation="vertical">
 
-                    <FrameLayout
+                    <TextView
+                        android:id="@+id/tv_spot_name"
                         android:layout_width="fill_parent"
-                        android:layout_height="180dp"
-                        android:foreground="@drawable/foreground_round1"
-                        >
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/app_theme_color"
+                        android:textSize="15sp" />
 
-                        <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
-                            android:id="@+id/vp_spot_images"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:background="@drawable/bg_common_default"/>
+                    <RatingBar
+                        android:id="@+id/ratingBar_poi"
+                        style="@style/custom_small_rating_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                         />
 
-                        <com.aizou.core.widget.DotView
-                            android:id="@+id/dot_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_gravity="right|bottom"
-                            android:layout_marginRight="5dp"
-                            cube_dotview:dot_radius="3dp"
-                            cube_dotview:dot_selected_color="0xffee528c"
-                            cube_dotview:dot_span="8dp"
-                            cube_dotview:dot_unselected_color="0xFFffffff"
-                            />
-                    </FrameLayout>
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:padding="10dp"
+                        android:layout_marginTop="20dp"
                         android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_spot_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableLeft="@drawable/ic_standard_spot"
-                            android:drawablePadding="6dp"
-                            android:textColor="@color/base_text_color_title"
-                            android:textSize="15sp" />
 
                         <ImageView
                             android:id="@+id/iv_fav"
@@ -86,207 +81,284 @@
                             android:scaleType="centerInside"
                             android:src="@drawable/ic_unfav" />
 
+                        <ImageView
+                            android:id="@+id/iv_share"
+                            android:layout_width="60dp"
+                            android:layout_height="25dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_share" />
+
                     </LinearLayout>
-
-
-                    <com.aizou.core.widget.expandabletextview.ExpandableTextView
-                        android:id="@+id/expand_text_view"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        expandableTextView:animDuration="200"
-                        expandableTextView:maxCollapsedLines="2">
-
-
-
-                        <TextView
-                            android:id="@id/expandable_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:textColor="@color/base_text_color_subtitle"
-                            android:lineSpacingExtra="3dp"
-                            android:textSize="14sp" />
-
-                        <ImageButton
-                            android:id="@id/expand_collapse"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="10dp"
-                            android:layout_gravity="right|bottom"
-                            android:paddingLeft="100dp"
-                            android:scaleType="center"
-                            android:background="@null" />
-                    </com.aizou.core.widget.expandabletextview.ExpandableTextView>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_round_top"
-                    android:drawableLeft="@drawable/ic_ticket"
-                    android:drawablePadding="10dp"
-                    android:padding="10dp"
-                    android:text="门票"
-                    android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/dash"
-                    android:layerType="software" />
-
-                <TextView
-                    android:id="@+id/tv_price_desc"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_round_bottom"
-                    android:padding="10dp"
-                    android:textColor="@color/base_text_color_title"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/shape_white_bar"
-                    android:drawableLeft="@drawable/ic_small_travel"
-                    android:drawablePadding="10dp"
-                    android:padding="10dp"
-                    android:text="游玩"
-                    android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_spot_travel"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="最佳月份"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="13sp" />
-
-
-                    <TextView
-                        android:id="@+id/tv_best_month"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="11dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/bg_spot_travel"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="开放时间"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="13sp" />
-
-
-                    <TextView
-                        android:id="@+id/tv_open_time"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="11dp"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="12sp"
-                         />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/bg_spot_travel"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="游玩时间"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="13sp" />
-                    <TextView
-                        android:id="@+id/tv_time_cost"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="11dp"
-                        android:textColor="@color/base_text_color_subtitle"
-                        android:textSize="12sp"
-                        />
-
-
-                </LinearLayout>
-
-
-
-                <TextView
-                    android:id="@+id/tv_addr"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:drawableLeft="@drawable/ic_location"
-                    android:drawableRight="@drawable/cell_accessory"
-                    android:drawablePadding="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/base_text_color_subtitle"
-                    android:background="@drawable/shape_white_bar"
-                    android:padding="10dp" />
-
-                <LinearLayout
-                    android:id="@+id/ll_other"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
 
                 </LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="简介"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
 
 
-    </LinearLayout>
+            <com.aizou.core.widget.expandabletextview.ExpandableTextView
+                android:id="@+id/expand_text_view"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2">
 
-    <RelativeLayout
-        android:id="@+id/zoom_container"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="invisible">
 
-        <com.aizou.core.widget.HackyViewPager
-            android:id="@+id/vp_zoom_pic"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@id/expandable_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="3dp"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@id/expand_collapse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:background="@null"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="100dp"
+                    android:scaleType="center" />
+            </com.aizou.core.widget.expandabletextview.ExpandableTextView>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_divider_color"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="门票"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_price_desc"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/base_text_color_title"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/base_color_white"
+                    android:background="@drawable/btn_theme_normal_shape"
+                    android:text="在线预订"/>
+            </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_divider_color"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="地址"
+                android:textColor="@color/app_theme_color"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_addr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/ic_location"
+                android:padding="10dp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="12sp" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_divider_color"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="游玩"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开放时间"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="13sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_open_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="游玩时间"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_time_cost"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="最佳月份"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="13sp" />
+
+
+                <com.aizou.core.widget.expandabletextview.ExpandableTextView
+                    android:id="@+id/tv_best_month"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    expandableTextView:animDuration="200"
+                    expandableTextView:maxCollapsedLines="2">
+
+
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:lineSpacingExtra="3dp"
+                        android:textColor="@color/base_text_color_subtitle"
+                        android:textSize="14sp" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:background="@null"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="100dp"
+                        android:scaleType="center" />
+                </com.aizou.core.widget.expandabletextview.ExpandableTextView>
+            </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:background="@color/base_divider_color"/>
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="温馨贴士"
+                android:visibility="gone"
+                android:padding="10dp"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:background="@color/base_divider_color"/>
+
+            <TextView
+                android:id="@+id/tv_travel_guide"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="游玩指南"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:visibility="gone"
+                android:background="@color/base_divider_color"/>
+
+            <TextView
+                android:id="@+id/tv_traffic_guide"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="交通指南"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.75dp"
+                android:visibility="gone"
+                android:background="@color/base_divider_color"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
 </RelativeLayout>

@@ -41,16 +41,12 @@ import java.util.ArrayList;
  */
 public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
-    private TitleHeaderBar mTitleBar;
-    private AutoScrollViewPager mSpotImagesVp;
-    private HackyViewPager mZoomImagesVp;
-    private View zoomContainer;
+    private ImageView spotIv;
+    private TextView picNumTv;
     private ExpandableTextView mSpotIntroTv;
-    private TextView mSpotNameTv,mPriceDescTv,mBestMonthTv,mOpenTimeTv,mTimeCostTv,mAddressTv;
-    private LinearLayout mOtherLl;
-    private View containView;
-    private ImageZoomAnimator2 zoomAnimator;
-    private DotView mDotView;
+    private TextView mSpotNameTv,mPriceDescTv,mOpenTimeTv,mTimeCostTv,mAddressTv;
+    private ExpandableTextView mBestMonthTv;
+    private TextView tipsTv,travelGuideTv,trafficGuideTv;
     private ImageView favIv;
     private SpotDetailBean spotDetailBean;
     @Override
@@ -62,31 +58,25 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(zoomContainer.getVisibility()==View.VISIBLE){
-            zoomAnimator.transformOut(mSpotImagesVp.getCurrentItem());
-        }else{
-            super.onBackPressed();
-        }
+        finishWithNoAnim();
+        overridePendingTransition(0,R.anim.fade_out);
     }
 
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
-        mTitleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        mDotView = (DotView) findViewById(R.id.dot_view);
+        spotIv = (ImageView) findViewById(R.id.iv_spot);
         favIv = (ImageView) findViewById(R.id.iv_fav);
-        mTitleBar.enableBackKey(true);
-        containView = findViewById(R.id.container);
-        mSpotImagesVp = (AutoScrollViewPager) findViewById(R.id.vp_spot_images);
-        zoomContainer = findViewById(R.id.zoom_container);
-        mZoomImagesVp = (HackyViewPager) findViewById(R.id.vp_zoom_pic);
+        picNumTv = (TextView) findViewById(R.id.tv_pic_num);
         mSpotIntroTv = (ExpandableTextView) findViewById(R.id.expand_text_view);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
-        mBestMonthTv = (TextView) findViewById(R.id.tv_best_month);
+        mBestMonthTv = (ExpandableTextView) findViewById(R.id.tv_best_month);
         mOpenTimeTv = (TextView) findViewById(R.id.tv_open_time);
         mTimeCostTv = (TextView) findViewById(R.id.tv_time_cost);
         mAddressTv = (TextView) findViewById(R.id.tv_addr);
-        mOtherLl = (LinearLayout) findViewById(R.id.ll_other);
+        tipsTv = (TextView) findViewById(R.id.tv_tips);
+        travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
+        trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
 
 
     }
@@ -123,10 +113,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
         }
     }
     private void bindView(final SpotDetailBean result) {
-        ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(mContext,result.images);
-        mDotView.setNum(result.images.size());
-        mTitleBar.getTitleTextView().setText(result.zhName);
-        mSpotImagesVp.setAdapter(imagePagerAdapter);
+        ImageLoader.getInstance().displayImage(result.images.size()>0?result.images.get(0).url:"",spotIv,UILUtils.getRadiusOption());
+        picNumTv.setText(result.images.size()+"");
         mSpotNameTv.setText(result.zhName);
         mSpotIntroTv.setText(result.desc);
         mPriceDescTv.setText(result.priceDesc);
@@ -194,182 +182,47 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             }
         });
-        mSpotImagesVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mDotView.setSelected(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mZoomImagesVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mSpotImagesVp.setCurrentItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mOtherLl.removeAllViews();
         if(!TextUtils.isEmpty(result.tipsUrl)){
-            View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
-            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
-            TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
-            otherIv.setImageResource(R.drawable.spot_guide_btn_normal);
-            otherTv.setText("游玩贴士");
-            mOtherLl.addView(view);
-            view.setOnClickListener(new View.OnClickListener() {
+            tipsTv.setVisibility(View.VISIBLE);
+            tipsTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title","游玩贴士");
+                    intent.putExtra("title","温馨贴士");
                     intent.putExtra("url",result.tipsUrl);
                     startActivity(intent);
 
                 }
             });
         }
-        if(!TextUtils.isEmpty(result.kengdieUrl)){
-            View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
-            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
-            TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
-            otherIv.setImageResource(R.drawable.spot_fangken_btn_normal);
-            otherTv.setText("注意事项");
-            mOtherLl.addView(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
         if(!TextUtils.isEmpty(result.trafficInfoUrl)){
-            View view = View.inflate(mContext,R.layout.item_spot_detail_othor,null);
-            ImageView otherIv = (ImageView) view.findViewById(R.id.iv_other);
-            TextView otherTv = (TextView) view.findViewById(R.id.tv_other);
-            otherIv.setImageResource(R.drawable.spot_traffic_btn_normal);
-            otherTv.setText("交通");
-            mOtherLl.addView(view);
-            view.setOnClickListener(new View.OnClickListener() {
+            trafficGuideTv.setVisibility(View.VISIBLE);
+            trafficGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    intent.putExtra("title","交通指南");
+                    intent.putExtra("url",result.trafficInfoUrl);
+                    startActivity(intent);
                 }
             });
         }
-        zoomAnimator = new ImageZoomAnimator2(mContext,mSpotImagesVp,zoomContainer,result.images);
-
-
-    }
-
-    public class ImagePagerAdapter extends RecyclingPagerAdapter {
-
-        private Context context;
-        private ArrayList<ImageBean> imageUrlList;
-
-        private int size;
-        private boolean isInfiniteLoop;
-
-        public ImagePagerAdapter(Context context, ArrayList<ImageBean> imageIdList) {
-            this.context = context;
-            this.imageUrlList = imageIdList;
-            this.size = imageIdList.size();
-            isInfiniteLoop = false;
-        }
-
-        @Override
-        public int getCount() {
-            // Infinite loop
-            return isInfiniteLoop ? Integer.MAX_VALUE : imageUrlList.size();
-        }
-
-        /**
-         * get really position
-         *
-         * @param position
-         * @return
-         */
-        private int getPosition(int position) {
-            return isInfiniteLoop ? position % size : position;
-        }
-
-        @Override
-        public View getView(final int position, View view, ViewGroup container) {
-                ImageView imageView = new ImageView(context);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setBackgroundResource(R.drawable.bg_common_default);
-               imageView.setOnClickListener(new View.OnClickListener() {
-
+        if(!TextUtils.isEmpty(result.guideUrl)){
+            travelGuideTv.setVisibility(View.VISIBLE);
+            travelGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                      zoomAnimator.transformIn(position);
-
-//                    Intent i = new Intent(mContext, ImageViewPagerActivity.class);
-//                    i.putExtra("pos", position);
-//                    i.putParcelableArrayListExtra("imageUrlList", imageUrlList);
-//
-//                    Rect rect = new Rect();
-//                    view.getGlobalVisibleRect(rect);
-//                    i.putExtra("rect", rect);
-//                    startActivity(i);
-//                    overridePendingTransition(0,0);
-//                    Bundle b = null;
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                        //b = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(),
-//                        //                                         view.getHeight()).toBundle();
-//                        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-//                        b = ActivityOptions.makeThumbnailScaleUpAnimation(view, bitmap, 0, 0).toBundle();
-//                    }
-
-
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    intent.putExtra("title","游玩指南");
+                    intent.putExtra("url",result.guideUrl);
+                    startActivity(intent);
                 }
             });
-
-            ImageLoader.getInstance().displayImage(
-                    imageUrlList.get(position).url, imageView,
-                    UILUtils.getDefaultOption());
-            imageView.setTag(position);
-            return imageView;
         }
-
-        private class ViewHolder {
-
-            ImageView imageView;
-        }
-
-        /**
-         * @return the isInfiniteLoop
-         */
-        public boolean isInfiniteLoop() {
-            return isInfiniteLoop;
-        }
-
-        /**
-         * @param isInfiniteLoop
-         *            the isInfiniteLoop to set
-         */
-        public ImagePagerAdapter setInfiniteLoop(boolean isInfiniteLoop) {
-            this.isInfiniteLoop = isInfiniteLoop;
-            return this;
-        }
-
 
 
     }
+
+
+
 }

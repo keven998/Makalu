@@ -263,8 +263,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         intent.putParcelableArrayListExtra("locList", locList);
         intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
         startActivity(intent);
-//          Intent intent = new Intent(mContext,PoiDetailActivity.class);
-//          startActivity(intent);
     }
 
     public void intentToShopping(View view){

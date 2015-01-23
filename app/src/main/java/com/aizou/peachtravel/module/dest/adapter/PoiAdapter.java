@@ -21,6 +21,7 @@ import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -146,6 +147,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
+            spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
             spotViewHolder.mSpotCosttimeTv.setText("参考游玩时间：" + poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotDesc.setText(poiDetailBean.desc);
             spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
@@ -261,12 +263,7 @@ public class PoiAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BaseActivity act = (BaseActivity) context;
-                    Intent intent = new Intent(act, PoiDetailActivity.class);
-                    intent.putExtra("id", poiDetailBean.id);
-                    intent.putExtra("type", poiDetailBean.type);
-                    act.startActivityWithNoAnim(intent);
-                    act.overridePendingTransition(0, R.anim.fade_in);
+                    IntentUtils.intentToDetail((BaseActivity) context,poiDetailBean.type,poiDetailBean.id);
                 }
             });
 

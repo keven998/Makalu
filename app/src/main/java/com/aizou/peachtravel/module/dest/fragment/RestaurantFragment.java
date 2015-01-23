@@ -35,6 +35,7 @@ import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
@@ -256,10 +257,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             holder.contentRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
-                    intent.putExtra("id",poiDetailBean.id);
-                    intent.putExtra("type",poiDetailBean.type);
-                    ((BaseActivity)getActivity()).startActivityWithNoAnim(intent);
+                    IntentUtils.intentToDetail(getActivity(),poiDetailBean.type,poiDetailBean.id);
                 }
             });
             return convertView;

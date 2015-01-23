@@ -29,6 +29,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
@@ -191,7 +192,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 holder = (ItemViewHolder) convertView.getTag();
             }
             if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{
                 holder.poiImageIv.setImageDrawable(null);
             }
@@ -250,10 +251,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.contentRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), PoiDetailActivity.class);
-                    intent.putExtra("id",poiDetailBean.id);
-                    intent.putExtra("type",poiDetailBean.type);
-                    ((BaseActivity)getActivity()).startActivityWithNoAnim(intent);
+                    IntentUtils.intentToDetail(getActivity(), poiDetailBean.type, poiDetailBean.id);
                 }
             });
             return convertView;
