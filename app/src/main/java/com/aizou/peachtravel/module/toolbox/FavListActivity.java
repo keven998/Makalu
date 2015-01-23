@@ -75,13 +75,10 @@ public class FavListActivity extends PeachBaseActivity {
     Spinner mTypeSpinner;
     @InjectView(R.id.fav_lv)
     PullToRefreshListView mFavLv;
-    @InjectView(R.id.edit_btn)
-    CheckedTextView mEditBtn;
     StringSpinnerAdapter mTypeSpinnerAdapter;
     private int currentPage = 0;
     private String curType="all";
     private CustomAdapter mAdapter;
-    private boolean isEditable = false;
     boolean isShare;
     int chatType;
     String toId;
@@ -152,15 +149,6 @@ public class FavListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_fav_list);
         ButterKnife.inject(this);
-        mEditBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean status = mEditBtn.isChecked();
-                mEditBtn.setChecked(!status);
-                isEditable = !status;
-                mAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     private void setupViewFromCache() {
@@ -228,7 +216,7 @@ public class FavListActivity extends PeachBaseActivity {
         if (datas == null || datas.size() == 0) {
             mFavLv.setHasMoreData(false);
             if (currentPage == 0) {
-                ToastUtil.getInstance(this).showToast("No收藏");
+//                ToastUtil.getInstance(this).showToast("No收藏");
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容啦");
                 mFavLv.setHasMoreData(false);
@@ -289,19 +277,11 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.tvLocal = (TextView) view.findViewById(R.id.tv_local);
                 vh.typeView = (TextView) view.findViewById(R.id.tv_type);
                 vh.timeView = (TextView) view.findViewById(R.id.tv_create_time);
-                vh.descView = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
-                vh.flagView = (ImageView) view.findViewById(R.id.iv_flag);
+                vh.descView = (TextView) view.findViewById(R.id.tv_summary);
                 vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
-//                int width = LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20);
-//                int height = width * 260 / 640;
-//                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-//                vh.imgView.setLayoutParams(lp);
                 view.setTag(vh);
             } else {
                 vh = (ViewHolder) view.getTag();
-                if (!vh.descView.isCollpased()) {
-                    vh.descView.reset();
-                }
             }
             final FavoritesBean item = mItemDataList.get(i);
             view.setOnClickListener(new View.OnClickListener() {
@@ -367,18 +347,13 @@ public class FavListActivity extends PeachBaseActivity {
                     }
                 }
             });
-            if (isEditable) {
-                vh.deleteBtn.setVisibility(View.VISIBLE);
-                vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        deleteItem(item);
-                    }
-                });
-            } else {
-                vh.deleteBtn.setVisibility(View.GONE);
-            }
 
+            vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteItem(item);
+                }
+            });
 
             if (item.images != null && item.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(item.images.get(0).url, vh.imgView, poptions);
@@ -387,55 +362,48 @@ public class FavListActivity extends PeachBaseActivity {
             }
 
             vh.titleView.setText(item.zhName);
-            if (item.locality != null) {
-                vh.tvLocal.setVisibility(View.VISIBLE);
-                vh.tvLocal.setText(item.locality.zhName);
-            } else {
-                vh.tvLocal.setVisibility(View.GONE);
-            }
-
+            vh.tvLocal.setText(item.locality.zhName);
+//            if (item.locality != null) {
+//                vh.tvLocal.setVisibility(View.VISIBLE);
+//                vh.tvLocal.setText(item.locality.zhName);
+//            } else {
+//                vh.tvLocal.setVisibility(View.GONE);
+//            }
 
             vh.descView.setText(item.desc);
             int type = item.getType();
-            int res = 0;
             String typeText = "";
             switch (type) {
                 case CONST_TYPE_FOOD:
                     typeText = "美食";
-                    res = R.drawable.ic_fav_delicacy;
                     break;
 
                 case CONST_TYPE_NOTE:
                     typeText = "游记";
-                    res = R.drawable.ic_fav_tnote;
                     break;
 
                 case CONST_TYPE_SHOP:
                     typeText = "购物";
-                    res = R.drawable.ic_fav_shopping;
                     break;
 
                 case CONST_TYPE_STAY:
                     typeText = "酒店";
-                    res = R.drawable.ic_fav_stay;
                     break;
 
                 case CONST_TYPE_SPOT:
                     typeText = "景点";
-                    res = R.drawable.ic_fav_spot;
                     break;
 
                 case CONST_TYPE_CITY:
                     typeText = "城市";
-                    res = R.drawable.ic_fav_city;
                     break;
 
                 default:
                     break;
             }
+
             vh.typeView.setText(typeText);
             vh.timeView.setText(simpleDateFormat.format(new Date(item.createTime)));
-            vh.flagView.setImageResource(res);
 
             return view;
         }
@@ -493,10 +461,9 @@ public class FavListActivity extends PeachBaseActivity {
         ImageView imgView;
         TextView titleView;
         TextView tvLocal;
-        ImageView flagView;
         TextView typeView;
         TextView timeView;
-        ExpandableTextView descView;
+        TextView descView;
         ImageButton deleteBtn;
     }
 
