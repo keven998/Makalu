@@ -80,6 +80,7 @@ public class PoiListActivity extends PeachBaseActivity {
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         locList = getIntent().getParcelableArrayListExtra("locList");
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+
 //        if (canAdd) {
 //            mBtnOk.setVisibility(View.VISIBLE);
 //            mBtnOk.setOnClickListener(new View.OnClickListener() {
@@ -165,10 +166,10 @@ public class PoiListActivity extends PeachBaseActivity {
 
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setText("吃什么");
+                    mTvPoiWantType.setText(String.format("%s吃什么?", curLoc.zhName));
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     mTitle.setText(String.format("买在%s", curLoc.zhName));
-                    mTvPoiWantType.setText("买什么");
+                    mTvPoiWantType.setText(String.format("%s买什么?", curLoc.zhName));
                 }
             }
 
@@ -196,8 +197,10 @@ public class PoiListActivity extends PeachBaseActivity {
 
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
+            mTvPoiWantType.setText(String.format("%s吃什么?", curLoc.zhName));
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("买在%s", curLoc.zhName));
+            mTvPoiWantType.setText(String.format("%s买什么?", curLoc.zhName));
         }
     }
 

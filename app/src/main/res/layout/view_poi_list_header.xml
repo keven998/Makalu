@@ -19,8 +19,7 @@
             android:textColor="@color/base_color_white"
             android:paddingLeft="10dp"
             android:gravity="center_vertical"
-            android:textSize="13sp"
-            android:text="吃什么" />
+            android:textSize="13sp"/>
 
         <TextView
             android:id="@+id/tv_city_poi_desc"

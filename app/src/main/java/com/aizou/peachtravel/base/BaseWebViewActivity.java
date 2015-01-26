@@ -139,6 +139,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
     }
     @Override
     protected void onDestroy() {
+        mWebView.stopLoading();
         mWebView.destroy();
         super.onDestroy();
     }
