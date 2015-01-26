@@ -28,6 +28,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
     private LoadingLayout mLoadMoreFooterLayout;
     /**滚动的监听器*/
     private OnScrollListener mScrollListener;
+    private boolean mHasMoreData;
     
     
     
@@ -89,6 +90,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
      * @param hasMoreData true表示还有更多的数据，false表示没有更多数据了
      */
     public void setHasMoreData(boolean hasMoreData) {
+        mHasMoreData = hasMoreData;
         if (!hasMoreData) {
             if (null != mLoadMoreFooterLayout) {
                 mLoadMoreFooterLayout.setState(ILoadingLayout.State.NO_MORE_DATA);
@@ -112,12 +114,11 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
     
     @Override
     protected boolean isReadyForPullUp() {
-        return isLastItemVisible();
+        return isLastItemVisible()&&mHasMoreData;
     }
 
     @Override
     protected boolean isReadyForPullDown() {
-        LogUtil.d("isFirstItemVisible---"+isFirstItemVisible());
         return isFirstItemVisible();
     }
 
@@ -203,11 +204,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
      * @return true表示还有更多数据
      */
     private boolean hasMoreData() {
-        if ((null != mLoadMoreFooterLayout) && (mLoadMoreFooterLayout.getState() == ILoadingLayout.State.NO_MORE_DATA)) {
-            return false;
-        }
-        
-        return true;
+        return mHasMoreData;
     }
     
     /**

@@ -214,17 +214,14 @@ public class FavListActivity extends PeachBaseActivity {
         mAdapter.appendData(datas);
 
         if (datas == null || datas.size() == 0) {
-            mFavLv.setHasMoreData(false);
             if (currentPage == 0) {
 //                ToastUtil.getInstance(this).showToast("No收藏");
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容啦");
                 mFavLv.setHasMoreData(false);
-                mFavLv.setScrollLoadEnabled(false);
             }
             // ptrLv.setScrollLoadEnabled(false);
         } else if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
-            mFavLv.setScrollLoadEnabled(true);
             mFavLv.setHasMoreData(true);
         }
 

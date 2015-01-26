@@ -87,7 +87,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             }
         }
         mNoteDescTv.setText(maxLengthStr);
-        mPropertyTv.setText(String.format("%s  %s  %s", itemData.authorName, itemData.source, simpleDateFormat.format(new Date(itemData.publishTime*1000))));
+        mPropertyTv.setText(String.format("%s  %s  %s", itemData.authorName, itemData.source, simpleDateFormat.format(new Date(itemData.publishTime))));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

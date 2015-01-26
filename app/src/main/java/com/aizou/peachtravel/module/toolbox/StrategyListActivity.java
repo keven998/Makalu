@@ -260,14 +260,15 @@ public class StrategyListActivity extends PeachBaseActivity {
                         cachePage();
                     }
                 }
-                mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
+                mMyStrategyLv.onPullUpRefreshComplete();
+
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                mMyStrategyLv.onPullUpRefreshComplete();
                 mMyStrategyLv.onPullDownRefreshComplete();
+                mMyStrategyLv.onPullUpRefreshComplete();
                 if (!isFinishing())
                 ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
@@ -284,10 +285,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         adapter.notifyDataSetChanged();
         if (result == null || result.size() < BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
         } else {
             mMyStrategyLv.setHasMoreData(true);
-            mMyStrategyLv.setScrollLoadEnabled(true);
         }
 //        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
 //            mMyStrategyLv.setScrollLoadEnabled(true);
