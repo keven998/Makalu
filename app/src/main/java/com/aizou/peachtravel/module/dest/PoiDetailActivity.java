@@ -313,6 +313,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, MoreCommentActivity.class);
                         intent.putExtra("id", id);
+                        intent.putExtra("poi",poiDetailBean);
                         startActivity(intent);
                     }
                 });

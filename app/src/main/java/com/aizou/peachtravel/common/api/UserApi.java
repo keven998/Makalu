@@ -2,6 +2,7 @@ package com.aizou.peachtravel.common.api;
 
 import android.text.TextUtils;
 
+import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -16,6 +17,7 @@ import com.aizou.peachtravel.bean.UploadAddrBookBean;
 import com.aizou.peachtravel.config.SystemConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.lidroid.xutils.http.client.entity.GZipDecompressingEntity;
 
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
@@ -492,7 +494,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_BY_ADDRESSBOOK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-//        request.setHeader("Content-Encoding", "gzip");
+        request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
         try {
             JSONObject rootObject = new JSONObject();
@@ -508,8 +510,9 @@ public class UserApi extends BaseApi {
             }
             rootObject.put("contacts", jsonArray);
             try {
-                StringEntity entity = new StringEntity(rootObject.toString());
-                request.setBodyEntity(entity);
+                StringEntity entity = new StringEntity(rootObject.toString(),"utf-8");
+//                request.setBodyEntity( entity);
+                request.setBodyEntity(new GzipCompressingEntity(entity));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

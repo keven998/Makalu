@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_white_bar"
         android:gravity="center_horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -163,17 +162,7 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:scaleType="centerInside"
-        android:paddingTop="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="15dp"
-        android:src="@drawable/ic_delete" />
+
 
 
 </RelativeLayout>

@@ -189,10 +189,7 @@ public class PoiAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BaseActivity act = (BaseActivity) context;
-                    Intent intent = new Intent(act, SpotDetailActivity.class);
-                    intent.putExtra("id", poiDetailBean.id);
-                    act.startActivityWithNoAnim(intent);
+                    IntentUtils.intentToDetail((BaseActivity) context, TravelApi.PeachType.SPOT,poiDetailBean.id);
                 }
             });
         } else {

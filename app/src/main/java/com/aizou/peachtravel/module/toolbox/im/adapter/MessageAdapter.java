@@ -744,9 +744,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context, SpotDetailActivity.class);
-                    intent.putExtra("id", finalBean.id);
-                    activity.startActivity(intent);
+                    IntentUtils.intentToDetail(activity, TravelApi.PeachType.SPOT,finalBean.id);
                 }
             });
         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {

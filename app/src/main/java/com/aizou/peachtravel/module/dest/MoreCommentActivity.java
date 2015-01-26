@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseWebViewActivity;
+import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.widget.NumberProgressBar;
@@ -21,7 +22,7 @@ public class MoreCommentActivity extends BaseWebViewActivity {
 
     //    @InjectView(R.id.ly_header_bar_title_wrap)
 //    TitleHeaderBar titleBar;
-    TravelNoteBean noteBean;
+    PoiDetailBean poiBean;
     String id;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTvTitleBarTitle;
@@ -37,7 +38,8 @@ public class MoreCommentActivity extends BaseWebViewActivity {
         mTvTitleBarTitle.setText("更多点评");
 //        titleBar.getTitleTextView().setText("游记详情");
         id = getIntent().getStringExtra("id");
-        mWebView.loadUrl(H5Url.MORE_COMMENT + id);
+        poiBean = getIntent().getParcelableExtra("poi");
+        mWebView.loadUrl(poiBean.moreCommentsUrl);
 //        titleBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,98 +3,112 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_backgroud">
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="152dp"
-        android:layout_margin="10dp">
-        
-        <ImageView android:id="@+id/big_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="108dp"
-            android:scaleType="centerCrop"
-            android:layout_alignParentTop="true"/>
-        
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginTop="113dp"
-            android:background="@drawable/shape_white_bar"
-            ></View>
-        
-        <ImageView android:id="@+id/iv_avatar"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:scaleType="fitCenter"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="76dp"
-            android:padding="3dp"
-            android:background="@drawable/white_circle_65"/>
-
-        <ImageView android:id="@+id/iv_gender"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:scaleType="fitCenter"
-            android:layout_alignBottom="@id/iv_avatar"
-            android:src="@drawable/ic_launcher"
-            android:layout_marginLeft="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_alignLeft="@id/iv_avatar"/>
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_nickname"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/shape_white_bar"
-        android:padding="15dp"
-        android:textSize="14sp"
-        android:textColor="@color/base_text_color_subtitle"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_id"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/shape_white_bar"
-        android:padding="15dp"
-        android:textSize="14sp"
-        android:textColor="@color/base_text_color_subtitle"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_sign"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/shape_white_bar"
-        android:padding="15dp"
-        android:textSize="14sp"
-        android:textColor="@color/base_text_color_subtitle"/>
 
-    <Button
-        android:id="@+id/tv_chat"
-        android:layout_marginTop="25dp"
-        android:layout_width="wrap_content"
-        android:onClick="startChat"
-        android:layout_height="35dp"
-        android:layout_gravity="center_horizontal"
-        android:paddingLeft="38dp"
-        android:paddingRight="38dp"
-        android:textSize="15sp"
-        android:background="@drawable/app_theme_button_selector"
-        android:textColor="@color/base_color_white"
-        android:text="Talk"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="152dp"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:id="@+id/big_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="108dp"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="113dp"
+                    android:background="@drawable/shape_white_bar"></View>
+
+                <ImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="76dp"
+                    android:background="@drawable/white_circle_65"
+                    android:padding="3dp"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/iv_gender"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignBottom="@id/iv_avatar"
+                    android:layout_alignLeft="@id/iv_avatar"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_launcher" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_white_bar"
+                android:padding="15dp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_id"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_white_bar"
+                android:padding="15dp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_sign"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_white_bar"
+                android:padding="15dp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/tv_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/app_theme_button_selector"
+                android:onClick="startChat"
+                android:paddingLeft="38dp"
+                android:paddingRight="38dp"
+                android:text="Talk"
+                android:textColor="@color/base_color_white"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

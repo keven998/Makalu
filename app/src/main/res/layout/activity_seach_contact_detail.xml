@@ -57,6 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:paddingLeft="17dp"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:paddingRight="10dp"
             android:textColor="@color/base_text_color_text_hint"
             android:textSize="12sp"/>

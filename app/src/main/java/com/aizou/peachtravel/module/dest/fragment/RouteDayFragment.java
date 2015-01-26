@@ -463,9 +463,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), SpotDetailActivity.class);
-                            intent.putExtra("id", poiDetailBean.id);
-                            startActivity(intent);
+                            IntentUtils.intentToDetail(getActivity(), TravelApi.PeachType.SPOT,poiDetailBean.id);
                         }
                     });
 

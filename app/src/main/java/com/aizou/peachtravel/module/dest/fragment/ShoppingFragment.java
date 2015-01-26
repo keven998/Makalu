@@ -200,6 +200,10 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiAddressTv.setText(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+            if(poiDetailBean.comments!=null&&poiDetailBean.comments.size()>0){
+                holder.commentUsernameTv.setText(poiDetailBean.comments.get(0).userName);
+                holder.commentContentTv.setText(poiDetailBean.comments.get(0).contents);
+            }
             if (isEditableMode) {
                 holder.deleteIv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setVisibility(View.GONE);

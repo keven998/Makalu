@@ -110,11 +110,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         setContentView(R.layout.activity_strategy);
         ButterKnife.inject(this);
         // 禁止viewpager的滑动事件
-        mStrategyViewpager.setCanScroll(false);
+        mStrategyViewpager.setCanScroll(true);
         // 设置viewpager保留界面不重新加载的页面数量
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
-        mStrategyViewpager.setPrepareNumber(0);
+        mStrategyViewpager.setPrepareNumber(2);
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
@@ -206,20 +206,27 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             });
 
         } else {
-            setupViewFromCache(id);
+           boolean hasCache= setupViewFromCache(id);
+            if(!hasCache)
+                DialogManager.getInstance().showLoadingDialog(mContext);
             getStrategyDataById(id);
 
         }
 
     }
 
-    private void setupViewFromCache(String itemId) {
+    private boolean setupViewFromCache(String itemId) {
         String data = PreferenceUtils.getCacheData(this, "last_strategy");
         if (!TextUtils.isEmpty(data)) {
             StrategyBean item = GsonTools.parseJsonToBean(data, StrategyBean.class);
             if (item.id.equals(itemId)) {
                 bindView(item);
+                return true;
+            }else{
+                return false;
             }
+        }else{
+            return false;
         }
     }
 
@@ -227,6 +234,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         TravelApi.getGuideDetail(itemId, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
                     bindView(strategyResult.result);
@@ -238,6 +246,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing())
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });

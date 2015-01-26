@@ -6,11 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -30,6 +34,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -41,11 +46,12 @@ import java.util.ArrayList;
  */
 public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
+    private ImageView closeIv;
     private ImageView spotIv;
     private TextView picNumTv;
-    private ExpandableTextView mSpotIntroTv;
-    private TextView mSpotNameTv,mPriceDescTv,mOpenTimeTv,mTimeCostTv,mAddressTv;
-    private ExpandableTextView mBestMonthTv;
+    private TextView mSpotIntroTv;
+    private TextView mSpotNameTv,mPriceDescTv,mAddressTv,mOpenCostTv;
+//    private ExpandableTextView mBestMonthTv;
     private TextView tipsTv,travelGuideTv,trafficGuideTv;
     private ImageView favIv;
     private SpotDetailBean spotDetailBean;
@@ -64,15 +70,31 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initView(){
         setContentView(R.layout.activity_spot_detail);
+        WindowManager m = getWindowManager();
+        Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
+        WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
+        p.height = (int) (d.getHeight() - LocalDisplay.dp2px(40));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(30));
+//        p.alpha = 1.0f;      //设置本身透明度
+//        p.dimAmount = 0.0f;      //设置黑暗度
+//        getWindow().setAttributes(p);
         spotIv = (ImageView) findViewById(R.id.iv_spot);
+        closeIv = (ImageView) findViewById(R.id.iv_close);
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         favIv = (ImageView) findViewById(R.id.iv_fav);
         picNumTv = (TextView) findViewById(R.id.tv_pic_num);
-        mSpotIntroTv = (ExpandableTextView) findViewById(R.id.expand_text_view);
+        mSpotIntroTv = (TextView) findViewById(R.id.tv_intro);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
-        mBestMonthTv = (ExpandableTextView) findViewById(R.id.tv_best_month);
-        mOpenTimeTv = (TextView) findViewById(R.id.tv_open_time);
-        mTimeCostTv = (TextView) findViewById(R.id.tv_time_cost);
+        mOpenCostTv = (TextView) findViewById(R.id.tv_open_and_cost);
+//        mBestMonthTv = (ExpandableTextView) findViewById(R.id.tv_best_month);
+//        mOpenTimeTv = (TextView) findViewById(R.id.tv_open_time);
+//        mTimeCostTv = (TextView) findViewById(R.id.tv_time_cost);
         mAddressTv = (TextView) findViewById(R.id.tv_addr);
         tipsTv = (TextView) findViewById(R.id.tv_tips);
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
@@ -114,13 +136,20 @@ public class SpotDetailActivity extends PeachBaseActivity {
     }
     private void bindView(final SpotDetailBean result) {
         ImageLoader.getInstance().displayImage(result.images.size()>0?result.images.get(0).url:"",spotIv,UILUtils.getRadiusOption());
-        picNumTv.setText(result.images.size()+"");
+        picNumTv.setText(result.images.size() + "");
+        spotIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentUtils.intentToPicGallery(SpotDetailActivity.this,result.images,0);
+            }
+        });
         mSpotNameTv.setText(result.zhName);
-        mSpotIntroTv.setText(result.desc);
+//        mSpotIntroTv.setText(result.desc);
         mPriceDescTv.setText(result.priceDesc);
-        mBestMonthTv.setText(result.travelMonth);
-        mOpenTimeTv.setText(result.openTime);
-        mTimeCostTv.setText(result.timeCostDesc);
+        mOpenCostTv.setText(result.openTime+"开放,玩"+result.timeCostDesc+"最佳");
+//        mBestMonthTv.setText(result.travelMonth);
+//        mOpenTimeTv.setText(result.openTime);
+//        mTimeCostTv.setText(result.timeCostDesc);
         mAddressTv.setText(result.address);
         mAddressTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +209,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
                         }
                     });
                 }
+            }
+        });
+        mSpotIntroTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,SpotIntroActivity.class);
+                intent.putExtra("content",spotDetailBean.desc);
+                startActivity(intent);
             }
         });
         if(!TextUtils.isEmpty(result.tipsUrl)){

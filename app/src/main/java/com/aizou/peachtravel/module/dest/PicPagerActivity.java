@@ -34,18 +34,21 @@ public class PicPagerActivity extends PeachBaseActivity {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-		setContentView(mViewPager);
 		imageUrls = getIntent().getParcelableArrayListExtra("imageUrlList");
 		int pos = getIntent().getIntExtra("pos",0);
-		
-
 		mViewPager.setAdapter(new ImagePagerAdapter());
 		mViewPager.setCurrentItem(pos);
 		if (savedInstanceState != null) {
 		}
 	}
 
-	 class ImagePagerAdapter extends PagerAdapter {
+    @Override
+    public void onBackPressed() {
+        PicPagerActivity.this.finishWithNoAnim();
+        overridePendingTransition(0,R.anim.fade_out);
+    }
+
+    class ImagePagerAdapter extends PagerAdapter {
 
 
 		@Override
@@ -94,7 +97,8 @@ public class PicPagerActivity extends PeachBaseActivity {
 				
 				@Override
 				public void onViewTap(View view, float x, float y) {
-					PicPagerActivity.this.finish();
+					PicPagerActivity.this.finishWithNoAnim();
+                    overridePendingTransition(0,R.anim.fade_out);
 					
 				}
 			});
