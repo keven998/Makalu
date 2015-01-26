@@ -133,10 +133,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         });
         handler = new Handler();
         // 以下通过代码创建控件组动画而不使用xml文件
-        contentShow = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.anim.item_appear));
+        contentShow = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
         contentShow.setOrder(LayoutAnimationController.ORDER_NORMAL);
         contentShow.setDelay(0.4f);
-        contentHide = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.anim.item_disappear));
+        contentHide = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
         contentHide.setOrder(LayoutAnimationController.ORDER_REVERSE);
         contentHide.setDelay(0.4f);
         contentLl = (LinearLayout) findViewById(R.id.ll_content);

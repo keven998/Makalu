@@ -45,7 +45,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         ButterKnife.inject(this);
         locId = getIntent().getStringExtra("id");
 
-        mTitleBar.getTitleTextView().setText("更多游记");
+        mTitleBar.getTitleTextView().setText("精选游记");
         mTitleBar.enableBackKey(true);
         mMoreTravelNoteLv.setPullLoadEnabled(false);
         mMoreTravelNoteLv.setPullRefreshEnabled(false);
