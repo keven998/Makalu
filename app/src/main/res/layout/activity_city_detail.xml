@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
 
     <ListView
         android:id="@+id/lv_city_detail"
@@ -21,4 +15,36 @@
         android:fadingEdge="none"
         android:listSelector="@null"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_title_bar_left"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="25dp"
+        android:layout_marginLeft="3dp"
+        android:singleLine="true"
+        android:duplicateParentState="true"
+        android:drawableLeft="@drawable/ic_navigation_back"
+        android:gravity="center"
+        android:text="返回"
+        android:textColor="@color/base_text_color_text_hint"
+        android:background="@drawable/btn_navigation_back_selector"
+        android:drawablePadding="3dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_title_bar_right"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_navigation_back_selector"
+        android:textColor="@color/app_theme_color"
+        android:layout_marginRight="3dp"
+        android:singleLine="true"
+        android:duplicateParentState="true"
+        android:paddingRight="8dp"
+        android:paddingLeft="25dp"
+        android:textSize="15sp" />
+
+</RelativeLayout>

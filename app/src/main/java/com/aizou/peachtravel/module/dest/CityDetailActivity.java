@@ -45,6 +45,8 @@ import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -52,17 +54,15 @@ import java.util.ArrayList;
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
     private ListView mTravelLv;
-    private View headerView;
     private ImageView mCityIv;
-    private TextView mPicNumTv;
     private TextView mCityNameTv;
+    private TextView mCityNameEn;
+    private TextView mTTview;
     private CheckBox mFavCb;
-    private ExpandableTextView mCityDescTv;
     private TextView mCostTimeTv;
     private ExpandableTextView bestMonthTv;
-    private DrawableCenterTextView travelTv,foodTv,shoppingTv;
+    private TextView travelTv,foodTv,shoppingTv;
     private ListViewDataAdapter travelAdapter;
-    private TitleHeaderBar titleHeaderBar;
     private LocBean locDetailBean;
     private String locId;
 
@@ -83,22 +83,34 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void initView(){
         mTravelLv = (ListView) findViewById(R.id.lv_city_detail);
-        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
-        titleHeaderBar.enableBackKey(true);
+
+        TextView lv = (TextView) findViewById(R.id.tv_title_bar_left);
+        TextView rv = (TextView) findViewById(R.id.tv_title_bar_right);
+        rv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+        lv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        rv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showActionDialog();
+            }
+        });
 
         View hv;
         hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
-        headerView = hv;
         mTravelLv.addHeaderView(hv);
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
-        mPicNumTv = (TextView) hv.findViewById(R.id.tv_pic_num);
+        mTTview = (TextView) hv.findViewById(R.id.travel_title);
         mCityNameTv = (TextView) hv.findViewById(R.id.tv_city_name);
-        mCityDescTv = (ExpandableTextView) hv.findViewById(R.id.tv_city_desc);
+        mCityNameEn = (TextView) hv.findViewById(R.id.tv_city_name_en);
         mCostTimeTv = (TextView) hv.findViewById(R.id.tv_cost_time);
         bestMonthTv = (ExpandableTextView) hv.findViewById(R.id.tv_best_month);
         mFavCb = (CheckBox) hv.findViewById(R.id.iv_fav);
-        travelTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_travel);
+        travelTv = (TextView) hv.findViewById(R.id.tv_travel);
         foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
         shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
@@ -176,12 +188,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             }
         });
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActionDialog();
-            }
-        });
 
         mFavCb.setChecked(locDetailBean.isFavorite);
         mFavCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -234,25 +240,24 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText(detailBean.zhName);
         if(detailBean.imageCnt>100){
             detailBean.imageCnt=100;
         }
         mCityNameTv.setText(detailBean.zhName);
-        mCityDescTv.setText(detailBean.desc);
-        mCostTimeTv.setText(detailBean.timeCostDesc);
-        bestMonthTv.setText(detailBean.travelMonth);
+        mCostTimeTv.setText(String.format("推荐旅程安排 %s", detailBean.timeCostDesc));
+        bestMonthTv.setText(String.format("最佳旅行时节 %s", detailBean.travelMonth));
         travelTv.setOnClickListener(this);
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
+
+        mCityNameEn.setText(detailBean.enName);
+        mTTview.setText(String.format("旅行在%s", detailBean.zhName));
     }
 
     public void intentToTravel(View view){
-//        Intent intent = new Intent(mContext,SpotDetailActivity.class);
-//        startActivity(intent);
         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
         intent.putExtra("url", H5Url.LOC_TRAVEL + locId);
-        intent.putExtra("title", String.format("玩转%s", mCityNameTv.getText()));
+        intent.putExtra("title", "畅游攻略");//String.format("玩转%s", mCityNameTv.getText()));
         startActivity(intent);
     }
 
