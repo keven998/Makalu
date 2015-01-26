@@ -247,7 +247,7 @@ public class PoiListActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindGuideView(PoiGuideBean result) {
+    private void bindGuideView(final PoiGuideBean result) {
         if (TextUtils.isEmpty(result.desc)) {
             headerView.setVisibility(View.GONE);
         } else {
@@ -258,10 +258,10 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    intent.putExtra("url", H5Url.FOOD + curLoc.id);
+                    intent.putExtra("url", result.diningUrl);
                     intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    intent.putExtra("url", H5Url.SHOPPING + curLoc.id);
+                    intent.putExtra("url", result.shoppingUrl);
                     intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
                 }
                 startActivity(intent);

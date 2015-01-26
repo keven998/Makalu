@@ -50,7 +50,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 //        titleBar.getTitleTextView().setText("游记详情");
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
-        mWebView.loadUrl(H5Url.TRAVEL_NOTE+id);
+        mWebView.loadUrl(noteBean.detailUrl);
 //        titleBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override

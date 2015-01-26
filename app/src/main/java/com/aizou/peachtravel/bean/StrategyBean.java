@@ -26,6 +26,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     public long userId;
     public Integer dayCnt;
     public Integer itineraryDays;
+    public String detailUrl;
 
     @Override
     public ShareDialogBean createShareBean() {
@@ -79,6 +80,9 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         };
     }
 
+    public StrategyBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -98,9 +102,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         dest.writeLong(this.userId);
         dest.writeValue(this.dayCnt);
         dest.writeValue(this.itineraryDays);
-    }
-
-    public StrategyBean() {
+        dest.writeString(this.detailUrl);
     }
 
     private StrategyBean(Parcel in) {
@@ -116,6 +118,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         this.userId = in.readLong();
         this.dayCnt = (Integer) in.readValue(Integer.class.getClassLoader());
         this.itineraryDays = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.detailUrl = in.readString();
     }
 
     public static final Creator<StrategyBean> CREATOR = new Creator<StrategyBean>() {

@@ -14,6 +14,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -71,7 +72,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             mSendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                 }
             });
         } else {

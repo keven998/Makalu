@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 
 public class ImageGridActivity extends FragmentActivity {
 
-	private static final String TAG = "ImageGridActivity";
+    private static final String TAG = "ImageGridActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,19 +20,17 @@ public class ImageGridActivity extends FragmentActivity {
             final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(android.R.id.content, new ImageGridFragment(), TAG);
             ft.commit();
+
         }
     }
-	
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		
-		
-		
-		
-	}
-	
-	
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+
 }

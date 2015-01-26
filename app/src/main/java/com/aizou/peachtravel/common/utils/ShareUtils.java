@@ -207,7 +207,7 @@ public class ShareUtils {
         }
         mController.getConfig().closeToast();
         mController.setShareMedia(umImage);
-        String shareUrl = H5Url.GUIDE + strategyBean.id;
+        String shareUrl = strategyBean.detailUrl;
         String shareTitle="分享我的旅行计划";
         String shareContent = "我的 《" + strategyBean.title + "》 来了，亲们快快来围观~ ";
 

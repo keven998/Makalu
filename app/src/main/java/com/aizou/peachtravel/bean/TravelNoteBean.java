@@ -25,6 +25,7 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
     public String source;
     public String sourceUrl;
     public long publishTime;
+    public String detailUrl;
 
     public TravelNoteBean() {
     }
@@ -68,26 +69,26 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         dest.writeString(this.id);
         dest.writeString(this.title);
         dest.writeString(this.summary);
-//        dest.writeString(this.cover);
         dest.writeTypedList(images);
         dest.writeString(this.authorName);
         dest.writeString(this.authorAvatar);
         dest.writeString(this.source);
         dest.writeString(this.sourceUrl);
         dest.writeLong(this.publishTime);
+        dest.writeString(this.detailUrl);
     }
 
     private TravelNoteBean(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
         this.summary = in.readString();
-//        this.cover = in.readString();
         in.readTypedList(images, ImageBean.CREATOR);
         this.authorName = in.readString();
         this.authorAvatar = in.readString();
         this.source = in.readString();
         this.sourceUrl = in.readString();
         this.publishTime = in.readLong();
+        this.detailUrl = in.readString();
     }
 
     public static final Creator<TravelNoteBean> CREATOR = new Creator<TravelNoteBean>() {

@@ -274,7 +274,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 break;
             case IMAGE: // 图片消息
                 ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
-                digest = digest + getStrng(context, R.string.picture) + imageBody.getFileName();
+                digest = digest + getStrng(context, R.string.picture) ;
                 break;
             case VOICE:// 语音消息
                 digest = digest + getStrng(context, R.string.voice);
@@ -297,7 +297,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
                 } else {
                     TextMessageBody txtBody = (TextMessageBody) message.getBody();
-                    digest = getStrng(context, R.string.voice_call) + txtBody.getMessage();
+                    digest = getStrng(context, R.string.voice_call) ;
                 }
                 break;
             case FILE: // 普通文件消息
