@@ -125,6 +125,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         mTvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = getIntent();
+                intent.putExtra("strategy", getSaveStrategy());
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -391,15 +394,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 
     @Override
     public void finish() {
-//        if(TextUtils.isEmpty(getIntent().getStringExtra("id"))){
-//            Intent intent = getIntent();
-//            intent.putExtra("strategy", strategy);
-//            setResult(RESULT_OK, intent);
-//        }else{
-        Intent intent = getIntent();
-        intent.putExtra("strategy", getSaveStrategy());
-        setResult(RESULT_OK, intent);
-//        }
         super.finish();
     }
 
@@ -562,6 +556,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         if (checkIsEditableMode()) {
             warnCancel();
         } else {
+            Intent intent = getIntent();
+            intent.putExtra("strategy", getSaveStrategy());
+            setResult(RESULT_OK, intent);
             finish();
         }
 
@@ -649,6 +646,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
+                Intent intent = getIntent();
+                intent.putExtra("strategy", strategy);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

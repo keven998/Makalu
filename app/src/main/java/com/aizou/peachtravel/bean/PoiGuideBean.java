@@ -8,6 +8,5 @@ import java.util.ArrayList;
 public class PoiGuideBean {
     public ArrayList<ImageBean> images;
     public String desc;
-    public String diningUrl;
-    public String shoppingUrl;
+    public String detailUrl;
 }

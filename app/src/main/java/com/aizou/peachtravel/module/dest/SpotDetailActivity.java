@@ -244,14 +244,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         }
-        if(!TextUtils.isEmpty(result.guideUrl)){
+        if(!TextUtils.isEmpty(result.visitGuideUrl)){
             travelGuideTv.setVisibility(View.VISIBLE);
             travelGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title","游玩指南");
-                    intent.putExtra("url",result.guideUrl);
+                    intent.putExtra("url",result.visitGuideUrl);
                     startActivity(intent);
                 }
             });
