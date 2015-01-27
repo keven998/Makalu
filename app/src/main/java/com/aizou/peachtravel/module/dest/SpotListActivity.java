@@ -22,7 +22,6 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.PoiGuideBean;
 import com.aizou.peachtravel.common.api.BaseApi;
-import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
@@ -40,11 +39,9 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class PoiListActivity extends PeachBaseActivity {
+public class SpotListActivity extends PeachBaseActivity {
     @InjectView(R.id.loc_spinner)
     Spinner mLocSpinner;
-    @InjectView(R.id.tv_city_poi_desc)
-    TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
@@ -55,10 +52,8 @@ public class PoiListActivity extends PeachBaseActivity {
     Button mBtnSearch;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTitle;
-    @InjectView(R.id.tv_poi_want_type)
-    TextView mTvPoiWantType;
     private PullToRefreshListView mPoiListLv;
-    private View headerView;
+    //    private View headerView;
     private String type;
     private boolean canAdd;
     private List<LocBean> locList;
@@ -135,13 +130,13 @@ public class PoiListActivity extends PeachBaseActivity {
 
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
-                if(poi.location!=null&&poi.location.coordinates!=null){
-                    Uri mUri = Uri.parse("geo:"+poi.location.coordinates[1]+","+poi.location.coordinates[0]+"?q="+poi.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    if (CommonUtils.checkIntent(PoiListActivity.this, mIntent)){
+                if (poi.location != null && poi.location.coordinates != null) {
+                    Uri mUri = Uri.parse("geo:" + poi.location.coordinates[1] + "," + poi.location.coordinates[0] + "?q=" + poi.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                    if (CommonUtils.checkIntent(SpotListActivity.this, mIntent)) {
                         startActivity(mIntent);
-                    }else{
-                        ToastUtil.getInstance(PoiListActivity.this).showToast("手机里没有地图软件哦");
+                    } else {
+                        ToastUtil.getInstance(SpotListActivity.this).showToast("手机里没有地图软件哦");
                     }
 
                 }
@@ -163,14 +158,7 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
                 mPoiListLv.doPullRefreshing(true, 200);
-
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setText(String.format("%s吃什么?", curLoc.zhName));
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    mTitle.setText(String.format("买在%s", curLoc.zhName));
-                    mTvPoiWantType.setText(String.format("%s买什么?", curLoc.zhName));
-                }
+                mTitle.setText(String.format("玩在%s", curLoc.zhName));
             }
 
             @Override
@@ -190,24 +178,19 @@ public class PoiListActivity extends PeachBaseActivity {
                 startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
             }
         });
-
+//        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
+//        mTvCityName.setText(result.zhName);
+//        mTvCityPoiDesc.setText(result.desc);
         mPoiListLv.doPullRefreshing(true, 200);
-
-        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-            mTitle.setText(String.format("吃在%s", curLoc.zhName));
-            mTvPoiWantType.setText(String.format("%s吃什么?", curLoc.zhName));
-        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-            mTitle.setText(String.format("买在%s", curLoc.zhName));
-            mTvPoiWantType.setText(String.format("%s买什么?", curLoc.zhName));
-        }
+        mTitle.setText(String.format("玩在%s", curLoc.zhName));
     }
 
     private void initView() {
         setContentView(R.layout.activity_poi_list);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
         mPoiListLv = listView;
-        headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
-        listView.getRefreshableView().addHeaderView(headerView);
+//        headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
+//        listView.getRefreshableView().addHeaderView(headerView);
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(false);
         listView.setScrollLoadEnabled(true);
@@ -217,7 +200,6 @@ public class PoiListActivity extends PeachBaseActivity {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getPoiGuide(type, curLoc.id);
                 getPoiListData(type, curLoc.id, 0);
             }
 
@@ -228,49 +210,6 @@ public class PoiListActivity extends PeachBaseActivity {
         });
     }
 
-    private void getPoiGuide(final String type, String cityId) {
-        TravelApi.getDestPoiGuide(cityId, type, new HttpCallBack<String>() {
-            @Override
-            public void doSucess(String result, String method) {
-                CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
-                if (poiGuideResult.code == 0) {
-                    bindGuideView(poiGuideResult.result);
-                }
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                if (!isFinishing()) {
-                    ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                }
-            }
-        });
-    }
-
-    private void bindGuideView(final PoiGuideBean result) {
-        if (TextUtils.isEmpty(result.desc)) {
-            headerView.setVisibility(View.GONE);
-        } else {
-            mTvCityPoiDesc.setText(result.desc);
-        }
-        findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    intent.putExtra("url", result.detailUrl);
-                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    intent.putExtra("url", result.detailUrl);
-                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
-                }
-                startActivity(intent);
-
-            }
-        });
-
-    }
 
     private void getPoiListData(String type, String cityId, final int page) {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
@@ -293,7 +232,7 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing()) {
-                    ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(SpotListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }
         });

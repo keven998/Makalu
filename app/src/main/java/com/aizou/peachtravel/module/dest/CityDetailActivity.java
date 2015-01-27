@@ -61,7 +61,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private CheckBox mFavCb;
     private TextView mCostTimeTv;
     private ExpandableTextView bestMonthTv;
-    private TextView travelTv,foodTv,shoppingTv;
+    private TextView travelTv,foodTv,shoppingTv,spotsTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
@@ -111,6 +111,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         bestMonthTv = (ExpandableTextView) hv.findViewById(R.id.tv_best_month);
         mFavCb = (CheckBox) hv.findViewById(R.id.iv_fav);
         travelTv = (TextView) hv.findViewById(R.id.tv_travel);
+        spotsTv = (TextView) hv.findViewById(R.id.tv_spots);
         foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
         shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
@@ -249,7 +250,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         travelTv.setOnClickListener(this);
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
-
+        spotsTv.setOnClickListener(this);
         mCityNameEn.setText(detailBean.enName);
         mTTview.setText(String.format("旅行在%s", detailBean.zhName));
     }
@@ -261,6 +262,14 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         startActivity(intent);
     }
 
+    public void intentToSpots(View view){
+        Intent intent = new Intent(mContext, SpotListActivity.class);
+        ArrayList<LocBean> locList = new ArrayList<LocBean>();
+        locList.add(locDetailBean);
+        intent.putParcelableArrayListExtra("locList", locList);
+        intent.putExtra("type", TravelApi.PeachType.SPOT);
+        startActivity(intent);
+    }
     public void intentToFood(View view){
         Intent intent = new Intent(mContext, PoiListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
@@ -284,6 +293,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         switch (v.getId()){
             case R.id.tv_travel:
                 intentToTravel(v);
+                break;
+            case R.id.tv_spots:
+                intentToSpots(v);
                 break;
 
             case R.id.tv_restaurant:
