@@ -100,8 +100,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
-        p.height = (int) (d.getHeight() - LocalDisplay.dp2px(40));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(30));
+        p.y = LocalDisplay.dp2px(5);
+        p.height = (int) (d.getHeight() - LocalDisplay.dp2px(80));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
 //        p.alpha = 1.0f;      //设置本身透明度
 //        p.dimAmount = 0.0f;      //设置黑暗度
         getWindow().setAttributes(p);
@@ -121,7 +122,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 finishWithNoAnim();
-                overridePendingTransition(0,R.anim.fade_out);
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {

@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,11 +12,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,14 +71,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 
     @InjectView(R.id.tv_title_back)
     TextView mTvTitleBack;
-    @InjectView(R.id.tv_title_complete)
-    TextView mTvTitleComplete;
     @InjectView(R.id.tv_title)
     TextView mTvTitle;
     @InjectView(R.id.iv_edit)
-    ImageView mIvEdit;
-    @InjectView(R.id.iv_loc_list)
-    ImageView mIvLocList;
+    CheckedTextView mIvEdit;
     @InjectView(R.id.iv_more)
     ImageView mIvMore;
     @InjectView(R.id.tv_copy_guide)
@@ -84,7 +88,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     private StrategyBean strategy;
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
-    private boolean isInEditMode;
     private int curIndex=0;
     RouteDayFragment routeDayFragment;
     RestaurantFragment restFragment;
@@ -125,18 +128,22 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         mTvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.putExtra("strategy", getSaveStrategy());
-                setResult(RESULT_OK, intent);
-                finish();
+                if (mIvEdit.isChecked()) {
+                    warnCancel();
+                } else {
+                    Intent intent = getIntent();
+                    intent.putExtra("strategy", getSaveStrategy());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
-        mTvTitleComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveStrategy();
-            }
-        });
+//        mTvTitleComplete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                saveStrategy();
+//            }
+//        });
     }
 
     @Override
@@ -153,24 +160,24 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 
 
     private void gotoEditMode(){
-        isInEditMode =true;
-        onEditModeChange(isInEditMode);
         for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
-            onEditModeChangeListener.onEditModeChange(isInEditMode);
+            onEditModeChangeListener.onEditModeChange(true);
         }
     }
 
     public void onEditModeChange(boolean inEditMode){
-        isInEditMode = inEditMode;
-        if(inEditMode){
-            mTvTitleBack.setVisibility(View.GONE);
-            mTvTitleComplete.setVisibility(View.VISIBLE);
-            mIvEdit.setVisibility(View.GONE);
-        }else{
-            mTvTitleBack.setVisibility(View.VISIBLE);
-            mTvTitleComplete.setVisibility(View.GONE);
-            mIvEdit.setVisibility(View.VISIBLE);
-        }
+//        isInEditMode = inEditMode;
+//        if(inEditMode){
+//            mTvTitleBack.setVisibility(View.GONE);
+//            mTvTitleComplete.setVisibility(View.VISIBLE);
+//            mIvEdit.setVisibility(View.GONE);
+//        }else{
+//            mTvTitleBack.setVisibility(View.VISIBLE);
+//            mTvTitleComplete.setVisibility(View.GONE);
+//            mIvEdit.setVisibility(View.VISIBLE);
+//        }
+//        mIvEdit.setChecked(false);
+//        mIvEdit.setText("编辑");
     }
 
     private void initData() {
@@ -185,7 +192,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 //            cityIdList.add("5473ccddb8ce043a64108d22");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
-            dialog.setMessage("小桃可为你创建行程模版，制作计划更简单");
+            dialog.setMessage("小桃可为你创建模版，旅程计划更简单");
             dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -225,10 +232,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             if (item.id.equals(itemId)) {
                 bindView(item);
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -268,7 +275,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行计划");
+                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
                         }
                     }.sendEmptyMessageDelayed(0, 1000);
                 } else {
@@ -297,7 +304,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 
         if (user.userId != result.userId) {
             mIvEdit.setVisibility(View.GONE);
-            mIvLocList.setVisibility(View.GONE);
             mIvMore.setVisibility(View.GONE);
             mTvCopyGuide.setVisibility(View.VISIBLE);
             mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
@@ -315,7 +321,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                                 strategy.userId = user.userId;
                                 bindView(strategy);
                                 if (!isFinishing())
-                                    ToastUtil.getInstance(StrategyActivity.this).showToast("已保存为旅行计划");
+                                    ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
                             }
 
                         }
@@ -364,14 +370,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             mIvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    gotoEditMode();
-                }
-            });
-            mIvLocList.setVisibility(View.VISIBLE);
-            mIvLocList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
+                    CheckedTextView cv = (CheckedTextView) v;
+                    if (!cv.isChecked()) {
+                        gotoEditMode();
+                        cv.setChecked(true);
+                        cv.setText("完成");
+                    } else {
+                        saveStrategy(false);
+                    }
                 }
             });
             mIvMore.setVisibility(View.VISIBLE);
@@ -384,6 +390,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 //                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
 //                }
 //            });
+
+            mIvMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showActionDialog();
+                }
+            });
         }
 
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
@@ -467,7 +480,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, CityDetailActivity.class);
                     intent.putExtra("id", mDatas.get(i).id);
-//                    intent.putExtra("name", mDatas.get(i).zhName);
                     startActivity(intent);
                 }
             });
@@ -475,7 +487,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"玩安排", "吃清单", "买清单",};
+        private String[] tabNames = {"旅程计划", "吃清单", "买清单",};
         private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
@@ -509,7 +521,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     routeDayFragment = new RouteDayFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("isInEditMode", isInEditMode);
+                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     routeDayFragment.setArguments(bundle);
                 }
                 return routeDayFragment;
@@ -518,7 +530,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     restFragment = new RestaurantFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("isInEditMode", isInEditMode);
+                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     restFragment.setArguments(bundle);
                 }
 
@@ -528,7 +540,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     shoppingFragment = new ShoppingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("strategy", strategyBean);
-                    bundle.putBoolean("isInEditMode", isInEditMode);
+                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     shoppingFragment.setArguments(bundle);
                 }
 
@@ -575,7 +587,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         return false;
     }
 
-    private void saveStrategy(){
+    private void saveStrategy(final boolean finish) {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if (routeDayFragment != null&&routeDayFragment.getStrategy()!=null) {
@@ -594,16 +606,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {
-                    isInEditMode=false;
-                    onEditModeChange(isInEditMode);
+                    mIvEdit.setText("编辑");
+                    mIvEdit.setChecked(false);
                     for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
-                        onEditModeChangeListener.onEditModeChange(isInEditMode);
+                        onEditModeChangeListener.onEditModeChange(false);
                     }
-                    if (routeDayFragment != null)
+                    if (routeDayFragment != null) {
                         routeDayFragment.resumeItinerary();
-
-//                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到旅行Memo");
-//                    finish();
+                    }
+                    if (finish) {
+                        finish();
+                    }
                 } else {
                     if (!isFinishing())
                         ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
@@ -634,11 +647,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
         messageDialog.setMessage("计划已编辑，是否保存");
-        messageDialog.setPositiveButton("保存", new View.OnClickListener() {
+        messageDialog.setPositiveButton("先保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
-                saveStrategy();
+                saveStrategy(true);
 
             }
         });
@@ -654,6 +667,46 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         });
         messageDialog.show();
     }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
+        Button btn1 = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn1.setText("分享");
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
+                dialog.dismiss();
+            }
+        });
+        Button btn2 = (Button) contentView.findViewById(R.id.btn_go_share);
+        btn2.setText("目的地");
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
 }
 
 
