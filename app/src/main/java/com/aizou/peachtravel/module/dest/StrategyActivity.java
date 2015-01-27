@@ -192,7 +192,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 //            cityIdList.add("5473ccddb8ce043a64108d22");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
-            dialog.setMessage("小桃可为你创建模版，旅程制作更简单");
+            dialog.setMessage("小桃可为你创建模版，旅程计划更简单");
             dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
