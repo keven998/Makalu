@@ -190,9 +190,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
             }
         });
-//        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
-//        mTvCityName.setText(result.zhName);
-//        mTvCityPoiDesc.setText(result.desc);
+
         mPoiListLv.doPullRefreshing(true, 200);
 
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
