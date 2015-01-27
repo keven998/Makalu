@@ -20,18 +20,29 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
+import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
+import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
+import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.core.widget.popupmenu.PopupMenuCompat;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
@@ -53,6 +64,7 @@ import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.toolbox.fragment.NearbyItemFragment;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
@@ -72,23 +84,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import butterknife.InjectView;
+
 public class IMMainActivity extends ChatBaseActivity {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
     // 未读消息textview
-    private ImageView unreadLabel;
+    private TextView unreadLabel;
     // 未读通讯录textview
-    private ImageView unreadAddressLable;
-
-    private Button[] mTabs;
+    private TextView unreadAddressLable;
+    FixedIndicatorView mIMIndicator;
+    FixedViewPager mIMViewPager;
+    private IndicatorViewPager indicatorViewPager;
+    private IMMainAdapter mIMdapter;
     private ContactlistFragment contactListFragment;
     //	private ChatHistoryFragment chatHistoryFragment;
     private ChatAllHistoryFragment chatHistoryFragment;
-    private SettingsFragment settingFragment;
     private Fragment[] fragments;
-    private int index;
-    private RelativeLayout[] tab_containers;
     // 当前fragment的index
     private int currentTabIndex;
     private NewMessageBroadcastReceiver msgReceiver;
@@ -96,8 +109,6 @@ public class IMMainActivity extends ChatBaseActivity {
     // 账号在别处登录
     private boolean isConflict = false;
 
-    private View tab1Selected;
-    private View tab2Selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,27 +122,26 @@ public class IMMainActivity extends ChatBaseActivity {
         if (savedInstanceState == null) {
             chatHistoryFragment = new ChatAllHistoryFragment();
             contactListFragment = new ContactlistFragment();
-            settingFragment = new SettingsFragment();
-            fragments = new Fragment[]{chatHistoryFragment, contactListFragment, settingFragment};
-            // 添加显示第一个fragment
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment,"ChatHistory")
-                    .add(R.id.fragment_container, contactListFragment,"ContactList").hide(contactListFragment).show(chatHistoryFragment)
-                    .commit();
+            fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
 
-        }else{
+        } else {
             chatHistoryFragment = (ChatAllHistoryFragment) getSupportFragmentManager().findFragmentByTag("ChatHistory");
             contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
             fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
             currentTabIndex = savedInstanceState.getInt("currentTabIndex");
-            mTabs[currentTabIndex].performClick();
-            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
-            trx.hide(chatHistoryFragment);
-            trx.hide(contactListFragment);
-            if (!fragments[currentTabIndex].isAdded()) {
-                trx.add(R.id.fragment_container, fragments[currentTabIndex]);
-            }
-            trx.show(fragments[currentTabIndex]).commit();
         }
+        indicatorViewPager = new IndicatorViewPager(mIMIndicator, mIMViewPager);
+        indicatorViewPager.setPageOffscreenLimit(2);
+        mIMViewPager.setPrepareNumber(2);
+        indicatorViewPager.setAdapter(mIMdapter = new IMMainAdapter(getSupportFragmentManager()));
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
+            @Override
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                currentTabIndex = currentItem;
+            }
+        });
+
+        indicatorViewPager.setCurrentItem(currentTabIndex,false);
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
 //            @Override
@@ -147,7 +157,7 @@ public class IMMainActivity extends ChatBaseActivity {
 //            }
 //        });
         //网络更新好友列表
-         getContactFromServer();
+        getContactFromServer();
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
@@ -165,13 +175,8 @@ public class IMMainActivity extends ChatBaseActivity {
         ackMessageIntentFilter.setPriority(3);
         registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
 
-        // 注册一个离线消息的BroadcastReceiver
-//		IntentFilter offlineMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-//				.getOfflineMessageBroadcastAction());
-//		registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
-
         // 注册群聊相关的listener
-        groupChangeListener =new MyGroupChangeListener();
+        groupChangeListener = new MyGroupChangeListener();
         EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
@@ -180,7 +185,7 @@ public class IMMainActivity extends ChatBaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        mTabs[0].performClick();
+        indicatorViewPager.setCurrentItem(0, false);
     }
 
     public void refreshChatHistoryFragment() {
@@ -205,23 +210,15 @@ public class IMMainActivity extends ChatBaseActivity {
      */
     private void initView() {
         initTitleBar();
-        unreadLabel = (ImageView) findViewById(R.id.unread_msg_notify);
-        unreadAddressLable = (ImageView) findViewById(R.id.unread_address_number);
-        mTabs = new Button[2];
-        mTabs[0] = (Button) findViewById(R.id.btn_conversation);
-        mTabs[1] = (Button) findViewById(R.id.btn_address_list);
-//		mTabs[2] = (Button) findViewById(R.id.btn_setting);
-        // 把第一个tab设为选中状态
-        tab1Selected = findViewById(R.id.tab1);
-        tab2Selected = findViewById(R.id.tab2);
-        mTabs[0].setSelected(true);
-        tab1Selected.setVisibility(View.VISIBLE);
-        tab2Selected.setVisibility(View.GONE);
+        mIMIndicator = (FixedIndicatorView) findViewById(R.id.im_indicator);
+        mIMViewPager = (FixedViewPager) findViewById(R.id.im_viewpager);
+        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5);
+        colorBar.setWidth(LocalDisplay.dp2px(50));
+        mIMIndicator.setScrollBar(colorBar);
+
     }
 
     private void initTitleBar() {
-        TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.add);
 //        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -234,7 +231,7 @@ public class IMMainActivity extends ChatBaseActivity {
 //            }
 //        });
 
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BlurMenu fragment = new BlurMenu();
@@ -246,7 +243,6 @@ public class IMMainActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("桃·Talk");
 //        titleHeaderBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,40 +341,34 @@ public class IMMainActivity extends ChatBaseActivity {
         });
     }
 
-    /**
-     * button点击事件
-     *
-     * @param view
-     */
-    public void onTabClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_conversation:
-                index = 0;
-                tab1Selected.setVisibility(View.VISIBLE);
-                tab2Selected.setVisibility(View.GONE);
-                break;
+    private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
 
-            case R.id.btn_address_list:
-                index = 1;
-                tab1Selected.setVisibility(View.GONE);
-                tab2Selected.setVisibility(View.VISIBLE);
-                break;
-//		case R.id.btn_setting:
-//			index = 2;
-//			break;
+        public IMMainAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
         }
-        if (currentTabIndex != index) {
-            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
-            trx.hide(fragments[currentTabIndex]);
-            if (!fragments[index].isAdded()) {
-                trx.add(R.id.fragment_container, fragments[index]);
+
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
+
+        @Override
+        public View getViewForTab(int position, View convertView, ViewGroup container) {
+            if(position==0){
+                convertView = View.inflate(mContext,R.layout.tab_im_conversation,null);
+                unreadLabel = (TextView) convertView.findViewById(R.id.unread_msg_notify);
+            }else{
+                convertView = View.inflate(mContext,R.layout.tab_im_contact,null);
+                unreadAddressLable = (TextView) convertView.findViewById(R.id.unread_address_number);
             }
-            trx.show(fragments[index]).commit();
+            return convertView;
         }
-        mTabs[currentTabIndex].setSelected(false);
-        // 把当前tab设为选中状态
-        mTabs[index].setSelected(true);
-        currentTabIndex = index;
+
+        @Override
+        public Fragment getFragmentForPage(int position) {
+            return fragments[position];
+        }
+
     }
 
     @Override
@@ -401,6 +391,7 @@ public class IMMainActivity extends ChatBaseActivity {
             // 注册群聊相关的listener
             EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
         } catch (Exception e) {
+
         }
 
     }
@@ -412,6 +403,7 @@ public class IMMainActivity extends ChatBaseActivity {
         int count = getUnreadMsgCountTotal();
         if (count > 0) {
             unreadLabel.setVisibility(View.VISIBLE);
+            unreadLabel.setText(count+"");
         } else {
             unreadLabel.setVisibility(View.GONE);
         }
@@ -427,6 +419,7 @@ public class IMMainActivity extends ChatBaseActivity {
                 if (count > 0) {
 //					unreadAddressLable.setText(String.valueOf(count));
                     unreadAddressLable.setVisibility(View.VISIBLE);
+                    unreadLabel.setText(count+"");
                 } else {
                     unreadAddressLable.setVisibility(View.GONE);
                 }
@@ -442,12 +435,12 @@ public class IMMainActivity extends ChatBaseActivity {
      */
     public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
-        unreadAddressCountTotal= (int) InviteMsgRepository.getUnAcceptMsgCount(this);
-        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null){
+        unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
+        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
 
             IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
             imUser.setUnreadMsgCount(unreadAddressCountTotal);
-            IMUserRepository.saveContact(this,imUser);
+            IMUserRepository.saveContact(this, imUser);
         }
         return unreadAddressCountTotal;
     }
@@ -526,25 +519,25 @@ public class IMMainActivity extends ChatBaseActivity {
             String msgid = intent.getStringExtra("msgid");
             // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
             EMMessage message = EMChatManager.getInstance().getMessage(msgid);
-            final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
+            final String fromUser = message.getStringAttribute(Constant.FROM_USER, "");
             final String finalUsername = username;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if(!TextUtils.isEmpty(fromUser)){
+                    if (!TextUtils.isEmpty(fromUser)) {
                         ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
                         IMUser imUser = IMUserRepository.getContactByUserName(mContext, finalUsername);
-                        if(imUser!=null){
+                        if (imUser != null) {
                             imUser.setNick(user.nickName);
                             imUser.setAvatar(user.avatar);
-                        }else{
+                        } else {
                             imUser = new IMUser();
                             imUser.setUsername(finalUsername);
                             imUser.setNick(user.nickName);
                             imUser.setUserId(user.userId);
                             imUser.setAvatar(user.avatar);
                         }
-                        IMUserRepository.saveContact(mContext,imUser);
+                        IMUserRepository.saveContact(mContext, imUser);
                     }
                 }
             }).start();
@@ -735,11 +728,13 @@ public class IMMainActivity extends ChatBaseActivity {
         }
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("currentTabIndex",currentTabIndex);
+        outState.putInt("currentTabIndex", currentTabIndex);
         super.onSaveInstanceState(outState);
     }
+
     @Override
     protected void onResume() {
         super.onResume();

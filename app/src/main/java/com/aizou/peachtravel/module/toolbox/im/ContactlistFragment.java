@@ -31,9 +31,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.widget.SideBar;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.widget.TopSectionBar;
@@ -52,6 +54,8 @@ public class ContactlistFragment extends Fragment {
 	private ContactAdapter adapter;
 	private List<IMUser> contactList;
 	private ListView listView;
+    private SideBar indexBar;
+    private TextView indexDialogTv;
 	private boolean hidden;
 	private TopSectionBar sectionBar;
 //	private InputMethodManager inputMethodManager;
@@ -70,12 +74,25 @@ public class ContactlistFragment extends Fragment {
             return;
 //		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		listView = (ListView) getView().findViewById(R.id.list);
+        indexBar = (SideBar) getView().findViewById(R.id.sb_index);
+        indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
+        indexBar.setTextView(indexDialogTv);
+        indexBar.setTextColor(getResources().getColor(R.color.app_theme_color));
         contactList = new ArrayList<IMUser>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
+        indexBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+            @Override
+            public void onTouchingLetterChanged(String s) {
+                int position = adapter.getPositionForIndex(s);
+                if (position != -1) {
+                    listView.setSelection(position+1);
+                }
+            }
+        });
         listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

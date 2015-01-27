@@ -161,7 +161,7 @@ public class SearchDestActivity extends PeachBaseActivity {
         mSearchResultAdapter.getDataList().addAll(result);
 
         if (mSearchResultAdapter.getCount() >= BaseApi.PAGE_SIZE) {
-            mSearchResultLv.setScrollLoadEnabled(true);
+            mSearchResultLv.setHasMoreData(true);
         }
         if (result == null || result.size() == 0) {
             mSearchResultLv.setHasMoreData(false);
@@ -202,10 +202,9 @@ public class SearchDestActivity extends PeachBaseActivity {
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("loc",itemData);
-                    setResult(RESULT_OK,intent);
-                    finish();
+                    Intent intent = new Intent(mContext,CityDetailActivity.class);
+                    intent.putExtra("id",itemData.id);
+                    startActivity(intent);
                 }
             });
         }

@@ -206,6 +206,19 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 		return positionOfSection.get(section);
 	}
 
+    /**
+     * 根据分类的首字母获取其第一次出现该首字母的位置
+     */
+    public int getPositionForIndex(String indexStr) {
+        for (int i = 0; i < sections.size(); i++) {
+            String sortStr = sections.get(i);
+            if (indexStr.equals(sortStr)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
 	public int getSectionForPosition(int position) {
 		return sectionOfPosition.get(position);

@@ -103,7 +103,7 @@ public class SplashActivity extends PeachBaseActivity {
                 if(storyResult.code == 0) {
                     if(!storyResult.result.image.equals(storyImageUrl)){
                         SharePrefUtil.saveString(SplashActivity.this, "story_image", storyResult.result.image);
-                        if (isFinishing() || isDestroyed()) return;
+                        if (isFinishing()) return;
                         ImageLoader.getInstance().displayImage(storyResult.result.image, splashIv, picOptions, new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {

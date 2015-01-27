@@ -3,50 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
-
-
-    <FrameLayout android:id="@+id/indexer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone">
-        <com.aizou.peachtravel.common.widget.TopSectionBar
-            android:id="@+id/section_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="44dp"
-            android:background="@color/base_color_white"
-            android:spacing="16dp"
-            android:overScrollMode="always"
-            android:clickable="true" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_trangle_index_up"
-            android:layout_gravity="bottom|center_horizontal"/>
-    </FrameLayout>
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/indexer"
+        android:layout_marginTop="10dp"
         android:background="@color/app_backgroud"
         android:cacheColorHint="#00000000"
-        android:layout_marginTop="10dp"
         android:descendantFocusability="afterDescendants"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:focusable="true"
-        android:fastScrollEnabled="true" />
+        android:fastScrollEnabled="true"
+        android:focusable="true" />
 
-    <include layout="@layout/fragment_contact_list_empty"
-        android:visibility="gone"
+    <com.aizou.core.widget.SideBar
+        android:id="@+id/sb_index"
+        android:layout_width="25dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:paddingRight="3dp" />
+
+    <TextView
+        android:id="@+id/dialog"
+        android:layout_width="80.0dip"
+        android:layout_height="80.0dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/show_head_toast_bg"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="30.0dip"
+        android:visibility="invisible" />
+
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/fragment_contact_list_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/indexer"
         android:layout_marginTop="72dp"
-        android:id="@+id/empty_view"></include>
+        android:visibility="gone"></include>
 
 </RelativeLayout>

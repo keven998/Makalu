@@ -211,7 +211,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
         if (conversation.getUnreadMsgCount() > 0) {
             // 显示与此用户的消息未读数
-//            holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
+            holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
             holder.unreadLabel.setVisibility(View.VISIBLE);
         } else {
             holder.unreadLabel.setVisibility(View.GONE);

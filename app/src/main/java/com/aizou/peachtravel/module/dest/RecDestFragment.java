@@ -68,10 +68,11 @@ public class RecDestFragment extends PeachBaseFragment {
         titleHeaderBar.getTitleTextView().setText("目的地");
         titleHeaderBar.enableBackKey(false);
         titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
-        titleHeaderBar.setOnClickListener(new View.OnClickListener() {
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(),SearchDestActivity.class);
+                startActivity(intent);
             }
         });
         setupViewFromCache();
