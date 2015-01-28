@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -40,6 +41,8 @@ import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomBase;
+import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.aizou.peachtravel.module.my.LoginActivity;
@@ -53,7 +56,8 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-    private ListView mTravelLv;
+    private PullToZoomListViewEx mTravelLv;
+    private RelativeLayout titleBar;
     private ImageView mCityIv;
     private TextView mCityNameTv;
     private TextView mCityNameEn;
@@ -82,8 +86,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void initView(){
-        mTravelLv = (ListView) findViewById(R.id.lv_city_detail);
-
+        mTravelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
+        titleBar = (RelativeLayout) findViewById(R.id.title_bar);
+        setTitleAlpha(0);
         TextView lv = (TextView) findViewById(R.id.tv_title_bar_left);
         TextView rv = (TextView) findViewById(R.id.tv_title_bar_right);
         rv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
@@ -99,11 +104,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 showActionDialog();
             }
         });
-
         View hv;
         hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
-        mTravelLv.addHeaderView(hv);
+        mTravelLv.setHeaderView(hv);
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
+        View zoomView = hv.findViewById(R.id.ly1);
+        mTravelLv.setZoomView(zoomView);
         mTTview = (TextView) hv.findViewById(R.id.travel_title);
         mCityNameTv = (TextView) hv.findViewById(R.id.tv_city_name);
         mCityNameEn = (TextView) hv.findViewById(R.id.tv_city_name_en);
@@ -122,7 +128,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
         mTravelLv.setAdapter(travelAdapter);
-
+        mTravelLv.setParallax(false);
         hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +137,30 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 startActivity(intent);
             }
         });
+
+        final int max = LocalDisplay.dp2px(170);
+        final int min = LocalDisplay.dp2px(80);
+        mTravelLv.setOnScrollYListener(new PullToZoomBase.OnScrollYListener() {
+            @Override
+            public void onScrollY(float scrollY) {
+                float height = min;
+                if (scrollY > max) {
+                    height = max - min;
+                } else {
+                    if (scrollY < min) {
+                        height = 0;
+                    } else {
+                        height = scrollY - min;
+                    }
+                }
+                int alpha = (int) (height * 255 / (max - min));
+                setTitleAlpha(alpha);
+            }
+        });
+    }
+
+    private void setTitleAlpha(int alpha) {
+        titleBar.getBackground().setAlpha(alpha);
     }
 
     private void getCityDetailData(String id){

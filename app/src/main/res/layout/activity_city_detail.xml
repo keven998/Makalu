@@ -5,46 +5,56 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
+    <com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx
         android:id="@+id/lv_city_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:overScrollMode="never"
         android:fadingEdge="none"
-        android:listSelector="@null"/>
+        android:listSelector="@null" />
 
-    <TextView
-        android:id="@+id/tv_title_bar_left"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="8dp"
-        android:paddingRight="25dp"
-        android:layout_marginLeft="3dp"
-        android:singleLine="true"
-        android:duplicateParentState="true"
-        android:drawableLeft="@drawable/ic_navigation_back"
-        android:gravity="center"
-        android:text="返回"
-        android:textColor="@color/base_text_color_text_hint"
-        android:background="@drawable/btn_navigation_back_selector"
-        android:drawablePadding="3dp"
-        android:textSize="15sp" />
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_theme_color">
 
-    <TextView
-        android:id="@+id/tv_title_bar_right"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/btn_navigation_back_selector"
-        android:textColor="@color/app_theme_color"
-        android:layout_marginRight="3dp"
-        android:singleLine="true"
-        android:duplicateParentState="true"
-        android:paddingRight="8dp"
-        android:paddingLeft="25dp"
-        android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/btn_navigation_back_selector"
+            android:drawableLeft="@drawable/ic_navigation_back"
+            android:drawablePadding="3dp"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="25dp"
+            android:singleLine="true"
+            android:text="返回"
+            android:textColor="@color/base_text_color_text_hint"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_title_bar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/btn_navigation_back_selector"
+            android:duplicateParentState="true"
+            android:paddingLeft="25dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textColor="@color/app_theme_color"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

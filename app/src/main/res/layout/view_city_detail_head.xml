@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent">
 
     <FrameLayout android:id="@+id/ly1"
         android:layout_width="fill_parent"
@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/iv_city_detail"
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/city_picture_collection_height"
+            android:layout_height="fill_parent"
             android:background="@drawable/bg_common_default"
             android:scaleType="centerCrop"/>
 

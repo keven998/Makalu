@@ -119,15 +119,11 @@ public class IMMainActivity extends ChatBaseActivity {
         //这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
         //显示所有人消息记录的fragment
+        chatHistoryFragment = new ChatAllHistoryFragment();
+        contactListFragment = new ContactlistFragment();
+        fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
         if (savedInstanceState == null) {
-            chatHistoryFragment = new ChatAllHistoryFragment();
-            contactListFragment = new ContactlistFragment();
-            fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
-
         } else {
-            chatHistoryFragment = (ChatAllHistoryFragment) getSupportFragmentManager().findFragmentByTag("ChatHistory");
-            contactListFragment = (ContactlistFragment) getSupportFragmentManager().findFragmentByTag("ContactList");
-            fragments = new Fragment[]{chatHistoryFragment, contactListFragment};
             currentTabIndex = savedInstanceState.getInt("currentTabIndex");
         }
         indicatorViewPager = new IndicatorViewPager(mIMIndicator, mIMViewPager);
