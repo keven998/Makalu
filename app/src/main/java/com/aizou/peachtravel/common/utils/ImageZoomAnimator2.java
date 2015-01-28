@@ -57,8 +57,6 @@ public class ImageZoomAnimator2 {
         this.zoomViewPager = (HackyViewPager) zoomContainer.findViewById(R.id.vp_zoom_pic);
         mImagePagerAdpater=new ImagePagerAdapter();
         zoomViewPager.setAdapter(mImagePagerAdpater);
-
-
     }
 
 

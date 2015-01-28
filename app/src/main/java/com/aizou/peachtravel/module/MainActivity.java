@@ -7,21 +7,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
-import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
-import com.aizou.core.utils.AssetUtils;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
-import com.aizou.peachtravel.bean.TestBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
@@ -30,9 +25,6 @@ import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactManager;
-import com.easemob.chat.EMNotifier;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -117,7 +109,8 @@ public class MainActivity extends PeachBaseActivity {
                 PeachUser user = AccountManager.getInstance().getLoginAccount(MainActivity.this);
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
-                    startActivity(intent);
+                    startActivityWithNoAnim(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 } else {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivityForResult(intent, CODE_IM_LOGIN);
@@ -265,10 +258,11 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==RESULT_OK){
-         if(requestCode==CODE_IM_LOGIN){
-             startActivity(new Intent(this, IMMainActivity.class));
-         }
+        if (resultCode == RESULT_OK) {
+             if (requestCode == CODE_IM_LOGIN) {
+                 startActivityWithNoAnim(new Intent(this, IMMainActivity.class));
+                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+             }
         }
     }
 }

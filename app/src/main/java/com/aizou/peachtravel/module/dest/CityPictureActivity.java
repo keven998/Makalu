@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -37,8 +38,6 @@ import java.util.List;
  * Created by Rjm on 2014/11/19.
  */
 public class CityPictureActivity extends PeachBaseActivity {
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleBar;
     @ViewInject(R.id.gv_city_pic)
     private GridView mCityPicGv;
     @ViewInject(R.id.zoom_container)
@@ -62,8 +61,15 @@ public class CityPictureActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_city_picture);
         ViewUtils.inject(this);
-        titleBar.enableBackKey(true);
-        titleBar.getTitleTextView().setText(getIntent().getStringExtra("title"));
+
+        TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleView.setText(getIntent().getStringExtra("title") + "画册");
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void initData() {
@@ -102,6 +108,12 @@ public class CityPictureActivity extends PeachBaseActivity {
         picAdapter = null;
         zoomPicVp = null;
         mCityPicGv = null;
+    }
+
+    @Override
+    public void finish() {
+        super.finishWithNoAnim();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override

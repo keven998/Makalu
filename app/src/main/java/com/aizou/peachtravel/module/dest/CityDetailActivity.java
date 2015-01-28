@@ -58,6 +58,7 @@ import java.util.ArrayList;
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
     private PullToZoomListViewEx mTravelLv;
     private RelativeLayout titleBar;
+    private TextView mTitleTv;
     private ImageView mCityIv;
     private TextView mCityNameTv;
     private TextView mCityNameEn;
@@ -88,6 +89,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void initView(){
         mTravelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
+        mTitleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         setTitleAlpha(0);
         TextView lv = (TextView) findViewById(R.id.tv_title_bar_left);
         TextView rv = (TextView) findViewById(R.id.tv_title_bar_right);
@@ -160,7 +162,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void setTitleAlpha(int alpha) {
-        titleBar.getBackground().setAlpha(alpha);
+//        if (alpha <= 1) {
+            titleBar.getBackground().setAlpha(alpha);
+            mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
+//        }
     }
 
     private void getCityDetailData(String id){
@@ -207,16 +212,17 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void bindView(final LocBean detailBean){
         locDetailBean = detailBean;
-        if(detailBean.images!=null&&detailBean.images.size()>0)
-        ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
+        if (detailBean.images != null && detailBean.images.size() > 0) {
+            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
+        }
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
-                startActivity(intent);
-
+                startActivityWithNoAnim(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -283,6 +289,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         spotsTv.setOnClickListener(this);
         mCityNameEn.setText(detailBean.enName);
         mTTview.setText(String.format("玩在%s", detailBean.zhName));
+
+        mTitleTv.setText(detailBean.zhName);
     }
 
     public void intentToTravel(View view){

@@ -23,7 +23,7 @@
     <dimen name="my_plan_img_height">132dp</dimen>
     <dimen name="my_plan_title_width">248dp</dimen>
 
-    <dimen name="city_picture_collection_height">200dp</dimen>
+    <dimen name="city_picture_collection_height">212dp</dimen>
 
     <dimen name="note_picture_size">100dp</dimen>
 
