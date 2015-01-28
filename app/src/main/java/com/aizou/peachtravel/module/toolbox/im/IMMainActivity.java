@@ -342,14 +342,22 @@ public class IMMainActivity extends ChatBaseActivity {
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
-            if(position==0){
-                convertView = View.inflate(mContext,R.layout.tab_im_conversation,null);
-                unreadLabel = (TextView) convertView.findViewById(R.id.unread_msg_notify);
-            }else{
-                convertView = View.inflate(mContext,R.layout.tab_im_contact,null);
-                unreadAddressLable = (TextView) convertView.findViewById(R.id.unread_address_number);
+            View view = convertView;
+            if (view == null) {
+                if (position == 0) {
+                    view = View.inflate(mContext, R.layout.tab_im_conversation, null);
+                } else {
+                    view = View.inflate(mContext, R.layout.tab_im_contact, null);
+                }
             }
-            return convertView;
+
+            if (position == 0) {
+                unreadLabel = (TextView) view.findViewById(R.id.unread_msg_notify);
+            } else {
+                unreadAddressLable = (TextView) view.findViewById(R.id.unread_address_number);
+            }
+
+            return view;
         }
 
         @Override

@@ -71,18 +71,20 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             idTv.setVisibility(View.GONE);
             signTv.setVisibility(View.GONE);
             genderIv.setVisibility(View.GONE);
-            getView().findViewById(R.id.indicator).setVisibility(View.GONE);
-            getView().findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
+            View view = getView();
+            view.findViewById(R.id.indicator).setVisibility(View.GONE);
+            view.findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder);
             nickNameTv.setText("未登录");
         } else {
             idTv.setVisibility(View.VISIBLE);
             signTv.setVisibility(View.VISIBLE);
             genderIv.setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.indicator).setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.btn_login).setVisibility(View.GONE);
-            getView().findViewById(R.id.btn_reg).setVisibility(View.GONE);
+            View view = getView();
+            view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.btn_login).setVisibility(View.GONE);
+            view.findViewById(R.id.btn_reg).setVisibility(View.GONE);
             if (user.gender.equalsIgnoreCase("M")) {
                 genderIv.setImageResource(R.drawable.ic_gender_man);
             } else if (user.gender.equalsIgnoreCase("F")) {

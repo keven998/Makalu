@@ -84,7 +84,7 @@ public class CityPictureActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result,LocAlbum.class);
                 if(imageReuslt.code == 0){
-                    picAdapter= new PicAdapter(imageReuslt.result.album);
+                    picAdapter = new PicAdapter(imageReuslt.result.album);
                     mCityPicGv.setAdapter(picAdapter);
                     zoomAnimator = new ImageZoomAnimator2(mContext, mCityPicGv, zoomContainer, imageReuslt.result.album);
                 }
@@ -151,28 +151,35 @@ public class CityPictureActivity extends PeachBaseActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            ImageView imageView = (ImageView) convertView;
+            if (imageView == null) {
+                ImageView picIv = new ImageView(mContext);
+                picIv.setBackgroundResource(R.drawable.frame_cell_image_frame);
+                picIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(40))/3;
+                int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(4))/3;
+                int height = width;
+                AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+                        width, height);
+                picIv.setLayoutParams(lp);
+                picIv.setPadding(1, 1, 1, 1);
+                imageView = picIv;
+            }
+            imageView.setImageDrawable(null);
             ImageBean itemData = imageBeanList.get(position);
-            ImageView picIv = new ImageView(mContext);
-            picIv.setBackgroundResource(R.drawable.bg_common_default);
-            picIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(40))/3;
-            int height = width;
-            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                    width, height);
-            picIv.setLayoutParams(lp);
-            ImageLoader.getInstance().displayImage(itemData.url, picIv, picOptions);
+            ImageLoader.getInstance().displayImage(itemData.url, imageView, picOptions);
 //            Picasso.with(mContext)
 //                    .load(itemData.url)
 ////                    .placeholder(R.drawable.avatar_placeholder)
 //                    .into(picIv);
-            picIv.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     zoomAnimator.transformIn(position);
                 }
             });
-            picIv.setTag(position);
-            return picIv;
+            imageView.setTag(position);
+            return imageView;
         }
     }
 
