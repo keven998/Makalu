@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_bar_height"
-    android:background="@drawable/mm_listitem_simple" >
+    android:background="@drawable/nav_title_bar" >
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_left"
@@ -46,8 +46,8 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="17sp"
-            android:textColor="@color/base_text_color_title"/>
+            android:textSize="18sp"
+            android:textColor="@color/base_color_white"/>
     </RelativeLayout>
 
     <RelativeLayout

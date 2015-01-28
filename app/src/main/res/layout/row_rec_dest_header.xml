@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="15dp"
+    android:paddingTop="18dp"
     android:paddingLeft="10dp"
     android:orientation="horizontal">
 
@@ -12,8 +12,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_rec_dest_header"
-        android:drawablePadding="10dp"
-        android:textColor="@color/app_theme_color"
-        android:textSize="16sp"
+        android:drawablePadding="4dp"
+        android:textColor="@color/base_text_color_subtitle"
+        android:textSize="15sp"
         />
 </LinearLayout>

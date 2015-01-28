@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/mm_listitem_simple">
+        android:background="@drawable/nav_title_bar">
 
         <TextView
             android:id="@+id/tv_title_bar_left"

@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/mm_listitem_simple">
+        android:background="@drawable/nav_title_bar">
 
         <FrameLayout android:id="@+id/lyt_btn_ok"
             android:layout_width="wrap_content"
