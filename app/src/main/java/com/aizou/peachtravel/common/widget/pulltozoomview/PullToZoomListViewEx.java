@@ -165,9 +165,7 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
 
         ViewGroup.LayoutParams localLayoutParams = mHeaderView.getLayoutParams();
         ViewGroup.LayoutParams zoomLayoutParams = mZoomView.getLayoutParams();
-        localLayoutParams.height = Math.abs(newScrollValue) + mHeaderHeight;
         zoomLayoutParams.height = Math.abs(newScrollValue) + zoomViewHeight;
-//        mHeaderView.setLayoutParams(localLayoutParams);
         mZoomView.setLayoutParams(zoomLayoutParams);
     }
 
@@ -205,43 +203,17 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         updateHeaderView();
     }
 
-    /**
-     * 设置HeaderView高度
-     *
-     * @param width  宽
-     * @param height 高
-     */
-    public void setHeaderViewSize(int width, int height) {
-        if (mHeaderView != null) {
-            Object localObject = mHeaderView.getLayoutParams();
-            if (localObject == null) {
-                localObject = new AbsListView.LayoutParams(width, height);
-            }
-            ((ViewGroup.LayoutParams) localObject).width = width;
-            ((ViewGroup.LayoutParams) localObject).height = height;
-            mHeaderView.setLayoutParams((ViewGroup.LayoutParams) localObject);
-            mHeaderHeight = height;
-        }
-    }
-
-    public void setHeaderLayoutParams(AbsListView.LayoutParams layoutParams) {
-        if (mHeaderView != null) {
-            mHeaderView.setLayoutParams(layoutParams);
-            mHeaderHeight = layoutParams.height;
-        }
-    }
 
     protected void onLayout(boolean paramBoolean, int paramInt1, int paramInt2,
                             int paramInt3, int paramInt4) {
         super.onLayout(paramBoolean, paramInt1, paramInt2, paramInt3, paramInt4);
-        Log.d(TAG, "onLayout --> ");
         if (mHeaderHeight == 0 && mHeaderView != null) {
             mHeaderHeight = mHeaderView.getHeight();
         }
         if (zoomViewHeight==0&&mZoomView != null) {
             zoomViewHeight = mZoomView.getHeight();
-
         }
+        Log.d(TAG, "onLayout --> mHeaderHeight="+mHeaderHeight+"--zoomViewHeight="+zoomViewHeight);
     }
 
     @Override
@@ -289,23 +261,22 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         public void run() {
             if (mZoomView != null) {
                 float f2;
-                ViewGroup.LayoutParams localLayoutParams;
                 ViewGroup.LayoutParams zoomLayoutParams;
                 if ((!mIsFinished) && (mScale > 1.0D)) {
                     float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
                     f2 = mScale - (mScale - 1.0F) * PullToZoomListViewEx.sInterpolator.getInterpolation(f1);
-                    localLayoutParams = mHeaderView.getLayoutParams();
                     zoomLayoutParams = mZoomView.getLayoutParams();
-                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2);
-                    if (f2 > 1.0F) {
-                        localLayoutParams.height = ((int) (f2 * mHeaderHeight));
-                        zoomLayoutParams.height = ((int) (f2 * zoomViewHeight));
+                    zoomLayoutParams.height = ((int) (f2 * zoomViewHeight));
 //                        mHeaderView.setLayoutParams(localLayoutParams);
-                        mZoomView.setLayoutParams(zoomLayoutParams);
+                    mZoomView.setLayoutParams(zoomLayoutParams);
+                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2+"--zoomViewHeight="+f2 * zoomViewHeight);
+                    if (f2 > 1.0F) {
                         post(this);
                         return;
                     }
+                    mRootView.requestLayout();
                     mIsFinished = true;
+
                 }
             }
         }
@@ -314,7 +285,8 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
             if (mZoomView != null) {
                 mStartTime = SystemClock.currentThreadTimeMillis();
                 mDuration = paramLong;
-                mScale = ((float) (mZoomView.getBottom()) / zoomViewHeight);
+                mScale = ((float) (mZoomView.getBottom()-mZoomView.getTop()) / zoomViewHeight);
+                Log.d(TAG, "ScalingRunnable --> mZoomView.getBottom() = " + mZoomView.getBottom()+"--zo0mViewHeight="+zoomViewHeight);
                 mIsFinished = false;
                 post(this);
             }

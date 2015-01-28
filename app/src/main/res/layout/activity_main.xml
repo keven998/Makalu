@@ -21,15 +21,15 @@
 
 
         <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="6dp">
+            android:layout_width="77dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="13dp"
+            android:paddingLeft="11.5dp">
 
             <CheckedTextView
                 android:id="@+id/tv_start_talk"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
                 android:background="@drawable/theme_round_bg"
                 android:drawableTop="@drawable/checker_tab_home_talk"
                 android:paddingTop="14dp"
@@ -42,9 +42,15 @@
 
             <TextView android:id="@+id/unread_msg_notify"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_talk_new_message"
-                android:layout_centerInParent="true"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_unread_msg"
+                android:minWidth="16dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:textColor="@color/base_color_white"
                 android:visibility="gone"/>
 
         </RelativeLayout>

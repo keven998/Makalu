@@ -43,7 +43,9 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.bean.ExtMessageBean;
+import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
@@ -96,6 +98,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -735,6 +738,14 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_travels, UILUtils.getRadiusOption(3));
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TravelNoteBean noteBean = new TravelNoteBean();
+                    noteBean.setFieldFromExtMessageBean(finalBean);
+                    IntentUtils.intentToNoteDetail(activity, noteBean);
+                }
+            });
 
         } else if (extType == Constant.ExtType.SPOT) {
             holder.tv_desc.setText(bean.desc);
