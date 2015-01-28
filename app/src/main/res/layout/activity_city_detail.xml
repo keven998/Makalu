@@ -41,6 +41,16 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:textColor="@color/base_color_white"/>
+
+        <TextView
             android:id="@+id/tv_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
