@@ -75,7 +75,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_setting_nick"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
@@ -87,9 +86,9 @@
                     android:text="昵称"/>
 
                 <TextView android:id="@+id/tv_nickname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"
@@ -177,7 +176,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_setting_memo"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
@@ -189,9 +187,9 @@
                     android:text="旅行签名"/>
 
                 <TextView android:id="@+id/tv_sign"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:drawableRight="@drawable/cell_accessory"
                     android:textColor="@color/base_text_color_subtitle"
                     android:gravity="center_vertical|right"

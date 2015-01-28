@@ -267,7 +267,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                                     Intent intent = new Intent();
                                     // it is group chat
                                     intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                                    intent.putExtra("groupId", group.getGroupId());
+                                    intent.putExtra("toId", group.getGroupId());
                                     setResult(RESULT_OK, intent);
                                     finishWithNoAnim();
                                 }
@@ -288,7 +288,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 Intent intent = new Intent();
                 // it is group chat
                 intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                intent.putExtra("userId", toBeAddContacts.get(0).getUsername());
+                intent.putExtra("toId", toBeAddContacts.get(0).getUsername());
                 setResult(RESULT_OK, intent);
                 finishWithNoAnim();
             }
