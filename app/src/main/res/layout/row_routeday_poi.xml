@@ -93,7 +93,6 @@
                 android:paddingRight="10dp"
                 android:drawablePadding="4dp"
                 android:textSize="12sp"
-                android:textStyle="italic"
                 android:textColor="@color/base_text_color_text_placeholder"/>
 
         </RelativeLayout>

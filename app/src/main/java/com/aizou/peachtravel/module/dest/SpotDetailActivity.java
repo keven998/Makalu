@@ -101,7 +101,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
 
-
     }
     private void initData(){
         mSpotId = getIntent().getStringExtra("id");

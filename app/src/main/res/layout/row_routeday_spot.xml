@@ -64,8 +64,7 @@
                 android:paddingTop="3dp"
                 android:singleLine="true"
                 android:textColor="@color/base_text_color_text_placeholder"
-                android:textSize="12sp"
-                android:textStyle="italic" />
+                android:textSize="12sp"/>
         </RelativeLayout>
 
         <RelativeLayout
