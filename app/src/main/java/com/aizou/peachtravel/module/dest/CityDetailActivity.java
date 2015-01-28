@@ -232,7 +232,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     mFavCb.setChecked(!b);
                     return;
                 }
-                if (b) {
+                if (!b) {
                     OtherApi.deleteFav(detailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
