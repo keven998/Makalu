@@ -221,8 +221,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
-                startActivity(intent);
-
+                startActivityWithNoAnim(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
