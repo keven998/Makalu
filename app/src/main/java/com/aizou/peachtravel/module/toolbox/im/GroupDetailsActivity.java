@@ -285,6 +285,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                             } catch (EaseMobException e) {
                                 e.printStackTrace();
                             }
+                            if (!isFinishing())
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     DialogManager.getInstance().dissMissLoadingDialog();
@@ -297,6 +298,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                         @Override
                         public void onError(int i, String s) {
+                            if (!isFinishing())
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -335,8 +337,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
             public void run() {
                 try {
                     EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
+                    if (!isFinishing())
                     runOnUiThread(new Runnable() {
                         public void run() {
+
                             DialogManager.getInstance().dissMissLoadingDialog();
                             setResult(RESULT_OK);
                             finish();
