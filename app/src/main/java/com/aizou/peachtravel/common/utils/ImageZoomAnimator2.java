@@ -133,8 +133,11 @@ public class ImageZoomAnimator2 {
 
         @Override
         public View getView(final int position, View view, ViewGroup container) {
-            View contentView = View.inflate(context, R.layout.item_view_pic, null);
-            final SmoothPhotoView photeView = (SmoothPhotoView) contentView.findViewById(R.id.pv_view);
+            if (view == null) {
+                view = View.inflate(context, R.layout.item_view_pic, null);
+            }
+
+            final SmoothPhotoView photeView = (SmoothPhotoView) view.findViewById(R.id.pv_view);
             photeView.setTag(position);
             photeView.setOnTransformListener(new SmoothPhotoView.TransformListener() {
                 @Override
@@ -151,7 +154,6 @@ public class ImageZoomAnimator2 {
                         zoomContainer.setBackgroundDrawable(backgroudDrawable);
                     }
                     backgroudDrawable.setAlpha(mBgAlpha);
-                    LogUtil.d("Transform","transfromComplete--"+mBgAlpha);
                 }
 
                 @Override
@@ -163,16 +165,15 @@ public class ImageZoomAnimator2 {
                         zoomContainer.setBackgroundDrawable(backgroudDrawable);
                     }
                     backgroudDrawable.setAlpha(mBgAlpha);
-                    LogUtil.d("Transform","transfromProcess--"+mBgAlpha);
                 }
             });
 
-            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-            final TextView progressText = (TextView) contentView.findViewById(R.id.progress_text);
+            final ProgressBar loadingPb = (ProgressBar) view.findViewById(R.id.pb_loading);
+            final TextView progressText = (TextView) view.findViewById(R.id.progress_text);
             String url;
             if(TextUtils.isEmpty(imageUrls.get(position).originUrl)){
                 url = imageUrls.get(position).url;
-            }else{
+            } else {
                 url = imageUrls.get(position).originUrl;
             }
 //            if (photeView.getDrawable() == null) {
@@ -222,7 +223,7 @@ public class ImageZoomAnimator2 {
                     transformOut(position);
                 }
             });
-            return contentView;
+            return view;
         }
 
 

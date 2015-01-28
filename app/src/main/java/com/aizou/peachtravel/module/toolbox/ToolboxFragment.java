@@ -489,16 +489,11 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
 
         @Override
         public View getView(final int position, View view, ViewGroup container) {
-            ImageView imageView = new ImageView(context);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
+            ImageView imageView = (ImageView) view;
+            if (imageView == null) {
+                imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
             ImageLoader.getInstance().displayImage(
                     operateBeans.get(getPosition(position)).cover, imageView, options
                     );

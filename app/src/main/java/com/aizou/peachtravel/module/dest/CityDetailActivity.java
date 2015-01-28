@@ -107,7 +107,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
         View hv;
-        hv = View.inflate(mContext,R.layout.view_city_detail_head, null);
+        hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         mTravelLv.setHeaderView(hv);
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
         View zoomView = hv.findViewById(R.id.ly1);
@@ -174,7 +174,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
-                if(detailResult.code==0){
+                if (detailResult.code == 0) {
                     bindView(detailResult.result);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
