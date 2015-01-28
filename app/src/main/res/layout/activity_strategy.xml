@@ -5,8 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
+        android:id="@+id/strategy_viewpager"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="62dp"/>
+
+    <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+        android:background="@drawable/shape_rectangle_white_with_border"
+        android:id="@+id/strategy_indicator"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="52dp"
+        android:paddingRight="52dp"
+        android:layout_height="62dp" />
+
+    <RelativeLayout android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@color/app_theme_color" >
 
@@ -98,23 +114,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
-        android:id="@+id/strategy_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/title_bar_height"
-        android:layout_marginBottom="62dp"/>
-
-
-
-    <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
-        android:background="@drawable/shape_rectangle_white_with_border"
-        android:id="@+id/strategy_indicator"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="52dp"
-        android:paddingRight="52dp"
-        android:layout_height="62dp" />
 
 </RelativeLayout>

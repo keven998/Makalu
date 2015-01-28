@@ -282,7 +282,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
         mCityNameEn.setText(detailBean.enName);
-        mTTview.setText(String.format("旅行在%s", detailBean.zhName));
+        mTTview.setText(String.format("玩在%s", detailBean.zhName));
     }
 
     public void intentToTravel(View view){

@@ -84,7 +84,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
         closeIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishWithNoAnim();
+                SpotDetailActivity.this.overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
         favIv = (ImageView) findViewById(R.id.iv_fav);
@@ -101,11 +102,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
 
-
     }
     private void initData(){
         mSpotId = getIntent().getStringExtra("id");
-//        mSpotId = "54814af98b5f77f8306decf4";
         getSpotDetailData();
     }
 
@@ -128,6 +127,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
     }
+
     private void refreshFav(SpotDetailBean detailBean){
         if(detailBean.isFavorite){
             favIv.setImageResource(R.drawable.ic_fav);
@@ -135,6 +135,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             favIv.setImageResource(R.drawable.ic_unfav);
         }
     }
+
     private void bindView(final SpotDetailBean result) {
         ImageLoader.getInstance().displayImage(result.images.size()>0?result.images.get(0).url:"",spotIv,UILUtils.getRadiusOption());
         picNumTv.setText(result.images.size() + "");
@@ -158,10 +159,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 if(result.location!=null&&result.location.coordinates!=null){
                     Uri mUri = Uri.parse("geo:"+result.location.coordinates[1]+","+result.location.coordinates[0]+"?q="+result.zhName);
                     Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    if (CommonUtils.checkIntent(mContext, mIntent)){
+                    if (CommonUtils.checkIntent(mContext, mIntent)) {
                         startActivity(mIntent);
-                    }else{
-                        ToastUtil.getInstance(mContext).showToast("手机里没有地图软件哦");
+                    } else {
+                        ToastUtil.getInstance(mContext).showToast("没找到地图");
                     }
 
                 }

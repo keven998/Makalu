@@ -72,8 +72,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
-    @InjectView(R.id.edit_btn)
-    CheckedTextView mEditBtn;
+//    @InjectView(R.id.edit_btn)
+//    CheckedTextView mEditBtn;
     View addDayFooter;
     Button addDayBtn;
     boolean isInEditMode;
@@ -160,67 +160,66 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         listView.setOnTouchListener(c);
         listView.setAdapter(adapter);
 
-        mEditBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!adapter.isEditableMode) {
-                    mEditBtn.setChecked(true);
-                    addDayFooter.setVisibility(View.VISIBLE);
-                    adapter.isEditableMode = !adapter.isEditableMode;
-                    adapter.notifyDataSetChanged();
-                } else {
-                    //todo:保存路线
-                    DialogManager.getInstance().showLoadingDialog(getActivity());
-                    JSONObject jsonObject = new JSONObject();
-                    StrategyManager.putSaveGuideBaseInfo(jsonObject, getActivity(), strategy);
-                    StrategyManager.putItineraryJson(getActivity(), jsonObject, strategy, routeDayMap);
-                    TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (saveResult.code == 0) {
-//                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
-                                mEditBtn.setChecked(false);
-                                addDayFooter.setVisibility(View.INVISIBLE);
-                                resumeItinerary();
-                                adapter.isEditableMode = !adapter.isEditableMode;
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
-                            if (isAdded())
-                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-                        }
-                    });
-
-                }
-
-            }
-        });
-        int count = adapter.getCount();
-        if (count == 0) {
-            if (!mEditBtn.isChecked()) {
-                mEditBtn.performClick();
-            }
-        } else {
-            boolean ed = true;
-            for (int i = 0; i < count; i++) {
-                if (adapter.getCountInSection(i) > 0) {
-                    ed = false;
-                    break;
-                }
-            }
-            if (ed) {
-                if (!mEditBtn.isChecked()) {
-                    mEditBtn.performClick();
-                }
-            }
-        }
+//        mEditBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!adapter.isEditableMode) {
+//                    mEditBtn.setChecked(true);
+//                    addDayFooter.setVisibility(View.VISIBLE);
+//                    adapter.isEditableMode = !adapter.isEditableMode;
+//                    adapter.notifyDataSetChanged();
+//                } else {
+//                    //todo:保存路线
+//                    DialogManager.getInstance().showLoadingDialog(getActivity());
+//                    JSONObject jsonObject = new JSONObject();
+//                    StrategyManager.putSaveGuideBaseInfo(jsonObject, getActivity(), strategy);
+//                    StrategyManager.putItineraryJson(getActivity(), jsonObject, strategy, routeDayMap);
+//                    TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
+//                        @Override
+//                        public void doSucess(String result, String method) {
+//                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
+//                            if (saveResult.code == 0) {
+////                                    ToastUtil.getInstance(getActivity()).showToast("保存成功");
+//                                mEditBtn.setChecked(false);
+//                                addDayFooter.setVisibility(View.INVISIBLE);
+//                                resumeItinerary();
+//                                adapter.isEditableMode = !adapter.isEditableMode;
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void doFailure(Exception error, String msg, String method) {
+//                            DialogManager.getInstance().dissMissLoadingDialog();
+//                            if (isAdded())
+//                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                        }
+//                    });
+//
+//                }
+//
+//            }
+//        });
+//        int count = adapter.getCount();
+//        if (count == 0) {
+//            if (!mEditBtn.isChecked()) {
+//                mEditBtn.performClick();
+//            }
+//        } else {
+//            boolean ed = true;
+//            for (int i = 0; i < count; i++) {
+//                if (adapter.getCountInSection(i) > 0) {
+//                    ed = false;
+//                    break;
+//                }
+//            }
+//            if (ed) {
+//                if (!mEditBtn.isChecked()) {
+//                    mEditBtn.performClick();
+//                }
+//            }
+//        }
 
 
         addDayBtn.setOnClickListener(new View.OnClickListener() {
@@ -286,7 +285,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         @Override
         public View onCreateFloatView(int position) {
             mPos = position;
-            LogUtil.d("dslv", "pos=" + mPos);
             View v = mAdapter.getView(position, null, mDslv);
             // v.setBackgroundDrawable(getResources().getDrawable(
             // R.drawable.bg_handle_section1));
@@ -311,7 +309,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 // section divider
                 if (mDslv.getFirstVisiblePosition() == 0) {
                     final int limit = div.getBottom() + lvDivHeight;
-                    LogUtil.d("dslv", "limit=" + limit + "--y=" + floatPoint.y);
                     if (floatPoint.y < limit) {
                         floatPoint.y = limit;
                     }
@@ -380,7 +377,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         @Override
         public View getItemView(final int section, int position, View convertView, ViewGroup parent) {
             int type = getContentItemViewType(section, position);
-            LogUtils.d("item---section:" + section + "--postion:" + position + "--globle_postion" + getGlobalPositionForItem(section, position));
             ItemViewHolder holder = null;
             if (convertView == null) {
                 holder = new ItemViewHolder();
@@ -422,7 +418,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     }
 
                     holder.spotNameTv.setText(poiDetailBean.zhName);
-                    holder.spotCostTimeTv.setText("参考游玩  "+poiDetailBean.timeCostDesc);
+                    holder.spotCostTimeTv.setText("参考游玩  " + poiDetailBean.timeCostDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
 //                        holder.nearByTv.setVisibility(View.GONE);
@@ -463,7 +459,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            IntentUtils.intentToDetail(getActivity(), TravelApi.PeachType.SPOT,poiDetailBean.id);
+                            IntentUtils.intentToDetail(getActivity(), TravelApi.PeachType.SPOT, poiDetailBean.id);
                         }
                     });
 

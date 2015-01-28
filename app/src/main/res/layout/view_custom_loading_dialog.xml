@@ -24,7 +24,7 @@
                 android:layout_height="70dp"
                 android:indeterminate="false"
                 android:indeterminateDuration="2000"
-                android:interpolator="@android:anim/decelerate_interpolator"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"
                 android:indeterminateDrawable="@drawable/pb_drawable"
                 android:layout_gravity="center" />
             </FrameLayout>

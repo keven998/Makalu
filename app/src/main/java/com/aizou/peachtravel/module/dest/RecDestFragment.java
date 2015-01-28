@@ -184,9 +184,8 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public View getItemView(int section, int position, View convertView, ViewGroup parent) {
-                convertView = View.inflate(context,R.layout.row_rec_dest_item, null);
+                convertView = View.inflate(context, R.layout.row_rec_dest_item, null);
             final RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) sections.get(section).getDataAtIndex(position);
-            LogUtil.d("recDest","section="+section+"--postion="+position+"--itemData="+itemData);
             TextView nameTv = (TextView) convertView.findViewById(R.id.tv_name);
             TextView descTv = (TextView) convertView.findViewById(R.id.tv_desc);
             ImageView imageIv = (ImageView) convertView.findViewById(R.id.iv_pic);
@@ -198,7 +197,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public View getHeaderViewForSection(int section, View convertView, ViewGroup parent) {
-                convertView = View.inflate(context,R.layout.row_rec_dest_header,null);
+                convertView = View.inflate(context, R.layout.row_rec_dest_header,null);
             TextView titleTv = (TextView) convertView.findViewById(R.id.tv_rec_title);
             String title= (String) sections.get(section).getHeaderData();
             titleTv.setText(title);
@@ -257,7 +256,6 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public void prepareLayout() {
-            Log.d(TAG, "prepare layout!!!");
             map.clear();
             int topStart = 0;
             int rowCnt = itemsAdapter.getNumberOfSections();
@@ -349,26 +347,19 @@ public class RecDestFragment extends PeachBaseFragment {
                             topStart += oneTwoItemSide;
                             curRowIndex = nextRowIndex;
                         }
-
                     }
-
                 }
-
-
             }
-
         }
 
         @Override
-        public HashMap<Object, FreeFlowItem> getItemProxies(
-                int viewPortLeft, int viewPortTop) {
+        public HashMap<Object, FreeFlowItem> getItemProxies(int viewPortLeft, int viewPortTop) {
 
             Rect viewport = new Rect(viewPortLeft,
                     viewPortTop,
                     viewPortLeft + width,
                     viewPortTop + height);
 
-//            LogUtil.d("freeflow", "Viewport: " + viewPortLeft + ", " + viewPortTop + ", " + viewport.width() + "," + viewport.height());
             HashMap<Object, FreeFlowItem> ret = new HashMap<Object, FreeFlowItem>();
 
             Iterator<Map.Entry<Object, FreeFlowItem>> it = map.entrySet().iterator();
@@ -385,7 +376,6 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public FreeFlowItem getFreeFlowItemForItem(Object item) {
-            Log.d(TAG, " returing item: " + map.get(item));
             return map.get(item);
         }
 
@@ -439,8 +429,8 @@ public class RecDestFragment extends PeachBaseFragment {
             return false;
         }
 
-
     }
+
     public  class LayoutParams extends FreeFlowLayout.FreeFlowLayoutParams {
         public int headerWidth = 0;
         public int headerHeight = 0;
