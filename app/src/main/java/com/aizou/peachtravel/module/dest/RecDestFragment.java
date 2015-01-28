@@ -67,7 +67,7 @@ public class RecDestFragment extends PeachBaseFragment {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("目的地");
         titleHeaderBar.enableBackKey(false);
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
+        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search_white);
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +109,6 @@ public class RecDestFragment extends PeachBaseFragment {
 
     private void getRecDestData(){
         TravelApi.getRecDest(new HttpCallBack<String>() {
-
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);
@@ -132,7 +131,7 @@ public class RecDestFragment extends PeachBaseFragment {
         }
     }
 
-    private void bindView(List<RecDestBean> recDestList){
+    private void bindView(List<RecDestBean> recDestList) {
         wantToLayout = new WantToLayout();
         recDestContainer.setEdgeEffectsEnabled(false);
         wantToLayout.setLayoutParams(new LayoutParams(LocalDisplay.SCREEN_WIDTH_PIXELS, LocalDisplay.dp2px(40)));
@@ -143,12 +142,12 @@ public class RecDestFragment extends PeachBaseFragment {
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
                 if(!proxy.isHeader){
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
-                    if(itemData.linkType.equals("html")){
+                    if (itemData.linkType.equals("html")) {
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                         intent.putExtra("title",itemData.title);
                         intent.putExtra("url",itemData.linkUrl);
                         startActivity(intent);
-                    } else if(itemData.linkType.equals("app")){
+                    } else if (itemData.linkType.equals("app")) {
                         IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
                     }
                 }

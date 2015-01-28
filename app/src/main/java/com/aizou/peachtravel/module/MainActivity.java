@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -47,10 +48,12 @@ public class MainActivity extends PeachBaseActivity {
     private Class fragmentArray[] = {ToolboxFragment.class, RecDestFragment.class, MyFragment.class,};
 
    // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.tab_tao_selector, R.drawable.tab_loc_selector, R.drawable.tab_my_selector,
+    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
             };
+    private String[] tabTitle = {"首页", "目的地", "我"};
 
-    private TextView talkBtn,unreadMsg;
+    private CheckedTextView talkBtn;
+    private TextView unreadMsg;
 
     //Tab选项卡的文字
 //    private String mTextviewArray[] = {"首页", "想去", "我"};
@@ -106,7 +109,7 @@ public class MainActivity extends PeachBaseActivity {
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        talkBtn = (TextView) findViewById(R.id.tv_start_talk);
+        talkBtn = (CheckedTextView) findViewById(R.id.tv_start_talk);
         unreadMsg = (TextView) findViewById(R.id.unread_msg_notify);
         talkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,11 +159,9 @@ public class MainActivity extends PeachBaseActivity {
     private View getTabItemView(int index){
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
-        imageView.setImageResource(mImageViewArray[index]);
-
-//        TextView textView = (TextView) view.findViewById(R.id.textview);
-//        textView.setText(mTextviewArray[index]);
+        CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
+        imageView.setCompoundDrawablesWithIntrinsicBounds(0, mImageViewArray[index], 0, 0);
+        imageView.setText(tabTitle[index]);
         return view;
     }
 

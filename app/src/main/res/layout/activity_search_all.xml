@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="@drawable/mm_listitem_simple"
+        android:background="@drawable/nav_title_bar"
         android:padding="11dp">
 
         <EditText
