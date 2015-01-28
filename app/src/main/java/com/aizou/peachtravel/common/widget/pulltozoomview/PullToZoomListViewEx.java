@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.aizou.peachtravel.common.utils.StickyUtils;
+
 /**
  * Author:    ZhuWenWu
  * Version    V1.0
@@ -224,7 +226,8 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mZoomView != null && !isHideHeader() && isPullToZoomEnabled()) {
-            float f = mHeaderHeight - mHeaderView.getBottom();
+            float f = StickyUtils.getScrollY(mHeaderView,mRootView);
+//                    mHeaderHeight - mHeaderView.getBottom();
             if(mOnScrollYListener!=null){
                 mOnScrollYListener.onScrollY(f);
             }

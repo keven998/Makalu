@@ -155,8 +155,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         height = scrollY - min;
                     }
                 }
-                int alpha = (int) (height * 255 / (max - min));
-                setTitleAlpha(alpha);
+                    int alpha = (int) (height * 255 / (max - min));
+                    setTitleAlpha(alpha);
+
             }
         });
     }
