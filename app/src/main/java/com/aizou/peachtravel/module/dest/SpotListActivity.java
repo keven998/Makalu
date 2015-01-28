@@ -158,7 +158,7 @@ public class SpotListActivity extends PeachBaseActivity {
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
                 mPoiListLv.doPullRefreshing(true, 200);
-                mTitle.setText(String.format("玩在%s", curLoc.zhName));
+                mTitle.setText(String.format("%s美景", curLoc.zhName));
             }
 
             @Override
@@ -182,7 +182,7 @@ public class SpotListActivity extends PeachBaseActivity {
 //        mTvCityName.setText(result.zhName);
 //        mTvCityPoiDesc.setText(result.desc);
         mPoiListLv.doPullRefreshing(true, 200);
-        mTitle.setText(String.format("玩在%s", curLoc.zhName));
+        mTitle.setText(String.format("%s美景", curLoc.zhName));
     }
 
     private void initView() {

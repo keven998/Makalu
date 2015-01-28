@@ -19,8 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -66,13 +64,10 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class StrategyActivity extends PeachBaseActivity implements OnEditModeChangeListener{
-    public static final int RESULT_NEW_PLAN = 100;
-    public static final int RESULT_COMPLETE = 101;
-
     @InjectView(R.id.tv_title_back)
     TextView mTvTitleBack;
-    @InjectView(R.id.tv_title)
-    TextView mTvTitle;
+//    @InjectView(R.id.tv_title)
+//    TextView mTvTitle;
     @InjectView(R.id.iv_edit)
     CheckedTextView mIvEdit;
     @InjectView(R.id.iv_more)
@@ -94,9 +89,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     ShoppingFragment shoppingFragment;
     private Set<OnEditModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
 
-    private boolean isAniming = false, isRVVisable = true;
-    private Animation inAnim, outAnim;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -104,9 +96,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData();
-
-        inAnim = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_top);
-        outAnim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
     }
 
     private void initView() {
@@ -320,8 +309,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                                 strategy.id = modifyResult.result.id;
                                 strategy.userId = user.userId;
                                 bindView(strategy);
-                                if (!isFinishing())
+                                if (!isFinishing()) {
                                     ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
+                                }
                             }
 
                         }
@@ -400,7 +390,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         }
 
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
-        indicatorViewPager.setCurrentItem(curIndex,false);
+        indicatorViewPager.setCurrentItem(curIndex, false);
 //        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
 //        setRVVisiable(false);
     }
@@ -557,7 +547,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (fragment != null) {
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
-
             }
         }
 
@@ -573,7 +562,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             setResult(RESULT_OK, intent);
             finish();
         }
-
     }
 
     private boolean checkIsEditableMode() {
