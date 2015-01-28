@@ -23,6 +23,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.RecDestBean;
+import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
@@ -148,7 +149,14 @@ public class RecDestFragment extends PeachBaseFragment {
                         intent.putExtra("url",itemData.linkUrl);
                         startActivity(intent);
                     } else if (itemData.linkType.equals("app")) {
-                        IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
+                        if(!itemData.itemType.equals(TravelApi.PeachType.NOTE)){
+                            IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
+                        }else{
+                            TravelNoteBean noteBean = new TravelNoteBean();
+                            noteBean.setFieldFromRecBean(itemData);
+                            IntentUtils.intentToNoteDetail(getActivity(), noteBean);
+                        }
+
                     }
                 }
             }

@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aizou.peachtravel.bean.TravelNoteBean;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -325,6 +327,13 @@ public class FavListActivity extends PeachBaseActivity {
                         });
                     }else{
                         IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
+                        if(!item.type.equals(TravelApi.PeachType.NOTE)){
+                            IntentUtils.intentToDetail(FavListActivity.this,item.type,item.itemId);
+                        }else{
+                            TravelNoteBean noteBean = new TravelNoteBean();
+                            noteBean.setFieldFromFavBean(item);
+                            IntentUtils.intentToNoteDetail(FavListActivity.this, noteBean);
+                        }
 //                        Intent intent = new Intent();
 //                        if(item.type.equals("vs")){
 //                            intent.setClass(mContext, SpotDetailActivity.class);

@@ -37,6 +37,33 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         return "";
     }
 
+    public void setFieldFromExtMessageBean(ExtMessageBean messageBean){
+        this.id=messageBean.id;
+        ArrayList<ImageBean> imageBeanList = new ArrayList<ImageBean>();
+        ImageBean imageBean = new ImageBean();
+        imageBean.url = messageBean.image;
+        imageBeanList.add(imageBean);
+        this.images = imageBeanList;
+        this.title = messageBean.name;
+        this.summary = messageBean.desc;
+    }
+    public void setFieldFromRecBean(RecDestBean.RecDestItem recBean){
+        this.id=recBean.itemId;
+        ArrayList<ImageBean> imageBeanList = new ArrayList<ImageBean>();
+        ImageBean imageBean = new ImageBean();
+        imageBean.url = recBean.cover;
+        imageBeanList.add(imageBean);
+        this.images = imageBeanList;
+        this.title = recBean.title;
+        this.summary = recBean.desc;
+    }
+    public void setFieldFromFavBean(FavoritesBean favBean){
+        this.id=favBean.itemId;
+        this.images = favBean.images;
+        this.title = favBean.zhName;
+        this.summary = favBean.desc;
+    }
+
     @Override
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();

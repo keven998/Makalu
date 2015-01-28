@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.CheckedTextView;
@@ -50,7 +51,14 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 //        titleBar.getTitleTextView().setText("游记详情");
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
-        mWebView.loadUrl(noteBean.detailUrl);
+        String url;
+        if(TextUtils.isEmpty(noteBean.detailUrl)){
+            url = H5Url.TRAVEL_NOTE+id;
+        }else{
+            url = noteBean.detailUrl;
+        }
+
+        mWebView.loadUrl(url);
 //        titleBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override

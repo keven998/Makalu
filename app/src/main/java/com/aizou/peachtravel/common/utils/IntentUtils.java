@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.bean.ImageBean;
+import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PicPagerActivity;
@@ -42,18 +43,22 @@ public class IntentUtils {
             intent.setClass(act, CityDetailActivity.class);
             intent.putExtra("id", id);
             act.startActivity(intent);
-        } else if (type.equals(TravelApi.PeachType.NOTE)) {
-            Intent intent = new Intent();
-            intent.setClass(act, TravelNoteDetailActivity.class);
-            intent.putExtra("id", id);
-            act.startActivity(intent);
         }
     }
 
-    public static void intentToPicGallery(Activity act,ArrayList<ImageBean> imageBeanList,int pos){
+    public static void intentToNoteDetail(Activity act, TravelNoteBean bean) {
+        Intent intent = new Intent();
+        intent.setClass(act, TravelNoteDetailActivity.class);
+        intent.putExtra("id", bean.id);
+        intent.putExtra("travelNote", bean);
+        act.startActivity(intent);
+    }
+
+
+    public static void intentToPicGallery(Activity act, ArrayList<ImageBean> imageBeanList, int pos) {
         Intent intent = new Intent(act, PicPagerActivity.class);
         intent.putParcelableArrayListExtra("imageUrlList", imageBeanList);
-        intent.putExtra("pos",pos);
+        intent.putExtra("pos", pos);
         act.startActivity(intent);
         act.overridePendingTransition(0, R.anim.fade_in);
     }
