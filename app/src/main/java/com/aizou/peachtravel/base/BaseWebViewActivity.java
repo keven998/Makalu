@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -137,10 +139,17 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
             mProgressBar.setVisibility(View.GONE);
         }
     }
+
     @Override
     protected void onDestroy() {
         mWebView.stopLoading();
+        View vp = (View) mWebView.getParent();
+        if (vp instanceof ViewGroup) {
+            ((ViewGroup)vp).removeView(mWebView);
+        }
+        mWebView.removeAllViews();
         mWebView.destroy();
         super.onDestroy();
     }
+
 }

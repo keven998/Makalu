@@ -22,23 +22,15 @@
         android:layout_height="wrap_content"
         android:background="@color/app_theme_color">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_title_bar_left"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="3dp"
-            android:background="@drawable/btn_navigation_back_selector"
-            android:drawableLeft="@drawable/ic_navigation_back"
-            android:drawablePadding="3dp"
-            android:duplicateParentState="true"
+            android:src="@drawable/selector_city_detail_nav_back"
             android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="25dp"
-            android:singleLine="true"
-            android:text="返回"
-            android:textColor="@color/base_text_color_text_hint"
-            android:textSize="15sp" />
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"/>
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -50,19 +42,14 @@
             android:textSize="17sp"
             android:textColor="@color/base_color_white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="3dp"
-            android:background="@drawable/btn_navigation_back_selector"
-            android:duplicateParentState="true"
-            android:paddingLeft="25dp"
-            android:paddingRight="8dp"
-            android:singleLine="true"
-            android:textColor="@color/app_theme_color"
-            android:textSize="15sp" />
+            android:src="@drawable/selector_ic_action_option"
+            android:paddingLeft="30dp"
+            android:paddingRight="10dp"/>
 
     </RelativeLayout>
 

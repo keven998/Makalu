@@ -205,6 +205,10 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         updateHeaderView();
     }
 
+    @Override
+    public ListView getRootView() {
+        return super.getRootView();
+    }
 
     protected void onLayout(boolean paramBoolean, int paramInt1, int paramInt2,
                             int paramInt3, int paramInt4) {
@@ -215,7 +219,6 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         if (zoomViewHeight==0&&mZoomView != null) {
             zoomViewHeight = mZoomView.getHeight();
         }
-        Log.d(TAG, "onLayout --> mHeaderHeight="+mHeaderHeight+"--zoomViewHeight="+zoomViewHeight);
     }
 
     @Override
@@ -231,7 +234,6 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
             if(mOnScrollYListener!=null){
                 mOnScrollYListener.onScrollY(f);
             }
-            Log.d(TAG, "onScroll --> f = " + f);
             if (isParallax()) {
                 if ((f > 0.0F) && (f < mHeaderHeight)) {
                     int i = (int) (0.65D * f);

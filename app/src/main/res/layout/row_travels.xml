@@ -11,8 +11,8 @@
         android:layout_marginRight="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <ImageView android:id="@+id/iv_travels"
             android:layout_width="@dimen/note_picture_size"
@@ -23,10 +23,12 @@
         <TextView android:id="@+id/tv_travels_name"
             android:layout_width="fill_parent"
             android:singleLine="true"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textColor="@color/base_text_color_title"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"/>
 
         <TextView android:id="@+id/tv_travels_desc"
@@ -34,13 +36,14 @@
             android:layout_alignLeft="@id/tv_travels_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:lineSpacingExtra="4dp"
+            android:layout_marginTop="5dp"
+            android:lineSpacingExtra="3dp"
             android:gravity="left|top"
             android:layout_marginLeft="10dp"
+            android:ellipsize="end"
+            android:lines="3"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="12sp"
-            android:maxLines="3"/>
+            android:textSize="12sp"/>
 
         <TextView android:id="@+id/tv_property"
             android:layout_alignBottom="@id/iv_travels"
@@ -49,6 +52,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
             android:textColor="@color/base_text_color_text_hint"
             android:layout_marginTop="3dp"
             android:textSize="9sp"

@@ -20,7 +20,7 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
     private static String LOG_TAG = "cube_list";
 
     protected ViewHolderCreator<ItemDataType> mViewHolderCreator;
-    protected HashSet<Integer> mCreatedTag = new HashSet<Integer>();
+//    protected HashSet<Integer> mCreatedTag = new HashSet<Integer>();
     private boolean mEnableCreateViewForMeasure = true;
 
     /**
@@ -37,9 +37,9 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
     @SuppressWarnings("unchecked")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (mEnableCreateViewForMeasure && convertView == null) {
-
-        }
+//        if (mEnableCreateViewForMeasure && convertView == null) {
+//
+//        }
         ItemDataType itemData = getItem(position);
         ViewHolderBase<ItemDataType> holderBase;
         if (convertView == null) {
@@ -52,8 +52,10 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
                     convertView.setTag(holderBase);
                 }
             }
-        }
+        } else {
             holderBase = (ViewHolderBase<ItemDataType>) convertView.getTag();
+        }
+
             if (holderBase != null) {
                 holderBase.setItemData(position);
                 holderBase.showData(position, itemData);

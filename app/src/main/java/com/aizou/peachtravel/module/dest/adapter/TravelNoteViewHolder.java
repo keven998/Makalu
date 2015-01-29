@@ -50,7 +50,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     public void setOnMoreClickListener(OnMoreClickListener onMoreClickListener){
         mOnMoreClickListener = onMoreClickListener;
-
     }
 
 
@@ -102,6 +101,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     public interface OnMoreClickListener{
         void onMoreClick(View view);
-
     }
+
 }

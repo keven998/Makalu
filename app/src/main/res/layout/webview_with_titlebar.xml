@@ -103,8 +103,7 @@
         android:layout_alignBottom="@id/ly_header_bar_title_wrap"
         custom:progress="0"
         custom:progress_text_visibility="invisible"
-        style="@style/NumberProgressBar_Default"
-        android:layout_height="1.5dp" />
+        style="@style/NumberProgressBar_Default" />
 
     <WebView android:id="@+id/web_view"
         android:layout_width="match_parent"

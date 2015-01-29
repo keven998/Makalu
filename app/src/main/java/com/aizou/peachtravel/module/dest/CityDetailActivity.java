@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -87,20 +89,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void initView(){
-        mTravelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
+        PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
+        mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
         mTitleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         setTitleAlpha(0);
-        TextView lv = (TextView) findViewById(R.id.tv_title_bar_left);
-        TextView rv = (TextView) findViewById(R.id.tv_title_bar_right);
-        rv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
-        lv.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        rv.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showActionDialog();
@@ -108,10 +108,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
         View hv;
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
-        mTravelLv.setHeaderView(hv);
+        travelLv.setHeaderView(hv);
+
+        travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
+
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
         View zoomView = hv.findViewById(R.id.ly1);
-        mTravelLv.setZoomView(zoomView);
+        travelLv.setZoomView(zoomView);
         mTTview = (TextView) hv.findViewById(R.id.travel_title);
         mCityNameTv = (TextView) hv.findViewById(R.id.tv_city_name);
         mCityNameEn = (TextView) hv.findViewById(R.id.tv_city_name_en);
@@ -129,8 +132,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 return viewHolder;
             }
         });
-        mTravelLv.setAdapter(travelAdapter);
-        mTravelLv.setParallax(false);
+        travelLv.setAdapter(travelAdapter);
+        travelLv.setParallax(false);
         hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +145,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         final int max = LocalDisplay.dp2px(170);
         final int min = LocalDisplay.dp2px(80);
-        mTravelLv.setOnScrollYListener(new PullToZoomBase.OnScrollYListener() {
+        travelLv.setOnScrollYListener(new PullToZoomBase.OnScrollYListener() {
             @Override
             public void onScrollY(float scrollY) {
                 float height = min;
