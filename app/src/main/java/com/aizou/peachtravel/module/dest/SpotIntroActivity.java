@@ -24,7 +24,8 @@ public class SpotIntroActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spot_intro);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("景点介绍");
+        String spot = getIntent().getStringExtra("spot");
+        mTitleBar.getTitleTextView().setText(spot);
         String content = getIntent().getStringExtra("content");
         mTvSpotIntro.setText(content);
         mTitleBar.enableBackKey(true);
