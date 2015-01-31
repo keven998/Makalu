@@ -216,8 +216,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mSpotIntroTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,SpotIntroActivity.class);
-                intent.putExtra("content",spotDetailBean.desc);
+                Intent intent = new Intent(mContext, SpotIntroActivity.class);
+                intent.putExtra("content", spotDetailBean.desc);
+                intent.putExtra("spot", spotDetailBean.zhName);
                 startActivity(intent);
             }
         });

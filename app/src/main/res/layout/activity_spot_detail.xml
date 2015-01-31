@@ -185,8 +185,19 @@
                     android:id="@+id/tv_intro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="简介"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="15sp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_travel_guide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="景点\n简介"
+                    android:text="亮点\n体验"
+                    android:layout_marginLeft="15dp"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="15sp"
                     android:visibility="visible" />
@@ -196,18 +207,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="温馨\n贴士"
+                    android:text="游玩\n贴士"
                      android:layout_marginLeft="15dp"
-                    android:textColor="@color/base_text_color_subtitle"
-                    android:textSize="15sp"
-                    android:visibility="visible" />
-                <TextView
-                    android:id="@+id/tv_travel_guide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="游玩\n指南"
-                    android:layout_marginLeft="15dp"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="15sp"
                     android:visibility="visible" />
@@ -216,8 +217,8 @@
                     android:id="@+id/tv_traffic_guide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="交通\n指南"
+                    android:paddingTop="16dp"
+                    android:text="交通"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="15sp"
