@@ -399,7 +399,7 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		canvas.clipRect(0, 0, width, scrollBar.getHeight(getHeight())); // needed
 
 		int preHeight = scrollBar.getSlideView().getHeight();
-		int preWidth = scrollBar.getSlideView().getHeight();
+		int preWidth = scrollBar.getSlideView().getWidth();
 		if (preHeight != scrollBar.getHeight(getHeight()) || preWidth != scrollBar.getWidth(tabWidth)) {
 			measureScrollBar(true);
 		}

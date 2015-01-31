@@ -20,6 +20,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.DrawableBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -97,8 +98,7 @@ public class NearbyActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
         mTvAddress.setText("正在定位...");
-        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5);
-        colorBar.setWidth(LocalDisplay.dp2px(50));
+        DrawableBar colorBar = new DrawableBar(mContext, R.drawable.ic_tab_arr);
         mNearbyIndicator.setScrollBar(colorBar);
 
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);

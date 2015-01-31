@@ -8,6 +8,6 @@
     android:paddingTop="14dp"
     android:paddingBottom="9dp"
     android:gravity="center"
-    android:textColor="@color/main_botton_text_color"
+    android:textColor="@color/nearby_tab_text_color"
     android:drawablePadding="6dp"
-    android:textSize="10sp" />
+    android:textSize="11sp" />

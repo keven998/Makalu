@@ -178,15 +178,13 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                 holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                 holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                holder.nearByTv = (ImageButton) convertView.findViewById(R.id.drag_nearby_tv);
+                holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
                 holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                 holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
                 holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                 holder.poiRankTv = (TextView) convertView.findViewById(R.id.poi_rank_tv);
-                holder.commentUsernameTv = (TextView) convertView.findViewById(R.id.poi_comment_username);
-                holder.commentContentTv = (TextView) convertView.findViewById(R.id.poi_comment_content);
                 convertView.setTag(holder);
             } else {
                 holder = (ItemViewHolder) convertView.getTag();
@@ -200,10 +198,6 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiAddressTv.setText(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
-            if(poiDetailBean.comments!=null&&poiDetailBean.comments.size()>0){
-                holder.commentUsernameTv.setText(poiDetailBean.comments.get(0).userName);
-                holder.commentContentTv.setText(poiDetailBean.comments.get(0).contents);
-            }
             if (isEditableMode) {
                 holder.deleteIv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setVisibility(View.GONE);
@@ -274,15 +268,13 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         private class ItemViewHolder {
             public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
-            public ImageButton nearByTv;
+            public TextView nearByTv;
             public ImageView poiImageIv;
             public TextView poiNameTv;
             public TextView poiAddressTv;
             public TextView poiPriceTv;
             public RatingBar poiRating;
             public TextView poiRankTv;
-            public TextView commentUsernameTv;
-            public TextView commentContentTv;
         }
     }
 }
