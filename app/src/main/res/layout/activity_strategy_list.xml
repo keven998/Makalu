@@ -18,7 +18,7 @@
         android:background="@color/app_backgroud"
         android:overScrollMode="never"
         android:divider="@null"
-        android:dividerHeight="10dp"
+        android:dividerHeight="0dp"
         android:fadingEdge="none"
         android:layout_below="@id/title_bar"/>
 
@@ -48,7 +48,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="28dp"
             android:gravity="center"
-            android:text="竟然一个旅行计划都没有～"
+            android:text="竟然一个旅程计划都没有～"
             android:textColor="@color/base_text_color_text_hint"
             android:lineSpacingExtra="2dp"
             android:textSize="13sp" />

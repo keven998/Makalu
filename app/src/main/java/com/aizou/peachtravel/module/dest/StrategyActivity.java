@@ -477,7 +477,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"旅程计划", "吃清单", "买清单",};
+        private String[] tabNames = {"旅程", "吃收集", "逛收集",};
         private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;

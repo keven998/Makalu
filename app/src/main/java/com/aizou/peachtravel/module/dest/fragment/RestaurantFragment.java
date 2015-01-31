@@ -69,7 +69,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         View rootView = inflater.inflate(R.layout.fragment_rest_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
-        addBtn.setText("吃货收集");
+        addBtn.setText("收集美食");
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addFooter);
         initData();
