@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -316,9 +317,9 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView mTimeTv;
 
         @InjectView(R.id.edit_title)
-        TextView mEditTtitle;
+        ImageButton mEditTtitle;
         @InjectView(R.id.delete_item)
-        TextView mDeleteItem;
+        ImageButton mDeleteItem;
 
 
         DisplayImageOptions poptions;

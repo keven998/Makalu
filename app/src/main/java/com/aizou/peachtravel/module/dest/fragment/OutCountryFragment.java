@@ -32,6 +32,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
+import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -39,6 +40,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import org.apache.http.Header;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -115,6 +117,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
     private void bindOutView(List<CountryBean> result) {
         outCountryAdapter.getDataList().clear();
+        ArrayList<LocBean> allSelectLoc = null;
+        if(getActivity()!=null){
+            allSelectLoc = ((SelectDestActivity)getActivity()).getAllSelectedLoc();
+        }
+        if(allSelectLoc!=null){
+            for(CountryBean countryBean:result){
+                for(LocBean kLocBean :countryBean.destinations ){
+                    if(allSelectLoc.contains(kLocBean)){
+                        kLocBean.isAdded = true;
+                    }
+
+                }
+            }
+        }
         outCountryAdapter.getDataList().addAll(result);
         outCountryAdapter.notifyDataSetChanged();
         mLvOutCountry.postDelayed(new Runnable() {

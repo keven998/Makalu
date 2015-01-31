@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.widget.header.HeaderBarBase;
@@ -27,7 +28,7 @@ import com.aizou.peachtravel.R;
  * @author http://www.liaohuqiu.net
  */
 public class TitleHeaderBar extends HeaderBarBase {
-
+    private RelativeLayout containerRl;
 	private TextView mTitleTextView;
 	private TextView mRightTextView;
 	private TextView mReturnImageView;
@@ -46,6 +47,7 @@ public class TitleHeaderBar extends HeaderBarBase {
 		mReturnImageView = (TextView) findViewById(R.id.tv_title_bar_left);
 		mTitleTextView = (TextView) findViewById(R.id.tv_title_bar_title);
 		mRightTextView = (TextView) findViewById(R.id.tv_title_bar_right);
+        containerRl = (RelativeLayout) findViewById(R.id.container);
 //		mMoreAction = findViewById(R.id.ly_title_bar_more_action);
 	}
 
@@ -92,6 +94,9 @@ public class TitleHeaderBar extends HeaderBarBase {
         } else {
             findViewById(R.id.ly_title_bar_left).setVisibility(GONE);
         }
+    }
+    public void setBackground(int res){
+        containerRl.setBackgroundResource(res);
     }
 
     public void setRightOnClickListener(OnClickListener l) {

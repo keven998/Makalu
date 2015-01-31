@@ -13,4 +13,5 @@ public class ExtMessageBean {
         public String rating="";
         public String price="";
         public String address="";
+        public String detailUrl;
 }

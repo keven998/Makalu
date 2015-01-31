@@ -5,6 +5,7 @@
 
     <color name="app_theme_color">#fd5668</color>
     <color name="app_theme_color_secondary">#6ed8dc</color>
+    <color name="app_theme_color_secondary_selected">#aa6ed8dc</color>
     <color name="app_theme_color_trans">#fd5668</color>
 
     <drawable name="highlight_btn_color">#fd5668</drawable>

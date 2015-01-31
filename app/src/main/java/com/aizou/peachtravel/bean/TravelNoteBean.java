@@ -46,6 +46,7 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         this.images = imageBeanList;
         this.title = messageBean.name;
         this.summary = messageBean.desc;
+        this.detailUrl = messageBean.detailUrl;
     }
     public void setFieldFromRecBean(RecDestBean.RecDestItem recBean){
         this.id=recBean.itemId;
@@ -56,6 +57,7 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         this.images = imageBeanList;
         this.title = recBean.title;
         this.summary = recBean.desc;
+        this.detailUrl = recBean.linkUrl;
     }
     public void setFieldFromFavBean(FavoritesBean favBean){
         this.id=favBean.itemId;

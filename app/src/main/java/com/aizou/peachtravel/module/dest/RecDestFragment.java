@@ -68,6 +68,8 @@ public class RecDestFragment extends PeachBaseFragment {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("目的地");
         titleHeaderBar.enableBackKey(false);
+        titleHeaderBar.setBackground(R.color.app_theme_color);
+        titleHeaderBar.getTitleTextView().setTextColor(getResources().getColor(R.color.base_color_white));
         titleHeaderBar.setRightViewImageRes(R.drawable.ic_search_white);
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override

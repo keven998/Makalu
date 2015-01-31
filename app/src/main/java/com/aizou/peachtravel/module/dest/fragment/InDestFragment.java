@@ -33,6 +33,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
+import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.easemob.util.HanziToPinyin;
 
 import org.apache.http.Header;
@@ -156,7 +157,14 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     private void bindInView(List<LocBean> result) {
         HashMap<String, List<LocBean>> locMap = new HashMap<String, List<LocBean>>();
         ArrayList<String> sections = new ArrayList<>();
+        ArrayList<LocBean> allSelectLoc = null;
+        if(getActivity()!=null){
+            allSelectLoc = ((SelectDestActivity)getActivity()).getAllSelectedLoc();
+        }
         for (LocBean locBean : result) {
+            if(allSelectLoc!=null&&allSelectLoc.contains(locBean)){
+                locBean.isAdded = true;
+            }
             if (Character.isDigit(locBean.zhName.charAt(0))) {
                 locBean.header = "#";
             } else {

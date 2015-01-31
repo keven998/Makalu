@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/app_backgroud"
+    android:background="@color/base_color_white"
     android:orientation="vertical">
 
     <FrameLayout
@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_tab_bg"
+        android:background="@drawable/round_tab_base"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -24,13 +24,13 @@
             android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:paddingBottom="13dp"
-            android:paddingLeft="11.5dp">
+            android:paddingLeft="11dp">
 
             <CheckedTextView
                 android:id="@+id/tv_start_talk"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
-                android:background="@drawable/theme_round_bg"
+                android:background="@drawable/round_tab"
                 android:drawableTop="@drawable/checker_tab_home_talk"
                 android:paddingTop="14dp"
                 android:drawablePadding="-2dp"
@@ -47,6 +47,7 @@
                 android:background="@drawable/bg_unread_msg"
                 android:minWidth="16dp"
                 android:paddingLeft="3dp"
+                android:layout_marginRight="10dp"
                 android:paddingRight="3dp"
                 android:textSize="12sp"
                 android:gravity="center"

@@ -78,12 +78,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     AutoScrollViewPager mVpTravel;
     @InjectView(R.id.dot_view)
     DotView mDotView;
-    @InjectView(R.id.tv_toolbox)
-    TextView mTvToolbox;
-    @InjectView(R.id.iv_talk)
-    ImageView mIvTalk;
-    @InjectView(R.id.rl_talk)
-    RelativeLayout mRlTalk;
     @InjectView(R.id.my_guides)
     RelativeLayout mRLMyGuides;
     @InjectView(R.id.my_around)
@@ -113,8 +107,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 showActionDialog();
             }
         });
-
-        mRlTalk.setOnClickListener(this);
+        mLyHeaderBarTitleWrap.setBackground(R.color.app_theme_color);
 
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
@@ -127,17 +120,15 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int cellSize = (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(10) * 3)/2;
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRLMyGuides.getLayoutParams();
-        params.width = cellSize;
-        params.height = cellSize;
-        mRLMyGuides.setLayoutParams(params);
+//        int cellSize = LocalDisplay.SCREEN_WIDTH_PIXELS/2;
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRLMyGuides.getLayoutParams();
+//        params.width = cellSize;
+//        mRLMyGuides.setLayoutParams(params);
         mRLMyGuides.setOnClickListener(this);
 
-        params = (RelativeLayout.LayoutParams) mRLMyAround.getLayoutParams();
-        params.width = cellSize;
-        params.height = cellSize;
-        mRLMyAround.setLayoutParams(params);
+//        params = (RelativeLayout.LayoutParams) mRLMyAround.getLayoutParams();
+//        params.width = cellSize;
+//        mRLMyAround.setLayoutParams(params);
         mRLMyAround.setOnClickListener(this);
     }
 
@@ -279,16 +270,21 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         YahooWeather.getInstance().queryYahooWeatherByLatLon(getActivity(), lat + "", lon + "", new YahooWeatherInfoListener() {
             @Override
             public void gotWeatherInfo(WeatherInfo weatherInfo) {
-                if (weatherInfo == null) {
-                    return;
-                }
-                weatherStr = DateUtil.getCurrentMonthDay() + "   " + city;
+                try {
+                    if (weatherInfo == null) {
+                        return;
+                    }
+                    weatherStr = DateUtil.getCurrentMonthDay() + "   " + city;
 //                ImageLoader.getInstance().displayImage(weatherInfo.getCurrentConditionIconURL(), mIvWeather, UILUtils.getDefaultOption());
-                mTvWeather.setText(weatherArray[weatherInfo.getCurrentCode()]);
-                mTvCity.setText(weatherStr);
+                    mTvWeather.setText(weatherArray[weatherInfo.getCurrentCode()]);
+                    mTvCity.setText(weatherStr);
 
-                mLocationManagerProxy.destroy();
-                mLocationManagerProxy = null;
+                    mLocationManagerProxy.destroy();
+                    mLocationManagerProxy = null;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -297,17 +293,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public void onClick(View v) {
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         switch (v.getId()) {
-            case R.id.rl_talk:
-
-                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
-                    Intent intent = new Intent(getActivity(), IMMainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent, CODE_IM_LOGIN);
-                    ToastUtil.getInstance(getActivity()).showToast("请先登录");
-                }
-                break;
 
             case R.id.my_around:
                 Intent intent = new Intent(getActivity(), NearbyActivity.class);
@@ -415,9 +400,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-        if(user!=null){
-            updateUnreadLabel();
-        }
         reloadData();
         if (scrollHandler != null) {
             scrollHandler.removeMessages(0);
@@ -439,18 +421,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         scrollHandler = null;
     }
 
-    /**
-     * 刷新未读消息数
-     */
-    public void updateUnreadLabel() {
-        int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
-        if (unreadMsgCountTotal > 0) {
-            mIvTalk.setImageResource(R.drawable.ic_toolbox_talk_newmsg);
-        } else {
-            mIvTalk.setImageResource(R.drawable.ic_toolbox_talk_normal);
-        }
-    }
 
     public class ImagePagerAdapter extends RecyclingPagerAdapter {
 
@@ -468,7 +438,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             this.size = operateBeans.size();
             isInfiniteLoop = false;
 
-            options = UILUtils.getRadiusOption();
+            options = UILUtils.getDefaultOption();
         }
 
         @Override

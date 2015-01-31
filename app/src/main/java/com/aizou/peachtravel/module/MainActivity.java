@@ -164,6 +164,7 @@ public class MainActivity extends PeachBaseActivity {
         IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
         intentFilter.setPriority(3);
         registerReceiver(msgReceiver, intentFilter);
+        updateUnreadMsgCount();
     }
 
     @Override
@@ -236,6 +237,7 @@ public class MainActivity extends PeachBaseActivity {
         unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
+            unreadMsg.setText(unreadMsgCountTotal+"");
         } else {
             unreadMsg.setVisibility(View.GONE);
         }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,6 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -82,6 +82,16 @@ public class PoiDetailActivity extends PeachBaseActivity {
     ImageView mIvClose;
     @InjectView(R.id.tv_recommend)
     TextView mTvRecommend;
+    @InjectView(R.id.iv_share)
+    ImageView mIvShare;
+    @InjectView(R.id.btn_book)
+    TextView mBtnBook;
+    @InjectView(R.id.tv_comment_num)
+    TextView mTvCommentNum;
+    @InjectView(R.id.rl_address)
+    RelativeLayout mRlAddress;
+    @InjectView(R.id.rl_tel)
+    RelativeLayout mRlTel;
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
@@ -102,7 +112,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(80));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(30));
 //        p.alpha = 1.0f;      //设置本身透明度
 //        p.dimAmount = 0.0f;      //设置黑暗度
         getWindow().setAttributes(p);
@@ -175,29 +185,55 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     public void onBackPressed() {
         finishWithNoAnim();
-        overridePendingTransition(0,R.anim.fade_out);
+        overridePendingTransition(0, R.anim.fade_out);
     }
 
     private void refreshFav(PoiDetailBean detailBean) {
         if (detailBean.isFavorite) {
-            mIvFav.setImageResource(R.drawable.ic_fav);
+            mIvFav.setImageResource(R.drawable.ic_poi_fav_selected);
         } else {
-            mIvFav.setImageResource(R.drawable.ic_unfav);
+            mIvFav.setImageResource(R.drawable.ic_poi_fav_normal);
         }
     }
 
     private void bindView(final PoiDetailBean bean) {
         if (bean.images != null && bean.images.size() > 0) {
-            ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+            ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
         mTvPoiName.setText(bean.zhName);
-        mTvPoiPrice.setText(bean.priceDesc);
+        if(TextUtils.isEmpty(bean.priceDesc)){
+            mTvPoiPrice.setVisibility(View.INVISIBLE);
+            mBtnBook.setVisibility(View.INVISIBLE);
+        }else{
+            mTvPoiPrice.setText(bean.priceDesc);
+            mBtnBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
         mPoiStar.setRating(bean.getRating());
+        mTvCommentNum.setText(bean.commentCnt + "条网友评论");
+        mTvCommentNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MoreCommentActivity.class);
+                intent.putExtra("id", id);
+                intent.putExtra("poi", poiDetailBean);
+                startActivity(intent);
+            }
+        });
+
         if (bean.tel != null && bean.tel.size() > 0) {
-            mTvTel.setText("电话:" + bean.tel.get(0));
+            mTvTel.setText(bean.tel.get(0));
+            mRlTel.setVisibility(View.VISIBLE);
+        } else {
+            mRlTel.setVisibility(View.GONE);
         }
         mTvAddr.setText(bean.address);
-        mTvAddr.setOnClickListener(new View.OnClickListener() {
+        mRlAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (bean.location != null && bean.location.coordinates != null) {
@@ -267,10 +303,16 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         });
+        mIvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(mContext);
+            }
+        });
 
 
-        commentAdapter.getDataList().addAll(bean.comments);
-        commentAdapter.notifyDataSetChanged();
+//        commentAdapter.getDataList().addAll(bean.comments);
+//        commentAdapter.notifyDataSetChanged();
         mExpandableText.setText(bean.desc);
 
     }
@@ -312,10 +354,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 mTvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, MoreCommentActivity.class);
-                        intent.putExtra("id", id);
-                        intent.putExtra("poi",poiDetailBean);
-                        startActivity(intent);
+
                     }
                 });
                 mTvCommentNum.setText("网友点评");

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_bar_height"
-    android:background="@drawable/nav_title_bar" >
+    android:background="@drawable/bg_titlebar" >
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_left"
@@ -22,7 +23,7 @@
             android:layout_marginBottom="6dp"
             android:singleLine="true"
             android:duplicateParentState="true"
-            android:drawableLeft="@drawable/ic_navigation_back"
+            android:drawableLeft="@drawable/selector_city_detail_nav_back"
             android:text="返回"
             android:gravity="center"
             android:textColor="@color/base_text_color_text_hint"
@@ -47,7 +48,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:textSize="18sp"
-            android:textColor="@color/base_color_white"/>
+            android:textColor="@color/base_text_color_title"/>
     </RelativeLayout>
 
     <RelativeLayout

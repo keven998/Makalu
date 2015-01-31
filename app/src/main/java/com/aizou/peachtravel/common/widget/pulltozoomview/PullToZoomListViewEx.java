@@ -138,7 +138,9 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
      */
     @Override
     protected ListView createRootView(Context context, AttributeSet attrs) {
-        return new ListView(context, attrs);
+        ListView listView =new ListView(context, attrs);
+        listView.setId(android.R.id.list);
+        return listView;
     }
 
 

@@ -46,6 +46,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
+    private LocBean hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private HorizontalScrollView mScrollPanel;
 
@@ -143,6 +144,13 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         mSelectDestVp.setOffscreenPageLimit(2);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
+        hasSelectLoc = getIntent().getParcelableExtra("loc");
+        if(hasSelectLoc!=null){
+            onDestAdded(hasSelectLoc);
+            for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
+                onDestActionListener.onDestAdded(hasSelectLoc);
+            }
+        }
 //        initData();
     }
 
@@ -155,6 +163,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             e.printStackTrace();
         }
         super.onAttachFragment(fragment);
+    }
+
+    public ArrayList<LocBean> getAllSelectedLoc(){
+        return allAddCityList;
     }
 
     private void initTitleBar(){

@@ -364,6 +364,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(act, SelectDestActivity.class);
+                intent.putExtra("loc",locDetailBean);
                 startActivity(intent);
                 dialog.dismiss();
             }
