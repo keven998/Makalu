@@ -63,7 +63,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         View rootView = inflater.inflate(R.layout.fragment_shopping_guide, container, false);
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
-        addBtn.setText("Shopping收集");
+        addBtn.setText("收集购物");
         ButterKnife.inject(this, rootView);
         mEditDslv.addFooterView(addFooter);
         initData();

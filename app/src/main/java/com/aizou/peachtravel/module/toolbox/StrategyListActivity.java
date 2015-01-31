@@ -298,7 +298,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (mCurrentPage == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
             } else {
-                ToastUtil.getInstance(this).showToast("已取完所有内容啦");
+                ToastUtil.getInstance(this).showToast("已取完所有内容");
             }
             return;
         }
@@ -401,8 +401,8 @@ public class StrategyListActivity extends PeachBaseActivity {
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-            dialog.setMessage("确定删除这条行程");
-            dialog.setPositiveButton("确定",new View.OnClickListener() {
+            dialog.setMessage("删除确认");
+            dialog.setPositiveButton("确认",new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
