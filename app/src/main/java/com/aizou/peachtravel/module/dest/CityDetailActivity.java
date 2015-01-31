@@ -68,7 +68,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private CheckBox mFavCb;
     private TextView mCostTimeTv;
     private ExpandableTextView bestMonthTv;
-    private TextView travelTv,foodTv,shoppingTv,spotsTv;
+    private TextView foodTv,shoppingTv,spotsTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
@@ -121,7 +121,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCostTimeTv = (TextView) hv.findViewById(R.id.tv_cost_time);
         bestMonthTv = (ExpandableTextView) hv.findViewById(R.id.tv_best_month);
         mFavCb = (CheckBox) hv.findViewById(R.id.iv_fav);
-        travelTv = (TextView) hv.findViewById(R.id.tv_travel);
         spotsTv = (TextView) hv.findViewById(R.id.tv_spots);
         foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
         shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
@@ -287,7 +286,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityNameTv.setText(detailBean.zhName);
         mCostTimeTv.setText(String.format("推荐旅程安排 %s", detailBean.timeCostDesc));
         bestMonthTv.setText(String.format("最佳旅行时节 %s", detailBean.travelMonth));
-        travelTv.setOnClickListener(this);
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
@@ -300,7 +298,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     public void intentToTravel(View view){
         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
         intent.putExtra("url", H5Url.LOC_TRAVEL + locId);
-        intent.putExtra("title", "畅游攻略");//String.format("玩转%s", mCityNameTv.getText()));
+        intent.putExtra("title", "城市概况");//String.format("玩转%s", mCityNameTv.getText()));
         startActivity(intent);
     }
 
