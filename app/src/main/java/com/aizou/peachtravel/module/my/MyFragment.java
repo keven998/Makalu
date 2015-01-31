@@ -135,8 +135,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_about:
-                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
-                startActivity(aboutIntent);
+//                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
+//                startActivity(aboutIntent);
                 break;
 
             case R.id.ll_setting:

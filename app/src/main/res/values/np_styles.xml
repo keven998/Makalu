@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="NumberProgressBar_Default">
-        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_height">3dp</item>
         <item name="android:layout_width">match_parent</item>
 
         <item name="max">100</item>
@@ -13,8 +13,8 @@
         <item name="progress_text_size">10sp</item>
         <item name="progress_text_color">#3498DB</item>
 
-        <item name="progress_reached_bar_height">2dp</item>
-        <item name="progress_unreached_bar_height">2dp</item>
+        <item name="progress_reached_bar_height">3dp</item>
+        <item name="progress_unreached_bar_height">3dp</item>
     </style>
 
     <style name="NumberProgressBar_Passing_Green">
