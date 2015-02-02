@@ -196,8 +196,8 @@ public class IMMainActivity extends ChatBaseActivity {
         initTitleBar();
         mIMIndicator = (FixedIndicatorView) findViewById(R.id.im_indicator);
         mIMViewPager = (FixedViewPager) findViewById(R.id.im_viewpager);
-        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5);
-        colorBar.setWidth(LocalDisplay.dp2px(50));
+        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color_secondary), LocalDisplay.dp2px(5));
+        colorBar.setWidth(LocalDisplay.dp2px(45));
         mIMIndicator.setScrollBar(colorBar);
 
     }
