@@ -45,18 +45,18 @@
     <RelativeLayout
         android:id="@+id/ly2"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="72dp"
         android:layout_below="@id/ly1"
         android:layout_marginTop="-20dp">
-        <TextView android:id="@+id/tv_travel"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <ImageView android:id="@+id/tv_travel"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:textColor="@color/base_color_white"
             android:textSize="14sp"
             android:gravity="center"
-            android:background="@drawable/theme_button_selctor"
+            android:scaleType="centerInside"
+            android:src="@drawable/selector_ic_city_guide"
             android:onClick="intentToTravel"
-            android:text="畅游\n攻略"
             android:layout_marginLeft="10dp"/>
 
         <TextView
