@@ -8,23 +8,24 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/nav_title_bar">
+        android:background="@drawable/bg_titlebar">
 
         <TextView
             android:id="@+id/tv_title_bar_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:minWidth="60dp"
             android:paddingLeft="8dp"
             android:paddingRight="12dp"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
-            android:drawableLeft="@drawable/ic_navigation_back"
-            android:text="返回"
+            android:singleLine="true"
+            android:duplicateParentState="true"
+            android:drawableLeft="@drawable/selector_city_detail_nav_back"
             android:gravity="center"
             android:textColor="@color/base_text_color_text_hint"
-            android:background="@drawable/btn_navigation_back_selector"
             android:drawablePadding="3dp"
             android:textSize="15sp" />
 
@@ -42,7 +43,7 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="17sp"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_subtitle"/>
         </RelativeLayout>
 
         <Spinner
@@ -53,7 +54,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="3dp"
-            android:background="@drawable/btn_navigation_back_selector"
+            android:background="@null"
             android:popupBackground="@drawable/shape_white_bar"
             android:paddingRight="5dp"
             android:dropDownVerticalOffset="7dp" />
@@ -67,7 +68,7 @@
         android:cacheColorHint="@android:color/transparent"
         android:overScrollMode="never"
         android:divider="@null"
-        android:dividerHeight="10dp"
+        android:dividerHeight="0dp"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
         android:fadingEdge="none" />
