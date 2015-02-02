@@ -9,15 +9,15 @@
         android:id="@+id/tv_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/them_botton_text_color"
+        android:textColor="@color/base_text_color_subtitle"
         android:background="@drawable/btn_has_add_city"
         android:clickable="true"
         android:textSize="13sp"
         android:paddingLeft="9dp"
-        android:paddingRight="9dp"
+        android:paddingRight="6dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:drawablePadding="6dp"
+        android:drawablePadding="5dp"
         android:drawableRight="@drawable/selecter_ic_select_destion_unchoose"/>
 
 </FrameLayout>

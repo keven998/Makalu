@@ -11,9 +11,10 @@
         android:textColor="@color/select_dest_text_color"
         android:background="@drawable/checker_cell_select_bg"
         android:clickable="true"
-        android:textSize="13sp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
        />

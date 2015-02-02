@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/tv_section"
-        android:layout_gravity="center"
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="13sp"
-        android:background="@color/base_divider_color"
-        android:paddingLeft="13dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-
-    <com.aizou.peachtravel.common.widget.FlowLayout
-        android:id="@+id/fl_city_list"
-        android:layout_width="fill_parent"
-        android:background="@drawable/shape_white_bar"
+        android:background="@drawable/content_card"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:padding="5dp"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <FrameLayout android:layout_width="match_parent"
+            android:layout_height="32dp">
+
+            <View android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/app_theme_color"/>
+
+            <TextView
+                android:id="@+id/tv_section"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="12sp"
+                android:paddingLeft="12dp"/>
+        </FrameLayout>
+
+        <com.aizou.peachtravel.common.widget.FlowLayout
+            android:id="@+id/fl_city_list"
+            android:layout_width="fill_parent"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="15dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 
-</LinearLayout>
+</FrameLayout>

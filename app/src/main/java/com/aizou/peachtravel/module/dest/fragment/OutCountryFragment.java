@@ -1,19 +1,18 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.CheckedTextView;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
@@ -30,13 +29,9 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
-import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutListView;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import org.apache.http.Header;
 
@@ -51,7 +46,7 @@ import butterknife.InjectView;
  */
 public class OutCountryFragment extends PeachBaseFragment implements OnDestActionListener {
     @InjectView(R.id.lv_out_country)
-    ExpandableLayoutListView mLvOutCountry;
+    ListView mLvOutCountry;
     ListViewDataAdapter<CountryBean> outCountryAdapter;
     OnDestActionListener mOnDestActionListener;
     @Override
@@ -64,8 +59,11 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 return new OutCountryViewHolder();
             }
         });
+        View view = new View(getActivity());
+        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
+        mLvOutCountry.addFooterView(view);
         mLvOutCountry.setAdapter(outCountryAdapter);
-//        getOutCountryList();
+
         initData();
         return rootView;
     }
@@ -173,108 +171,43 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
-        private ExpandableLayoutItem itemView;
-        private CheckedTextView nameTv;
+        private TextView sectionTv;
         private FlowLayout cityListFl;
-        private View contentView;
-        DisplayImageOptions picOptions;
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            contentView = layoutInflater.inflate(R.layout.dest_out_country, null);
-            itemView = (ExpandableLayoutItem) contentView.findViewById(R.id.row_country);
-            RelativeLayout headRl = itemView.getHeaderRelativeLayout();
-            RelativeLayout contentRl=itemView.getContentRelativeLayout();
-            nameTv = (CheckedTextView) headRl.findViewById(R.id.tv_country_name);
-            cityListFl = (FlowLayout) contentRl.findViewById(R.id.fl_city_list);
-//            int width = LocalDisplay.SCREEN_WIDTH_PIXELS-LocalDisplay.dp2px(20);
-//            int height = width * 240 / 640;
-//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-//            imageIv.setLayoutParams(lp);
-//            imageIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-//            picOptions = new DisplayImageOptions.Builder()
-//                    .cacheInMemory(true)
-//                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
-//                    .resetViewBeforeLoading(true)
-////				.decodingOptions(D)
-//                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(2)))
-//                    .build();
-            picOptions = UILUtils.getRadiusOption();
+            View contentView = layoutInflater.inflate(R.layout.dest_in_item, null);
+            sectionTv = (TextView) contentView.findViewById(R.id.tv_section);
+            cityListFl = (FlowLayout) contentView.findViewById(R.id.fl_city_list);
             return contentView;
         }
 
         @Override
         public void showData(int position, final CountryBean itemData) {
-//            contentView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(cityListFl.getVisibility()==View.VISIBLE){
-//                        cityListFl.setVisibility(View.GONE);
-//                    }else{
-//                        cityListFl.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//            });
-            nameTv.setText(itemData.zhName);
-            nameTv.setChecked(itemData.isOpened);
-            itemView.setOnExpandedListener(new ExpandableLayoutItem.OnExpandedListener() {
-                @Override
-                public void onExpanded(boolean isOpen) {
-                    itemData.isOpened=isOpen;
-                    outCountryAdapter.notifyDataSetChanged();
-                }
-            });
-//            if(itemData.images!=null&&itemData.images.size()>0) {
-//                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, imageIv, UILUtils.getDefaultOption());
-//            } else {
-//                imageIv.setImageDrawable(null);
-//            }
-//            descTv.setText(itemData.desc);
+            sectionTv.setText(itemData.zhName);
             cityListFl.removeAllViews();
-            for(final LocBean bean:itemData.destinations){
-                View view = View.inflate(getActivity(),R.layout.dest_select_city,null);
-                CheckedTextView cityNameTv = (CheckedTextView) view.findViewById(R.id.tv_cell_name);
+            for (final LocBean bean : itemData.destinations) {
+                View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
+                CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
                 cityNameTv.setChecked(bean.isAdded);
                 cityNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        bean.isAdded=!bean.isAdded;
-                        if(mOnDestActionListener!=null){
-                            if(bean.isAdded){
+                        bean.isAdded = !bean.isAdded;
+                        if (mOnDestActionListener != null) {
+                            if (bean.isAdded) {
                                 mOnDestActionListener.onDestAdded(bean);
-                            }else{
+                            } else {
                                 mOnDestActionListener.onDestRemoved(bean);
                             }
                         }
                         outCountryAdapter.notifyDataSetChanged();
                     }
                 });
-//                ImageView addIv = (ImageView) view.findViewById(R.id.iv_add);
-//                if(bean.isAdded){
-//                    addIv.setImageResource(R.drawable.ic_line_edit_delete);
-//                }else{
-//                    addIv.setImageResource(R.drawable.ic_view_add);
-//                }
-//                addIv.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        bean.isAdded=!bean.isAdded;
-//                        if(mOnDestActionListener!=null){
-//                            if(bean.isAdded){
-//                                mOnDestActionListener.onDestAdded(bean);
-//                            }else{
-//                                mOnDestActionListener.onDestRemoved(bean);
-//                            }
-//                        }
-//                        outCountryAdapter.notifyDataSetChanged();
-//                    }
-//                });
 
-                cityListFl.addView(view);
+                cityListFl.addView(contentView);
             }
-            cityListFl.requestLayout();
 
         }
     }
