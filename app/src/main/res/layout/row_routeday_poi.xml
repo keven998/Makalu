@@ -22,10 +22,10 @@
             android:id="@+id/delete_iv"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
             android:scaleType="center"
-            android:src="@drawable/ic_line_edit_delete"
+            android:src="@drawable/ic_guide_delete"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -39,7 +39,6 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
-
                 android:background="@drawable/bg_common_default"
                 android:scaleType="centerCrop"/>
 

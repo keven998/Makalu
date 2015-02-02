@@ -165,8 +165,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 //            mTvTitleComplete.setVisibility(View.GONE);
 //            mIvEdit.setVisibility(View.VISIBLE);
 //        }
-//        mIvEdit.setChecked(false);
-//        mIvEdit.setText("编辑");
+        mIvEdit.setChecked(inEditMode);
+        if(inEditMode){
+            mIvEdit.setText("完成");
+        }else{
+            mIvEdit.setText("编辑");
+        }
+        gotoEditMode();
+
     }
 
     private void initData() {

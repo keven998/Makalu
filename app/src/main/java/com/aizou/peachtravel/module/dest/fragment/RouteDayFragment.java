@@ -536,15 +536,13 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
             } else {
                 holder = (HeaderViewHolder) convertView.getTag();
             }
-            holder.dayTv = (TextView) convertView.findViewById(R.id.tv_div);
+            holder.dayTv = (TextView) convertView.findViewById(R.id.tv_day_index);
             holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
-            holder.deleteDayIv = (Button) convertView.findViewById(R.id.iv_delete_day);
-            holder.nullLl = (LinearLayout) convertView.findViewById(R.id.ll_null);
-            holder.citysLl = (LinearLayout) convertView.findViewById(R.id.ll_citys);
+            holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);
+            holder.citysTv = (TextView) convertView.findViewById(R.id.tv_loc_list);
+            holder.dayTv.setText("第" + (section + 1) + "天");
             List<PoiDetailBean> poiList = routeDayMap.get(section);
-            holder.citysLl.removeAllViews();
             if (poiList.size() > 0) {
-                holder.nullLl.setVisibility(View.GONE);
                 LinkedHashSet<String> citySet = new LinkedHashSet<String>();
                 for (PoiDetailBean detailBean : poiList) {
                     if (detailBean.locality != null) {
@@ -553,25 +551,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 }
 
                 if (!citySet.isEmpty()) {
-                    String des = "";
+                    StringBuffer des =new StringBuffer();
                     for (String str : citySet) {
-                        View cityView = View.inflate(getActivity(), R.layout.item_route_day_loc, null);
-                        holder.citysLl.addView(cityView);
-                        TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
-                        cityNameTv.setText(str);
+                        des.append(" "+str);
                     }
-                    holder.dayTv.setText("第" + (section + 1) + "天  " + des);
-                } else {
-                    holder.dayTv.setText("第" + (section + 1) + "天");
+                    holder.citysTv.setText(des);
                 }
             } else {
-                holder.dayTv.setText("第" + (section + 1) + "天  未安排");
-                if (isEditableMode) {
-                    holder.nullLl.setVisibility(View.GONE);
-                } else {
-                    holder.nullLl.setVisibility(View.GONE);
-                }
-
+                holder.citysTv.setText("未安排");
             }
             if (isEditableMode) {
                 holder.addPoiIv.setVisibility(View.VISIBLE);
@@ -724,10 +711,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         }
 
         private class HeaderViewHolder {
-            public LinearLayout citysLl;
-            public LinearLayout nullLl;
+            public TextView citysTv;
             public TextView dayTv;
-            public Button deleteDayIv;
+            public ImageView deleteDayIv;
             public Button addPoiIv;
         }
     }

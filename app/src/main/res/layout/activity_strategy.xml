@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_backgroud">
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/strategy_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="62dp"/>
+        android:layout_marginBottom="62dp"
+        android:layout_marginTop="35dp" />
 
-    <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
-        android:background="@drawable/shape_rectangle_white_with_border"
-        android:id="@+id/strategy_indicator"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="62dp"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="52dp"
-        android:paddingRight="52dp"
-        android:layout_height="62dp" />
+        android:background="@color/app_theme_color"
+      >
+        <View
+            android:layout_width="180dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="50dp"
+            android:background="#D74353" />
 
-    <RelativeLayout android:layout_width="match_parent"
+        <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+            android:id="@+id/strategy_indicator"
+            android:layout_width="250dp"
+            android:layout_height="62dp"
+            android:layout_centerHorizontal="true"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/app_theme_color" >
+        android:background="@color/app_theme_color">
 
         <TextView
             android:id="@+id/tv_title_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="12dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:singleLine="true"
-            android:duplicateParentState="true"
-            android:drawableLeft="@drawable/ic_navigation_back"
-            android:text="返回"
-            android:gravity="center"
-            android:textColor="@color/base_color_white"
             android:background="@drawable/btn_navigation_back_selector"
+            android:drawableLeft="@drawable/ic_navigation_back"
             android:drawablePadding="3dp"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:singleLine="true"
+            android:text="返回"
+            android:textColor="@color/base_color_white"
             android:textSize="15sp" />
 
         <RelativeLayout
@@ -51,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/tv_title_back"
-            android:gravity="center" >
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/tv_title"
@@ -60,17 +78,17 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textSize="17sp"
-                android:textColor="@color/base_text_color_title"/>
+                android:textColor="@color/base_text_color_title"
+                android:textSize="17sp" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ly_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:layout_toRightOf="@id/ly_title_bar_center"
-            android:gravity="right|center_vertical"
-            android:layout_alignParentRight="true">
+            android:gravity="right|center_vertical">
 
             <ImageView
                 android:id="@+id/iv_more"
@@ -78,38 +96,39 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="20dp"
                 android:paddingRight="10dp"
-                android:visibility="gone"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_guide_more"/>
+                android:src="@drawable/ic_guide_more"
+                android:visibility="gone" />
 
-            <CheckedTextView android:id="@+id/iv_edit"
+            <CheckedTextView
+                android:id="@+id/iv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="12dp"
-                android:paddingRight="15dp"
-                android:visibility="gone"
-                android:text="编辑"
                 android:checked="false"
                 android:gravity="center"
+                android:paddingLeft="12dp"
+                android:paddingRight="15dp"
+                android:text="编辑"
+                android:textColor="@color/base_color_white"
                 android:textSize="16sp"
-                android:textColor="@color/base_color_white"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_copy_guide"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/btn_guide_complete_selector"
-                android:textColor="@color/base_color_white"
                 android:layout_marginRight="8dp"
-                android:singleLine="true"
+                android:background="@drawable/btn_guide_complete_selector"
                 android:duplicateParentState="true"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:text="复制路线"
                 android:gravity="center"
-                android:visibility="gone"
-                android:textSize="15sp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="复制路线"
+                android:textColor="@color/base_color_white"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
         </LinearLayout>
 

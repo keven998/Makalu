@@ -5,8 +5,8 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    android:textColor="@color/radio_colors"
+    android:textColor="@color/base_color_white"
     android:drawablePadding="3dp"
     android:paddingTop="10dp"
-    android:paddingBottom="11dp"
-    android:textSize="11sp" />
+    android:paddingBottom="8dp"
+    android:textSize="10sp" />
