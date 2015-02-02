@@ -32,6 +32,7 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ScrollBar;
 
 
@@ -94,6 +95,8 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		adapter.registDataSetObserver(dataSetObserver);
 		adapter.notifyDataSetChanged();
 		initNotifyOnPageScrollListener();
+
+
 	}
 
 	@Override
@@ -265,7 +268,8 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			break;
 		}
 		setPadding(getPaddingLeft(), paddingTop, getPaddingRight(), paddingBottom);
-		// measureScrollBar(true);
+//        postInvalidate();
+//		measureScrollBar(true);
 	}
 
 	private InRun inRun;
@@ -329,8 +333,10 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			drawSlideBar(canvas);
 		}
 		super.dispatchDraw(canvas);
+        LogUtil.d("indicator--onDraw indecator");
 		if (scrollBar != null && scrollBar.getGravity() != ScrollBar.Gravity.CENTENT_BACKGROUND) {
 			drawSlideBar(canvas);
+
 		}
 	}
 
@@ -352,6 +358,7 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		case CENTENT_BACKGROUND:
 		case CENTENT:
 			offsetY = (getHeight() - scrollBar.getHeight(getHeight())) / 2;
+
 			break;
 		case TOP:
 		case TOP_FLOAT:
@@ -391,7 +398,7 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			offsetX = currentView.getLeft();
 		}
 		int tabWidth = currentView.getWidth();
-		int width = scrollBar.getSlideView().getWidth();
+		int width = scrollBar.getWidth(tabWidth);
 		width = Math.min(tabWidth, width);
 		offsetX += (tabWidth - width) / 2;
 		int saveCount = canvas.save();
@@ -403,7 +410,9 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		if (preHeight != scrollBar.getHeight(getHeight()) || preWidth != scrollBar.getWidth(tabWidth)) {
 			measureScrollBar(true);
 		}
+
 		scrollBar.getSlideView().draw(canvas);
+        LogUtil.d("indicator--onDraw scrollBar width="+width);
 		canvas.restoreToCount(saveCount);
 	}
 

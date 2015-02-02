@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
@@ -34,6 +35,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -72,7 +74,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 .showImageForEmptyUri(R.drawable.avatar_placeholder)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 	}
 	
@@ -125,7 +127,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh = new ViewHolder1();
                 vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
                 vh.nickView = (TextView) convertView.findViewById(R.id.name);
-                vh.phoneView = (TextView) convertView.findViewById(R.id.phone);
+                vh.talkView = (ImageView) convertView.findViewById(R.id.iv_talk);
                 vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
                 vh.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
                 convertView.setTag(vh);
@@ -133,7 +135,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh = (ViewHolder1)convertView.getTag();
             }
 
-			IMUser user = getItem(position);
+			final IMUser user = getItem(position);
 			String username = user.getUsername();
 			String header = user.getHeader();
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
@@ -150,13 +152,13 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 			//显示申请与通知item
 			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
                 vh.nickView.setText("桃友申请");
-                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
+//                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
-                vh.phoneView.setVisibility(View.GONE);
-                vh.avatarView.setImageResource(R.drawable.avatar_placeholder);
+                vh.talkView.setVisibility(View.GONE);
+                vh.avatarView.setImageResource(R.drawable.ic_request);
 				if(user.getUnreadMsgCount() > 0){
 					vh.unreadMsgView.setVisibility(View.VISIBLE);
-//					unreadMsgView.setText(user.getUnreadMsgCount()+"");
+                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
 				}else{
                     vh.unreadMsgView.setVisibility(View.GONE);
 				}
@@ -166,7 +168,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.nickView.setText(user.getNick());
                 vh.avatarView.setImageResource(R.drawable.groups_icon);
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                vh.phoneView.setVisibility(View.GONE);
+                vh.talkView.setVisibility(View.GONE);
                 vh.unreadMsgView.setVisibility(View.GONE);
 //                vh.avatarView.setVisibility(View.VISIBLE);
 			} else {
@@ -177,13 +179,13 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
-                vh.phoneView.setVisibility(View.VISIBLE);
-               if(TextUtils.isEmpty(user.getSignature())) {
-                   vh.phoneView.setText("no签名");
-               }else{
-                   vh.phoneView.setText(user.getSignature());
-               }
-
+                vh.talkView.setVisibility(View.VISIBLE);
+                vh.talkView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getContext().startActivity(new Intent(getContext(), ChatActivity.class).putExtra("userId", user.getUsername()));
+                    }
+                });
                 vh.unreadMsgView.setVisibility(View.GONE);
 			}
 
@@ -261,7 +263,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
         public TextView sectionHeader;
         public ImageView avatarView;
         public TextView nickView;
-        public TextView phoneView;
+        public ImageView talkView;
         public TextView unreadMsgView;
     }
 
