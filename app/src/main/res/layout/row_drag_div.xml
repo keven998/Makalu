@@ -15,30 +15,28 @@
         android:layout_marginLeft="5dp"
         android:background="@color/app_theme_color" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_below="@id/vw_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:background="@color/base_color_white"
-        android:orientation="horizontal">
+        android:background="@color/base_color_white">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
+            android:paddingBottom="14dp"
             android:paddingRight="10dp"
             android:paddingLeft="15dp"
-            android:paddingTop="20dp">
+            android:paddingTop="14dp">
 
             <TextView
                 android:id="@+id/tv_day_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_theme_color"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"/>
 
             <Button
                 android:id="@+id/iv_add_poi"
@@ -66,12 +64,12 @@
                 android:paddingRight="12dp"
                 android:singleLine="true"
                 android:layout_alignBottom="@id/tv_day_index"
-                android:textColor="@color/base_text_color_title"
+                android:textColor="@color/base_text_color_text_hint"
                 android:textSize="12sp" />
 
         </RelativeLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
 
     <ImageView

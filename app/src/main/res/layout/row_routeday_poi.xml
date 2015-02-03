@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:paddingLeft="10dp"
-    android:duplicateParentState="true"
     android:paddingRight="10dp">
 
 
@@ -31,19 +28,20 @@
         <RelativeLayout
             android:id="@+id/rl_content"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="62dp"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/poi_image_iv"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/bg_common_default"
-                android:scaleType="centerCrop"/>
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="9.5dp"
+                android:background="@color/app_backgroud"
+                android:scaleType="centerCrop" />
 
             <FrameLayout
-                android:layout_width="54dp"
+                android:layout_width="52dp"
                 android:layout_height="wrap_content"
                 android:background="#bbffffff"
                 android:layout_alignLeft="@id/poi_image_iv"
@@ -63,11 +61,13 @@
                 android:id="@+id/poi_name_tv"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/poi_image_iv"
                 android:layout_alignTop="@id/poi_image_iv"
-                android:textSize="14sp"
+                android:layout_toRightOf="@id/poi_image_iv"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="-4dp"
+                android:maxLines="2"
                 android:textColor="@color/base_text_color_title"
-                android:singleLine="true"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/poi_price_tv"
@@ -91,7 +91,7 @@
                 android:singleLine="true"
                 android:paddingRight="10dp"
                 android:drawablePadding="4dp"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textColor="@color/base_text_color_text_placeholder"/>
 
         </RelativeLayout>
@@ -112,16 +112,14 @@
 
         <ImageView
             android:id="@+id/drag_handle"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:scaleType="center"
-            android:layout_marginLeft="5dp"
-            android:paddingLeft="15dp"
-            android:layout_marginRight="10dp"
             android:src="@drawable/ic_line_edit_drag"
             android:visibility="gone" />
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

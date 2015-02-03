@@ -8,17 +8,17 @@
         <Button
             android:id="@+id/btn_add_day"
             android:layout_width="185dp"
-            android:layout_height="33dp"
+            android:layout_height="36dp"
             android:text="增加一天"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/btn_add_day_shape"
+            android:background="@drawable/selector_btn_add_plan_item"
             android:textColor="@color/base_color_white"
             android:drawableLeft="@drawable/ic_add_to_list"
             android:textSize="14sp"
             android:paddingLeft="15dp"
             android:paddingRight="24dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="36dp"
             />
 
 </FrameLayout>

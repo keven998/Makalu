@@ -72,8 +72,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
-//    @InjectView(R.id.edit_btn)
-//    CheckedTextView mEditBtn;
     View addDayFooter;
     Button addDayBtn;
     boolean isInEditMode;
@@ -335,7 +333,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
         public RouteDayAdapter() {
             super();
-            options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
+            options = UILUtils.getDefaultOption();
         }
 
         @Override
@@ -551,14 +549,18 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 }
 
                 if (!citySet.isEmpty()) {
-                    StringBuffer des =new StringBuffer();
+                    StringBuffer des = new StringBuffer();
                     for (String str : citySet) {
                         des.append(" "+str);
                     }
                     holder.citysTv.setText(des);
+                    holder.citysTv.setTextColor(getResources().getColor(R.color.base_text_color_text_hint));
+                } else {
+                    holder.citysTv.setText("");
                 }
             } else {
-                holder.citysTv.setText("未安排");
+                holder.citysTv.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
+                holder.citysTv.setText("没有安排");
             }
             if (isEditableMode) {
                 holder.addPoiIv.setVisibility(View.VISIBLE);

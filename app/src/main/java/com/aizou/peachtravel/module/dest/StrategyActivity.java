@@ -105,7 +105,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         setContentView(R.layout.activity_strategy);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(true);
-        layoutBar = new LayoutBar(mContext,R.layout.tab_strategy, ScrollBar.Gravity.CENTENT);
+        layoutBar = new LayoutBar(mContext, R.layout.tab_strategy, ScrollBar.Gravity.CENTENT);
         indexTv = (TextView) layoutBar.getSlideView();
         mStrategyIndicator.setScrollBar(layoutBar);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -140,12 +140,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 }
             }
         });
-//        mTvTitleComplete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                saveStrategy();
-//            }
-//        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mStrategyViewpager = null;
+        mStrategyIndicator = null;
+        routeDayFragment = null;
+        restFragment = null;
+        shoppingFragment = null;
+        layoutBar = null;
     }
 
     @Override
@@ -157,12 +162,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             e.printStackTrace();
         }
         super.onAttachFragment(fragment);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LogUtil.d("indicator--onDraw onResume" );
     }
 
     private void gotoEditMode(){
