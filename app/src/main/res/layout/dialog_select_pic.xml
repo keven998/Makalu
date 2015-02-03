@@ -3,39 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_camera"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/app_theme_color"
-        android:background="@drawable/option_cell_selector"
-        android:textSize="18sp"
-        android:text="拍照" />
+        android:background="@drawable/btn_white_normal_shape"
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#f4f4f4"
-        ></View>
+        <Button
+            android:id="@+id/btn_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color_secondary"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="拍照" />
 
-    <Button
-        android:id="@+id/btn_local"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/app_theme_color"
-        android:background="@drawable/option_cell_selector"
-        android:textSize="18sp"
-        android:text="从相册选取" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.75dp"
+            android:background="@color/base_divider_color"
+            ></View>
+
+        <Button
+            android:id="@+id/btn_local"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color_secondary"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="从相册选取" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_cancle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/app_theme_color"
-        android:background="@drawable/option_cell_selector"
+        android:textColor="@color/app_theme_color_secondary"
+        android:background="@drawable/btn_white_selector"
         android:textSize="18sp"
         android:text="取消" />
 

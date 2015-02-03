@@ -136,7 +136,7 @@ public class SpotListActivity extends PeachBaseActivity {
                     if (CommonUtils.checkIntent(SpotListActivity.this, mIntent)) {
                         startActivity(mIntent);
                     } else {
-                        ToastUtil.getInstance(SpotListActivity.this).showToast("手机里没有地图软件哦");
+                        ToastUtil.getInstance(SpotListActivity.this).showToast("没有找到地图应用");
                     }
 
                 }

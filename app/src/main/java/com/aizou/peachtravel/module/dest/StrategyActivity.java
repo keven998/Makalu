@@ -69,8 +69,6 @@ import butterknife.InjectView;
 public class StrategyActivity extends PeachBaseActivity implements OnEditModeChangeListener{
     @InjectView(R.id.tv_title_back)
     TextView mTvTitleBack;
-//    @InjectView(R.id.tv_title)
-//    TextView mTvTitle;
     @InjectView(R.id.iv_edit)
     CheckedTextView mIvEdit;
     @InjectView(R.id.iv_more)
@@ -107,7 +105,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         setContentView(R.layout.activity_strategy);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(true);
-        layoutBar = new LayoutBar(mContext,R.layout.tab_strategy, ScrollBar.Gravity.CENTENT);
+        layoutBar = new LayoutBar(mContext, R.layout.tab_strategy, ScrollBar.Gravity.CENTENT);
         indexTv = (TextView) layoutBar.getSlideView();
         mStrategyIndicator.setScrollBar(layoutBar);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -142,12 +140,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 }
             }
         });
-//        mTvTitleComplete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                saveStrategy();
-//            }
-//        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mStrategyViewpager = null;
+        mStrategyIndicator = null;
+        routeDayFragment = null;
+        restFragment = null;
+        shoppingFragment = null;
+        layoutBar = null;
     }
 
     @Override
@@ -159,12 +162,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             e.printStackTrace();
         }
         super.onAttachFragment(fragment);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LogUtil.d("indicator--onDraw onResume" );
     }
 
     private void gotoEditMode(){
@@ -184,14 +181,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
 //            mTvTitleComplete.setVisibility(View.GONE);
 //            mIvEdit.setVisibility(View.VISIBLE);
 //        }
-        mIvEdit.setChecked(inEditMode);
-        if(inEditMode){
-            mIvEdit.setText("完成");
-        }else{
-            mIvEdit.setText("编辑");
-        }
-        gotoEditMode();
 
+        mIvEdit.setChecked(inEditMode);
+        gotoEditMode();
     }
 
     private void initData() {
@@ -389,7 +381,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     if (!cv.isChecked()) {
                         gotoEditMode();
                         cv.setChecked(true);
-                        cv.setText("完成");
                     } else {
                         saveStrategy(false);
                     }
@@ -629,7 +620,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {
-                    mIvEdit.setText("编辑");
                     mIvEdit.setChecked(false);
                     for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
                         onEditModeChangeListener.onEditModeChange(false);

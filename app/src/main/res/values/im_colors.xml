@@ -18,7 +18,7 @@
     <color name="bottom_bar_normal_bg">#2D2F31</color>
     <color name="bottom_text_color_normal">#ffffff</color>
      <color name="btn_white_normal">#f7f8f8</color>
-    <color name="btn_white_pressed">#b5b5b6</color>
+    <color name="btn_white_pressed">#dddddd</color>
     <color name="btn_green_noraml">#68C270</color>
     <color name="btn_green_pressed">#6FCD78</color>
     <color name="btn_gray_normal">#c0c0c0</color>

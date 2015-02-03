@@ -12,21 +12,15 @@
         android:layout_height="@dimen/title_bar_height"
          />
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-        <com.aizou.core.widget.prv.PullToRefreshListView
-            android:id="@+id/more_travel_note_lv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarStyle="outsideOverlay"
-            android:listSelector="@android:color/transparent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:fadingEdge="none" />
+    <com.aizou.core.widget.prv.PullToRefreshListView
+        android:id="@+id/more_travel_note_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none" />
 
-    </FrameLayout>
 </LinearLayout>

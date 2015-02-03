@@ -40,95 +40,56 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/app_theme_color">
+        android:background="@drawable/bg_titlebar">
 
         <TextView
             android:id="@+id/tv_title_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/btn_navigation_back_selector"
-            android:drawableLeft="@drawable/ic_navigation_back"
-            android:drawablePadding="3dp"
-            android:duplicateParentState="true"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="12dp"
-            android:singleLine="true"
-            android:text="返回"
-            android:textColor="@color/base_color_white"
-            android:textSize="15sp" />
+            android:drawableLeft="@drawable/selector_city_detail_nav_back"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp" />
 
-        <RelativeLayout
-            android:id="@+id/ly_title_bar_center"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/tv_title_back"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textColor="@color/base_text_color_title"
-                android:textSize="17sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/ly_title_bar_right"
+        <CheckedTextView
+            android:id="@+id/iv_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/ly_title_bar_center"
-            android:gravity="right|center_vertical">
+            android:checked="false"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="18dp"
+            android:drawableLeft="@drawable/checker_ic_plan_edit"
+            android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/iv_more"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_guide_more"
-                android:visibility="gone" />
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/iv_edit"
+            android:paddingLeft="25dp"
+            android:paddingRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_guide_more"
+            android:visibility="gone" />
 
-            <CheckedTextView
-                android:id="@+id/iv_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:checked="false"
-                android:gravity="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="15dp"
-                android:text="编辑"
-                android:textColor="@color/base_color_white"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_copy_guide"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/btn_guide_complete_selector"
-                android:duplicateParentState="true"
-                android:gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:singleLine="true"
-                android:text="复制路线"
-                android:textColor="@color/base_color_white"
-                android:textSize="15sp"
-                android:visibility="gone" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_copy_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/btn_guide_complete_selector"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="复制"
+            android:textColor="@color/base_color_white"
+            android:textSize="15sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

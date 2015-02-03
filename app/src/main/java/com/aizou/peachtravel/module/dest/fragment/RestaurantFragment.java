@@ -239,13 +239,13 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.location!=null&&poiDetailBean.location.coordinates!=null){
+                        if (poiDetailBean.location != null && poiDetailBean.location.coordinates != null) {
                             Uri mUri = Uri.parse("geo:"+poiDetailBean.location.coordinates[1]+","+poiDetailBean.location.coordinates[0]+"?q="+poiDetailBean.zhName);
                             Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
                             if (CommonUtils.checkIntent(getActivity(), mIntent)){
                                 startActivity(mIntent);
                             }else{
-                                ToastUtil.getInstance(getActivity()).showToast("手机里没有地图软件哦");
+                                ToastUtil.getInstance(getActivity()).showToast("没有找到地图应用");
                             }
 
                         }

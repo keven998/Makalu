@@ -81,27 +81,13 @@ public class PoiListActivity extends PeachBaseActivity {
         locList = getIntent().getParcelableArrayListExtra("locList");
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
 
-//        if (canAdd) {
-//            mBtnOk.setVisibility(View.VISIBLE);
-//            mBtnOk.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent();
-//                    intent.putParcelableArrayListExtra("poiList", hasAddList);
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-//                }
-//            });
-//        } else {
-//            mBtnOk.setVisibility(View.INVISIBLE);
-//        }
         if (locList.size() > 1) {
             mLocSpinner.setVisibility(View.VISIBLE);
         } else {
             mLocSpinner.setVisibility(View.GONE);
         }
         if (canAdd) {
-            mTvTitleBarLeft.setText("完成");
+//            mTvTitleBarLeft.setText("完成");
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,7 +127,7 @@ public class PoiListActivity extends PeachBaseActivity {
                     if (CommonUtils.checkIntent(PoiListActivity.this, mIntent)){
                         startActivity(mIntent);
                     }else{
-                        ToastUtil.getInstance(PoiListActivity.this).showToast("手机里没有地图软件哦");
+                        ToastUtil.getInstance(PoiListActivity.this).showToast("没有找到地图应用");
                     }
 
                 }
@@ -168,7 +154,7 @@ public class PoiListActivity extends PeachBaseActivity {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
                     mTvPoiWantType.setText("吃什么");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    mTitle.setText(String.format("买在%s", curLoc.zhName));
+                    mTitle.setText(String.format("%s购物", curLoc.zhName));
                     mTvPoiWantType.setText("买什么");
                 }
             }
@@ -196,7 +182,7 @@ public class PoiListActivity extends PeachBaseActivity {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
             mTvPoiWantType.setText("吃什么");
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-            mTitle.setText(String.format("买在%s", curLoc.zhName));
+            mTitle.setText(String.format("%s购物", curLoc.zhName));
             mTvPoiWantType.setText("买什么");
         }
     }

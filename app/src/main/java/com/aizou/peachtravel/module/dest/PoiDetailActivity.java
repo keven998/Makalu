@@ -242,7 +242,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     if (CommonUtils.checkIntent(mContext, mIntent)) {
                         startActivity(mIntent);
                     } else {
-                        ToastUtil.getInstance(mContext).showToast("手机里没有地图软件哦");
+                        ToastUtil.getInstance(mContext).showToast("没有找到地图应用");
                     }
                 }
             }

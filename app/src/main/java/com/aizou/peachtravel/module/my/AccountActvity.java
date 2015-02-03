@@ -389,8 +389,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
+
     private void uploadAvatar(final File file){
-        LogUtil.d("file",file.toString());
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
