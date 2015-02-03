@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.bean;
 
+import android.text.TextUtils;
+
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.share.ShareDialogBean;
@@ -34,7 +36,7 @@ public class SpotDetailBean implements ICreateShareDialog{
         extMessageBean.type = TravelApi.PeachType.SPOT;
         extMessageBean.image = images.size()>0?images.get(0).url:"";
         extMessageBean.name = zhName;
-        extMessageBean.desc = desc;
+        extMessageBean.desc =  (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
         extMessageBean.timeCost = timeCostDesc;
         return new ShareDialogBean(extMessageBean);
     }

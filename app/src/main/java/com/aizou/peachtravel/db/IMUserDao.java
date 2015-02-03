@@ -26,13 +26,14 @@ public class IMUserDao extends AbstractDao<IMUser, String> {
         public final static Property Username = new Property(1, String.class, "username", true, "USERNAME");
         public final static Property Nick = new Property(2, String.class, "nick", false, "NICK");
         public final static Property Avatar = new Property(3, String.class, "avatar", false, "AVATAR");
-        public final static Property Gender = new Property(4, String.class, "gender", false, "GENDER");
-        public final static Property Signature = new Property(5, String.class, "signature", false, "SIGNATURE");
-        public final static Property Tel = new Property(6, String.class, "tel", false, "TEL");
-        public final static Property Memo = new Property(7, String.class, "memo", false, "MEMO");
-        public final static Property UnreadMsgCount = new Property(8, Integer.class, "unreadMsgCount", false, "UNREAD_MSG_COUNT");
-        public final static Property Header = new Property(9, String.class, "header", false, "HEADER");
-        public final static Property IsMyFriends = new Property(10, boolean.class, "isMyFriends", false, "IS_MY_FRIENDS");
+        public final static Property AvatarSmall = new Property(4, String.class, "avatarSmall", false, "AVATAR_SMALL");
+        public final static Property Gender = new Property(5, String.class, "gender", false, "GENDER");
+        public final static Property Signature = new Property(6, String.class, "signature", false, "SIGNATURE");
+        public final static Property Tel = new Property(7, String.class, "tel", false, "TEL");
+        public final static Property Memo = new Property(8, String.class, "memo", false, "MEMO");
+        public final static Property UnreadMsgCount = new Property(9, Integer.class, "unreadMsgCount", false, "UNREAD_MSG_COUNT");
+        public final static Property Header = new Property(10, String.class, "header", false, "HEADER");
+        public final static Property IsMyFriends = new Property(11, boolean.class, "isMyFriends", false, "IS_MY_FRIENDS");
     };
 
 
@@ -52,13 +53,14 @@ public class IMUserDao extends AbstractDao<IMUser, String> {
                 "'USERNAME' TEXT PRIMARY KEY NOT NULL ," + // 1: username
                 "'NICK' TEXT," + // 2: nick
                 "'AVATAR' TEXT," + // 3: avatar
-                "'GENDER' TEXT," + // 4: gender
-                "'SIGNATURE' TEXT," + // 5: signature
-                "'TEL' TEXT," + // 6: tel
-                "'MEMO' TEXT," + // 7: memo
-                "'UNREAD_MSG_COUNT' INTEGER," + // 8: unreadMsgCount
-                "'HEADER' TEXT," + // 9: header
-                "'IS_MY_FRIENDS' INTEGER NOT NULL );"); // 10: isMyFriends
+                "'AVATAR_SMALL' TEXT," + // 4: avatarSmall
+                "'GENDER' TEXT," + // 5: gender
+                "'SIGNATURE' TEXT," + // 6: signature
+                "'TEL' TEXT," + // 7: tel
+                "'MEMO' TEXT," + // 8: memo
+                "'UNREAD_MSG_COUNT' INTEGER," + // 9: unreadMsgCount
+                "'HEADER' TEXT," + // 10: header
+                "'IS_MY_FRIENDS' INTEGER NOT NULL );"); // 11: isMyFriends
     }
 
     /** Drops the underlying database table. */
@@ -92,36 +94,41 @@ public class IMUserDao extends AbstractDao<IMUser, String> {
             stmt.bindString(4, avatar);
         }
  
+        String avatarSmall = entity.getAvatarSmall();
+        if (avatarSmall != null) {
+            stmt.bindString(5, avatarSmall);
+        }
+ 
         String gender = entity.getGender();
         if (gender != null) {
-            stmt.bindString(5, gender);
+            stmt.bindString(6, gender);
         }
  
         String signature = entity.getSignature();
         if (signature != null) {
-            stmt.bindString(6, signature);
+            stmt.bindString(7, signature);
         }
  
         String tel = entity.getTel();
         if (tel != null) {
-            stmt.bindString(7, tel);
+            stmt.bindString(8, tel);
         }
  
         String memo = entity.getMemo();
         if (memo != null) {
-            stmt.bindString(8, memo);
+            stmt.bindString(9, memo);
         }
  
         Integer unreadMsgCount = entity.getUnreadMsgCount();
         if (unreadMsgCount != null) {
-            stmt.bindLong(9, unreadMsgCount);
+            stmt.bindLong(10, unreadMsgCount);
         }
  
         String header = entity.getHeader();
         if (header != null) {
-            stmt.bindString(10, header);
+            stmt.bindString(11, header);
         }
-        stmt.bindLong(11, entity.getIsMyFriends() ? 1l: 0l);
+        stmt.bindLong(12, entity.getIsMyFriends() ? 1l: 0l);
     }
 
     /** @inheritdoc */
@@ -138,13 +145,14 @@ public class IMUserDao extends AbstractDao<IMUser, String> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // username
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // nick
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // avatar
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // gender
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // signature
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tel
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // memo
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // unreadMsgCount
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // header
-            cursor.getShort(offset + 10) != 0 // isMyFriends
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // avatarSmall
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // gender
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // signature
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // tel
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // memo
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // unreadMsgCount
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // header
+            cursor.getShort(offset + 11) != 0 // isMyFriends
         );
         return entity;
     }
@@ -156,13 +164,14 @@ public class IMUserDao extends AbstractDao<IMUser, String> {
         entity.setUsername(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setNick(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setAvatar(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setGender(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSignature(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setTel(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setMemo(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setUnreadMsgCount(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
-        entity.setHeader(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setIsMyFriends(cursor.getShort(offset + 10) != 0);
+        entity.setAvatarSmall(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setGender(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSignature(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTel(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setMemo(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setUnreadMsgCount(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setHeader(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setIsMyFriends(cursor.getShort(offset + 11) != 0);
      }
     
     /** @inheritdoc */

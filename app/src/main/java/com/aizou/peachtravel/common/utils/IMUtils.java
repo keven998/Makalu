@@ -77,7 +77,7 @@ public class IMUtils {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",myUser.userId);
-            jsonObject.put("avatar",myUser.avatar);
+            jsonObject.put("avatar",myUser.avatarSmall);
             jsonObject.put("nickName",myUser.nickName);
             message.setAttribute("fromUser",jsonObject.toString());
         } catch (JSONException e) {
@@ -98,13 +98,17 @@ public class IMUtils {
             IMUser imUser = IMUserRepository.getContactByUserName(context, message.getFrom());
             if(imUser!=null){
                 imUser.setNick(user.nickName);
-                imUser.setSignature(user.avatar);
+//                imUser.setAvatar(user.avatar);
+                imUser.setUserId(user.userId);
+                imUser.setAvatarSmall(user.avatar);
             }else{
                 imUser = new IMUser();
                 imUser.setUsername(message.getFrom());
                 imUser.setNick(user.nickName);
                 imUser.setUserId(user.userId);
-                imUser.setAvatar(user.avatar);
+//                imUser.setAvatar(user.avatar);
+                imUser.setAvatarSmall(user.avatar);
+
             }
             IMUserRepository.saveContact(context,imUser);
             return imUser;

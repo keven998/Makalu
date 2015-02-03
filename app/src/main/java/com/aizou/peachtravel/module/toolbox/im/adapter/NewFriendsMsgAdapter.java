@@ -65,7 +65,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 .showImageOnFail(R.drawable.avatar_placeholder)
                 .cacheOnDisk(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22.5f))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8))) // 设置成圆角图片
                 .build();
     }
 
@@ -166,6 +166,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 imUser.setNick(msg.getNickname());
                 imUser.setUsername(msg.getFrom());
                 imUser.setAvatar(msg.getAvatar());
+                imUser.setAvatarSmall(msg.getAvatar());
                 imUser.setIsMyFriends(true);
                 imUser.setGender(msg.getGender());
                 IMUtils.setUserHead(imUser);

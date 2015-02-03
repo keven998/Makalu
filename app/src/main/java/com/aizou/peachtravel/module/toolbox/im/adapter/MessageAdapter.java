@@ -35,7 +35,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
@@ -43,7 +42,6 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.bean.ExtMessageBean;
-import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
@@ -60,8 +58,6 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
-import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.aizou.peachtravel.module.toolbox.im.BaiduMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
@@ -98,7 +94,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -124,19 +119,11 @@ public class MessageAdapter extends BaseAdapter {
     private static final int MESSAGE_TYPE_RECV_FILE = 11;
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 12;
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 13;
-    private static final int MESSAGE_TYPE_SENT_GUIDE = 14;
-    private static final int MESSAGE_TYPE_RECV_GUIDE = 15;
-    private static final int MESSAGE_TYPE_SENT_CITY = 16;
-    private static final int MESSAGE_TYPE_RECV_CITY = 17;
-    private static final int MESSAGE_TYPE_SENT_TRAVELS = 18;
-    private static final int MESSAGE_TYPE_RECV_TRAVELS = 19;
-    private static final int MESSAGE_TYPE_SENT_SPOT = 20;
-    private static final int MESSAGE_TYPE_RECV_SPOT = 21;
-    private static final int MESSAGE_TYPE_SENT_FSH = 22;
-    private static final int MESSAGE_TYPE_RECV_FSH = 23;
-    private static final int MESSAGE_TYPE_TIPS = 24;
-    private static final int MESSAGE_TYPE_SENT_UNKOWN = 25;
-    private static final int MESSAGE_TYPE_RECV_UNKOWN = 26;
+    private static final int MESSAGE_TYPE_SENT_EXT = 14;
+    private static final int MESSAGE_TYPE_RECV_EXT = 15;
+    private static final int MESSAGE_TYPE_TIPS = 16;
+    private static final int MESSAGE_TYPE_SENT_UNKOWN = 17;
+    private static final int MESSAGE_TYPE_RECV_UNKOWN = 18;
 
     public static final String IMAGE_DIR = "chat/image/";
     public static final String VOICE_DIR = "chat/audio/";
@@ -145,7 +132,7 @@ public class MessageAdapter extends BaseAdapter {
     private String username;
     private LayoutInflater inflater;
     private Activity activity;
-    private HashMap<String,IMUser> groupMembers=new HashMap<String, IMUser>();
+    private HashMap<String, IMUser> groupMembers = new HashMap<String, IMUser>();
     private DisplayImageOptions picOptions;
 
     // reference to conversation object in chatsdk
@@ -170,7 +157,7 @@ public class MessageAdapter extends BaseAdapter {
                 .showImageForEmptyUri(R.drawable.avatar_placeholder)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -211,18 +198,18 @@ public class MessageAdapter extends BaseAdapter {
                 if (extType == 0) {
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TXT : MESSAGE_TYPE_SENT_TXT;
                 } else if (extType == Constant.ExtType.GUIDE) {
-                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_GUIDE : MESSAGE_TYPE_SENT_GUIDE;
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
                 } else if (extType == Constant.ExtType.CITY) {
-                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_CITY : MESSAGE_TYPE_SENT_CITY;
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
                 } else if (extType == Constant.ExtType.TRAVELS) {
-                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TRAVELS : MESSAGE_TYPE_SENT_TRAVELS;
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
                 } else if (extType == Constant.ExtType.SPOT) {
-                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_SPOT : MESSAGE_TYPE_SENT_SPOT;
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
                 } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
-                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_FSH : MESSAGE_TYPE_SENT_FSH;
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
                 } else if (extType == Constant.ExtType.TIPS) {
                     return MESSAGE_TYPE_TIPS;
-                }else{
+                } else {
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_UNKOWN : MESSAGE_TYPE_SENT_UNKOWN;
                 }
             }
@@ -249,7 +236,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     public int getViewTypeCount() {
-        return 27;
+        return 19;
     }
 
     private View createViewByMessage(EMMessage message, int position) {
@@ -280,24 +267,12 @@ public class MessageAdapter extends BaseAdapter {
                     if (extType == 0) {
                         return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
                                 R.layout.row_sent_message, null);
-                    } else if (extType == Constant.ExtType.GUIDE) {
-                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_guide, null) : inflater.inflate(
-                                R.layout.row_sent_guide, null);
-                    } else if (extType == Constant.ExtType.CITY) {
-                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_city, null) : inflater.inflate(
-                                R.layout.row_sent_city, null);
-                    } else if (extType == Constant.ExtType.TRAVELS) {
-                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_travels, null) : inflater.inflate(
-                                R.layout.row_sent_travels, null);
-                    } else if (extType == Constant.ExtType.SPOT) {
-                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_spot, null) : inflater.inflate(
-                                R.layout.row_sent_spot, null);
-                    } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
-                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_fsh, null) : inflater.inflate(
-                                R.layout.row_sent_fsh, null);
+                    } else if (extType == Constant.ExtType.GUIDE || extType == Constant.ExtType.CITY || extType == Constant.ExtType.TRAVELS || extType == Constant.ExtType.SPOT || extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
+                        return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
+                                R.layout.row_sent_ext, null);
                     } else if (extType == Constant.ExtType.TIPS) {
                         return inflater.inflate(R.layout.row_chat_tips, null);
-                    }else{
+                    } else {
                         return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
                                 R.layout.row_sent_message, null);
                     }
@@ -342,22 +317,16 @@ public class MessageAdapter extends BaseAdapter {
                         int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
                         holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                         holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+                        holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                        holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
                         if (extType == 0) {
                             holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                         } else if (extType == Constant.ExtType.GUIDE) {
-                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
-                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.CITY) {
-                            holder.iv_city_pic = (ImageView) convertView.findViewById(R.id.iv_city_pic);
                         } else if (extType == Constant.ExtType.TRAVELS) {
-                            holder.iv_travels = (ImageView) convertView.findViewById(R.id.iv_travels);
                         } else if (extType == Constant.ExtType.SPOT) {
-                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
-                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
-                            holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
-                            holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
                         } else if (extType == Constant.ExtType.TIPS) {
                             holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
                         } else {
@@ -453,7 +422,7 @@ public class MessageAdapter extends BaseAdapter {
                     }
 
                 } else {
-                // 语音电话
+                    // 语音电话
                     handleGroupMessage(position, convertView, message, holder);
                     handleVoiceCallMessage(message, holder, position);
                     handleCommonMessage(position, convertView, message, holder);
@@ -509,37 +478,37 @@ public class MessageAdapter extends BaseAdapter {
 
     }
 
-    private void handleGroupMessage(final int position, View convertView, final EMMessage message, ViewHolder holder){
+    private void handleGroupMessage(final int position, View convertView, final EMMessage message, ViewHolder holder) {
         // 群聊时，显示接收的消息的发送人的名称
         ChatType chatType = message.getChatType();
-        if( message.direct == EMMessage.Direct.RECEIVE){
-            if(chatType==ChatType.GroupChat){
+        if (message.direct == EMMessage.Direct.RECEIVE) {
+            if (chatType == ChatType.GroupChat) {
                 // demo用username代替nick
                 IMUser user = groupMembers.get(message.getFrom());
-                if(user==null){
-                    user = IMUserRepository.getContactByUserName(context,message.getFrom());
-                    if(user==null){
-                        user= IMUtils.getUserInfoFromMessage(context,message);
+                if (user == null) {
+                    user = IMUserRepository.getContactByUserName(context, message.getFrom());
+                    if (user == null) {
+                        user = IMUtils.getUserInfoFromMessage(context, message);
                     }
-                    groupMembers.put(message.getFrom(),user);
+                    groupMembers.put(message.getFrom(), user);
 
                 }
-                if(user!=null){
+                if (user != null) {
                     holder.tv_userId.setText(user.getNick());
-                    ImageLoader.getInstance().displayImage(user.getAvatar(),holder.head_iv,picOptions);
+                    ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
-            }else {
+            } else {
                 IMUser user = AccountManager.getInstance().getContactList(activity).get(username);
-                if(user!=null){
+                if (user != null) {
                     holder.tv_userId.setText(user.getNick());
-                    ImageLoader.getInstance().displayImage(user.getAvatar(),holder.head_iv,picOptions);
+                    ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
 
             }
-        }else{
+        } else {
             PeachUser user = AccountManager.getInstance().getLoginAccount(context);
-            if(user!=null){
-                ImageLoader.getInstance().displayImage(user.avatar,holder.head_iv,picOptions);
+            if (user != null) {
+                ImageLoader.getInstance().displayImage(user.avatarSmall, holder.head_iv, picOptions);
             }
         }
 
@@ -623,23 +592,24 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (IMUserRepository.isMyFriend(context, message.getFrom())) {
                         Intent intent = new Intent(context, ContactDetailActivity.class);
-                        IMUser user=IMUserRepository.getContactByUserName(context,message.getFrom());
+                        IMUser user = IMUserRepository.getContactByUserName(context, message.getFrom());
                         intent.putExtra("userId", user.getUserId());
                         intent.putExtra("userNick", user.getNick());
                         context.startActivity(intent);
                     } else {
-                        IMUser itemData=IMUserRepository.getContactByUserName(context,message.getFrom());
+                        IMUser itemData = IMUserRepository.getContactByUserName(context, message.getFrom());
                         PeachUser user = new PeachUser();
-                        if(itemData!=null){
+                        if (itemData != null) {
                             user.nickName = itemData.getNick();
                             user.userId = itemData.getUserId();
                             user.easemobUser = itemData.getUsername();
                             user.avatar = itemData.getAvatar();
+                            user.avatarSmall = itemData.getAvatarSmall();
                             user.signature = itemData.getSignature();
                             user.gender = itemData.getGender();
                             user.memo = itemData.getMemo();
-                        }else{
-                           user.easemobUser =message.getFrom();
+                        } else {
+                            user.easemobUser = message.getFrom();
                         }
                         Intent intent = new Intent(context, SeachContactDetailActivity.class);
                         intent.putExtra("user", user);
@@ -708,9 +678,10 @@ public class MessageAdapter extends BaseAdapter {
         final String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
-        holder.tv_name.setText(bean.name);
         final ExtMessageBean finalBean = bean;
         if (extType == Constant.ExtType.GUIDE) {
+            holder.tv_attr.setVisibility(View.VISIBLE);
+            holder.tv_name.setText(bean.name);
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
@@ -718,26 +689,31 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context, StrategyActivity.class);
+                    Intent intent = new Intent(context, StrategyActivity.class);
                     intent.putExtra("id", finalBean.id);
                     activity.startActivity(intent);
                 }
             });
         } else if (extType == Constant.ExtType.CITY) {
             holder.tv_name.setText(bean.name);
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_city_pic, UILUtils.getRadiusOption(8));
+            holder.tv_attr.setVisibility(View.GONE);
+            holder.tv_desc.setText(bean.desc);
+            holder.tv_type.setText("城市");
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(8));
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context, CityDetailActivity.class);
+                    Intent intent = new Intent(context, CityDetailActivity.class);
                     intent.putExtra("id", finalBean.id);
                     activity.startActivity(intent);
                 }
             });
         } else if (extType == Constant.ExtType.TRAVELS) {
+            holder.tv_name.setText(bean.name);
+            holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
-            ImageLoader.getInstance().displayImage(bean.image, holder.iv_travels, UILUtils.getRadiusOption(3));
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -748,6 +724,8 @@ public class MessageAdapter extends BaseAdapter {
             });
 
         } else if (extType == Constant.ExtType.SPOT) {
+            holder.tv_attr.setVisibility(View.VISIBLE);
+            holder.tv_name.setText(bean.name);
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             holder.tv_type.setText("景点");
@@ -755,24 +733,28 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    IntentUtils.intentToDetail(activity, TravelApi.PeachType.SPOT,finalBean.id);
+                    IntentUtils.intentToDetail(activity, TravelApi.PeachType.SPOT, finalBean.id);
                 }
             });
         } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
+            holder.tv_attr.setVisibility(View.VISIBLE);
             switch (extType) {
                 case Constant.ExtType.FOOD:
+                    holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("美食");
-                    holder.tv_attr.setText(bean.rating+"星 "+bean.price);
+                    holder.tv_attr.setText(bean.rating + "星 " + bean.price);
                     break;
 
                 case Constant.ExtType.HOTEL:
+                    holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("酒店");
-                    holder.tv_attr.setText(bean.rating+"星 "+bean.price);
+                    holder.tv_attr.setText(bean.rating + "星 " + bean.price);
                     break;
 
                 case Constant.ExtType.SHOPPING:
+                    holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("购物");
-                    holder.tv_attr.setText(bean.rating+"星 ");
+                    holder.tv_attr.setText(bean.rating + "星 ");
                     break;
             }
             holder.tv_desc.setText(bean.address);
@@ -782,30 +764,30 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     switch (extType) {
                         case Constant.ExtType.FOOD:
-                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.RESTAURANTS,finalBean.id);
+                            IntentUtils.intentToDetail(activity, TravelApi.PeachType.RESTAURANTS, finalBean.id);
                             break;
 
                         case Constant.ExtType.HOTEL:
-                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.HOTEL,finalBean.id);
+                            IntentUtils.intentToDetail(activity, TravelApi.PeachType.HOTEL, finalBean.id);
                             break;
 
                         case Constant.ExtType.SHOPPING:
-                            IntentUtils.intentToDetail(activity,TravelApi.PeachType.SHOPPING,finalBean.id);
+                            IntentUtils.intentToDetail(activity, TravelApi.PeachType.SHOPPING, finalBean.id);
                             break;
                     }
 
                 }
             });
-        }else{
-             holder.tv.setText("本版本不支持此消息类型，请升级最新版本！");
+        } else {
+            holder.tv.setText("本版本不支持此消息类型，请升级最新版本！");
         }
         holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                        activity.startActivityForResult(
-                                (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                        -1), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
-                        return true;
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                -1), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                return true;
             }
         });
 
@@ -867,7 +849,7 @@ public class MessageAdapter extends BaseAdapter {
 
         // 接收方向的消息
         if (message.direct == EMMessage.Direct.RECEIVE) {
-            Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.default_image);
+            Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
             // "it is receive msg";
             if (message.status == EMMessage.Status.INPROGRESS) {
                 // "!!!! back receive";
@@ -947,7 +929,7 @@ public class MessageAdapter extends BaseAdapter {
 //                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                                            .show();
                                     if (activity != null && !activity.isFinishing())
-                                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
+                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
 
@@ -1076,7 +1058,7 @@ public class MessageAdapter extends BaseAdapter {
 //                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                                            .show();
                                     if (activity != null && !activity.isFinishing())
-                                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
+                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                                     timer.cancel();
                                 }
 
@@ -1105,8 +1087,8 @@ public class MessageAdapter extends BaseAdapter {
     private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         holder.tv.setText(voiceBody.getLength() + "\"");
-        holder.rl_voice_content .setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
-        holder.rl_voice_content .setOnLongClickListener(new OnLongClickListener() {
+        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
+        holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
@@ -1511,24 +1493,24 @@ public class MessageAdapter extends BaseAdapter {
                 }
                 if (message.status == EMMessage.Status.SUCCESS) {
                     if (message.getType() == EMMessage.Type.FILE) {
-                    holder.pb.setVisibility(View.INVISIBLE);
-                    holder.staus_iv.setVisibility(View.INVISIBLE);
+                        holder.pb.setVisibility(View.INVISIBLE);
+                        holder.staus_iv.setVisibility(View.INVISIBLE);
                     } else {
-                    holder.pb.setVisibility(View.GONE);
-                    holder.staus_iv.setVisibility(View.GONE);
+                        holder.pb.setVisibility(View.GONE);
+                        holder.staus_iv.setVisibility(View.GONE);
                     }
 
                 } else if (message.status == EMMessage.Status.FAIL) {
                     if (message.getType() == EMMessage.Type.FILE) {
-                    holder.pb.setVisibility(View.INVISIBLE);
+                        holder.pb.setVisibility(View.INVISIBLE);
                     } else {
-                    holder.pb.setVisibility(View.GONE);
+                        holder.pb.setVisibility(View.GONE);
                     }
                     holder.staus_iv.setVisibility(View.VISIBLE);
 //                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                            .show();
                     if (activity != null && !activity.isFinishing())
-                    ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
+                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
                 }
 
                 notifyDataSetChanged();
@@ -1586,7 +1568,7 @@ public class MessageAdapter extends BaseAdapter {
                             e.printStackTrace();
                         }
                     }
-                    ((BaseActivity)activity).startActivityWithNoAnim(intent);
+                    ((BaseActivity) activity).startActivityWithNoAnim(intent);
                 }
             });
             return true;
@@ -1654,7 +1636,7 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_name;
         TextView tv_attr;
         TextView tv_desc;
-        ImageView iv_city_pic, iv_image, iv_travels;
+        ImageView iv_image;
         RelativeLayout rl_content;
         TextView tv_tips;
         ImageView playBtn;
@@ -1668,7 +1650,6 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_ack;
         // 显示送达回执状态
         TextView tv_delivered;
-
 
 
         TextView tv_file_name;

@@ -536,7 +536,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
 
             final IMUser user = mDatas.get(i);
-            ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatar(), viewHolder.mImg, picOptions);
+            ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatarSmall(), viewHolder.mImg, picOptions);
             viewHolder.mTxt.setText(mDatas.get(i).getNick());
 
 
@@ -577,7 +577,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .showImageForEmptyUri(R.drawable.avatar_placeholder)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(22)))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -614,7 +614,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
 
             vh.nickView.setText(user.getNick());
-            vh.avatarView.setTag(user.getAvatar());
+            vh.avatarView.setTag(user.getAvatarSmall());
 //            Picasso.with(mContext)
 //                    .load(user.getAvatar())
 //                    .placeholder(R.drawable.avatar_placeholder)
@@ -629,7 +629,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 //                    }
 //                }
 //            });
-            ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
+            ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
 
             if (vh.checkBox != null) {
                 // checkBox.setOnCheckedChangeListener(null);

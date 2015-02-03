@@ -305,6 +305,7 @@ public class IMMainActivity extends ChatBaseActivity {
                         user.setUsername(peachUser.easemobUser);
                         user.setUnreadMsgCount(0);
                         user.setAvatar(peachUser.avatar);
+                        user.setAvatarSmall(peachUser.avatarSmall);
                         user.setSignature(peachUser.signature);
                         user.setIsMyFriends(true);
                         user.setGender(peachUser.gender);
@@ -514,25 +515,14 @@ public class IMMainActivity extends ChatBaseActivity {
             String username = intent.getStringExtra("from");
             String msgid = intent.getStringExtra("msgid");
             // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-            EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+            final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
             final String fromUser = message.getStringAttribute(Constant.FROM_USER, "");
             final String finalUsername = username;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     if (!TextUtils.isEmpty(fromUser)) {
-                        ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
-                        IMUser imUser = IMUserRepository.getContactByUserName(mContext, finalUsername);
-                        if (imUser != null) {
-                            imUser.setNick(user.nickName);
-                            imUser.setAvatar(user.avatar);
-                        } else {
-                            imUser = new IMUser();
-                            imUser.setUsername(finalUsername);
-                            imUser.setNick(user.nickName);
-                            imUser.setUserId(user.userId);
-                            imUser.setAvatar(user.avatar);
-                        }
+                       IMUser imUser = IMUtils.getUserInfoFromMessage(mContext,message);
                         IMUserRepository.saveContact(mContext, imUser);
                     }
                 }

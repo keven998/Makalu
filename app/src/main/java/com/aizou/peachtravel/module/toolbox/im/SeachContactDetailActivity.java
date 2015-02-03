@@ -193,7 +193,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
                 .build();
-        ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
+        ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
         nickNameTv.setText(user.nickName);
         signTv.setText(user.signature);
     }

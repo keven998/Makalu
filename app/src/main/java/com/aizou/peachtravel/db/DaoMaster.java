@@ -14,7 +14,16 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
  * Master of DAO (schema version 1): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 1;
+    public static final int SCHEMA_VERSION = 2;
+
+    //修改原来的user表名改为_temp_user临时表名
+    private static final String CREATE_TEMP_USER = "alter table IMUSER rename to _temp_user";
+
+    //把临时备份表中的数据copy到新创建的数据库表中
+    private static final String INSERT_DATA = "insert into IMUSER select *,'' from _temp_user";
+
+    //删除临时备份表
+    private static final String DROP_USER = "drop table _temp_user";
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
@@ -44,6 +53,29 @@ public class DaoMaster extends AbstractDaoMaster {
     /** WARNING: Drops all table on Upgrade! Use only during development. */
     public static class DevOpenHelper extends OpenHelper {
         public DevOpenHelper(Context context, String name, CursorFactory factory) {
+            super(context, name, factory);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+//            dropAllTables(db, true);
+//            onCreate(db);
+            switch(newVersion){
+                case 2:
+                    db.execSQL(CREATE_TEMP_USER); //第一步将旧表改为临时表
+                    IMUserDao.createTable(db, true);
+//                    db.execSQL(CREATE_USER); //第二步创建新表(新添加的字段或去掉 的字段)
+                    db.execSQL(INSERT_DATA); //第三步将旧表中的原始数据保存到新表中以防遗失
+
+                    db.execSQL(DROP_USER); //第四步删除临时备份表
+                    break;
+            }
+        }
+    }
+    /** WARNING: Drops all table on Upgrade! Use only during development. */
+    public static class ReleaseOpenHelper extends OpenHelper {
+        public ReleaseOpenHelper(Context context, String name, CursorFactory factory) {
             super(context, name, factory);
         }
 

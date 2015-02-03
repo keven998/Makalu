@@ -203,6 +203,7 @@ public class LoginActivity extends PeachBaseActivity {
                                 user.setUsername(peachUser.easemobUser);
                                 user.setUnreadMsgCount(0);
                                 user.setAvatar(peachUser.avatar);
+                                user.setAvatarSmall(peachUser.avatarSmall);
                                 user.setSignature(peachUser.signature);
                                 user.setIsMyFriends(true);
                                 user.setGender(peachUser.gender);

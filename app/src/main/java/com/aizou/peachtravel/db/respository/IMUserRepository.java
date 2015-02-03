@@ -50,6 +50,9 @@ public class IMUserRepository {
         }
     }
     public static void saveContact(Context c,IMUser user){
+        if(user==null){
+            return;
+        }
         getIMUserDao(c).insertOrReplace(user);
     }
     public static void saveContactList(Context c,List<IMUser> user){
