@@ -7,19 +7,15 @@
     android:background="@color/base_color_white"
     tools:context=".TravelFragment">
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/operation_section_height">
 
         <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
             android:id="@+id/vp_travel"
             android:layout_width="fill_parent"
-            android:layout_height="160dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/title_bar_height"
             android:background="#f3d4df" />
 
         <com.aizou.core.widget.DotView
@@ -29,9 +25,32 @@
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="18dp"
             cube_dotview:dot_radius="3dp"
-            cube_dotview:dot_selected_color="0xfffd5668"
+            cube_dotview:dot_selected_color="0xfffd818e"
             cube_dotview:dot_span="10dp"
             cube_dotview:dot_unselected_color="0xffffffff" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/nav_title_bar">
+
+            <ImageView
+                android:id="@+id/tv_title_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/home_title_image"/>
+
+            <ImageView
+                android:id="@+id/tv_title_bar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:paddingRight="8dp"
+                android:paddingLeft="12dp"
+                android:src="@drawable/selector_ic_create_new_plan"/>
+
+        </FrameLayout>
 
     </FrameLayout>
     <LinearLayout

@@ -23,7 +23,7 @@
         android:drawableLeft="@drawable/ic_check_version"
         android:gravity="center_vertical"
         android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/app_them_extender_right"
         android:text="检查新版本"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
@@ -41,7 +41,7 @@
         android:drawableLeft="@drawable/ic_clear_cache"
         android:gravity="center_vertical"
         android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/app_them_extender_right"
         android:text="清除缓存"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
@@ -59,7 +59,7 @@
         android:drawableLeft="@drawable/ic_feedback"
         android:gravity="center_vertical"
         android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/app_them_extender_right"
         android:text="意见与吐槽"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
@@ -77,7 +77,7 @@
         android:drawableLeft="@drawable/ic_setting_notify"
         android:gravity="center_vertical"
         android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/app_them_extender_right"
         android:text="消息和提醒"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />

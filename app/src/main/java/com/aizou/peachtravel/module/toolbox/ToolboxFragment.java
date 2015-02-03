@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
@@ -38,8 +35,6 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
-import com.aizou.peachtravel.common.utils.SelectPicUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
@@ -51,7 +46,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
-import com.easemob.chat.EMChatManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -67,9 +61,6 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public final static int CODE_IM_LOGIN = 101;
     public final static int CODE_PLAN = 103;
 
-
-    @InjectView(R.id.ly_header_bar_title_wrap)
-    TitleHeaderBar mLyHeaderBarTitleWrap;
     @InjectView(R.id.tv_weather)
     TextView mTvWeather;
     @InjectView(R.id.tv_city)
@@ -98,16 +89,13 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_travel, null);
         ButterKnife.inject(this, rootView);
-        mLyHeaderBarTitleWrap.getTitleTextView().setBackgroundResource(R.drawable.home_title_image);
-        mLyHeaderBarTitleWrap.enableBackKey(false);
-        mLyHeaderBarTitleWrap.setRightViewImageRes(R.drawable.ic_add_phone_contact);
-        mLyHeaderBarTitleWrap.setRightOnClickListener(new View.OnClickListener() {
+
+        rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showActionDialog();
             }
         });
-        mLyHeaderBarTitleWrap.setBackground(R.color.app_theme_color);
 
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
@@ -120,15 +108,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        int cellSize = LocalDisplay.SCREEN_WIDTH_PIXELS/2;
-//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRLMyGuides.getLayoutParams();
-//        params.width = cellSize;
-//        mRLMyGuides.setLayoutParams(params);
         mRLMyGuides.setOnClickListener(this);
-
-//        params = (RelativeLayout.LayoutParams) mRLMyAround.getLayoutParams();
-//        params.width = cellSize;
-//        mRLMyAround.setLayoutParams(params);
         mRLMyAround.setOnClickListener(this);
     }
 

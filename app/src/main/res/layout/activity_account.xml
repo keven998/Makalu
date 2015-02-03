@@ -143,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_setting_nick"
+                    android:drawableLeft="@drawable/ic_setting_gender"
                     android:textColor="@color/base_text_color_title"
                     android:gravity="center_vertical"
                     android:textSize="15sp"

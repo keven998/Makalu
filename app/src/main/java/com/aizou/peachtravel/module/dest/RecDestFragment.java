@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +15,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
-import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.RecDestBean;
 import com.aizou.peachtravel.bean.TravelNoteBean;
-import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
 import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer;
 import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowItem;
@@ -44,8 +38,6 @@ import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.apache.http.Header;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,13 +57,7 @@ public class RecDestFragment extends PeachBaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
         recDestContainer = (FreeFlowContainer) rootView.findViewById(R.id.rec_dest_container);
-        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("目的地");
-        titleHeaderBar.enableBackKey(false);
-        titleHeaderBar.setBackground(R.color.app_theme_color);
-        titleHeaderBar.getTitleTextView().setTextColor(getResources().getColor(R.color.base_color_white));
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search_white);
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(),SearchDestActivity.class);
@@ -93,21 +79,8 @@ public class RecDestFragment extends PeachBaseFragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     private void initData() {
-
         getRecDestData();
-//        String dataJson= AssetUtils.getFromAssets(getActivity(),"recdest.json");
-//        Gson gson = new Gson();
-//        Type listType = new TypeToken<ArrayList<RecDestBean>>() {
-//        }.getType();
-//        ArrayList<RecDestBean> dataList =  gson.fromJson(dataJson, listType);
-//        recClassifyAdapter.getDataList().addAll(dataList);
-//        recClassifyAdapter.notifyDataSetChanged();
     }
 
     private void getRecDestData(){

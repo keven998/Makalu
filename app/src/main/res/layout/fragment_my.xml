@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+    android:orientation="vertical"
+    android:background="@color/app_backgroud">
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_bar_height">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -227,5 +224,23 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/nav_title_bar">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:text="我"
+            android:textColor="@color/base_color_white"/>
+
+    </FrameLayout>
+
+</FrameLayout>

@@ -3,7 +3,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/app_backgroud">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -18,9 +19,31 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+        android:layout_height="50dp"
+        android:background="@drawable/nav_title_bar">
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:text="目的地"
+            android:textColor="@color/base_color_white"/>
+
+        <ImageView
+            android:id="@+id/tv_title_bar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:paddingRight="8dp"
+            android:paddingLeft="12dp"
+            android:src="@drawable/ic_search_white"/>
+
+    </FrameLayout>
 
 </FrameLayout>
