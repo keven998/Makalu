@@ -22,20 +22,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:paddingLeft="8dp"
-                android:paddingRight="12dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:singleLine="true"
-                android:duplicateParentState="true"
-                android:drawableLeft="@drawable/ic_navigation_back"
-                android:text="返回"
-                android:gravity="center"
-                android:textColor="@color/base_color_white"
-                android:background="@drawable/btn_navigation_back_selector"
-                android:drawablePadding="3dp"
-                android:textSize="15sp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:drawableLeft="@drawable/nav_back_highlight"/>
 
             <TextView
                 android:id="@+id/tv_title_bar_title"

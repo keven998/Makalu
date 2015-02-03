@@ -16,18 +16,10 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:minWidth="60dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="12dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:singleLine="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
             android:duplicateParentState="true"
-            android:drawableLeft="@drawable/selector_city_detail_nav_back"
-            android:gravity="center"
-            android:textColor="@color/base_text_color_text_hint"
-            android:drawablePadding="3dp"
-            android:textSize="15sp" />
+            android:drawableLeft="@drawable/selector_city_detail_nav_back"/>
 
         <RelativeLayout
             android:layout_width="200dp"

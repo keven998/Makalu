@@ -9,10 +9,9 @@
         android:id="@+id/realtabcontent"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_weight="1" />
+        android:layout_marginBottom="50dp"/>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_tab_base"
@@ -57,10 +56,10 @@
 
         <com.aizou.core.widget.FragmentTabHost
             android:id="@android:id/tabhost"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="77dp"
             android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_gravity="bottom"/>
+    </FrameLayout>
 
 </RelativeLayout>
