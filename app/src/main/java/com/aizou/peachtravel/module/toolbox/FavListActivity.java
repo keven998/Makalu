@@ -1,7 +1,6 @@
 package com.aizou.peachtravel.module.toolbox;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,39 +8,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.aizou.peachtravel.bean.TravelNoteBean;
-import com.aizou.peachtravel.common.api.TravelApi;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.FavoritesBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
-import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
-import com.aizou.peachtravel.module.dest.CityDetailActivity;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
-import com.aizou.peachtravel.module.dest.SpotDetailActivity;
-import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
@@ -325,31 +318,14 @@ public class FavListActivity extends PeachBaseActivity {
                             public void onDialogShareCancle(Dialog dialog, int type, String content) {
                             }
                         });
-                    }else{
-                        IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
+                    } else {
                         if(!item.type.equals(TravelApi.PeachType.NOTE)){
-                            IntentUtils.intentToDetail(FavListActivity.this,item.type,item.itemId);
-                        }else{
+                            IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
+                        } else {
                             TravelNoteBean noteBean = new TravelNoteBean();
                             noteBean.setFieldFromFavBean(item);
                             IntentUtils.intentToNoteDetail(FavListActivity.this, noteBean);
                         }
-//                        Intent intent = new Intent();
-//                        if(item.type.equals("vs")){
-//                            intent.setClass(mContext, SpotDetailActivity.class);
-//                            intent.putExtra("id",item.itemId);
-//                        }else if(item.type.equals("hotel")||item.type.equals("restaurant")||item.type.equals("shopping")){
-//                            intent.setClass(mContext, PoiDetailActivity.class);
-//                            intent.putExtra("id",item.itemId);
-//                            intent.putExtra("type",item.type);
-//                        }else if(item.type.equals("locality")){
-//                            intent.setClass(mContext, CityDetailActivity.class);
-//                            intent.putExtra("id",item.itemId);
-//                        }else if(item.type.equals("travelNote")){
-//                            intent.setClass(mContext, TravelNoteDetailActivity.class);
-//                            intent.putExtra("id",item.itemId);
-//                        }
-//                        startActivityWithNoAnim(intent);
                     }
                 }
             });
@@ -369,12 +345,6 @@ public class FavListActivity extends PeachBaseActivity {
 
             vh.titleView.setText(item.zhName);
             vh.tvLocal.setText(item.locality.zhName);
-//            if (item.locality != null) {
-//                vh.tvLocal.setVisibility(View.VISIBLE);
-//                vh.tvLocal.setText(item.locality.zhName);
-//            } else {
-//                vh.tvLocal.setVisibility(View.GONE);
-//            }
 
             vh.descView.setText(item.desc);
             int type = item.getType();

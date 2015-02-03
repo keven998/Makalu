@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,8 +41,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     //    private RadioGroup inOutRg;
     private LinearLayout citysLl;
-    private LinearLayout mBottomPanel;
-    private TextView startTv;
+    private FrameLayout mBottomPanel;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
@@ -117,11 +117,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         initTitleBar();
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
-        mBottomPanel = (LinearLayout) rootView.findViewById(R.id.bottom_panel);
-        startTv = (TextView) rootView.findViewById(R.id.tv_start);
+        mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
-        startTv.setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);

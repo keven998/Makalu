@@ -12,14 +12,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.aizou.core.R;
-import com.aizou.core.utils.LocalDisplay;
 
 
 public class SideBar extends View {
 	// 触摸事件
 	private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
 	// 26个字母
-	public static String[] b = { "#","A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+	public static String[] b = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
 			"R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private int choose = -1;// 选中
 	private Paint paint = new Paint();
@@ -55,8 +54,7 @@ public class SideBar extends View {
 		// 获取焦点改变背景颜色.
 		int height = getHeight();// 获取对应高度
 		int width = getWidth(); // 获取对应宽度
-		
-		
+
 		float singleHeight = (height * 1f) / b.length;// 获取每一个字母的高度
 		singleHeight = (height * 1f - singleHeight/2) / b.length;
 		for (int i = 0; i < b.length; i++) {
@@ -64,10 +62,10 @@ public class SideBar extends View {
 			// paint.setColor(Color.WHITE);
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
-			paint.setTextSize(LocalDisplay.designedDP2px(10));
+			paint.setTextSize(getResources().getDimensionPixelSize(R.dimen.list_index_title_size));
 			// 选中的状态
 			if (i == choose) {
-				paint.setColor(Color.parseColor("#c60000"));
+				paint.setColor(Color.parseColor("#1e888c"));
 				paint.setFakeBoldText(true);
 			}
 			// x坐标等于中间-字符串宽度的一半.
@@ -98,7 +96,7 @@ public class SideBar extends View {
 			break;
 
 		default:
-			setBackgroundResource(R.drawable.rounded_rectangle_shape);
+//			setBackgroundResource(R.drawable.rounded_rectangle_shape);
 			if (oldChoose != c) {
 				if (c >= 0 && c < b.length) {
 					if (listener != null) {

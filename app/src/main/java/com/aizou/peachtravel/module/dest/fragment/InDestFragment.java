@@ -76,8 +76,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return new InCityViewHolder();
             }
         });
-        View view =new View(getActivity());
-        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(50)));
+        View view = new View(getActivity());
+        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
         mLvInCity.addFooterView(view);
         mLvInCity.setAdapter(inCityAdapter);
         mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
@@ -90,17 +90,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
         });
         mSbIndex.setTextView(mDialog);
-        mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color));
-//        LinearLayout footer = new LinearLayout(getActivity());
-//        footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(64)));
-//        footer.setBackgroundColor(getResources().getColor(R.color.app_backgroud));
-//        ViewGroup.LayoutParams params = footer.getLayoutParams();
-//        params.height = LocalDisplay.dp2px(64);
-//        footer.setLayoutParams(params);
-//        mLvInCity.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.padding_footer, null));
-
-//        mSectionBar.setListView(mLvInCity);
-//        getInLocList();
+        mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         initData();
         return rootView;
     }
@@ -208,8 +198,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         inCityAdapter.getDataList().clear();
         inCityAdapter.getDataList().addAll(incityList);
         inCityAdapter.notifyDataSetChanged();
-
-
     }
 
     @Override
@@ -222,7 +210,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
         }
         inCityAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -235,7 +222,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
         }
         inCityAdapter.notifyDataSetChanged();
-
     }
 
     private class InCityAdapter2 extends BaseSectionAdapter {
@@ -424,9 +410,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
             initSections();
-//            if (mSectionBar != null) {
-//                mSectionBar.notifyDataSetChanged();
-//            }
         }
 
     }

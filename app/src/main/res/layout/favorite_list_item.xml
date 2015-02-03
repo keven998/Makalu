@@ -7,7 +7,9 @@
     <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="132dp">
+        android:layout_height="142dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
         <LinearLayout android:gravity="center"
             android:layout_width="wrap_content"
@@ -99,6 +101,8 @@
                 android:textColor="@color/base_text_color_text_placeholder"
                 android:paddingRight="10dp"
                 android:paddingBottom="6dp"
+                android:drawableLeft="@drawable/ic_clock_1"
+                android:drawablePadding="1dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"/>
 
