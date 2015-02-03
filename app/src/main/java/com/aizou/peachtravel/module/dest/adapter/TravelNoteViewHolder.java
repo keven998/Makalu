@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -9,13 +10,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.TravelNoteBean;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
+import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -33,7 +39,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     TextView mNoteDescTv;
     TextView mPropertyTv;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    OnMoreClickListener mOnMoreClickListener;
+    OnSendClickListener mOnSendClickListener;
     Activity activity;
 
     private boolean mIsShowSend;
@@ -48,8 +54,8 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         picOptions = UILUtils.getRadiusOption();
     }
 
-    public void setOnMoreClickListener(OnMoreClickListener onMoreClickListener){
-        mOnMoreClickListener = onMoreClickListener;
+    public void setOnSendClickListener(OnSendClickListener onSendClickListener){
+        mOnSendClickListener = onSendClickListener;
     }
 
 
@@ -71,6 +77,9 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
             mSendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(mOnSendClickListener!=null){
+                        mOnSendClickListener.onSendClick(v,itemData);
+                    }
                 }
             });
         } else {
@@ -99,8 +108,8 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     }
 
-    public interface OnMoreClickListener{
-        void onMoreClick(View view);
+    public interface OnSendClickListener{
+        void onSendClick(View view,TravelNoteBean itemData);
     }
 
 }

@@ -341,6 +341,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:padding="2dp"
+                android:textColor="@color/base_color_white"
                 android:text="@string/move_up_to_cancel"
                 android:textSize="10sp" />
         </RelativeLayout>

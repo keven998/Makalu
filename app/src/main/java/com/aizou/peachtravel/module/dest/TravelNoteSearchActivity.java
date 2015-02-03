@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,8 +27,11 @@ import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
+import com.easemob.EMCallBack;
 
 import java.util.List;
 
@@ -49,6 +53,8 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
     ListViewDataAdapter mTravelNoteAdapter;
     int mPage=0;
     String mKeyWord="";
+    String toId;
+    int chatType;
 
 
     @Override
@@ -56,6 +62,8 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_travelnote);
         ButterKnife.inject(this);
+        toId = getIntent().getStringExtra("toId");
+        chatType = getIntent().getIntExtra("chatType",0);
         mTitleBar.getTitleTextView().setText("发送游记");
         mTitleBar.enableBackKey(true);
         mSearchTravelNoteLv.setPullLoadEnabled(false);
@@ -65,7 +73,53 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new TravelNoteViewHolder(TravelNoteSearchActivity.this, true, false);
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(TravelNoteSearchActivity.this, true, false);
+                viewHolder.setOnSendClickListener(new TravelNoteViewHolder.OnSendClickListener() {
+                    @Override
+                    public void onSendClick(View view, TravelNoteBean itemData) {
+                        IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(int i, String s) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }
+                });
+                return viewHolder;
             }
         });
         mSearchTravelNoteLv.getRefreshableView().setAdapter(mTravelNoteAdapter);

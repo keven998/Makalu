@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -23,6 +25,7 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
 import com.aizou.peachtravel.module.dest.fragment.OutCountryFragment;
 import com.aizou.peachtravel.module.my.LoginActivity;
@@ -137,6 +140,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
+        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), LocalDisplay.dp2px(5));
+        colorBar.setWidth(LocalDisplay.dp2px(45));
+        indicatorViewPager.setIndicatorScrollBar(colorBar);
 //        indicatorViewPager.setIndicatorScrollBar(new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -169,18 +175,12 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     }
 
     private void initTitleBar(){
-        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        //UNUSED
-//        titleHeaderBar.setRightViewImageRes(R.drawable.ic_search);
-//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(mContext, SearchDestActivity.class);
-//                startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
-//            }
-//        });
-        titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.getTitleTextView().setText("选择目的地");
+        findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initData() {

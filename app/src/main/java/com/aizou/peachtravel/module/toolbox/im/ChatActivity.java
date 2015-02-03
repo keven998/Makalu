@@ -362,7 +362,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         activityInstance = this;
         titleHeaderBar.enableBackKey(true);
 
-        findViewById(R.id.ly_title_bar_right).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);

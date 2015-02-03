@@ -4,34 +4,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
+    <RelativeLayout
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_titlebar">
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ly_header_bar_title_wrap"
-        android:id="@+id/indicator">
-        <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
-            android:id="@+id/in_out_indicator"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/base_color_white"/>
+        <RelativeLayout
+            android:id="@+id/ly_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="28dp"
-            android:layout_gravity="center"
-            android:layout_weight="0"
-            android:background="@color/base_divider_color"/>
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tv_title_bar_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:minWidth="60dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="12dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:singleLine="true"
+                android:duplicateParentState="true"
+                android:drawableLeft="@drawable/selector_city_detail_nav_back"
+                android:gravity="center"
+                android:textColor="@color/base_text_color_text_hint"
+                android:drawablePadding="3dp"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ly_title_bar_center"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center">
+
+            <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+                android:id="@+id/in_out_indicator"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="1dp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ly_title_bar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/ly_title_bar_center">
+
+            <TextView
+                android:id="@+id/tv_title_bar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="6dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:paddingLeft="12dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textColor="@color/app_theme_color"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/select_dest_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/indicator"/>
+        android:layout_below="@id/title_bar"/>
 
     <FrameLayout android:id="@+id/bottom_panel"
         android:layout_width="match_parent"
