@@ -76,7 +76,7 @@
             android:layout_marginRight="10dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:background="@drawable/app_theme_button_selector"
+            android:background="@drawable/theme_button_selctor"
             android:text="同意"
             android:textColor="@color/base_color_white"
             android:textSize="13sp" />

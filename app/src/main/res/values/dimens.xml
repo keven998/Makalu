@@ -15,4 +15,6 @@
     <dimen name="city_picture_collection_height">148dp</dimen>
 
     <dimen name="note_picture_size">100dp</dimen>
+
+    <dimen name="operation_section_height">210dp</dimen>
 </resources>

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -19,7 +18,6 @@ import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.utils.ShareUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -57,12 +55,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.ll_message_center).setOnClickListener(this);
         rootView.findViewById(R.id.ll_push_friends).setOnClickListener(this);
         rootView.findViewById(R.id.rl_user_info).setOnClickListener(this);
-
-        TitleHeaderBar thb = (TitleHeaderBar)rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        thb.setBackground(R.color.app_theme_color);
-        thb.getTitleTextView().setText("我");
-        thb.getTitleTextView().setTextColor(getResources().getColor(R.color.base_color_white));
-        thb.enableBackKey(false);
 
         return rootView;
     }

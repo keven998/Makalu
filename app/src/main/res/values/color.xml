@@ -3,17 +3,17 @@
     <color name="app_backgroud">#f6f6f6</color>
     <color name="title_bar_background">#ffffff</color>
 
-    <color name="app_theme_color">#fd5668</color>
-    <color name="app_theme_color_highlight">#ae383c</color>
+    <color name="app_theme_color">#fd818e</color>
+    <color name="app_theme_color_highlight">#ad313e</color>
     <color name="app_theme_color_secondary">#6ed8dc</color>
     <color name="app_theme_color_secondary_selected">#1e888c</color>
-    <color name="app_theme_color_trans">#fd5668</color>
+    <color name="app_theme_color_trans">#fd818e</color>
 
-    <drawable name="highlight_btn_color">#fd5668</drawable>
-    <drawable name="highlight_btn_color_selected">#aafd5668</drawable>
+    <drawable name="highlight_btn_color">#fd818e</drawable>
+    <drawable name="highlight_btn_color_selected">#ad313e</drawable>
 
     <color name="plan_start_end">#B2B2B2</color>
-    <color name="main_color">#fd5668</color>
+    <color name="main_color">#fd818e</color>
     <color name="main_color_second">#22B599</color>
     <color name="home_title_color">#08dca7</color>
     <color name="has_add_view">#F20D0D</color>
@@ -42,7 +42,7 @@
     <color name="base_highlight_color">#f4f4f4</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
-    <drawable name="list_cell_item_clicked">#f8f8f8</drawable>
+    <drawable name="list_cell_item_clicked">#eeeeee</drawable>
 
     <drawable name="sub_list_cell_item">#f8f9f9</drawable>
     <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>

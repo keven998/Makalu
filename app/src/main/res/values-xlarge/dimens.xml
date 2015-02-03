@@ -22,5 +22,5 @@
 
     <dimen name="my_plan_img_height">132dp</dimen>
     <dimen name="my_plan_title_width">225dp</dimen>
-
+    <dimen name="operation_section_height">240dp</dimen>
 </resources>

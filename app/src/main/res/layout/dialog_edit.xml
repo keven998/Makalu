@@ -29,7 +29,7 @@
         android:id="@+id/btn_ok"
         android:layout_width="90dp"
         android:layout_height="30dp"
-        android:background="@drawable/app_theme_button_selector"
+        android:background="@drawable/theme_button_selctor"
         android:textColor="@color/base_color_white"
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"

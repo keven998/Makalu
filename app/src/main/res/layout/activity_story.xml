@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#80fd5668">
+        android:background="#80fd818e">
         <com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView
             android:id="@+id/start"
             android:layout_width="wrap_content"

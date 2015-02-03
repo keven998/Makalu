@@ -24,7 +24,7 @@
             android:paddingLeft="10dp"
             android:textSize="14sp"
             android:textColorHint="@color/base_text_color_text_placeholder"
-            android:hint="输入城市名或拼音"
+            android:hint="城市、景点、美食等"
             android:singleLine="true"
             android:textColor="@color/base_text_color_title"
             android:drawablePadding="10dp"

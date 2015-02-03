@@ -63,7 +63,7 @@
             android:layout_height="25dp"
             android:textSize="13sp"
             android:visibility="gone"
-            android:background="@drawable/ic_theme_btn_bg"
+            android:background="@drawable/theme_button_selctor"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:textColor="@color/base_color_white"
