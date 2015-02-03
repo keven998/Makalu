@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/avatar_placeholder"
         android:layout_centerHorizontal="true"
         android:visibility="visible" />
@@ -25,7 +25,7 @@
         android:id="@+id/badge_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_remove_select_one"
+        android:background="@drawable/ic_delete"
         android:visibility="invisible" />
 
 </RelativeLayout>
