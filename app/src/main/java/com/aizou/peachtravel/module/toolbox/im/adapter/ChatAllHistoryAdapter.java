@@ -133,7 +133,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                                 String username = group.getMembers().get(i);
                                 IMUser user = IMUserRepository.getContactByUserName(getContext(), username);
                                 if (user != null) {
-                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatar(), avatarSize, UILUtils.getDefaultOption());
+                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
 
                                     LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                     if (bitmap == null) {
@@ -171,8 +171,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
-                finalHolder.avatar.setTag(imUser.getAvatar());
-                ImageLoader.getInstance().displayImage(imUser.getAvatar(), finalHolder.avatar,UILUtils.getRadiusOption(LocalDisplay.dp2px(10)));
+                finalHolder.avatar.setTag(imUser.getAvatarSmall());
+                ImageLoader.getInstance().displayImage(imUser.getAvatarSmall(), finalHolder.avatar,UILUtils.getRadiusOption(LocalDisplay.dp2px(10)));
 //                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
 //                    @Override
 //                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

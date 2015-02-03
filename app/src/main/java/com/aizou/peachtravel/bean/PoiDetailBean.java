@@ -2,6 +2,7 @@ package com.aizou.peachtravel.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.share.ShareDialogBean;
@@ -75,7 +76,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         extMessageBean.price = priceDesc;
         extMessageBean.address = address;
         extMessageBean.timeCost = timeCostDesc;
-        extMessageBean.desc=desc;
+        extMessageBean.desc= (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
         return new ShareDialogBean(extMessageBean);
     }
 

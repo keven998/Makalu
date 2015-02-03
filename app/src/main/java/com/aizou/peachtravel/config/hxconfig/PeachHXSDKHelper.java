@@ -271,25 +271,14 @@ public class PeachHXSDKHelper extends HXSDKHelper {
             // 消息id
             String username = intent.getStringExtra("from");
             String msgid = intent.getStringExtra("msgid");
-            EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+            final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
             final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
             final String finalUsername = username;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     if(!TextUtils.isEmpty(fromUser)){
-                        ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
-                        IMUser imUser = IMUserRepository.getContactByUserName(appContext, finalUsername);
-                        if(imUser!=null){
-                            imUser.setNick(user.nickName);
-                            imUser.setAvatar(user.avatar);
-                        }else{
-                            imUser = new IMUser();
-                            imUser.setUsername(finalUsername);
-                            imUser.setNick(user.nickName);
-                            imUser.setUserId(user.userId);
-                            imUser.setAvatar(user.avatar);
-                        }
+                        IMUser imUser = IMUtils.getUserInfoFromMessage(appContext,message);
                         IMUserRepository.saveContact(appContext,imUser);
                     }
                 }

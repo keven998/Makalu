@@ -61,7 +61,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
         extMessageBean.timeCost = timeCostDesc;
         extMessageBean.type= TravelApi.PeachType.LOC;
         extMessageBean.id = id;
-        extMessageBean.desc = desc;
+        extMessageBean.desc =  (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
         if(images!=null&&images.size()>0)
         extMessageBean.image =images.get(0).url;
         return new ShareDialogBean(extMessageBean);

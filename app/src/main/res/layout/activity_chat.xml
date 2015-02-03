@@ -22,51 +22,43 @@
             android:id="@+id/rl_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/base_color_white"
+            android:background="@drawable/bg_chat_mode_bottom"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="6dp"
             android:paddingBottom="6dp">
+            <ImageView
+                android:id="@+id/btn_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/btn_chat_tao"
+                android:scaleType="fitCenter"
+                android:onClick="more" />
 
             <ImageView
-                android:id="@+id/btn_set_mode_voice"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="12dp"
-                android:src="@drawable/btn_chat_mode_voice"
+                android:id="@+id/iv_emoticons_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
                 android:scaleType="fitCenter"
-                android:onClick="setModeVoice"
+                android:src="@drawable/chatting_biaoqing_btn_normal"
                 android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/btn_set_mode_keyboard"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="12dp"
-                android:src="@drawable/chatting_setmode_keyboard_btn"
+                android:id="@+id/iv_emoticons_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
                 android:scaleType="fitCenter"
-                android:onClick="setModeKeyboard"
+                android:src="@drawable/chatting_biaoqing_btn_enable"
                 android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/btn_press_to_speak"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:background="@drawable/chat_press_speak_btn"
-                android:gravity="center"
-                android:visibility="gone" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/button_pushtotalk"
-                    android:textColor="@color/base_text_color_subtitle"
-                    android:textSize="16sp" />
-            </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/edittext_layout"
@@ -74,9 +66,28 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/editor_with_border"
                 android:gravity="center"
+                android:layout_marginRight="10dp"
                 android:visibility="visible"
                 android:layout_weight="1"
                 >
+                <LinearLayout
+                    android:id="@+id/btn_press_to_speak"
+                    android:layout_width="fill_parent"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/chat_press_speak_btn"
+                    android:gravity="center"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/button_pushtotalk"
+                        android:textColor="@color/base_text_color_subtitle"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
 
                 <com.aizou.peachtravel.common.widget.PasteEditText
                     android:id="@+id/et_sendmessage"
@@ -95,38 +106,32 @@
                     android:textSize="15sp" />
 
                 <ImageView
-                    android:id="@+id/iv_emoticons_normal"
+                    android:id="@+id/btn_set_mode_voice"
                     android:layout_width="29dp"
                     android:layout_height="24dip"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:paddingRight="5dp"
+                    android:src="@drawable/btn_chat_mode_voice"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chatting_biaoqing_btn_normal"
+                    android:onClick="setModeVoice"
                     android:visibility="visible" />
 
                 <ImageView
-                    android:id="@+id/iv_emoticons_checked"
+                    android:id="@+id/btn_set_mode_keyboard"
                     android:layout_width="29dp"
-                    android:layout_height="24dp"
+                    android:layout_height="24dip"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:paddingRight="5dp"
+                    android:src="@drawable/chatting_setmode_keyboard_btn"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chatting_biaoqing_btn_enable"
-                    android:visibility="invisible" />
+                    android:onClick="setModeKeyboard"
+                    android:visibility="gone" />
+
+
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/btn_more"
-                android:layout_width="42dip"
-                android:layout_height="30dip"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
-                android:src="@drawable/btn_chat_tao"
-                android:scaleType="fitCenter"
-                android:onClick="more" />
 
             <Button
                 android:id="@+id/btn_send"

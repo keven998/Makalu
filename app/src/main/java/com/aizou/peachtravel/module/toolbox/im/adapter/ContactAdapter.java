@@ -129,6 +129,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.nickView = (TextView) convertView.findViewById(R.id.name);
                 vh.talkView = (ImageView) convertView.findViewById(R.id.iv_talk);
                 vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
+                vh.dividerView = convertView.findViewById(R.id.vw_divider);
                 vh.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
                 convertView.setTag(vh);
 			} else {
@@ -141,12 +142,15 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
+                    vh.dividerView.setVisibility(View.GONE);
 				} else {
                     vh.sectionHeader.setVisibility(View.VISIBLE);
                     vh.sectionHeader.setText(header);
+                    vh.dividerView.setVisibility(View.VISIBLE);
 				}
 			} else {
                 vh.sectionHeader.setVisibility(View.GONE);
+                vh.dividerView.setVisibility(View.GONE);
 			}
 
 			//显示申请与通知item
@@ -178,7 +182,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //					unreadMsgView.setVisibility(View.INVISIBLE);
 //                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                ImageLoader.getInstance().displayImage(user.getAvatar(), vh.avatarView, picOptions);
+                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
                 vh.talkView.setVisibility(View.VISIBLE);
                 vh.talkView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -262,6 +266,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
     class ViewHolder1 {
         public TextView sectionHeader;
         public ImageView avatarView;
+        public View dividerView;
         public TextView nickView;
         public ImageView talkView;
         public TextView unreadMsgView;

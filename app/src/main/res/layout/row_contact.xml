@@ -16,6 +16,11 @@
         android:textColor="@color/base_text_color_text_placeholder"
         android:textSize="12sp"
         android:visibility="gone" />
+    <View
+        android:id="@+id/vw_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="0.75dp"
+        android:background="@color/base_divider_color"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

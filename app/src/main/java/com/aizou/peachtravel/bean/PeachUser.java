@@ -8,6 +8,7 @@ public class PeachUser implements Serializable{
 	public long userId;
 	public String nickName="";
 	public String avatar="";
+    public String avatarSmall="";
     public String gender="";
     public String signature="";
 	public String tel;

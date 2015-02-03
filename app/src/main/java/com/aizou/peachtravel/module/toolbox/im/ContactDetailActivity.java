@@ -77,6 +77,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                     if(imUser!=null){
                         imUser.setNick(user.nickName);
                         imUser.setAvatar(user.avatar);
+                        imUser.setAvatarSmall(user.avatarSmall);
                         imUser.setSignature(user.signature);
                         imUser.setMemo(user.memo);
                         imUser.setGender(user.gender);
