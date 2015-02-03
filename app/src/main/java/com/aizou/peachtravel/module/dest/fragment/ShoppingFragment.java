@@ -239,7 +239,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                             if (CommonUtils.checkIntent(getActivity(), mIntent)){
                                 startActivity(mIntent);
                             }else{
-                                ToastUtil.getInstance(getActivity()).showToast("手机里没有地图软件哦");
+                                ToastUtil.getInstance(getActivity()).showToast("没有找到地图应用");
                             }
 
                         }

@@ -65,7 +65,7 @@
                 android:singleLine="true"
                 android:layout_alignBottom="@id/tv_day_index"
                 android:textColor="@color/base_text_color_text_hint"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </RelativeLayout>
 
