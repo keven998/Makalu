@@ -76,6 +76,6 @@
         android:paddingRight="25dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
-        android:background="@drawable/app_theme_button_selector"/>
+        android:background="@drawable/theme_button_selctor"/>
 
 </LinearLayout>

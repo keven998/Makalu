@@ -40,7 +40,7 @@
         android:paddingRight="25dp"
         android:layout_marginTop="25dp"
         android:textColor="@color/base_color_white"
-        android:background="@drawable/app_theme_button_selector"
+        android:background="@drawable/theme_button_selctor"
         android:text="加桃友"
         android:textSize="14sp"/>
 

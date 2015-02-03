@@ -59,9 +59,7 @@
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginRight="20dp"
-            android:background="@drawable/app_theme_button_selector" />
-
-
+            android:background="@drawable/theme_button_selctor" />
 
         <Button
             android:id="@+id/btn_ok"
@@ -70,7 +68,7 @@
             android:layout_weight="1"
             android:textColor="@color/base_color_white"
             android:textSize="14sp"
-            android:background="@drawable/app_theme_button_selector" />
+            android:background="@drawable/theme_button_selctor" />
     </LinearLayout>
 
 </LinearLayout>
