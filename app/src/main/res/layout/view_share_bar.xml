@@ -28,7 +28,7 @@
         android:drawableTop="@drawable/ic_share_taotalk"
         android:gravity="center"
         android:drawablePadding="5dp"
-        android:text="桃·talk"
+        android:text="Talk"
         android:layout_marginTop="10dp"
         android:textColor="@color/base_text_color_subtitle"
         android:textSize="12sp" />

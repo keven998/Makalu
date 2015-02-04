@@ -27,7 +27,6 @@
             android:gravity="center"
             android:textColor="@color/app_theme_color"
             android:textSize="14sp"
-            android:text="吃什么"
             android:paddingBottom="4dp"
             android:textStyle="bold" />
 

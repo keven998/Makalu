@@ -71,7 +71,7 @@
             android:paddingLeft="25dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_guide_more"
+            android:src="@drawable/ic_more"
             android:visibility="gone" />
 
         <TextView

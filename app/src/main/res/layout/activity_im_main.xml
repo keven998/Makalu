@@ -67,7 +67,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/btn_navigation_back_selector"
-                android:drawableRight="@drawable/add"
+                android:drawableRight="@drawable/ic_add"
                 android:duplicateParentState="true"
                 android:gravity="center"
                 android:paddingLeft="12dp"
