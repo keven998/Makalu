@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/content_card"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
         <View
             android:id="@+id/vw_top"
@@ -20,14 +20,14 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
 
             <RelativeLayout
                 android:id="@+id/rl_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="130dp"
                 android:paddingBottom="10dp">
                 <ImageView
                     android:id="@+id/poi_image_iv"
@@ -43,22 +43,23 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/poi_image_iv"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
                     android:layout_toRightOf="@id/poi_image_iv"
                     android:gravity="left|center_vertical"
                     android:singleLine="true"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/poi_address_tv"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/poi_name_tv"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/poi_image_iv"
+                    android:singleLine="true"
                     android:maxLines="2"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="13sp" />
@@ -68,23 +69,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/poi_address_tv"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/poi_image_iv"
                     android:singleLine="true"
-                    android:textColor="@color/base_text_color_subtitle"
+                    android:textColor="@color/base_text_color_text_hint"
                     android:textSize="11sp" />
+
                 <RatingBar
                     android:id="@+id/poi_rating"
-                    style="@style/custom_small_rating_bar"
+                    style="@style/custom_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/poi_price_tv"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@id/poi_image_iv"
-                    android:rating="2.4" />
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toRightOf="@id/poi_image_iv"/>
 
                 <TextView
                     android:id="@+id/poi_rank_tv"
@@ -92,9 +93,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/poi_rating"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:singleLine="true"
                     android:textColor="@color/base_text_color_text_hint"
                     android:textSize="11sp" />
@@ -105,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="13dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/btn_theme_secondary_selector"
                     android:paddingLeft="5dp"
@@ -115,37 +116,34 @@
                     android:textSize="13sp"
                     android:text="导航"
                     android:textColor="@color/base_color_white"
-                    android:drawableRight="@drawable/ic_poi_location"
-                     />
-
-
+                    android:drawableRight="@drawable/ic_poi_location"/>
             </RelativeLayout>
-
 
             <ImageView
                 android:id="@+id/drag_handle"
-                android:layout_width="44dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="20dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_line_edit_drag"
                 android:visibility="gone" />
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/delete_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
-        android:scaleType="center"
+        android:paddingLeft="7dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="28dp"
+        android:paddingRight="36dp"
         android:src="@drawable/ic_line_edit_delete"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
 </FrameLayout>

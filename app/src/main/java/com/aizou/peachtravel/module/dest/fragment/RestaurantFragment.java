@@ -42,6 +42,7 @@ import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
@@ -158,6 +159,11 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
     public class RestAdapter extends BaseAdapter implements
             DragSortListView.DropListener {
         public boolean isEditableMode;
+        private DisplayImageOptions picOptions;
+
+        public RestAdapter() {
+            picOptions = UILUtils.getDefaultOption();
+        }
 
         @Override
         public int getCount() {
@@ -196,13 +202,13 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                 holder = (ItemViewHolder) convertView.getTag();
             }
             if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getDefaultOption());
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, picOptions);
             }else{
                 holder.poiImageIv.setImageDrawable(null);
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.poiAddressTv.setText(poiDetailBean.address);
-            holder.poiRating.setRating(poiDetailBean.getRating());
+            holder.poiRating.setRating(2.5f);
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
 
             if (isEditableMode) {
@@ -214,7 +220,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                     public void onClick(View v) {
                         final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
                         dialog.setTitle("提示");
-                        dialog.setMessage("确定删除？");
+                        dialog.setMessage("确定删除");
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
