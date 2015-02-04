@@ -148,7 +148,7 @@ public class PoiAdapter extends BaseAdapter {
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
             spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
-            spotViewHolder.mSpotCosttimeTv.setText("参考游玩时间：" + poiDetailBean.timeCostDesc);
+            spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
