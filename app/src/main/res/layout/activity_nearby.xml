@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
-
     <com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView
         android:id="@+id/nearby_indicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/base_color_white" />
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_marginTop="@dimen/title_bar_height"
+        android:background="@drawable/bg_titlebar" />
 
-    <View
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/app_backgroud"
-        ></View>
+        android:layout_height="50dp"
+        android:background="@drawable/nav_title_bar">
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:text="身边"
+            android:textColor="@color/base_color_white"/>
+
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:minWidth="60dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:duplicateParentState="true"
+            android:drawableLeft="@drawable/nav_back_highlight"/>
+
+    </FrameLayout>
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/nearby_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/nearby_indicator"
+        android:layout_marginBottom="30dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:background="#a0000000">
 
         <TextView
@@ -57,21 +78,7 @@
             android:background="@null"
             android:src="@drawable/selecter_ic_refreash_18"/>
 
-        <!--<ProgressBar-->
-            <!--android:id="@+id/pb_location"-->
-            <!--android:layout_width="20dp"-->
-            <!--android:layout_height="20dp"-->
-            <!--android:visibility="gone"-->
-            <!--style="?android:attr/progressBarStyleSmall"-->
-            <!--/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_refresh"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="13sp"-->
-            <!--android:text="刷新" />-->
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

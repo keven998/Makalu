@@ -52,8 +52,6 @@ public class NearbyActivity extends PeachBaseActivity {
     TextView mTvAddress;
     @InjectView(R.id.btn_refresh)
     ImageButton mBtnRefresh;
-//    @InjectView(R.id.pb_location)
-//    ProgressBar mPbLocation;
     private IndicatorViewPager indicatorViewPager;
     private NearbyAdapter mNAdapter;
 
@@ -130,6 +128,10 @@ public class NearbyActivity extends PeachBaseActivity {
             mAnim.cancel();
             mAnim = null;
         }
+        indicatorViewPager = null;
+        mNAdapter = null;
+        mNearbyViewPager = null;
+        mNearbyIndicator = null;
     }
 
     private void resetLocation() {
@@ -212,7 +214,7 @@ public class NearbyActivity extends PeachBaseActivity {
 
                     @Override
                     public void onProviderDisabled(String provider) {
-                        mTvAddress.setText("无法获取你的位置信息");
+                        mTvAddress.setText("无法获取位置信息");
                     }
                 });
     }
@@ -230,7 +232,7 @@ public class NearbyActivity extends PeachBaseActivity {
 
 
     private void updateContent() {
-        if (mLat == -1 || mLng == -1) return;
+        if (mLat == -1 && mLng == -1) return;
         for(OnLocationChangeListener onLocationChangeListener:onLocationChangeListenerList){
             onLocationChangeListener.onLocationChange(mLat, mLng);
         }

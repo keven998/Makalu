@@ -101,15 +101,10 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             }
         });
 
-        if(mPoiList == null){
-            LogUtil.d(type+"----poiList=null");
-//            mLat = getArguments().getDouble("lat");
-//            mLng = getArguments().getDouble("lng");
+        if (mPoiList == null) {
             mPage = 0;
             mPoiList = new ArrayList<>();
-//            getPoiListByLoc(mPage,mLat,mLng);
         } else {
-            LogUtil.d(type+"----poiList!=null");
             poiAdapter.getDataList().clear();
             poiAdapter.getDataList().addAll(mPoiList);
             poiAdapter.notifyDataSetChanged();

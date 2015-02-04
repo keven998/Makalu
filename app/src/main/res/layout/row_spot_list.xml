@@ -6,26 +6,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/content_card"
         android:paddingBottom="10dp">
 
-        <View
-            android:id="@+id/vw_top"
+        <View android:id="@+id/vw_top"
             android:layout_width="fill_parent"
             android:layout_height="4dp"
             android:background="@color/app_theme_color_secondary" />
-
 
         <ImageView
             android:id="@+id/spot_image_iv"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@id/vw_top"
-            android:layout_marginBottom="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/bg_common_default"
@@ -36,25 +32,25 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/spot_image_iv"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/spot_image_iv"
             android:gravity="left|center_vertical"
             android:singleLine="true"
             android:textColor="@color/base_text_color_title"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/spot_address_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_spot_name"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/spot_image_iv"
-            android:maxLines="2"
+            android:singleLine="true"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="13sp" />
 
@@ -63,12 +59,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/spot_address_tv"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/spot_image_iv"
             android:singleLine="true"
-            android:textColor="@color/base_text_color_subtitle"
+            android:textColor="@color/base_text_color_text_hint"
             android:textSize="11sp" />
 
 
@@ -78,10 +74,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/spot_costtime_tv"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/spot_image_iv"
-            android:rating="2.4" />
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/spot_image_iv" />
 
         <TextView
             android:id="@+id/spot_rank_tv"
@@ -89,9 +84,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/spot_rating"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:singleLine="true"
             android:textColor="@color/base_text_color_text_hint"
             android:textSize="11sp" />
@@ -99,10 +94,10 @@
         <CheckedTextView
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="13dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/theme_button_selctor"
             android:drawablePadding="2dp"
@@ -113,8 +108,6 @@
             android:textColor="@color/base_color_white"
             android:textSize="13sp" />
 
-
     </RelativeLayout>
-
 
 </FrameLayout>
