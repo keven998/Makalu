@@ -162,7 +162,7 @@ public class MainActivity extends PeachBaseActivity {
     protected void onResume() {
         super.onResume();
         IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(3);
+        intentFilter.setPriority(2);
         registerReceiver(msgReceiver, intentFilter);
         updateUnreadMsgCount();
     }

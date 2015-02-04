@@ -43,15 +43,17 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     public final static int REQUEST_CODE_NEW_PLAN=103;
 
     //    private RadioGroup inOutRg;
+    private int requestCode;
     private LinearLayout citysLl;
     private FrameLayout mBottomPanel;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
-    private LocBean hasSelectLoc;
+    private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private HorizontalScrollView mScrollPanel;
+
 
     @Override
     public void onDestAdded(final LocBean locBean) {
@@ -128,9 +130,17 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             public void onClick(View view) {
                 PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
-                    Intent intent = new Intent(mContext, StrategyActivity.class);
-                    intent.putParcelableArrayListExtra("destinations", allAddCityList);
-                    startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
+                    if(requestCode==StrategyActivity.EDIT_LOC_REQUEST_CODE){
+                        Intent intent = new Intent();
+                        intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                        setResult(RESULT_OK,intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(mContext, StrategyActivity.class);
+                        intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                        startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
+                    }
+
                 } else {
                     ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);
@@ -149,12 +159,16 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         mSelectDestVp.setOffscreenPageLimit(2);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
-        hasSelectLoc = getIntent().getParcelableExtra("loc");
+        requestCode = getIntent().getIntExtra("request_code",0);
+        hasSelectLoc = getIntent().getParcelableArrayListExtra("locList");
         if(hasSelectLoc!=null){
-            onDestAdded(hasSelectLoc);
-            for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                onDestActionListener.onDestAdded(hasSelectLoc);
+            for(LocBean locBean:hasSelectLoc){
+                onDestAdded(locBean);
+                for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
+                    onDestActionListener.onDestAdded(locBean);
+                }
             }
+
         }
 //        initData();
     }
