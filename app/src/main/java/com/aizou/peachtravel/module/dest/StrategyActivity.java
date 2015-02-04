@@ -22,12 +22,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.LayoutBar;
@@ -49,6 +51,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
@@ -67,6 +70,7 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class StrategyActivity extends PeachBaseActivity implements OnEditModeChangeListener{
+    public final static int EDIT_LOC_REQUEST_CODE=110;
     @InjectView(R.id.tv_title_back)
     TextView mTvTitleBack;
     @InjectView(R.id.iv_edit)
@@ -304,6 +308,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     }
 
     private void bindView(final StrategyBean result) {
+        destinations = result.localities;
         strategy = result;
 //        mTitleBar.getTitleTextView().setText(result.title);
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
@@ -574,6 +579,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
             }
+            if(requestCode==EDIT_LOC_REQUEST_CODE){
+                destinations = data.getParcelableArrayListExtra("destinations");
+                showLocDialog();
+            }
         }
 
     }
@@ -699,10 +708,68 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showLocDialog();
                 dialog.dismiss();
             }
         });
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    private void showLocDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_strategy_loclist, null);
+        FlowLayout locListFl = (FlowLayout) contentView.findViewById(R.id.fl_loc_list);
+        TextView cancleTv = (TextView) contentView.findViewById(R.id.tv_cancle);
+        for(final LocBean loc :destinations){
+            View view = View.inflate(mContext,R.layout.item_strategy_loc,null);
+            TextView  nameTv = (TextView) view.findViewById(R.id.tv_cell_name);
+            nameTv.setText(loc.zhName);
+            nameTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,CityDetailActivity.class);
+                    intent.putExtra("id",loc.id);
+                    startActivity(intent);
+                }
+            });
+            locListFl.addView(view);
+        }
+        View editView =View.inflate(mContext, R.layout.item_strategy_loc,null);
+        TextView  nameTv = (TextView) editView.findViewById(R.id.tv_cell_name);
+        ViewGroup.LayoutParams tvLp = nameTv.getLayoutParams();
+        tvLp.width = LocalDisplay.dp2px(80);
+        tvLp.height =LocalDisplay.dp2px(32);
+        nameTv.setLayoutParams(tvLp);
+        nameTv.setBackgroundResource(R.drawable.btn_loc_add);
+        nameTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,SelectDestActivity.class);
+                intent.putExtra("locList",destinations);
+                intent.putExtra("request_code",EDIT_LOC_REQUEST_CODE);
+                startActivityForResult(intent,EDIT_LOC_REQUEST_CODE);
+                dialog.dismiss();
+
+            }
+        });
+        locListFl.addView(editView);
+        cancleTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

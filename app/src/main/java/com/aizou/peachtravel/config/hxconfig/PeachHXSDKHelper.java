@@ -14,6 +14,9 @@
 package com.aizou.peachtravel.config.hxconfig;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +34,7 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.hxsdk.controller.HXSDKHelper;
 import com.aizou.peachtravel.common.hxsdk.model.HXSDKModel;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.config.Constant;
@@ -41,6 +45,7 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.SplashActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
+import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.aizou.peachtravel.module.toolbox.im.VoiceCallReceiver;
 import com.easemob.EMCallBack;
 
@@ -51,10 +56,12 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMNotifier;
+import com.easemob.chat.NotificationCompat;
 import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EasyUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
@@ -160,12 +167,12 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         appContext.registerReceiver(new VoiceCallReceiver(), callFilter);
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(3);
+        cmdIntentFilter.setPriority(2);
         appContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 
         NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(3);
+        intentFilter.setPriority(100);
         appContext.registerReceiver(msgReceiver, intentFilter);
 
     }
@@ -283,7 +290,43 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                     }
                 }
             }).start();
+//            notifyNewMessage(message);
         }
+    }
+
+    /**
+     * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下
+     * 如果不需要，注释掉即可
+     * @param message
+     */
+    protected void notifyNewMessage(EMMessage message) {
+        //如果是设置了不提醒只显示数目的群组(这个是app里保存这个数据的，demo里不做判断)
+        //以及设置了setShowNotificationInbackgroup:false(设为false后，后台时sdk也发送广播)
+        if(!EasyUtils.isAppRunningForeground(appContext)){
+            return;
+        }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(appContext)
+                .setSmallIcon(appContext.getApplicationInfo().icon)
+                .setWhen(System.currentTimeMillis()).setAutoCancel(true);
+
+//        String ticker = IMUtils.getMessageDigest(message, appContext);
+//        if(message.getType() == EMMessage.Type.TXT)
+//            ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+//        //设置状态栏提示
+        mBuilder.setTicker("收到一条新消息");
+
+        //必须设置pendingintent，否则在2.3的机器上会有bug
+        Intent intent = new Intent(appContext, IMMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        int notifiId=11;
+        PendingIntent pendingIntent = PendingIntent.getActivity(appContext, notifiId, intent, PendingIntent.FLAG_ONE_SHOT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        Notification notification = mBuilder.build();
+        NotificationManager notificationManager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notifiId, notification);
+        notificationManager.cancel(notifiId);
     }
 
 

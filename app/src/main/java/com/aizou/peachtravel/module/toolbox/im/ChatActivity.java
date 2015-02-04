@@ -84,6 +84,7 @@ import com.aizou.peachtravel.common.widget.ExpandGridView;
 import com.aizou.peachtravel.common.widget.PasteEditText;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.config.hxconfig.PeachHXSDKModel;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
@@ -96,6 +97,7 @@ import com.aizou.peachtravel.module.toolbox.im.adapter.MessageAdapter;
 import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
@@ -502,7 +504,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		}
 	}
 
-	/**
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
+
+    /**
 	 * onActivityResult
 	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1468,6 +1476,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        options.setNoticeBySound(false);
         refresh();
 	}
 
@@ -1480,6 +1490,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
 		if (wakeLock.isHeld())
 			wakeLock.release();
 		if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {
