@@ -8,4 +8,4 @@
     android:background="@drawable/common_tab_bg"
     android:clickable="true"
     android:scaleType="centerInside"
-    android:src="@drawable/add" />
+    android:src="@drawable/ic_add" />
