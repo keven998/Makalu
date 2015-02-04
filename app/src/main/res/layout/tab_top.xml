@@ -2,12 +2,9 @@
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tv_title"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="18dp"
-    android:paddingRight="18dp"
-    android:paddingTop="14dp"
-    android:paddingBottom="9dp"
-    android:gravity="center"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:paddingTop="7dp"
     android:textColor="@color/nearby_tab_text_color"
-    android:drawablePadding="6dp"
-    android:textSize="11sp" />
+    android:drawablePadding="1dp"
+    android:textSize="10sp" />

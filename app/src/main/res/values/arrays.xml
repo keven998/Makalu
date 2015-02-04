@@ -18,9 +18,9 @@
         <item>豆瓣</item>
     </string-array>
     <string-array name="local_type_title">
-        <item>玩</item>
+        <item>景</item>
         <item>吃</item>
-        <item>买</item>
+        <item>逛</item>
         <item>住</item>
     </string-array>
     <string-array name="sns_icons">

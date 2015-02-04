@@ -8,18 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
-import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.DrawableBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
@@ -33,7 +29,6 @@ import com.amap.api.location.LocationProviderProxy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,8 +37,6 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class NearbyActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
-    TitleHeaderBar mTitleBar;
     @InjectView(R.id.nearby_indicator)
     ScrollIndicatorView mNearbyIndicator;
     @InjectView(R.id.nearby_viewPager)
@@ -111,8 +104,12 @@ public class NearbyActivity extends PeachBaseActivity {
             }
         });
 
-        mTitleBar.getTitleTextView().setText("我身边");
-        mTitleBar.enableBackKey(true);
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mBtnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

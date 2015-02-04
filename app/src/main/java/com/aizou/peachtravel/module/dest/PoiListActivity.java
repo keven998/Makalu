@@ -152,10 +152,10 @@ public class PoiListActivity extends PeachBaseActivity {
 
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setText("当地美食攻略");
+                    mTvPoiWantType.setText("美食\n攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     mTitle.setText(String.format("%s购物", curLoc.zhName));
-                    mTvPoiWantType.setText("当地购购攻略");
+                    mTvPoiWantType.setText("购购\n攻略");
                 }
             }
 
