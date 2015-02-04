@@ -598,7 +598,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     public void onClick(View v) {
                         final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                         deleteDialog.setTitle("提示");
-                        deleteDialog.setMessage("确定删除这一天吗？");
+                        deleteDialog.setMessage("删除这天安排");
                         deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

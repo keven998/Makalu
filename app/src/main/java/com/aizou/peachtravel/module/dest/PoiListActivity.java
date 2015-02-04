@@ -152,10 +152,10 @@ public class PoiListActivity extends PeachBaseActivity {
 
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setText("吃什么");
+                    mTvPoiWantType.setText("当地美食攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     mTitle.setText(String.format("%s购物", curLoc.zhName));
-                    mTvPoiWantType.setText("买什么");
+                    mTvPoiWantType.setText("当地购购攻略");
                 }
             }
 
@@ -180,10 +180,10 @@ public class PoiListActivity extends PeachBaseActivity {
         mPoiListLv.doPullRefreshing(true, 200);
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
-            mTvPoiWantType.setText("吃什么");
+//            mTvPoiWantType.setText("吃什么");
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-            mTvPoiWantType.setText("买什么");
+//            mTvPoiWantType.setText("买什么");
         }
     }
 
@@ -246,10 +246,12 @@ public class PoiListActivity extends PeachBaseActivity {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     intent.putExtra("url", result.detailUrl);
-                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
+//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
+                    intent.putExtra("title", "美食攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     intent.putExtra("url", result.detailUrl);
-                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
+//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
+                    intent.putExtra("title", "购物攻略");
                 }
                 startActivity(intent);
 
