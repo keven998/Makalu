@@ -73,17 +73,16 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:background="@drawable/ic_pb_earth"/>
 
-            <ProgressBar
-                android:layout_width="30dip"
-                android:layout_height="30dip"
+            <ImageView
+                android:id="@+id/pb_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:indeterminate="false"
-                android:interpolator="@android:anim/decelerate_interpolator"
-                android:indeterminateDuration="1500"
-                android:indeterminateDrawable="@anim/update_loading_progressbar_anim"
+                android:background="@anim/loading_anim"
                 android:visibility="visible" />
         </FrameLayout>
     </RelativeLayout>

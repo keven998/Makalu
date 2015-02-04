@@ -3,7 +3,7 @@
     android:layout_height="120dp"
     android:layout_centerInParent="true"
     android:layout_gravity="center"
-    android:background="@drawable/shape_white_dialog" >
+     >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -18,14 +18,14 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
+                android:visibility="invisible"
                 android:background="@drawable/ic_pb_earth"/>
-            <ProgressBar
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+            <ImageView
+                android:id="@+id/pb_iv"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:indeterminate="false"
-                android:indeterminateDuration="2000"
-                android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-                android:indeterminateDrawable="@drawable/pb_drawable"
+                android:background="@anim/loading_anim"
                 android:layout_gravity="center" />
             </FrameLayout>
 
