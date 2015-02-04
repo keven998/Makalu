@@ -100,12 +100,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 finish();
             }
         });
-        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showActionDialog();
-            }
-        });
+
         View hv;
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         travelLv.setHeaderView(hv);
@@ -215,6 +210,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void bindView(final LocBean detailBean){
         locDetailBean = detailBean;
+        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showActionDialog();
+            }
+        });
         if (detailBean.images != null && detailBean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
         }

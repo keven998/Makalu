@@ -187,6 +187,14 @@ public class PoiListActivity extends PeachBaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("poiList", hasAddList);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     private void initView() {
         setContentView(R.layout.activity_poi_list);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
