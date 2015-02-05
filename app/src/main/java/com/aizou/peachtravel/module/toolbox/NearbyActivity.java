@@ -170,18 +170,6 @@ public class NearbyActivity extends PeachBaseActivity {
                             });
 
                         } else {
-//            ToastUtil.getInstance(this).showToast("定位失败，请稍后重试");
-
-//                            if(mLat==-1){
-//                                init2PreLocData();
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        updateContent();
-//                                    }
-//                                });
-//                            }
-
                             mBtnRefresh.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -268,9 +256,8 @@ public class NearbyActivity extends PeachBaseActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            LogUtil.d("NearItemFragment","init "+position);
             NearbyItemFragment fragment = fragmentMap.get(tabTypes[position]);
-            if(fragment==null){
+            if(fragment == null) {
                 fragment = new NearbyItemFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", tabTypes[position]);
@@ -281,17 +268,6 @@ public class NearbyActivity extends PeachBaseActivity {
             }
             return fragment;
         }
-//        public void updateLocation(double lat, double lng) {
-//            for (NearbyItemFragment fragment : fragmentList) {
-//                if(fragment.isAdded()){
-//                    Bundle bundle= fragment.getArguments();
-//                    bundle.putDouble("lat",lat);
-//                    bundle.putDouble("lng",lng);
-//                    fragment.setArguments(bundle);
-//                }
-//
-//            }
-//        }
 
     }
 
