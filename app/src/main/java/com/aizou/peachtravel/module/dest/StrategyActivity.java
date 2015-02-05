@@ -762,6 +762,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SelectDestActivity.class);
                 intent.putExtra("locList",destinations);
+                intent.putExtra("guide_id",strategy.id);
                 intent.putExtra("request_code",EDIT_LOC_REQUEST_CODE);
                 startActivityForResult(intent,EDIT_LOC_REQUEST_CODE);
                 dialog.dismiss();

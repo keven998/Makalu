@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -679,7 +680,7 @@ public class MessageAdapter extends BaseAdapter {
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         final ExtMessageBean finalBean = bean;
-        holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == Constant.ExtType.GUIDE) {
             holder.tv_attr.setVisibility(View.VISIBLE);
             holder.tv_name.setText(bean.name);
@@ -725,10 +726,15 @@ public class MessageAdapter extends BaseAdapter {
             });
 
         } else if (extType == Constant.ExtType.SPOT) {
-            holder.tv_attr.setVisibility(View.VISIBLE);
+            if (TextUtils.isEmpty(bean.timeCost)) {
+                holder.tv_attr.setVisibility(View.GONE);
+            } else {
+                holder.tv_attr.setVisibility(View.VISIBLE);
+                holder.tv_attr.setText(bean.timeCost);
+            }
             holder.tv_name.setText(bean.name);
             holder.tv_desc.setText(bean.desc);
-            holder.tv_attr.setText(bean.timeCost);
+
             holder.tv_type.setText("景点");
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {
@@ -758,7 +764,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_attr.setText(bean.rating + " ");
                     break;
             }
-            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small,0,0,0);
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small, 0, 0, 0);
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {
