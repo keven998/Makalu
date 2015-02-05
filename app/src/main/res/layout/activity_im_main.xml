@@ -30,7 +30,7 @@
                 android:layout_marginBottom="6dp"
                 android:singleLine="true"
                 android:duplicateParentState="true"
-                android:drawableLeft="@drawable/selector_city_detail_nav_back"
+                android:drawableLeft="@drawable/selector_ic_nav_back"
                 android:gravity="center"
                 android:textColor="@color/base_text_color_text_hint"
                 android:drawablePadding="3dp"

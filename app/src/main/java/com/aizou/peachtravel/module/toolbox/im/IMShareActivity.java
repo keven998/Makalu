@@ -71,7 +71,7 @@ public class IMShareActivity extends PeachBaseActivity {
         View headerView = View.inflate(mContext, R.layout.header_im_share, null);
         mImShareLv.addHeaderView(headerView);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("选择Talk");
+        mTitleBar.getTitleTextView().setText("选择");
         mTitleBar.enableBackKey(true);
         mCreateNewTalk.setOnClickListener(new View.OnClickListener() {
             @Override

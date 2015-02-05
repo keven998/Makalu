@@ -1,42 +1,47 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseWebViewActivity;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TravelNoteBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.common.widget.NumberProgressBar;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
-import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
+import com.aizou.peachtravel.module.toolbox.im.IMShareActivity;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/13.
  */
 public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
-//    @InjectView(R.id.ly_header_bar_title_wrap)
-//    TitleHeaderBar titleBar;
     TravelNoteBean noteBean;
     String id;
 
@@ -48,7 +53,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();
-//        titleBar.getTitleTextView().setText("游记详情");
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         String url;
@@ -59,7 +63,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         }
 
         mWebView.loadUrl(url);
-//        titleBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,28 +70,31 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             }
         });
         if (noteBean != null) {
-            CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right);
-            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_title_ic_favorite, 0);
-            txtView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    MoreMenu fragment = new MoreMenu();
-//                    Bundle args = new Bundle();
-//                    args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
-//                    args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
-//                    args.putString("id", id);
-//                    fragment.setArguments(args);
-//                    fragment.show(getSupportFragmentManager(), "more_menu");
-                    favorite((CheckedTextView) v);
-                }
-            });
-
-            TextView txtView2 = (TextView) findViewById(R.id.tv_title_bar_right_1);
-            txtView2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share , 0);
+            ImageView txtView2 = (ImageView) findViewById(R.id.tv_title_bar_right);
+            txtView2.setVisibility(View.VISIBLE);
+            txtView2.setImageResource(R.drawable.ic_talk_navigationbar_normal);
             txtView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    IMUtils.onClickImShare(TravelNoteDetailActivity.this);
+                    showActionDialog();
+                }
+            });
+
+            CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
+            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_ic_nav_favorite, 0);
+            txtView.setVisibility(View.VISIBLE);
+            txtView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PeachUser user = AccountManager.getInstance().getLoginAccount(TravelNoteDetailActivity.this);
+                    if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                        favorite((CheckedTextView) v);
+                    } else {
+                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("请先登录");
+                        Intent intent = new Intent(TravelNoteDetailActivity.this, LoginActivity.class);
+                        startActivityForResult(intent, 11);
+                    }
+
                 }
             });
         }
@@ -98,11 +104,17 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareResult(mContext,noteBean,requestCode,resultCode,data,null);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 11) {
+                CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
+                favorite(txtView);
+            } else {
+                IMUtils.onShareResult(mContext, noteBean, requestCode, resultCode, data, null);
+            }
+        }
     }
 
     private void favorite(final CheckedTextView ct) {
-//        DialogManager.getInstance().showLoadingDialog(getActivity());
         final boolean isFav = ct.isChecked();
         ct.setChecked(!isFav);
         if (!isFav) {
@@ -110,7 +122,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                 @Override
                 public void doSucess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0) {
+                    if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                         ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("已收藏");
                     } else {
                         //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
@@ -133,9 +145,8 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                 public void doSucess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0) {
-                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("收藏取消");
+//                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("收藏取消");
                     } else {
-                        //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
                         ct.setChecked(isFav);
                     }
 
@@ -150,6 +161,37 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                 }
             });
         }
+    }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("Talk分享");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMUtils.onClickImShare(act);
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
     public static class MoreMenu extends BlurDialogFragment {

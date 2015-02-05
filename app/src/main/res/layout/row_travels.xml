@@ -27,7 +27,7 @@
             android:textColor="@color/base_text_color_title"
             android:layout_height="wrap_content"
             android:layout_marginTop="-2dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"/>
 
@@ -36,8 +36,8 @@
             android:layout_alignLeft="@id/tv_travels_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:lineSpacingExtra="3dp"
+            android:layout_marginTop="7dp"
             android:gravity="left|top"
             android:layout_marginLeft="10dp"
             android:ellipsize="end"
@@ -46,26 +46,27 @@
             android:textSize="12sp"/>
 
         <TextView android:id="@+id/tv_property"
-            android:layout_alignBottom="@id/iv_travels"
             android:layout_toRightOf="@id/iv_travels"
+            android:layout_alignBottom="@id/iv_travels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="right|bottom"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:textColor="@color/base_text_color_text_hint"
-            android:layout_marginTop="3dp"
+            android:layout_marginBottom="-3dp"
             android:textSize="9sp"
             android:singleLine="true"/>
 
         <Button android:id="@+id/btn_send"
             android:layout_width="44dp"
-            android:layout_height="25dp"
+            android:layout_height="26dp"
             android:textSize="13sp"
             android:visibility="gone"
+            android:layout_marginRight="10dp"
             android:background="@drawable/theme_button_selctor"
-            android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:textColor="@color/base_color_white"
             android:text="发送"/>
 

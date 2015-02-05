@@ -284,7 +284,7 @@ public class IMMainActivity extends ChatBaseActivity {
                     // 添加user"申请与通知"
                     IMUser newFriends = new IMUser();
                     newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                    newFriends.setNick("桃友申请");
+                    newFriends.setNick("好友申请");
                     newFriends.setHeader("");
                     newFriends.setIsMyFriends(true);
                     newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));

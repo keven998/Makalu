@@ -2,6 +2,6 @@
 <resources>
 
     <integer name="response_success">402</integer>
-    <integer name="response_favorite_exist">402</integer>
+    <integer name="response_favorite_exist">401</integer>
 
 </resources>

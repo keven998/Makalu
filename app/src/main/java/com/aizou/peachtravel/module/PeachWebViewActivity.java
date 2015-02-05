@@ -49,7 +49,6 @@ public class PeachWebViewActivity extends BaseWebViewActivity {
         if(!TextUtils.isEmpty(title)){
             ((TextView)findViewById(R.id.tv_title_bar_title)).setText(title);
         }
-        LogUtil.d("webUrl=" + mCurrentUrl);
         mWebView.loadUrl(mCurrentUrl);
 
     }

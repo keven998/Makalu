@@ -6,86 +6,54 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <RelativeLayout android:id="@+id/ly_header_bar_title_wrap"
+    <FrameLayout android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/bg_titlebar" >
 
-        <RelativeLayout
+        <ImageView
             android:id="@+id/ly_title_bar_left"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true">
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_gravity="left"
+            android:src="@drawable/selector_ic_nav_back"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"/>
 
-            <TextView
-                android:id="@+id/tv_title_bar_left"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/selector_city_detail_nav_back"
-                android:paddingLeft="12dp"
-                android:paddingRight="20dp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/ly_title_bar_center"
+        <TextView
+            android:id="@+id/tv_title_bar_title"
             android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/tv_title_bar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textSize="17sp"
-                android:textColor="@color/base_text_color_title"/>
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:ellipsize="end"
+            android:textColor="@color/base_text_color_title"/>
 
         <LinearLayout
-            android:id="@+id/ly_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
             android:orientation="horizontal">
-
-            <TextView
+            <CheckedTextView
                 android:id="@+id/tv_title_bar_right_1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/btn_navigation_back_selector"
-                android:textColor="@color/app_theme_color"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:gravity="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="10dp"
-                android:textSize="15sp" />
-
-            <CheckedTextView
+                android:visibility="gone"
+                android:paddingLeft="30dp"
+                android:paddingRight="10dp"/>
+            <ImageView
                 android:id="@+id/tv_title_bar_right"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/btn_navigation_back_selector"
-                android:textColor="@color/app_theme_color"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:gravity="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="10dp"
-                android:textSize="15sp" />
-
+                android:layout_height="@dimen/title_bar_height"
+                android:scaleType="center"
+                android:paddingLeft="10dp"
+                android:visibility="gone"
+                android:paddingRight="20dp"/>
         </LinearLayout>
-
-    </RelativeLayout>
+    </FrameLayout>
 
     <com.aizou.peachtravel.common.widget.NumberProgressBar
         android:id="@+id/numberbar1"

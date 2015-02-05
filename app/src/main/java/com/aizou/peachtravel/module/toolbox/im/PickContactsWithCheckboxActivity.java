@@ -188,7 +188,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("选择Talk桃友");
+        titleHeaderBar.getTitleTextView().setText("选择好友");
         titleHeaderBar.enableBackKey(true);
     }
 
@@ -199,7 +199,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      */
     public void save(View v) {
         if (toBeAddContacts.size() == 0) {
-            ToastUtil.getInstance(mContext).showToast("我还不知道你想和谁Talk");
+            ToastUtil.getInstance(mContext).showToast("请至少选择一位好友");
             return;
         }
         final StringBuffer groupName = new StringBuffer();

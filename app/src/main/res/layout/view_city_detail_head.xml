@@ -96,7 +96,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/app_theme_color"></View>
+            android:background="@color/app_theme_color"/>
 
         <TextView android:id="@+id/travel_title"
             android:layout_width="wrap_content"
@@ -105,7 +105,6 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:textColor="@color/base_text_color_title"
-            android:textStyle="bold"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
@@ -168,12 +167,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/app_theme_color"
+                android:textColor="@color/theme_color"
                 android:background="@drawable/city_detail_content_button"
                 android:drawableTop="@drawable/city_detail_spots"
-                android:drawablePadding="-6dp"
+                android:drawablePadding="-5dp"
                 android:textSize="17sp"
-                android:paddingTop="10dp"
+                android:paddingTop="8dp"
                 android:onClick="intentToFood"
                 android:text="美景"/>
 
@@ -182,13 +181,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/app_theme_color"
+                android:textColor="@color/theme_color"
                 android:background="@drawable/city_detail_content_button"
                 android:drawableTop="@drawable/city_detail_delicious"
-                android:drawablePadding="-6dp"
+                android:drawablePadding="-5dp"
                 android:layout_centerHorizontal="true"
                 android:textSize="17sp"
-                android:paddingTop="13dp"
+                android:paddingTop="8dp"
                 android:onClick="intentToFood"
                 android:text="美食"/>
 
@@ -199,11 +198,11 @@
                 android:gravity="center"
                 android:background="@drawable/city_detail_content_button"
                 android:drawableTop="@drawable/city_detail_shopping"
-                android:drawablePadding="-6dp"
-                android:textColor="@color/app_theme_color"
+                android:drawablePadding="-5dp"
+                android:textColor="@color/theme_color"
                 android:layout_alignParentRight="true"
                 android:textSize="17sp"
-                android:paddingTop="11dp"
+                android:paddingTop="8dp"
                 android:onClick="intentToShopping"
                 android:text="购物"/>
 
@@ -223,10 +222,9 @@
             android:gravity="center_vertical"
             android:text="精选游记"
             android:layout_marginLeft="10dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="1dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="12dp"
             android:textColor="@color/app_theme_color_secondary"
-            android:textStyle="bold"
             android:textSize="17sp"/>
 
         <TextView
@@ -237,8 +235,8 @@
             android:paddingRight="12dp"
             android:gravity="center"
             android:layout_alignParentRight="true"
-            android:paddingTop="12dp"
-            android:paddingBottom="5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="12dp"
             android:text="更多精选游记"
             android:textColor="@color/secondary_theme_color"
             android:drawableRight="@drawable/app_them_arrow_secondary"
