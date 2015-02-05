@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="20dp">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="4dp"
-        android:background="@color/app_theme_color" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/content_card"
-        android:orientation="horizontal"
-        android:padding="13dp">
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="4dp"
+            android:background="@color/app_theme_color" />
 
         <TextView
             android:id="@+id/tv_poi_want_type"
@@ -26,22 +27,24 @@
             android:background="@drawable/btn_poi_guide"
             android:gravity="center"
             android:textColor="@color/app_theme_color"
-            android:textSize="14sp"
-            android:paddingBottom="4dp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="4dp"/>
 
         <TextView
             android:id="@+id/tv_city_poi_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/tv_poi_want_type"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="2dp"
             android:maxLines="4"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_more"
@@ -50,11 +53,13 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_city_poi_desc"
             android:drawablePadding="5dp"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="12dp"
             android:drawableRight="@drawable/arr_poi_guide"
-            android:text="更多" />
+            android:text="详情" />
     </RelativeLayout>
-</LinearLayout>
+</FrameLayout>
 
 

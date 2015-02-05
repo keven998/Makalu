@@ -208,7 +208,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.poiAddressTv.setText(poiDetailBean.address);
-            holder.poiRating.setRating(2.5f);
+            holder.poiRating.setRating(poiDetailBean.rating);
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
 
             if (isEditableMode) {

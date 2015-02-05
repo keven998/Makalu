@@ -73,9 +73,10 @@
                 android:id="@+id/poi_price_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:gravity="left"
-                android:textSize="13sp"
-                android:textColor="@color/app_theme_color"
+                android:textSize="12sp"
+                android:textColor="@color/base_text_color_text_hint"
                 android:layout_marginTop="2dp"
                 android:layout_below="@id/poi_name_tv"
                 android:singleLine="true"
@@ -87,11 +88,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/poi_image_iv"
                 android:layout_toRightOf="@id/poi_image_iv"
-                android:paddingTop="3dp"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="3dp"
                 android:singleLine="true"
                 android:paddingRight="10dp"
                 android:drawablePadding="4dp"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textColor="@color/base_text_color_text_placeholder"/>
 
         </RelativeLayout>
