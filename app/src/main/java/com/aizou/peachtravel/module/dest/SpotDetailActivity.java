@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -50,11 +51,15 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private ImageView spotIv;
     private TextView picNumTv;
     private TextView mSpotIntroTv;
-    private TextView mSpotNameTv,mPriceDescTv,mAddressTv,mOpenCostTv;
-//    private ExpandableTextView mBestMonthTv;
-    private TextView tipsTv,travelGuideTv,trafficGuideTv;
+    private LinearLayout cardLl;
+    private TextView mSpotNameTv, mPriceDescTv, mAddressTv, mCostTimeTv, mOpenTimeTv;
+    //    private ExpandableTextView mBestMonthTv;
+    private TextView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView favIv;
     private SpotDetailBean spotDetailBean;
+    private RatingBar ratingBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +73,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
         overridePendingTransition(0, android.R.anim.fade_out);
     }
 
-    private void initView(){
+    private void initView() {
         setContentView(R.layout.activity_spot_detail);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(80));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(30));
 //        p.alpha = 1.0f;      //设置本身透明度
 //        p.dimAmount = 0.0f;      //设置黑暗度
 //        getWindow().setAttributes(p);
@@ -89,11 +94,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
         favIv = (ImageView) findViewById(R.id.iv_fav);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);
         picNumTv = (TextView) findViewById(R.id.tv_pic_num);
         mSpotIntroTv = (TextView) findViewById(R.id.tv_intro);
+        cardLl = (LinearLayout) findViewById(R.id.ll_card);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
-        mOpenCostTv = (TextView) findViewById(R.id.tv_open_and_cost);
+        mCostTimeTv = (TextView) findViewById(R.id.tv_cost_time);
+        mOpenTimeTv = (TextView) findViewById(R.id.tv_open_time);
 //        mBestMonthTv = (ExpandableTextView) findViewById(R.id.tv_best_month);
 //        mOpenTimeTv = (TextView) findViewById(R.id.tv_open_time);
 //        mTimeCostTv = (TextView) findViewById(R.id.tv_time_cost);
@@ -103,18 +111,19 @@ public class SpotDetailActivity extends PeachBaseActivity {
         trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
 
     }
-    private void initData(){
+
+    private void initData() {
         mSpotId = getIntent().getStringExtra("id");
         getSpotDetailData();
     }
 
-    private void getSpotDetailData(){
-        TravelApi.getSpotDetail(mSpotId,new HttpCallBack<String>() {
+    private void getSpotDetailData() {
+        TravelApi.getSpotDetail(mSpotId, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson<SpotDetailBean> detailResult = CommonJson.fromJson(result,SpotDetailBean.class);
-                if(detailResult.code==0){
-                    spotDetailBean=detailResult.result;
+                CommonJson<SpotDetailBean> detailResult = CommonJson.fromJson(result, SpotDetailBean.class);
+                if (detailResult.code == 0) {
+                    spotDetailBean = detailResult.result;
                     bindView(detailResult.result);
                 }
 
@@ -123,32 +132,33 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing())
-                ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
-    private void refreshFav(SpotDetailBean detailBean){
-        if(detailBean.isFavorite){
-            favIv.setImageResource(R.drawable.ic_fav);
-        }else{
-            favIv.setImageResource(R.drawable.ic_unfav);
+    private void refreshFav(SpotDetailBean detailBean) {
+        if (detailBean.isFavorite) {
+            favIv.setImageResource(R.drawable.ic_poi_fav_selected);
+        } else {
+            favIv.setImageResource(R.drawable.ic_poi_fav_normal);
         }
     }
 
     private void bindView(final SpotDetailBean result) {
-        ImageLoader.getInstance().displayImage(result.images.size()>0?result.images.get(0).url:"",spotIv,UILUtils.getRadiusOption());
-        picNumTv.setText(result.images.size() + "");
+        ImageLoader.getInstance().displayImage(result.images.size() > 0 ? result.images.get(0).url : "", spotIv, UILUtils.getDefaultOption());
         spotIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.intentToPicGallery(SpotDetailActivity.this,result.images,0);
+                IntentUtils.intentToPicGallery(SpotDetailActivity.this, result.images, 0);
             }
         });
+        ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
 //        mSpotIntroTv.setText(result.desc);
-        mPriceDescTv.setText(result.priceDesc);
-        mOpenCostTv.setText(result.openTime+"开放,玩"+result.timeCostDesc+"最佳");
+        mPriceDescTv.setText("门票 "+result.priceDesc);
+        mCostTimeTv.setText("推荐游玩时间 " + result.timeCostDesc);
+        mOpenTimeTv.setText("开放时间 " + result.openTime);
 //        mBestMonthTv.setText(result.travelMonth);
 //        mOpenTimeTv.setText(result.openTime);
 //        mTimeCostTv.setText(result.timeCostDesc);
@@ -156,9 +166,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mAddressTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(result.location!=null&&result.location.coordinates!=null){
-                    Uri mUri = Uri.parse("geo:"+result.location.coordinates[1]+","+result.location.coordinates[0]+"?q="+result.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
+                if (result.location != null && result.location.coordinates != null) {
+                    Uri mUri = Uri.parse("geo:" + result.location.coordinates[1] + "," + result.location.coordinates[0] + "?q=" + result.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
                     if (CommonUtils.checkIntent(mContext, mIntent)) {
                         startActivity(mIntent);
                     } else {
@@ -174,7 +184,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
 //                DialogManager.getInstance().showLoadingDialog(SpotDetailActivity.this);
-                if(result.isFavorite){
+                if (result.isFavorite) {
                     OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
@@ -198,8 +208,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                         @Override
                         public void doSucess(String result, String method) {
 //                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result,ModifyResult.class);
-                            if(deleteResult.code == 0){
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
                                 spotDetailBean.isFavorite = true;
                                 refreshFav(spotDetailBean);
                             }
@@ -213,6 +223,15 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             }
         });
+        cardLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SpotIntroActivity.class);
+                intent.putExtra("content", spotDetailBean.desc);
+                intent.putExtra("spot", spotDetailBean.zhName);
+                startActivity(intent);
+            }
+        });
         mSpotIntroTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,47 +241,55 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
-        if(!TextUtils.isEmpty(result.tipsUrl)){
+        if (!TextUtils.isEmpty(result.tipsUrl)) {
+            tipsTv.setEnabled(true);
             tipsTv.setVisibility(View.VISIBLE);
             tipsTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title","温馨贴士");
-                    intent.putExtra("url",result.tipsUrl);
+                    intent.putExtra("title", "实用信息");
+                    intent.putExtra("url", result.tipsUrl);
                     startActivity(intent);
 
                 }
             });
+        }else{
+            tipsTv.setEnabled(false);
         }
-        if(!TextUtils.isEmpty(result.trafficInfoUrl)){
+        if (!TextUtils.isEmpty(result.trafficInfoUrl)) {
+            trafficGuideTv.setEnabled(true);
             trafficGuideTv.setVisibility(View.VISIBLE);
             trafficGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title","交通指南");
-                    intent.putExtra("url",result.trafficInfoUrl);
+                    intent.putExtra("title", "交通指南");
+                    intent.putExtra("url", result.trafficInfoUrl);
                     startActivity(intent);
                 }
             });
+        }else{
+            trafficGuideTv.setEnabled(false);
         }
-        if(!TextUtils.isEmpty(result.visitGuideUrl)){
+        if (!TextUtils.isEmpty(result.visitGuideUrl)) {
+            travelGuideTv.setEnabled(true);
             travelGuideTv.setVisibility(View.VISIBLE);
             travelGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title","游玩指南");
-                    intent.putExtra("url",result.visitGuideUrl);
+                    intent.putExtra("title", "亮点体验");
+                    intent.putExtra("url", result.visitGuideUrl);
                     startActivity(intent);
                 }
             });
+        }else{
+            travelGuideTv.setEnabled(false);
         }
 
 
     }
-
 
 
 }

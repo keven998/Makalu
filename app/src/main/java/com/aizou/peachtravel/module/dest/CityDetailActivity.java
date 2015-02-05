@@ -298,7 +298,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     public void intentToTravel(View view){
         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-        intent.putExtra("url", H5Url.LOC_TRAVEL + locId);
+        intent.putExtra("url", locDetailBean.playGuideUrl);
         intent.putExtra("title", "城市概况");//String.format("玩转%s", mCityNameTv.getText()));
         startActivity(intent);
     }
