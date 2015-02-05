@@ -155,7 +155,7 @@ public class PoiListActivity extends PeachBaseActivity {
                     mTvPoiWantType.setText("美食\n攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     mTitle.setText(String.format("%s购物", curLoc.zhName));
-                    mTvPoiWantType.setText("购购\n攻略");
+                    mTvPoiWantType.setText("购物\n攻略");
                 }
             }
 
@@ -184,7 +184,7 @@ public class PoiListActivity extends PeachBaseActivity {
                     "攻略");
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-            mTvPoiWantType.setText("购购\n" +
+            mTvPoiWantType.setText("购物\n" +
                     "攻略");
         }
     }

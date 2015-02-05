@@ -194,16 +194,6 @@ public class PoiAdapter extends BaseAdapter {
                 }
             });
         } else {
-//            poiViewHolder.mTvPoiName.setText("hellohellohellohellohellohellohello");
-//            poiViewHolder.mTvPrice.setText("129/人");
-//            poiViewHolder.mTvAddr.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
-//            poiViewHolder.mIvPoiImage.setImageResource(R.drawable.guide_1);
-//            poiViewHolder.mRatingBarPoi.setRating(2.7f);
-//            poiViewHolder.mTvCommentName.setText("hellohello");
-//            poiViewHolder.mTvCommentNum.setText(String.valueOf(9999));
-//            poiViewHolder.mTvCommentContent.setText("hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
-
-
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {

@@ -573,23 +573,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         intent.putExtra("dayIndex", section);
                         intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
                         getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
-//                        RouteDayMenu fragment = new RouteDayMenu();
-//                        fragment.setRouteDay(routeDayMap, routeDayAdpater);
-//                        Bundle args = new Bundle();
-//                        args.putInt(
-//                                SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS,
-//                                4
-//                        );
-//                        args.putFloat(
-//                                SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR,
-//                                5
-//                        );
-//                        args.putInt("dayIndex", section);
-//                        args.putParcelableArrayList("locList", locList);
-//
-//                        fragment.setArguments(args);
-//                        fragment.show(getActivity().getSupportFragmentManager(), "blur_menu");
-//                        showMenu();
                     }
                 });
 
