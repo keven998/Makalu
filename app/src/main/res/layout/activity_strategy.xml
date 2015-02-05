@@ -17,7 +17,8 @@
         android:layout_width="fill_parent"
         android:layout_height="62dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/app_theme_color">
+        android:background="@color/app_theme_color"
+        >
 
         <View
             android:layout_width="180dp"
@@ -87,6 +88,7 @@
             android:paddingRight="10dp"
             android:singleLine="true"
             android:text="复制"
+            android:layout_centerVertical="true"
             android:textColor="@color/base_color_white"
             android:textSize="15sp"
             android:visibility="gone" />

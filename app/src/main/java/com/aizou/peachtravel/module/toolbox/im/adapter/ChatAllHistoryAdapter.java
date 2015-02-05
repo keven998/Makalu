@@ -172,7 +172,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
                 finalHolder.avatar.setTag(imUser.getAvatarSmall());
-                ImageLoader.getInstance().displayImage(imUser.getAvatarSmall(), finalHolder.avatar,UILUtils.getRadiusOption(LocalDisplay.dp2px(10)));
+                ImageLoader.getInstance().displayImage(imUser.getAvatarSmall(), finalHolder.avatar,options);
 //                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
 //                    @Override
 //                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

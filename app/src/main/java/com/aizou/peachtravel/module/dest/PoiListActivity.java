@@ -121,12 +121,12 @@ public class PoiListActivity extends PeachBaseActivity {
 
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
-                if(poi.location!=null&&poi.location.coordinates!=null){
-                    Uri mUri = Uri.parse("geo:"+poi.location.coordinates[1]+","+poi.location.coordinates[0]+"?q="+poi.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    if (CommonUtils.checkIntent(PoiListActivity.this, mIntent)){
+                if (poi.location != null && poi.location.coordinates != null) {
+                    Uri mUri = Uri.parse("geo:" + poi.location.coordinates[1] + "," + poi.location.coordinates[0] + "?q=" + poi.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                    if (CommonUtils.checkIntent(PoiListActivity.this, mIntent)) {
                         startActivity(mIntent);
-                    }else{
+                    } else {
                         ToastUtil.getInstance(PoiListActivity.this).showToast("没有找到地图应用");
                     }
 
@@ -180,10 +180,12 @@ public class PoiListActivity extends PeachBaseActivity {
         mPoiListLv.doPullRefreshing(true, 200);
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
-//            mTvPoiWantType.setText("吃什么");
+            mTvPoiWantType.setText("美食\n" +
+                    "攻略");
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-//            mTvPoiWantType.setText("买什么");
+            mTvPoiWantType.setText("购购\n" +
+                    "攻略");
         }
     }
 

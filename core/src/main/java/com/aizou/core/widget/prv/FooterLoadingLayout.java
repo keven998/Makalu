@@ -5,11 +5,13 @@ package com.aizou.core.widget.prv;
 
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.aizou.core.R;
 public class FooterLoadingLayout extends LoadingLayout {
     /**进度条*/
     private FrameLayout mProgressBar;
+    private ImageView pbIv;
     /** 显示的文本 */
     private TextView mHintView;
     
@@ -56,7 +59,7 @@ public class FooterLoadingLayout extends LoadingLayout {
     private void init(Context context) {
         mProgressBar = (FrameLayout) findViewById(R.id.pull_to_load_footer_progressbar);
         mHintView = (TextView) findViewById(R.id.pull_to_load_footer_hint_textview);
-        
+        pbIv = (ImageView) findViewById(R.id.pb_iv);
         setState(State.RESET);
     }
     
@@ -114,6 +117,7 @@ public class FooterLoadingLayout extends LoadingLayout {
     	show(true);
         mProgressBar.setVisibility(View.VISIBLE);
         mHintView.setVisibility(View.VISIBLE);
+        ((AnimationDrawable) pbIv.getBackground()).start();
         mHintView.setText(R.string.pull_to_refresh_header_hint_loading);
     }
     
