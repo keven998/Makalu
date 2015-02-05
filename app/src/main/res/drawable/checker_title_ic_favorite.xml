@@ -3,8 +3,8 @@
 
     <item android:drawable="@drawable/ic_favorite_selected" android:state_selected="true"/>
     <item android:drawable="@drawable/ic_favorite_selected" android:state_checked="true"/>
-    <item android:drawable="@drawable/ic_favorite_selected" android:state_pressed="true" android:state_selected="false"/>
-    <item android:drawable="@drawable/ic_favorite_unselected" android:state_pressed="true" android:state_selected="true"/>
+    <item android:drawable="@drawable/ic_favorite_selected" android:state_pressed="true" android:state_checked="false"/>
+    <item android:drawable="@drawable/ic_favorite_unselected" android:state_pressed="true" android:state_checked="true"/>
     <item android:drawable="@drawable/ic_favorite_unselected"/>
 
 </selector>
