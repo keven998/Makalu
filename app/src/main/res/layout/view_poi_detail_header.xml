@@ -150,14 +150,14 @@
                 android:layout_height="0.75dp"
                 android:layout_marginTop="15dp"
                 android:layout_toLeftOf="@id/attr_address"
-                android:background="@color/base_divider_color" />
+                android:background="@color/base_text_color_text_placeholder" />
 
             <View
                 android:layout_width="60dp"
                 android:layout_height="0.75dp"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/attr_address"
-                android:background="@color/base_divider_color" />
+                android:background="@color/base_text_color_text_placeholder" />
 
             <TextView
                 android:id="@+id/tv_addr"
@@ -166,6 +166,7 @@
                 android:layout_below="@id/attr_address"
                 android:gravity="center"
                 android:lineSpacingExtra="3dp"
+                android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textColor="@color/base_text_color_subtitle"
@@ -193,14 +194,14 @@
                 android:layout_height="0.75dp"
                 android:layout_marginTop="15dp"
                 android:layout_toLeftOf="@id/attr_tel"
-                android:background="@color/base_divider_color" />
+                android:background="@color/base_text_color_text_placeholder" />
 
             <View
                 android:layout_width="60dp"
                 android:layout_height="0.75dp"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/attr_tel"
-                android:background="@color/base_divider_color" />
+                android:background="@color/base_text_color_text_placeholder" />
 
             <TextView
                 android:id="@+id/tv_tel"

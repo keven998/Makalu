@@ -29,6 +29,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
     public List<ImageBean> images =new ArrayList<ImageBean>();
     public int imageCnt;
     public boolean isFavorite;
+    public String playGuideUrl;
 
 
     public LocBean() {
@@ -88,6 +89,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
         dest.writeTypedList(images);
         dest.writeInt(this.imageCnt);
         dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeString(this.playGuideUrl);
     }
 
     private LocBean(Parcel in) {
@@ -105,6 +107,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
         in.readTypedList(images, ImageBean.CREATOR);
         this.imageCnt = in.readInt();
         this.isFavorite = in.readByte() != 0;
+        this.playGuideUrl = in.readString();
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {

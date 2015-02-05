@@ -20,6 +20,7 @@ public class SpotDetailBean implements ICreateShareDialog{
     public String desc;
     public String priceDesc;
     public String travelMonth;
+    public float rating;
     public LocationBean location;
     public ArrayList<ImageBean> images=new ArrayList<>();
     public String openTime;
@@ -28,7 +29,12 @@ public class SpotDetailBean implements ICreateShareDialog{
     public String trafficInfoUrl;
     public String visitGuideUrl;
     public String tipsUrl;
-
+    public float getRating() {
+        if(rating>1){
+            return rating;
+        }
+        return rating * 5;
+    }
     @Override
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();

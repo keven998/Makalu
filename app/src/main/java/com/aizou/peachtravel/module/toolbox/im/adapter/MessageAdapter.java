@@ -679,6 +679,7 @@ public class MessageAdapter extends BaseAdapter {
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         final ExtMessageBean finalBean = bean;
+        holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
         if (extType == Constant.ExtType.GUIDE) {
             holder.tv_attr.setVisibility(View.VISIBLE);
             holder.tv_name.setText(bean.name);
@@ -742,21 +743,22 @@ public class MessageAdapter extends BaseAdapter {
                 case Constant.ExtType.FOOD:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("美食");
-                    holder.tv_attr.setText(bean.rating + "星 " + bean.price);
+                    holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case Constant.ExtType.HOTEL:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("酒店");
-                    holder.tv_attr.setText(bean.rating + "星 " + bean.price);
+                    holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case Constant.ExtType.SHOPPING:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("购物");
-                    holder.tv_attr.setText(bean.rating + "星 ");
+                    holder.tv_attr.setText(bean.rating + " ");
                     break;
             }
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small,0,0,0);
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {

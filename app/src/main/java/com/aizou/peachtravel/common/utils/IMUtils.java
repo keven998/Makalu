@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -248,16 +250,25 @@ public class IMUtils {
         final ShareDialogBean dialogBean = iCreateShareDialog.createShareBean();
         final Dialog dialog  = new Dialog(context,R.style.ComfirmDialog);
         View contentView = View.inflate(context, R.layout.dialog_im_share,null);
-        TextView titleTv = (TextView) contentView.findViewById(R.id.title_tv);
-        ImageView vsIv = (ImageView) contentView.findViewById(R.id.image_iv);
-        TextView nameTv = (TextView) contentView.findViewById(R.id.name_tv);
-        TextView attrTv = (TextView) contentView.findViewById(R.id.attr_tv);
-        TextView descTv = (TextView) contentView.findViewById(R.id.desc_tv);
+        TextView titleTv = (TextView) contentView.findViewById(R.id.tv_title);
+        ImageView vsIv = (ImageView) contentView.findViewById(R.id.iv_image);
+        TextView nameTv = (TextView) contentView.findViewById(R.id.tv_name);
+        TextView attrTv = (TextView) contentView.findViewById(R.id.tv_attr);
+        TextView descTv = (TextView) contentView.findViewById(R.id.tv_desc);
         Button okBtn = (Button) contentView.findViewById(R.id.btn_ok);
         Button cancleBtn = (Button) contentView.findViewById(R.id.btn_cancle);
         titleTv.setText(dialogBean.getTitle());
         nameTv.setText(dialogBean.getName());
-        attrTv.setText(dialogBean.getAttr());
+        if(TextUtils.isEmpty(dialogBean.getAttr())){
+            attrTv.setVisibility(View.GONE);
+        }else{
+            if(dialogBean.getExtType()== Constant.ExtType.FOOD||dialogBean.getExtType()== Constant.ExtType.HOTEL||dialogBean.getExtType()== Constant.ExtType.SHOPPING){
+                attrTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small,0,0,0);
+            }
+            attrTv.setVisibility(View.VISIBLE);
+            attrTv.setText(dialogBean.getAttr());
+        }
+
         descTv.setText(dialogBean.getDesc());
         ImageLoader.getInstance().displayImage(dialogBean.getImage(), vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
         dialog.setContentView(contentView);
@@ -275,6 +286,11 @@ public class IMUtils {
                 callback.onDialogShareCancle(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()));
             }
         });
+        WindowManager m =((Activity) context).getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+        WindowManager.LayoutParams p = ((Activity) context).getWindow().getAttributes(); // 获取对话框当前的参数值
+        p.width = (int) (d.getWidth() -LocalDisplay.dp2px(40)); // 宽度设置为屏幕的0.65
+        ((Activity) context).getWindow().setAttributes(p);
         dialog.show();
     }
 
