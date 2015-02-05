@@ -10,6 +10,7 @@ import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.config.SystemConfig;
 
 import org.apache.http.entity.StringEntity;
@@ -63,6 +64,7 @@ public class TravelApi extends BaseApi{
     public final static String GUIDE="/guides";
     //修改攻略标题
     public final static String MODIFY_GUIDE_INFO="/guides/info/%1$s";
+    public final static String MODIFY_GUIDE_LOC="/guides";
     //收藏
     public final static String FAV="/misc/favorites";
     //搜索
@@ -339,6 +341,46 @@ public class TravelApi extends BaseApi{
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+
+        return HttpManager.request(request, callback);
+    }
+
+    /**
+     * 修改攻略目的地
+     * @param id
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler modifyGuideLoc
+    (String id, List<LocBean> locList,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + MODIFY_GUIDE_LOC);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            JSONArray locArray= new JSONArray();
+            JSONObject locObject;
+            for(LocBean loc:locList){
+                locObject = new JSONObject();
+                locObject.put("id",loc.id);
+                locObject.put("zhName",loc.zhName);
+                locObject.put("enName",loc.enName);
+                locArray.put(locObject);
+            }
+            jsonObject.put("localities",locArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }

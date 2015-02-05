@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -22,8 +23,13 @@ import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
@@ -51,6 +57,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private IndicatorViewPager indicatorViewPager;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
+    private String guideId;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private HorizontalScrollView mScrollPanel;
 
@@ -131,10 +138,32 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
                     if(requestCode==StrategyActivity.EDIT_LOC_REQUEST_CODE){
-                        Intent intent = new Intent();
-                        intent.putParcelableArrayListExtra("destinations", allAddCityList);
-                        setResult(RESULT_OK,intent);
-                        finish();
+                        DialogManager.getInstance().showLoadingDialog(SelectDestActivity.this);
+                        TravelApi.modifyGuideLoc(guideId,allAddCityList,new HttpCallBack<String>() {
+                            @Override
+                            public void doSucess(String result, String method) {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                CommonJson<ModifyResult> modfiyResult = CommonJson.fromJson(result,ModifyResult.class);
+                                if(modfiyResult.code==0){
+                                    Intent intent = new Intent();
+                                    intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                                    setResult(RESULT_OK,intent);
+                                    finish();
+                                }else{
+                                    if (!isFinishing())
+                                        ToastUtil.getInstance(mContext).showToast(modfiyResult.err.message);
+                                }
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method) {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                if (!isFinishing())
+                                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+
+                            }
+                        });
+
                     }else{
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putParcelableArrayListExtra("destinations", allAddCityList);
@@ -160,6 +189,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
         requestCode = getIntent().getIntExtra("request_code",0);
+        guideId = getIntent().getStringExtra("guide_id");
         hasSelectLoc = getIntent().getParcelableArrayListExtra("locList");
         if(hasSelectLoc!=null){
             for(LocBean locBean:hasSelectLoc){

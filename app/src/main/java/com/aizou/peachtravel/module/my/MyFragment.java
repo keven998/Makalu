@@ -17,7 +17,9 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.utils.ShareUtils;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -127,8 +129,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_about:
-//                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
-//                startActivity(aboutIntent);
+                Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
+                aboutIntent.putExtra("url", H5Url.ABOUT);
+                aboutIntent.putExtra("title","关于");
+                startActivity(aboutIntent);
                 break;
 
             case R.id.ll_setting:

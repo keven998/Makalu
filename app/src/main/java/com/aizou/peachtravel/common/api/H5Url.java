@@ -16,4 +16,6 @@ public class H5Url {
     public static final String MORE_COMMENT="http://h5.taozilvxing.com/morecomment.php?pid=";
     //攻略
     public static final String GUIDE="http://h5.taozilvxing.com/planshare.php?pid=";
+    //关于桃子旅行
+    public static final String ABOUT="http://h5.taozilvxing.com/about.html";
 }

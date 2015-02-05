@@ -20,7 +20,7 @@ public class CommonJson<T> implements Serializable {
 	public ErrBean err;
 
 	public class ErrBean {
-		public String message;
+		public String message="";
 		public String extro;
 	}
 
