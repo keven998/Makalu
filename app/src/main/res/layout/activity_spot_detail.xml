@@ -109,7 +109,7 @@
             <LinearLayout
                 android:id="@+id/ll_card"
                 android:layout_width="fill_parent"
-                android:layout_height="140dp"
+                android:layout_height="145dp"
                 android:layout_margin="20dp"
                 android:background="@drawable/bg_spot_card"
                 android:orientation="horizontal"
@@ -127,7 +127,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
 
@@ -144,7 +145,7 @@
                         android:id="@+id/tv_open_time"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="2dp"
                         android:ellipsize="end"
                         android:gravity="center"
                         android:lineSpacingExtra="2dp"
@@ -157,7 +158,7 @@
                         android:id="@+id/tv_price_desc"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:ellipsize="end"
                         android:gravity="center"
                         android:lineSpacingExtra="2dp"

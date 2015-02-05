@@ -33,9 +33,11 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
+import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -55,7 +57,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private TextView mSpotNameTv, mPriceDescTv, mAddressTv, mCostTimeTv, mOpenTimeTv;
     //    private ExpandableTextView mBestMonthTv;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
-    private ImageView favIv;
+    private ImageView favIv,shareIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
 
@@ -94,6 +96,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
         favIv = (ImageView) findViewById(R.id.iv_fav);
+        shareIv = (ImageView) findViewById(R.id.iv_share);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);
         picNumTv = (TextView) findViewById(R.id.tv_pic_num);
         mSpotIntroTv = (TextView) findViewById(R.id.tv_intro);
@@ -177,6 +180,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
                 }
 
+            }
+        });
+        shareIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(SpotDetailActivity.this);
             }
         });
         refreshFav(spotDetailBean);
@@ -291,5 +300,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IMUtils.onShareResult(mContext,spotDetailBean,requestCode,resultCode,data,null);
+    }
 }

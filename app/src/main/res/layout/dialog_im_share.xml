@@ -1,73 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_peach_dialog"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title_tv"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_peach_dialog_title"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:textColor="@color/base_color_white"
-        android:textSize="12sp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="15dp">
 
-        <ImageView
-            android:id="@+id/image_iv"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:scaleType="centerCrop" />
+        <RelativeLayout
+            android:id="@+id/rl_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp">
 
-        <TextView
-            android:id="@+id/name_tv"
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:foreground="@drawable/ic_text_cover_bg">
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_common_default"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/base_color_white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/image_iv"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="12sp" />
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/rl_image"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/attr_tv"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/name_tv"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:singleLine="true"
-            android:layout_toRightOf="@id/image_iv"
-            android:textColor="@color/base_text_color_subtitle"
-            android:textSize="11sp" />
 
-        <TextView
-            android:id="@+id/desc_tv"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/attr_tv"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp"
-            android:maxLines="2"
-            android:layout_toRightOf="@id/image_iv"
-            android:textColor="@color/base_text_color_subtitle"
-            android:textSize="11sp" />
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/app_theme_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_attr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:drawablePadding="5dp"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:scrollHorizontally="true"
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="12sp" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/dash"
-        android:layerType="software" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -75,19 +88,18 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:paddingTop="10dp">
+        android:paddingLeft="55dp"
+        android:paddingRight="55dp">
 
         <Button
             android:id="@+id/btn_cancle"
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="40dp"
             android:layout_weight="1"
-            android:background="@drawable/frame_cell_bounding_theme_highlight"
+            android:background="@drawable/theme_button_selctor"
             android:text="取消"
-            android:textColor="@color/app_theme_color"
+            android:textColor="@color/base_color_white"
             android:textSize="14sp"
             android:visibility="visible" />
 
@@ -97,9 +109,9 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:background="@drawable/frame_cell_bounding_theme_highlight"
+            android:background="@drawable/theme_button_selctor"
             android:text="发送"
-            android:textColor="@color/app_theme_color"
+            android:textColor="@color/base_color_white"
             android:textSize="14sp" />
     </LinearLayout>
 

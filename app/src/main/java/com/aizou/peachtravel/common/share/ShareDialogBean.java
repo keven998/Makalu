@@ -59,7 +59,7 @@ public class ShareDialogBean {
             desc =extMessageBean.address;
             extType =7;
         }else if(extMessageBean.type.equals(TravelApi.PeachType.LOC)){
-            title ="目的地";
+            title ="城市";
             attr=extMessageBean.timeCost;
             desc =extMessageBean.desc;
             extType =2;
