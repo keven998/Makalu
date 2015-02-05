@@ -158,7 +158,7 @@ public class PoiAdapter extends BaseAdapter {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
                     spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_secondary_normal_shape);
                 }
-                ((ViewGroup) spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
+                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (poiDetailBean.hasAdded) {
@@ -178,7 +178,7 @@ public class PoiAdapter extends BaseAdapter {
                 });
             } else {
                 spotViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离
-                ((ViewGroup) spotViewHolder.mBtnAdd.getParent()).setOnClickListener(new View.OnClickListener() {
+                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (mOnPoiActionListener != null) {

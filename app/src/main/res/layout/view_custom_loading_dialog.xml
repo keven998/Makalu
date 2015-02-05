@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
-    android:layout_height="120dp"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:layout_centerInParent="true"
+    android:background="@drawable/bg_loading_dialog"
     android:layout_gravity="center"
      >
 

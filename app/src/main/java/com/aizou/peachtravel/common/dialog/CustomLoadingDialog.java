@@ -59,6 +59,6 @@ public class CustomLoadingDialog extends ProgressDialog {
 
     @Override
     public void dismiss() {
-//        super.dismiss();
+        super.dismiss();
     }
 }
