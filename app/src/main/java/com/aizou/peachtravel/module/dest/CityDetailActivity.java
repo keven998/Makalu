@@ -4,23 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.expandabletextview.ExpandableTextView;
@@ -34,23 +29,20 @@ import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomBase;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -85,7 +77,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         locId = getIntent().getStringExtra("id");
 //        locId="5473ccd7b8ce043a64108c46";
         getCityDetailData(locId);
-        getTravelNotes(locId);
+//        getTravelNotes(locId);
     }
 
     private void initView(){
@@ -166,13 +158,15 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //        }
     }
 
-    private void getCityDetailData(String id){
+    private void getCityDetailData(final String id){
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
         TravelApi.getCityDetail(id, (int)(LocalDisplay.SCREEN_WIDTH_PIXELS/1.5), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
+                    getTravelNotes(id);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -191,8 +185,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
+
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
                     travelAdapter.notifyDataSetChanged();
@@ -203,6 +199,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
 //                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -297,10 +294,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     public void intentToTravel(View view){
-        Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-        intent.putExtra("url", locDetailBean.playGuideUrl);
-        intent.putExtra("title", "城市概况");//String.format("玩转%s", mCityNameTv.getText()));
-        startActivity(intent);
+        if(locDetailBean!=null){
+            Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+            intent.putExtra("url", locDetailBean.playGuide);
+            intent.putExtra("title", "城市概况");//String.format("玩转%s", mCityNameTv.getText()));
+            startActivity(intent);
+        }
+
     }
 
     public void intentToSpots(View view){

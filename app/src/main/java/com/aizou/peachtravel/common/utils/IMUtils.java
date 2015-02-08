@@ -288,9 +288,9 @@ public class IMUtils {
         });
         WindowManager m =((Activity) context).getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
-        WindowManager.LayoutParams p = ((Activity) context).getWindow().getAttributes(); // 获取对话框当前的参数值
+        WindowManager.LayoutParams p =dialog.getWindow().getAttributes(); // 获取对话框当前的参数值
         p.width = (int) (d.getWidth() -LocalDisplay.dp2px(40)); // 宽度设置为屏幕的0.65
-        ((Activity) context).getWindow().setAttributes(p);
+        dialog.getWindow().setAttributes(p);
         dialog.show();
     }
 

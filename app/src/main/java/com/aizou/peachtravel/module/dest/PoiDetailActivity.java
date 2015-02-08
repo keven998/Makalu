@@ -34,6 +34,7 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RecommendBean;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
@@ -154,15 +155,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
 //        } else {
 //            id = "53b0599710114e05dc63b5a5";
 //        }
+
         getDetailData();
 
     }
 
 
     private void getDetailData() {
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
         TravelApi.getPoiDetail(type, id, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
                 if (detailBean.code == 0) {
                     poiDetailBean = detailBean.result;
@@ -175,6 +179,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing()) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }

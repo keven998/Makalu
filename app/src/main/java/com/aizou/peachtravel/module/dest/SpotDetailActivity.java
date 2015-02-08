@@ -108,6 +108,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initData() {
         mSpotId = getIntent().getStringExtra("id");
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
         getSpotDetailData();
     }
 
@@ -115,6 +116,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         TravelApi.getSpotDetail(mSpotId, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<SpotDetailBean> detailResult = CommonJson.fromJson(result, SpotDetailBean.class);
                 if (detailResult.code == 0) {
                     spotDetailBean = detailResult.result;
@@ -125,8 +127,11 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (!isFinishing())
+                if (!isFinishing()){
+                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+
             }
         });
     }
