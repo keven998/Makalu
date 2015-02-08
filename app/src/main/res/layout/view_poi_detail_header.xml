@@ -86,18 +86,30 @@
                 android:textColor="@color/app_theme_color"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/btn_book"
+            <FrameLayout android:id="@+id/fl_book"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:layout_marginTop="40dp"
-                android:text="在线预订"
-                android:textColor="@color/base_color_white"
-                android:gravity="center"
-                android:textSize="10sp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@drawable/btn_reserve_shape" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:id="@+id/btn_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/selecter_theme_btn_radius_10"
+                    android:duplicateParentState="true"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="在线预订"
+                    android:textColor="@color/base_color_white"
+                    android:textSize="12sp" />
+            </FrameLayout>
 
             <View
                 android:id="@+id/div"
