@@ -669,7 +669,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
         messageDialog.setMessage("计划已编辑，是否保存");
-        messageDialog.setPositiveButton("先保存", new View.OnClickListener() {
+        messageDialog.setPositiveButton("保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageDialog.dismiss();
