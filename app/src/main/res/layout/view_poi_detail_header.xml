@@ -75,6 +75,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
             android:paddingTop="15dp">
+
             <LinearLayout
                 android:id="@+id/ll_left"
                 android:layout_width="120dp"
@@ -82,46 +83,46 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-            <RatingBar
-                android:id="@+id/ratingBar_poi"
-                style="@style/custom_rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                <RatingBar
+                    android:id="@+id/ratingBar_poi"
+                    style="@style/custom_rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
 
-            <TextView
-                android:id="@+id/tv_poi_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:drawablePadding="5dp"
-                android:text="0条网友点评"
-                android:gravity="center"
-                android:textColor="@color/base_text_color_subtitle"
-                android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tv_poi_rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:text="0条网友点评"
+                    android:textColor="@color/base_text_color_subtitle"
+                    android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tv_poi_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_poi_rank"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/app_theme_color"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/tv_poi_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_poi_rank"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/app_theme_color"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/btn_book"
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:layout_below="@id/tv_poi_price"
-                android:background="@drawable/btn_reserve_shape"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="在线预订"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/btn_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_below="@id/tv_poi_price"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selecter_theme_btn_radius_10"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="在线预订"
+                    android:textColor="@color/base_color_white"
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <View
@@ -138,13 +139,13 @@
                 android:id="@+id/tv_addr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_poi_address"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/div"
+                android:drawableLeft="@drawable/ic_poi_address"
+                android:drawablePadding="5dp"
                 android:lineSpacingExtra="3dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:drawablePadding="5dp"
                 android:textColor="@color/base_text_color_subtitle"
                 android:textSize="13sp" />
 
@@ -153,28 +154,28 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_addr"
-                android:lineSpacingExtra="3dp"
-                android:drawableLeft="@drawable/ic_poi_tel"
-                android:layout_toRightOf="@id/div"
                 android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/div"
+                android:drawableLeft="@drawable/ic_poi_tel"
+                android:drawablePadding="5dp"
+                android:lineSpacingExtra="3dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:drawablePadding="5dp"
                 android:textColor="@color/base_text_color_subtitle"
                 android:textSize="13sp" />
 
 
         </RelativeLayout>
+
         <TextView
             android:id="@+id/tv_poi_desc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="10dp"
+            android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <RelativeLayout
@@ -190,26 +191,26 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/bg_attr_dots"
                 android:gravity="center_vertical"
+                android:text="网友点评"
                 android:textColor="@color/app_theme_color"
-                android:textSize="14sp"
-               android:text="网友点评" />
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="60dp"
                 android:layout_height="0.75dp"
-                android:layout_toLeftOf="@id/attr_tel"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="2dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toLeftOf="@id/attr_tel"
                 android:background="@color/base_text_color_text_placeholder" />
 
             <View
                 android:layout_width="60dp"
                 android:layout_height="0.75dp"
-                android:layout_toRightOf="@id/attr_tel"
-                android:layout_marginTop="2dp"
-                android:layout_marginLeft="5dp"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/attr_tel"
                 android:background="@color/base_text_color_text_placeholder" />
 
 
@@ -272,8 +273,8 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:visibility="gone"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
