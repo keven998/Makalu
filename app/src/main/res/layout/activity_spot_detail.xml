@@ -270,7 +270,7 @@
                         android:enabled="false"
                         android:text="景点\n体验"
                         android:textColor="@color/theme_color"
-                        android:textSize="12sp"/>
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:id="@+id/tv_tips"
@@ -283,7 +283,7 @@
                         android:padding="15dp"
                         android:text="小\n贴士"
                         android:textColor="@color/theme_color"
-                        android:textSize="12sp"/>
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:id="@+id/tv_traffic_guide"
@@ -294,9 +294,9 @@
                         android:gravity="center"
                         android:padding="15dp"
                         android:enabled="false"
-                        android:text="交通\n指南"
+                        android:text="交通"
                         android:textColor="@color/theme_color"
-                        android:textSize="12sp"/>
+                        android:textSize="13sp"/>
                 </LinearLayout>
             </FrameLayout>
 

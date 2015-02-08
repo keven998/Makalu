@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -311,7 +316,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mIvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMUtils.onClickImShare(mContext);
+                showActionDialog();
             }
         });
 
@@ -465,5 +470,35 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.share_to_talk_confirm_action, null);
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("Talk分享");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMUtils.onClickImShare(PoiDetailActivity.this);
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
 
 }

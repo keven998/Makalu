@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,9 +9,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -103,7 +108,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         tipsTv = (TextView) findViewById(R.id.tv_tips);
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
-
     }
 
     private void initData() {
@@ -176,7 +180,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         shareIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMUtils.onClickImShare(SpotDetailActivity.this);
+                showActionDialog();
             }
         });
         findViewById(R.id.fl_book).setOnClickListener(new View.OnClickListener() {
@@ -291,4 +295,36 @@ public class SpotDetailActivity extends PeachBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         IMUtils.onShareResult(mContext,spotDetailBean,requestCode,resultCode,data,null);
     }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.share_to_talk_confirm_action, null);
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("Talk分享");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMUtils.onClickImShare(SpotDetailActivity.this);
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
 }
