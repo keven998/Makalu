@@ -19,9 +19,13 @@ public class DialogManager {
      */
     private PeachMessageDialog mMessageDialog;
     /**
-     * Loading对话框
+     * 模态Loading对话框
      */
     private CustomLoadingDialog mLoadingDialog;
+    /**
+     * 非模态Loading对话框
+     */
+    private ModelessLoadingDialog mModelessLoadingDialog;
 
     /**
      * 进度对话框
@@ -95,6 +99,33 @@ public class DialogManager {
     }
 
     /**
+     * 描述:显示非模态对话框
+     *
+     * @param context 上下文
+     */
+    public CustomLoadingDialog showModelessLoadingDialog(Context context) {
+        mModelessLoadingDialog = createModelessLoadingDialog(context, null, null);
+        WindowManager.LayoutParams lp = mModelessLoadingDialog.getWindow()
+                .getAttributes();
+        lp.flags = lp.flags | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        mModelessLoadingDialog.getWindow().setAttributes(lp);
+        return  mLoadingDialog;
+    }
+
+    /**
+     * 描述:隐藏通信框
+     */
+    public void dissMissModelessLoadingDialog() {
+        if (mModelessLoadingDialog != null) {
+            if (mModelessLoadingDialog.isShowing())
+                mModelessLoadingDialog.dismiss();
+
+        }
+        mModelessLoadingDialog =null;
+
+    }
+
+    /**
      * 描述:显示通信框
      *
      * @param context 上下文
@@ -126,6 +157,15 @@ public class DialogManager {
         CustomLoadingDialog dlg = new CustomLoadingDialog(con, message);
         dlg.show();
         dlg.setCancelable(true);
+        return dlg;
+    }
+    /**
+     * 创建通讯提示框
+     */
+    private ModelessLoadingDialog createModelessLoadingDialog( Context con, String message, OnCancelListener cancleListener) {
+        ModelessLoadingDialog dlg = new ModelessLoadingDialog(con, message);
+        dlg.show();
+        dlg.setCancelable(false);
         return dlg;
     }
     /**

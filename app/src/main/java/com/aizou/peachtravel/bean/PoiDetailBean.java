@@ -76,7 +76,15 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         extMessageBean.price = priceDesc;
         extMessageBean.address = address;
         extMessageBean.timeCost = timeCostDesc;
-        extMessageBean.desc= (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
+        if(!TextUtils.isEmpty(desc)){
+            if(desc.length()>50){
+                extMessageBean.desc =desc.substring(0,50);
+            }else{
+                extMessageBean.desc=desc;
+            }
+        }else{
+            extMessageBean.desc="";
+        }
         return new ShareDialogBean(extMessageBean);
     }
 
