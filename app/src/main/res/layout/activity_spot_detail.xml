@@ -268,7 +268,7 @@
                         android:gravity="center"
                         android:padding="15dp"
                         android:enabled="false"
-                        android:text="亮点\n体验"
+                        android:text="景点\n体验"
                         android:textColor="@color/theme_color"
                         android:textSize="12sp"/>
 
@@ -281,7 +281,7 @@
                         android:gravity="center"
                         android:enabled="false"
                         android:padding="15dp"
-                        android:text="实用\n信息"
+                        android:text="小\n贴士"
                         android:textColor="@color/theme_color"
                         android:textSize="12sp"/>
 
