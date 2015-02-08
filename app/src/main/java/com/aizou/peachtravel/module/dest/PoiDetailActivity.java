@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -68,14 +67,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @InjectView(R.id.tv_poi_price)
     TextView mTvPoiPrice;
     @Optional
-    @InjectView(R.id.expand_text_view)
-    ExpandableTextView mExpandableText;
-    @Optional
     @InjectView(R.id.tv_tel)
     TextView mTvTel;
     @Optional
     @InjectView(R.id.tv_addr)
     TextView mTvAddr;
+    @InjectView(R.id.tv_poi_desc)
+    TextView mTvDesc;
     @Optional
     @InjectView(R.id.iv_fav)
     ImageView mIvFav;
@@ -87,12 +85,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
     ImageView mIvShare;
     @InjectView(R.id.btn_book)
     TextView mBtnBook;
-    @InjectView(R.id.tv_comment_num)
-    TextView mTvCommentNum;
-    @InjectView(R.id.rl_address)
-    RelativeLayout mRlAddress;
-    @InjectView(R.id.rl_tel)
-    RelativeLayout mRlTel;
+    @InjectView(R.id.tv_poi_rank)
+    TextView mTvRank;
+    @InjectView(R.id.tv_more_cmt)
+    TextView mTvMoreCmt;
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
@@ -118,8 +114,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 //        p.dimAmount = 0.0f;      //设置黑暗度
         getWindow().setAttributes(p);
         View headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
+        View footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
+        mLvFoodshopDetail.addFooterView(footerView);
         ButterKnife.inject(this);
 //        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
 //        mTitleBar.enableBackKey(true);
@@ -206,10 +204,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
         mTvPoiName.setText(bean.zhName);
-        if(TextUtils.isEmpty(bean.priceDesc)){
+        if (TextUtils.isEmpty(bean.priceDesc)) {
             mTvPoiPrice.setVisibility(View.INVISIBLE);
             mBtnBook.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             mTvPoiPrice.setText(bean.priceDesc);
             mBtnBook.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,8 +218,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         mPoiStar.setRating(bean.getRating());
-        mTvCommentNum.setText(bean.commentCnt + "条网友评论");
-        mTvCommentNum.setOnClickListener(new View.OnClickListener() {
+        mTvRank.setText("同城排名:");
+        mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MoreCommentActivity.class);
@@ -232,13 +230,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
         });
 
         if (bean.tel != null && bean.tel.size() > 0) {
+            mTvTel.setVisibility(View.VISIBLE);
             mTvTel.setText(bean.tel.get(0));
-            mRlTel.setVisibility(View.VISIBLE);
         } else {
-            mRlTel.setVisibility(View.GONE);
+            mTvTel.setVisibility(View.INVISIBLE);
         }
         mTvAddr.setText(bean.address);
-        mRlAddress.setOnClickListener(new View.OnClickListener() {
+        mTvAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (bean.location != null && bean.location.coordinates != null) {
@@ -314,11 +312,16 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 IMUtils.onClickImShare(mContext);
             }
         });
+        if (TextUtils.isEmpty(bean.desc)) {
+            mTvDesc.setVisibility(View.GONE);
+        } else {
+            mTvDesc.setVisibility(View.VISIBLE);
+            mTvDesc.setText(bean.desc);
+        }
 
+        commentAdapter.getDataList().addAll(bean.comments);
+        commentAdapter.notifyDataSetChanged();
 
-//        commentAdapter.getDataList().addAll(bean.comments);
-//        commentAdapter.notifyDataSetChanged();
-        mExpandableText.setText(bean.desc);
 
     }
 
@@ -337,12 +340,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView mTvComment;
         @InjectView(R.id.comment_star)
         RatingBar mCommentStar;
-        @InjectView(R.id.tv_comment_num)
-        TextView mTvCommentNum;
-        @InjectView(R.id.tv_more)
-        TextView mTvMore;
-        @InjectView(R.id.ll_comment_index)
-        RelativeLayout mLlCommentIndex;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         @Override
@@ -354,30 +351,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            if (position == 0) {
-                mLlCommentIndex.setVisibility(View.VISIBLE);
-                mTvMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-                mTvCommentNum.setText("网友点评");
-//                SpannableString impress = new SpannableString("( "+ poiDetailBean.commentCnt+" )");
-//                impress.setSpan(
-//                        new ForegroundColorSpan(getResources().getColor(
-//                                R.color.base_divider_color)), 0, impress.length(),
-//                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-//                impress.setSpan(new AbsoluteSizeSpan(LocalDisplay.dp2px(12)),  0, impress.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                mTvCommentNum.append(impress);
-            } else {
-                mLlCommentIndex.setVisibility(View.GONE);
-            }
             mTvUsername.setText(itemData.userName);
             mTvDate.setText(dateFormat.format(new Date(itemData.publishTime)));
             mTvComment.setText(Html.fromHtml(itemData.contents));
-            mCommentStar.setRating(itemData.getRating());
+//            mCommentStar.setRating(itemData.getRating());
 
         }
     }

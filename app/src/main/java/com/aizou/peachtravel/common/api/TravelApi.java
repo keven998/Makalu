@@ -189,6 +189,7 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC,type)+id);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -407,6 +408,7 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + FAV);
         request.putUrlParams("page",page+"");
         request.putUrlParams("pageSize",PAGE_SIZE+"");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -451,6 +453,7 @@ public class TravelApi extends BaseApi{
         request.putUrlParams("hotel","true");
         request.putUrlParams("restaurant","true");
         request.putUrlParams("shopping","true");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(50)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -464,6 +467,7 @@ public class TravelApi extends BaseApi{
         request.putUrlParams("locId", locId);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(50)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -474,6 +478,7 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + SUGGEST);
         request.putUrlParams("keyWord", keyword);
         request.putUrlParams(type, "true");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(50)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -487,6 +492,7 @@ public class TravelApi extends BaseApi{
         request.putUrlParams(type, "true");
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

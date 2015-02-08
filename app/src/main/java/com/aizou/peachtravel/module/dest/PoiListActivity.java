@@ -141,7 +141,6 @@ public class PoiListActivity extends PeachBaseActivity {
         }
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
         curLoc = locList.get(0);
-
         mLocSpinner.setAdapter(mLocSpinnerAdapter);
         mLocSpinner.setSelection(0, true);
         mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
