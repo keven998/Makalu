@@ -53,9 +53,9 @@
             android:gravity="right|bottom"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
+            android:layout_marginBottom="-2dp"
             android:textColor="@color/base_text_color_text_hint"
-            android:layout_marginBottom="3dp"
-            android:textSize="9sp"
+            android:textSize="10sp"
             android:singleLine="true"/>
 
         <Button android:id="@+id/btn_send"

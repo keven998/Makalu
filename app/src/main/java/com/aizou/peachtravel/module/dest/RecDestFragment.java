@@ -116,7 +116,7 @@ public class RecDestFragment extends PeachBaseFragment {
         recDestContainer.setOnItemClickListener(new AbsLayoutContainer.OnItemClickListener() {
             @Override
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-                if(!proxy.isHeader){
+                if(!proxy.isHeader) {
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
                     if (itemData.linkType.equals("html")) {
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
@@ -126,7 +126,7 @@ public class RecDestFragment extends PeachBaseFragment {
                     } else if (itemData.linkType.equals("app")) {
                         if(!itemData.itemType.equals(TravelApi.PeachType.NOTE)){
                             IntentUtils.intentToDetail(getActivity(),itemData.itemType,itemData.itemId);
-                        }else{
+                        } else {
                             TravelNoteBean noteBean = new TravelNoteBean();
                             noteBean.setFieldFromRecBean(itemData);
                             IntentUtils.intentToNoteDetail(getActivity(), noteBean);
@@ -155,7 +155,7 @@ public class RecDestFragment extends PeachBaseFragment {
                 sections.add(section);
 
             }
-            options =UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
+            options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         }
 
         @Override
@@ -165,7 +165,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public View getItemView(int section, int position, View convertView, ViewGroup parent) {
-                convertView = View.inflate(context, R.layout.row_rec_dest_item, null);
+            convertView = View.inflate(context, R.layout.row_rec_dest_item, null);
             final RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) sections.get(section).getDataAtIndex(position);
             TextView nameTv = (TextView) convertView.findViewById(R.id.tv_name);
             TextView descTv = (TextView) convertView.findViewById(R.id.tv_desc);

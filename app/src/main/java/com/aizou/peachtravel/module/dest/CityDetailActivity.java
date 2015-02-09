@@ -75,9 +75,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void initData() {
         locId = getIntent().getStringExtra("id");
-//        locId="5473ccd7b8ce043a64108c46";
         getCityDetailData(locId);
-//        getTravelNotes(locId);
     }
 
     private void initView(){
@@ -243,7 +241,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     OtherApi.deleteFav(detailBean.id, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
 
@@ -262,8 +259,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         @Override
                         public void doSucess(String result, String method) {
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-
+                            if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
+                                ToastUtil.getInstance(CityDetailActivity.this).showToast("已收藏");
                             } else {
                                 mFavCb.setChecked(!b);
                             }
