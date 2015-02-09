@@ -9,7 +9,6 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/indexer"
         android:layout_marginTop="10dp"
         android:background="@color/app_backgroud"
         android:cacheColorHint="#00000000"
@@ -46,7 +45,6 @@
         layout="@layout/fragment_contact_list_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/indexer"
         android:layout_marginTop="72dp"
         android:visibility="gone"></include>
 

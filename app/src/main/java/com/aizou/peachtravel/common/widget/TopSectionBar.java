@@ -4,25 +4,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
-import android.widget.TextView;
 
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.module.MainActivity;
-import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 
 /**
  * Created by Rjm on 2014/10/29.
