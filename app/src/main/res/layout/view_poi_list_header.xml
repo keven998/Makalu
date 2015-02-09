@@ -43,7 +43,7 @@
             android:layout_toRightOf="@id/tv_poi_want_type"
             android:lineSpacingExtra="2dp"
             android:lines="4"
-            android:textColor="@color/base_text_color_subtitle"
+            android:textColor="@color/normal_text_color"
             android:textSize="12sp" />
 
         <TextView
