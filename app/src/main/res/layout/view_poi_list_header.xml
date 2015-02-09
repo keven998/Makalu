@@ -42,7 +42,7 @@
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/tv_poi_want_type"
             android:lineSpacingExtra="2dp"
-            android:maxLines="4"
+            android:lines="4"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 

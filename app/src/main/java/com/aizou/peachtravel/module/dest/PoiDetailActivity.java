@@ -117,8 +117,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(80));
         p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
-//        p.alpha = 1.0f;      //设置本身透明度
-//        p.dimAmount = 0.0f;      //设置黑暗度
+
         getWindow().setAttributes(p);
         View headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
         View footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
@@ -126,14 +125,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail.addHeaderView(headerView);
         mLvFoodshopDetail.addFooterView(footerView);
         ButterKnife.inject(this);
-//        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-//        mTitleBar.enableBackKey(true);
-//        mTitleBar.setLeftOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finishWithNoAnim();
-//            }
-//        });
+
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,15 +146,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private void initData() {
         id = getIntent().getStringExtra("id");
         type = getIntent().getStringExtra("type");
-//        type = "restaurant";
-//        if ("restaurant".equals(type)) {
-//            id = "53b0599710114e05dc63b5a2";
-//        } else {
-//            id = "53b0599710114e05dc63b5a5";
-//        }
-
         getDetailData();
-
     }
 
 
@@ -184,7 +168,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing()) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
+                    DialogManager.getInstance().dissMissModelessLoadingDialog();
                     ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }

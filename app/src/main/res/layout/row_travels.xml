@@ -39,7 +39,6 @@
             android:lineSpacingExtra="3dp"
             android:layout_marginTop="7dp"
             android:gravity="left|top"
-            android:layout_marginLeft="10dp"
             android:ellipsize="end"
             android:lines="3"
             android:textColor="@color/base_text_color_subtitle"

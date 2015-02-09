@@ -54,7 +54,7 @@ public class ModelessLoadingDialog extends ProgressDialog {
 		setContentView(R.layout.view_modeless_loading_dialog);
 		progress_dialog_content = (TextView) findViewById(R.id.progress_dialog_content);
         progressIv = (ImageView) findViewById(R.id.pb_iv);
-        ( (AnimationDrawable)progressIv.getBackground()).start();
+        ((AnimationDrawable)progressIv.getBackground()).start();
 	}
 
     @Override
