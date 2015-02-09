@@ -15,12 +15,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -45,6 +48,7 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -193,43 +197,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                DialogManager.getInstance().showLoadingDialog(SpotDetailActivity.this);
-                if (result.isFavorite) {
-                    OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-                                spotDetailBean.isFavorite = false;
-                                refreshFav(spotDetailBean);
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            if (!isFinishing())
-                                ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                        }
-                    });
+                PeachUser user = AccountManager.getInstance().getLoginAccount(SpotDetailActivity.this);
+                if (user == null || TextUtils.isEmpty(user.easemobUser)) {
+                    ToastUtil.getInstance(SpotDetailActivity.this).showToast("请先登录");
+                    Intent intent = new Intent(SpotDetailActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 11);
+                    return;
                 } else {
-                    OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-                                spotDetailBean.isFavorite = true;
-                                refreshFav(spotDetailBean);
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                        }
-                    });
+                    favorite(result.isFavorite);
                 }
             }
         });
@@ -286,14 +261,55 @@ public class SpotDetailActivity extends PeachBaseActivity {
         } else {
             travelGuideTv.setEnabled(false);
         }
+    }
 
+    private void favorite(boolean isFavorite) {
+        if (isFavorite) {
+            OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0) {
+                        spotDetailBean.isFavorite = false;
+                        refreshFav(spotDetailBean);
+                    }
+                }
 
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    if (!isFinishing())
+                        ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+            });
+        } else {
+            OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0  || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
+                        spotDetailBean.isFavorite = true;
+                        refreshFav(spotDetailBean);
+                        ToastUtil.getInstance(SpotDetailActivity.this).showToast("已收藏");
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                }
+            });
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareResult(mContext,spotDetailBean,requestCode,resultCode,data,null);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 11) {
+                favorite(spotDetailBean.isFavorite);
+            } else {
+                IMUtils.onShareResult(mContext, spotDetailBean, requestCode, resultCode, data, null);
+            }
+        }
     }
 
     private void showActionDialog() {

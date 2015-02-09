@@ -174,7 +174,7 @@
                 android:textSize="17sp"
                 android:paddingTop="8dp"
                 android:onClick="intentToFood"
-                android:text="美景"/>
+                android:text="景点"/>
 
             <com.aizou.peachtravel.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_restaurant"

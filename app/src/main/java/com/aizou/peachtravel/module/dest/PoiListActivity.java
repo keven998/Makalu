@@ -22,8 +22,8 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.PoiGuideBean;
 import com.aizou.peachtravel.common.api.BaseApi;
-import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
@@ -87,7 +87,6 @@ public class PoiListActivity extends PeachBaseActivity {
             mLocSpinner.setVisibility(View.GONE);
         }
         if (canAdd) {
-//            mTvTitleBarLeft.setText("完成");
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,7 +130,6 @@ public class PoiListActivity extends PeachBaseActivity {
                     }
 
                 }
-//                MapUtils.showSelectMapDialog(getActivity(),mLat,mLng,"我的位置",poi.location.coordinates[1],poi.location.coordinates[0],poi.zhName);
             }
         });
         mPoiListLv.getRefreshableView().setAdapter(mPoiAdapter);
@@ -147,8 +145,7 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
-                mPoiListLv.doPullRefreshing(true, 200);
-
+//                mPoiListLv.doPullRefreshing(true, 200);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
                     mTvPoiWantType.setText("美食\n攻略");
@@ -156,6 +153,8 @@ public class PoiListActivity extends PeachBaseActivity {
                     mTitle.setText(String.format("%s购物", curLoc.zhName));
                     mTvPoiWantType.setText("购物\n攻略");
                 }
+
+                loadPageData();
             }
 
             @Override
@@ -180,7 +179,7 @@ public class PoiListActivity extends PeachBaseActivity {
             }
         });
 
-        mPoiListLv.doPullRefreshing(true, 200);
+//        mPoiListLv.doPullRefreshing(true, 200);
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
             mTvPoiWantType.setText("美食\n" +
@@ -190,6 +189,8 @@ public class PoiListActivity extends PeachBaseActivity {
             mTvPoiWantType.setText("购物\n" +
                     "攻略");
         }
+
+        loadPageData();
     }
 
     @Override
@@ -215,8 +216,7 @@ public class PoiListActivity extends PeachBaseActivity {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getPoiGuide(type, curLoc.id);
-                getPoiListData(type, curLoc.id, 0);
+
             }
 
             @Override
@@ -224,6 +224,12 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id, curPage + 1);
             }
         });
+    }
+
+    private void loadPageData() {
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        getPoiGuide(type, curLoc.id);
+        getPoiListData(type, curLoc.id, 0);
     }
 
     private void getPoiGuide(final String type, String cityId) {
@@ -283,12 +289,12 @@ public class PoiListActivity extends PeachBaseActivity {
                     bindView(poiListResult.result);
                 }
                 if (curPage == 0) {
-                    mPoiListLv.onPullDownRefreshComplete();
+//                    mPoiListLv.onPullDownRefreshComplete();
                     mPoiListLv.onPullUpRefreshComplete();
                 } else {
                     mPoiListLv.onPullUpRefreshComplete();
                 }
-
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
@@ -296,6 +302,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 if (!isFinishing()) {
                     ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
         });
 

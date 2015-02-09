@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -34,8 +33,10 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.RecommendBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
@@ -44,6 +45,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -118,8 +120,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(80));
         p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
-//        p.alpha = 1.0f;      //设置本身透明度
-//        p.dimAmount = 0.0f;      //设置黑暗度
+
         getWindow().setAttributes(p);
          headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
          footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
@@ -127,14 +128,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail.addHeaderView(headerView);
         mLvFoodshopDetail.addFooterView(footerView);
         ButterKnife.inject(this);
-//        mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-//        mTitleBar.enableBackKey(true);
-//        mTitleBar.setLeftOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finishWithNoAnim();
-//            }
-//        });
+
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,15 +149,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private void initData() {
         id = getIntent().getStringExtra("id");
         type = getIntent().getStringExtra("type");
-//        type = "restaurant";
-//        if ("restaurant".equals(type)) {
-//            id = "53b0599710114e05dc63b5a2";
-//        } else {
-//            id = "53b0599710114e05dc63b5a5";
-//        }
-
         getDetailData();
-
     }
 
 
@@ -185,7 +171,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing()) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
+                    DialogManager.getInstance().dissMissModelessLoadingDialog();
                     ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }
@@ -259,58 +245,17 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
         refreshFav(bean);
-//        mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                IMUtils.onClickImShare(mContext);
-//            }
-//        });
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                DialogManager.getInstance().showLoadingDialog(PoiDetailActivity.this);
-                if (poiDetailBean.isFavorite) {
-                    OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-                                poiDetailBean.isFavorite = false;
-                                refreshFav(poiDetailBean);
-                            }
-
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                        }
-                    });
+                PeachUser user = AccountManager.getInstance().getLoginAccount(PoiDetailActivity.this);
+                if (user == null || TextUtils.isEmpty(user.easemobUser)) {
+                    ToastUtil.getInstance(PoiDetailActivity.this).showToast("请先登录");
+                    Intent intent = new Intent(PoiDetailActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 11);
+                    return;
                 } else {
-                    OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-                                poiDetailBean.isFavorite = true;
-                                refreshFav(poiDetailBean);
-                            } else {
-                                if (!isFinishing()) {
-                                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
-                            if (!isFinishing()) {
-                                ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                            }
-                        }
-                    });
+                    favorite();
                 }
             }
         });
@@ -333,15 +278,61 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         }
         commentAdapter.notifyDataSetChanged();
+    }
 
+    private void favorite() {
+        if (poiDetailBean.isFavorite) {
+            OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0) {
+                        poiDetailBean.isFavorite = false;
+                        refreshFav(poiDetailBean);
+                    }
+                }
 
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
+                }
+            });
+        } else {
+            OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
+                @Override
+                public void doSucess(String result, String method) {
+                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
+                        poiDetailBean.isFavorite = true;
+                        refreshFav(poiDetailBean);
+                        ToastUtil.getInstance(PoiDetailActivity.this).showToast("已收藏");
+                    } else {
+                        if (!isFinishing()) {
+                            ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        }
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+            });
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IMUtils.onShareResult(mContext, poiDetailBean, requestCode, resultCode, data, null);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 11) {
+                favorite();
+            } else {
+                IMUtils.onShareResult(mContext, poiDetailBean, requestCode, resultCode, data, null);
+            }
+        }
     }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
@@ -367,8 +358,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvUsername.setText(itemData.userName);
             mTvDate.setText(dateFormat.format(new Date(itemData.publishTime)));
             mTvComment.setText(Html.fromHtml(itemData.contents));
-//            mCommentStar.setRating(itemData.getRating());
-
         }
     }
 

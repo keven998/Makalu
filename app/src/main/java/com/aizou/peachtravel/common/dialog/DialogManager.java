@@ -1,6 +1,8 @@
 package com.aizou.peachtravel.common.dialog;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -95,7 +97,6 @@ public class DialogManager {
 
         }
         mLoadingDialog =null;
-
     }
 
     /**
@@ -162,10 +163,18 @@ public class DialogManager {
     /**
      * 创建通讯提示框
      */
-    private ModelessLoadingDialog createModelessLoadingDialog( Context con, String message, OnCancelListener cancleListener) {
+    private ModelessLoadingDialog createModelessLoadingDialog(final Context con, String message, OnCancelListener cancleListener) {
         ModelessLoadingDialog dlg = new ModelessLoadingDialog(con, message);
         dlg.show();
-        dlg.setCancelable(false);
+        dlg.setCancelable(true);
+        dlg.setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (con instanceof Activity) {
+                    ((Activity) con).finish();
+                }
+            }
+        });
         return dlg;
     }
     /**

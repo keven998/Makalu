@@ -111,7 +111,6 @@
             android:textColor="@color/base_color_white"
             android:textSize="13sp" />
 
-
     </RelativeLayout>
 
 
