@@ -8,5 +8,5 @@
     android:textColor="@color/base_color_white"
     android:drawablePadding="3dp"
     android:paddingTop="10dp"
-    android:paddingBottom="8dp"
-    android:textSize="10sp" />
+    android:paddingBottom="3dp"
+    android:textSize="9sp" />

@@ -60,7 +60,7 @@ public class RecDestFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),SearchDestActivity.class);
+                Intent intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivity(intent);
             }
         });

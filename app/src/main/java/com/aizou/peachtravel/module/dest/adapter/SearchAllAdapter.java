@@ -80,16 +80,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         }
         final SearchTypeBean typeBean = mSearchList.get(section);
         LocBean locBean=null;
-        PoiDetailBean poiBean;
+        final PoiDetailBean poiBean;
         final Object itemObject =typeBean.resultList.get(position);
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mOnSearchResultClickListener!=null){
-                    mOnSearchResultClickListener.onItemOnClick(itemObject);
-                }
-            }
-        });
         if(itemObject instanceof LocBean){
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
@@ -97,8 +89,17 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             if(locBean.images!=null&&locBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{
-                holder.mImageIv.setImageResource(R.drawable.ic_launcher);
+                holder.mImageIv.setImageResource(R.drawable.bg_common_default);
             }
+            final LocBean finalLocBean = locBean;
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnSearchResultClickListener!=null){
+                        mOnSearchResultClickListener.onItemOnClick(typeBean.type, finalLocBean.id, finalLocBean);
+                    }
+                }
+            });
 
         }else if(itemObject instanceof PoiDetailBean){
             poiBean = (PoiDetailBean) itemObject;
@@ -109,6 +110,14 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             }else{
                 holder.mImageIv.setImageDrawable(null);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnSearchResultClickListener!=null){
+                        mOnSearchResultClickListener.onItemOnClick(typeBean.type,poiBean.id,poiBean);
+                    }
+                }
+            });
         }
         if(mIsShowMore){
             if(position == 4) {
@@ -214,6 +223,6 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     public interface OnSearchResultClickListener {
         void onMoreResultClick(String type);
-        void onItemOnClick(Object object);
+        void onItemOnClick(String type,String id,Object object);
     }
 }

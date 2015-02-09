@@ -36,6 +36,7 @@ public class OtherApi extends BaseApi {
     public final static String OPERATE="/columns";
     //反馈
     public final static String FEEDBACK="/misc/feedback";
+    //检查更新
     public final static String UPDATE="/misc/updates";
 
     /**

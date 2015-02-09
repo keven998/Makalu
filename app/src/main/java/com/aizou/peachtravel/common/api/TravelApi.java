@@ -64,6 +64,7 @@ public class TravelApi extends BaseApi{
     public final static String GUIDE="/guides";
     //修改攻略标题
     public final static String MODIFY_GUIDE_INFO="/guides/info/%1$s";
+    //修改攻略目的地
     public final static String MODIFY_GUIDE_LOC="/guides";
     //收藏
     public final static String FAV="/misc/favorites";

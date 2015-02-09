@@ -96,6 +96,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
     TextView mTvRank;
     @InjectView(R.id.tv_more_cmt)
     TextView mTvMoreCmt;
+
+    View headerView;
+    View footerView;
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
@@ -119,8 +122,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         p.width = (int) (d.getWidth() - LocalDisplay.dp2px(12));
 
         getWindow().setAttributes(p);
-        View headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
-        View footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
+         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
+         footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         mLvFoodshopDetail.addFooterView(footerView);
@@ -268,8 +271,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvDesc.setVisibility(View.VISIBLE);
             mTvDesc.setText(bean.desc);
         }
-
         commentAdapter.getDataList().addAll(bean.comments);
+        if(bean.comments==null||bean.comments.size()<2){
+            if(mLvFoodshopDetail.getFooterViewsCount()>0){
+                mLvFoodshopDetail.removeFooterView(footerView);
+            }
+        }
         commentAdapter.notifyDataSetChanged();
     }
 
