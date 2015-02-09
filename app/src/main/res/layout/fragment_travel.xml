@@ -118,7 +118,7 @@
                     android:layout_marginTop="10dp"
                     android:lineSpacingExtra="5dp"
                     android:minLines="3"
-                    android:text="最贴心的旅程助手\n旅行可以\n更安心、简单"
+                    android:text="最贴心的旅程助手\n让旅行可以\n更安心、简单"
                     android:textColor="@color/base_text_color_text_placeholder"
                     android:textSize="12sp" />
 

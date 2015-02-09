@@ -384,7 +384,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                        holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
                         holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
                         holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
                         holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
@@ -394,7 +393,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                         holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
                         holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                        holder.nearByTv = (Button) convertView.findViewById(R.id.drag_nearby_btn);
                         holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                         holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
                         holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
@@ -419,7 +417,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     holder.spotCostTimeTv.setText("参考游玩  " + poiDetailBean.timeCostDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
-//                        holder.nearByTv.setVisibility(View.GONE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -446,13 +443,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         });
                     } else {
                         holder.deleteIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                            }
-//                        });
+
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -477,7 +469,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
-//                        holder.nearByTv.setVisibility(View.GONE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -504,14 +495,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         });
                     } else {
                         holder.deleteIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.GONE);
-//                        holder.nearByTv.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//                        });
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -687,7 +671,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         private class ItemViewHolder {
             public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
-            public Button nearByTv;
             public ImageView poiImageIv, spotImageIv;
             public TextView poiNameTv, spotNameTv;
             public TextView poiAddressTv, spotCostTimeTv;

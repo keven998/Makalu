@@ -75,9 +75,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:gravity="left"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textColor="@color/base_text_color_text_hint"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="3dp"
                 android:layout_below="@id/poi_name_tv"
                 android:singleLine="true"
                 android:layout_toRightOf="@id/poi_image_iv"/>
@@ -89,28 +89,15 @@
                 android:layout_alignBottom="@id/poi_image_iv"
                 android:layout_toRightOf="@id/poi_image_iv"
                 android:layout_marginLeft="15dp"
-                android:paddingBottom="3dp"
+                android:paddingBottom="4dp"
                 android:singleLine="true"
                 android:paddingRight="10dp"
                 android:drawablePadding="4dp"
+                android:ellipsize="end"
                 android:textSize="10sp"
                 android:textColor="@color/base_text_color_text_placeholder"/>
 
         </RelativeLayout>
-
-        <Button
-            android:id="@+id/drag_nearby_btn"
-            android:layout_width="55dp"
-            android:layout_height="28dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:textSize="12sp"
-            android:textColor="@color/main_botton_text_color"
-            android:background="@drawable/checker_cell_frame_bg"
-            android:visibility="gone"
-            android:text="周边" />
 
         <ImageView
             android:id="@+id/drag_handle"
