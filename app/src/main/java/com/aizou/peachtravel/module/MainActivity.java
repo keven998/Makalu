@@ -47,8 +47,6 @@ public class MainActivity extends PeachBaseActivity {
     private CheckedTextView talkBtn;
     private TextView unreadMsg;
 
-    //Tab选项卡的文字
-//    private String mTextviewArray[] = {"首页", "想去", "我"};
     //Tab选项Tag
     private String mTagArray[] = {"Home", "Loc", "My"};
     private NewMessageBroadcastReceiver msgReceiver;
