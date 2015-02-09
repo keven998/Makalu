@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="130dp"
-                android:paddingBottom="10dp">
+                >
                 <ImageView
                     android:id="@+id/poi_image_iv"
                     android:layout_width="100dp"
@@ -70,7 +70,7 @@
                     android:layout_below="@id/poi_address_tv"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_toRightOf="@id/poi_image_iv"
                     android:singleLine="true"
                     android:textColor="@color/base_text_color_text_hint"
@@ -78,7 +78,7 @@
 
                 <RatingBar
                     android:id="@+id/poi_rating"
-                    style="@style/custom_rating_bar"
+                    style="@style/custom_small_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/poi_price_tv"
@@ -90,12 +90,12 @@
                     android:id="@+id/poi_rank_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@id/poi_rating"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="4dp"
                     android:singleLine="true"
+                    android:layout_toRightOf="@id/poi_image_iv"
                     android:textColor="@color/base_text_color_text_hint"
                     android:textSize="11sp" />
 
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="13dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/btn_theme_secondary_selector"
                     android:paddingLeft="5dp"

@@ -12,7 +12,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/content_card"
-        android:paddingBottom="10dp">
+        >
 
         <View android:id="@+id/vw_top"
             android:layout_width="fill_parent"
@@ -26,6 +26,7 @@
             android:layout_below="@id/vw_top"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/bg_common_default"
             android:scaleType="centerCrop" />
 
@@ -64,7 +65,7 @@
             android:layout_below="@id/poi_address_tv"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/poi_image_iv"
             android:singleLine="true"
             android:textColor="@color/base_text_color_text_hint"
@@ -73,7 +74,7 @@
 
         <RatingBar
             android:id="@+id/poi_rating"
-            style="@style/custom_rating_bar"
+            style="@style/custom_small_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/poi_price_tv"
@@ -85,8 +86,8 @@
             android:id="@+id/poi_rank_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@id/poi_rating"
+            android:layout_toRightOf="@id/poi_image_iv"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="4dp"

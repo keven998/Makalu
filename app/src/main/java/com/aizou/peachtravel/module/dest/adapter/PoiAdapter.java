@@ -150,6 +150,9 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
             spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
+            if(poiDetailBean.rank!=0){
+                spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.rank);
+            }
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已" + mAddStr);
@@ -241,6 +244,9 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
             poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
+            if(poiDetailBean.rank!=0){
+                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.rank);
+            }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
 ////                poiViewHolder.mRlComment.setVisibility(View.GONE);
 //            } else {

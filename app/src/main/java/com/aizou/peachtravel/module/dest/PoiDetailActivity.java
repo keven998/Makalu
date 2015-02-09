@@ -212,7 +212,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         mPoiStar.setRating(bean.getRating());
-        mTvRank.setText("同城排名:");
+        if(poiDetailBean.rank!=0){
+            mTvRank.setText("热度排名 "+poiDetailBean.rank);
+        }
         mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +231,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
         } else {
             mTvTel.setVisibility(View.INVISIBLE);
         }
-        mTvAddr.setText(bean.address);
+        if(TextUtils.isEmpty(bean.address)){
+            mTvAddr.setText(bean.zhName);
+        }else{
+            mTvAddr.setText(bean.address);
+        }
         mTvAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

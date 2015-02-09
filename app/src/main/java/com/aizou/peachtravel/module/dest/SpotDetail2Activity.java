@@ -2,68 +2,51 @@ package com.aizou.peachtravel.module.dest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.utils.LocalDisplay;
-import com.aizou.peachtravel.bean.PeachUser;
-import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.widget.DotView;
-import com.aizou.core.widget.HackyViewPager;
-import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
-import com.aizou.core.widget.expandabletextview.ExpandableTextView;
-import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.ImageBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.SpotDetailBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
-import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
-import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
-import com.aizou.peachtravel.common.utils.ShareUtils;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
-
 /**
  * Created by Rjm on 2014/11/17.
  */
-public class SpotDetailActivity extends PeachBaseActivity {
+public class SpotDetail2Activity extends PeachBaseActivity {
     private String mSpotId;
     private ImageView closeIv;
     private ImageView spotIv;
-    private LinearLayout descLl,priceLl,timeLl;
-    private RelativeLayout addressLl;
-    private TextView mSpotNameTv, descTv,mPriceDescTv, mAddressTv, mTimeTv;
+    private LinearLayout cardLl;
+    private TextView mSpotNameTv, mPriceDescTv, mAddressTv, mCostTimeTv;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView favIv,shareIv;
     private SpotDetailBean spotDetailBean;
@@ -100,19 +83,16 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 finishWithNoAnim();
-                SpotDetailActivity.this.overridePendingTransition(0, android.R.anim.fade_out);
+                SpotDetail2Activity.this.overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
         favIv = (ImageView) findViewById(R.id.iv_fav);
         shareIv = (ImageView) findViewById(R.id.iv_share);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);
-        descLl = (LinearLayout) findViewById(R.id.ll_desc);
-        priceLl = (LinearLayout) findViewById(R.id.ll_price);
-        timeLl = (LinearLayout) findViewById(R.id.ll_time);
+        cardLl = (LinearLayout) findViewById(R.id.ll_card);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
-        descTv = (TextView) findViewById(R.id.tv_desc);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
-        mTimeTv = (TextView) findViewById(R.id.tv_spot_time);
+        mCostTimeTv = (TextView) findViewById(R.id.tv_cost_time);
         mAddressTv = (TextView) findViewById(R.id.tv_addr);
         tipsTv = (TextView) findViewById(R.id.tv_tips);
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
@@ -142,7 +122,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing()) {
                     DialogManager.getInstance().dissMissLoadingDialog();
-                    ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(SpotDetail2Activity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
 
             }
@@ -151,9 +131,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void refreshFav(SpotDetailBean detailBean) {
         if (detailBean.isFavorite) {
-            favIv.setImageResource(R.drawable.ic_poi_fav_selected);
+            favIv.setImageResource(R.drawable.ic_favorite_selected);
         } else {
-            favIv.setImageResource(R.drawable.ic_poi_fav_normal);
+            favIv.setImageResource(R.drawable.ic_favorite_navigationbar_normal);
         }
     }
 
@@ -162,24 +142,14 @@ public class SpotDetailActivity extends PeachBaseActivity {
         spotIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.intentToPicGallery(SpotDetailActivity.this, result.images, 0);
+                IntentUtils.intentToPicGallery(SpotDetail2Activity.this, result.images, 0);
             }
         });
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
-        if(TextUtils.isEmpty(result.desc)){
-            descLl.setVisibility(View.GONE);
-        }else{
-            descLl.setVisibility(View.VISIBLE);
-            descTv.setText(result.desc);
-        }
         mPriceDescTv.setText("门票 "+result.priceDesc);
-        mTimeTv.setText(String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime));
-        if(TextUtils.isEmpty(result.address)){
-            mAddressTv.setText(result.zhName);
-        }else{
-            mAddressTv.setText(result.address);
-        }
+        mCostTimeTv.setText(String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime));
+        mAddressTv.setText(result.address);
         mAddressTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,10 +182,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(SpotDetailActivity.this);
+                PeachUser user = AccountManager.getInstance().getLoginAccount(SpotDetail2Activity.this);
                 if (user == null || TextUtils.isEmpty(user.easemobUser)) {
-                    ToastUtil.getInstance(SpotDetailActivity.this).showToast("请先登录");
-                    Intent intent = new Intent(SpotDetailActivity.this, LoginActivity.class);
+                    ToastUtil.getInstance(SpotDetail2Activity.this).showToast("请先登录");
+                    Intent intent = new Intent(SpotDetail2Activity.this, LoginActivity.class);
                     startActivityForResult(intent, 11);
                     return;
                 } else {
@@ -223,7 +193,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             }
         });
-        descLl.setOnClickListener(new View.OnClickListener() {
+        cardLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SpotIntroActivity.class);
@@ -232,24 +202,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
-        timeLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpotIntroActivity.class);
-                intent.putExtra("content", spotDetailBean.desc);
-                intent.putExtra("spot", spotDetailBean.zhName);
-                startActivity(intent);
-            }
-        });
-        priceLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpotIntroActivity.class);
-                intent.putExtra("content", spotDetailBean.desc);
-                intent.putExtra("spot", spotDetailBean.zhName);
-                startActivity(intent);
-            }
-        });
+
         if (!TextUtils.isEmpty(result.tipsUrl)) {
             tipsTv.setEnabled(true);
             tipsTv.setOnClickListener(new View.OnClickListener() {
@@ -310,7 +263,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     if (!isFinishing())
-                        ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                        ToastUtil.getInstance(SpotDetail2Activity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             });
         } else {
@@ -321,7 +274,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                     if (deleteResult.code == 0  || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                         spotDetailBean.isFavorite = true;
                         refreshFav(spotDetailBean);
-                        ToastUtil.getInstance(SpotDetailActivity.this).showToast("已收藏");
+                        ToastUtil.getInstance(SpotDetail2Activity.this).showToast("已收藏");
                     }
                 }
 
@@ -353,7 +306,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IMUtils.onClickImShare(SpotDetailActivity.this);
+                IMUtils.onClickImShare(SpotDetail2Activity.this);
                 dialog.dismiss();
             }
         });

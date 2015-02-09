@@ -18,6 +18,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public final static String RESTAURANT="restaurant";
     public final static String SHOPPING="shopping";
     public String distance="";
+
     public boolean hasAdded=false;
     public boolean isFavorite;
     public String type;
@@ -38,6 +39,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
     public List<CommentBean> comments= new ArrayList<CommentBean>();
     public String moreCommentsUrl;
+    public int rank;
 
     public PoiDetailBean() {
     }
@@ -116,6 +118,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         dest.writeTypedList(recommends);
         dest.writeTypedList(comments);
         dest.writeString(this.moreCommentsUrl);
+        dest.writeInt(this.rank);
     }
 
     private PoiDetailBean(Parcel in) {
@@ -140,6 +143,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         in.readTypedList(recommends, RecommendBean.CREATOR);
         in.readTypedList(comments, CommentBean.CREATOR);
         this.moreCommentsUrl = in.readString();
+        this.rank = in.readInt();
     }
 
     public static final Creator<PoiDetailBean> CREATOR = new Creator<PoiDetailBean>() {
