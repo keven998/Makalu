@@ -3,35 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <com.aizou.peachtravel.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_add_contacts"
         android:layout_width="match_parent"
         android:layout_height="103dp"
+        android:layout_below="@id/ly_header_bar_title_wrap"
         android:layout_centerVertical="true"
-        android:padding="6dp"
-        android:layout_below="@id/ly_header_bar_title_wrap"
         android:background="@color/base_color_white"
+        android:padding="6dp"
         android:scrollbars="none"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/ly_header_bar_title_wrap"
-        android:background="@color/app_backgroud"
-        android:cacheColorHint="#00000000"
-        android:layout_marginTop="10dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:focusable="true"
-        android:fastScrollEnabled="false" />
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ly_header_bar_title_wrap"
+            android:layout_marginTop="10dp"
+            android:background="@color/app_backgroud"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:fastScrollEnabled="false"
+            android:focusable="true" />
+    </LinearLayout>
 
 </RelativeLayout>

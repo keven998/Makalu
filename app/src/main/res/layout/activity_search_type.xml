@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="38dp"
         android:gravity="center_vertical"
-        android:background="@drawable/highlight_btn_color_selected"
+        android:background="@color/app_theme_color"
         android:paddingLeft="21dp"
         android:paddingRight="10dp"
         android:orientation="horizontal">

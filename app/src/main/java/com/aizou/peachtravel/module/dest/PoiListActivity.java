@@ -167,6 +167,10 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
+                if(TextUtils.isEmpty(mKeyWord)){
+                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
+                    return;
+                }
                 Intent intent = new Intent(mContext, SearchPoiActivity.class);
                 intent.putExtra("keyword", mKeyWord);
                 intent.putExtra("type", type);

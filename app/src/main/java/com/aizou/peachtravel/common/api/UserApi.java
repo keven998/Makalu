@@ -63,6 +63,7 @@ public class UserApi extends BaseApi {
 
     //联系人
     public final static String CONTACTS = "/users/contacts";
+    //请求添加好友
     public final static String REQUEST_ADD_CONTACTS="/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";

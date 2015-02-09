@@ -33,7 +33,7 @@
         android:layout_width="80.0dip"
         android:layout_height="80.0dip"
         android:layout_centerInParent="true"
-        android:background="@drawable/show_head_toast_bg"
+        android:background="@drawable/shape_sub_theme"
         android:gravity="center"
         android:textColor="#ffffffff"
         android:textSize="30.0dip"

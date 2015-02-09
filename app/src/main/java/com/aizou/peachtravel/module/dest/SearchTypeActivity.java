@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,6 +24,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
 import com.easemob.EMCallBack;
@@ -117,7 +119,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         }
         else if(type.equals("restaurant")){
             typeBean = new SearchTypeBean();
-            typeBean.type = "SearchTypeBean";
+            typeBean.type = "restaurant";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
         }
@@ -153,6 +155,8 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 if (curPage == 0) {
                     mSearchTypeLv.onPullUpRefreshComplete();
                     mSearchTypeLv.onPullDownRefreshComplete();
+                }else{
+                    mSearchTypeLv.onPullUpRefreshComplete();
                 }
             }
 
@@ -191,7 +195,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 hasMore=false;
             }
         }
-        else if(type.equals("restaurants")){
+        else if(type.equals("restaurant")){
             typeBean.resultList.addAll(result.restaurant);
             if(result.restaurant.size()<BaseApi.PAGE_SIZE){
                 hasMore=false;
@@ -212,47 +216,52 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 }
 
                 @Override
-                public void onItemOnClick(Object object) {
-                    IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
-                        @Override
-                        public void onDialogShareOk(Dialog dialog, int type, String content) {
-                            DialogManager.getInstance().showLoadingDialog(mContext);
-                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
-                                @Override
-                                public void onSuccess() {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("已发送~");
+                public void onItemOnClick(String type,String id,Object object) {
+                    if(!TextUtils.isEmpty(toId)){
+                        IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
 
-                                        }
-                                    });
+                                            }
+                                        });
 
-                                }
+                                    }
 
-                                @Override
-                                public void onError(int i, String s) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
 
-                                        }
-                                    });
+                                            }
+                                        });
 
-                                }
+                                    }
 
-                                @Override
-                                public void onProgress(int i, String s) {
+                                    @Override
+                                    public void onProgress(int i, String s) {
 
-                                }
-                            });
-                        }
+                                    }
+                                });
+                            }
 
-                        @Override
-                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                        }
-                    });
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }else{
+                        IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
+                    }
+
                 }
             });
             mSearchTypeLv.getRefreshableView().setAdapter(mAdapter);

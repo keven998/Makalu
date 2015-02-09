@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.dest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -126,6 +127,10 @@ public class AddPoiActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 mKeyWord = mEtSearch.getText().toString().trim();
+                if(TextUtils.isEmpty(mKeyWord)){
+                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
+                    return;
+                }
                 Intent intent = new Intent(mContext,SearchPoiActivity.class);
                 intent.putExtra("keyword",mKeyWord);
                 intent.putExtra("type",mType);
