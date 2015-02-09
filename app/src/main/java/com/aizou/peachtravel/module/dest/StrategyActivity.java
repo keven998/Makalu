@@ -197,12 +197,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            //test
-//            cityIdList.add("5473ccd7b8ce043a64108c46");
-//            cityIdList.add("5473ccddb8ce043a64108d22");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setMessage("小桃可为你创建模版，旅程计划更简单");
+            dialog.setCanceledOnTouchOutside(false);
             dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,7 +208,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                     createStrategyByCityIds(cityIdList, false);
                 }
             });
-            dialog.setPositiveButton("创建", new View.OnClickListener() {
+            dialog.setPositiveButton("需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
