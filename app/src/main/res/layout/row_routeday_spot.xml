@@ -50,6 +50,18 @@
                 android:maxLines="2"
                 android:textColor="@color/base_text_color_title"
                 android:textSize="15sp" />
+            <TextView
+                android:id="@+id/spot_rank_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="left"
+                android:textSize="10sp"
+                android:textColor="@color/base_text_color_text_hint"
+                android:layout_marginTop="3dp"
+                android:layout_below="@id/spot_name_tv"
+                android:singleLine="true"
+                android:layout_toRightOf="@id/spot_image_iv"/>
 
             <TextView
                 android:id="@+id/spot_time_cost_tv"

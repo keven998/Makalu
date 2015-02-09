@@ -128,6 +128,8 @@ public class FavListActivity extends PeachBaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 curType = favTypeValueArray[position];
 //                initData(curType, 0);
+                mFavLv.onPullUpRefreshComplete();
+                mFavLv.onPullDownRefreshComplete();
                 mFavLv.doPullRefreshing(true, 0);
             }
 
@@ -178,6 +180,9 @@ public class FavListActivity extends PeachBaseActivity {
         OtherApi.getFavist(type, page, new HttpCallBack() {
             @Override
             public void doSucess(Object result, String method) {
+                if(!curType.equals(type)){
+                    return;
+                }
                 CommonJson4List<FavoritesBean> lists = CommonJson4List.fromJson(result.toString(), FavoritesBean.class);
                 if (lists.code == 0) {
                     currentPage = page;

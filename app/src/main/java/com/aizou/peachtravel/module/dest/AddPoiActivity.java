@@ -157,6 +157,8 @@ public class AddPoiActivity extends PeachBaseActivity {
                 mType = poiTypeValueArray[position];
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
+                mLvPoiList.onPullUpRefreshComplete();
+                mLvPoiList.onPullDownRefreshComplete();
                 mLvPoiList.doPullRefreshing(true,500);
 //                getPoiListByLoc(mType, curLoc.id, 0);
             }
@@ -172,6 +174,8 @@ public class AddPoiActivity extends PeachBaseActivity {
                 curLoc = locList.get(position);
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
+                mLvPoiList.onPullUpRefreshComplete();
+                mLvPoiList.onPullDownRefreshComplete();
                 mLvPoiList.doPullRefreshing(true,500);
 //                getPoiListByLoc(mType, curLoc.id, 0);
             }
@@ -209,11 +213,14 @@ public class AddPoiActivity extends PeachBaseActivity {
         mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
     }
 
-    private void getPoiListByLoc(String type, String cityId, final int page) {
+    private void getPoiListByLoc(final String type, final String cityId, final int page) {
 
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                if(!(mType.equals(type)&&curLoc.id.equals(cityId))){
+                    return;
+                }
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
                 if (poiListResult.code == 0) {

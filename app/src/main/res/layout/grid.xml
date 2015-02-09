@@ -8,7 +8,6 @@
         android:id="@+id/iv_avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/avatar_placeholder"
         android:layout_centerHorizontal="true"
         android:visibility="visible" />
     <TextView

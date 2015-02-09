@@ -23,8 +23,10 @@
 
     <LinearLayout
         android:id="@+id/ll_content"
+        android:layout_below="@id/ly_header_bar_title_wrap"
+        android:layout_height="fill_parent"
+        android:layoutAnimation="@anim/layout_appear_meanwhile"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ListView

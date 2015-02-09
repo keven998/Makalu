@@ -145,6 +145,8 @@ public class PoiListActivity extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
                 curLoc = locList.get(position);
+                mPoiListLv.onPullUpRefreshComplete();
+                mPoiListLv.onPullDownRefreshComplete();
 //                mPoiListLv.doPullRefreshing(true, 200);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
@@ -279,10 +281,13 @@ public class PoiListActivity extends PeachBaseActivity {
 
     }
 
-    private void getPoiListData(String type, String cityId, final int page) {
+    private void getPoiListData(final String type, final String cityId, final int page) {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                if(!curLoc.id.equals(cityId)){
+                    return;
+                }
                 CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
                 if (poiListResult.code == 0) {
                     curPage = page;

@@ -387,6 +387,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.spotImageIv = (ImageView) convertView.findViewById(R.id.spot_image_iv);
                         holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
                         holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
+                        holder.rankTv = (TextView) convertView.findViewById(R.id.spot_rank_tv);
                         break;
                     case POI:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
@@ -415,6 +416,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText("参考游玩  " + poiDetailBean.timeCostDesc);
+                    if(poiDetailBean.rank!=0){
+                        holder.rankTv.setText("景点排名 "+poiDetailBean.rank);
+                    }else{
+                        holder.rankTv.setText("");
+                    }
+
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
@@ -465,8 +472,20 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
                     holder.poiRating.setRating(poiDetailBean.getRating());
-
-                    holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+                    String typeName="";
+                    if(TravelApi.PeachType.RESTAURANTS.equals(poiDetailBean.type)){
+                        typeName="美食";
+                    }else  if(TravelApi.PeachType.SHOPPING.equals(poiDetailBean.type)){
+                        typeName="购物";
+                    }else  if(TravelApi.PeachType.HOTEL.equals(poiDetailBean.type)){
+                        typeName="酒店";
+                    }
+                    if(poiDetailBean.rank!=0){
+                        holder.poiPriceTv.setText(typeName+"排名 "+poiDetailBean.rank);
+                    }else{
+                        holder.poiPriceTv.setText("");
+                    }
+//                    holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {
                         holder.deleteIv.setVisibility(View.VISIBLE);
                         holder.dragHandleIv.setVisibility(View.VISIBLE);
@@ -672,6 +691,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
             public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
             public ImageView poiImageIv, spotImageIv;
+            public TextView rankTv;
             public TextView poiNameTv, spotNameTv;
             public TextView poiAddressTv, spotCostTimeTv;
             public TextView poiPriceTv;
