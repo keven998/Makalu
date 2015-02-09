@@ -52,8 +52,6 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/3.
  */
 public class InDestFragment extends PeachBaseFragment implements OnDestActionListener {
-    //    @InjectView(R.id.section_bar)
-//    TopSectionBar mSectionBar;
     @InjectView(R.id.lv_in_city)
     ListView mLvInCity;
     @InjectView(R.id.sb_index)

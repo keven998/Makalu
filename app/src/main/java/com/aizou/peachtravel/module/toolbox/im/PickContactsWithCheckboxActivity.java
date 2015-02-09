@@ -13,11 +13,6 @@
  */
 package com.aizou.peachtravel.module.toolbox.im;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,20 +37,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.StretchAnimation;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
-import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
@@ -69,8 +62,11 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private LinearLayout contentLl;
@@ -93,7 +89,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private List<String> exitingMembers;
     // 好友列表
     private List<IMUser> alluserList;
-    private TopSectionBar sectionBar;
     private int request;
     private String groupId;
     private EMGroup group;
@@ -155,17 +150,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
         contactAdapter = new PickContactAdapter(this, R.layout.row_contact_with_checkbox, alluserList);
         listView.setAdapter(contactAdapter);
-
-        if (alluserList.size() > 15) {//magic number for show indexing
-            sectionBar = (TopSectionBar) findViewById(R.id.section_bar);
-            sectionBar.setListView(listView);
-            findViewById(R.id.indexer).setVisibility(View.VISIBLE);
-        }
-
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(showing){
+                if(showing) {
                     return;
                 }
                 CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);

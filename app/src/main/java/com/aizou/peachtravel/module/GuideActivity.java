@@ -69,10 +69,10 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
                 Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
                 earthIv.startAnimation(operatingAnim);
                 views.add(view);
-			} else if(i==1){
+			} else if(i == 1) {
                 View view = View.inflate(this,R.layout.guide_2,null);
                 views.add(view);
-			}else if(i==2){
+			} else if(i == 2) {
                 View view = View.inflate(this,R.layout.guide_3,null);
                 views.add(view);
             }
@@ -125,8 +125,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 				SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
                 Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
                 startActivityWithNoAnim(mainActivity);
-//                Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
-//                startActivityWithNoAnim(storyIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} else if (type.equals("setting")) {
 
 			}

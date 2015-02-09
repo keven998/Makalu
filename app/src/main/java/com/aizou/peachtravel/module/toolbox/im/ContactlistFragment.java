@@ -13,13 +13,6 @@
  */
 package com.aizou.peachtravel.module.toolbox.im;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,21 +22,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.SideBar;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.widget.TopSectionBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,8 +54,6 @@ public class ContactlistFragment extends Fragment {
     private SideBar indexBar;
     private TextView indexDialogTv;
 	private boolean hidden;
-	private TopSectionBar sectionBar;
-//	private InputMethodManager inputMethodManager;
     private View emptyView;
 
 	@Override
@@ -153,25 +148,9 @@ public class ContactlistFragment extends Fragment {
 
 	}
 
-    private void enableIndexBar(boolean enable) {
-        if (enable) {
-            if (sectionBar == null) {
-                sectionBar = (TopSectionBar) getView().findViewById(R.id.section_bar);
-                sectionBar.setListView(listView);
-                ((FrameLayout)sectionBar.getParent()).setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (sectionBar != null) {
-                ((FrameLayout)sectionBar.getParent()).setVisibility(View.GONE);
-                sectionBar = null;
-            }
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sectionBar = null;
     }
 
 
@@ -234,12 +213,6 @@ public class ContactlistFragment extends Fragment {
                         if (emptyView != null) {
                             emptyView.setVisibility(View.GONE);
                             emptyView = null;
-                        }
-
-                        if (contactList.size() > 15) {//magic number for show indexing
-                            enableIndexBar(true);
-                        } else {
-                            enableIndexBar(false);
                         }
                     }
 

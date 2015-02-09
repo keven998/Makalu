@@ -208,19 +208,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     @Override
-    public void finish() {
-//        String action = getIntent().getAction();
-//        if ("plan.flow".equals(action)) {
-//            Intent intent = new Intent(StrategyListActivity.this, MainActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_to_right);
-//            return;
-//        }
-        super.finish();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {

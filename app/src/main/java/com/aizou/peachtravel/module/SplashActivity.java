@@ -1,18 +1,22 @@
 package com.aizou.peachtravel.module;
 
-import com.aizou.core.dialog.ToastUtil;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
+
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.CoverStoryBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
-import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.chat.EMMessage;
@@ -21,20 +25,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import android.app.Activity;
-import android.app.Notification;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageView;
 
 /**
  * 欢迎页，等待2秒，进入主界面
@@ -80,11 +71,11 @@ public class SplashActivity extends PeachBaseActivity {
                     if (showSplash && !hasLoad) {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
                         startActivityWithNoAnim(mainIntent);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } else {
                         Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
                         startActivityWithNoAnim(mainActivity);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 //                        Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
 //                        startActivityWithNoAnim(storyIntent);
                     }
