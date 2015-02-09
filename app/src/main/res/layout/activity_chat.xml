@@ -201,7 +201,7 @@
                         android:drawableTop="@drawable/btn_chat_my_guide"
                         android:gravity="center_horizontal"
                         android:onClick="onClick"
-                        android:text="旅行计划"
+                        android:text="我的旅程"
                         android:textColor="@color/base_text_color_subtitle"
                         android:textSize="13sp" />
 
