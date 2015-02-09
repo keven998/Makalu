@@ -85,6 +85,7 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
             }
             extMessageBean.desc = maxLengthStr;
         }
+        extMessageBean.detailUrl = detailUrl;
         return new ShareDialogBean(extMessageBean);
     }
 
