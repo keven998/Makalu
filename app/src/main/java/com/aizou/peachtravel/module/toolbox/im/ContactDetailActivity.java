@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.FastBlurHelper;
@@ -129,10 +131,29 @@ public class ContactDetailActivity extends ChatBaseActivity {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
-        contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("从好友列表删除");
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteContact(imUser);
+                final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                deleteDialog.setTitle("提示");
+                deleteDialog.setMessage("删除确认");
+                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteContact(imUser);
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.show();
+
                 dialog.dismiss();
             }
         });

@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:drawableTop="@drawable/ic_share_taotalk"
+        android:drawableTop="@drawable/ic_new_talk"
         android:gravity="center"
         android:drawablePadding="4dp"
         android:text="Talk"
