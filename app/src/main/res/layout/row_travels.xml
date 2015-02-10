@@ -62,7 +62,6 @@
             android:layout_height="26dp"
             android:textSize="13sp"
             android:visibility="visible"
-            android:layout_marginRight="10dp"
             android:background="@drawable/theme_button_selctor"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
