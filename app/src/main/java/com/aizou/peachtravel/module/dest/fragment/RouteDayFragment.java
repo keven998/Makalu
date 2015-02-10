@@ -35,6 +35,7 @@ import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -50,7 +51,6 @@ import butterknife.InjectView;
  */
 public class RouteDayFragment extends PeachBaseFragment implements OnEditModeChangeListener {
     public static final int ADD_POI_REQUEST_CODE = 101;
-    private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private OnEditModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
@@ -58,6 +58,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     RouteDayAdapter routeDayAdpater;
     View addDayFooter;
     Button addDayBtn;
+    StrategyBean strategy;
     boolean isInEditMode;
 
 
@@ -82,8 +83,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     }
 
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+        StrategyBean strategyBean = getStrategy();
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
-        for (int i = 0; i < strategy.itineraryDays; i++) {
+        for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
@@ -123,12 +125,13 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         return routeDayMap;
     }
 
-    public StrategyBean getStrategy() {
-        return strategy;
+    private StrategyBean getStrategy() {
+        return ((StrategyActivity) getActivity()).getStrategy();
+
     }
 
     private void initData() {
-        strategy = getArguments().getParcelable("strategy");
+        strategy = getStrategy();
         isInEditMode = getArguments().getBoolean("isInEditMode");
         resizeData(strategy.itinerary);
         routeDayAdpater = new RouteDayAdapter(isInEditMode);

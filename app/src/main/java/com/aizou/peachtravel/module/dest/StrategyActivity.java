@@ -48,6 +48,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
@@ -85,7 +86,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     @InjectView(R.id.strategy_indicator)
     FixedIndicatorView mStrategyIndicator;
     private String id;
-    private StrategyBean strategy;
+    private StrategyBean strategy,originalStrategy;
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
     private int curIndex=0;
@@ -189,6 +190,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         mIvEdit.setChecked(inEditMode);
         gotoEditMode();
     }
+    public StrategyBean getStrategy(){
+        return strategy;
+    }
 
     private void initData() {
         id = getIntent().getStringExtra("id");
@@ -201,14 +205,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             dialog.setTitle("提示");
             dialog.setMessage("小桃可为你创建模版，旅程计划更简单");
             dialog.setCanceledOnTouchOutside(false);
-            dialog.setNegativeButton("不创建", new View.OnClickListener() {
+            dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                     createStrategyByCityIds(cityIdList, false);
                 }
             });
-            dialog.setPositiveButton("创建", new View.OnClickListener() {
+            dialog.setPositiveButton("需要", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -224,7 +228,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             });
 
         } else {
-           boolean hasCache= setupViewFromCache(id);
+            boolean hasCache= setupViewFromCache(id);
             if(!hasCache)
                 DialogManager.getInstance().showLoadingDialog(mContext);
             getStrategyDataById(id);
@@ -265,7 +269,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             public void doFailure(Exception error, String msg, String method) {
                 if (!isFinishing())
                     DialogManager.getInstance().dissMissLoadingDialog();
-                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -301,13 +305,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         });
     }
 
-    private void copyGuide(){
-
-    }
-
     private void bindView(final StrategyBean result) {
         destinations = result.localities;
         strategy = result;
+        originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
 //        mTitleBar.getTitleTextView().setText(result.title);
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
 
@@ -429,15 +430,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     }
 
     private StrategyBean getSaveStrategy() {
-        if (routeDayFragment != null && routeDayFragment.getStrategy() != null) {
-            strategy = routeDayFragment.getStrategy();
-        }
-        if (restFragment != null && restFragment.getStrategy() != null) {
-            strategy.restaurant = restFragment.getStrategy().restaurant;
-        }
-        if (shoppingFragment != null && shoppingFragment.getStrategy() != null) {
-            strategy.shopping = shoppingFragment.getStrategy().shopping;
-        }
         return strategy;
     }
 
@@ -539,7 +531,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (routeDayFragment == null) {
                     routeDayFragment = new RouteDayFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("strategy", strategyBean);
                     bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     routeDayFragment.setArguments(bundle);
                 }
@@ -548,7 +539,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (restFragment == null) {
                     restFragment = new RestaurantFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("strategy", strategyBean);
                     bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     restFragment.setArguments(bundle);
                 }
@@ -558,7 +548,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (shoppingFragment == null) {
                     shoppingFragment = new ShoppingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("strategy", strategyBean);
                     bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
                     shoppingFragment.setArguments(bundle);
                 }
@@ -579,6 +568,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             }
             if(requestCode==EDIT_LOC_REQUEST_CODE){
                 destinations = data.getParcelableArrayListExtra("destinations");
+                strategy.localities = destinations;
+                originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
                 showLocDialog();
             }
         }
@@ -611,14 +602,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     private void saveStrategy(final boolean finish) {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
-        if (routeDayFragment != null&&routeDayFragment.getStrategy()!=null) {
-            StrategyManager.putItineraryJson(mContext, jsonObject, routeDayFragment.getStrategy(), routeDayFragment.getRouteDayMap());
+        if (routeDayFragment != null) {
+            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
         }
-        if (shoppingFragment != null&&shoppingFragment.getStrategy()!=null) {
-            StrategyManager.putShoppingJson(mContext, jsonObject, shoppingFragment.getStrategy());
+        if (shoppingFragment != null) {
+            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
         }
-        if (restFragment != null&&restFragment.getStrategy()!=null) {
-            StrategyManager.putRestaurantJson(mContext, jsonObject, restFragment.getStrategy());
+        if (restFragment != null) {
+            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
         }
         DialogManager.getInstance().showLoadingDialog(mContext);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
@@ -627,6 +618,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {
+                    originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
                     mIvEdit.setChecked(false);
                     for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
                         onEditModeChangeListener.onEditModeChange(false);
@@ -657,11 +649,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
-            StrategyManager.putItineraryJson(mContext, jsonObject, routeDayFragment.getStrategy(), routeDayFragment.getRouteDayMap());
+            StrategyManager.putItineraryJson(mContext, jsonObject,strategy, routeDayFragment.getRouteDayMap());
         } else if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
-            StrategyManager.putShoppingJson(mContext, jsonObject, shoppingFragment.getStrategy());
+            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
         } else if (restFragment != null && restFragment.isEditableMode()) {
-            StrategyManager.putRestaurantJson(mContext, jsonObject, restFragment.getStrategy());
+            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
         }
 
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
@@ -679,7 +671,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             public void onClick(View v) {
                 messageDialog.dismiss();
                 Intent intent = getIntent();
-                intent.putExtra("strategy", strategy);
+                intent.putExtra("strategy", originalStrategy);
                 setResult(RESULT_OK, intent);
                 finish();
             }

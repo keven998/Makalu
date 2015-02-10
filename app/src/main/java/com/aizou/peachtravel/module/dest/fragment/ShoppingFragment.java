@@ -34,6 +34,7 @@ import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
+import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -52,7 +53,6 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
     View addFooter;
     Button addBtn;
     ShoppingAdapter mShoppingAdapter;
-    StrategyBean strategy;
     boolean isInEditMode;
 
     @Override
@@ -81,12 +81,14 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         }
         return false;
     }
-    public StrategyBean getStrategy(){
-        return  strategy;
+
+    private StrategyBean getStrategy() {
+        return ((StrategyActivity) getActivity()).getStrategy();
+
     }
 
     private void initData() {
-        strategy = getArguments().getParcelable("strategy");
+        final StrategyBean strategyBean = getStrategy();
         isInEditMode = getArguments().getBoolean("isInEditMode");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
@@ -117,8 +119,8 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                 intent.putExtra("canAdd", true);
-                intent.putParcelableArrayListExtra("locList", strategy.localities);
-                intent.putParcelableArrayListExtra("poiList",strategy.shopping);
+                intent.putParcelableArrayListExtra("locList", strategyBean.localities);
+                intent.putParcelableArrayListExtra("poiList",strategyBean.shopping);
                 getActivity().startActivityForResult(intent, ADD_SHOPPING_REQUEST_CODE);
             }
         });
@@ -129,7 +131,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK){
             if(requestCode==ADD_SHOPPING_REQUEST_CODE){
-                strategy.shopping = data.getParcelableArrayListExtra("poiList");
+                getStrategy().shopping = data.getParcelableArrayListExtra("poiList");
                 mShoppingAdapter.notifyDataSetChanged();
             }
         }
@@ -150,9 +152,11 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         public boolean isEditableMode;
         private DisplayImageOptions picOptions;
         private boolean isAnimationEnd=true;
+        private StrategyBean strategy;
         public ShoppingAdapter(boolean isEditableMode) {
             this.isEditableMode = isEditableMode;
             picOptions = UILUtils.getDefaultOption();
+            strategy = getStrategy();
         }
         public void setEditableMode(boolean mode){
             isAnimationEnd =false;

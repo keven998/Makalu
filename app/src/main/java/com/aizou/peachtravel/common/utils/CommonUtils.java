@@ -27,6 +27,8 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Display;
 
@@ -144,6 +146,12 @@ public class CommonUtils {
             }
         }
         return false;
+    }
+
+    public static Parcelable clone(Parcelable parcelable){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("clone",parcelable);
+        return  bundle.getParcelable("clone");
     }
 
 

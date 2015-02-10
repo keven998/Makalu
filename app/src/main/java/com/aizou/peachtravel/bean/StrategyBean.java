@@ -7,13 +7,14 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.share.ShareDialogBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/12/26.
  */
-public class StrategyBean implements ICreateShareDialog, Parcelable {
+public class StrategyBean implements ICreateShareDialog, Parcelable{
     public String id;
     public String title;
     public String summary;

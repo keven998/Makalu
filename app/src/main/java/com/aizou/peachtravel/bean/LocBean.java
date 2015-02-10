@@ -8,6 +8,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.share.ShareDialogBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

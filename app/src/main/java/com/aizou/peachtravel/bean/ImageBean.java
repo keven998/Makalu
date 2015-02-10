@@ -4,6 +4,8 @@ package com.aizou.peachtravel.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Rjm on 2014/11/17.
  */

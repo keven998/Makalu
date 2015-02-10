@@ -66,7 +66,6 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
     View addFooter;
     Button addBtn;
     RestAdapter mRestAdapter;
-    StrategyBean strategy;
     boolean isInEditMode;
 
     @Override
@@ -96,13 +95,13 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         }
         return false;
     }
-    public StrategyBean getStrategy(){
-        return  strategy;
+    private StrategyBean getStrategy() {
+        return ((StrategyActivity) getActivity()).getStrategy();
+
     }
 
-
     private void initData() {
-        strategy = getArguments().getParcelable("strategy");
+        final StrategyBean strategyBean = getStrategy();
         isInEditMode = getArguments().getBoolean("isInEditMode");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
@@ -131,8 +130,8 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
-                intent.putParcelableArrayListExtra("locList", strategy.localities);
-                intent.putParcelableArrayListExtra("poiList", strategy.restaurant);
+                intent.putParcelableArrayListExtra("locList", strategyBean.localities);
+                intent.putParcelableArrayListExtra("poiList", strategyBean.restaurant);
                 getActivity().startActivityForResult(intent, ADD_REST_REQUEST_CODE);
             }
         });
@@ -143,7 +142,8 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK){
             if(requestCode==ADD_REST_REQUEST_CODE){
-                strategy.restaurant = data.getParcelableArrayListExtra("poiList");
+                StrategyBean strategyBean = getStrategy();
+                strategyBean.restaurant = data.getParcelableArrayListExtra("poiList");
                 mRestAdapter.notifyDataSetChanged();
             }
         }
@@ -164,10 +164,12 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         private boolean isEditableMode;
         private DisplayImageOptions picOptions;
         private boolean isAnimationEnd=true;
+        private StrategyBean strategy;
 
         public RestAdapter(boolean isEditableMode) {
             this.isEditableMode = isEditableMode;
             picOptions = UILUtils.getDefaultOption();
+            strategy = getStrategy();
         }
 
         public void setEditableMode(boolean mode){
