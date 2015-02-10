@@ -47,7 +47,7 @@
                 android:layout_toRightOf="@id/spot_image_iv"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="-4dp"
-                android:maxLines="2"
+                android:singleLine="true"
                 android:textColor="@color/base_text_color_title"
                 android:textSize="15sp" />
             <TextView
@@ -72,7 +72,7 @@
                 android:drawableLeft="@drawable/ic_time"
                 android:layout_marginLeft="15dp"
                 android:drawablePadding="2dp"
-                android:paddingBottom="6dp"
+                android:paddingBottom="2dp"
                 android:singleLine="true"
                 android:textColor="@color/base_text_color_text_placeholder"
                 android:textSize="11sp"/>

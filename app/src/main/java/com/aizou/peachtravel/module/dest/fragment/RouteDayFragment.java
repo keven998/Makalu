@@ -7,52 +7,35 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aizou.core.utils.LocalDisplay;
-import com.aizou.peachtravel.base.BaseActivity;
-import com.aizou.peachtravel.common.dialog.DialogManager;
-import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.LocBean;
-import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
-import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
-import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
-import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
-import com.aizou.peachtravel.module.dest.SpotDetailActivity;
-import com.aizou.peachtravel.module.dest.StrategyActivity;
-import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -147,16 +130,13 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         strategy = getArguments().getParcelable("strategy");
         isInEditMode = getArguments().getBoolean("isInEditMode");
         resizeData(strategy.itinerary);
-        final RouteDayAdapter adapter = new RouteDayAdapter();
-        routeDayAdpater = adapter;
-        final DragSortListView listView = mEditDslv;
-        routeDayAdpater.isEditableMode = isInEditMode;
-        listView.setDropListener(adapter);
+        routeDayAdpater = new RouteDayAdapter(isInEditMode);
+        mEditDslv.setDropListener(routeDayAdpater);
         // make and set controller on dslv
-        SectionController c = new SectionController(listView, adapter);
-        listView.setFloatViewManager(c);
-        listView.setOnTouchListener(c);
-        listView.setAdapter(adapter);
+        SectionController c = new SectionController(mEditDslv, routeDayAdpater);
+        mEditDslv.setFloatViewManager(c);
+        mEditDslv.setOnTouchListener(c);
+        mEditDslv.setAdapter(routeDayAdpater);
 
 //        mEditBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -225,17 +205,17 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
             public void onClick(View v) {
                 routeDayMap.add(new ArrayList<PoiDetailBean>());
                 strategy.itineraryDays++;
-                adapter.notifyDataSetChanged();
-                listView.postDelayed(new Runnable() {
+                routeDayAdpater.notifyDataSetChanged();
+                mEditDslv.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.setSelection(adapter.getCount() - 1);
+                        mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
                     }
                 }, 50);
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        routeDayAdpater.isEditableMode=true;
+                        routeDayAdpater.setEditableMode(true);
                         routeDayAdpater.notifyDataSetChanged();
                         mOnEditModeChangeListener.onEditModeChange(true);
                     }
@@ -260,7 +240,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     public void onEditModeChange(boolean isInEdit) {
         this.isInEditMode = isInEdit;
         if (routeDayAdpater != null) {
-            routeDayAdpater.isEditableMode = isInEdit;
+            routeDayAdpater.setEditableMode(isInEdit);
             routeDayAdpater.notifyDataSetChanged();
         }
 
@@ -328,11 +308,13 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
             DragSortListView.DropListener {
         public static final int SPOT = 0;
         public static final int POI = 1;
-        public boolean isEditableMode;
+        private boolean isEditableMode;
         private DisplayImageOptions options;
+        public boolean isAnimationEnd =true;
 
-        public RouteDayAdapter() {
+        public RouteDayAdapter(boolean isEditableMode) {
             super();
+            this.isEditableMode = isEditableMode;
             options = UILUtils.getDefaultOption();
         }
 
@@ -345,6 +327,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 return POI;
             }
 
+        }
+        public void setEditableMode(boolean mode){
+            isEditableMode = mode;
+            isAnimationEnd=false;
         }
 
         @Override
@@ -423,8 +409,33 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     }
 
                     if (isEditableMode) {
-                        holder.deleteIv.setVisibility(View.VISIBLE);
-                        holder.dragHandleIv.setVisibility(View.VISIBLE);
+                        if(isAnimationEnd){
+                            holder.deleteIv.setVisibility(View.VISIBLE);
+                            holder.dragHandleIv.setVisibility(View.VISIBLE);
+                        }else{
+                            Animation animation =AnimationSimple.expand(holder.deleteIv);
+                            AnimationSimple.expand(holder.dragHandleIv);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    isAnimationEnd =true;
+                                    notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+
+
+
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -449,8 +460,32 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                             }
                         });
                     } else {
-                        holder.deleteIv.setVisibility(View.GONE);
-                        holder.dragHandleIv.setVisibility(View.GONE);
+                        if(isAnimationEnd){
+                            holder.deleteIv.setVisibility(View.GONE);
+                            holder.dragHandleIv.setVisibility(View.GONE);
+                        }else{
+                            Animation animation =AnimationSimple.collapse(holder.deleteIv);
+                            AnimationSimple.collapse(holder.dragHandleIv);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    isAnimationEnd =true;
+                                    notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+
+
 
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
@@ -487,8 +522,33 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     }
 //                    holder.poiPriceTv.setText(poiDetailBean.priceDesc);
                     if (isEditableMode) {
-                        holder.deleteIv.setVisibility(View.VISIBLE);
-                        holder.dragHandleIv.setVisibility(View.VISIBLE);
+                        if(isAnimationEnd){
+                            holder.deleteIv.setVisibility(View.VISIBLE);
+                            holder.dragHandleIv.setVisibility(View.VISIBLE);
+
+                        }else{
+                            Animation animation =AnimationSimple.expand(holder.deleteIv);
+                            AnimationSimple.expand(holder.dragHandleIv);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    isAnimationEnd =true;
+                                    notifyDataSetChanged();
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -513,8 +573,33 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                             }
                         });
                     } else {
-                        holder.deleteIv.setVisibility(View.GONE);
-                        holder.dragHandleIv.setVisibility(View.GONE);
+                        if(isAnimationEnd){
+                            holder.deleteIv.setVisibility(View.GONE);
+                            holder.dragHandleIv.setVisibility(View.GONE);
+                        }else{
+                            Animation animation =AnimationSimple.collapse(holder.deleteIv);
+                            AnimationSimple.collapse(holder.dragHandleIv);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    isAnimationEnd =true;
+                                    notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+
+
+
                     }
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -672,7 +672,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             public void onClick(View v) {
                 messageDialog.dismiss();
                 saveStrategy(true);
-
             }
         });
         messageDialog.setNegativeButton("直接返回", new View.OnClickListener() {

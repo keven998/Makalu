@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
@@ -36,6 +38,7 @@ import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
@@ -95,8 +98,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         controller.setDragHandleId(R.id.drag_handle);
         controller.setBackgroundColor(Color.TRANSPARENT);
         controller.setRemoveEnabled(false);
-        mShoppingAdapter = new ShoppingAdapter();
-        mShoppingAdapter.isEditableMode =isInEditMode;
+        mShoppingAdapter = new ShoppingAdapter(isInEditMode);
         final DragSortListView listView = mEditDslv;
         View view = new View(getActivity());
         view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(10)));
@@ -113,7 +115,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        mShoppingAdapter.isEditableMode=true;
+                        mShoppingAdapter.setEditableMode(true);
                         mShoppingAdapter.notifyDataSetChanged();
                         mOnEditModeChangeListener.onEditModeChange(true);
                     }
@@ -143,7 +145,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
     public void onEditModeChange(boolean isInEdit) {
         this.isInEditMode = isInEdit;
         if (mShoppingAdapter != null) {
-            mShoppingAdapter.isEditableMode = isInEdit;
+            mShoppingAdapter.setEditableMode(isInEdit);
             mShoppingAdapter.notifyDataSetChanged();
         }
 
@@ -152,7 +154,16 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
     public class ShoppingAdapter extends BaseAdapter implements
             DragSortListView.DropListener {
         public boolean isEditableMode;
-
+        private DisplayImageOptions picOptions;
+        private boolean isAnimationEnd=true;
+        public ShoppingAdapter(boolean isEditableMode) {
+            this.isEditableMode = isEditableMode;
+            picOptions = UILUtils.getDefaultOption();
+        }
+        public void setEditableMode(boolean mode){
+            isAnimationEnd =false;
+            isEditableMode = mode;
+        }
         @Override
         public int getCount() {
             return  strategy.shopping.size();
@@ -171,7 +182,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final PoiDetailBean poiDetailBean =  strategy.shopping.get(position);
-            ItemViewHolder holder;
+            final ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
                 convertView = View.inflate(getActivity(), R.layout.row_list_poi, null);
@@ -190,7 +201,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 holder = (ItemViewHolder) convertView.getTag();
             }
             if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+                ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, picOptions);
             }else{
                 holder.poiImageIv.setImageDrawable(null);
             }
@@ -199,19 +210,42 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
             if (isEditableMode) {
-                holder.deleteIv.setVisibility(View.VISIBLE);
-                holder.nearByTv.setVisibility(View.GONE);
-                holder.dragHandleIv.setVisibility(View.VISIBLE);
+                if(isAnimationEnd){
+                    holder.deleteIv.setVisibility(View.VISIBLE);
+                    holder.nearByTv.setVisibility(View.GONE);
+                    holder.dragHandleIv.setVisibility(View.VISIBLE);
+                }else{
+                    Animation animation = AnimationSimple.expand(holder.deleteIv);
+                    AnimationSimple.expand(holder.dragHandleIv);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            isAnimationEnd =true;
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
                         dialog.setTitle("提示");
-                        dialog.setMessage("确定删除？");
+                        dialog.setMessage("确定删除");
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                strategy.shopping.remove(poiDetailBean);
+                                strategy.restaurant.remove(poiDetailBean);
                                 notifyDataSetChanged();
                                 dialog.dismiss();
                             }
@@ -223,17 +257,40 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                             }
                         });
                         dialog.show();
-
                     }
                 });
             } else {
-                holder.deleteIv.setVisibility(View.GONE);
-                holder.nearByTv.setVisibility(View.VISIBLE);
-                holder.dragHandleIv.setVisibility(View.GONE);
+                if(isAnimationEnd){
+                    holder.deleteIv.setVisibility(View.GONE);
+                    holder.nearByTv.setVisibility(View.VISIBLE);
+                    holder.dragHandleIv.setVisibility(View.GONE);
+                }else{
+                    Animation animation =AnimationSimple.collapse(holder.deleteIv);
+                    AnimationSimple.collapse(holder.dragHandleIv);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            isAnimationEnd =true;
+                            holder.nearByTv.setVisibility(View.VISIBLE);
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(poiDetailBean.location!=null&&poiDetailBean.location.coordinates!=null){
+                        if (poiDetailBean.location != null && poiDetailBean.location.coordinates != null) {
                             Uri mUri = Uri.parse("geo:"+poiDetailBean.location.coordinates[1]+","+poiDetailBean.location.coordinates[0]+"?q="+poiDetailBean.zhName);
                             Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
                             if (CommonUtils.checkIntent(getActivity(), mIntent)){

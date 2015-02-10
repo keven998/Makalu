@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -34,6 +36,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
@@ -104,8 +107,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         controller.setDragHandleId(R.id.drag_handle);
         controller.setBackgroundColor(Color.TRANSPARENT);
         controller.setRemoveEnabled(false);
-        mRestAdapter = new RestAdapter();
-        mRestAdapter.isEditableMode = isInEditMode;
+        mRestAdapter = new RestAdapter(isInEditMode);
         final DragSortListView listView = mEditDslv;
         View view = new View(getActivity());
         view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(10)));
@@ -120,7 +122,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        mRestAdapter.isEditableMode=true;
+                        mRestAdapter.setEditableMode(true);
                         mRestAdapter.notifyDataSetChanged();
                         mOnEditModeChangeListener.onEditModeChange(true);
                     }
@@ -150,7 +152,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
     public void onEditModeChange(boolean isInEdit) {
         this.isInEditMode = isInEdit;
         if (mRestAdapter != null) {
-            mRestAdapter.isEditableMode = isInEdit;
+            mRestAdapter.setEditableMode(isInEdit);
             mRestAdapter.notifyDataSetChanged();
         }
 
@@ -158,11 +160,18 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
 
     public class RestAdapter extends BaseAdapter implements
             DragSortListView.DropListener {
-        public boolean isEditableMode;
+        private boolean isEditableMode;
         private DisplayImageOptions picOptions;
+        private boolean isAnimationEnd=true;
 
-        public RestAdapter() {
+        public RestAdapter(boolean isEditableMode) {
+            this.isEditableMode = isEditableMode;
             picOptions = UILUtils.getDefaultOption();
+        }
+
+        public void setEditableMode(boolean mode){
+            isAnimationEnd =false;
+            isEditableMode = mode;
         }
 
         @Override
@@ -183,7 +192,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final PoiDetailBean poiDetailBean = strategy.restaurant.get(position);
-            ItemViewHolder holder;
+            final ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
                 convertView = View.inflate(getActivity(), R.layout.row_list_poi, null);
@@ -212,9 +221,32 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
 
             if (isEditableMode) {
-                holder.deleteIv.setVisibility(View.VISIBLE);
-                holder.nearByTv.setVisibility(View.GONE);
-                holder.dragHandleIv.setVisibility(View.VISIBLE);
+                if(isAnimationEnd){
+                    holder.deleteIv.setVisibility(View.VISIBLE);
+                    holder.nearByTv.setVisibility(View.GONE);
+                    holder.dragHandleIv.setVisibility(View.VISIBLE);
+                }else{
+                    Animation animation = AnimationSimple.expand(holder.deleteIv);
+                    AnimationSimple.expand(holder.dragHandleIv);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            isAnimationEnd =true;
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -239,9 +271,33 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                     }
                 });
             } else {
-                holder.deleteIv.setVisibility(View.GONE);
-                holder.nearByTv.setVisibility(View.VISIBLE);
-                holder.dragHandleIv.setVisibility(View.GONE);
+                if(isAnimationEnd){
+                    holder.deleteIv.setVisibility(View.GONE);
+                    holder.nearByTv.setVisibility(View.VISIBLE);
+                    holder.dragHandleIv.setVisibility(View.GONE);
+                }else{
+                    Animation animation =AnimationSimple.collapse(holder.deleteIv);
+                    AnimationSimple.collapse(holder.dragHandleIv);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            isAnimationEnd =true;
+                            holder.nearByTv.setVisibility(View.VISIBLE);
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -267,6 +323,8 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             return convertView;
         }
 
+
+
         @Override
         public void drop(int from, int to) {
             if (from != to) {
@@ -288,5 +346,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             public TextView poiRankTv;
             public RatingBar poiRating;
         }
+
+
     }
 }
