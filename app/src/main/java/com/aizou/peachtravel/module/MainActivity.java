@@ -108,7 +108,7 @@ public class MainActivity extends PeachBaseActivity {
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
                     startActivityWithNoAnim(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivityForResult(intent, CODE_IM_LOGIN);
@@ -261,7 +261,7 @@ public class MainActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
              if (requestCode == CODE_IM_LOGIN) {
                  startActivityWithNoAnim(new Intent(this, IMMainActivity.class));
-                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
              }
         }
     }

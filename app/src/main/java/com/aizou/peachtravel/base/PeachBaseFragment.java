@@ -41,6 +41,11 @@ public class PeachBaseFragment extends Fragment {
         }
     }
 
+
+    public void startActivityWithNoAnim(Intent intent) {
+        super.startActivity(intent);
+    }
+
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);

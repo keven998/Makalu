@@ -366,7 +366,8 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case CODE_IM_LOGIN:
-                    startActivity(new Intent(getActivity(), IMMainActivity.class));
+                    startActivityWithNoAnim(new Intent(getActivity(), IMMainActivity.class));
+                    getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     break;
 
                 case CODE_PLAN:
