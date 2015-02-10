@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,7 +171,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
         }
 
         public void setEditableMode(boolean mode){
-            isAnimationEnd =false;
+            isAnimationEnd = false;
             isEditableMode = mode;
         }
 
@@ -207,12 +208,12 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                 holder.poiRankTv = (TextView) convertView.findViewById(R.id.poi_rank_tv);
                 convertView.setTag(holder);
-            }else{
+            } else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
-            if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
+            if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, picOptions);
-            }else{
+            } else {
                 holder.poiImageIv.setImageDrawable(null);
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
@@ -220,32 +221,57 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             holder.poiRating.setRating(poiDetailBean.rating);
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
 
-            if (isEditableMode) {
-                if(isAnimationEnd){
-                    holder.deleteIv.setVisibility(View.VISIBLE);
-                    holder.nearByTv.setVisibility(View.GONE);
-                    holder.dragHandleIv.setVisibility(View.VISIBLE);
-                }else{
-                    Animation animation = AnimationSimple.expand(holder.deleteIv);
-                    AnimationSimple.expand(holder.dragHandleIv);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
+            if (!isAnimationEnd && isEditableMode) {
+                final View view = holder.deleteIv;
+                Animation animation = AnimationSimple.expand(view);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            isAnimationEnd =true;
-                            notifyDataSetChanged();
-                        }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                            isAnimationEnd = true;
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                        }
-                    });
-                }
+                    }
+                });
+                view.startAnimation(animation);
+                animation = AnimationSimple.expand(holder.dragHandleIv);
+                holder.dragHandleIv.startAnimation(animation);
+
+                holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+                        dialog.setTitle("提示");
+                        dialog.setMessage("确定删除");
+                        dialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                strategy.restaurant.remove(poiDetailBean);
+                                notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+                holder.nearByTv.setVisibility(View.GONE);
+            } else if (isEditableMode) {
+                holder.deleteIv.setVisibility(View.VISIBLE);
+                holder.nearByTv.setVisibility(View.GONE);
+                holder.dragHandleIv.setVisibility(View.VISIBLE);
 
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -271,33 +297,10 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
                     }
                 });
             } else {
-                if(isAnimationEnd){
-                    holder.deleteIv.setVisibility(View.GONE);
-                    holder.nearByTv.setVisibility(View.VISIBLE);
-                    holder.dragHandleIv.setVisibility(View.GONE);
-                }else{
-                    Animation animation =AnimationSimple.collapse(holder.deleteIv);
-                    AnimationSimple.collapse(holder.dragHandleIv);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
+                holder.deleteIv.setVisibility(View.GONE);
+                holder.dragHandleIv.setVisibility(View.GONE);
 
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            isAnimationEnd =true;
-                            holder.nearByTv.setVisibility(View.VISIBLE);
-                            notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                }
-
+                holder.nearByTv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -408,40 +409,61 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.rankTv.setText("");
                     }
 
-                    if (isEditableMode) {
-                        if(isAnimationEnd){
-                            holder.deleteIv.setVisibility(View.VISIBLE);
-                            holder.dragHandleIv.setVisibility(View.VISIBLE);
-                        }else{
-                            Animation animation =AnimationSimple.expand(holder.deleteIv);
-                            AnimationSimple.expand(holder.dragHandleIv);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
+                    if (!isAnimationEnd && isEditableMode) {
+                        Animation animation = AnimationSimple.expand(holder.deleteIv);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    isAnimationEnd =true;
-                                    notifyDataSetChanged();
-                                }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                isAnimationEnd = true;
+                            }
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
 
-                                }
-                            });
-                        }
-
-
+                            }
+                        });
+                        holder.deleteIv.startAnimation(animation);
+                        animation = AnimationSimple.expand(holder.dragHandleIv);
+                        holder.dragHandleIv.startAnimation(animation);
 
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                                 deleteDialog.setTitle("提示");
-                                deleteDialog.setMessage("确定删除？");
+                                deleteDialog.setMessage("确定删除");
+                                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        deleteDialog.dismiss();
+                                    }
+                                });
+                                deleteDialog.show();
+                            }
+                        });
+                    } else if (isEditableMode) {
+                        holder.deleteIv.setVisibility(View.VISIBLE);
+                        holder.dragHandleIv.setVisibility(View.VISIBLE);
+
+                        holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
+                                deleteDialog.setTitle("提示");
+                                deleteDialog.setMessage("确定删除");
                                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -460,34 +482,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                             }
                         });
                     } else {
-                        if(isAnimationEnd){
-                            holder.deleteIv.setVisibility(View.GONE);
-                            holder.dragHandleIv.setVisibility(View.GONE);
-                        }else{
-                            Animation animation =AnimationSimple.collapse(holder.deleteIv);
-                            AnimationSimple.collapse(holder.dragHandleIv);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    isAnimationEnd =true;
-                                    notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-                        }
-
-
-
+                        holder.deleteIv.setVisibility(View.GONE);
+                        holder.dragHandleIv.setVisibility(View.GONE);
                     }
+
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -520,34 +518,28 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     }else{
                         holder.poiPriceTv.setText("");
                     }
-//                    holder.poiPriceTv.setText(poiDetailBean.priceDesc);
-                    if (isEditableMode) {
-                        if(isAnimationEnd){
-                            holder.deleteIv.setVisibility(View.VISIBLE);
-                            holder.dragHandleIv.setVisibility(View.VISIBLE);
 
-                        }else{
-                            Animation animation =AnimationSimple.expand(holder.deleteIv);
-                            AnimationSimple.expand(holder.dragHandleIv);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
+                    if (!isAnimationEnd && isEditableMode) {
+                        Animation animation = AnimationSimple.expand(holder.deleteIv);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    isAnimationEnd =true;
-                                    notifyDataSetChanged();
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                isAnimationEnd = true;
+                            }
 
-                                }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-                        }
+                            }
+                        });
+                        holder.deleteIv.startAnimation(animation);
+                        animation = AnimationSimple.expand(holder.dragHandleIv);
+                        holder.dragHandleIv.startAnimation(animation);
 
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -572,35 +564,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                                 deleteDialog.show();
                             }
                         });
+                    } else if (isEditableMode) {
+                        holder.deleteIv.setVisibility(View.VISIBLE);
+                        holder.dragHandleIv.setVisibility(View.VISIBLE);
                     } else {
-                        if(isAnimationEnd){
-                            holder.deleteIv.setVisibility(View.GONE);
-                            holder.dragHandleIv.setVisibility(View.GONE);
-                        }else{
-                            Animation animation =AnimationSimple.collapse(holder.deleteIv);
-                            AnimationSimple.collapse(holder.dragHandleIv);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    isAnimationEnd =true;
-                                    notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-                        }
-
-
-
+                        holder.deleteIv.setVisibility(View.GONE);
+                        holder.dragHandleIv.setVisibility(View.GONE);
                     }
+
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

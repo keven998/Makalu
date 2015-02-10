@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
-import com.aizou.peachtravel.base.BaseActivity;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
@@ -35,13 +33,9 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
-import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -209,32 +203,59 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiAddressTv.setText(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
-            if (isEditableMode) {
-                if(isAnimationEnd){
-                    holder.deleteIv.setVisibility(View.VISIBLE);
-                    holder.nearByTv.setVisibility(View.GONE);
-                    holder.dragHandleIv.setVisibility(View.VISIBLE);
-                }else{
-                    Animation animation = AnimationSimple.expand(holder.deleteIv);
-                    AnimationSimple.expand(holder.dragHandleIv);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
 
-                        }
+            if (!isAnimationEnd && isEditableMode) {
+                final View view = holder.deleteIv;
+                Animation animation = AnimationSimple.expand(view);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            isAnimationEnd =true;
-                            notifyDataSetChanged();
-                        }
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        isAnimationEnd = true;
+                    }
 
-                        }
-                    });
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                view.startAnimation(animation);
+                animation = AnimationSimple.expand(holder.dragHandleIv);
+                holder.dragHandleIv.startAnimation(animation);
+
+                holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+                        dialog.setTitle("提示");
+                        dialog.setMessage("确定删除");
+                        dialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                strategy.restaurant.remove(poiDetailBean);
+                                notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+                holder.nearByTv.setVisibility(View.GONE);
+
+            } else if (isEditableMode) {
+                holder.deleteIv.setVisibility(View.VISIBLE);
+                holder.nearByTv.setVisibility(View.GONE);
+                holder.dragHandleIv.setVisibility(View.VISIBLE);
 
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,32 +281,9 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                     }
                 });
             } else {
-                if(isAnimationEnd){
-                    holder.deleteIv.setVisibility(View.GONE);
-                    holder.nearByTv.setVisibility(View.VISIBLE);
-                    holder.dragHandleIv.setVisibility(View.GONE);
-                }else{
-                    Animation animation =AnimationSimple.collapse(holder.deleteIv);
-                    AnimationSimple.collapse(holder.dragHandleIv);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            isAnimationEnd =true;
-                            holder.nearByTv.setVisibility(View.VISIBLE);
-                            notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                }
+                holder.deleteIv.setVisibility(View.GONE);
+                holder.dragHandleIv.setVisibility(View.GONE);
+                holder.nearByTv.setVisibility(View.VISIBLE);
 
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -303,6 +301,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                     }
                 });
             }
+
             holder.contentRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

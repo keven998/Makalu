@@ -161,7 +161,7 @@ public class AnimationSimple {
         };
         animation.setInterpolator(new DecelerateInterpolator());
         animation.setDuration(300);
-        v.startAnimation(animation);
+//        v.startAnimation(animation);
         return animation;
     }
 
