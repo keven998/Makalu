@@ -97,7 +97,7 @@
                     android:layout_marginTop="5dp"
                     android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:text="0条网友点评"
+                    android:text="热度排名"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="13sp" />
 

@@ -23,7 +23,7 @@
                 android:background="@color/app_theme_color_secondary"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:src="@drawable/ic_guide_archieve" />
+                android:src="@drawable/ic_guide_archieve_normal" />
         </LinearLayout>
 
         <RelativeLayout

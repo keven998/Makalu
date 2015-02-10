@@ -161,7 +161,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         appContext.registerReceiver(new VoiceCallReceiver(), callFilter);
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(2);
+        cmdIntentFilter.setPriority(100);
         appContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 
         NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();

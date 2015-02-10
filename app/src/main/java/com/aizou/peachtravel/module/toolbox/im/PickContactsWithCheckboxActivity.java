@@ -379,7 +379,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .showImageForEmptyUri(R.drawable.avatar_placeholder)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(64)))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(4)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 

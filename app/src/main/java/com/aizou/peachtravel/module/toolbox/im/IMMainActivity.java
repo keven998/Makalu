@@ -446,9 +446,8 @@ public class IMMainActivity extends ChatBaseActivity {
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-//					unreadAddressLable.setText(String.valueOf(count));
+					unreadAddressLable.setText(String.valueOf(count));
                     unreadAddressLable.setVisibility(View.VISIBLE);
-                    unreadLabel.setText(count+"");
                 } else {
                     unreadAddressLable.setVisibility(View.GONE);
                 }

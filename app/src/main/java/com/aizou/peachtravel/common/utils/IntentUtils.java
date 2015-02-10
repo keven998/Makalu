@@ -56,11 +56,14 @@ public class IntentUtils {
 
 
     public static void intentToPicGallery(Activity act, ArrayList<ImageBean> imageBeanList, int pos) {
-        Intent intent = new Intent(act, PicPagerActivity.class);
-        intent.putParcelableArrayListExtra("imageUrlList", imageBeanList);
-        intent.putExtra("pos", pos);
-        act.startActivity(intent);
-        act.overridePendingTransition(0, R.anim.fade_in);
+        if(imageBeanList!=null&&imageBeanList.size()>0){
+            Intent intent = new Intent(act, PicPagerActivity.class);
+            intent.putParcelableArrayListExtra("imageUrlList", imageBeanList);
+            intent.putExtra("pos", pos);
+            act.startActivity(intent);
+            act.overridePendingTransition(0, R.anim.fade_in);
+        }
+
     }
 
 

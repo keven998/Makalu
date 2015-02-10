@@ -191,6 +191,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     }
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -525,8 +526,15 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_OK);
-        finish();
+        if(isInDeleteMode){
+            isInDeleteMode=false;
+            memberAdapter.notifyDataSetChanged();
+        }else{
+            setResult(RESULT_OK);
+            finish();
+        }
+
+
     }
 
 
