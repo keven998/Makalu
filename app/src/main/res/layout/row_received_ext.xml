@@ -10,6 +10,7 @@
         style="@style/chat_text_date_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_gravity="center" />
 
     <RelativeLayout
@@ -85,11 +86,9 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:singleLine="true"
                     android:textColor="@color/app_theme_color"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tv_attr"
@@ -105,6 +104,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
+                    android:lineSpacingExtra="3dp"
+                    android:ellipsize="end"
+                    android:layout_marginTop="1dp"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="11sp" />
             </LinearLayout>

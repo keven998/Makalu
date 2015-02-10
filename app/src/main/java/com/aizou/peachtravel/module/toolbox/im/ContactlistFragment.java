@@ -72,7 +72,7 @@ public class ContactlistFragment extends Fragment {
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
         indexBar.setTextView(indexDialogTv);
-        indexBar.setTextColor(getResources().getColor(R.color.app_theme_color));
+        indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<IMUser>();
 		// 获取设置contactlist
 		getContactList();

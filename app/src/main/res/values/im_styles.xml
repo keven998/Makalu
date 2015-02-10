@@ -17,16 +17,16 @@
     </style>
 
     <style name="chat_text_name_style">
-        <item name="android:textColor">@color/base_text_color_title</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/base_text_color_text_hint</item>
+        <item name="android:textSize">11sp</item>
     </style>
     
     <style name="chat_text_date_style">
-        <item name="android:paddingTop">2dip</item>
-        <item name="android:paddingBottom">2dip</item>
-        <item name="android:textColor">@color/base_text_color_subtitle</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textColor">@color/base_text_color_text_hint</item>
         <item name="android:background">@drawable/bg_timestmp</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:drawablePadding">6dp</item>
     </style>
 

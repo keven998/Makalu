@@ -11,8 +11,8 @@
         android:gravity="center"
         android:padding="14dp"
         android:text="分享"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="16sp" />
+        android:textColor="@color/base_text_color_title"
+        android:textSize="17sp" />
 
     <View
         android:layout_width="match_parent"
@@ -25,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:drawableTop="@drawable/ic_share_taotalk"
+        android:drawableTop="@drawable/ic_new_talk"
         android:gravity="center"
-        android:drawablePadding="5dp"
+        android:drawablePadding="4dp"
         android:text="Talk"
         android:layout_marginTop="10dp"
         android:textColor="@color/base_text_color_subtitle"
@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_share_wxcircle"
             android:gravity="center"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:text="朋友圈"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
@@ -57,7 +57,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_share_weixin"
             android:gravity="center"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:text="微信好友"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
@@ -69,7 +69,7 @@
             android:drawableTop="@drawable/ic_share_qq"
             android:gravity="center"
             android:text="QQ好友"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 
@@ -89,7 +89,7 @@
             android:drawableTop="@drawable/ic_share_qzone"
             android:gravity="center"
             android:text="QQ空间"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 
@@ -100,7 +100,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_share_sina"
             android:gravity="center"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:text="新浪微博"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
@@ -113,7 +113,7 @@
             android:drawableTop="@drawable/ic_share_douban"
             android:gravity="center"
             android:text="豆瓣"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 
@@ -134,6 +134,7 @@
         android:textSize="17sp"
         android:textColor="@color/theme_color"
         android:text="取消"
+        android:textStyle="bold"
          />
 
 </LinearLayout>

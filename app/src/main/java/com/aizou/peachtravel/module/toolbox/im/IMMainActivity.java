@@ -13,6 +13,8 @@
  */
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,13 +25,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
@@ -39,7 +45,6 @@ import com.aizou.core.widget.popupmenu.PopupMenuCompat;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
 import com.aizou.peachtravel.bean.ContactListBean;
-import com.aizou.peachtravel.bean.ExtFromUser;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
@@ -47,7 +52,6 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.aizou.peachtravel.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
@@ -203,31 +207,19 @@ public class IMMainActivity extends ChatBaseActivity {
     }
 
     private void initTitleBar() {
-//        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                BlurMenu fragment = new BlurMenu();
-//                Bundle args = new Bundle();
-//                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
-//                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
-//                fragment.setArguments(args);
-//                fragment.show(getSupportFragmentManager(), "blur_menu");
-//            }
-//        });
-
         findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BlurMenu fragment = new BlurMenu();
-                Bundle args = new Bundle();
-                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
-                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
-                fragment.setArguments(args);
-                fragment.show(getSupportFragmentManager(), "blur_menu");
+//                BlurMenu fragment = new BlurMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 5);
+//                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 6);
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "blur_menu");
+                showActionDialog();
             }
         });
 
-//        titleHeaderBar.enableBackKey(true);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,9 +227,49 @@ public class IMMainActivity extends ChatBaseActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finishWithNoAnim();
-                overridePendingTransition(0, R.anim.fade_out);
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
+    }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("新建Talk");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(IMMainActivity.this, PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                dialog.dismiss();
+            }
+        });
+        Button btn1 = (Button) contentView.findViewById(R.id.btn_go_share);
+        btn1.setText("加好友");
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(IMMainActivity.this, AddContactActivity.class));
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
     @Override

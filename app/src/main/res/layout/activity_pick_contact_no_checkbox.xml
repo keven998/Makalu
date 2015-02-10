@@ -39,26 +39,26 @@
             android:divider="#E2E2E2"
             android:dividerHeight="1dp" />
 
-        <com.aizou.peachtravel.common.Sidebar
+        <com.aizou.core.widget.SideBar
             android:id="@+id/sidebar"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
+            android:layout_width="16dp"
+            android:layout_height="384dp"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
+            android:layout_centerVertical="true"
             android:clickable="true" />
 
         <TextView
             android:id="@+id/floating_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/show_head_toast_bg"
+            android:background="@drawable/shape_sub_theme"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:visibility="invisible" />
+            android:textColor="@color/base_color_white"
+            android:textSize="28sp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </LinearLayout>

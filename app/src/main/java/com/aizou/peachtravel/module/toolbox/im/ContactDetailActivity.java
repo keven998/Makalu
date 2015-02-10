@@ -1,16 +1,22 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
@@ -20,6 +26,8 @@ import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.FastBlurHelper;
@@ -103,18 +111,97 @@ public class ContactDetailActivity extends ChatBaseActivity {
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContactDetailMenu fragment = new ContactDetailMenu();
-                Bundle args = new Bundle();
-                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
-                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
-                args.putSerializable("imUser",imUser);
-                fragment.setArguments(args);
-                fragment.show(getSupportFragmentManager(), "contact_detail_menu");
+//                ContactDetailMenu fragment = new ContactDetailMenu();
+//                Bundle args = new Bundle();
+//                args.putInt(SupportBlurDialogFragment.BUNDLE_KEY_BLUR_RADIUS, 2);
+//                args.putFloat(SupportBlurDialogFragment.BUNDLE_KEY_DOWN_SCALE_FACTOR, 3);
+//                args.putSerializable("imUser",imUser);
+//                fragment.setArguments(args);
+//                fragment.show(getSupportFragmentManager(), "contact_detail_menu");
+
+                showActionDialog();
             }
         });
 
         titleHeaderBar.getTitleTextView().setText(getIntent().getStringExtra("userNick"));
         titleHeaderBar.enableBackKey(true);
+    }
+
+    private void showActionDialog() {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
+        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
+        btn.setText("从好友列表删除");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                deleteDialog.setTitle("提示");
+                deleteDialog.setMessage("删除确认");
+                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteContact(imUser);
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.show();
+
+                dialog.dismiss();
+            }
+        });
+        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    private void deleteContact(final IMUser tobeDeleteUser) {
+        DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
+        UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
+            @Override
+            public void doSucess(Object result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
+                if (deleteResult.code == 0) {
+                    IMUserRepository.deleteContact(ContactDetailActivity.this, tobeDeleteUser.getUsername());
+                    EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(),true);
+                    AccountManager.getInstance().getContactList(ContactDetailActivity.this).remove(tobeDeleteUser.getUsername());
+                    InviteMsgRepository.deleteInviteMsg(ContactDetailActivity.this,tobeDeleteUser.getUsername());
+                    finish();
+                } else if(!TextUtils.isEmpty(deleteResult.err.message)) {
+                    ToastUtil.getInstance(ContactDetailActivity.this).showToast(deleteResult.err.message);
+
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(ContactDetailActivity.this).showToast("删除失败");
+            }
+        });
+
     }
 
     private void bindView() {

@@ -66,12 +66,12 @@
 
         <Button android:id="@+id/search_contact"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="34dp"
             android:layout_marginRight="10dp"
             android:textSize="13sp"
             android:layout_marginLeft="10dp"
             android:text="查找"
-            android:background="@drawable/theme_button_selctor"
+            android:background="@drawable/btn_theme_secondary_selector"
             android:layout_gravity="center_vertical"
             android:textColor="@color/base_color_white"/>
 
