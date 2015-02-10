@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:layout_height="wrap_content">
+    android:paddingRight="10dp">
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_frame_white_card"
         android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/image_iv"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="13dp"
-                android:layout_marginLeft="5dp"
-                android:paddingTop="2dp"
-                android:background="@drawable/bg_common_default"
-                android:paddingBottom="2dp"
-                android:scaleType="centerCrop"/>
+        <ImageView
+            android:id="@+id/image_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="13dp"
+            android:background="@drawable/bg_common_default"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/name_tv"
-                android:layout_toRightOf="@id/image_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/base_text_color_title"
-                android:layout_marginTop="1dp"
-                android:textSize="14sp"/>
-            <TextView
-                android:id="@+id/address_tv"
-                android:layout_toRightOf="@id/image_iv"
-                android:layout_width="wrap_content"
-                android:layout_below="@id/name_tv"
-                android:layout_marginTop="3dp"
-                android:maxLines="2"
-                android:layout_height="wrap_content"
-                android:textColor="@color/base_text_color_text_placeholder"
-                android:singleLine="true"
-                android:textSize="12sp"/>
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="60dp"
+            android:layout_toRightOf="@id/image_iv"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_tv"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@id/image_iv"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:textColor="@color/base_text_color_text_placeholder"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/btn_theme_secondary_selector"
+            android:paddingBottom="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:text="发送"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp" />
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -51,21 +71,20 @@
             android:id="@+id/all_result_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/selector_frame_white_card"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="11dp"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
-            android:drawablePadding="10dp"
+            android:text="查看全部结果"
             android:textColor="@color/app_theme_color"
-            android:drawableLeft="@drawable/ic_search"
-            android:textSize="13sp"
-            android:paddingBottom="11dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:text="查看全部结果"/>
+            android:textSize="13sp" />
 
 
     </FrameLayout>
-
 
 
 </LinearLayout>

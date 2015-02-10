@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -276,15 +277,18 @@ public class FavListActivity extends PeachBaseActivity {
                 vh.timeView = (TextView) view.findViewById(R.id.tv_create_time);
                 vh.descView = (TextView) view.findViewById(R.id.tv_summary);
                 vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
+                vh.sendRl = (RelativeLayout) view.findViewById(R.id.rl_send);
+                vh.sendBtn = (TextView) view.findViewById(R.id.btn_send);
                 view.setTag(vh);
             } else {
                 vh = (ViewHolder) view.getTag();
             }
             final FavoritesBean item = mItemDataList.get(i);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(isShare){
+            if(isShare){
+                vh.sendRl.setVisibility(View.VISIBLE);
+                vh.sendBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
@@ -323,7 +327,14 @@ public class FavListActivity extends PeachBaseActivity {
                             public void onDialogShareCancle(Dialog dialog, int type, String content) {
                             }
                         });
-                    } else {
+                    }
+                });
+            }else{
+                vh.sendRl.setVisibility(View.GONE);
+            }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                         if(!item.type.equals(TravelApi.PeachType.NOTE)){
                             IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
                         } else {
@@ -331,7 +342,6 @@ public class FavListActivity extends PeachBaseActivity {
                             noteBean.setFieldFromFavBean(item);
                             IntentUtils.intentToNoteDetail(FavListActivity.this, noteBean);
                         }
-                    }
                 }
             });
 
@@ -446,6 +456,8 @@ public class FavListActivity extends PeachBaseActivity {
         TextView timeView;
         TextView descView;
         ImageButton deleteBtn;
+        RelativeLayout sendRl;
+        TextView sendBtn;
     }
 
     class FavoriteItem {

@@ -3,48 +3,53 @@
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/app_backgroud">
+    android:background="@color/app_backgroud"
+    android:orientation="horizontal">
 
     <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp">
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp">
 
         <LinearLayout
-            android:gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/my_plan_img_height">
-            <ImageButton android:id="@+id/edit_title"
-                android:textColor="@color/base_color_white"
+            android:layout_height="@dimen/my_plan_img_height"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/app_theme_color_secondary"
                 android:paddingLeft="20dp"
-                android:src="@drawable/ic_guide_edit"
                 android:paddingRight="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:src="@drawable/ic_guide_edit"
+                android:textColor="@color/base_color_white" />
+
             <ImageButton
                 android:id="@+id/delete_item"
-                android:textColor="@color/base_color_white"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/app_theme_color"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:src="@drawable/ic_guide_archieve"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:textColor="@color/base_color_white" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
                 android:background="@drawable/bg_common_default"
-                android:foreground="@drawable/ic_text_cover_bg_round"
-                android:layout_marginLeft="11dp">
+                android:foreground="@drawable/ic_text_cover_bg_round">
+
                 <ImageView
                     android:id="@+id/strategy_iv"
                     android:layout_width="fill_parent"
@@ -52,69 +57,99 @@
                     android:scaleType="centerCrop" />
             </FrameLayout>
 
-            <TextView android:id="@+id/name_tv"
-                android:layout_width="@dimen/my_plan_title_width"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_guide_title"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="5dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="12dp"
-                android:textSize="15sp"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:textColor="@color/base_color_white"/>
 
-            <TextView android:id="@+id/citys_tv"
+            <TextView
+                android:id="@+id/citys_tv"
                 android:layout_width="@dimen/my_plan_title_width"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:paddingBottom="8dp"
                 android:layout_marginLeft="10dp"
-                android:paddingLeft="10dp"
-                android:textSize="13sp"
-                android:singleLine="true"
                 android:ellipsize="end"
-                android:textColor="@color/base_color_white"/>
+                android:paddingBottom="8dp"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="@color/base_color_white"
+                android:textSize="13sp" />
 
-            <TextView android:id="@+id/time_tv"
+            <TextView
+                android:id="@+id/time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:paddingBottom="8dp"
                 android:layout_marginRight="10dp"
-                android:paddingLeft="10dp"
-                android:textSize="10sp"
-                android:gravity="right"
-                android:singleLine="true"
-                android:drawablePadding="2dp"
                 android:drawableLeft="@drawable/ic_clock"
-                android:textColor="@color/base_color_white"/>
+                android:drawablePadding="2dp"
+                android:gravity="right"
+                android:paddingBottom="8dp"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="@color/base_color_white"
+                android:textSize="10sp" />
 
-            <TextView android:id="@+id/tian"
+            <TextView
+                android:id="@+id/tian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="24dp"
-                android:textSize="13sp"
                 android:gravity="right"
                 android:text="天"
-                android:textColor="@color/base_color_white"/>
+                android:textColor="@color/base_color_white"
+                android:textSize="13sp" />
 
-            <TextView android:id="@+id/day_tv"
+            <TextView
+                android:id="@+id/day_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/tian"
                 android:layout_marginTop="10dp"
-                android:textSize="48sp"
-                android:textStyle="bold"
+                android:layout_toLeftOf="@id/tian"
                 android:gravity="right"
                 android:singleLine="true"
-                android:textColor="@color/base_color_white"/>
+                android:textColor="@color/base_color_white"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/rl_send"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/my_plan_img_height"
+                android:layout_marginLeft="11dp"
+                android:background="@drawable/bg_send">
+                <TextView
+                    android:id="@+id/btn_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发送"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/base_color_white"
+                    android:layout_marginRight="15dp"
+                    android:textSize="13sp"
+                    android:background="@drawable/btn_theme_secondary_selector"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="@dimen/my_plan_title_width"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_guide_title"
+                android:ellipsize="end"
+                android:paddingBottom="1dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="12dp"
+                android:paddingTop="1dp"
+                android:singleLine="true"
+                android:textColor="@color/base_color_white"
+                android:textSize="15sp" />
 
         </RelativeLayout>
     </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>

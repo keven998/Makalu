@@ -1210,7 +1210,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 	}
 
-	/**
+
+    /**
 	 * 消息广播接收者
 	 * 
 	 */
@@ -1244,7 +1245,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			// EMChatManager.getInstance().getConversation(toChatUsername);
 			// 通知adapter有新消息，更新ui
 			adapter.refresh();
-			listView.setSelection(listView.getCount() - 1);
+            int curSelection = listView.getFirstVisiblePosition();
+            if(curSelection>listView.getCount()/2){
+                listView.setSelection(listView.getCount() - 1);
+            }
 			// 记得把广播给终结掉
 			abortBroadcast();
 		}

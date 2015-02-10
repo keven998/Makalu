@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -33,6 +34,7 @@ import java.util.Date;
  */
 public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     View view;
+    RelativeLayout mSendRl;
     Button mSendBtn;
     ImageView mTravelIv;
     TextView mNoteNameTv;
@@ -62,6 +64,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     @Override
     public View createView(LayoutInflater layoutInflater) {
         view = layoutInflater.inflate(R.layout.row_travels, null);
+        mSendRl = (RelativeLayout) view.findViewById(R.id.rl_send);
         mSendBtn = (Button) view.findViewById(R.id.btn_send);
         mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
         mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
@@ -73,7 +76,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     @Override
     public void showData(int position, final TravelNoteBean itemData) {
         if(mIsShowSend){
-            mSendBtn.setVisibility(View.VISIBLE);
+            mSendRl.setVisibility(View.VISIBLE);
             mSendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,7 +86,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
                 }
             });
         } else {
-            mSendBtn.setVisibility(View.GONE);
+            mSendRl.setVisibility(View.GONE);
         }
         ImageLoader.getInstance().displayImage(itemData.getNoteImage(),mTravelIv, picOptions);
         mNoteNameTv.setText(itemData.title);

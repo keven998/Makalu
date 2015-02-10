@@ -23,7 +23,10 @@ import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachEditDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -74,6 +77,18 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                     if (userResult.code == 0) {
                         if (userResult.result.size() > 0) {
                             user = userResult.result.get(0);
+                            IMUser imUser = IMUserRepository.getContactByUserId(mContext,user.userId);
+                            if(imUser==null){
+                                imUser=new IMUser();
+                            }
+                            imUser.setNick(user.nickName);
+                            imUser.setAvatar(user.avatar);
+                            imUser.setAvatarSmall(user.avatarSmall);
+                            imUser.setSignature(user.signature);
+                            imUser.setMemo(user.memo);
+                            imUser.setGender(user.gender);
+                            IMUtils.setUserHead(imUser);
+                            IMUserRepository.saveContact(mContext, imUser);
                             bindView();
                         }
                     }

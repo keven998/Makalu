@@ -38,7 +38,7 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/9.
  */
 public class SearchTypeActivity extends PeachBaseActivity {
-    public final static int REQUEST_CODE_SEARCH_LOC=100;
+    public final static int REQUEST_CODE_SEARCH_LOC = 100;
     @InjectView(R.id.title_bar)
     TitleHeaderBar mTitleBar;
     @InjectView(R.id.loc_tv)
@@ -47,7 +47,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
     LinearLayout mLlLoc;
     @InjectView(R.id.search_type_lv)
     PullToRefreshListView mSearchTypeLv;
-    int curPage=0;
+    int curPage = 0;
     String type;
     String keyWord;
     SearchAllAdapter mAdapter;
@@ -80,7 +80,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                searchSearchTypeData(curPage+1);
+                searchSearchTypeData(curPage + 1);
             }
         });
         mTitleBar.getTitleTextView().setText("更多结果");
@@ -88,8 +88,8 @@ public class SearchTypeActivity extends PeachBaseActivity {
         mLlLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,SearchDestForPoiActivity.class);
-                startActivityForResult(intent,REQUEST_CODE_SEARCH_LOC);
+                Intent intent = new Intent(mContext, SearchDestForPoiActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
             }
         });
     }
@@ -98,32 +98,29 @@ public class SearchTypeActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         keyWord = getIntent().getStringExtra("keyWord");
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType",0);
-        if(type.equals("loc")){
+        chatType = getIntent().getIntExtra("chatType", 0);
+        if (type.equals("loc")) {
             mLlLoc.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "loc";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-        }else if(type.equals("vs")){
+        } else if (type.equals("vs")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-        }
-        else if(type.equals("hotel")){
+        } else if (type.equals("hotel")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "hotel";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-        }
-        else if(type.equals("restaurant")){
+        } else if (type.equals("restaurant")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "restaurant";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-        }
-        else if(type.equals("shopping")){
+        } else if (type.equals("shopping")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "shopping";
             typeBean.resultList = new ArrayList();
@@ -132,14 +129,15 @@ public class SearchTypeActivity extends PeachBaseActivity {
         DialogManager.getInstance().showLoadingDialog(this);
         searchSearchTypeData(0);
     }
-    private void setLoc(LocBean locBean){
+
+    private void setLoc(LocBean locBean) {
         mLocBean = locBean;
         mLocTv.setText(locBean.zhName);
     }
 
-    private void searchSearchTypeData(final int page){
+    private void searchSearchTypeData(final int page) {
         String locId = "";
-        if(mLocBean != null) {
+        if (mLocBean != null) {
             locId = mLocBean.id;
 
         }
@@ -147,15 +145,15 @@ public class SearchTypeActivity extends PeachBaseActivity {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result,SearchAllBean.class);
-                if(searchAllResult.code==0){
+                CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                if (searchAllResult.code == 0) {
                     curPage = page;
                     bindView(searchAllResult.result);
                 }
                 if (curPage == 0) {
                     mSearchTypeLv.onPullUpRefreshComplete();
                     mSearchTypeLv.onPullDownRefreshComplete();
-                }else{
+                } else {
                     mSearchTypeLv.onPullUpRefreshComplete();
                 }
             }
@@ -163,11 +161,11 @@ public class SearchTypeActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                    if (!isFinishing()) {
-                        mSearchTypeLv.onPullUpRefreshComplete();
-                        mSearchTypeLv.onPullDownRefreshComplete();
-                        ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                    }
+                if (!isFinishing()) {
+                    mSearchTypeLv.onPullUpRefreshComplete();
+                    mSearchTypeLv.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
 
@@ -177,38 +175,41 @@ public class SearchTypeActivity extends PeachBaseActivity {
         if (curPage == 0) {
             typeBean.resultList.clear();
         }
-        boolean hasMore =true;
-        if(type.equals("loc")){
+        boolean hasMore = true;
+        if (type.equals("loc")) {
             typeBean.resultList.addAll(result.locality);
-            if(result.locality.size()<BaseApi.PAGE_SIZE){
-                hasMore=false;
+            if (result.locality.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
             }
-        }else if(type.equals("vs")){
+        } else if (type.equals("vs")) {
             typeBean.resultList.addAll(result.vs);
-            if(result.vs.size()<BaseApi.PAGE_SIZE){
-                hasMore=false;
+            if (result.vs.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
             }
-        }
-        else if(type.equals("hotel")){
+        } else if (type.equals("hotel")) {
             typeBean.resultList.addAll(result.hotel);
-            if(result.hotel.size()<BaseApi.PAGE_SIZE){
-                hasMore=false;
+            if (result.hotel.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
             }
-        }
-        else if(type.equals("restaurant")){
+        } else if (type.equals("restaurant")) {
             typeBean.resultList.addAll(result.restaurant);
-            if(result.restaurant.size()<BaseApi.PAGE_SIZE){
-                hasMore=false;
+            if (result.restaurant.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
             }
-        }
-        else if(type.equals("shopping")){
+        } else if (type.equals("shopping")) {
             typeBean.resultList.addAll(result.shopping);
-            if(result.shopping.size()<BaseApi.PAGE_SIZE){
-                hasMore=false;
+            if (result.shopping.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
             }
         }
-        if(mAdapter==null){
-            mAdapter = new SearchAllAdapter(mContext,typeBeans,false);
+        if (mAdapter == null) {
+            boolean isSend;
+            if (!TextUtils.isEmpty(toId)) {
+                isSend = true;
+            } else {
+                isSend = false;
+            }
+            mAdapter = new SearchAllAdapter(mContext, typeBeans, false, isSend);
             mAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
                 @Override
                 public void onMoreResultClick(String type) {
@@ -216,56 +217,57 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 }
 
                 @Override
-                public void onItemOnClick(String type,String id,Object object) {
-                    if(!TextUtils.isEmpty(toId)){
-                        IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
-                            @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content) {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
-                                    @Override
-                                    public void onSuccess() {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+                public void onItemOnClick(String type, String id, Object object) {
+                    IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
 
-                                            }
-                                        });
+                }
 
-                                    }
+                @Override
+                public void onSendClick(String type, String id, Object object) {
+                    IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
+                        @Override
+                        public void onDialogShareOk(Dialog dialog, int type, String content) {
+                            DialogManager.getInstance().showLoadingDialog(mContext);
+                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("已发送~");
 
-                                    @Override
-                                    public void onError(int i, String s) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+                                        }
+                                    });
 
-                                            }
-                                        });
+                                }
 
-                                    }
+                                @Override
+                                public void onError(int i, String s) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(mContext).showToast("好像发送失败了");
 
-                                    @Override
-                                    public void onProgress(int i, String s) {
+                                        }
+                                    });
 
-                                    }
-                                });
-                            }
+                                }
 
-                            @Override
-                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                            }
-                        });
-                    }else{
-                        IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
-                    }
+                                @Override
+                                public void onProgress(int i, String s) {
 
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                        }
+                    });
                 }
             });
             mSearchTypeLv.getRefreshableView().setAdapter(mAdapter);
-        }else{
+        } else {
             mAdapter.notifyDataSetChanged();
         }
 
@@ -285,9 +287,9 @@ public class SearchTypeActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            if(requestCode==REQUEST_CODE_SEARCH_LOC){
-                LocBean locBean =data.getParcelableExtra("loc");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_SEARCH_LOC) {
+                LocBean locBean = data.getParcelableExtra("loc");
                 setLoc(locBean);
                 searchSearchTypeData(0);
             }

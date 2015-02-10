@@ -1,18 +1,24 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.SearchTypeBean;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.share.ICreateShareDialog;
+import com.aizou.peachtravel.common.utils.IMUtils;
+import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -27,12 +33,14 @@ public class SearchAllAdapter extends BaseSectionAdapter {
     private Context mContext;
     private ArrayList<SearchTypeBean> mSearchList;
     private boolean mIsShowMore;
+    private boolean mIsSend;
     private OnSearchResultClickListener mOnSearchResultClickListener;
 
-    public SearchAllAdapter(Context context, ArrayList<SearchTypeBean> searchList,boolean isShowMore) {
+    public SearchAllAdapter(Context context, ArrayList<SearchTypeBean> searchList,boolean isShowMore,boolean isSend) {
         mContext = context;
         mSearchList = searchList;
         mIsShowMore = isShowMore;
+        mIsSend = isSend;
     }
     public void setOnSearchResultClickListener(OnSearchResultClickListener onSearchResultClickListener){
         mOnSearchResultClickListener = onSearchResultClickListener;
@@ -100,6 +108,19 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                     }
                 }
             });
+            if(mIsSend){
+                holder.mSendTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mOnSearchResultClickListener != null) {
+                            mOnSearchResultClickListener.onSendClick(typeBean.type,finalLocBean.id,finalLocBean);
+                        }
+                    }
+                });
+                holder.mSendTv.setVisibility(View.VISIBLE);
+            }else{
+                holder.mSendTv.setVisibility(View.GONE);
+            }
 
         }else if(itemObject instanceof PoiDetailBean){
             poiBean = (PoiDetailBean) itemObject;
@@ -118,6 +139,19 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                     }
                 }
             });
+            if(mIsSend){
+                holder.mSendTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mOnSearchResultClickListener != null) {
+                            mOnSearchResultClickListener.onSendClick(typeBean.type,poiBean.id,poiBean);
+                        }
+                    }
+                });
+                holder.mSendTv.setVisibility(View.VISIBLE);
+            }else{
+                holder.mSendTv.setVisibility(View.GONE);
+            }
         }
         if(mIsShowMore){
             if(position == 4) {
@@ -214,6 +248,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         TextView mAddressTv;
         @InjectView(R.id.all_result_tv)
         TextView mAllResultTv;
+        @InjectView(R.id.btn_send)
+        TextView mSendTv;
 
         public ContentViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -224,5 +260,6 @@ public class SearchAllAdapter extends BaseSectionAdapter {
     public interface OnSearchResultClickListener {
         void onMoreResultClick(String type);
         void onItemOnClick(String type,String id,Object object);
+        void onSendClick(String type,String id,Object object);
     }
 }

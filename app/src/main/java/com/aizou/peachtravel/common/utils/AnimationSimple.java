@@ -18,6 +18,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.aizou.core.log.LogUtil;
+
 /**
  * <b>类功能描述：</b><div style="margin-left:40px;margin-top:-10px">
  * 动画设置器(封装了简单的动画)
@@ -150,6 +152,7 @@ public class AnimationSimple {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().width = (interpolatedTime == 1) ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) (targetWidth * interpolatedTime);
+                LogUtil.d(v.toString()+"---width="+v.getLayoutParams().width);
                 v.requestLayout();
             }
 

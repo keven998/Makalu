@@ -3,72 +3,86 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/base_color_white"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@color/base_color_white"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingTop="10dp">
 
-        <ImageView android:id="@+id/iv_travels"
+        <ImageView
+            android:id="@+id/iv_travels"
             android:layout_width="@dimen/note_picture_size"
             android:layout_height="@dimen/note_picture_size"
             android:background="@drawable/bg_common_default"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
-        <TextView android:id="@+id/tv_travels_name"
+        <TextView
+            android:id="@+id/tv_travels_name"
             android:layout_width="fill_parent"
-            android:singleLine="true"
-            android:textSize="17sp"
-            android:textColor="@color/base_text_color_title"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="5dp"
-            android:layout_toRightOf="@id/iv_travels"/>
+            android:layout_marginTop="-2dp"
+            android:layout_toRightOf="@id/iv_travels"
+            android:singleLine="true"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="17sp" />
 
-        <TextView android:id="@+id/tv_travels_desc"
-            android:layout_below="@id/tv_travels_name"
-            android:layout_alignLeft="@id/tv_travels_name"
+        <TextView
+            android:id="@+id/tv_travels_desc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="3dp"
+            android:layout_alignLeft="@id/tv_travels_name"
+            android:layout_below="@id/tv_travels_name"
             android:layout_marginTop="7dp"
-            android:gravity="left|top"
             android:ellipsize="end"
+            android:gravity="left|top"
+            android:lineSpacingExtra="3dp"
             android:lines="3"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
-        <TextView android:id="@+id/tv_property"
-            android:layout_toRightOf="@id/iv_travels"
-            android:layout_alignBottom="@id/iv_travels"
+        <TextView
+            android:id="@+id/tv_property"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right|bottom"
+            android:layout_alignBottom="@id/iv_travels"
+            android:layout_marginBottom="-2dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="-2dp"
+            android:layout_toRightOf="@id/iv_travels"
+            android:gravity="right|bottom"
+            android:singleLine="true"
             android:textColor="@color/base_text_color_text_hint"
-            android:textSize="10sp"
-            android:singleLine="true"/>
-
-        <Button android:id="@+id/btn_send"
-            android:layout_width="44dp"
-            android:layout_height="26dp"
-            android:textSize="13sp"
-            android:visibility="visible"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/theme_button_selctor"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/base_color_white"
-            android:text="发送"/>
+            android:textSize="10sp" />
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_send"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_send">
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="44dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_theme_secondary_selector"
+            android:text="发送"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp"
+            android:visibility="visible" />
+    </RelativeLayout>
 </FrameLayout>
