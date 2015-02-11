@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:textColor="@color/base_text_color_text_hint"
-        android:text="美眉们有什么需要的请尽管吩咐"
+        android:text="有什么需要的请尽管吩咐"
         android:textSize="14sp" />
 
     <EditText
@@ -28,7 +28,7 @@
         android:padding="8dp"
         android:lines="4"
         android:minLines="4"
-        android:hint="吐槽区"
+        android:hint="说点啥吧"
         android:textColorHint="#aaaaaa"
         android:gravity="left|top"
         android:textSize="15sp"

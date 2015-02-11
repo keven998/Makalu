@@ -46,7 +46,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 			@Override
 			public void onClick(View v) {
 				if(TextUtils.isEmpty(contentEt.getText())){
-					ToastUtil.getInstance(mContext).showToast("你的吐槽呢，我读书少不要骗我");
+					ToastUtil.getInstance(mContext).showToast("说点什么吧");
 				} else {
 					feedback();
 				}
@@ -75,7 +75,7 @@ public class FeedbackActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> feedbackResult = CommonJson.fromJson(result,ModifyResult.class);
                 if(feedbackResult.code==0){
-                    ToastUtil.getInstance(mContext).showToast("提交成功");
+                    ToastUtil.getInstance(mContext).showToast("谢谢反馈，我们在努力做到更好");
                 }else {
                     ToastUtil.getInstance(mContext).showToast("提交失败");
                 }
