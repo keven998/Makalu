@@ -244,7 +244,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setMessage(getString(R.string.dissolution_group_hint));
-        dialog.setPositiveButton("退出", new OnClickListener() {
+        dialog.setPositiveButton("解散", new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
