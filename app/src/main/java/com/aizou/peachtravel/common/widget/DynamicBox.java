@@ -52,7 +52,7 @@ public class DynamicBox {
     private final String TITLE_FAILURE 	     = "Error";
 
     private final String[] mSupportedAbsListViews = new String[]{"listview","gridview","expandablelistView"};
-    private final String[] mSupportedViews = new String[]{"linearlayout","relativelayout","scrollview"};
+    private final String[] mSupportedViews = new String[]{"linearlayout","relativelayout","scrollview","freeflowcontainer"};
 
     public DynamicBox(Context context, View targetView){
         this.mContext 		= context;
