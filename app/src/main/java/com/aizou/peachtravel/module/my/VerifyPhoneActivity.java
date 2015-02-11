@@ -48,7 +48,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         startCountDownTime();
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("注册验证");
+        titleBar.getTitleTextView().setText("验证");
         titleBar.enableBackKey(true);
 
         TextView tips = (TextView)findViewById(R.id.tips);
