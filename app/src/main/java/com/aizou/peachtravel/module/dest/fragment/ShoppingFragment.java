@@ -3,9 +3,15 @@ package com.aizou.peachtravel.module.dest.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,7 +210,17 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 holder.poiImageIv.setImageDrawable(null);
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
-            holder.poiAddressTv.setText(poiDetailBean.address);
+
+            String locName="";
+            if(!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
+                locName="["+poiDetailBean.locality.zhName+"]";
+            }
+            SpannableString ss = new SpannableString(locName);
+            ss.setSpan(new StyleSpan(Typeface.BOLD), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //设置字体前景色
+            ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.poiAddressTv.setText(ss);
+            holder.poiAddressTv.append(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
             if(!poiDetailBean.getFormatRank().equals("0")){
