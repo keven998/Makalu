@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aizou.peachtravel"
     android:versionCode="101"
-    android:versionName="1.0.0">
+    android:versionName="@string/app_version">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
