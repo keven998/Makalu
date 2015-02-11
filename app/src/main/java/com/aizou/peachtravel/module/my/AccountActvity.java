@@ -114,8 +114,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         nickNameTv.setText(user.nickName);
         tvGender.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.avatar_placeholder)
-                .showImageOnFail(R.drawable.avatar_placeholder)
+                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                .showImageOnFail(R.drawable.avatar_placeholder_round)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中

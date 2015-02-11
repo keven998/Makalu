@@ -2,6 +2,7 @@ package com.aizou.peachtravel.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
@@ -41,8 +42,16 @@ public class StrategyBean implements ICreateShareDialog, Parcelable{
         }else{
             extMessageBean.timeCost = dayCnt+"天";
         }
+        if(TextUtils.isEmpty(summary)){
+            StringBuffer sb=new StringBuffer();
+            for(LocBean loc:localities){
+                sb.append(loc.zhName+" ");
+            }
+            extMessageBean.desc = sb.toString();
+        }else{
+            extMessageBean.desc = summary;
+        }
 
-        extMessageBean.desc = summary;
         return new ShareDialogBean(extMessageBean);
     }
 

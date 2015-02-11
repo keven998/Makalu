@@ -764,7 +764,12 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_attr.setText(bean.rating + " ");
                     break;
             }
-            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small, 0, 0, 0);
+            if(message.direct== EMMessage.Direct.RECEIVE){
+                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small, 0, 0, 0);
+            }else{
+                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small_unselect, 0, 0, 0);
+            }
+
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {

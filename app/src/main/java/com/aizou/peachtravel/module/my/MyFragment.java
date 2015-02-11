@@ -91,8 +91,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             nickNameTv.setText(user.nickName);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
-                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                    .showImageOnFail(R.drawable.avatar_placeholder_round)
                     .cacheOnDisc(true)
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片

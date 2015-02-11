@@ -133,7 +133,7 @@ public class SpotDetail2Activity extends PeachBaseActivity {
         if (detailBean.isFavorite) {
             favIv.setImageResource(R.drawable.ic_favorite_selected);
         } else {
-            favIv.setImageResource(R.drawable.ic_favorite_navigationbar_normal);
+            favIv.setImageResource(R.drawable.ic_favorite_unselected);
         }
     }
 
