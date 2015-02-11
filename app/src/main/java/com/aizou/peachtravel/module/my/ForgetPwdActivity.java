@@ -49,7 +49,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
         titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("验证账户");
+        titleBar.getTitleTextView().setText("用户验证");
         titleBar.enableBackKey(true);
         ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);

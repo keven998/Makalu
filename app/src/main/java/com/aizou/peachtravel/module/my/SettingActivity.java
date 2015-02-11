@@ -106,7 +106,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 CommonJson<UpdateBean> updateResult = CommonJson.fromJson(result, UpdateBean.class);
                 if (updateResult.code == 0) {
                     if (updateResult.result.update) {
-                        UpdateUtil.showUpdateDialog(mContext, "有新的版本!",
+                        UpdateUtil.showUpdateDialog(mContext, "检测到新版本",
                                 updateResult.result.downloadUrl);
                     } else {
                         ToastUtil.getInstance(mContext).showToast("已是最新版本！");

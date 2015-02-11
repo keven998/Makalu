@@ -47,7 +47,7 @@
             android:textColor="@color/base_text_color_title"
             android:paddingLeft="6dp"
             android:paddingRight="10dp"
-            android:hint="想绑定的手机号"
+            android:hint="新的手机号"
             android:textColorHint="@color/base_text_color_text_placeholder"
             android:layout_gravity="center_vertical"/>
 
