@@ -39,7 +39,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
     public List<CommentBean> comments= new ArrayList<CommentBean>();
     public String moreCommentsUrl;
-    public int rank;
+    private int rank;
 
     public PoiDetailBean() {
     }
@@ -50,6 +50,14 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         }
         return rating * 5;
     }
+
+    public String getFormatRank() {
+        if(rank>100){
+            return "大于100";
+        }
+        return rank+"";
+    }
+
 
     @Override
     public boolean equals(Object o) {

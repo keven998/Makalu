@@ -47,4 +47,10 @@
 
     <drawable name="sub_list_cell_item">#f8f9f9</drawable>
     <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>
+
+    <!-- Exceptions colors -->
+    <color name="exception_button_color">#5fcf80</color>
+    <color name="exception_button_color_second">#35c460</color>
+    <color name="exception_title_color">#ff6a7983</color>
+    <color name="exception_message_color">#8c989e</color>
 </resources>

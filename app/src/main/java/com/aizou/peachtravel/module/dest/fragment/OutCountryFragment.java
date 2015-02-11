@@ -27,6 +27,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
@@ -49,10 +50,12 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     ListView mLvOutCountry;
     ListViewDataAdapter<CountryBean> outCountryAdapter;
     OnDestActionListener mOnDestActionListener;
+    DynamicBox box;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_out_country, container, false);
         ButterKnife.inject(this, rootView);
+        box = new DynamicBox(getActivity(),mLvOutCountry);
         outCountryAdapter = new ListViewDataAdapter<CountryBean>(new ViewHolderCreator<CountryBean>() {
             @Override
             public ViewHolderBase<CountryBean> createViewHolder() {
@@ -75,6 +78,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             if (countryListResult.code == 0) {
                 bindOutView(countryListResult.result);
             }
+        }else{
+            box.showLoadingLayout();
         }
         getOutCountryList();
     }
@@ -87,6 +92,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             }
             @Override
             public void doSucess(String result, String method,Header[] headers) {
+                box.hideAll();
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
@@ -97,6 +103,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                box.hideAll();
 //                if (isAdded())
 //                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }

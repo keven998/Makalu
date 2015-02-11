@@ -1,29 +1,22 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseActivity;
-import com.aizou.peachtravel.bean.CommentBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
-import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -150,8 +143,8 @@ public class PoiAdapter extends BaseAdapter {
             spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
             spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
             spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
-            if(poiDetailBean.rank!=0){
-                spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.rank);
+            if(!poiDetailBean.getFormatRank().equals("0")){
+                spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
             }
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
@@ -244,8 +237,8 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
             poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
-            if(poiDetailBean.rank!=0){
-                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.rank);
+            if(!poiDetailBean.getFormatRank().equals("0")){
+                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
             }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
 ////                poiViewHolder.mRlComment.setVisibility(View.GONE);

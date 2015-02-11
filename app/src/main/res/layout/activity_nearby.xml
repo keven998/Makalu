@@ -37,7 +37,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="20dp"
             android:duplicateParentState="true"
-            android:drawableLeft="@drawable/nav_back_highlight"/>
+            android:drawableLeft="@drawable/selector_ic_nav_back"/>
 
     </FrameLayout>
 

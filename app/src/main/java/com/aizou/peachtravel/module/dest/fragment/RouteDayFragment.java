@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -406,8 +405,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
                     holder.spotNameTv.setText(poiDetailBean.zhName);
                     holder.spotCostTimeTv.setText("参考游玩  " + poiDetailBean.timeCostDesc);
-                    if(poiDetailBean.rank!=0){
-                        holder.rankTv.setText("景点排名 "+poiDetailBean.rank);
+                    if(!poiDetailBean.getFormatRank().equals("0")){
+                        holder.rankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
                     }else{
                         holder.rankTv.setText("");
                     }
@@ -516,8 +515,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                     }else  if(TravelApi.PeachType.HOTEL.equals(poiDetailBean.type)){
                         typeName="酒店";
                     }
-                    if(poiDetailBean.rank!=0){
-                        holder.poiPriceTv.setText(typeName+"排名 "+poiDetailBean.rank);
+                    if(!poiDetailBean.getFormatRank().equals("0")){
+                        holder.poiPriceTv.setText(typeName+"排名 "+poiDetailBean.getFormatRank());
                     }else{
                         holder.poiPriceTv.setText("");
                     }

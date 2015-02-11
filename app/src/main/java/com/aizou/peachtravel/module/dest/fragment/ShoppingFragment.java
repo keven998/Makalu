@@ -207,6 +207,9 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiAddressTv.setText(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+            if(!poiDetailBean.getFormatRank().equals("0")){
+                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+            }
 
             if (!isAnimationEnd && isEditableMode) {
                 final View view = holder.deleteIv;

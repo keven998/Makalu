@@ -217,6 +217,7 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL +String.format(GUIDEBYID,id));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -232,6 +233,7 @@ public class TravelApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + CREATE_GUIDE);
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();

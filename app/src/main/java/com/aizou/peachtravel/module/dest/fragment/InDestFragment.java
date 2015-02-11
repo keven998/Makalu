@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
@@ -58,6 +59,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     SideBar mSbIndex;
     @InjectView(R.id.dialog)
     TextView mDialog;
+
+    DynamicBox box;
     private List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
 
@@ -68,6 +71,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_in_dest, container, false);
         ButterKnife.inject(this, rootView);
+        box = new DynamicBox(getActivity(), mLvInCity);
         inCityAdapter = new InCityAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -100,11 +104,14 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             if (locListResult.code == 0) {
                 bindInView(locListResult.result);
             }
+        }else{
+            box.showLoadingLayout();
         }
         getInLocList();
     }
 
     private void getInLocList() {
+
         String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_last_modify");
         TravelApi.getInDestList(lastModify, new HttpCallBack<String>() {
             @Override
@@ -115,6 +122,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             @Override
             public void doSucess(String result, String method, Header[] headers) {
                 CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
+                box.hideAll();
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_indest", result);
@@ -125,6 +133,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                box.hideAll();
 //                if (isAdded()) {
 //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
 //                }
@@ -146,11 +155,11 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         HashMap<String, List<LocBean>> locMap = new HashMap<String, List<LocBean>>();
         ArrayList<String> sections = new ArrayList<>();
         ArrayList<LocBean> allSelectLoc = null;
-        if(getActivity()!=null){
-            allSelectLoc = ((SelectDestActivity)getActivity()).getAllSelectedLoc();
+        if (getActivity() != null) {
+            allSelectLoc = ((SelectDestActivity) getActivity()).getAllSelectedLoc();
         }
         for (LocBean locBean : result) {
-            if(allSelectLoc!=null&&allSelectLoc.contains(locBean)){
+            if (allSelectLoc != null && allSelectLoc.contains(locBean)) {
                 locBean.isAdded = true;
             }
             if (Character.isDigit(locBean.zhName.charAt(0))) {

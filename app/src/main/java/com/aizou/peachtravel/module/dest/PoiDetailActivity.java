@@ -212,8 +212,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         mPoiStar.setRating(bean.getRating());
-        if(poiDetailBean.rank!=0){
-            mTvRank.setText("热度排名 "+poiDetailBean.rank);
+        if(!poiDetailBean.getFormatRank().equals("0")){
+            mTvRank.setText("热度排名 "+poiDetailBean.getFormatRank());
         }
         mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override

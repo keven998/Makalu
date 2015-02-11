@@ -29,12 +29,18 @@ public class SpotDetailBean implements ICreateShareDialog{
     public String trafficInfoUrl;
     public String visitGuideUrl;
     public String tipsUrl;
-    public int rank;
+    private int rank;
     public float getRating() {
         if(rating>1){
             return rating;
         }
         return rating * 5;
+    }
+    public String getRank() {
+        if(rank>100){
+            return "大于100";
+        }
+        return rank+"";
     }
     @Override
     public ShareDialogBean createShareBean() {

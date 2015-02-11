@@ -26,6 +26,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
 import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer;
 import com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowItem;
@@ -51,6 +52,7 @@ import java.util.Map;
 public class RecDestFragment extends PeachBaseFragment {
     private FreeFlowContainer recDestContainer;
     private WantToLayout wantToLayout;
+    private DynamicBox box;
 
 
     @Override
@@ -64,6 +66,7 @@ public class RecDestFragment extends PeachBaseFragment {
                 startActivity(intent);
             }
         });
+        box = new DynamicBox(getActivity(),recDestContainer);
         setupViewFromCache();
         initData();
         return rootView;
@@ -76,6 +79,8 @@ public class RecDestFragment extends PeachBaseFragment {
                     new TypeToken<List<RecDestBean>>() {
                     });
             bindView(lists);
+        }else{
+            box.showLoadingLayout();
         }
     }
 
@@ -87,6 +92,7 @@ public class RecDestFragment extends PeachBaseFragment {
         TravelApi.getRecDest(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                box.hideAll();
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);
                 if(destResult.code == 0) {
                    bindView(destResult.result);
@@ -96,6 +102,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                box.hideAll();
 //                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });

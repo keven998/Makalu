@@ -6,36 +6,26 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckedTextView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.peachtravel.base.BaseActivity;
-import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
-import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
-import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
-import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.AnimationSimple;
 import com.aizou.peachtravel.common.utils.CommonUtils;
@@ -43,13 +33,10 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
-import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -220,8 +207,11 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.poiAddressTv.setText(poiDetailBean.address);
-            holder.poiRating.setRating(poiDetailBean.rating);
+            holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+            if(!poiDetailBean.getFormatRank().equals("0")){
+                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+            }
 
             if (!isAnimationEnd && isEditableMode) {
                 final View view = holder.deleteIv;
