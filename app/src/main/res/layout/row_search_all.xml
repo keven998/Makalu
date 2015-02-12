@@ -78,7 +78,7 @@
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:text="查看全部结果"
-            android:textColor="@color/app_theme_color"
+            android:textColor="@color/theme_color"
             android:textSize="13sp" />
 
 
