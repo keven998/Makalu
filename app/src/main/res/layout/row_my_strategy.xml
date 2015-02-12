@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="11dp"
                 android:background="@drawable/bg_common_default"
-                android:foreground="@drawable/ic_text_cover_bg_round">
+                android:foreground="@drawable/fg_mock_up">
 
                 <ImageView
                     android:id="@+id/strategy_iv"
