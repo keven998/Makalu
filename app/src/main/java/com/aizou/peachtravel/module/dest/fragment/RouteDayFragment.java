@@ -131,7 +131,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
     private void initData() {
         strategy = getStrategy();
-        isInEditMode = getArguments().getBoolean("isInEditMode");
         resizeData(strategy.itinerary);
         routeDayAdpater = new RouteDayAdapter(isInEditMode);
         mEditDslv.setDropListener(routeDayAdpater);

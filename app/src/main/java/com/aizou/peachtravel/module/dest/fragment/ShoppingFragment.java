@@ -95,7 +95,6 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
 
     private void initData() {
         final StrategyBean strategyBean = getStrategy();
-        isInEditMode = getArguments().getBoolean("isInEditMode");
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
         controller.setBackgroundColor(Color.TRANSPARENT);
@@ -216,7 +215,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                 locName="["+poiDetailBean.locality.zhName+"]";
             }
             SpannableString ss = new SpannableString(locName);
-            ss.setSpan(new StyleSpan(Typeface.BOLD), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(new StyleSpan(Typeface.BOLD), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             //设置字体前景色
             ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.poiAddressTv.setText(ss);
