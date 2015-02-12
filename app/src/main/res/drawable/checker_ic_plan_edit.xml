@@ -3,6 +3,7 @@
 
     <item android:drawable="@drawable/ic_plan_edit_done" android:state_selected="true"/>
     <item android:drawable="@drawable/ic_plan_edit_done" android:state_checked="true"/>
+    <item android:drawable="@drawable/ic_plan_edit_done" android:state_pressed="true"/>
     <item android:drawable="@drawable/ic_plan_edit_normal"/>
 
 </selector>
