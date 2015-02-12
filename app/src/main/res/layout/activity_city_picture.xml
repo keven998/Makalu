@@ -24,7 +24,7 @@
                 android:layout_alignParentLeft="true"
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
-                android:drawableLeft="@drawable/nav_back_highlight"/>
+                android:drawableLeft="@drawable/selector_ic_nav_back"/>
 
             <TextView
                 android:id="@+id/tv_title_bar_title"

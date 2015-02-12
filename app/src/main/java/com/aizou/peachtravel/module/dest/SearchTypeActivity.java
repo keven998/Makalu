@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.peachtravel.common.dialog.DialogManager;
@@ -39,6 +40,8 @@ import butterknife.InjectView;
  */
 public class SearchTypeActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_LOC = 100;
+    @InjectView(R.id.ly_title_bar_left)
+    RelativeLayout backRl;
     @InjectView(R.id.tv_title_bar_title)
     TextView titleTv;
     @InjectView(R.id.tv_city_filter)
@@ -79,6 +82,12 @@ public class SearchTypeActivity extends PeachBaseActivity {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 searchSearchTypeData(curPage + 1);
+            }
+        });
+        backRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
         titleTv.setText("更多结果");
