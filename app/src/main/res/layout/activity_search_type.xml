@@ -39,25 +39,15 @@
 
         </LinearLayout>
 
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:paddingTop="10dp"
-        android:layout_weight="1">
-
-
-        <com.aizou.core.widget.prv.PullToRefreshListView
-            android:id="@+id/search_type_lv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
-
-
-    </FrameLayout>
+    <com.aizou.core.widget.prv.PullToRefreshListView
+        android:id="@+id/search_type_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:paddingBottom="3dp"
+        android:paddingTop="2dp"
+        android:divider="@null"
+        android:fadingEdge="none"
+        android:listSelector="@null"/>
 
 </LinearLayout>

@@ -2,8 +2,6 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:paddingTop="8dp"
     android:layout_height="wrap_content">
 
@@ -16,7 +14,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:background="@drawable/shape_white_bar"
-        android:textColor="@color/base_text_color_text_hint"/>
+        android:textColor="@color/base_text_color_subtitle"/>
 
 
 </FrameLayout>
