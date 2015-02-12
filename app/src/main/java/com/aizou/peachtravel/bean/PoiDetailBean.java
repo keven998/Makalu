@@ -53,7 +53,7 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
 
     public String getFormatRank() {
         if(rank>100){
-            return "大于100";
+            return ">100";
         }
         return rank+"";
     }

@@ -40,7 +40,7 @@ public class SpotDetailBean implements ICreateShareDialog{
     }
     public String getRank() {
         if(rank>100){
-            return "大于100";
+            return ">100";
         }
         return rank+"";
     }
