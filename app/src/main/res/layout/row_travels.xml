@@ -45,7 +45,7 @@
             android:gravity="left|top"
             android:lineSpacingExtra="3dp"
             android:lines="3"
-            android:textColor="@color/base_text_color_subtitle"
+            android:textColor="@color/normal_text_color"
             android:textSize="12sp" />
 
         <TextView
