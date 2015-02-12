@@ -50,8 +50,9 @@ public class SplashActivity extends PeachBaseActivity {
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
-//                .showImageOnFail(R.drawable.ic_launcher)
-//                .showImageForEmptyUri(R.drawable.ic_launcher)
+                .showImageOnFail(R.drawable.bg_splash)
+                .showImageForEmptyUri(R.drawable.bg_splash)
+                .showImageOnLoading(R.drawable.bg_splash)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();

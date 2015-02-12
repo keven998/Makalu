@@ -59,7 +59,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
     }
 
     private void startCountDownTime(){
-        downTimeBtn.setClickable(false);
+        downTimeBtn.setEnabled(false);
         countDownTimer= new CountDownTimer(countDown*1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -69,7 +69,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
             @Override
             public void onFinish() {
                 downTimeBtn.setText("重新获取");
-                downTimeBtn.setClickable(true);
+                downTimeBtn.setEnabled(true);
             }
         }.start();
     }

@@ -71,7 +71,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
             view.findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
-            avatarIv.setImageResource(R.drawable.avatar_placeholder);
+            avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
             nickNameTv.setText("未登录");
         } else {
             idTv.setVisibility(View.VISIBLE);
@@ -93,11 +93,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                     .showImageOnFail(R.drawable.avatar_placeholder_round)
+                    .resetViewBeforeLoading(true)
                     .cacheOnDisc(true)
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
                     .build();
-            ImageLoader.getInstance().displayImage(user.avatar, avatarIv, options);
+            ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
             idTv.setText("ID: " + user.userId);
             if (TextUtils.isEmpty(user.signature)) {
                 signTv.setText("no签名");

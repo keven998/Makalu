@@ -142,6 +142,7 @@ public class FavListActivity extends PeachBaseActivity {
 //        initData(0);
 
         setupViewFromCache();
+        mFavLv.doPullRefreshing(true, 0);
     }
 
     private void initView() {
@@ -151,20 +152,20 @@ public class FavListActivity extends PeachBaseActivity {
 
     private void setupViewFromCache() {
         AccountManager account = AccountManager.getInstance();
-        String data = PreferenceUtils.getCacheData(this, String.format("%s_favorites", account.user.userId));
-        if (!TextUtils.isEmpty(data)) {
-            List<FavoritesBean> lists = GsonTools.parseJsonToBean(data,
-                    new TypeToken<List<FavoritesBean>>() {
-                    });
-            mAdapter.appendData(lists);
-            if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
-                mFavLv.setHasMoreData(true);
-                mFavLv.setScrollLoadEnabled(true);
-            }
-            initData(curType, 0);
-        } else {
+//        String data = PreferenceUtils.getCacheData(this, String.format("%s_favorites", account.user.userId));
+//        if (!TextUtils.isEmpty(data)) {
+//            List<FavoritesBean> lists = GsonTools.parseJsonToBean(data,
+//                    new TypeToken<List<FavoritesBean>>() {
+//                    });
+//            mAdapter.appendData(lists);
+//            if (mAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+//                mFavLv.setHasMoreData(true);
+//                mFavLv.setScrollLoadEnabled(true);
+//            }
+//            initData(curType, 0);
+//        } else {
             mFavLv.doPullRefreshing(true, 0);
-        }
+//        }
     }
 
     private void cachePage() {
@@ -408,11 +409,11 @@ public class FavListActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-//                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
+                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
                     OtherApi.deleteFav(item.itemId, new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
 //                                        mItemDataList.remove(i);
@@ -429,7 +430,7 @@ public class FavListActivity extends PeachBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-//                            DialogManager.getInstance().dissMissLoadingDialog();
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             if (!isFinishing())
                             ToastUtil.getInstance(FavListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }

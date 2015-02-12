@@ -98,6 +98,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("locId", locId);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(pageSize));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -114,6 +115,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("keyWord", keyword);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -132,6 +134,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("faType", type);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

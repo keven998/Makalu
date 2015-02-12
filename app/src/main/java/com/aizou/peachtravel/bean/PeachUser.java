@@ -25,7 +25,7 @@ public class PeachUser implements Serializable{
         } else if ("M".equals(gender)) {
             return "帅锅";
         } else if ("U".equals(gender)) {
-            return "未知";
+            return "不告诉你";
         }
         return "";
     }

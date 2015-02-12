@@ -123,7 +123,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         new RoundedBitmapDisplayer(LocalDisplay.dp2px(
                                 25))) // 设置成圆角图片
                 .build();
-        ImageLoader.getInstance().displayImage(user.avatar, avatarIv,
+        ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
                 options);
         idTv.setText(user.userId + "");
         signTv.setText(user.signature);
@@ -409,7 +409,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                         LogUtil.d(response.toString());
                                         try {
                                             String imageUrl = response.getString("url");
+                                            String urlSmall = response.getString("urlSmall");
                                             user.avatar = imageUrl;
+                                            user.avatarSmall = urlSmall;
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                                             ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
                                         } catch (JSONException e) {

@@ -163,11 +163,11 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("我是桃子旅行，女生们旅行必备的贴心小应用，官方下载: http://****");
+            circleMedia.setShareContent("我是桃子旅行，女生们旅行必备的贴心小应用，官方下载: "+downloadUrl);
         } else {
             circleMedia.setShareContent(content);
         }
-        circleMedia.setShareImage(new UMImage(act,R.drawable.ic_launcher));
+        circleMedia.setShareImage(new UMImage(act,R.drawable.ic_taozi_share));
         circleMedia.setTargetUrl(downloadUrl);
         mController.setShareMedia(circleMedia);
         mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
@@ -202,7 +202,7 @@ public class ShareUtils {
                 && strategyBean.images.size() > 0) {
             umImage = new UMImage(act, strategyBean.images.get(0).url);
         } else {
-            umImage = new UMImage(act, R.drawable.ic_launcher);
+            umImage = new UMImage(act, R.drawable.ic_taozi_share);
         }
         mController.getConfig().closeToast();
         mController.setShareMedia(umImage);
@@ -561,22 +561,20 @@ public class ShareUtils {
     }
 
     public static void configPlatforms(Activity act) {
-        String appId = "wx26b58c7173483529";
-        String appSecret = "28daa05c021ebebe6d3cf06645b0c5ac";
 // 添加微信平台
-        UMWXHandler wxHandler = new UMWXHandler(act, appId, appSecret);
+        UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxHandler.addToSocialSDK();
 // 添加微信朋友圈
-        UMWXHandler wxCircleHandler = new UMWXHandler(act, appId, appSecret);
+        UMWXHandler wxCircleHandler = new UMWXHandler(act,  PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxCircleHandler.setToCircle(true);
         wxCircleHandler.addToSocialSDK();
 
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, "1103275581",
-                "VW1VnrywTEnK3vgw");
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act,PlatfromSetting.QQ_APPID,
+                PlatfromSetting.QQ_APPKEY);
         qqSsoHandler.addToSocialSDK();
 
         QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
-                "1103275581", "VW1VnrywTEnK3vgw");
+                PlatfromSetting.QQ_APPID, PlatfromSetting.QQ_APPKEY);
         qZoneSsoHandler.addToSocialSDK();
 
         SmsHandler smsHandler = new SmsHandler();

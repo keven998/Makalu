@@ -63,7 +63,10 @@ public class UpdateUtil {
 		down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
 				| DownloadManager.Request.NETWORK_WIFI);
 		down.setShowRunningNotification(true);
-//		down.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+		down.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        down.setMimeType("application/vnd.android.package-archive");
+        // 设置为可被媒体扫描器找到
+        down.allowScanningByMediaScanner();
 		down.setVisibleInDownloadsUi(true);
 		down.setTitle("更新") // 用于信息查看
 				.setDescription("正在下载桃子旅行"); // 用于信息查看

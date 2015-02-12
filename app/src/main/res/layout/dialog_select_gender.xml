@@ -46,7 +46,7 @@
             android:textColor="@color/app_theme_color_secondary"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
-            android:text="未知" />
+            android:text="不告诉你" />
 
     </LinearLayout>
 
