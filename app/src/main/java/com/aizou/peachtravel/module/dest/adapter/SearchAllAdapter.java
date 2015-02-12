@@ -14,6 +14,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.SearchTypeBean;
+import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
@@ -104,7 +105,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                 @Override
                 public void onClick(View v) {
                     if(mOnSearchResultClickListener!=null){
-                        mOnSearchResultClickListener.onItemOnClick(typeBean.type, finalLocBean.id, finalLocBean);
+                        mOnSearchResultClickListener.onItemOnClick(TravelApi.PeachType.LOC, finalLocBean.id, finalLocBean);
                     }
                 }
             });
@@ -113,7 +114,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                     @Override
                     public void onClick(View v) {
                         if(mOnSearchResultClickListener != null) {
-                            mOnSearchResultClickListener.onSendClick(typeBean.type,finalLocBean.id,finalLocBean);
+                            mOnSearchResultClickListener.onSendClick(TravelApi.PeachType.LOC,finalLocBean.id,finalLocBean);
                         }
                     }
                 });

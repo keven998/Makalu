@@ -106,6 +106,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
         } else if (type.equals("vs")) {
+            mLlLoc.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
@@ -275,6 +276,9 @@ public class SearchTypeActivity extends PeachBaseActivity {
         if (result == null
                 || !hasMore) {
             mSearchTypeLv.setHasMoreData(false);
+            if(curPage!=0){
+                ToastUtil.getInstance(mContext).showToast("已加载完全部");
+            }
             // ptrLv.setScrollLoadEnabled(false);
         } else {
             mSearchTypeLv.setHasMoreData(true);
@@ -291,7 +295,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
             if (requestCode == REQUEST_CODE_SEARCH_LOC) {
                 LocBean locBean = data.getParcelableExtra("loc");
                 setLoc(locBean);
-                searchSearchTypeData(0);
+                mSearchTypeLv.doPullRefreshing(true,0);
             }
         }
     }
