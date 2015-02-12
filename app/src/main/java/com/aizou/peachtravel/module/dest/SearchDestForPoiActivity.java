@@ -102,6 +102,8 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
                     if (TextUtils.isEmpty(mKeyWord)) {
 //                        ToastUtil.getInstance(mContext).showToast("你要找什么");
+                        mSearchResultAdapter.getDataList().clear();
+                        mSearchResultAdapter.notifyDataSetChanged();
                         return true;
                     } else {
                         DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
