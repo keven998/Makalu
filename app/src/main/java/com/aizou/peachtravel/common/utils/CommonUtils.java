@@ -107,6 +107,21 @@ public class CommonUtils {
         }
 
     }
+    public static String getNearbyDistance(double lat1, double lon1, double lat2, double lon2) {
+        DecimalFormat df = new DecimalFormat(".0");
+        double distance = getDistance(lat1, lon1, lat2, lon2);
+        if (distance > 1000) {
+            if(distance>10000){
+                return ">10km";
+            }else{
+                return df.format(distance / 1000d)+"km";
+            }
+
+        } else {
+            return (int) distance + "m";
+        }
+
+    }
 
     public static boolean checkIntent(Context context,Intent intent){
         PackageManager packageManager = context.getPackageManager();

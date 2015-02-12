@@ -52,8 +52,8 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         rootView = inflater.inflate(R.layout.fragment_tabmain_item, container, false);
         ButterKnife.inject(this, rootView);
         type = getArguments().getString("type");
-        mLat = getArguments().getDouble("lat");
-        mLng = getArguments().getDouble("lng");
+//        mLat = getArguments().getDouble("lat");
+//        mLng = getArguments().getDouble("lng");
 
         PullToRefreshListView listView = (PullToRefreshListView) rootView.findViewById(R.id.nearby_lv);
         mListView = listView;
@@ -91,8 +91,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-//                mPage = 0;
-//                getPoiListByLoc(mPage, mLat, mLng);
+                getPoiListByLoc(0, mLat, mLng);
             }
 
             @Override
@@ -121,19 +120,22 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
     public void updateLocation(double lat, double lng) {
         mLat = lat;
         mLng = lng;
-        mPoiList.clear();
         mPage = 0;
-        poiAdapter.reset();
+        if(mPoiList!=null&&poiAdapter!=null){
+            mPoiList.clear();
+            poiAdapter.reset();
+        }
+
     }
 
     public void requestDataUpdate() {
-        getPoiListByLoc(0, mLat, mLng);
+        mListView.doPullRefreshing(true,0);
     }
 
     public void requestDataForInit() {
         if (mPoiList.size() == 0) {
             if (mLat != -1 && mLng != -1) {
-                getPoiListByLoc(0, mLat, mLng);
+                mListView.doPullRefreshing(true,0);
             }
         }
     }
@@ -200,7 +202,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
         for (PoiDetailBean poi : poiList) {
             if(poi.location!=null){
-                String distance = CommonUtils.getDistanceStr(mLat, mLng, poi.location.coordinates[1], poi.location.coordinates[0]);
+                String distance = CommonUtils.getNearbyDistance(mLat, mLng, poi.location.coordinates[1], poi.location.coordinates[0]);
                 poi.distance = distance;
             }
         }
