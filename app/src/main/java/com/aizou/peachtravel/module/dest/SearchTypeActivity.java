@@ -39,12 +39,10 @@ import butterknife.InjectView;
  */
 public class SearchTypeActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_LOC = 100;
-    @InjectView(R.id.title_bar)
-    TitleHeaderBar mTitleBar;
-    @InjectView(R.id.loc_tv)
-    TextView mLocTv;
-    @InjectView(R.id.ll_loc)
-    LinearLayout mLlLoc;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView titleTv;
+    @InjectView(R.id.tv_city_filter)
+    TextView cityFilterTv;
     @InjectView(R.id.search_type_lv)
     PullToRefreshListView mSearchTypeLv;
     int curPage = 0;
@@ -83,9 +81,8 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 searchSearchTypeData(curPage + 1);
             }
         });
-        mTitleBar.getTitleTextView().setText("更多结果");
-        mTitleBar.enableBackKey(true);
-        mLlLoc.setOnClickListener(new View.OnClickListener() {
+        titleTv.setText("更多结果");
+        cityFilterTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SearchDestForPoiActivity.class);
@@ -100,13 +97,13 @@ public class SearchTypeActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getIntExtra("chatType", 0);
         if (type.equals("loc")) {
-            mLlLoc.setVisibility(View.GONE);
+            cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "loc";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
         } else if (type.equals("vs")) {
-            mLlLoc.setVisibility(View.GONE);
+            cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
@@ -133,7 +130,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
     private void setLoc(LocBean locBean) {
         mLocBean = locBean;
-        mLocTv.setText(locBean.zhName);
+        cityFilterTv.setText(locBean.zhName);
     }
 
     private void searchSearchTypeData(final int page) {

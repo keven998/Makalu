@@ -29,6 +29,8 @@ public class SpotDetailBean implements ICreateShareDialog{
     public String trafficInfoUrl;
     public String visitGuideUrl;
     public String tipsUrl;
+    public String descUrl;
+    public String lyPoiUrl;
     private int rank;
     public float getRating() {
         if(rating>1){

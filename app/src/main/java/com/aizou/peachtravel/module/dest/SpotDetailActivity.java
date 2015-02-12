@@ -226,27 +226,27 @@ public class SpotDetailActivity extends PeachBaseActivity {
         descLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpotIntroActivity.class);
-                intent.putExtra("content", spotDetailBean.desc);
-                intent.putExtra("spot", spotDetailBean.zhName);
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                intent.putExtra("title", "景点信息");
+                intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
         });
         timeLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpotIntroActivity.class);
-                intent.putExtra("content", spotDetailBean.desc);
-                intent.putExtra("spot", spotDetailBean.zhName);
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                intent.putExtra("title", "景点信息");
+                intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
         });
         priceLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpotIntroActivity.class);
-                intent.putExtra("content", spotDetailBean.desc);
-                intent.putExtra("spot", spotDetailBean.zhName);
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                intent.putExtra("title", "景点信息");
+                intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
         });
