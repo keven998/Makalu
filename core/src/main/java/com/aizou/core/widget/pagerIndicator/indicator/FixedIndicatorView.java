@@ -15,25 +15,23 @@ limitations under the License.
 */
 package com.aizou.core.widget.pagerIndicator.indicator;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ScrollBar;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -333,7 +331,6 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			drawSlideBar(canvas);
 		}
 		super.dispatchDraw(canvas);
-        LogUtil.d("indicator--onDraw indecator");
 		if (scrollBar != null && scrollBar.getGravity() != ScrollBar.Gravity.CENTENT_BACKGROUND) {
 			drawSlideBar(canvas);
 
@@ -412,7 +409,6 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		}
 
 		scrollBar.getSlideView().draw(canvas);
-        LogUtil.d("indicator--onDraw scrollBar width="+width);
 		canvas.restoreToCount(saveCount);
 	}
 
