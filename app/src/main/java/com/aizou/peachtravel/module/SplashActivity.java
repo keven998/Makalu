@@ -84,7 +84,6 @@ public class SplashActivity extends PeachBaseActivity {
             }
 
         };
-        handler.postDelayed(runnable, SPLASH_DISPLAY_LENGHT);
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
@@ -131,6 +130,7 @@ public class SplashActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
             }
         });
+        handler.postDelayed(runnable, SPLASH_DISPLAY_LENGHT);
 	}
 
     @Override
