@@ -36,8 +36,8 @@
 
             <RelativeLayout
                 android:id="@+id/rl_image"
-                android:layout_width="55dp"
-                android:layout_height="55dp">
+                android:layout_width="65dp"
+                android:layout_height="65dp">
 
                 <FrameLayout
                     android:layout_width="fill_parent"

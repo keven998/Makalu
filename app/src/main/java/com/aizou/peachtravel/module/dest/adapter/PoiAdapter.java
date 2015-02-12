@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +142,12 @@ public class PoiAdapter extends BaseAdapter {
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
             spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
-            spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
+            if(TextUtils.isEmpty(poiDetailBean.timeCostDesc)){
+                spotViewHolder.mSpotCosttimeTv.setText("");
+            }else{
+                spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
+            }
+
             spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
                 spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
