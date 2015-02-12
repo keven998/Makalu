@@ -206,12 +206,12 @@ public class NearbyActivity extends PeachBaseActivity {
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-        try {
-            OnLocationChangeListener listener = (OnLocationChangeListener) fragment;
-            onLocationChangeListenerList.add(listener);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            OnLocationChangeListener listener = (OnLocationChangeListener) fragment;
+//            onLocationChangeListenerList.add(listener);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         super.onAttachFragment(fragment);
     }
 
@@ -261,9 +261,14 @@ public class NearbyActivity extends PeachBaseActivity {
                 fragment = new NearbyItemFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", tabTypes[position]);
-                bundle.putDouble("lat", mLat);
-                bundle.putDouble("lng", mLng);
                 fragment.setArguments(bundle);
+                fragment.updateLocation(mLat,mLng);
+                try {
+                    OnLocationChangeListener listener = (OnLocationChangeListener) fragment;
+                    onLocationChangeListenerList.add(listener);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 fragmentMap.put(tabTypes[position], fragment);
             }
             return fragment;
