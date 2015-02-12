@@ -54,7 +54,7 @@ public class ShareUtils {
 
     }
 
-    public static final String downloadUrl="http://fir.im/xgas";
+    public static final String downloadUrl="http://www.taozilvxing.com";
 
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -163,7 +163,7 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("我是桃子旅行，女生们旅行必备的贴心小应用，官方下载: "+downloadUrl);
+            circleMedia.setShareContent("我是桃子旅行，女生们旅行必备的贴心小应用， "+downloadUrl);
         } else {
             circleMedia.setShareContent(content);
         }
