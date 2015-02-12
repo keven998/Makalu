@@ -72,7 +72,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         if (noteBean != null) {
             ImageView txtView2 = (ImageView) findViewById(R.id.tv_title_bar_right);
             txtView2.setVisibility(View.VISIBLE);
-            txtView2.setImageResource(R.drawable.ic_talk_navigationbar_normal);
+            txtView2.setImageResource(R.drawable.ic_note_share_selector);
             txtView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,7 +81,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             });
 
             CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
-            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_ic_nav_favorite, 0);
+            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_note_fav_selector, 0);
             txtView.setVisibility(View.VISIBLE);
             txtView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -17,7 +17,7 @@
             android:minWidth="60dp"
             android:paddingLeft="12dp"
             android:paddingRight="20dp"
-            android:duplicateParentState="true"
+            android:clickable="true"
             android:drawableLeft="@drawable/selector_ic_nav_back"/>
 
         <TextView
