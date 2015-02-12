@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="17sp"
-        android:textColor="@color/base_text_color_title"
+        android:textColor="@color/base_text_color_subtitle"
         android:padding="14dp"
         />
 
@@ -20,10 +20,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_peach_edit"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:textSize="14sp"
-        android:textColor="@color/base_color_white"
-        android:minLines="3"/>
+        android:gravity="top|left"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/base_text_color_title"
+        android:lines="3"/>
     
     <Button
         android:id="@+id/btn_ok"
