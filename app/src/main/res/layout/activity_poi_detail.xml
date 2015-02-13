@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:scaleType="center"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingLeft="20dp"
         android:paddingRight="15dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
         android:layout_gravity="right"
-        android:src="@drawable/ic_poi_close" />
+        android:src="@drawable/ic_poi_close_selector" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
