@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -8,7 +9,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="10dp">
 
@@ -19,7 +19,7 @@
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:foreground="@drawable/ic_text_cover_bg">
+                android:foreground="@drawable/fg_mock_up">
 
                 <ImageView
                     android:id="@+id/iv_poi"
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_poi_share" />
+                    android:src="@drawable/ic_poi_share_selector" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -71,10 +71,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="20dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
-            android:paddingTop="15dp">
+            android:paddingTop="25dp">
 
             <LinearLayout
                 android:id="@+id/ll_left"
@@ -88,64 +88,41 @@
                     style="@style/custom_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp" />
+                    />
 
                 <TextView
                     android:id="@+id/tv_poi_rank"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="20dp"
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:text="热度排名"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tv_poi_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_poi_rank"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/app_theme_color"
-                    android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/btn_book"
-                    android:layout_width="wrap_content"
-                    android:layout_height="16dp"
-                    android:layout_below="@id/tv_poi_price"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/selecter_theme_btn_radius_10"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="在线预订"
-                    android:textColor="@color/base_color_white"
-                    android:textSize="10sp" />
             </LinearLayout>
 
             <View
                 android:id="@+id/div"
                 android:layout_width="1dp"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_toRightOf="@id/ll_left"
-                android:background="@color/base_text_color_subtitle" />
+                android:background="@color/base_text_color_text_placeholder" />
 
 
             <TextView
                 android:id="@+id/tv_addr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/div"
-                android:drawableLeft="@drawable/ic_poi_address"
-                android:drawablePadding="5dp"
-                android:lineSpacingExtra="3dp"
+                android:lineSpacingExtra="4dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:lines="2"
+                android:ellipsize="end"
                 android:textColor="@color/base_text_color_subtitle"
                 android:textSize="13sp" />
 
@@ -154,7 +131,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_addr"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/div"
                 android:drawableLeft="@drawable/ic_poi_tel"
                 android:drawablePadding="5dp"
@@ -166,13 +143,45 @@
 
 
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical">
+            <com.aizou.peachtravel.common.widget.autofixtv.AutofitTextView
+                android:id="@+id/tv_poi_price"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                autofit:minTextSize="10sp"
+                android:textColor="@color/app_theme_color"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/btn_book"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/theme_button_selctor"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:paddingRight="10dp"
+                android:text="在线预订"
+                android:layout_gravity="right"
+                android:textColor="@color/base_color_white"
+                android:textSize="16sp" />
+            </LinearLayout>
 
         <TextView
             android:id="@+id/tv_poi_desc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:lineSpacingExtra="3dp"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="13sp" />
@@ -196,7 +205,7 @@
                 android:textSize="14sp" />
 
             <View
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="0.75dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
@@ -205,7 +214,7 @@
                 android:background="@color/base_text_color_text_placeholder" />
 
             <View
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="0.75dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
@@ -215,6 +224,12 @@
 
 
         </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_comment_top_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/ic_quotation_l"/>
 
         <LinearLayout
             android:layout_width="fill_parent"

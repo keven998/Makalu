@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -99,6 +100,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     View headerView;
     View footerView;
+    @InjectView(R.id.iv_comment_top_mark)
+    ImageView mIvCommentTopMark;
+    @InjectView(R.id.iv_comment_bottom_mark)
+    ImageView mIvCommentBottomMark;
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
@@ -122,8 +127,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         p.width = (int) (d.getWidth() - LocalDisplay.dp2px(28));
 
         getWindow().setAttributes(p);
-         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
-         footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
+        headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
+        footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         mLvFoodshopDetail.addFooterView(footerView);
@@ -199,8 +204,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
         mTvPoiName.setText(bean.zhName);
         if (TextUtils.isEmpty(bean.priceDesc)) {
-            mTvPoiPrice.setVisibility(View.INVISIBLE);
-            mBtnBook.setVisibility(View.INVISIBLE);
+            mTvPoiPrice.setVisibility(View.GONE);
+            mBtnBook.setVisibility(View.GONE);
         } else {
             mTvPoiPrice.setText(bean.priceDesc);
             mBtnBook.setOnClickListener(new View.OnClickListener() {
@@ -212,8 +217,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         mPoiStar.setRating(bean.getRating());
-        if(!poiDetailBean.getFormatRank().equals("0")){
-            mTvRank.setText("热度排名 "+poiDetailBean.getFormatRank());
+        if (!poiDetailBean.getFormatRank().equals("0")) {
+            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
         }
         mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,13 +234,16 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvTel.setVisibility(View.VISIBLE);
             mTvTel.setText(bean.tel.get(0));
         } else {
-            mTvTel.setVisibility(View.INVISIBLE);
+            mTvTel.setVisibility(View.GONE);
         }
-        if(TextUtils.isEmpty(bean.address)){
-            mTvAddr.setText(bean.zhName);
-        }else{
-            mTvAddr.setText(bean.address);
+
+        String address;
+        if (TextUtils.isEmpty(bean.address)) {
+            address = "<img src=\"" + R.drawable.ic_poi_address + "\" />  " + bean.zhName;
+        } else {
+            address = "<img src=\"" + R.drawable.ic_poi_address + "\" />  " + bean.address;
         }
+        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
         mTvAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,13 +286,30 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvDesc.setText(bean.desc);
         }
         commentAdapter.getDataList().addAll(bean.comments);
-        if(bean.comments==null||bean.comments.size()<2){
-            if(mLvFoodshopDetail.getFooterViewsCount()>0){
+        if (bean.comments == null || bean.comments.size() < 2) {
+            if (mLvFoodshopDetail.getFooterViewsCount() > 0) {
                 mLvFoodshopDetail.removeFooterView(footerView);
             }
         }
+        if(bean.comments==null||bean.comments.size()==0){
+            mIvCommentTopMark.setVisibility(View.GONE);
+            mIvCommentBottomMark.setVisibility(View.GONE);
+        }
         commentAdapter.notifyDataSetChanged();
     }
+
+    Html.ImageGetter imageGetter = new Html.ImageGetter() {
+
+        public Drawable getDrawable(String source) {
+            Drawable drawable = null;
+            int rId = Integer.parseInt(source);
+            drawable = getResources().getDrawable(rId);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            return drawable;
+        }
+
+        ;
+    };
 
     private void favorite() {
         if (poiDetailBean.isFavorite) {
