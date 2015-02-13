@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -63,6 +64,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private ImageView spotIv;
     private LinearLayout descLl,priceLl,timeLl;
     private RelativeLayout addressLl;
+    private FrameLayout mBookFl;
     private TextView mSpotNameTv, descTv,mPriceDescTv, mAddressTv, mTimeTv;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView favIv,shareIv;
@@ -113,7 +115,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         descTv = (TextView) findViewById(R.id.tv_desc);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
         mTimeTv = (TextView) findViewById(R.id.tv_spot_time);
+        addressLl = (RelativeLayout) findViewById(R.id.rl_address);
         mAddressTv = (TextView) findViewById(R.id.tv_addr);
+        mBookFl = (FrameLayout) findViewById(R.id.fl_book);
         tipsTv = (TextView) findViewById(R.id.tv_tips);
         travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
@@ -180,7 +184,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         }else{
             mAddressTv.setText(result.address);
         }
-        mAddressTv.setOnClickListener(new View.OnClickListener() {
+        addressLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (result.location != null && result.location.coordinates != null) {
@@ -196,6 +200,21 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             }
         });
+        if(!TextUtils.isEmpty(result.lyPoiUrl)){
+            mBookFl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,SpotDetailActivity.class);
+                    intent.putExtra("url",result.lyPoiUrl);
+                    intent.putExtra("title",result.zhName);
+                    startActivity(intent);
+                }
+            });
+
+        }else{
+            mBookFl.setVisibility(View.GONE);
+
+        }
         shareIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

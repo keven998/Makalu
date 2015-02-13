@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="32dp"
         android:paddingRight="15dp"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_poi_close" />
+        android:src="@drawable/ic_poi_close_selector" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -108,7 +108,7 @@
                         android:paddingRight="15dp"
                         android:paddingTop="30dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_poi_share" />
+                        android:src="@drawable/ic_poi_share_selector" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -133,11 +133,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="2"
-                    android:padding="18dp"
+                    android:lines="2"
+                    android:padding="15dp"
                     android:lineSpacingExtra="3dp"
                     android:textColor="@color/normal_text_color"
-                    android:textSize="13sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -162,11 +162,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:lines="2"
                     android:lineSpacingExtra="3dp"
-                    android:padding="18dp"
+                    android:layout_margin="15dp"
                     android:textColor="@color/normal_text_color"
-                    android:textSize="13sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -191,11 +191,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="2"
-                    android:padding="18dp"
+                    android:lines="2"
+                    android:padding="15dp"
                     android:lineSpacingExtra="3dp"
                     android:textColor="@color/normal_text_color"
-                    android:textSize="13sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -203,7 +203,7 @@
                 android:id="@+id/fl_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="right"
                 android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -213,8 +213,8 @@
                     android:id="@+id/tv_book"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/selecter_theme_btn_radius_15"
+                    android:layout_gravity="right"
+                    android:background="@drawable/theme_button_selctor"
                     android:duplicateParentState="true"
                     android:gravity="center"
                     android:paddingLeft="10dp"
@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_poi_address" />
+                    android:src="@drawable/ic_poi_address_selector" />
 
                 <TextView
                     android:id="@+id/tv_addr"

@@ -14,18 +14,18 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/22.
  */
-public class PoiDetailBean implements Parcelable,ICreateShareDialog{
-    public final static String RESTAURANT="restaurant";
-    public final static String SHOPPING="shopping";
-    public String distance="";
+public class PoiDetailBean implements Parcelable, ICreateShareDialog {
+    public final static String RESTAURANT = "restaurant";
+    public final static String SHOPPING = "shopping";
+    public String distance = "";
 
-    public boolean hasAdded=false;
+    public boolean hasAdded = false;
     public boolean isFavorite;
     public String type;
     public String id;
     public String zhName;
     public String enName;
-    public String priceDesc="";
+    public String priceDesc = "";
     public String desc;
     public String timeCostDesc;
     public float rating;
@@ -34,10 +34,10 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     public List<ImageBean> images = new ArrayList<ImageBean>();
     public List<LocBean> locList = new ArrayList<LocBean>();
     public LocBean locality;
-    public String address="";
-    public ArrayList<String> tel=new ArrayList<>();
+    public String address = "";
+    public ArrayList<String> tel = new ArrayList<>();
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
-    public List<CommentBean> comments= new ArrayList<CommentBean>();
+    public List<CommentBean> comments = new ArrayList<CommentBean>();
     public String moreCommentsUrl;
     private int rank;
 
@@ -45,29 +45,33 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     }
 
     public float getRating() {
-        if(rating>1){
+        if (rating > 1) {
             return rating;
         }
         return rating * 5;
     }
 
     public String getFormatRank() {
-        if(rank>100){
+        if (rank > 100) {
             return ">100";
         }
-        return rank+"";
+        return rank + "";
     }
 
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if(o instanceof PoiDetailBean){
-//            return id.equals(((PoiDetailBean)o).id);
-//        }else{
-//            return false;
-//        }
-//
-//    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PoiDetailBean other = (PoiDetailBean) obj;
+        if (!this.id.equals(other.id))
+            return false;
+        return true;
+    }
 //
 //    @Override
 //    public int hashCode() {
@@ -79,21 +83,21 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.id = id;
         extMessageBean.type = type;
-        extMessageBean.image = images.size()>0?images.get(0).url:"";
+        extMessageBean.image = images.size() > 0 ? images.get(0).url : "";
         extMessageBean.name = zhName;
-        DecimalFormat df= new   java.text.DecimalFormat("#.#");
-        extMessageBean.rating=df.format(getRating());
+        DecimalFormat df = new java.text.DecimalFormat("#.#");
+        extMessageBean.rating = df.format(getRating());
         extMessageBean.price = priceDesc;
         extMessageBean.address = address;
         extMessageBean.timeCost = timeCostDesc;
-        if(!TextUtils.isEmpty(desc)){
-            if(desc.length()>50){
-                extMessageBean.desc =desc.substring(0,50);
-            }else{
-                extMessageBean.desc=desc;
+        if (!TextUtils.isEmpty(desc)) {
+            if (desc.length() > 50) {
+                extMessageBean.desc = desc.substring(0, 50);
+            } else {
+                extMessageBean.desc = desc;
             }
-        }else{
-            extMessageBean.desc="";
+        } else {
+            extMessageBean.desc = "";
         }
         return new ShareDialogBean(extMessageBean);
     }
