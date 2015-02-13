@@ -3,7 +3,7 @@
     <color name="app_backgroud">#f6f6f6</color>
     <color name="title_bar_background">#ffffff</color>
 
-    <color name="app_theme_color">#fd818e</color>
+    <color name="app_theme_color">#fe828f</color>
     <color name="app_theme_color_highlight">#ad313e</color>
     <color name="app_theme_color_secondary">#6ed8dc</color>
     <color name="app_theme_color_secondary_selected">#1e888c</color>
