@@ -59,20 +59,20 @@ public class PoiDetailBean implements Parcelable,ICreateShareDialog{
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if(o instanceof PoiDetailBean){
-            return id.equals(((PoiDetailBean)o).id);
-        }else{
-            return false;
-        }
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if(o instanceof PoiDetailBean){
+//            return id.equals(((PoiDetailBean)o).id);
+//        }else{
+//            return false;
+//        }
+//
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return id.hashCode();
+//    }
 
     @Override
     public ShareDialogBean createShareBean() {

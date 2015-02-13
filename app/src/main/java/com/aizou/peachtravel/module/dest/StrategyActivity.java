@@ -530,26 +530,20 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             if (position == 0) {
                 if (routeDayFragment == null) {
                     routeDayFragment = new RouteDayFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
-                    routeDayFragment.setArguments(bundle);
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
                 return routeDayFragment;
             } else if (position == 1) {
                 if (restFragment == null) {
                     restFragment = new RestaurantFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
-                    restFragment.setArguments(bundle);
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return restFragment;
             } else {
                 if (shoppingFragment == null) {
                     shoppingFragment = new ShoppingFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isInEditMode", mIvEdit.isChecked());
-                    shoppingFragment.setArguments(bundle);
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return shoppingFragment;
