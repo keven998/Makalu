@@ -153,13 +153,13 @@
             android:gravity="center_vertical"
             android:paddingLeft="30dp"
             android:paddingRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
             <com.aizou.peachtravel.common.widget.autofixtv.AutofitTextView
                 android:id="@+id/tv_poi_price"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:gravity="left|top"
                 android:singleLine="true"
                 autofit:minTextSize="10sp"
                 android:textColor="@color/app_theme_color"
