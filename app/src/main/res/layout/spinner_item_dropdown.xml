@@ -7,13 +7,13 @@
     <TextView
         android:id="@android:id/text1"
         android:layout_width="65dp"
-        android:layout_height="30dp"
+        android:layout_height="32dp"
         android:ellipsize="end"
         android:gravity="center"
         android:singleLine="true"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textColor="@color/app_theme_color"
+        android:textColor="@color/theme_color"
         android:textSize="13sp" />
 
     <View

@@ -73,7 +73,7 @@ public class SpotDetail2Activity extends PeachBaseActivity {
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(64));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(24));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(28));
 //        p.alpha = 1.0f;      //设置本身透明度
 //        p.dimAmount = 0.0f;      //设置黑暗度
 //        getWindow().setAttributes(p);

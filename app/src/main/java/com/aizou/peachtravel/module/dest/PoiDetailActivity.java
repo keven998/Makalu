@@ -119,7 +119,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight() - LocalDisplay.dp2px(64));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(24));
+        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(28));
 
         getWindow().setAttributes(p);
          headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);

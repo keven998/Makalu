@@ -28,16 +28,16 @@
             android:text="身边"
             android:textColor="@color/base_color_white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_title_bar_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:minWidth="60dp"
-            android:paddingLeft="12dp"
+            android:paddingLeft="10dp"
             android:paddingRight="20dp"
-            android:duplicateParentState="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+            android:scaleType="center"
+            android:src="@drawable/selector_ic_nav_back_white"/>
 
     </FrameLayout>
 
