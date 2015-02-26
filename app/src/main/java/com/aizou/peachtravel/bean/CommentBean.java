@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class CommentBean implements Parcelable {
     public String userId;
-    public String userAvatar;
-    public String userName;
+    public String authorAvatar;
+    public String authorName;
     public float rating;
     public String contents;
     public long publishTime;
@@ -34,8 +34,8 @@ public class CommentBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userId);
-        dest.writeString(this.userAvatar);
-        dest.writeString(this.userName);
+        dest.writeString(this.authorAvatar);
+        dest.writeString(this.authorName);
         dest.writeFloat(this.rating);
         dest.writeString(this.contents);
         dest.writeLong(this.publishTime);
@@ -47,8 +47,8 @@ public class CommentBean implements Parcelable {
 
     private CommentBean(Parcel in) {
         this.userId = in.readString();
-        this.userAvatar = in.readString();
-        this.userName = in.readString();
+        this.authorAvatar = in.readString();
+        this.authorName = in.readString();
         this.rating = in.readFloat();
         this.contents = in.readString();
         this.publishTime = in.readLong();

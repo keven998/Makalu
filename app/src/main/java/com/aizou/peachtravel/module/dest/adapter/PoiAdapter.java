@@ -251,7 +251,7 @@ public class PoiAdapter extends BaseAdapter {
 //            } else {
 ////                poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
 //                CommentBean commentBean = poiDetailBean.comments.get(0);
-//                poiViewHolder.mPoiCommentUsername.setText(commentBean.userName);
+//                poiViewHolder.mPoiCommentUsername.setText(commentBean.authorName);
 ////                poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
 //                poiViewHolder.mPoiCommentContent.setText(Html.fromHtml(commentBean.contents));
 //            }

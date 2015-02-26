@@ -384,7 +384,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvProperty.setText(String.format("%s  %s", itemData.userName, dateFormat.format(new Date(itemData.publishTime))));
+            mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
         }
     }
