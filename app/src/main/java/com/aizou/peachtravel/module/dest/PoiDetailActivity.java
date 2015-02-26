@@ -5,12 +5,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +51,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -218,7 +224,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         mPoiStar.setRating(bean.getRating());
         if (!poiDetailBean.getFormatRank().equals("0")) {
-            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
+//            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
+            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         }
         mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,7 +250,22 @@ public class PoiDetailActivity extends PeachBaseActivity {
         } else {
             address = "<img src=\"" + R.drawable.ic_poi_address + "\" />  " + bean.address;
         }
-        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
+//        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
+
+        Spanned spanned = Html.fromHtml(address, imageGetter , null);
+        if (spanned instanceof SpannableStringBuilder) {
+            ImageSpan[] imageSpans = spanned.getSpans(0, spanned.length(), ImageSpan.class);
+            for (ImageSpan imageSpan : imageSpans) {
+                int start = spanned.getSpanStart(imageSpan);
+                int end = spanned.getSpanEnd(imageSpan);
+                Drawable d = imageSpan.getDrawable();
+                StickerSpan newImageSpan = new StickerSpan(d, ImageSpan.ALIGN_BASELINE);
+                ((SpannableStringBuilder) spanned).setSpan(newImageSpan, start, end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                ((SpannableStringBuilder) spanned).removeSpan(imageSpan);
+            }
+        }
+        mTvAddr.setText(spanned);
+
         mTvAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,8 +329,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             return drawable;
         }
-
-        ;
     };
 
     private void favorite() {
@@ -500,6 +520,35 @@ public class PoiDetailActivity extends PeachBaseActivity {
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    public class StickerSpan extends ImageSpan {
+
+        public StickerSpan(Drawable b, int verticalAlignment) {
+            super(b, verticalAlignment);
+
+        }
+
+        @Override
+        public void draw(Canvas canvas, CharSequence text,
+                         int start, int end, float x,
+                         int top, int y, int bottom, Paint paint) {
+            Drawable b = getDrawable();
+            canvas.save();
+            int transY = bottom - b.getBounds().bottom - LocalDisplay.dp2px(2);
+            if (mVerticalAlignment == ALIGN_BASELINE) {
+                int textLength = text.length();
+                for (int i = 0; i < textLength; i++) {
+                    if (Character.isLetterOrDigit(text.charAt(i))) {
+                        transY -= paint.getFontMetricsInt().descent;
+                        break;
+                    }
+                }
+            }
+            canvas.translate(x, transY);
+            b.draw(canvas);
+            canvas.restore();
+        }
     }
 
 }

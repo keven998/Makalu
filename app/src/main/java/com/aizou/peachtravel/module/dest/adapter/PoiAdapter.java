@@ -244,7 +244,8 @@ public class PoiAdapter extends BaseAdapter {
             }
             poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
-                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+//                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+                poiViewHolder.mPoiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
             }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
 ////                poiViewHolder.mRlComment.setVisibility(View.GONE);

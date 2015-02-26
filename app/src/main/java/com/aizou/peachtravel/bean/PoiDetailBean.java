@@ -58,6 +58,19 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
         return rank + "";
     }
 
+    public String getPoiTypeName() {
+        if ("hotel".equals(type)) {
+            return "酒店";
+        } else if ("restaurant".equals(type)) {
+            return "美食";
+        } else if ("shopping".equals(type)) {
+            return "购物";
+        } else if ("vs".equals(type)) {
+            return "景点";
+        } else {
+            return "";
+        }
+    }
 
     @Override
     public boolean equals(Object obj) {
