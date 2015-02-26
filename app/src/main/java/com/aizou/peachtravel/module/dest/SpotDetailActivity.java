@@ -211,7 +211,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
 
-        }else{
+        } else {
             mBookFl.setVisibility(View.GONE);
 
         }
@@ -246,7 +246,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", "景点信息");
+                intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
@@ -255,7 +255,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", "景点信息");
+                intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
@@ -264,7 +264,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", "景点信息");
+                intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
                 startActivity(intent);
             }
@@ -275,7 +275,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title", "实用信息");
+                    intent.putExtra("title", "游玩小贴士");
                     intent.putExtra("url", result.tipsUrl);
                     startActivity(intent);
 
@@ -290,7 +290,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title", "交通指南");
+                    intent.putExtra("title", "景点交通");
                     intent.putExtra("url", result.trafficInfoUrl);
                     startActivity(intent);
                 }
@@ -304,7 +304,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    intent.putExtra("title", "亮点体验");
+                    intent.putExtra("title", "景点体验");
                     intent.putExtra("url", result.visitGuideUrl);
                     startActivity(intent);
                 }

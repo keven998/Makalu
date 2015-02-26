@@ -190,7 +190,10 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:padding="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
                     android:lineSpacingExtra="3dp"
                     android:textColor="@color/normal_text_color"
                     android:textSize="14sp" />
@@ -202,10 +205,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-               >
+                android:paddingRight="20dp">
 
                 <TextView
                     android:id="@+id/tv_book"
@@ -226,7 +227,7 @@
             <RelativeLayout
                 android:id="@+id/rl_address"
                 android:layout_width="fill_parent"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:layout_height="wrap_content">
@@ -306,7 +307,7 @@
                         android:gravity="center"
                         android:textStyle="bold"
                         android:padding="15dp"
-                        android:text="交通"
+                        android:text="景点\n交通"
                         android:textColor="@color/theme_color"
                         android:textSize="13sp" />
                 </LinearLayout>
