@@ -367,10 +367,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.tv_username)
-        TextView mTvUsername;
-        @InjectView(R.id.tv_date)
-        TextView mTvDate;
+        @InjectView(R.id.tv_property)
+        TextView mTvProperty;
         @InjectView(R.id.tv_comment)
         TextView mTvComment;
         @InjectView(R.id.comment_star)
@@ -386,14 +384,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvUsername.setText(itemData.userName);
-            mTvDate.setText(dateFormat.format(new Date(itemData.publishTime)));
+            mTvProperty.setText(String.format("%s  %s", itemData.userName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
         }
     }
 
     public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder>
-
     {
 
         private LayoutInflater mInflater;
