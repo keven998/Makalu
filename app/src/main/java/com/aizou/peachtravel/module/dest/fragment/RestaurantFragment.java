@@ -224,7 +224,8 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
             if(!poiDetailBean.getFormatRank().equals("0")){
-                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+//                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
+                holder.poiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
             }
 
             if (!isAnimationEnd && isEditableMode) {

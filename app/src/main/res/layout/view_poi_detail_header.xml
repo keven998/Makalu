@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -13,7 +12,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="150dp">
+            android:layout_height="@dimen/spot_detail_picture_height">
 
             <FrameLayout
                 android:layout_width="fill_parent"
@@ -74,11 +73,9 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
-            android:paddingTop="25dp">
+            android:paddingTop="35dp">
 
             <LinearLayout
                 android:id="@+id/ll_left"
@@ -89,6 +86,7 @@
 
                 <RatingBar
                     android:id="@+id/ratingBar_poi"
+                    android:layout_marginTop="5dp"
                     style="@style/custom_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,9 +96,8 @@
                     android:id="@+id/tv_poi_rank"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="热度排名"
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="13sp" />
 
@@ -110,10 +107,9 @@
             <View
                 android:id="@+id/div"
                 android:layout_width="1dp"
-                android:layout_height="36dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="7dp"
                 android:layout_toRightOf="@id/ll_left"
                 android:background="@color/base_divider_color" />
 
@@ -125,7 +121,7 @@
                 android:layout_toRightOf="@id/div"
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="10dp"
-                android:lines="2"
+                android:maxLines="4"
                 android:ellipsize="end"
                 android:textColor="@color/normal_text_color"
                 android:textSize="13sp" />
@@ -145,8 +141,8 @@
                 android:textColor="@color/normal_text_color"
                 android:textSize="13sp" />
 
-
         </RelativeLayout>
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -176,7 +172,7 @@
                 android:text="在线预订"
                 android:layout_gravity="right"
                 android:textColor="@color/base_color_white"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
             </LinearLayout>
 
         <TextView
@@ -189,14 +185,14 @@
             android:layout_marginLeft="20dp"
             android:lineSpacingExtra="3dp"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
 
         <RelativeLayout
             android:id="@+id/rl_comment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="24dp">
 
             <TextView
                 android:id="@+id/attr_tel"
@@ -210,7 +206,7 @@
                 android:textSize="15sp" />
 
             <View
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="0.75dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
@@ -219,14 +215,13 @@
                 android:background="@color/base_divider_color" />
 
             <View
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="0.75dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_toRightOf="@id/attr_tel"
                 android:background="@color/base_divider_color" />
-
 
         </RelativeLayout>
 
@@ -321,4 +316,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</RelativeLayout>
+</FrameLayout>
