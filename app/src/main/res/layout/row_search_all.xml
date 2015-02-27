@@ -51,7 +51,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_theme_secondary_selector"
+            android:background="@drawable/selecter_theme_btn_radius_4"
             android:paddingBottom="4dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

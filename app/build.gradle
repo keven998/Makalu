@@ -44,4 +44,5 @@ dependencies {
     compile files('libs/weibosdkcore.jar')
     compile files('libs/easemobchat_2.1.4.jar')
     compile files('libs/umeng-analytics-v5.2.4.jar')
+    compile files('libs/easemobchat_2.1.5.jar')
 }

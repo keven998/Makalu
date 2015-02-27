@@ -45,7 +45,7 @@ public class SplashActivity extends PeachBaseActivity {
 
 	protected void initData() {
         final EMMessage emMessage = getIntent().getParcelableExtra("im_message");
-        PushManager.getInstance().initialize(this.getApplicationContext());
+//        PushManager.getInstance().initialize(this.getApplicationContext());
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

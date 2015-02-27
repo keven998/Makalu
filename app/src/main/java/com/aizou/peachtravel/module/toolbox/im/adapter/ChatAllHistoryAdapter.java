@@ -233,6 +233,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             }
             holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()), isGroup)),
                     BufferType.SPANNABLE);
+        }else{
+            holder.message.setText("");
+            holder.time.setText("");
         }
 
         return convertView;

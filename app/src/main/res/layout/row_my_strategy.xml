@@ -131,7 +131,7 @@
                     android:textColor="@color/base_color_white"
                     android:layout_marginRight="15dp"
                     android:textSize="13sp"
-                    android:background="@drawable/btn_theme_secondary_selector"/>
+                    android:background="@drawable/selecter_theme_btn_radius_4"/>
 
             </RelativeLayout>
 

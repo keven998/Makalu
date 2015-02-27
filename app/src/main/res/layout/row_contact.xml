@@ -10,12 +10,12 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="2dp"
+        android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingTop="2dp"
+        android:text="M"
         android:textColor="@color/base_text_color_text_placeholder"
-        android:textSize="12sp"
-        android:visibility="gone" />
+        android:textSize="11sp"
+        android:visibility="visible" />
     <View
         android:id="@+id/vw_divider"
         android:layout_width="fill_parent"

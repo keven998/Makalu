@@ -96,6 +96,9 @@ public class StrategyListActivity extends PeachBaseActivity {
                 return new StrategyListViewHolder(isShare);
             }
         });
+        if(isShare){
+            mEditBtn.setVisibility(View.GONE);
+        }
 
         listView.getRefreshableView().setAdapter(mStrategyListAdapter);
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {

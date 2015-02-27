@@ -130,6 +130,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setProgress(0);
         }
 
         @Override

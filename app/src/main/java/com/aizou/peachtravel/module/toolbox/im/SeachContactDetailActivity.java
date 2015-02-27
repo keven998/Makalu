@@ -209,6 +209,14 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
                 .build();
         ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
+        if (user.gender.equalsIgnoreCase("M")) {
+            genderIv.setImageResource(R.drawable.ic_gender_man);
+        } else if (user.gender.equalsIgnoreCase("F")) {
+            genderIv.setImageResource(R.drawable.ic_gender_lady);
+        } else {
+            genderIv.setImageDrawable(null);
+        }
+
         nickNameTv.setText(user.nickName);
         signTv.setText(user.signature);
     }

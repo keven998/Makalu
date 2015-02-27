@@ -18,7 +18,7 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp">
 
-        <FrameLayout android:id="@+id/avatar_frame"
+        <RelativeLayout android:id="@+id/avatar_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_shape_pink_with_2_round">
@@ -35,7 +35,17 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginBottom="11dp"
                 android:scaleType="fitCenter"/>
-        </FrameLayout>
+            <ImageView
+                android:id="@+id/iv_gender"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignBottom="@id/iv_avatar"
+                android:layout_alignRight="@id/iv_avatar"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="4dp"
+                android:scaleType="fitCenter"
+                />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_nickname"

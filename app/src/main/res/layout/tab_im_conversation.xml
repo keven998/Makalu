@@ -13,8 +13,8 @@
             android:gravity="center"
             android:drawableTop="@drawable/tab_im_chat"
             android:text="Talk"
-            android:paddingTop="6dp"
-            android:paddingBottom="3dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="7dp"
             android:textColor="@color/im_tab_text_color"
             android:textSize="10sp" />
 

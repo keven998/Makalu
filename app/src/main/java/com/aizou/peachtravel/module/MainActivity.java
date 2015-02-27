@@ -19,6 +19,10 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
+import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.my.MyFragment;
@@ -232,13 +236,30 @@ public class MainActivity extends PeachBaseActivity {
 
     private void updateUnreadMsgCount(){
         int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
+        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount()+getUnreadAddressCountTotal();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
             unreadMsg.setText(unreadMsgCountTotal+"");
         } else {
             unreadMsg.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 获取未读申请与通知消息
+     *
+     * @return
+     */
+    public int getUnreadAddressCountTotal() {
+        int unreadAddressCountTotal = 0;
+        unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
+        if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
+
+            IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
+            imUser.setUnreadMsgCount(unreadAddressCountTotal);
+            IMUserRepository.saveContact(this, imUser);
+        }
+        return unreadAddressCountTotal;
     }
 
 
