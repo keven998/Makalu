@@ -184,6 +184,8 @@
                 android:id="@+id/btn_exitdel_grp"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/theme_button_selctor"
