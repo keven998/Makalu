@@ -132,7 +132,8 @@ public class ContactDetailActivity extends ChatBaseActivity {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
         Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setText("从好友列表删除");
+        btn.setTextColor(getResources().getColor(R.color.app_theme_color));
+        btn.setText("删除");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
