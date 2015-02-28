@@ -41,6 +41,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +74,17 @@ public class LoginActivity extends PeachBaseActivity {
             startActivityForResult(intent, REQUEST_CODE_REG);
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_login");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_login");
+    }
     private void initView() {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
@@ -81,6 +92,7 @@ public class LoginActivity extends PeachBaseActivity {
         findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
                 weixinLogin();
 //                UserApi.authSignUp("123456",new HttpCallBack() {
 //                    @Override

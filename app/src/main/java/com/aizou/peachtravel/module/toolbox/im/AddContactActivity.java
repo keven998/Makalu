@@ -37,6 +37,7 @@ import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.umeng.analytics.MobclickAgent;
 
 public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {
     private EditText editText;
@@ -80,7 +81,17 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_add_friend");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_add_friend");
+    }
     private void initTitleBar(){
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 
@@ -101,6 +112,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
      *
      */
     public void searchContact() {
+        MobclickAgent.onEvent(mContext,"event_search_friend");
         final String name = editText.getText().toString();
 //        String saveText = searchBtn.getText().toString();
 //        if (getString(R.string.button_search).equals(saveText)) {
@@ -178,11 +190,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_contact:
+                MobclickAgent.onEvent(mContext,"event_add_friend_from_contacts");
                 Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                 startActivity(phoneIntent);
                 break;
 
             case R.id.tv_weixin_contacts:
+                MobclickAgent.onEvent(mContext,"event_notify_weichat_friends");
                 ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，女生们专属的旅行应用。桃子旅行搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
                 break;
         }

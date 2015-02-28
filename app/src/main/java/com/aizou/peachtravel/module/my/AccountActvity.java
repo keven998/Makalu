@@ -42,6 +42,7 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,8 +109,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         initData();
+        MobclickAgent.onPageStart("page_personal_profile");
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_personal_profile");
+    }
     private void bindView(PeachUser user){
         nickNameTv.setText(user.nickName);
         tvGender.setText(user.getGenderDesc());
@@ -149,34 +157,41 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_nickname:
+                MobclickAgent.onEvent(mContext,"event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
                 startActivity(nickNameIntent);
                 break;
 
             case R.id.ll_sign:
+                MobclickAgent.onEvent(mContext,"event_update_memo");
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
                 startActivity(signIntent);
                 break;
 
             case R.id.ll_gender:
+                MobclickAgent.onEvent(mContext,"event_update_gender");
                 showSelectGenderDialog();
                 break;
 
             case R.id.ll_avatar:
+                MobclickAgent.onEvent(mContext,"event_update_avatar");
                 showSelectPicDialog();
                 break;
 
             case R.id.ll_modify_pwd:
+                MobclickAgent.onEvent(mContext,"event_update_password");
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
                 startActivity(modifyPwdIntent);
                 break;
 
             case R.id.ll_bind_phone:
+                MobclickAgent.onEvent(mContext,"event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivity(bindPhoneIntent);
                 break;
 
             case R.id.btn_logout:
+                MobclickAgent.onEvent(mContext,"event_logout");
                 warnLogout();
                 break;
         }
@@ -223,7 +238,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 AccountActvity.this.finish();
                             }
                         });
-
                     }
 
                     @Override
@@ -235,7 +249,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 dialog.dismiss();
                             }
                         });
-
                     }
 
                     @Override

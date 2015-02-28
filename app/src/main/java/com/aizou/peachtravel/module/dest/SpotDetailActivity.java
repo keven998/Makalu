@@ -52,6 +52,7 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -77,6 +78,18 @@ public class SpotDetailActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_spot_detail");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_spot_detail");
     }
 
     @Override
@@ -204,7 +217,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
             mBookFl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext,SpotDetailActivity.class);
+                    MobclickAgent.onEvent(mContext,"event_book_ticket");
+                    Intent intent = new Intent(mContext,PeachWebViewActivity.class);
                     intent.putExtra("url",result.lyPoiUrl);
                     intent.putExtra("title",result.zhName);
                     startActivity(intent);
@@ -245,6 +259,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         descLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_spot_information");
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
@@ -254,6 +269,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         timeLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_spot_information");
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
@@ -263,6 +279,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         priceLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_spot_information");
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
@@ -274,6 +291,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             tipsTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(mContext,"event_spot_travel_tips");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "游玩小贴士");
                     intent.putExtra("url", result.tipsUrl);
@@ -289,6 +307,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             trafficGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(mContext,"event_spot_traffic_summary");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "景点交通");
                     intent.putExtra("url", result.trafficInfoUrl);
@@ -303,6 +322,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             travelGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(mContext,"event_spot_travel_experience");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "景点体验");
                     intent.putExtra("url", result.visitGuideUrl);
@@ -333,6 +353,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            MobclickAgent.onEvent(mContext,"event_spot_favorite");
             OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
@@ -372,6 +393,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_spot_share_to_talk");
                 IMUtils.onClickImShare(SpotDetailActivity.this);
                 dialog.dismiss();
             }

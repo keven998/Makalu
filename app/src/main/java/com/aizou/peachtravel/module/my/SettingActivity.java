@@ -20,6 +20,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
@@ -43,6 +44,17 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         xtLl.setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_app_setting");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_app_setting");
+    }
 
     private void initTitlebar() {
         TitleHeaderBar thb = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
@@ -60,20 +72,24 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_version_update:
+                MobclickAgent.onEvent(mContext,"event_check_version_update");
                 update();
                 break;
 
             case R.id.ll_feedback:
+                MobclickAgent.onEvent(mContext,"event_feedback");
                 Intent feedback = new Intent(mContext, FeedbackActivity.class);
                 startActivity(feedback);
                 break;
 
             case R.id.ll_xt:
+                MobclickAgent.onEvent(mContext,"event_push_setting");
                 Intent pushIntent = new Intent(mContext, PushSettingActivity.class);
                 startActivity(pushIntent);
                 break;
 
             case R.id.ll_clear_cache:
+                MobclickAgent.onEvent(mContext,"event_clear_cache");
                 DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
                 new Thread(new Runnable() {
                     @Override

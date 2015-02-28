@@ -23,6 +23,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -54,7 +55,17 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         TextView tips = (TextView)findViewById(R.id.tips);
         tips.setText(String.format("已发送短信验证码至 %s\n网络有延迟,请稍后", tel));
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_verify_phone");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_verify_phone");
+    }
     private void initData(){
         tel = getIntent().getStringExtra("tel");
         pwd = getIntent().getStringExtra("pwd");

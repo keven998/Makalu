@@ -30,6 +30,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,25 @@ public class PoiListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+           MobclickAgent.onPageStart("page_delicacy_lists");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+           MobclickAgent.onPageStart("page_shopping_lists");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            MobclickAgent.onPageEnd("page_delicacy_lists");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+            MobclickAgent.onPageEnd("page_shopping_lists");
+        }
     }
 
     private void initData() {
@@ -266,10 +286,12 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    MobclickAgent.onEvent(mContext,"event_delicacy_strategy");
                     intent.putExtra("url", result.detailUrl);
 //                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
                     intent.putExtra("title", "美食攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    MobclickAgent.onEvent(mContext,"event_shopping_strategy");
                     intent.putExtra("url", result.detailUrl);
 //                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
                     intent.putExtra("title", "购物攻略");

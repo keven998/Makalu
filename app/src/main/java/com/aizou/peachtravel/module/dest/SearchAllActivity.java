@@ -29,6 +29,7 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
 import com.easemob.EMCallBack;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -95,6 +96,17 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_search_destination");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_search_destination");
+    }
 
     private void searchAll(final String keyword){
         DialogManager.getInstance().showLoadingDialog(this);
@@ -161,6 +173,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
+                MobclickAgent.onEvent(mContext,"event_click_more_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
@@ -171,6 +184,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onItemOnClick(String type,String id,Object object) {
+                   MobclickAgent.onEvent(mContext,"event_click_search_result_item");
                    IntentUtils.intentToDetail(SearchAllActivity.this,type,id);
 
             }

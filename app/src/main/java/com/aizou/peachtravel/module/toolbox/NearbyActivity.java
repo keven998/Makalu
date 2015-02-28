@@ -26,6 +26,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,17 @@ public class NearbyActivity extends PeachBaseActivity {
         mLocationManagerProxy.setGpsEnable(false);
         startLocation();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_locality");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_locality");
+    }
 
     private void init2PreLocData() {
         mLat = getIntent().getDoubleExtra("lat", -1);
@@ -113,6 +125,7 @@ public class NearbyActivity extends PeachBaseActivity {
         mBtnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_refresh_location");
                 startLocation();
             }
         });

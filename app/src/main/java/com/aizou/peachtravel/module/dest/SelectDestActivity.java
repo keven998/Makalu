@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
 import com.aizou.peachtravel.module.dest.fragment.OutCountryFragment;
 import com.aizou.peachtravel.module.my.LoginActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,6 +61,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     @Override
     public void onDestAdded(final LocBean locBean) {
+        MobclickAgent.onEvent(mContext,"event_select_city");
         if(allAddCityList.contains(locBean)){
             ToastUtil.getInstance(mContext).showToast("已添加");
             return;
@@ -131,6 +133,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         rootView.findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_select_done_go_next");
                 PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
                     if(requestCode==StrategyActivity.EDIT_LOC_REQUEST_CODE){
@@ -184,6 +187,14 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         mSelectDestVp.setOffscreenPageLimit(2);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mSelectDestVp.setPrepareNumber(0);
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
+            @Override
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                if(currentItem==1){
+                    MobclickAgent.onEvent(mContext,"event_go_aboard");
+                }
+            }
+        });
         requestCode = getIntent().getIntExtra("request_code",0);
         guideId = getIntent().getStringExtra("guide_id");
         hasSelectLoc = getIntent().getParcelableArrayListExtra("locList");
@@ -197,6 +208,18 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
         }
 //        initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_destinations");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_destinations");
     }
 
     @Override

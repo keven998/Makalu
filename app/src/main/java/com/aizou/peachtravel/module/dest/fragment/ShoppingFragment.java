@@ -43,6 +43,7 @@ import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -113,6 +114,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(),"event_add_shopping_schedule");
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;

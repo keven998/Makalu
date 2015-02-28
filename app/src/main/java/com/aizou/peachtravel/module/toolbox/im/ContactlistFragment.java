@@ -34,6 +34,7 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,12 +142,19 @@ public class ContactlistFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+        MobclickAgent.onPageStart("page_friends_lists");
 		if (!hidden) {
 			refresh();
 		}
 
 
 	}
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_friends_lists");
+    }
 
     @Override
     public void onDestroy() {

@@ -25,6 +25,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.MapUtils;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
                 if(poi.location!=null&&poi.location.coordinates!=null){
+                    MobclickAgent.onEvent(getActivity(),"event_go_navigation");
                     Uri mUri = Uri.parse("geo:"+poi.location.coordinates[1]+","+poi.location.coordinates[0]+"?q="+poi.zhName);
                     Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
                     if (CommonUtils.checkIntent(getActivity(), mIntent)){

@@ -44,6 +44,7 @@ import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,6 +79,17 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_my_trip_plans");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_my_trip_plans");
     }
 
     private void initView() {
@@ -130,6 +142,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new View.OnClickListener()  {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(mContext,"event_create_new_trip_plan_mine");
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
@@ -364,6 +377,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mEditTtitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext,"event_edit_trip_title");
                     final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                     editDialog.setTitle("修改标题");
                     editDialog.setMessage(itemData.title);
@@ -409,6 +423,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
 
         private void deleteItem(final StrategyBean itemData) {
+            MobclickAgent.onEvent(mContext,"event_delete_trip_plan");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);

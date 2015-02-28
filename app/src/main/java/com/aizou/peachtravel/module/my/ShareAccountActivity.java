@@ -29,6 +29,7 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -96,6 +97,17 @@ public class ShareAccountActivity extends PeachBaseActivity {
         thb.getTitleTextView().setText("分享绑定");
         thb.enableBackKey(true);
 	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_bind_sns_account");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_bind_sns_account");
+    }
 
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
@@ -193,6 +205,13 @@ public class ShareAccountActivity extends PeachBaseActivity {
 					if (!OauthHelper
 							.isAuthenticated(mContext, shareAccount.platform)) {
 //						showLoadingDialog("正在获取授权");
+                        if(shareAccount.platform==SHARE_MEDIA.QQ){
+                            MobclickAgent.onEvent(mContext,"event_bind_qq_account");
+                        }else  if(shareAccount.platform==SHARE_MEDIA.SINA){
+                            MobclickAgent.onEvent(mContext,"event_bind_weibo_account");
+                        } else if(shareAccount.platform==SHARE_MEDIA.DOUBAN){
+                            MobclickAgent.onEvent(mContext,"event_bind_douban_account");
+                        }
 						mController.doOauthVerify(mContext, shareAccount.platform,
 								new UMAuthListener() {
 

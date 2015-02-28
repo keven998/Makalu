@@ -25,6 +25,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +72,17 @@ public class AddPoiActivity extends PeachBaseActivity {
         initView();
         initData();
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_add_agenda");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_add_agenda");
     }
 
     private void initView() {
@@ -154,6 +166,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MobclickAgent.onEvent(mContext,"event_filter_items");
                 mType = poiTypeValueArray[position];
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
@@ -171,6 +184,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
+                MobclickAgent.onEvent(mContext,"event_filter_city");
                 curLoc = locList.get(position);
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();

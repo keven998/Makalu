@@ -71,6 +71,7 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -241,6 +242,7 @@ public class IMMainActivity extends ChatBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_create_new_talk");
                 startActivityForResult(new Intent(IMMainActivity.this, PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                 dialog.dismiss();
             }
@@ -250,6 +252,7 @@ public class IMMainActivity extends ChatBaseActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_add_new_friend");
                 startActivity(new Intent(IMMainActivity.this, AddContactActivity.class));
                 dialog.dismiss();
             }

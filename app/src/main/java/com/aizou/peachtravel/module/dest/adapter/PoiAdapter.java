@@ -20,6 +20,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +170,7 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
+                            MobclickAgent.onEvent(mContext,"event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
@@ -214,6 +216,7 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
+                            MobclickAgent.onEvent(mContext,"event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);

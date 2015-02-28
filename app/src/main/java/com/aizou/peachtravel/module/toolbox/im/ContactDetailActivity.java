@@ -44,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Rjm on 2014/10/29.
@@ -104,7 +105,17 @@ public class ContactDetailActivity extends ChatBaseActivity {
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_friend_information");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_friend_information");
+    }
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
@@ -137,6 +148,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_delete_it");
                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
                 deleteDialog.setTitle("提示");
                 deleteDialog.setMessage("删除确认");
@@ -263,6 +275,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
     }
 
     public void startChat(View view) {
+        MobclickAgent.onEvent(mContext,"event_talk_with_it");
         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
 //        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 //        finish();

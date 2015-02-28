@@ -26,6 +26,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Rjm on 2014/10/9.
@@ -112,6 +113,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         refresh();
+        MobclickAgent.onPageStart("page_home_me");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_home_me");
     }
 
     @Override
@@ -125,6 +132,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.ll_share_account:
+                MobclickAgent.onEvent(getActivity(),"event_share_app_by_weichat");
                 Intent intent = new Intent(getActivity(), ShareAccountActivity.class);
                 startActivity(intent);
                 break;

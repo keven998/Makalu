@@ -26,6 +26,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 欢迎页，等待2秒，进入主界面
@@ -41,6 +42,7 @@ public class SplashActivity extends PeachBaseActivity {
 		super.onCreate(savedInstanceState);
 		initView();
 		initData();
+        MobclickAgent.openActivityDurationTrack(false);
 	}
 
 	protected void initData() {

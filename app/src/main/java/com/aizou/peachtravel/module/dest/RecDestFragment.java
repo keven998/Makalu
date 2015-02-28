@@ -39,6 +39,7 @@ import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class RecDestFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(getActivity(),"event_go_search");
                 Intent intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivity(intent);
             }
@@ -70,6 +72,18 @@ public class RecDestFragment extends PeachBaseFragment {
         setupViewFromCache();
         initData();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_home_destination");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_home_destination");
     }
 
     private void setupViewFromCache() {
@@ -124,6 +138,7 @@ public class RecDestFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
                 if(!proxy.isHeader) {
+                    MobclickAgent.onEvent(getActivity(),"event_click_destination_cell");
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
                     if (itemData.linkType.equals("html")) {
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);

@@ -54,6 +54,7 @@ import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -162,6 +163,29 @@ public class PoiDetailActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         getDetailData();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            MobclickAgent.onPageStart("page_delicacy_detail");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+            MobclickAgent.onPageStart("page_shopping_detail");
+        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
+            MobclickAgent.onPageStart("page_hotel_detail");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            MobclickAgent.onPageEnd("page_delicacy_detail");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+            MobclickAgent.onPageEnd("page_shopping_detail");
+        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
+            MobclickAgent.onPageEnd("page_hotel_detail");
+        }
+    }
 
 
     private void getDetailData() {
@@ -217,7 +241,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mBtnBook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    MobclickAgent.onEvent(mContext,"event_go_booking_room");
                 }
             });
         }
@@ -349,6 +373,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                MobclickAgent.onEvent(mContext,"event_favorite_delicacy");
+            } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                MobclickAgent.onEvent(mContext,"event_favorite_shopping");
+            }else if (type.equals(TravelApi.PeachType.HOTEL)) {
+                MobclickAgent.onEvent(mContext,"event_favorite_hotel");
+            }
             OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {

@@ -34,6 +34,7 @@ import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.toolbox.im.adapter.NewFriendsMsgAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 申请与通知
@@ -71,6 +72,17 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         registerForContextMenu(listView);
 
 	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_ask_for_friend");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_ask_for_friend");
+    }
 
     @Override
     public void onCreateContextMenu(android.view.ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

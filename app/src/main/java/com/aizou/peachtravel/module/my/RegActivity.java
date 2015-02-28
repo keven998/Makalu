@@ -19,6 +19,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -45,7 +46,17 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         titleBar.getTitleTextView().setText("注册");
         titleBar.enableBackKey(true);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_register");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_register");
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()){

@@ -37,6 +37,7 @@ import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -205,6 +206,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         addDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(),"event_add_day");
                 routeDayMap.add(new ArrayList<PoiDetailBean>());
                 strategy.itineraryDays++;
                 routeDayAdpater.notifyDataSetChanged();
@@ -435,6 +437,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                MobclickAgent.onEvent(getActivity(),"event_delete_select_item");
                                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                                 deleteDialog.setTitle("提示");
                                 deleteDialog.setMessage("确定删除");
@@ -462,6 +465,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                MobclickAgent.onEvent(getActivity(),"event_delete_select_item");
                                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                                 deleteDialog.setTitle("提示");
                                 deleteDialog.setMessage("确定删除");
@@ -628,6 +632,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 holder.addPoiIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(getActivity(),"event_add_plan_in_agenda");
                         Intent intent = new Intent(getActivity(), AddPoiActivity.class);
                         intent.putParcelableArrayListExtra("locList", strategy.localities);
                         intent.putExtra("dayIndex", section);
@@ -639,6 +644,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
                 holder.deleteDayIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(getActivity(),"event_delete_day_agenda");
                         final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                         deleteDialog.setTitle("提示");
                         deleteDialog.setMessage("删除这天安排");
@@ -712,6 +718,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
         @Override
         public void drop(int from, int to) {
+            MobclickAgent.onEvent(getActivity(),"event_reorder_items");
             int fromSection = getSection(from);
             int fromPostion = getPositionInSection(from);
             int toSection = getSection(to);

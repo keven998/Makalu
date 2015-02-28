@@ -29,6 +29,7 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.SearchAllAdapter;
 import com.easemob.EMCallBack;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,18 @@ public class SearchTypeActivity extends PeachBaseActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_search_destination_all_result");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_search_destination_all_result");
+    }
+
     private void initView() {
         setContentView(R.layout.activity_search_type);
         ButterKnife.inject(this);
@@ -94,6 +107,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         cityFilterTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_filter_city");
                 Intent intent = new Intent(mContext, SearchDestForPoiActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
             }

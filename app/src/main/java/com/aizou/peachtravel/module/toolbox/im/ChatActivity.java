@@ -119,6 +119,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -673,6 +674,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			String s = mEditTextContent.getText().toString();
 			sendText(s,0);
 		}else if (id == R.id.btn_my_guide) {
+            MobclickAgent.onEvent(mContext,"event_share_plan_extra");
             Intent intent = new Intent(mContext, StrategyListActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
@@ -681,6 +683,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             startActivity(intent);
         } else if (id == R.id.btn_fav) {
             // 点击我的收藏图标
+            MobclickAgent.onEvent(mContext,"event_share_favorite_extra");
             Intent intent = new Intent(mContext, FavListActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
@@ -688,6 +691,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.setAction("action.chat");
             startActivity(intent);
         }  else if (id == R.id.btn_dest) {
+            MobclickAgent.onEvent(mContext,"event_share_search_extra");
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
@@ -706,6 +710,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 //                e.printStackTrace();
 //            }
         } else if (id == R.id.btn_travels) {
+            MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
@@ -1480,6 +1485,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onPageStart("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(false);
         refresh();
@@ -1494,6 +1500,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+        MobclickAgent.onPageEnd("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
 		if (wakeLock.isHeld())

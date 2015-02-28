@@ -51,6 +51,7 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
@@ -190,6 +191,7 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
+            MobclickAgent.onEvent(getActivity(),"event_delete_talk_item");
             PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             EMConversation tobeDeleteCons = peachConversation.emConversation;
             // 删除此会话
@@ -315,6 +317,7 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_talk_lists");
         if (!hidden) {
             refresh();
         }
@@ -323,4 +326,9 @@ public class ChatAllHistoryFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_talk_lists");
+    }
 }

@@ -48,6 +48,7 @@ import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -94,6 +95,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 showActionDialog();
+                MobclickAgent.onEvent(getActivity(),"event_create_new_trip_plan_home");
             }
         });
 
@@ -275,6 +277,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.my_around:
+                MobclickAgent.onEvent(getActivity(),"event_locality");
                 Intent intent = new Intent(getActivity(), NearbyActivity.class);
                 intent.putExtra("lat", geoLat);
                 intent.putExtra("lng", geoLng);
@@ -335,6 +338,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
                 break;
 
             case R.id.my_guides:
+                MobclickAgent.onEvent(getActivity(),"event_my_trip_plans");
                 if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
                     Intent strategyIntent = new Intent(getActivity(), StrategyListActivity.class);
                     startActivity(strategyIntent);
@@ -380,6 +384,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_home_tools");
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         reloadData();
         if (scrollHandler != null) {
@@ -391,6 +396,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("page_home_tools");
         if (scrollHandler != null) {
             scrollHandler.removeMessages(0);
         }
@@ -452,6 +458,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(getActivity(),"event_click_opertion_page");
                     Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                     intent.putExtra("url",operateBeans.get(getPosition(position)).link);
                     startActivity(intent);

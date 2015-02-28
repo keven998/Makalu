@@ -56,6 +56,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -104,6 +105,18 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_plan_detail");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_plan_detail");
     }
 
     private void initView() {
@@ -209,6 +222,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    MobclickAgent.onEvent(mContext,"event_unuse_template");
                     createStrategyByCityIds(cityIdList, false);
                 }
             });
@@ -216,6 +230,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    MobclickAgent.onEvent(mContext,"event_use_template");
                     createStrategyByCityIds(cityIdList, true);
                 }
             });
@@ -383,9 +398,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 public void onClick(View v) {
                     CheckedTextView cv = (CheckedTextView) v;
                     if (!cv.isChecked()) {
+                        MobclickAgent.onEvent(mContext,"event_edit_plan");
                         gotoEditMode();
                         cv.setChecked(true);
                     } else {
+                        MobclickAgent.onEvent(mContext,"event_edit_done");
                         saveStrategy(false);
                     }
                 }
@@ -682,6 +699,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(mContext,"event_share_plan_detail");
                 ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
                 dialog.dismiss();
             }
@@ -726,6 +744,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             nameTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(mContext,"event_go_city_detail");
                     Intent intent = new Intent(mContext,CityDetailActivity.class);
                     intent.putExtra("id",loc.id);
                     startActivity(intent);
@@ -743,6 +762,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         nameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_rechoose_destination");
                 Intent intent = new Intent(mContext,SelectDestActivity.class);
                 intent.putExtra("locList",destinations);
                 intent.putExtra("guide_id",strategy.id);

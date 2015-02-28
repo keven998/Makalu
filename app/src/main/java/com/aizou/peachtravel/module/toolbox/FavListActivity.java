@@ -41,6 +41,7 @@ import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,9 +98,6 @@ public class FavListActivity extends PeachBaseActivity {
                 finish();
             }
         });
-
-
-
         PullToRefreshListView listView = mFavLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
@@ -127,6 +125,7 @@ public class FavListActivity extends PeachBaseActivity {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MobclickAgent.onEvent(mContext,"event_do_filter");
                 curType = favTypeValueArray[position];
 //                initData(curType, 0);
                 mFavLv.onPullUpRefreshComplete();
@@ -143,6 +142,17 @@ public class FavListActivity extends PeachBaseActivity {
 
         setupViewFromCache();
         mFavLv.doPullRefreshing(true, 0);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_my_favorites");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_my_favorites");
     }
 
     private void initView() {
@@ -349,6 +359,7 @@ public class FavListActivity extends PeachBaseActivity {
             vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext,"event_delete_favorite");
                     deleteItem(item);
                 }
             });

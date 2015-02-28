@@ -25,6 +25,7 @@ import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
 import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -102,6 +103,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(activity,"event_city_travel_note_item");
                 Intent intent = new Intent(activity, TravelNoteDetailActivity.class);
                 intent.putExtra("travelNote", itemData);
                 intent.putExtra("id", itemData.id);
