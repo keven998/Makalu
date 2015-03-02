@@ -70,7 +70,7 @@
             android:layout_marginRight="10dp"
             android:textSize="13sp"
             android:layout_marginLeft="10dp"
-            android:text="查找"
+            android:text="搜索"
             android:background="@drawable/btn_theme_secondary_selector"
             android:layout_gravity="center_vertical"
             android:textColor="@color/base_color_white"/>
