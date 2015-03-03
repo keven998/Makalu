@@ -12,21 +12,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.H5Url;
+import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
+import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
+import com.easemob.EMCallBack;
+import com.easemob.EMValueCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMGroupManager;
+import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Rjm on 2014/10/9.
@@ -182,12 +203,138 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
         }
     }
+    private void imLogin(final PeachUser user) {
+        EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+
+                // 登陆成功，保存用户名密码
+                // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
+                AccountManager.getInstance().saveLoginAccount(getActivity(), user);
+                boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                if (!updatenick) {
+                    EMLog.e("LoginActivity", "update current user nick fail");
+                }
+
+                // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
+
+//                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
+                final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
+                // 添加user"申请与通知"
+                IMUser newFriends = new IMUser();
+                newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
+                newFriends.setNick("申请与通知");
+                newFriends.setHeader("");
+                newFriends.setIsMyFriends(true);
+                userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+//                    // 添加"群聊"
+//                    IMUser groupUser = new IMUser();
+//                    groupUser.setUsername(Constant.GROUP_USERNAME);
+//                    groupUser.setNick("群聊");
+//                    groupUser.setHeader("");
+//                    groupUser.setUnreadMsgCount(0);
+//                    userlist.put(Constant.GROUP_USERNAME, groupUser);
+                // 存入内存
+                AccountManager.getInstance().setContactList(userlist);
+                List<IMUser> users = new ArrayList<IMUser>(userlist.values());
+                IMUserRepository.saveContactList(getActivity(), users);
+                // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
+                final long startTime = System.currentTimeMillis();
+                LogUtil.d("getGroupFromServer", startTime + "");
+                EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+                    @Override
+                    public void onSuccess(List<EMGroup> emGroups) {
+                        long endTime = System.currentTimeMillis();
+                        LogUtil.d("getGroupFromServer", endTime - startTime + "--groudSize=" + emGroups.size());
+
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+                });
+
+                // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
+                // ** manually load all local groups and
+                // conversations in case we are auto login
+                EMGroupManager.getInstance().loadAllGroups();
+                EMChatManager.getInstance().loadAllConversations();
+                UserApi.getContact(new HttpCallBack<String>() {
+                    @Override
+                    public void doSucess(String result, String method) {
+                        CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
+                        if (contactResult.code == 0) {
+                            for (PeachUser peachUser : contactResult.result.contacts) {
+                                IMUser user = new IMUser();
+                                user.setUserId(peachUser.userId);
+                                user.setMemo(peachUser.memo);
+                                user.setNick(peachUser.nickName);
+                                user.setUsername(peachUser.easemobUser);
+                                user.setUnreadMsgCount(0);
+                                user.setAvatar(peachUser.avatar);
+                                user.setAvatarSmall(peachUser.avatarSmall);
+                                user.setSignature(peachUser.signature);
+                                user.setIsMyFriends(true);
+                                user.setGender(peachUser.gender);
+                                IMUtils.setUserHead(user);
+                                userlist.put(peachUser.easemobUser, user);
+                            }
+                            // 存入内存
+                            AccountManager.getInstance().setContactList(userlist);
+                            // 存入db
+                            List<IMUser> users = new ArrayList<IMUser>(userlist.values());
+                            IMUserRepository.saveContactList(getActivity(), users);
+                        }
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        if (!getActivity().isFinishing())
+                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                });
+                // 进入主页面
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        ToastUtil.getInstance(getActivity()).showToast("欢迎回到桃子旅行");
+
+                    }
+                });
+                refresh();
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, final String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        ToastUtil.getInstance(getActivity()).showToast("登录失败 " + message);
+                    }
+                });
+            }
+        });
+
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == LoginActivity.REQUEST_CODE_REG) {
+                PeachUser user = (PeachUser) data.getSerializableExtra("user");
+                DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
+                imLogin(user);
 
             } else if (requestCode == CODE_FAVORITE) {
                 startActivity(new Intent(getActivity(), FavListActivity.class));

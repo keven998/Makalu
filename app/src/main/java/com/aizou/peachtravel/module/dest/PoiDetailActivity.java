@@ -52,6 +52,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -235,13 +236,21 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTvPoiName.setText(bean.zhName);
         if (TextUtils.isEmpty(bean.priceDesc)) {
             mTvPoiPrice.setVisibility(View.GONE);
-            mBtnBook.setVisibility(View.GONE);
         } else {
             mTvPoiPrice.setText(bean.priceDesc);
+        }
+        if(TextUtils.isEmpty(bean.lyPoiUrl)){
+            mBtnBook.setVisibility(View.GONE);
+        }else{
+            mBtnBook.setVisibility(View.VISIBLE);
             mBtnBook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MobclickAgent.onEvent(mContext,"event_go_booking_room");
+                    Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+                    intent.putExtra("url",bean.lyPoiUrl);
+                    intent.putExtra("title",bean.zhName);
+                    startActivity(intent);
                 }
             });
         }
