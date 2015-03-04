@@ -216,7 +216,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             }
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
-            dialog.setMessage("小桃可为你创建模版，旅程计划更简单");
+            dialog.setMessage("是否需要为你创建行程模版");
             dialog.setCanceledOnTouchOutside(false);
             dialog.setNegativeButton("不需要", new View.OnClickListener() {
                 @Override
@@ -289,7 +289,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         });
     }
 
-    public void createStrategyByCityIds(List<String> cityIds, boolean recommend) {
+    public void createStrategyByCityIds(List<String> cityIds, final boolean recommend) {
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
         TravelApi.createGuide(cityIds, recommend, new HttpCallBack<String>() {
             @Override
@@ -299,12 +299,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (strategyResult.code == 0) {
 //                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
-                    new Handler() {
-                        @Override
-                        public void handleMessage(Message msg) {
-                            ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
-                        }
-                    }.sendEmptyMessageDelayed(0, 1000);
+                    if (recommend) {
+                        ToastUtil.getInstance(StrategyActivity.this).showToast(String.format("已为你创建%d行程", strategyResult.result.itineraryDays));
+                    } else {
+                        new Handler() {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程，可自由定制");
+                            }
+                        }.sendEmptyMessageDelayed(0, 1000);
+                    }
+
                 } else {
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
