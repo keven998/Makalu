@@ -311,10 +311,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             MobclickAgent.onEvent(mContext,"event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
-            intent.putExtra("title", "城市概况");//String.format("玩转%s", mCityNameTv.getText()));
+            intent.putExtra("title", "城市指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
         }
-
     }
 
     public void intentToSpots(View view){
@@ -326,6 +325,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         intent.putExtra("type", TravelApi.PeachType.SPOT);
         startActivity(intent);
     }
+
     public void intentToFood(View view){
         MobclickAgent.onEvent(mContext,"event_city_delicacy");
         Intent intent = new Intent(mContext, PoiListActivity.class);
