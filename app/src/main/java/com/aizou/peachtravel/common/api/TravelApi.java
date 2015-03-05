@@ -190,7 +190,7 @@ public class TravelApi extends BaseApi{
         request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC,type)+id);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
-        request.putUrlParams("imgWidth", LocalDisplay.dp2px(100)+"");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(150)+"");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

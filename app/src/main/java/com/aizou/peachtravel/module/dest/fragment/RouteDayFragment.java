@@ -95,6 +95,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
 
     }
 
+
     public void resumeItinerary() {
         ArrayList<StrategyBean.IndexPoi> poiList = new ArrayList<>();
         int dayIndex = 0;
