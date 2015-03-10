@@ -213,7 +213,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             holder.poiNameTv.setText(poiDetailBean.zhName);
 
             String locName="";
-            if(!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
+            if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
                 locName="["+poiDetailBean.locality.zhName+"]";
             }
             SpannableString ss = new SpannableString(locName);
@@ -261,7 +261,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                strategy.restaurant.remove(poiDetailBean);
+                                strategy.shopping.remove(poiDetailBean);
                                 notifyDataSetChanged();
                                 dialog.dismiss();
                             }
@@ -291,7 +291,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                strategy.restaurant.remove(poiDetailBean);
+                                strategy.shopping.remove(poiDetailBean);
                                 notifyDataSetChanged();
                                 dialog.dismiss();
                             }

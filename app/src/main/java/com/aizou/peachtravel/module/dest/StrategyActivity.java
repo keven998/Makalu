@@ -104,7 +104,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         super.onCreate(savedInstanceState);
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
-        initData();
+        initData(savedInstanceState);
     }
 
     @Override
@@ -117,6 +117,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("page_plan_detail");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("strategy",strategy);
     }
 
     private void initView() {
@@ -207,7 +213,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         return strategy;
     }
 
-    private void initData() {
+    private void initData(Bundle savedInstanceState) {
         id = getIntent().getStringExtra("id");
         if (id == null) {
             cityIdList = new ArrayList<String>();
@@ -243,10 +249,16 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
             });
 
         } else {
-            boolean hasCache= setupViewFromCache(id);
-            if(!hasCache)
-                DialogManager.getInstance().showLoadingDialog(mContext);
-            getStrategyDataById(id);
+            if(savedInstanceState!=null){
+                strategy =savedInstanceState.getParcelable("strategy");
+                bindView(strategy);
+            }else{
+                boolean hasCache= setupViewFromCache(id);
+                if(!hasCache)
+                    DialogManager.getInstance().showLoadingDialog(mContext);
+                getStrategyDataById(id);
+            }
+
 
         }
 

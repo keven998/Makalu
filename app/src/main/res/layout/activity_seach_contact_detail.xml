@@ -16,11 +16,12 @@
         android:background="@drawable/shape_white_bar"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp">
+        android:layout_marginRight="11dp"
+        >
 
         <RelativeLayout android:id="@+id/avatar_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="86dp"
             android:background="@drawable/ic_shape_pink_with_2_round">
 
             <ImageView
@@ -28,12 +29,8 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:padding="3dp"
-                android:layout_gravity="center"
                 android:background="@drawable/white_circle_65"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginBottom="11dp"
+                android:layout_centerInParent="true"
                 android:scaleType="fitCenter"/>
             <ImageView
                 android:id="@+id/iv_gender"

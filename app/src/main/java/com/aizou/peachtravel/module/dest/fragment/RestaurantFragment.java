@@ -214,7 +214,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnEditModeC
             }
             holder.poiNameTv.setText(poiDetailBean.zhName);
             String locName="";
-            if(!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
+            if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
                 locName="["+poiDetailBean.locality.zhName+"]";
             }
             SpannableString ss = new SpannableString(locName);

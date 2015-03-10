@@ -164,6 +164,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
             }
             if (contact != null) {
                 holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
+            }else{
+                holder.name.setText("");
             }
 
         } else {
@@ -205,6 +207,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 } else {
                     holder.name.setText(imUser.getMemo());
                 }
+            }else{
+                holder.name.setText("");
             }
 
 

@@ -206,12 +206,12 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(32))) // 设置成圆角图片
                 .build();
         ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
-        if (user.gender.equalsIgnoreCase("M")) {
+        if ("M".equalsIgnoreCase(user.gender)) {
             genderIv.setImageResource(R.drawable.ic_gender_man);
-        } else if (user.gender.equalsIgnoreCase("F")) {
+        } else if ("F".equalsIgnoreCase(user.gender)) {
             genderIv.setImageResource(R.drawable.ic_gender_lady);
         } else {
             genderIv.setImageDrawable(null);

@@ -241,6 +241,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         }
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     @Override
     public void onEditModeChange(boolean isInEdit) {
         this.isInEditMode = isInEdit;

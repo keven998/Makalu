@@ -300,11 +300,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(getActivity()).showToast("欢迎回到桃子旅行");
+                        ToastUtil.getInstance(getActivity()).showToast("欢迎来到桃子旅行");
+                        refresh();
 
                     }
                 });
-                refresh();
+
 
             }
 

@@ -63,10 +63,7 @@ public class MainActivity extends PeachBaseActivity {
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
 
-        // 注册一个离线消息的BroadcastReceiver
-		IntentFilter offlineMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-				.getOfflineMessageBroadcastAction());
-		registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
+
 
     }
 /**
@@ -166,6 +163,10 @@ public class MainActivity extends PeachBaseActivity {
         IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
         intentFilter.setPriority(2);
         registerReceiver(msgReceiver, intentFilter);
+        // 注册一个离线消息的BroadcastReceiver
+        IntentFilter offlineMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
+                .getOfflineMessageBroadcastAction());
+        registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
         updateUnreadMsgCount();
     }
 
@@ -173,6 +174,7 @@ public class MainActivity extends PeachBaseActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(msgReceiver);
+        unregisterReceiver(offlineMessageReceiver);
     }
 
     @Override
