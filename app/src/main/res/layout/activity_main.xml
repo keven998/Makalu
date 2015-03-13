@@ -14,7 +14,7 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_tab_base"
+        android:background="@drawable/bg_home_tab"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -27,15 +27,12 @@
 
             <CheckedTextView
                 android:id="@+id/tv_start_talk"
-                android:layout_width="54dp"
-                android:layout_height="54dp"
-                android:background="@drawable/round_tab"
-                android:drawableTop="@drawable/checker_tab_home_talk"
-                android:paddingTop="14dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/checker_tab_talk"
                 android:drawablePadding="-2dp"
                 android:gravity="center"
                 android:checked="false"
-                android:text="Talk"
                 android:textSize="9sp"
                 android:textColor="@color/checker_home_tab_text_color" />
 

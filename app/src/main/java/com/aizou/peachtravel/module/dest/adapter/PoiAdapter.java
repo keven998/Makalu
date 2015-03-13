@@ -87,7 +87,7 @@ public class PoiAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         String type = mPoiList.get(position).type;
-        if (type.equals(TravelApi.PeachType.SPOT)) {
+        if (TravelApi.PeachType.SPOT.equals(type)) {
             return SPOT;
         } else {
             return POI;
