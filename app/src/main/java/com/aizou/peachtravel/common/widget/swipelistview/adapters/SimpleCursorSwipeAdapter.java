@@ -8,15 +8,16 @@ import android.view.ViewGroup;
 
 
 import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
-import com.aizou.peachtravel.common.widget.swipelistview.implments.SwipeItemMangerImpl;
+import com.aizou.peachtravel.common.widget.swipelistview.implments.SwipeItemAdapterMangerImpl;
 import com.aizou.peachtravel.common.widget.swipelistview.interfaces.SwipeAdapterInterface;
 import com.aizou.peachtravel.common.widget.swipelistview.interfaces.SwipeItemMangerInterface;
+import com.aizou.peachtravel.common.widget.swipelistview.util.Attributes;
 
 import java.util.List;
 
 public abstract class SimpleCursorSwipeAdapter extends SimpleCursorAdapter implements SwipeItemMangerInterface, SwipeAdapterInterface {
 
-    private SwipeItemMangerImpl mItemManger = new SwipeItemMangerImpl(this);
+    private SwipeItemAdapterMangerImpl mItemManger = new SwipeItemAdapterMangerImpl(this);
 
     protected SimpleCursorSwipeAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
         super(context, layout, c, from, to, flags);
@@ -74,12 +75,12 @@ public abstract class SimpleCursorSwipeAdapter extends SimpleCursorAdapter imple
     }
 
     @Override
-    public SwipeItemMangerImpl.Mode getMode() {
+    public Attributes.Mode getMode() {
         return mItemManger.getMode();
     }
 
     @Override
-    public void setMode(SwipeItemMangerImpl.Mode mode) {
+    public void setMode(Attributes.Mode mode) {
         mItemManger.setMode(mode);
     }
 }

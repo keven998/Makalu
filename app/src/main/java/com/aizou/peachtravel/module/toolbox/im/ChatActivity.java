@@ -388,6 +388,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		if (chatType == CHATTYPE_SINGLE) { // 单聊
 			toChatUsername = getIntent().getStringExtra("userId");
             toChatUser = AccountManager.getInstance().getContactList(mContext).get(toChatUsername);
+            if(toChatUser==null){
+                finish();
+            }
 			titleHeaderBar.getTitleTextView().setText(toChatUser.getNick());
 
 			// conversation =

@@ -516,9 +516,9 @@ public class IMMainActivity extends ChatBaseActivity {
                 //对方同意了加好友请求(好友添加)
                 else if (cmdType == 2) {
                     updateUnreadLabel();
-                    if (currentTabIndex == 0)
+                    if (chatHistoryFragment != null)
                         chatHistoryFragment.refresh();
-                    if (currentTabIndex == 1)
+                    if (contactListFragment != null)
                         contactListFragment.refresh();
 
 
@@ -526,7 +526,9 @@ public class IMMainActivity extends ChatBaseActivity {
                 //删除好友
                 else if (cmdType == 3) {
                     // 刷新ui
-                    if (currentTabIndex == 1)
+                    if (chatHistoryFragment != null)
+                        chatHistoryFragment.refresh();
+                    if (contactListFragment != null)
                         contactListFragment.refresh();
 
                 }

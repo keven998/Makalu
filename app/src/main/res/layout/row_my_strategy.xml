@@ -6,38 +6,13 @@
     android:background="@color/app_backgroud"
     android:orientation="horizontal">
 
-    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
+    <com.aizou.peachtravel.common.widget.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/my_plan_img_height"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/edit_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#aaaaaa"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:src="@drawable/ic_guide_edit_selector"
-                android:textColor="@color/base_color_white" />
-
-            <ImageButton
-                android:id="@+id/delete_item"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/app_theme_color"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:src="@drawable/ic_guide_archieve_selector"
-                android:textColor="@color/base_color_white" />
-        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -152,6 +127,29 @@
                 android:textSize="15sp" />
 
         </RelativeLayout>
-    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="@dimen/my_plan_img_height"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/edit_title"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="#aaaaaa"
+                android:scaleType="center"
+                android:src="@drawable/ic_guide_edit_selector"
+                android:textColor="@color/base_color_white" />
+
+            <ImageButton
+                android:id="@+id/delete_item"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@color/app_theme_color"
+                android:scaleType="center"
+                android:src="@drawable/ic_guide_archieve_selector"
+                android:textColor="@color/base_color_white" />
+        </LinearLayout>
+    </com.aizou.peachtravel.common.widget.SwipeLayout>
 
 </FrameLayout>

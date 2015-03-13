@@ -220,13 +220,14 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                     imUser.setNick(agreeBean.nickName);
                     imUser.setUsername(agreeBean.easemobUser);
                     imUser.setAvatar(agreeBean.avatar);
+                    imUser.setAvatarSmall(agreeBean.avatarSmall);
                     imUser.setIsMyFriends(true);
                     imUser.setGender(agreeBean.gender);
                     IMUtils.setUserHead(imUser);
                     IMUserRepository.saveContact(appContext, imUser);
                     AccountManager.getInstance().getContactList(appContext).put(imUser.getUsername(),imUser);
                     EMConversation conversation = EMChatManager.getInstance().getConversation(imUser.getUsername());
-                    if(conversation.getMsgCount()==0){
+                    if(conversation==null||conversation.getMsgCount()==0){
                         EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                         TextMessageBody body = new TextMessageBody(appContext.getResources().getString(R.string.agree_add_contact));
                         msg.addBody(body);

@@ -6,18 +6,19 @@ import android.widget.BaseAdapter;
 
 
 import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
-import com.aizou.peachtravel.common.widget.swipelistview.implments.SwipeItemMangerImpl;
+import com.aizou.peachtravel.common.widget.swipelistview.implments.SwipeItemAdapterMangerImpl;
 import com.aizou.peachtravel.common.widget.swipelistview.interfaces.SwipeAdapterInterface;
 import com.aizou.peachtravel.common.widget.swipelistview.interfaces.SwipeItemMangerInterface;
+import com.aizou.peachtravel.common.widget.swipelistview.util.Attributes;
 
 import java.util.List;
 
 public abstract class BaseSwipeAdapter extends BaseAdapter implements SwipeItemMangerInterface, SwipeAdapterInterface {
 
-    protected SwipeItemMangerImpl mItemManger = new SwipeItemMangerImpl(this);
+    protected SwipeItemAdapterMangerImpl mItemManger = new SwipeItemAdapterMangerImpl(this);
 
     /**
-     * return the {@link SwipeLayout} resource id, int the view item.
+     * return the {@link com.daimajia.swipe.SwipeLayout} resource id, int the view item.
      * @param position
      * @return
      */
@@ -71,6 +72,11 @@ public abstract class BaseSwipeAdapter extends BaseAdapter implements SwipeItemM
     }
 
     @Override
+    public void closeAllItems() {
+        mItemManger.closeAllItems();
+    }
+
+    @Override
     public List<Integer> getOpenItems() {
         return mItemManger.getOpenItems();
     }
@@ -91,12 +97,12 @@ public abstract class BaseSwipeAdapter extends BaseAdapter implements SwipeItemM
     }
 
     @Override
-    public SwipeItemMangerImpl.Mode getMode() {
+    public Attributes.Mode getMode() {
         return mItemManger.getMode();
     }
 
     @Override
-    public void setMode(SwipeItemMangerImpl.Mode mode) {
+    public void setMode(Attributes.Mode mode) {
         mItemManger.setMode(mode);
     }
 }
