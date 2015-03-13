@@ -122,7 +122,6 @@ public class ShowVideoActivity extends ChatBaseActivity implements OnTouchListen
 
 			@Override
 			public void onProgress(final int progress) {
-				Log.d("ease", "video progress:" + progress);
 				runOnUiThread(new Runnable() {
 
 					@Override

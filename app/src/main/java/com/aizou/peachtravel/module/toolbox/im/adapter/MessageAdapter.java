@@ -1450,7 +1450,6 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onSuccess() {
-                    Log.d(TAG, "send image message successfully");
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             // send success

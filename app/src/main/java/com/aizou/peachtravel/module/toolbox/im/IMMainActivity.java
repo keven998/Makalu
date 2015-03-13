@@ -712,7 +712,6 @@ public class IMMainActivity extends ChatBaseActivity {
             msg.setGroupId(groupId);
             msg.setGroupName(groupName);
             msg.setReason(reason);
-            Log.d(TAG, applyer + " 申请加入群聊：" + groupName);
             msg.setStatus(InviteStatus.BEAPPLYED);
             notifyNewIviteMessage(msg);
         }

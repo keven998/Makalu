@@ -25,8 +25,6 @@ public class PhoneContactUtils {
     public static ArrayList<AddressBookbean> getPhoneContact(Context context){
         ArrayList<AddressBookbean> contactList = new ArrayList<AddressBookbean>();
         AddressBookbean bean = null;
-        long startTime=System.currentTimeMillis();
-        Log.d("time", "start = " + startTime);
         Cursor phones = null;
         ContentResolver cr = context.getContentResolver();
         try {
@@ -70,8 +68,6 @@ public class PhoneContactUtils {
                 phones.close();
         }
         long endTime = System.currentTimeMillis();
-        Log.d("time", "end = " + endTime);
-        Log.d("time", "costTime = " + (endTime-startTime));
         return  contactList;
 
     }

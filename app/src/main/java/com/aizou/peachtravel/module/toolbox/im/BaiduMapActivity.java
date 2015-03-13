@@ -138,7 +138,6 @@ public class BaiduMapActivity extends ChatBaseActivity {
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}
-				Log.d("map", "cancel retrieve location");
 				finish();
 			}
 		});
@@ -260,8 +259,6 @@ public class BaiduMapActivity extends ChatBaseActivity {
 			if (location == null) {
 				return;
 			}
-			Log.d("map", "On location change received:" + location);
-			Log.d("map", "addr:" + location.getAddrStr());
 			sendButton.setEnabled(true);
 			if (progressDialog != null) {
 				progressDialog.dismiss();

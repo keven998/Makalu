@@ -267,12 +267,6 @@ public class SmoothPhotoView extends PhotoView {
             }
 
             if(mTransformStart){
-                Log.d("Dean", "mTransfrom.startScale:" + mTransfrom.startScale);
-                Log.d("Dean", "mTransfrom.startScale:"+mTransfrom.endScale);
-                Log.d("Dean", "mTransfrom.scale:"+mTransfrom.scale);
-                Log.d("Dean", "mTransfrom.startRect:"+mTransfrom.startRect.toString());
-                Log.d("Dean", "mTransfrom.endRect:"+mTransfrom.endRect.toString());
-                Log.d("Dean", "mTransfrom.rect:"+mTransfrom.rect.toString());
             }
 
             mPaint.setAlpha(mBgAlpha);

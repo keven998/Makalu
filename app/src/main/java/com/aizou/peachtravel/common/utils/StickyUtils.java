@@ -27,8 +27,6 @@ public class StickyUtils {
 //				}
 //			}
 //		}
-		Log.d("holder_top", getTop(holderView)+"");
-		Log.d("translationY", translationY+"");
 		return translationY;
 	}
 

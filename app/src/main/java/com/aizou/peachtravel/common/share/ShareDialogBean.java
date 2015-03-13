@@ -38,7 +38,7 @@ public class ShareDialogBean {
         this.name = extMessageBean.name;
         this.image = extMessageBean.image;
         if(extMessageBean.type.equals(TravelApi.PeachType.GUIDE)){
-            title = "攻略";
+            title = "计划";
             attr = extMessageBean.timeCost;
             desc = extMessageBean.desc;
             extType=1;
