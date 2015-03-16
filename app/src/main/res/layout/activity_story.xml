@@ -10,7 +10,7 @@
         android:id="@+id/iv_story"
         android:layout_width="fill_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/story_default"
+        android:src="@drawable/bg_splash"
         android:layout_height="fill_parent" />
 
     <FrameLayout
