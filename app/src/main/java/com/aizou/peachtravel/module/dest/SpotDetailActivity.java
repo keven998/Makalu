@@ -235,12 +235,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 showActionDialog();
             }
         });
-        findViewById(R.id.fl_book).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         refreshFav(spotDetailBean);
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
