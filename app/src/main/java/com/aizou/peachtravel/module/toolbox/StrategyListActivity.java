@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,6 +39,8 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
+import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.easemob.EMCallBack;
@@ -47,6 +50,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +71,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     PullToRefreshListView mMyStrategyLv;
     @InjectView(R.id.edit_btn)
     ImageButton mEditBtn;
-    ListViewDataAdapter mStrategyListAdapter;
+    StrategyAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
     int chatType;
@@ -80,6 +84,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         initView();
         initData();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -102,13 +107,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setScrollLoadEnabled(false);
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
-        mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
-            @Override
-            public ViewHolderBase createViewHolder() {
-                return new StrategyListViewHolder(isShare);
-            }
-        });
-        if(isShare){
+        mStrategyListAdapter = new StrategyAdapter(isShare);
+        if (isShare) {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -139,10 +139,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         );
 
         mEditBtn.setOnClickListener(
-                new View.OnClickListener()  {
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext,"event_create_new_trip_plan_mine");
+                        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
@@ -246,7 +246,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void bindView(List<StrategyBean> result) {
-        ListViewDataAdapter adapter = mStrategyListAdapter;
+        StrategyAdapter adapter = mStrategyListAdapter;
         if (mCurrentPage == 0) {
             adapter.getDataList().clear();
         }
@@ -272,7 +272,171 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
     }
 
+    public class StrategyAdapter extends BaseSwipeAdapter {
+        protected ArrayList<StrategyBean> mItemDataList = new ArrayList<StrategyBean>();
+        DisplayImageOptions poptions;
+        boolean isSend;
+
+        public StrategyAdapter(boolean isSend) {
+            poptions = UILUtils.getDefaultOption();
+            this.isSend = isSend;
+        }
+
+        @Override
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.swipe;
+        }
+
+        public ArrayList<StrategyBean> getDataList() {
+            return mItemDataList;
+        }
+
+        @Override
+        public View generateView(int position, ViewGroup parent) {
+            View v = LayoutInflater.from(mContext).inflate(R.layout.row_my_strategy, null);
+            return v;
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
+            ImageView mStrategyIv = (ImageView) convertView.findViewById(R.id.strategy_iv);
+            TextView mDayTv = (TextView) convertView.findViewById(R.id.day_tv);
+            TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
+            TextView mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
+            TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
+            ImageButton mEditTtitle = (ImageButton) convertView.findViewById(R.id.edit_title);
+            ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
+
+
+            final StrategyBean itemData = (StrategyBean) getItem(position);
+            TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
+            RelativeLayout mRlSend = (RelativeLayout) convertView.findViewById(R.id.rl_send);
+            if (itemData.images != null && itemData.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, poptions);
+            } else {
+                mStrategyIv.setImageDrawable(null);
+            }
+            mDayTv.setText(String.valueOf(itemData.dayCnt));
+            mCitysTv.setText(itemData.summary);
+            mNameTv.setText(itemData.title);
+            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
+            if (isSend) {
+                mRlSend.setVisibility(View.VISIBLE);
+                mBtnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(int i, String s) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }
+                });
+            } else {
+                mRlSend.setVisibility(View.GONE);
+            }
+
+
+            mEditTtitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext, "event_edit_trip_title");
+                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                    editDialog.setTitle("修改标题");
+                    editDialog.setMessage(itemData.title);
+                    editDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editDialog.dismiss();
+                            DialogManager.getInstance().showLoadingDialog(mContext);
+                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
+                                @Override
+                                public void doSucess(String result, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+                                    if (modifyResult.code == 0) {
+                                        itemData.title = editDialog.getMessage();
+                                        mStrategyListAdapter.notifyDataSetChanged();
+                                        cachePage();
+                                    } else {
+                                        if (!isFinishing())
+                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                    }
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    if (!isFinishing())
+                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                }
+                            });
+                        }
+                    });
+                    editDialog.show();
+                }
+            });
+
+            mDeleteItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteItem(itemData);
+                }
+            });
+        }
+
+        @Override
+        public int getCount() {
+            return mItemDataList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItemDataList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+    }
+
     public class StrategyListViewHolder extends ViewHolderBase<StrategyBean> {
+        View rootView;
         @InjectView(R.id.strategy_iv)
         ImageView mStrategyIv;
         @InjectView(R.id.day_tv)
@@ -296,6 +460,9 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView mBtnSend;
         @InjectView(R.id.rl_send)
         RelativeLayout mRlSend;
+        @InjectView(R.id.swipe)
+        SwipeLayout swipe;
+
 
         public StrategyListViewHolder(boolean isSend) {
             poptions = UILUtils.getDefaultOption();
@@ -304,12 +471,12 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            View view = layoutInflater.inflate(R.layout.row_my_strategy, mMyStrategyLv.getRefreshableView(), false);
-            ButterKnife.inject(this, view);
+            rootView = layoutInflater.inflate(R.layout.row_my_strategy, mMyStrategyLv.getRefreshableView(), false);
+            ButterKnife.inject(this, rootView);
 //            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20));
 //            int height = width * 480 / 150;
 //            mStrategyIv.setLayoutParams(new RelativeLayout.LayoutParams(width,height));
-            return view;
+            return rootView;
         }
 
         @Override
@@ -377,7 +544,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mEditTtitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext,"event_edit_trip_title");
+                    MobclickAgent.onEvent(mContext, "event_edit_trip_title");
                     final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                     editDialog.setTitle("修改标题");
                     editDialog.setMessage(itemData.title);
@@ -422,56 +589,56 @@ public class StrategyListActivity extends PeachBaseActivity {
             });
         }
 
-        private void deleteItem(final StrategyBean itemData) {
-            MobclickAgent.onEvent(mContext,"event_delete_trip_plan");
-            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-            dialog.setTitle("提示");
-            dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-            dialog.setMessage("删除确认");
-            dialog.setPositiveButton("确认", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    DialogManager.getInstance().showLoadingDialog(mContext);
-                    TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String result, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0) {
-                                int index = mStrategyListAdapter.getDataList().indexOf(itemData);
-                                mStrategyListAdapter.getDataList().remove(index);
-                                mStrategyListAdapter.notifyDataSetChanged();
-                                if (mStrategyListAdapter.getCount() == 0) {
-                                    mMyStrategyLv.doPullRefreshing(true, 0);
-                                } else if (index <= OtherApi.PAGE_SIZE) {
-                                    cachePage();
-                                }
-                            } else {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                if (!isFinishing())
-                                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+    }
+
+    private void deleteItem(final StrategyBean itemData) {
+        MobclickAgent.onEvent(mContext, "event_delete_trip_plan");
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage("删除确认");
+        dialog.setPositiveButton("确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                DialogManager.getInstance().showLoadingDialog(mContext);
+                TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                    @Override
+                    public void doSucess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                        if (deleteResult.code == 0) {
+                            int index = mStrategyListAdapter.getDataList().indexOf(itemData);
+                            mStrategyListAdapter.getDataList().remove(index);
+                            mStrategyListAdapter.notifyDataSetChanged();
+                            if (mStrategyListAdapter.getCount() == 0) {
+                                mMyStrategyLv.doPullRefreshing(true, 0);
+                            } else if (index <= OtherApi.PAGE_SIZE) {
+                                cachePage();
                             }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
+                        } else {
+                            DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())
-                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                         }
-                    });
-                }
-            });
-            dialog.setNegativeButton("取消", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
+                    }
 
-        }
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
+                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                });
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
 
     }
 }

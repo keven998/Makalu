@@ -486,6 +486,7 @@
         <activity
             android:name=".module.toolbox.StrategyListActivity"
             android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
             android:theme="@style/horizontal_slide" >
         </activity>
 

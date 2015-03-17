@@ -36,6 +36,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
+import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
@@ -239,7 +240,7 @@ public class FavListActivity extends PeachBaseActivity {
 
     }
 
-    class CustomAdapter extends BaseAdapter {
+    class CustomAdapter extends BaseSwipeAdapter {
         private LayoutInflater inflater;
         protected ArrayList<FavoritesBean> mItemDataList = new ArrayList<FavoritesBean>();
         DisplayImageOptions poptions;
@@ -275,29 +276,31 @@ public class FavListActivity extends PeachBaseActivity {
         }
 
         @Override
-        public View getView(final int i, View contentView, ViewGroup viewGroup) {
-            View view = contentView;
-            ViewHolder vh;
-            if (view == null) {
-                view = inflater.inflate(R.layout.favorite_list_item, null);
-                vh = new ViewHolder();
-                vh.imgView = (ImageView) view.findViewById(R.id.stand_img);
-                vh.titleView = (TextView) view.findViewById(R.id.tv_title);
-                vh.tvLocal = (TextView) view.findViewById(R.id.tv_local);
-                vh.typeView = (TextView) view.findViewById(R.id.tv_type);
-                vh.timeView = (TextView) view.findViewById(R.id.tv_create_time);
-                vh.descView = (TextView) view.findViewById(R.id.tv_summary);
-                vh.deleteBtn = (ImageButton) view.findViewById(R.id.delete);
-                vh.sendRl = (RelativeLayout) view.findViewById(R.id.rl_send);
-                vh.sendBtn = (TextView) view.findViewById(R.id.btn_send);
-                view.setTag(vh);
-            } else {
-                vh = (ViewHolder) view.getTag();
-            }
-            final FavoritesBean item = mItemDataList.get(i);
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.swipe;
+        }
+
+        @Override
+        public View generateView(int position, ViewGroup parent) {
+            View view =inflater.inflate(R.layout.favorite_list_item, null);
+            return view;
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
+            ImageView imgView = (ImageView) convertView.findViewById(R.id.stand_img);
+            TextView titleView = (TextView) convertView.findViewById(R.id.tv_title);
+            TextView tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
+            TextView typeView = (TextView) convertView.findViewById(R.id.tv_type);
+            TextView timeView = (TextView) convertView.findViewById(R.id.tv_create_time);
+            TextView descView = (TextView) convertView.findViewById(R.id.tv_summary);
+            ImageButton deleteBtn = (ImageButton) convertView.findViewById(R.id.delete);
+            RelativeLayout sendRl = (RelativeLayout) convertView.findViewById(R.id.rl_send);
+            TextView sendBtn = (TextView) convertView.findViewById(R.id.btn_send);
+            final FavoritesBean item = mItemDataList.get(position);
             if(isShare){
-                vh.sendRl.setVisibility(View.VISIBLE);
-                vh.sendBtn.setOnClickListener(new View.OnClickListener() {
+                sendRl.setVisibility(View.VISIBLE);
+                sendBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
@@ -341,22 +344,22 @@ public class FavListActivity extends PeachBaseActivity {
                     }
                 });
             }else{
-                vh.sendRl.setVisibility(View.GONE);
+                sendRl.setVisibility(View.GONE);
             }
-            view.setOnClickListener(new View.OnClickListener() {
+            convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        if(!item.type.equals(TravelApi.PeachType.NOTE)){
-                            IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
-                        } else {
-                            TravelNoteBean noteBean = new TravelNoteBean();
-                            noteBean.setFieldFromFavBean(item);
-                            IntentUtils.intentToNoteDetail(FavListActivity.this, noteBean);
-                        }
+                    if(!item.type.equals(TravelApi.PeachType.NOTE)){
+                        IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
+                    } else {
+                        TravelNoteBean noteBean = new TravelNoteBean();
+                        noteBean.setFieldFromFavBean(item);
+                        IntentUtils.intentToNoteDetail(FavListActivity.this, noteBean);
+                    }
                 }
             });
 
-            vh.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     MobclickAgent.onEvent(mContext,"event_delete_favorite");
@@ -365,15 +368,15 @@ public class FavListActivity extends PeachBaseActivity {
             });
 
             if (item.images != null && item.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(item.images.get(0).url, vh.imgView, poptions);
+                ImageLoader.getInstance().displayImage(item.images.get(0).url, imgView, poptions);
             } else {
-                vh.imgView.setImageDrawable(null);
+                imgView.setImageDrawable(null);
             }
 
-            vh.titleView.setText(item.zhName);
-            vh.tvLocal.setText(item.locality.zhName);
+            titleView.setText(item.zhName);
+            tvLocal.setText(item.locality.zhName);
 
-            vh.descView.setText(item.desc);
+            descView.setText(item.desc);
             int type = item.getType();
             String typeText = "";
             switch (type) {
@@ -405,11 +408,10 @@ public class FavListActivity extends PeachBaseActivity {
                     break;
             }
 
-            vh.typeView.setText(typeText);
-            vh.timeView.setText(simpleDateFormat.format(new Date(item.createTime)));
-
-            return view;
+            typeView.setText(typeText);
+            timeView.setText(simpleDateFormat.format(new Date(item.createTime)));
         }
+
 
         private void deleteItem(final FavoritesBean item) {
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);

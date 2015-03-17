@@ -20,6 +20,25 @@ public class SwipeLayout extends LinearLayout {
     private final double AUTO_OPEN_SPEED_LIMIT = 800.0;
     private int draggedX;
 
+    private static final int DRAG_LEFT = 1;
+    private static final int DRAG_RIGHT = 2;
+    private static final int DRAG_TOP = 4;
+    private static final int DRAG_BOTTOM = 8;
+
+    private int mTouchSlop;
+
+    private int mLeftIndex;
+    private int mRightIndex;
+    private int mTopIndex;
+    private int mBottomIndex;
+    private boolean mSwipeEnabled = true;
+    private boolean mLeftSwipeEnabled = true;
+    private boolean mRightSwipeEnabled = true;
+    private boolean mTopSwipeEnabled = true;
+    private boolean mBottomSwipeEnabled = true;
+
+    private int mCurrentDirectionIndex = 0;
+
     public SwipeLayout(Context context) {
         this(context, null);
     }
@@ -115,10 +134,42 @@ public class SwipeLayout extends LinearLayout {
         }
         return super.onInterceptTouchEvent(ev);
     }
-
+    private boolean shouldAllowSwipe() {
+        if (mCurrentDirectionIndex == mLeftIndex && !mLeftSwipeEnabled) return false;
+        if (mCurrentDirectionIndex == mRightIndex && !mRightSwipeEnabled) return false;
+        if (mCurrentDirectionIndex == mTopIndex && !mTopSwipeEnabled) return false;
+        if (mCurrentDirectionIndex == mBottomIndex && !mBottomSwipeEnabled) return false;
+        return true;
+    }
+    private float sX = -1, sY = -1;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        viewDragHelper.processTouchEvent(event);
+        int action = event.getActionMasked();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                viewDragHelper.processTouchEvent(event);
+                sX = event.getRawX();
+                sY = event.getRawY();
+                return true;
+            case MotionEvent.ACTION_MOVE: {
+                float distanceX = event.getRawX() - sX;
+                float distanceY = event.getRawY() - sY;
+                float angle = Math.abs(distanceY / distanceX);
+                angle = (float) Math.toDegrees(Math.atan(angle));
+                if (!shouldAllowSwipe()) return super.onTouchEvent(event);
+                viewDragHelper.processTouchEvent(event);
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                sX = -1;
+                sY = -1;
+            }
+            default:
+                viewDragHelper.processTouchEvent(event);
+        }
+
         return true;
     }
 

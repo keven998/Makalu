@@ -4,13 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.aizou.peachtravel.common.widget.SwipeLayout
+    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="142dp"
         android:paddingBottom="6dp"
         android:paddingTop="6dp">
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="142dp"
+            android:gravity="center">
 
+            <ImageButton
+                android:id="@+id/delete"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:background="@color/app_theme_color_secondary"
+                android:scaleType="center"
+                android:src="@drawable/ic_guide_archieve_normal" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -131,20 +143,8 @@
                 android:textSize="15sp" />
 
         </RelativeLayout>
-        <LinearLayout
-            android:layout_width="60dp"
-            android:layout_height="142dp"
-            android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/delete"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:background="@color/app_theme_color_secondary"
-                android:scaleType="center"
-                android:src="@drawable/ic_guide_archieve_normal" />
-        </LinearLayout>
 
-    </com.aizou.peachtravel.common.widget.SwipeLayout>
+    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
 
 </FrameLayout>
