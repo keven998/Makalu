@@ -23,6 +23,7 @@
             android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:paddingBottom="13dp"
+            android:visibility="gone"
             android:paddingLeft="11dp">
 
             <CheckedTextView
@@ -54,7 +55,6 @@
         <com.aizou.core.widget.FragmentTabHost
             android:id="@android:id/tabhost"
             android:layout_width="match_parent"
-            android:layout_marginLeft="77dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom"/>
     </FrameLayout>

@@ -40,6 +40,7 @@ import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.SplashActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.aizou.peachtravel.module.toolbox.im.VoiceCallReceiver;
@@ -147,11 +148,11 @@ public class PeachHXSDKHelper extends HXSDKHelper {
     
     @Override
     protected void onConnectionConflict(){
-        AccountManager.getInstance().logout(appContext,true,null);
-//        Intent intent = new Intent(appContext, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("conflict", true);
-//        appContext.startActivity(intent);
+//        AccountManager.getInstance().logout(appContext,true,null);
+        Intent intent = new Intent(appContext, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("conflict", true);
+        appContext.startActivity(intent);
     }
     
     @Override
@@ -285,7 +286,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                     }
                 }
             }).start();
-//            notifyNewMessage(message);
+            notifyNewMessage(message);
         }
     }
 
@@ -312,7 +313,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         mBuilder.setTicker("收到一条新消息");
 
         //必须设置pendingintent，否则在2.3的机器上会有bug
-        Intent intent = new Intent(appContext, IMMainActivity.class);
+        Intent intent = new Intent(appContext, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         int notifiId=11;
         PendingIntent pendingIntent = PendingIntent.getActivity(appContext, notifiId, intent, PendingIntent.FLAG_ONE_SHOT);

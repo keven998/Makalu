@@ -64,10 +64,6 @@ public class AccountManager {
                 if (callBack != null) {
                     callBack.onSuccess();
                 }
-                Intent intent = new Intent();
-                intent.setAction(ACCOUNT_LOGOUT_ACTION);
-                intent.putExtra("isConflict",isConflict);
-                context.sendBroadcast(intent);
 
 
             }

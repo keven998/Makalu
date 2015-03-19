@@ -18,7 +18,9 @@ import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
+import com.easemob.chat.EMChat;
 import com.easemob.chat.EMMessage;
 import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -64,8 +66,8 @@ public class SplashActivity extends PeachBaseActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (emMessage != null && user != null) {
-                    Intent intent = new Intent(mContext, IMMainActivity.class);
+                if (emMessage != null && EMChat.getInstance().isLoggedIn()) {
+                    Intent intent = new Intent(mContext, MainActivity.class);
                     startActivityWithNoAnim(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
@@ -76,9 +78,17 @@ public class SplashActivity extends PeachBaseActivity {
                         startActivityWithNoAnim(mainIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } else {
-                        Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
-                        startActivityWithNoAnim(mainActivity);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        if(EMChat.getInstance().isLoggedIn()){
+                            Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                            startActivityWithNoAnim(mainActivity);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }else{
+                            Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class);
+                            startActivityWithNoAnim(mainActivity);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }
+
+
 //                        Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
 //                        startActivityWithNoAnim(storyIntent);
                     }

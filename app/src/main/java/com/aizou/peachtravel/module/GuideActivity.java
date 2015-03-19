@@ -8,6 +8,7 @@ import com.aizou.core.widget.DotView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
@@ -123,7 +124,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 				&& arg2 == 0 && isScrolling) {
 			if (TextUtils.isEmpty(type)) {
 				SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
-                Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
+                Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
                 startActivityWithNoAnim(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} else if (type.equals("setting")) {
@@ -138,7 +139,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
     public void onBackPressed() {
 //        super.onBackPressed();
         SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
-        Intent mainActivity = new Intent(GuideActivity.this, MainActivity.class);
+        Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
         startActivityWithNoAnim(mainActivity);
 //        Intent storyIntent = new Intent(GuideActivity.this, StoryActivity.class);
 //        startActivityWithNoAnim(storyIntent);

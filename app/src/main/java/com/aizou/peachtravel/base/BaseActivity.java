@@ -1,5 +1,8 @@
 package com.aizou.peachtravel.base;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +17,15 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
+import com.aizou.peachtravel.common.utils.CommonUtils;
+import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
+import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.easemob.EMCallBack;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.NotificationCompat;
+import com.easemob.util.EasyUtils;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -23,24 +33,16 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class BaseActivity extends FragmentActivity {
     protected Context mContext;
-    protected LogoutRecevier mLogoutRecevier;
     protected boolean isFroground;
     protected boolean isAccountAbout;
     protected boolean isConflict;
+    private static final int notifiId = 11;
+    protected NotificationManager notificationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState != null &&savedInstanceState.getBoolean("isConflict")&&isAccountAbout) {
-            // 防止被T后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
-            // 三个fragment里加的判断同理
-            finish();
-            return;
-        }
         super.onCreate(savedInstanceState);
-        mLogoutRecevier = new LogoutRecevier();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(AccountManager.ACCOUNT_LOGOUT_ACTION);
-        registerReceiver(mLogoutRecevier, filter);
         mContext = this;
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -59,7 +61,6 @@ public class BaseActivity extends FragmentActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mLogoutRecevier);
         super.onDestroy();
     }
 
@@ -93,72 +94,42 @@ public class BaseActivity extends FragmentActivity {
         this.isAccountAbout = isAccountAbout;
     }
 
-    protected PeachMessageDialog conflictDialog;
-    /**
-     * 显示帐号在别处登录dialog
-     */
-    protected void showConflictDialog() {
-        if(isFinishing())
-            return;
-        try {
-            if (conflictDialog == null){
-                conflictDialog= new PeachMessageDialog(mContext);
-                conflictDialog.setTitle("下线通知");
-                conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
-                conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
-                conflictDialog.setPositiveButton("确定",new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        conflictDialog.dismiss();
-                        conflictDialog = null;
-                        if(isAccountAbout){
-                            finish();
-                        }
-                    }
-                });
-                conflictDialog.show();
-                conflictDialog.setCancelable(false);
-            }
-            conflictDialog.show();
-            isConflict=true;
-        } catch (Exception e) {
-            Log.e("###", "---------color conflictBuilder error" + e.getMessage());
-        }
 
-
-    }
-
-    public class LogoutRecevier extends BroadcastReceiver{
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == AccountManager.ACCOUNT_LOGOUT_ACTION) {
-                boolean isConflict = intent.getBooleanExtra("isConflict",false);
-                if(isFroground){
-                    if(isConflict){
-                        showConflictDialog();
-                    }else{
-                        onDrivingLogout();
-                    }
-
-                }else{
-                    if(isAccountAbout){
-                        finish();
-                    }else{
-
-                    }
-                }
-            }
-        }
-    }
 
     public void onDrivingLogout() {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("isConflict",isConflict);
-        super.onSaveInstanceState(outState);
+    /**
+     * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下
+     * 如果不需要，注释掉即可
+     * @param message
+     */
+    protected void notifyNewMessage(EMMessage message) {
+        //如果是设置了不提醒只显示数目的群组(这个是app里保存这个数据的，demo里不做判断)
+        //以及设置了setShowNotificationInbackgroup:false(设为false后，后台时sdk也发送广播)
+        if(!EasyUtils.isAppRunningForeground(this)){
+            return;
+        }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(getApplicationInfo().icon)
+                .setWhen(System.currentTimeMillis()).setAutoCancel(true);
+
+        String ticker = IMUtils.getMessageDigest(message, this);
+        if(message.getType() == EMMessage.Type.TXT)
+            ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+        //设置状态栏提示
+        mBuilder.setTicker(message.getFrom()+": " + ticker);
+
+        //必须设置pendingintent，否则在2.3的机器上会有bug
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, notifiId, intent, PendingIntent.FLAG_ONE_SHOT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        Notification notification = mBuilder.build();
+        notificationManager.notify(notifiId, notification);
+        notificationManager.cancel(notifiId);
     }
 }

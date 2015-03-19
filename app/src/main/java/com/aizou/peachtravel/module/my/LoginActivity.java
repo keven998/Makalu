@@ -33,8 +33,10 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMCallBack;
 import com.easemob.EMValueCallBack;
+import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
@@ -63,10 +65,17 @@ public class LoginActivity extends PeachBaseActivity {
     private TitleHeaderBar titleBar;
     public JSONObject uploadJson;
     private int request_code;
+    private boolean autoLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 如果用户名密码都有，直接进入主页面
+        if (EMChat.getInstance().isLoggedIn()) {
+            autoLogin = true;
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            return;
+        }
         initView();
         request_code=getIntent().getIntExtra("request_code",0);
         if(request_code==REQUEST_CODE_REG){
@@ -78,6 +87,10 @@ public class LoginActivity extends PeachBaseActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_login");
+            if (autoLogin) {
+                return;
+        }
+
     }
 
     @Override
@@ -242,11 +255,14 @@ public class LoginActivity extends PeachBaseActivity {
                     public void run() {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到桃子旅行");
+                        setResult(RESULT_OK);
+                        finish();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
 
                     }
                 });
-                setResult(RESULT_OK);
-                finish();
+
 
             }
 

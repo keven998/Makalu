@@ -31,6 +31,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -235,7 +236,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             @Override
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
+                                Intent intent =new Intent(mContext,MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                                 AccountActvity.this.finish();
+
                             }
                         });
                     }
