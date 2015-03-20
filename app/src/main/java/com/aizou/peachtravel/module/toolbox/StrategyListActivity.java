@@ -609,6 +609,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (deleteResult.code == 0) {
                             int index = mStrategyListAdapter.getDataList().indexOf(itemData);
+                            mStrategyListAdapter.closeItem(index);
                             mStrategyListAdapter.getDataList().remove(index);
                             mStrategyListAdapter.notifyDataSetChanged();
                             if (mStrategyListAdapter.getCount() == 0) {

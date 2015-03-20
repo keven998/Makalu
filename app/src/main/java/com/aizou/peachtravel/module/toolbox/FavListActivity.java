@@ -431,6 +431,7 @@ public class FavListActivity extends PeachBaseActivity {
                             if (deleteResult.code == 0) {
 //                                        mItemDataList.remove(i);
                                 int index = mItemDataList.indexOf(item);
+                                closeItem(index);
                                 mItemDataList.remove(index);
                                 notifyDataSetChanged();
                                 if (mItemDataList.size() == 0) {
