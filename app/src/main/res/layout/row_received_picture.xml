@@ -47,9 +47,8 @@
 
             <com.aizou.peachtravel.common.widget.MaskImage
                 android:id="@+id/iv_sendPicture"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:minWidth="100dp"
                 mask:mask="@drawable/chatfrom_image_mask"
                 android:scaleType="fitStart" />
 
