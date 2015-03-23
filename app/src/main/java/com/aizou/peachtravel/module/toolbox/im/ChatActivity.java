@@ -1488,7 +1488,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-        MobclickAgent.onPageStart("page_talking");
+//        MobclickAgent.onPageStart("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(false);
         refresh();
@@ -1503,7 +1503,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-        MobclickAgent.onPageEnd("page_talking");
+//        MobclickAgent.onPageEnd("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
 		if (wakeLock.isHeld())

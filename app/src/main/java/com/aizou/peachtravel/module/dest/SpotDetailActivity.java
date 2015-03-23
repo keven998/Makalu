@@ -83,13 +83,13 @@ public class SpotDetailActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_spot_detail");
+//        MobclickAgent.onPageEnd("page_spot_detail");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_spot_detail");
+//        MobclickAgent.onPageStart("page_spot_detail");
     }
 
     @Override

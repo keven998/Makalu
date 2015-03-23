@@ -350,7 +350,7 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_talk_lists");
+//        MobclickAgent.onPageStart("page_talk_lists");
         if (!hidden) {
             refresh();
         }
@@ -362,6 +362,6 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_talk_lists");
+//        MobclickAgent.onPageEnd("page_talk_lists");
     }
 }

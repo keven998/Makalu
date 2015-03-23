@@ -88,13 +88,13 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_my_trip_plans");
+//        MobclickAgent.onPageStart("page_my_trip_plans");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_my_trip_plans");
+//        MobclickAgent.onPageEnd("page_my_trip_plans");
     }
 
     private void initView() {

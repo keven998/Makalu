@@ -76,13 +76,13 @@ public class AddPoiActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_add_agenda");
+//        MobclickAgent.onPageStart("page_add_agenda");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_add_agenda");
+//        MobclickAgent.onPageEnd("page_add_agenda");
     }
 
     private void initView() {

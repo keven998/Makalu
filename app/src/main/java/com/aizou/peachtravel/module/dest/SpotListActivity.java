@@ -74,13 +74,13 @@ public class SpotListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_spot_lists");
+//        MobclickAgent.onPageStart("page_spot_lists");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_spot_lists");
+//        MobclickAgent.onPageEnd("page_spot_lists");
     }
 
     private void initData() {

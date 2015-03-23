@@ -49,8 +49,8 @@ public class ShareUtils {
         public final static String WX_APPID = "wx26b58c7173483529";
         public final static String WX_APPSECRET = "28daa05c021ebebe6d3cf06645b0c5ac";
 
-        public final static String QQ_APPID = "1103275581";
-        public final static String QQ_APPKEY = "VW1VnrywTEnK3vgw";
+        public final static String QQ_APPID = "1104433490";
+        public final static String QQ_APPKEY = "9OCrfdw4vb31gHOU";
 
     }
 

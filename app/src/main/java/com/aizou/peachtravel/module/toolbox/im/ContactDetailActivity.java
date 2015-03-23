@@ -108,13 +108,13 @@ public class ContactDetailActivity extends ChatBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_friend_information");
+//        MobclickAgent.onPageStart("page_friend_information");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_friend_information");
+//        MobclickAgent.onPageEnd("page_friend_information");
     }
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);

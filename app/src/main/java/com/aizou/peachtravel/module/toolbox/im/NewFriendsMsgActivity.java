@@ -75,13 +75,13 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_ask_for_friend");
+//        MobclickAgent.onPageStart("page_ask_for_friend");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_ask_for_friend");
+//        MobclickAgent.onPageEnd("page_ask_for_friend");
     }
 
     @Override

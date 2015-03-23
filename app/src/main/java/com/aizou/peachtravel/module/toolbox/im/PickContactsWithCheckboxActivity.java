@@ -165,13 +165,13 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_choose_talk_to");
+//        MobclickAgent.onPageStart("page_choose_talk_to");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_choose_talk_to");
+//        MobclickAgent.onPageEnd("page_choose_talk_to");
     }
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);

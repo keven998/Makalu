@@ -147,13 +147,13 @@ public class FavListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_my_favorites");
+//        MobclickAgent.onPageStart("page_my_favorites");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_my_favorites");
+//        MobclickAgent.onPageEnd("page_my_favorites");
     }
 
     private void initView() {

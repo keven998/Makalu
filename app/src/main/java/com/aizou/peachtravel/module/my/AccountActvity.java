@@ -109,14 +109,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         initData();
-        MobclickAgent.onPageStart("page_personal_profile");
+//        MobclickAgent.onPageStart("page_personal_profile");
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_personal_profile");
+//        MobclickAgent.onPageEnd("page_personal_profile");
     }
     private void bindView(PeachUser user){
         nickNameTv.setText(user.nickName);

@@ -77,13 +77,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_city_detail");
+//        MobclickAgent.onPageStart("page_city_detail");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_city_detail");
+//        MobclickAgent.onPageEnd("page_city_detail");
     }
 
     private void initData() {

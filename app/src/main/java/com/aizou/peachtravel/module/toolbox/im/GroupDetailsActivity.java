@@ -194,13 +194,13 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_talk_setting");
+//        MobclickAgent.onPageStart("page_talk_setting");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_talk_setting");
+//        MobclickAgent.onPageEnd("page_talk_setting");
     }
 
     @Override

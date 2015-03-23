@@ -134,12 +134,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         refresh();
-        MobclickAgent.onPageStart("page_home_me");
+//        MobclickAgent.onPageStart("page_home_me");
     }
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_me");
+//        MobclickAgent.onPageEnd("page_home_me");
     }
 
     @Override
