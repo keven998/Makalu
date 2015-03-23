@@ -167,25 +167,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-            MobclickAgent.onPageStart("page_delicacy_detail");
-        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-            MobclickAgent.onPageStart("page_shopping_detail");
-        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
-            MobclickAgent.onPageStart("page_hotel_detail");
-        }
+//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//            MobclickAgent.onPageStart("page_delicacy_detail");
+//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//            MobclickAgent.onPageStart("page_shopping_detail");
+//        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
+//            MobclickAgent.onPageStart("page_hotel_detail");
+//        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-            MobclickAgent.onPageEnd("page_delicacy_detail");
-        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-            MobclickAgent.onPageEnd("page_shopping_detail");
-        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
-            MobclickAgent.onPageEnd("page_hotel_detail");
-        }
+//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//            MobclickAgent.onPageEnd("page_delicacy_detail");
+//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//            MobclickAgent.onPageEnd("page_shopping_detail");
+//        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
+//            MobclickAgent.onPageEnd("page_hotel_detail");
+//        }
     }
 
 

@@ -44,7 +44,7 @@ public class SplashActivity extends PeachBaseActivity {
 		super.onCreate(savedInstanceState);
 		initView();
 		initData();
-        MobclickAgent.openActivityDurationTrack(false);
+//        MobclickAgent.openActivityDurationTrack(false);
 	}
 
 	protected void initData() {

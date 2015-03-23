@@ -86,7 +86,7 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_login");
+//        MobclickAgent.onPageStart("page_login");
             if (autoLogin) {
                 return;
         }
@@ -96,7 +96,7 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_login");
+//        MobclickAgent.onPageEnd("page_login");
     }
     private void initView() {
         setContentView(R.layout.activity_login);

@@ -84,13 +84,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_add_friend");
+//        MobclickAgent.onPageStart("page_add_friend");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_add_friend");
+//        MobclickAgent.onPageEnd("page_add_friend");
     }
     private void initTitleBar(){
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);

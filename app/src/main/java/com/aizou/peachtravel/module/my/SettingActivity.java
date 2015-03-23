@@ -47,13 +47,13 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_app_setting");
+//        MobclickAgent.onPageStart("page_app_setting");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_app_setting");
+//        MobclickAgent.onPageEnd("page_app_setting");
     }
 
     private void initTitlebar() {

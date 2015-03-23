@@ -99,13 +99,13 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_search_destination");
+//        MobclickAgent.onPageStart("page_search_destination");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_search_destination");
+//        MobclickAgent.onPageEnd("page_search_destination");
     }
 
     private void searchAll(final String keyword){

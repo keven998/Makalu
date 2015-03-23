@@ -77,13 +77,13 @@ public class RecDestFragment extends PeachBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_home_destination");
+//        MobclickAgent.onPageStart("page_home_destination");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_destination");
+//        MobclickAgent.onPageEnd("page_home_destination");
     }
 
     private void setupViewFromCache() {

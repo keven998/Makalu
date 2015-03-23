@@ -142,7 +142,7 @@ public class ContactlistFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-        MobclickAgent.onPageStart("page_friends_lists");
+//        MobclickAgent.onPageStart("page_friends_lists");
 		if (!hidden) {
 			refresh();
 		}
@@ -153,7 +153,7 @@ public class ContactlistFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_friends_lists");
+//        MobclickAgent.onPageEnd("page_friends_lists");
     }
 
     @Override

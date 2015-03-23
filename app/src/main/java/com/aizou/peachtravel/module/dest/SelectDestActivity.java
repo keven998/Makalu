@@ -213,13 +213,13 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_destinations");
+//        MobclickAgent.onPageStart("page_destinations");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_destinations");
+//        MobclickAgent.onPageEnd("page_destinations");
     }
 
     @Override

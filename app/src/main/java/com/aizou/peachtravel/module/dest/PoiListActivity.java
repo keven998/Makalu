@@ -78,21 +78,21 @@ public class PoiListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-           MobclickAgent.onPageStart("page_delicacy_lists");
-        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-           MobclickAgent.onPageStart("page_shopping_lists");
-        }
+//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//           MobclickAgent.onPageStart("page_delicacy_lists");
+//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//           MobclickAgent.onPageStart("page_shopping_lists");
+//        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-            MobclickAgent.onPageEnd("page_delicacy_lists");
-        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-            MobclickAgent.onPageEnd("page_shopping_lists");
-        }
+//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//            MobclickAgent.onPageEnd("page_delicacy_lists");
+//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//            MobclickAgent.onPageEnd("page_shopping_lists");
+//        }
     }
 
     private void initData() {

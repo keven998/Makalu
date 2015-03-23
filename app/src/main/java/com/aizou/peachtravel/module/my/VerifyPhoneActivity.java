@@ -58,13 +58,13 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_verify_phone");
+//        MobclickAgent.onPageStart("page_verify_phone");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_verify_phone");
+//        MobclickAgent.onPageEnd("page_verify_phone");
     }
     private void initData(){
         tel = getIntent().getStringExtra("tel");

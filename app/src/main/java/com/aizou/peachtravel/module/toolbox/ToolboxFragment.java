@@ -384,7 +384,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_home_tools");
+//        MobclickAgent.onPageStart("page_home_tools");
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         reloadData();
         if (scrollHandler != null) {
@@ -396,7 +396,7 @@ public class ToolboxFragment extends PeachBaseFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_tools");
+//        MobclickAgent.onPageEnd("page_home_tools");
         if (scrollHandler != null) {
             scrollHandler.removeMessages(0);
         }

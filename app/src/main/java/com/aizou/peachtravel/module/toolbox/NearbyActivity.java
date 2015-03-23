@@ -80,13 +80,13 @@ public class NearbyActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_locality");
+//        MobclickAgent.onPageStart("page_locality");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_locality");
+//        MobclickAgent.onPageEnd("page_locality");
     }
 
     private void init2PreLocData() {

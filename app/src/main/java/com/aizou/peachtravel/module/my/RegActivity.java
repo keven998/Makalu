@@ -49,13 +49,13 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_register");
+//        MobclickAgent.onPageStart("page_register");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_register");
+//        MobclickAgent.onPageEnd("page_register");
     }
     @Override
     public void onClick(View view) {
