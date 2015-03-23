@@ -34,7 +34,7 @@ public class MaskImage extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         Bitmap original = bm;
-        int minWidth=getMinimumWidth();
+        int minWidth=getMeasuredWidth();
         if(minWidth>bm.getWidth()){
             int height =minWidth* bm.getHeight()/bm.getWidth();
             original = Bitmap.createScaledBitmap(bm,minWidth,height,true);
