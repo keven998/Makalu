@@ -92,14 +92,33 @@ public class TravelApi extends BaseApi{
     }
 
     /**
-     * 获取国内目的地列表
+     * 获取国内目的地列表(1.0版本)
      * @param callback
      * @return
      */
+    @Deprecated
     public static PTRequestHandler getInDestList(String lastModeify,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
+//        request.putUrlParams("groupBy","true");
+        setDefaultParams(request);
+        if(!TextUtils.isEmpty(lastModeify)){
+            request.addHeader("Cache-Control","private");
+            request.addHeader("If-Modified-Since",lastModeify);
+        }
+        return HttpManager.request(request, callback);
+    }
+    /**
+     * 获取国内目的地列表
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler getInDestListByGroup(String lastModeify,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
+        request.putUrlParams("groupBy","true");
         setDefaultParams(request);
         if(!TextUtils.isEmpty(lastModeify)){
             request.addHeader("Cache-Control","private");

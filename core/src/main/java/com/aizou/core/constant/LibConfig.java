@@ -14,7 +14,7 @@ public class LibConfig {
     /**
      * 是否显示LOG
      */
-    public static boolean  LOG= false;
+    public static boolean  LOG= true;
 
 	/**
 	 * 是否保存到SD卡

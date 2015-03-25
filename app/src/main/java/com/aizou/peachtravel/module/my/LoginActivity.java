@@ -159,7 +159,6 @@ public class LoginActivity extends PeachBaseActivity {
                 }
 
                 // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
-
 //                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
                 final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                 // 添加user"申请与通知"
@@ -283,15 +282,10 @@ public class LoginActivity extends PeachBaseActivity {
 
                 CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
                 if (userResult.code == 0) {
-//                    userResult.result.easemobUser="rjm4413";
-//                    userResult.result.easemobPwd="123456";
                     imLogin(userResult.result);
-
-//                    imLogin("rjm4413","123456","小明");
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
-
                 }
 
             }
@@ -342,7 +336,6 @@ public class LoginActivity extends PeachBaseActivity {
             public void onError(int errCode) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权失败");
-
             }
 
             @Override
@@ -357,7 +350,6 @@ public class LoginActivity extends PeachBaseActivity {
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
     }
 

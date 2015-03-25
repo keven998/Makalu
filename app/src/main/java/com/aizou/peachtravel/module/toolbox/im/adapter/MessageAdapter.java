@@ -177,7 +177,13 @@ public class MessageAdapter extends BaseAdapter {
      * 刷新页面
      */
     public void refresh() {
-        notifyDataSetChanged();
+        ((Activity)context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+
     }
 
     public EMMessage getItem(int position) {
