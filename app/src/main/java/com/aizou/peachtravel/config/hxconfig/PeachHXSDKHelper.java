@@ -128,7 +128,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
                 final Intent notificationIntent = new Intent(appContext, SplashActivity.class);
                 notificationIntent.setAction(Intent.ACTION_MAIN);
                 notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                notificationIntent.putExtra("im_message",message);
+                notificationIntent.putExtra("isFromTalk",true);
 //                appContext.startActivity(notificationIntent);
 //                Intent intent = new Intent(appContext, ChatActivity.class);
 //                ChatType chatType = message.getChatType();
@@ -317,7 +317,6 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         int notifiId=11;
         PendingIntent pendingIntent = PendingIntent.getActivity(appContext, notifiId, intent, PendingIntent.FLAG_ONE_SHOT);
         mBuilder.setContentIntent(pendingIntent);
-
         Notification notification = mBuilder.build();
         NotificationManager notificationManager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notifiId, notification);

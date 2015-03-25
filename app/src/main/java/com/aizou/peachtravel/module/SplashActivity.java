@@ -46,7 +46,7 @@ public class SplashActivity extends PeachBaseActivity {
 	}
 
 	protected void initData() {
-        final EMMessage emMessage = getIntent().getParcelableExtra("im_message");
+        final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
@@ -64,7 +64,7 @@ public class SplashActivity extends PeachBaseActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (emMessage != null && user != null) {
+                if (isFromTalk && user != null) {
                     Intent intent = new Intent(mContext, IMMainActivity.class);
                     startActivityWithNoAnim(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
