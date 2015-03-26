@@ -54,7 +54,7 @@ public class ShareUtils {
 
     }
 
-    public static final String downloadUrl="http://www.taozilvxing.com";
+    public static final String downloadUrl="http://a.app.qq.com/o/simple.jsp?pkgname=com.aizou.peachtravel";
 
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -162,8 +162,9 @@ public class ShareUtils {
         UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
+        circleMedia.setTitle("推荐\"桃子旅行\"给你。");
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("我是桃子旅行，女生们旅行必备的贴心小应用， "+downloadUrl);
+            circleMedia.setShareContent("能和旅伴一起讨论旅行，还有便利的自由行规划工具，陪你一起去旅行");
         } else {
             circleMedia.setShareContent(content);
         }
