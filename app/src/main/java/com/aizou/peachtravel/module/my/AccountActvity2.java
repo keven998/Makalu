@@ -1,16 +1,19 @@
 package com.aizou.peachtravel.module.my;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -35,7 +38,6 @@ import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -51,35 +53,56 @@ import org.json.JSONObject;
 
 import java.io.File;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class AccountActvity2 extends PeachBaseActivity implements View.OnClickListener {
 
 
-    @ViewInject(R.id.iv_avatar)
-    private ImageView avatarIv;
-    @ViewInject(R.id.iv_gender)
-    private ImageView genderIv;
-
-    @ViewInject(R.id.tv_nickname)
-    private TextView nickNameTv;
-    @ViewInject(R.id.tv_id)
-    private TextView idTv;
-    @ViewInject(R.id.tv_sign)
-    private TextView signTv;
-    @ViewInject(R.id.ll_modify_pwd)
-    private TextView modifPwdLl;
-    @ViewInject(R.id.btn_logout)
-    private Button logoutBtn;
-    @ViewInject(R.id.tv_bind_phone)
-    private TextView bindPhoneTv;
-    @ViewInject(R.id.tv_phone)
-    private TextView phoneTv;
+    @InjectView(R.id.ly_header_bar_title_wrap)
+    TitleHeaderBar lyHeaderBarTitleWrap;
+    @InjectView(R.id.rv_photos)
+    RecyclerView rvPhotos;
+    @InjectView(R.id.tv_nickname)
+    TextView tvNickname;
+    @InjectView(R.id.ll_nickname)
+    LinearLayout llNickname;
+    @InjectView(R.id.tv_status)
+    TextView tvStatus;
+    @InjectView(R.id.ll_status)
+    LinearLayout llStatus;
+    @InjectView(R.id.tv_sign)
+    TextView tvSign;
+    @InjectView(R.id.ll_sign)
+    LinearLayout llSign;
+    @InjectView(R.id.ll_modify_pwd)
+    TextView llModifyPwd;
+    @InjectView(R.id.tv_bind_phone)
+    TextView tvBindPhone;
+    @InjectView(R.id.tv_phone)
+    TextView tvPhone;
+    @InjectView(R.id.ll_bind_phone)
+    LinearLayout llBindPhone;
+    @InjectView(R.id.tv_gender)
+    TextView tvGender;
+    @InjectView(R.id.ll_gender)
+    LinearLayout llGender;
+    @InjectView(R.id.tv_birthday)
+    TextView tvBirthday;
+    @InjectView(R.id.ll_birthday)
+    LinearLayout llBirthday;
+    @InjectView(R.id.tv_resident)
+    TextView tvResident;
+    @InjectView(R.id.ll_resident)
+    LinearLayout llResident;
+    @InjectView(R.id.btn_logout)
+    Button btnLogout;
     private File tempImage;
     private PeachUser user;
     DisplayImageOptions options;
-    private TextView tvGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +115,15 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 
     private void initView() {
         setContentView(R.layout.activity_account2);
-        ViewUtils.inject(this);
-        tvGender = (TextView) findViewById(R.id.tv_gender);
-        findViewById(R.id.ll_avatar).setOnClickListener(this);
+        ButterKnife.inject(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_sign).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
-        logoutBtn.setOnClickListener(this);
+        llBirthday.setOnClickListener(this);
+        llResident.setOnClickListener(this);
+        btnLogout.setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("个人信息");
@@ -120,24 +143,12 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         super.onPause();
 //        MobclickAgent.onPageEnd("page_personal_profile");
     }
-    private void bindView(PeachUser user){
-        nickNameTv.setText(user.nickName);
+
+    private void bindView(PeachUser user) {
+        tvNickname.setText(user.nickName);
         tvGender.setText(user.getGenderDesc());
-        options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
-                .showImageOnFail(R.drawable.avatar_placeholder_round)
-                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .cacheOnDisc(true)
-                        // 设置下载的图片是否缓存在SD卡中
-                .displayer(
-                        new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                                25))) // 设置成圆角图片
-                .build();
-        ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
-                options);
-        idTv.setText(user.userId + "");
-        signTv.setText(user.signature);
-        phoneTv.setText(user.tel);
+        tvSign.setText(user.signature);
+        tvPhone.setText(user.tel);
     }
 
     private void initData() {
@@ -159,48 +170,60 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_nickname:
-                MobclickAgent.onEvent(mContext,"event_update_nick");
+                MobclickAgent.onEvent(mContext, "event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
                 startActivity(nickNameIntent);
                 break;
 
             case R.id.ll_sign:
-                MobclickAgent.onEvent(mContext,"event_update_memo");
+                MobclickAgent.onEvent(mContext, "event_update_memo");
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
                 startActivity(signIntent);
                 break;
 
             case R.id.ll_gender:
-                MobclickAgent.onEvent(mContext,"event_update_gender");
+                MobclickAgent.onEvent(mContext, "event_update_gender");
                 showSelectGenderDialog();
                 break;
 
             case R.id.ll_avatar:
-                MobclickAgent.onEvent(mContext,"event_update_avatar");
+                MobclickAgent.onEvent(mContext, "event_update_avatar");
                 showSelectPicDialog();
                 break;
 
             case R.id.ll_modify_pwd:
-                MobclickAgent.onEvent(mContext,"event_update_password");
+                MobclickAgent.onEvent(mContext, "event_update_password");
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
                 startActivity(modifyPwdIntent);
                 break;
 
             case R.id.ll_bind_phone:
-                MobclickAgent.onEvent(mContext,"event_update_phone");
+                MobclickAgent.onEvent(mContext, "event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivity(bindPhoneIntent);
                 break;
+            case R.id.ll_birthday:
+                DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                    }
+                },1990,0,0);
+                dialog.show();
+                break;
+            case R.id.ll_resident:
+                break;
 
             case R.id.btn_logout:
-                MobclickAgent.onEvent(mContext,"event_logout");
+                MobclickAgent.onEvent(mContext, "event_logout");
                 warnLogout();
                 break;
         }
     }
-    private void refreshUserInfo(){
+
+    private void refreshUserInfo() {
         PeachUser user = AccountManager.getInstance().getLoginAccount(this);
-        if(user!=null){
+        if (user != null) {
             UserApi.getUserInfo(user.userId + "", new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
@@ -225,11 +248,11 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定退出已登陆账号吗？");
-        dialog.setPositiveButton("确定",new View.OnClickListener() {
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext,"正在登出");
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
                 AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
                     @Override
                     public void onSuccess() {
@@ -237,7 +260,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                             @Override
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent =new Intent(mContext,MainActivity.class);
+                                Intent intent = new Intent(mContext, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 AccountActvity2.this.finish();
@@ -264,7 +287,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                 });
             }
         });
-        dialog.setNegativeButton("取消",new View.OnClickListener() {
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -296,7 +319,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 
             @Override
             public void onClick(View v) {
-                tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity2.this);
+                tempImage = SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity2.this);
                 dialog.dismiss();
 
             }
@@ -323,8 +346,8 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void modifyGender(final String gender){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void modifyGender(final String gender) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -335,10 +358,10 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
-                if(modifyResult.code==0){
+                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+                if (modifyResult.code == 0) {
                     user.gender = gender;
-                    AccountManager.getInstance().saveLoginAccount(mContext,user);
+                    AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tvGender.setText(user.getGenderDesc());
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
@@ -348,7 +371,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
             }
 
             @Override
@@ -409,8 +432,8 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void uploadAvatar(final File file){
-        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
+    private void uploadAvatar(final File file) {
+        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -432,7 +455,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                                             user.avatar = imageUrl;
                                             user.avatarSmall = urlSmall;
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                            ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
+//                                            ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -442,8 +465,8 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                             }, new UploadOptions(null, null, false,
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
-                                            progressDialog.setContent((int) (percent*100)+"%");
-                                            LogUtil.d("progress",percent+"");
+                                            progressDialog.setContent((int) (percent * 100) + "%");
+                                            LogUtil.d("progress", percent + "");
                                         }
                                     }, null));
                 } else {
@@ -463,7 +486,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode!=RESULT_OK){
+        if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == SelectPicUtils.REQUEST_CODE_CAMERA) { // 发送照片
@@ -472,16 +495,14 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
-            if(tempImage!=null){
+            if (tempImage != null) {
                 uploadAvatar(tempImage);
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
-            if(tempImage!=null){
-               uploadAvatar(tempImage);
+            if (tempImage != null) {
+                uploadAvatar(tempImage);
 
             }
-
-
 
 
         }

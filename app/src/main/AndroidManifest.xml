@@ -252,6 +252,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.my.AccountActvity2"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.my.ModifyNicknameActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
