@@ -13,7 +13,10 @@
  */
 package com.aizou.peachtravel.common.utils;
 
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -32,7 +35,12 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Display;
 
+import com.aizou.peachtravel.bean.StartCity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.apache.http.Header;
+import org.apache.http.util.EncodingUtils;
 
 public class CommonUtils {
 
@@ -167,6 +175,34 @@ public class CommonUtils {
         Bundle bundle = new Bundle();
         bundle.putParcelable("clone",parcelable);
         return  bundle.getParcelable("clone");
+    }
+
+    public static ArrayList<StartCity> parserStartCityJson(Context context) {
+        String json = getFromAssets(context, "startCity.json");
+        if (json == null) {
+            return null;
+        }
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<StartCity>>() {
+        }.getType();
+        return gson.fromJson(json, listType);
+    }
+
+    public static String getFromAssets(Context context, String fileName) {
+        String result = "";
+        try {
+            InputStream in = context.getResources().getAssets().open(fileName);
+            // 获取文件的字节数
+            int lenght = in.available();
+            // 创建byte数组
+            byte[] buffer = new byte[lenght];
+            // 将文件中的数据读到byte数组中
+            in.read(buffer);
+            result = EncodingUtils.getString(buffer, "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 

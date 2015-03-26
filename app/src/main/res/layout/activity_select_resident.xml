@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_search"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:hint="@string/please_input_city_name"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:textColor="@color/base_text_color_subtitle"
+        android:textColorHint="@color/base_text_color_text_hint"
+        android:textSize="14sp" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ExpandableListView
+            android:id="@+id/elv_city"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:childDivider="@color/base_divider_color"
+            android:divider="@color/base_divider_color"
+            android:dividerHeight="1dp"
+            android:fadingEdge="none"
+            android:groupIndicator="@null"
+            android:listSelector="@android:color/transparent" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -257,6 +257,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.my.SelectResidentActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.my.ModifySignActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
