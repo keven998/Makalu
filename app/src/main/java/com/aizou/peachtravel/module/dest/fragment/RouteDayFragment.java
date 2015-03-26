@@ -22,8 +22,10 @@ import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.LocBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
@@ -32,8 +34,9 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
+import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
-import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
+import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,10 +52,10 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class RouteDayFragment extends PeachBaseFragment implements OnEditModeChangeListener {
+public class RouteDayFragment extends PeachBaseFragment implements OnStrategyModeChangeListener {
     public static final int ADD_POI_REQUEST_CODE = 101;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
-    private OnEditModeChangeListener mOnEditModeChangeListener;
+    private OnStrategyModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
@@ -75,7 +78,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
     @Override
     public void onAttach(Activity activity) {
         try {
-            mOnEditModeChangeListener = (OnEditModeChangeListener) activity;
+            mOnEditModeChangeListener = (OnStrategyModeChangeListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement On OnDestActionListener");
         }
@@ -132,10 +135,21 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         return ((StrategyActivity) getActivity()).getStrategy();
 
     }
+    private void setAddDayView(){
+        final PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
+        if(addDayFooter!=null){
+            if (user.userId != strategy.userId) {
+                addDayFooter.setVisibility(View.GONE);
+            }else{
+                addDayFooter.setVisibility(View.VISIBLE);
+            }
+        }
 
+    }
     private void initData() {
         strategy = getStrategy();
         resizeData(strategy.itinerary);
+        setAddDayView();
         routeDayAdpater = new RouteDayAdapter(isInEditMode);
         mEditDslv.setDropListener(routeDayAdpater);
         // make and set controller on dslv
@@ -257,6 +271,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
             routeDayAdpater.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public void onCopyStrategy() {
+        strategy = getStrategy();
+        setAddDayView();
     }
 
     private class SectionController extends DragSortController {

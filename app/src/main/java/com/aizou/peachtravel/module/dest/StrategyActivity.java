@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -71,7 +70,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class StrategyActivity extends PeachBaseActivity implements OnEditModeChangeListener{
+public class StrategyActivity extends PeachBaseActivity implements OnStrategyModeChangeListener {
     public final static int EDIT_LOC_REQUEST_CODE=110;
     @InjectView(R.id.tv_title_back)
     TextView mTvTitleBack;
@@ -96,7 +95,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     RouteDayFragment routeDayFragment;
     RestaurantFragment restFragment;
     ShoppingFragment shoppingFragment;
-    private Set<OnEditModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
+    private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +179,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     @Override
     public void onAttachFragment(Fragment fragment) {
         try {
-            OnEditModeChangeListener listener = (OnEditModeChangeListener)fragment;
+            OnStrategyModeChangeListener listener = (OnStrategyModeChangeListener)fragment;
             mOnEditModeChangeListeners.add(listener);
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,7 +188,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
     }
 
     private void gotoEditMode(){
-        for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
+        for(OnStrategyModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
             onEditModeChangeListener.onEditModeChange(true);
         }
     }
@@ -209,6 +208,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
         mIvEdit.setChecked(inEditMode);
         gotoEditMode();
     }
+
+    @Override
+    public void onCopyStrategy() {
+
+    }
+
     public StrategyBean getStrategy(){
         return strategy;
     }
@@ -648,7 +653,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnEditModeCha
                 if (saveResult.code == 0) {
                     originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
                     mIvEdit.setChecked(false);
-                    for(OnEditModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
+                    for(OnStrategyModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
                         onEditModeChangeListener.onEditModeChange(false);
                     }
                     if (routeDayFragment != null) {
