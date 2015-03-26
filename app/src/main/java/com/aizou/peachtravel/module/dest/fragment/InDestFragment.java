@@ -25,6 +25,7 @@ import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.core.widget.section.SectionListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.GroupLocBean;
 import com.aizou.peachtravel.bean.InDestBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
@@ -82,15 +83,15 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
         mLvInCity.addFooterView(view);
         mLvInCity.setAdapter(inCityAdapter);
-        mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
-            @Override
-            public void onTouchingLetterChanged(String s) {
-                int position = inCityAdapter.getPositionForIndex(s);
-                if (position != -1) {
-                    mLvInCity.setSelection(position);
-                }
-            }
-        });
+//        mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+//            @Override
+//            public void onTouchingLetterChanged(String s) {
+//                int position = inCityAdapter.getPositionForIndex(s);
+//                if (position != -1) {
+//                    mLvInCity.setSelection(position);
+//                }
+//            }
+//        });
         mSbIndex.setTextView(mDialog);
         mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         initData();
@@ -98,9 +99,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     private void initData() {
-        String data = PreferenceUtils.getCacheData(getActivity(), "destination_indest");
+        String data = PreferenceUtils.getCacheData(getActivity(), "destination_indest_group");
         if (!TextUtils.isEmpty(data)) {
-            CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(data, LocBean.class);
+            CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(data, GroupLocBean.class);
             if (locListResult.code == 0) {
                 bindInView(locListResult.result);
             }
@@ -112,8 +113,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
     private void getInLocList() {
 
-        String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_last_modify");
-        TravelApi.getInDestList(lastModify, new HttpCallBack<String>() {
+        String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_group_last_modify");
+        TravelApi.getInDestListByGroup(lastModify, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
 
@@ -121,12 +122,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
             @Override
             public void doSucess(String result, String method, Header[] headers) {
-                CommonJson4List<LocBean> locListResult = CommonJson4List.fromJson(result, LocBean.class);
+                CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
                 box.hideAll();
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
-                    PreferenceUtils.cacheData(getActivity(), "destination_indest", result);
-                    PreferenceUtils.cacheData(getActivity(), "indest_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    PreferenceUtils.cacheData(getActivity(), "destination_indest_group", result);
+                    PreferenceUtils.cacheData(getActivity(), "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
                     LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
                 }
             }
@@ -151,57 +152,42 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         super.onAttach(activity);
     }
 
-    private void bindInView(List<LocBean> result) {
-        HashMap<String, List<LocBean>> locMap = new HashMap<String, List<LocBean>>();
-        ArrayList<String> sections = new ArrayList<>();
+    private void bindInView(List<GroupLocBean> result) {
         ArrayList<LocBean> allSelectLoc = null;
         if (getActivity() != null) {
             allSelectLoc = ((SelectDestActivity) getActivity()).getAllSelectedLoc();
         }
-        for (LocBean locBean : result) {
-            if (allSelectLoc != null && allSelectLoc.contains(locBean)) {
-                locBean.isAdded = true;
-            }
-            if (Character.isDigit(locBean.zhName.charAt(0))) {
-                locBean.header = "#";
-            } else {
-                if (TextUtils.isEmpty(locBean.pinyin)) {
-                    locBean.header = HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
-                            0, 1).toUpperCase();
-                } else {
-                    locBean.header = locBean.pinyin.substring(0, 1).toUpperCase();
-                }
-
-                char header = locBean.header.toLowerCase().charAt(0);
-                if (header < 'a' || header > 'z') {
-                    locBean.header = "#";
-                }
-            }
-            sections.add(locBean.header);
-            if (locMap.get(locBean.header) != null) {
-                locMap.get(locBean.header).add(locBean);
-            } else {
-                List<LocBean> locList = new ArrayList<LocBean>();
-                locList.add(locBean);
-                locMap.put(locBean.header, locList);
-            }
-
-        }
         incityList.clear();
-        for (Map.Entry<String, List<LocBean>> entry : locMap.entrySet()) {
+        for (GroupLocBean groupLocBean : result) {
             InDestBean inDestBean = new InDestBean();
-            inDestBean.section = entry.getKey();
-            inDestBean.locList = entry.getValue();
-            incityList.add(inDestBean);
-        }
-        // 排序
-        Collections.sort(incityList, new Comparator<InDestBean>() {
+            inDestBean.section = groupLocBean.zhName;
+            inDestBean.locList = new ArrayList<>();
+            for(LocBean locBean:groupLocBean.destinations){
+                if (allSelectLoc != null && allSelectLoc.contains(locBean)) {
+                    locBean.isAdded = true;
+                }
+                if (Character.isDigit(locBean.zhName.charAt(0))) {
+                    locBean.header = "#";
+                } else {
+                    if (TextUtils.isEmpty(locBean.pinyin)) {
+                        locBean.header = HanziToPinyin.getInstance().get(locBean.zhName.substring(0, 1)).get(0).target.substring(
+                                0, 1).toUpperCase();
+                    } else {
+                        locBean.header = locBean.pinyin.substring(0, 1).toUpperCase();
+                    }
 
-            @Override
-            public int compare(InDestBean lhs, InDestBean rhs) {
-                return lhs.section.compareTo(rhs.section);
+                    char header = locBean.header.toLowerCase().charAt(0);
+                    if (header < 'a' || header > 'z') {
+                        locBean.header = "#";
+                    }
+                }
+                inDestBean.locList.add(locBean);
             }
-        });
+            incityList.add(inDestBean);
+
+
+
+        }
         inCityAdapter.getDataList().clear();
         inCityAdapter.getDataList().addAll(incityList);
         inCityAdapter.notifyDataSetChanged();
@@ -416,7 +402,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         @Override
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
-            initSections();
+//            initSections();
         }
 
     }

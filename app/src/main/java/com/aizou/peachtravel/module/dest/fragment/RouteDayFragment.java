@@ -90,7 +90,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnEditModeCha
         }
 
         for (StrategyBean.IndexPoi indexPoi : itinerary) {
-            routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
+            if(routeDayMap.size()>indexPoi.dayIndex){
+                routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
+            }
         }
 
     }

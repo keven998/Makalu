@@ -197,7 +197,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 
             case R.id.tv_weixin_contacts:
                 MobclickAgent.onEvent(mContext,"event_notify_weichat_friends");
-                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，女生们专属的旅行应用。桃子旅行搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
+                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
                 break;
         }
     }
