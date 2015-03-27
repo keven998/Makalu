@@ -19,14 +19,11 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
-import com.easemob.chat.EMMessage;
-import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 欢迎页，等待2秒，进入主界面

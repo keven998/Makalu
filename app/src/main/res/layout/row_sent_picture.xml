@@ -37,10 +37,11 @@
 
             <com.aizou.peachtravel.common.widget.MaskImage
                 android:id="@+id/iv_sendPicture"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
                 mask:mask="@drawable/chatto_image_mask"
+                mask:minWidth="120dp"
                 />
         </RelativeLayout>	
         <LinearLayout

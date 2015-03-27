@@ -21,6 +21,7 @@ import com.aizou.peachtravel.R;
  */
 public class MaskImage extends ImageView {
     int mMaskSource=0;
+    int minWidth;
 
     public MaskImage(Context context){
         super(context);
@@ -29,12 +30,12 @@ public class MaskImage extends ImageView {
         super(context, attrs);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MaskImage, 0, 0);
         mMaskSource = a.getResourceId(R.styleable.MaskImage_mask, 0);
+        minWidth = a.getDimensionPixelSize(R.styleable.MaskImage_minWidth,0);
         a.recycle();
     }
     @Override
     public void setImageBitmap(Bitmap bm) {
         Bitmap original = bm;
-        int minWidth=getMeasuredWidth();
         if(minWidth>bm.getWidth()){
             int height =minWidth* bm.getHeight()/bm.getWidth();
             original = Bitmap.createScaledBitmap(bm,minWidth,height,true);
