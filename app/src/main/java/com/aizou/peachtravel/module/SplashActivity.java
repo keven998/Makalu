@@ -30,7 +30,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
  */
 public class SplashActivity extends PeachBaseActivity {
 	private final int SPLASH_DISPLAY_LENGHT = 2000; // 延迟启动
-	private boolean showSplash = true;
+	private boolean showSplash = false;
     private ImageView splashIv;
     Handler handler;
 
