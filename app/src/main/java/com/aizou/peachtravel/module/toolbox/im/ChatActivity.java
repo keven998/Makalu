@@ -31,7 +31,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -87,6 +91,7 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKModel;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.dest.SearchAllActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteSearchActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
@@ -173,6 +178,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
 	public static final String COPY_IMAGE = "EASEMOBIMG";
     private TitleHeaderBar titleHeaderBar;
+    private DrawerLayout drawerLayout;
 	private View recordingContainer;
 	private ImageView micImage;
 	private TextView recordingHint;
@@ -241,6 +247,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 */
 	protected void initView() {
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.title_bar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		recordingContainer = findViewById(R.id.recording_container);
 		micImage = (ImageView) findViewById(R.id.mic_image);
 		recordingHint = (TextView) findViewById(R.id.recording_hint);
@@ -368,7 +375,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
+                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityWithNoAnim(intent);
                 overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
@@ -404,12 +411,26 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             if(group!=null){
                 titleHeaderBar.getTitleTextView().setText(group.getGroupName());
             }
+            Fragment fragment = new GroupDetailFragment();
+            Bundle args = new Bundle();
+            args.putString("groupId",toChatUsername);
+            fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.menu_frame, fragment).commit();
             titleHeaderBar.setRightOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext,GroupDetailsActivity.class);
-                    intent.putExtra("groupId",toChatUsername);
-                    startActivity(intent);
+//                    Intent intent = new Intent(mContext,GroupDetailsActivity.class);
+//                    intent.putExtra("groupId",toChatUsername);
+//                    startActivity(intent);
+                    //END即gravity.right 从右向左显示   START即left  从左向右弹出显示
+                    if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+                        drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
+                    } else {
+                        drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
+                    }
+
                 }
             });
 

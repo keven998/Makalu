@@ -302,6 +302,12 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
+            android:name=".module.toolbox.im.ContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            >
+        </activity>
+        <activity
             android:name=".module.toolbox.im.IMShareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"

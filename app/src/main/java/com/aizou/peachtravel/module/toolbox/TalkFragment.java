@@ -40,6 +40,7 @@ import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
+import com.aizou.peachtravel.module.toolbox.im.ContactActivity;
 import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ChatAllHistoryAdapter;
 import com.easemob.chat.EMChat;
@@ -201,6 +202,13 @@ public class TalkFragment extends PeachBaseFragment {
 //
 //            }
 //        });
+        btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ContactActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

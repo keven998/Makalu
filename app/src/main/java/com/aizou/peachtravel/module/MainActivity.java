@@ -104,6 +104,7 @@ public class MainActivity extends PeachBaseActivity {
         List<String> blacklist = null;
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
+        initData();
 
     }
     @Override
@@ -117,6 +118,7 @@ public class MainActivity extends PeachBaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
+        initData();
     }
 
     private void initData(){
@@ -296,13 +298,6 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(2);
-        registerReceiver(msgReceiver, intentFilter);
-        // 注册一个离线消息的BroadcastReceiver
-        IntentFilter offlineMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-                .getOfflineMessageBroadcastAction());
-        registerReceiver(offlineMessageReceiver, offlineMessageIntentFilter);
         if (!isConflict){
             updateUnreadMsgCount();
             EMChatManager.getInstance().activityResumed();
@@ -313,8 +308,6 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(msgReceiver);
-        unregisterReceiver(offlineMessageReceiver);
     }
 
     @Override
