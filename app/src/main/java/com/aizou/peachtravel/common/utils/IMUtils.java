@@ -154,7 +154,7 @@ public class IMUtils {
             IMUser imUser = IMUserRepository.getContactByUserName(context, message.getFrom());
             if(imUser!=null){
                 imUser.setNick(user.nickName);
-//                imUser.setAvatar(user.avatar);
+                imUser.setAvatar(user.avatar);
                 imUser.setUserId(user.userId);
                 imUser.setAvatarSmall(user.avatar);
             }else{
@@ -162,7 +162,7 @@ public class IMUtils {
                 imUser.setUsername(message.getFrom());
                 imUser.setNick(user.nickName);
                 imUser.setUserId(user.userId);
-//                imUser.setAvatar(user.avatar);
+                imUser.setAvatar(user.avatar);
                 imUser.setAvatarSmall(user.avatar);
 
             }

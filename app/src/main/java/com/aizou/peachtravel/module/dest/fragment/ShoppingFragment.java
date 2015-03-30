@@ -3,7 +3,6 @@ package com.aizou.peachtravel.module.dest.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +26,10 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
@@ -38,7 +38,8 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.dslv.DragSortController;
 import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
-import com.aizou.peachtravel.module.dest.OnEditModeChangeListener;
+import com.aizou.peachtravel.config.PeachApplication;
+import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
 import com.aizou.peachtravel.module.dest.PoiListActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -51,10 +52,10 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/29.
  */
-public class ShoppingFragment extends PeachBaseFragment implements OnEditModeChangeListener {
+public class ShoppingFragment extends PeachBaseFragment implements OnStrategyModeChangeListener {
 
     public final static int ADD_SHOPPING_REQUEST_CODE=103;
-    private OnEditModeChangeListener mOnEditModeChangeListener;
+    private OnStrategyModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
     View addFooter;
@@ -76,7 +77,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
     @Override
     public void onAttach(Activity activity) {
         try {
-            mOnEditModeChangeListener = (OnEditModeChangeListener) activity;
+            mOnEditModeChangeListener = (OnStrategyModeChangeListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement On OnEditModeChangeListener");
         }
@@ -93,9 +94,20 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
         return ((StrategyActivity) getActivity()).getStrategy();
 
     }
+    private void setAddView(StrategyBean strategyBean){
+        final PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
+        if(addFooter!=null){
+            if (user.userId != strategyBean.userId) {
+                addFooter.setVisibility(View.GONE);
+            }else{
+                addFooter.setVisibility(View.VISIBLE);
+            }
+        }
 
+    }
     private void initData() {
         final StrategyBean strategyBean = getStrategy();
+        setAddView(strategyBean);
         DragSortController controller = new DragSortController(mEditDslv);
         controller.setDragHandleId(R.id.drag_handle);
         controller.setBackgroundColor(Color.TRANSPARENT);
@@ -152,6 +164,11 @@ public class ShoppingFragment extends PeachBaseFragment implements OnEditModeCha
             mShoppingAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public void onCopyStrategy() {
+        setAddView(getStrategy());
     }
 
     public class ShoppingAdapter extends BaseAdapter implements

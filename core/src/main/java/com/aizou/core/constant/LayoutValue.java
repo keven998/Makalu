@@ -2,7 +2,6 @@ package com.aizou.core.constant;
 
 /**
  * 文件名	：屏幕尺寸相关常量
- * @author xby
  */
 public class LayoutValue {
 	/** 状态栏的高度 */

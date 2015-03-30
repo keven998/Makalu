@@ -21,21 +21,18 @@ import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.chat.EMChat;
-import com.easemob.chat.EMMessage;
-import com.igexin.sdk.PushManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 欢迎页，等待2秒，进入主界面
  */
 public class SplashActivity extends PeachBaseActivity {
 	private final int SPLASH_DISPLAY_LENGHT = 2000; // 延迟启动
-	private boolean showSplash = true;
+	private boolean showSplash = false;
     private ImageView splashIv;
     Handler handler;
 
