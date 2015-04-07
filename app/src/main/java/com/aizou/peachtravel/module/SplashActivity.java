@@ -64,7 +64,7 @@ public class SplashActivity extends PeachBaseActivity {
             @Override
             public void run() {
                 if (isFromTalk && user != null) {
-                    Intent intent = new Intent(mContext, IMMainActivity.class);
+                    Intent intent = new Intent(mContext, MainActivity.class);
                     startActivityWithNoAnim(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
