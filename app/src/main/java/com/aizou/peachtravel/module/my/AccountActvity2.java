@@ -64,8 +64,8 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar lyHeaderBarTitleWrap;
-    @InjectView(R.id.rv_photos)
-    RecyclerView rvPhotos;
+    /*@InjectView(R.id.rv_photos)
+    RecyclerView rvPhotos;*/
     @InjectView(R.id.tv_nickname)
     TextView tvNickname;
     @InjectView(R.id.ll_nickname)

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_backgroud">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/title_bar_background"
+        >
+
+        <TextView
+            android:id="@+id/expert_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/nav_back_normal"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="left|center_vertical"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="桃子达人"
+            android:textColor="@color/base_color_black"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/expert_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:drawableRight="@drawable/favorite_filter"
+            android:layout_marginRight="5dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/home_title_color"
+            android:layout_gravity="bottom"/>
+
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/search_expert_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/ic_search"
+        android:paddingLeft="10dp"
+        android:gravity="center"
+        android:hint="姓名或拼音首字母"
+        android:textSize="17sp"
+        android:background="@drawable/search_box_half_radius"
+        android:textColor="@color/base_text_color_text_placeholder"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <ListView
+        android:id="@+id/expert_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:dividerHeight="0.8dp"
+        />
+
+</LinearLayout>

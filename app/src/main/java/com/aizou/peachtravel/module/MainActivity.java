@@ -13,6 +13,7 @@ import android.widget.CheckedTextView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
@@ -21,6 +22,7 @@ import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
@@ -32,6 +34,7 @@ import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.dest.RecDestFragment;
+import com.aizou.peachtravel.module.dest.TripFragment;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.TalkFragment;
@@ -39,6 +42,7 @@ import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.GroupsActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
+import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
@@ -50,6 +54,7 @@ import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,10 +73,10 @@ public class MainActivity extends PeachBaseActivity {
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, RecDestFragment.class, MyFragment.class,};
+    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class,};
 
    // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home_talk, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
+    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
             };
     private String[] tabTitle = {"Talk", "旅游", "我"};
 
@@ -91,11 +96,11 @@ public class MainActivity extends PeachBaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        if(!EMChat.getInstance().isLoggedIn()){
+        /*if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
-        }
+        }*/
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){
@@ -113,11 +118,11 @@ public class MainActivity extends PeachBaseActivity {
         if (getIntent().getBooleanExtra("conflict", false) ){
             showConflictDialog();
         }
-        if(!EMChat.getInstance().isLoggedIn()){
+        /*if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
-        }
+        }*/
         initData();
     }
 
@@ -210,7 +215,7 @@ public class MainActivity extends PeachBaseActivity {
     private void refreshChatHistoryFragment(){
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
         if(talkFragment != null){
-            talkFragment.refresh();
+                talkFragment.refresh();
         }
     }
 
@@ -256,21 +261,10 @@ public class MainActivity extends PeachBaseActivity {
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String s) {
-                if (s.equals(mTagArray[0])) {
-                } else if (s.equals(mTagArray[1])) {
-                    RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
-                    if (fg != null) {
-                        fg.reloadData();
-                    }
-                }
-            }
-        });
+        mTabHost.getTabWidget().setDividerDrawable(null);
+
         //得到fragment的个数
         int count = fragmentArray.length;
-
         for(int i = 0; i < count; i++){
             //为每一个Tab按钮设置图标、文字和内容
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(getTabItemView(i));
@@ -278,6 +272,77 @@ public class MainActivity extends PeachBaseActivity {
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String s) {
+                ToastUtil.getInstance(MainActivity.this).showToast("s="+s+"=="+mTagArray[0]);
+                if (s.equals(mTagArray[0])) {
+                    if(!EMChat.getInstance().isLoggedIn()){
+                        ToastUtil.getInstance(MainActivity.this).showToast("不要执行");
+                        showLogDialog();
+                    }
+                } else if (s.equals(mTagArray[1])) {
+                  /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
+                    if (fg != null) {
+                        fg.reloadData();
+                    }*/
+                }
+            }
+        });
+        mTabHost.setCurrentTab(1);
+    }
+
+    public void showLogDialog(){
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage("亲，需要登录哦!");
+        dialog.setPositiveButton("确定",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                DialogManager.getInstance().showLoadingDialog(mContext,"正在切换");
+                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                Intent intent =new Intent(mContext,LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                               // finish();
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.getInstance(MainActivity.this).showToast("呃～网络好像找不到了");
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            }
+        });
+        dialog.setNegativeButton("取消",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 
@@ -291,7 +356,7 @@ public class MainActivity extends PeachBaseActivity {
         }
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
         imageView.setCompoundDrawablesWithIntrinsicBounds(0, mImageViewArray[index], 0, 0);
-        imageView.setText(tabTitle[index]);
+        //imageView.setText(tabTitle[index]);
         return view;
     }
 

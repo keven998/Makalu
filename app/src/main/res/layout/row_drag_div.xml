@@ -2,25 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="10dp"
-    android:paddingTop="15dp">
+    android:orientation="vertical">
 
-    <View
+    <!--<View
         android:id="@+id/vw_top"
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
-        android:background="@color/app_theme_color" />
+        android:background="@color/app_theme_color" />-->
 
     <FrameLayout
-        android:layout_below="@id/vw_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:background="@color/base_color_white">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:background="@color/base_border_color"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="20dp"
+            />
 
 
         <RelativeLayout
@@ -35,8 +38,11 @@
                 android:id="@+id/tv_day_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/app_theme_color"
-                android:textSize="18sp"/>
+                android:textColor="@color/base_color_black"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/ic_about"
+                android:drawablePadding="5dp"
+                android:text="第一天"/>
 
             <Button
                 android:id="@+id/iv_add_poi"
@@ -47,7 +53,15 @@
                 android:text="添加安排"
                 android:textColor="@color/base_color_white"
                 android:textSize="13sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/day_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location"
+                android:layout_alignParentRight="true"
+                />
 
             <TextView
                 android:id="@+id/tv_loc_list"
@@ -65,7 +79,8 @@
                 android:singleLine="true"
                 android:layout_alignBottom="@id/tv_day_index"
                 android:textColor="@color/base_text_color_text_hint"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

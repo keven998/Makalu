@@ -14,8 +14,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/nav_title_bar">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/base_color_white">
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -26,7 +26,7 @@
             android:singleLine="true"
             android:textSize="18sp"
             android:text="身边"
-            android:textColor="@color/base_color_white"/>
+            android:textColor="@color/base_color_black"/>
 
         <ImageView
             android:id="@+id/tv_title_bar_left"
@@ -37,7 +37,13 @@
             android:paddingLeft="10dp"
             android:paddingRight="20dp"
             android:scaleType="center"
-            android:src="@drawable/selector_ic_nav_back_white"/>
+            android:src="@drawable/selector_ic_nav_back"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@color/app_theme_color_secondary"/>
 
     </FrameLayout>
 

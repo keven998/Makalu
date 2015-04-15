@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_titlebar">
+        android:background="@color/base_color_white">
 
         <TextView
             android:id="@+id/tv_title_add"
@@ -16,7 +16,7 @@
             android:layout_alignParentLeft="true"
             android:drawableLeft="@drawable/ic_add_selector"
             android:paddingLeft="12dp"
-            android:paddingRight="30dp" />
+            android:paddingRight="10dp" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -29,13 +29,11 @@
             android:textColor="@color/base_text_color_title"
             android:textSize="17sp" />
 
-
         <RelativeLayout
             android:id="@+id/btn_container_address_list"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true">
-
 
             <ImageView
                 android:id="@+id/btn_address_list"
@@ -64,19 +62,25 @@
                 android:textSize="12sp"
                 android:visibility="visible" />
 
-        </RelativeLayout>
-
+         </RelativeLayout>
 
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/list"
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="#00000000"
-        android:divider="@color/base_divider_color"
-        android:dividerHeight="0.75dp"
-        android:listSelector="@android:color/transparent" />
+        android:layout_height="1dp"
+        android:background="@color/home_title_color"
+        />
+
+    <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/base_divider_color"
+            android:dividerHeight="0.75dp"
+            android:listSelector="@android:color/transparent" />
 
     <LinearLayout
         android:id="@+id/empty_view"

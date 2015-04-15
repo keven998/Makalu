@@ -127,29 +127,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private void initView() {
         setContentView(R.layout.activity_strategy);
         ButterKnife.inject(this);
-        mStrategyViewpager.setCanScroll(true);
-        layoutBar = new LayoutBar(mContext, R.layout.tab_strategy, ScrollBar.Gravity.CENTENT);
-        indexTv = (TextView) layoutBar.getSlideView();
-        mStrategyIndicator.setScrollBar(layoutBar);
-        // 设置viewpager保留界面不重新加载的页面数量
+        mStrategyViewpager.setCanScroll(false);
+       // indexTv = (TextView)LayoutInflater.from(this).inflate(R.layout.tab_strategy,null);
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(2);
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
-            @Override
-            public void onIndicatorPageChange(int preItem, int currentItem) {
-                curIndex = currentItem;
-                if(curIndex==0){
-                    indexTv.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_plan_selected, 0, 0);
-                }else if(curIndex==1){
-                    indexTv.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_delicacy_selected, 0, 0);
-                }else if(curIndex==2){
-                    indexTv.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_shopping_selected, 0, 0);
-                }
-
-            }
-        });
         mTvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,14 +432,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         indicatorViewPager.setCurrentItem(curIndex, false);
-        if(curIndex==0){
-            LogUtil.d("indicator--onDraw setDrawable");
-            indexTv.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_tab_plan_selected,0,0);
-        }else if(curIndex==1){
-            indexTv.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_tab_delicacy_selected,0,0);
-        }else if(curIndex==2){
-            indexTv.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_tab_shopping_selected,0,0);
-        }
+
 //        mStrategyViewpager.postInvalidate();
 //
 //        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
@@ -537,8 +513,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"旅程", "美食收集", "逛收集",};
-        private int[] tabIcons = {R.drawable.ic_tab_plan_unselect, R.drawable.ic_tab_delicacy_normal, R.drawable.ic_tab_shopping_normal};
+        private String[] tabNames = {"旅程", "美食收集", "购物收集",};
+        private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 

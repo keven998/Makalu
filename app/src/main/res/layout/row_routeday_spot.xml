@@ -3,14 +3,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:background="@drawable/selector_frame_white_card">
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="68dp"
+        android:background="@color/base_border_color"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="20dp"
+        />
 
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/base_border_color"
+        android:layout_gravity="top"
+        android:layout_marginLeft="35dp"
+        />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_frame_white_card"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -27,7 +40,7 @@
         <RelativeLayout
             android:id="@+id/rl_content"
             android:layout_width="0dp"
-            android:layout_height="62dp"
+            android:layout_height="68dp"
             android:layout_weight="1">
 
             <ImageView
@@ -69,12 +82,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/spot_image_iv"
                 android:layout_toRightOf="@id/spot_image_iv"
-                android:drawableLeft="@drawable/ic_time"
                 android:layout_marginLeft="15dp"
-                android:drawablePadding="2dp"
                 android:paddingBottom="2dp"
                 android:singleLine="true"
-                android:textColor="@color/base_text_color_text_placeholder"
+                android:textColor="@color/main_color_second"
                 android:textSize="11sp"/>
         </RelativeLayout>
 

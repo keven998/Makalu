@@ -230,7 +230,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 //                holder.msgState.setVisibility(View.VISIBLE);
                 Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_send_fail);
                 drawable.setBounds(1, 1, LocalDisplay.dp2px(15), LocalDisplay.dp2px(15));
-                holder.message.setCompoundDrawables(null, null, drawable, null);
+                holder.message.setCompoundDrawables(drawable, null, null, null);
             } else {
 //                holder.msgState.setVisibility(View.GONE);
                 holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

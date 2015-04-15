@@ -1,12 +1,15 @@
 package com.aizou.peachtravel.module;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
@@ -19,6 +22,7 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.module.my.LoginActivity;
+import com.aizou.peachtravel.module.my.RegActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.chat.EMChat;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -30,10 +34,12 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 /**
  * 欢迎页，等待2秒，进入主界面
  */
-public class SplashActivity extends PeachBaseActivity {
-	private final int SPLASH_DISPLAY_LENGHT = 2000; // 延迟启动
+public class SplashActivity extends PeachBaseActivity implements View.OnClickListener{
+	private final int SPLASH_DISPLAY_LENGHT = 1500; // 延迟启动
 	private boolean showSplash = false;
     private ImageView splashIv;
+    private Button sp_log,sp_reg;
+    private TextView sp_bounce;
     Handler handler;
 
     @Override
@@ -80,9 +86,15 @@ public class SplashActivity extends PeachBaseActivity {
                             startActivityWithNoAnim(mainActivity);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         }else{
-                            Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class);
+                            sp_log.setVisibility(View.VISIBLE);
+                            sp_reg.setVisibility(View.VISIBLE);
+                            sp_bounce.setVisibility(View.VISIBLE);
+                            sp_log.setOnClickListener(SplashActivity.this);
+                            sp_reg.setOnClickListener(SplashActivity.this);
+                            sp_bounce.setOnClickListener(SplashActivity.this);
+                           /* Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class);
                             startActivityWithNoAnim(mainActivity);
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);*/
                         }
 
 
@@ -148,16 +160,54 @@ public class SplashActivity extends PeachBaseActivity {
         handler = null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     protected void initView() {
 		// 全屏设置
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_splash);
         splashIv = (ImageView) findViewById(R.id.iv_splash);
+        sp_log = (Button) findViewById(R.id.sp_log);
+        sp_reg = (Button) findViewById(R.id.sp_reg);
+        sp_bounce = (TextView) findViewById(R.id.sp_bounce);
 	}
 
     private void getStroy(){
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.sp_log:
+                Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class);
+                startActivityWithNoAnim(logActivity);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+
+            case R.id.sp_reg:
+                Intent regActivity = new Intent(SplashActivity.this, RegActivity.class);
+                startActivityWithNoAnim(regActivity);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+
+            case R.id.sp_bounce:
+                Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                startActivityWithNoAnim(mainActivity);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                System.out.print("test ....................");
+                break;
+
+            default:break;
+        }
+    }
 }

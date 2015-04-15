@@ -26,6 +26,10 @@
     <color name="base_color_white_trans">#ddffffff</color>
     <color name="base_color_black">#000000</color>
     <color name="base_color_red">#ff0000</color>
+    <color name="base_color_purple">#7D26CD</color>
+    <color name="base_color_orange">#FF7F24</color>
+    <color name="base_color_light_black">#1C1C1C</color>
+    <color name="base_color_light_green">#40E0D0</color>
 
 
     <color name="base_content_color">#22b59a</color>
@@ -41,12 +45,14 @@
     <color name="base_border_color">#b3b3b3</color>
     <color name="base_divider_color">#eeeeee</color>
     <color name="base_highlight_color">#f4f4f4</color>
+    <color name="back_blue_color">#0000FF</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">#eeeeee</drawable>
 
     <drawable name="sub_list_cell_item">#f8f9f9</drawable>
     <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>
+
 
     <!-- Exceptions colors -->
     <color name="exception_button_color">#5fcf80</color>

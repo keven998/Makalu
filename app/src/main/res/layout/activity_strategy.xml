@@ -11,29 +11,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="62dp"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="@dimen/title_bar_height" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="62dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/app_theme_color"
+        android:background="@color/base_color_white"
         >
 
-        <View
+       <!-- <View
             android:layout_width="180dp"
             android:layout_height="10dp"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginTop="22dp"
-            android:background="#df4859" />
+            android:background="#df4859" />-->
 
         <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
             android:id="@+id/strategy_indicator"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/base_border_color"
+            android:layout_alignParentTop="true"
+            />
 
 
     </RelativeLayout>
@@ -41,7 +48,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_titlebar">
+        android:background="@color/title_bar_background">
 
         <TextView
             android:id="@+id/tv_title_back"
@@ -52,28 +59,41 @@
             android:paddingLeft="12dp"
             android:paddingRight="30dp" />
 
+        <TextView
+            android:id="@+id/strategy_title"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="云南游玩哈"
+            android:textSize="18sp"
+            android:textColor="@color/base_color_black"
+            android:singleLine="true"
+            android:ellipsize="end"
+            />
+
         <CheckedTextView
             android:id="@+id/iv_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/iv_more"
             android:checked="false"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:paddingRight="18dp"
+            android:paddingRight="5dp"
             android:drawableLeft="@drawable/checker_ic_plan_edit"
-            android:visibility="gone" />
+            />
 
         <ImageView
             android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/iv_edit"
-            android:paddingLeft="25dp"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_more"
-            android:visibility="gone" />
+            />
 
         <TextView
             android:id="@+id/tv_copy_guide"
@@ -91,7 +111,13 @@
             android:layout_centerVertical="true"
             android:textColor="@color/base_color_white"
             android:textSize="15sp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/home_title_color"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

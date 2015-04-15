@@ -7,19 +7,36 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/title_bar_height">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/login_frame_bg">
+
+            <TextView
+                android:id="@+id/tv_title_bar_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="18sp"
+                android:text="我"
+                android:textColor="@color/base_color_white"/>
+
             <LinearLayout android:id="@+id/rl_user_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_frame_bg"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -52,24 +69,59 @@
                     android:layout_marginLeft="11dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1">
-                    <TextView android:id="@+id/tv_nickname"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="@color/base_color_white"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:text="未登录"/>
+                        android:id="@+id/base_line"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView android:id="@+id/tv_nickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/base_color_white"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:text="未登录"/>
+
+                        <TextView
+                            android:id="@+id/user_level"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/route_desc_num_color"
+                            android:textColor="@color/base_color_white"
+                            android:textSize="12sp"
+                            android:text="V2"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:layout_marginLeft="5dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/user_xingzuo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/base_color_white"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="5dp"
+                            android:text="狮子座"
+                            />
+
+                    </LinearLayout>
+
 
                     <TextView android:id="@+id/tv_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_nickname"
+                        android:layout_below="@id/base_line"
                         android:textSize="13sp"
                         android:layout_marginTop="2dp"
                         android:textStyle="italic"
                         android:textColor="@color/base_color_white"
-                        android:visibility="gone"/>
+                        android:text="dsf"
+                        android:visibility="gone"
+                        />
 
                     <TextView android:id="@+id/tv_sign"
                         android:layout_width="wrap_content"
@@ -80,31 +132,30 @@
                         android:textStyle="italic"
                         android:maxLines="2"
                         android:textColor="@color/base_color_white"
+                        android:text="fdsafas"
                         android:visibility="gone"/>
-
-                    <Button android:id="@+id/btn_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/tv_nickname"
-                        android:background="@drawable/btn_login_button"
-                        android:layout_alignLeft="@id/tv_nickname"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="25dp"
-                        android:paddingRight="25dp"
-                        android:text="登录"
-                        android:textColor="@color/them_botton_text_color"
-                        android:textSize="14sp"/>
 
                     <Button android:id="@+id/btn_reg"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:layout_toRightOf="@id/btn_login"
-                        android:layout_alignTop="@id/btn_login"
                         android:background="@drawable/btn_login_button"
                         android:layout_marginLeft="8dp"
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp"
+                        android:layout_marginRight="10dp"
                         android:text="注册"
+                        android:textColor="@color/them_botton_text_color"
+                        android:textSize="14sp"/>
+
+                    <Button android:id="@+id/btn_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="@drawable/btn_login_button"
+                        android:layout_toRightOf="@id/btn_reg"
+                        android:layout_alignTop="@id/btn_reg"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:text="登录"
                         android:textColor="@color/them_botton_text_color"
                         android:textSize="14sp"/>
 
@@ -117,6 +168,7 @@
                     android:src="@drawable/cell_accessory_white"
                     android:layout_marginRight="18dp"/>
 
+            </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -139,7 +191,8 @@
                     android:gravity="center_vertical"
                     android:text="分享绑定"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/ll_message_center"
@@ -154,10 +207,12 @@
                     android:drawableLeft="@drawable/ic_my_favorite"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/right_arrow_icon"
                     android:text="我的收藏"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="18sp"
+                    android:visibility="visible"/>
+
 
                 <TextView
                     android:id="@+id/ll_push_friends"
@@ -172,10 +227,10 @@
                     android:paddingBottom="14dp"
                     android:drawableLeft="@drawable/ic_share_to_friend"
                     android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/right_arrow_icon"
                     android:text="推荐给微信好友"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -196,10 +251,10 @@
                     android:paddingBottom="14dp"
                     android:drawableLeft="@drawable/ic_setting"
                     android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/right_arrow_icon"
                     android:text="设置"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/ll_about"
@@ -214,10 +269,10 @@
                     android:paddingBottom="14dp"
                     android:drawableLeft="@drawable/ic_about"
                     android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/right_arrow_icon"
                     android:text="关于桃子旅行"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -225,19 +280,9 @@
     
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/nav_title_bar">
+        android:layout_height="0dp">
 
-        <TextView
-            android:id="@+id/tv_title_bar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textSize="18sp"
-            android:text="我"
-            android:textColor="@color/base_color_white"/>
+
 
     </FrameLayout>
 

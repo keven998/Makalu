@@ -79,7 +79,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.ll_message_center).setOnClickListener(this);
         rootView.findViewById(R.id.ll_push_friends).setOnClickListener(this);
         rootView.findViewById(R.id.rl_user_info).setOnClickListener(this);
-
+       // rootView.findViewById(R.id.guide_favour).setOnClickListener(this);  //新添的指路达人
         return rootView;
     }
 
@@ -91,16 +91,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             genderIv.setVisibility(View.GONE);
             View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
+            view.findViewById(R.id.base_line).setVisibility(View.GONE);
             view.findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
-            nickNameTv.setText("未登录");
+           // nickNameTv.setText("未登录");
         } else {
             idTv.setVisibility(View.VISIBLE);
             signTv.setVisibility(View.VISIBLE);
             genderIv.setVisibility(View.VISIBLE);
             View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.base_line).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btn_login).setVisibility(View.GONE);
             view.findViewById(R.id.btn_reg).setVisibility(View.GONE);
             if (user.gender.equalsIgnoreCase("M")) {

@@ -10,4 +10,53 @@
         android:background="@color/base_color_white"
         android:scaleType="centerCrop"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:layout_gravity="bottom"
+        >
+
+        <Button
+            android:id="@+id/sp_reg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/back_blue_color"
+            android:layout_marginRight="20dp"
+            android:textSize="20sp"
+            android:textColor="@color/base_color_white"
+            android:text="注册"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/sp_log"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/base_color_red"
+            android:textSize="20sp"
+            android:textColor="@color/base_color_white"
+            android:text="登录"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/sp_bounce"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="跳过"
+        android:textColor="@color/base_color_purple"
+        android:textSize="20dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        />
+
+
 </FrameLayout>

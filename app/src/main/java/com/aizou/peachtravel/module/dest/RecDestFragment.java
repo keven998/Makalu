@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -55,7 +56,6 @@ public class RecDestFragment extends PeachBaseFragment {
     private WantToLayout wantToLayout;
     private DynamicBox box;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rec_dest, null);
@@ -66,6 +66,12 @@ public class RecDestFragment extends PeachBaseFragment {
                 MobclickAgent.onEvent(getActivity(),"event_go_search");
                 Intent intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivity(intent);
+            }
+        });
+        rootView.findViewById(R.id.des_back).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                (getActivity()).finish();
             }
         });
         box = new DynamicBox(getActivity(),recDestContainer);

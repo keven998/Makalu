@@ -32,17 +32,21 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachConversation;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactActivity;
 import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ChatAllHistoryAdapter;
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
@@ -110,10 +114,66 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        listView = (ListView) getView().findViewById(R.id.list);
+        adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+        // 设置adapter
+        listView.setAdapter(adapter);
+        tvTitleAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EMChat.getInstance().isLoggedIn()){
+                    showActionDialog();}
+                else{
+                    showLogDialog();
+                }
+            }
+        });
+//        // 搜索框
+//        query = (EditText) getView().findViewById(R.id.query);
+//        // 搜索框中清除button
+//        clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
+//        query.addTextChangedListener(new TextWatcher() {
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                adapter.getFilter().filter(s);
+//                if (s.length() > 0) {
+//                    clearSearch.setVisibility(View.VISIBLE);
+//                } else {
+//                    clearSearch.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
+//        clearSearch.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                query.getText().clear();
+//
+//            }
+//        });
+        btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EMChat.getInstance().isLoggedIn()){
+                    Intent intent = new Intent(getActivity(), ContactActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
+                }else{
+                    showLogDialog();
+                }
+            }
+        });
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
-        if(!EMChat.getInstance().isLoggedIn())
+
+        if(!EMChat.getInstance().isLoggedIn()){
             return;
+        }
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
@@ -124,10 +184,7 @@ public class TalkFragment extends PeachBaseFragment {
 //        }
         loadConversationsWithRecentChat();
         updateGroupsInfo();
-        listView = (ListView) getView().findViewById(R.id.list);
-        adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
-        // 设置adapter
-        listView.setAdapter(adapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -168,48 +225,59 @@ public class TalkFragment extends PeachBaseFragment {
                 return false;
             }
         });
-        tvTitleAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActionDialog();
-            }
-        });
-//        // 搜索框
-//        query = (EditText) getView().findViewById(R.id.query);
-//        // 搜索框中清除button
-//        clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
-//        query.addTextChangedListener(new TextWatcher() {
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                adapter.getFilter().filter(s);
-//                if (s.length() > 0) {
-//                    clearSearch.setVisibility(View.VISIBLE);
-//                } else {
-//                    clearSearch.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
-//        clearSearch.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                query.getText().clear();
-//
-//            }
-//        });
-        btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ContactActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
 
+    public void showLogDialog(){
+        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+        dialog.setTitle("提示");
+        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage("亲，需要登录哦!");
+        dialog.setPositiveButton("确定",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                DialogManager.getInstance().showLoadingDialog(getActivity(),"正在切换");
+                AccountManager.getInstance().logout(getActivity(), false, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                Intent intent =new Intent(getActivity(),LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                               // getActivity().finish();
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.getInstance(getActivity()).showToast("呃～网络好像找不到了");
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            }
+        });
+        dialog.setNegativeButton("取消",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void showActionDialog() {
@@ -223,6 +291,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_create_new_talk");
                 startActivityForResult(new Intent( getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
                 dialog.dismiss();
             }
         });
@@ -233,6 +302,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
                 startActivity(new Intent( getActivity(), AddContactActivity.class));
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
                 dialog.dismiss();
             }
         });
@@ -255,7 +325,7 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
 
-    private void setEmptyView() {
+    public void setEmptyView() {
 //        listView.setEmptyView();
         if (listView.getEmptyView() == null) {
             View emptyView = getActivity().findViewById(R.id.empty_view);
@@ -468,12 +538,16 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        //返回页面的动画样式
+        //getActivity().overridePendingTransition(R.anim.push_bottom_out,R.anim.push_bottom_in);
         MobclickAgent.onPageStart("page_talk_lists");
         if (!hidden) {
             refresh();
         }
-        if (listView.getAdapter().getCount() <= 0) {
-            setEmptyView();
+        if(EMChat.getInstance().isLoggedIn()) {
+            if (listView.getAdapter().getCount() <= 0) {
+                setEmptyView();
+            }
         }
     }
 
@@ -516,4 +590,6 @@ public class TalkFragment extends PeachBaseFragment {
         super.onDestroyView();
         ButterKnife.reset(this);
     }
+
+
 }
