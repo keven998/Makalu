@@ -1,37 +1,56 @@
 package com.aizou.peachtravel.module.dest;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.DateUtil;
+import com.aizou.core.widget.DotView;
+import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
+import com.aizou.core.widget.pagerIndicator.viewpager.RecyclingPagerAdapter;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
+import com.aizou.peachtravel.bean.OperateBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.api.OtherApi;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.ImageZoomAnimator2;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
+import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
 import com.aizou.peachtravel.module.toolbox.StrategyListActivity;
+import com.aizou.peachtravel.module.toolbox.ToolboxFragment;
 import com.aizou.peachtravel.module.toolbox.im.ExpertListActivity;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
 
 /**
  * Created by lxp_dqm07 on 2015/4/11.
@@ -50,6 +69,8 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
     private String address;
     private double geoLat = -1;
     private double geoLng = -1;
+    private AutoScrollViewPager mVpTravel;
+    private DotView mDotView;
 
     private LocationManagerProxy mLocationManagerProxy;
 
@@ -58,6 +79,8 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.fragment_trip,null);
 
+        mVpTravel=(AutoScrollViewPager)rootView.findViewById(R.id.vp_travel);
+        mDotView=(DotView)rootView.findViewById(R.id.dot_view);
         lx_guide_favour=(TextView)rootView.findViewById(R.id.lx_guide_favour);
         lx_trip_plan=(TextView)rootView.findViewById(R.id.lx_trip_plan);
         lx_around=(TextView)rootView.findViewById(R.id.lx_around);
@@ -71,7 +94,141 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
 
+        getOperateData();
+
         return rootView;
+    }
+
+    private void getOperateData() {
+        OtherApi.getOperate(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson4List<OperateBean> operateResult = CommonJson4List.fromJson(result, OperateBean.class);
+                if (operateResult.code == 0) {
+                    bindOperateView(operateResult.result);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+
+    }
+
+    private void bindOperateView(final List<OperateBean> result) {
+        ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(getActivity(), result);
+        imagePagerAdapter.setInfiniteLoop(true);
+        mVpTravel.setAdapter(imagePagerAdapter);
+        mVpTravel.setStopScrollWhenTouch(true);
+        mVpTravel.setAutoScrollDurationFactor(6000);
+        mDotView.setNum(result.size());
+        mVpTravel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mDotView.setSelected(position % result.size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+//        scrollHandler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                int nextItem = mVpTravel.getCurrentItem() + 1;
+//                nextItem = (nextItem >= mVpTravel.getAdapter().getCount() ? 0 : nextItem);
+//                mVpTravel.setCurrentItem(nextItem);
+//                scrollHandler.sendEmptyMessageDelayed(0, 6000);
+//            }
+//        };
+//        scrollHandler.sendEmptyMessageDelayed(0, 6000);
+    }
+
+    public class ImagePagerAdapter extends RecyclingPagerAdapter {
+
+        private Context context;
+        private List<OperateBean> operateBeans;
+
+        private int size;
+        private boolean isInfiniteLoop;
+
+        private DisplayImageOptions options;
+
+        public ImagePagerAdapter(Context context, List<OperateBean> operateBeans) {
+            this.context = context;
+            this.operateBeans = operateBeans;
+            this.size = operateBeans.size();
+            isInfiniteLoop = false;
+
+            options = UILUtils.getDefaultOption();
+        }
+
+        @Override
+        public int getCount() {
+            // Infinite loop
+            return isInfiniteLoop ? Integer.MAX_VALUE : operateBeans.size();
+        }
+
+        /**
+         * get really position
+         *
+         * @param position
+         * @return
+         */
+        private int getPosition(int position) {
+            return isInfiniteLoop ? position % size : position;
+        }
+
+        @Override
+        public View getView(final int position, View view, ViewGroup container) {
+            ImageView imageView = (ImageView) view;
+            if (imageView == null) {
+                imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+            ImageLoader.getInstance().displayImage(
+                    operateBeans.get(getPosition(position)).cover, imageView, options
+            );
+            imageView.setTag(position);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MobclickAgent.onEvent(getActivity(), "event_click_opertion_page");
+                    Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
+                    intent.putExtra("url",operateBeans.get(getPosition(position)).link);
+                    startActivity(intent);
+                }
+            });
+            return imageView;
+        }
+
+
+        /**
+         * @return the isInfiniteLoop
+         */
+        public boolean isInfiniteLoop() {
+            return isInfiniteLoop;
+        }
+
+        /**
+         * @param isInfiniteLoop the isInfiniteLoop to set
+         */
+        public ImagePagerAdapter setInfiniteLoop(boolean isInfiniteLoop) {
+            this.isInfiniteLoop = isInfiniteLoop;
+            return this;
+        }
+
+
     }
 
     @Override
@@ -90,6 +247,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 }else{
                     Intent LoginIntent=new Intent(getActivity(), LoginActivity.class);
                     startActivity(LoginIntent);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                     ToastUtil.getInstance(getActivity()).showToast(" 请先登录");
                 }
                 break;

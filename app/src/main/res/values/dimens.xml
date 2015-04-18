@@ -16,6 +16,6 @@
 
     <dimen name="note_picture_size">100dp</dimen>
 
-    <dimen name="operation_section_height">210dp</dimen>
+    <dimen name="operation_section_height">180dp</dimen>
     <dimen name="spot_detail_picture_height">148dp</dimen>
 </resources>

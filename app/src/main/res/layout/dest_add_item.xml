@@ -9,15 +9,15 @@
         android:id="@+id/tv_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_text_color_subtitle"
-        android:background="@drawable/btn_has_add_city"
+        android:textColor="@color/base_color_white"
+        android:background="@drawable/checktext_select_dest_selected"
         android:clickable="true"
-        android:textSize="13sp"
-        android:paddingLeft="9dp"
-        android:paddingRight="6dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:drawablePadding="5dp"
-        android:drawableRight="@drawable/selecter_ic_select_destion_unchoose"/>
+        android:textSize="16sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/ic_refresh_white_18dp"/>
 
 </FrameLayout>

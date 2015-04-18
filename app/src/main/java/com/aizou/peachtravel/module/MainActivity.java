@@ -275,11 +275,12 @@ public class MainActivity extends PeachBaseActivity {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
-                ToastUtil.getInstance(MainActivity.this).showToast("s="+s+"=="+mTagArray[0]);
                 if (s.equals(mTagArray[0])) {
                     if(!EMChat.getInstance().isLoggedIn()){
-                        ToastUtil.getInstance(MainActivity.this).showToast("不要执行");
-                        showLogDialog();
+                        mTabHost.setCurrentTab(1);
+                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(logIntent);
+                        overridePendingTransition(R.anim.push_bottom_in,0);
                     }
                 } else if (s.equals(mTagArray[1])) {
                   /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
@@ -291,60 +292,6 @@ public class MainActivity extends PeachBaseActivity {
         });
         mTabHost.setCurrentTab(1);
     }
-
-    public void showLogDialog(){
-        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-        dialog.setTitle("提示");
-        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage("亲，需要登录哦!");
-        dialog.setPositiveButton("确定",new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext,"正在切换");
-                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent =new Intent(mContext,LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                               // finish();
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.getInstance(MainActivity.this).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
-            }
-        });
-        dialog.setNegativeButton("取消",new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
 
     /**
      * 给Tab按钮设置图标和文字
@@ -630,7 +577,7 @@ public class MainActivity extends PeachBaseActivity {
 
 
 
-    private void updateUnreadMsgCount(){
+    public void updateUnreadMsgCount(){
         int unreadMsgCountTotal = 0;
         unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount()+getUnreadAddressCountTotal();
         if (unreadMsgCountTotal > 0) {

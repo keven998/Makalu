@@ -142,4 +142,9 @@
         <item name="android:layout_marginTop">25dip</item>
     </style>
 
+    <!--Activity主题-->
+    <!--<style name="activityTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>-->
+
 </resources>

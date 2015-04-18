@@ -74,8 +74,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.ll_share_account).setOnClickListener(this);
         rootView.findViewById(R.id.ll_about).setOnClickListener(this);
         rootView.findViewById(R.id.ll_setting).setOnClickListener(this);
-        rootView.findViewById(R.id.btn_login).setOnClickListener(this);
-        rootView.findViewById(R.id.btn_reg).setOnClickListener(this);
         rootView.findViewById(R.id.ll_message_center).setOnClickListener(this);
         rootView.findViewById(R.id.ll_push_friends).setOnClickListener(this);
         rootView.findViewById(R.id.rl_user_info).setOnClickListener(this);
@@ -86,25 +84,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public void refresh(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
         if(user == null) {
-            idTv.setVisibility(View.GONE);
-            signTv.setVisibility(View.GONE);
             genderIv.setVisibility(View.GONE);
             View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
-            view.findViewById(R.id.base_line).setVisibility(View.GONE);
-            view.findViewById(R.id.btn_login).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.btn_reg).setVisibility(View.VISIBLE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
-           // nickNameTv.setText("未登录");
+            ToastUtil.getInstance(getActivity()).showToast("null 啊 未登录");
+            nickNameTv.setText("未登录");
+            idTv.setText("赶快加入旅FM的世界吧");
+            signTv.setText("");
         } else {
-            idTv.setVisibility(View.VISIBLE);
-            signTv.setVisibility(View.VISIBLE);
             genderIv.setVisibility(View.VISIBLE);
             View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.base_line).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.btn_login).setVisibility(View.GONE);
-            view.findViewById(R.id.btn_reg).setVisibility(View.GONE);
             if (user.gender.equalsIgnoreCase("M")) {
                 genderIv.setImageResource(R.drawable.ic_gender_man);
             } else if (user.gender.equalsIgnoreCase("F")) {
@@ -149,9 +140,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         switch(view.getId()) {
             case R.id.rl_user_info:
                 PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user == null) return;
-                Intent accountIntent = new Intent(getActivity(), AccountActvity2.class);
-                startActivity(accountIntent);
+                if (user == null) {
+                    Intent logIntent=new Intent(getActivity(),LoginActivity.class);
+                    startActivity(logIntent);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
+                }else{
+                    Intent accountIntent = new Intent(getActivity(), AccountActvity2.class);
+                    startActivity(accountIntent);
+                }
                 break;
 
             case R.id.ll_share_account:
@@ -172,7 +168,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 startActivity(settingIntent);
                 break;
 
-            case R.id.btn_login:
+           /* case R.id.btn_login:
                 Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(loginintent);
                 break;
@@ -180,7 +176,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             case R.id.btn_reg:
                 Intent regintent = new Intent(getActivity(), RegActivity.class);
                 startActivityForResult(regintent, LoginActivity.REQUEST_CODE_REG);
-                break;
+                break;*/
 
             case R.id.ll_message_center:
 //                Intent msgIntent = new Intent(getActivity(), MessageContents.class);

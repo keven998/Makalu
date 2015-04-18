@@ -14,11 +14,13 @@ import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.http.parser.IReponseParser;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SDcardLogUtil;
+import com.aizou.core.utils.StringUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.ResponseStream;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 
@@ -26,7 +28,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +189,76 @@ public class HttpManager {
         }
         return null;
     }
+
+
+    public static   String aysnRequest(final PTRequest request ) {
+        try {
+            final String url = request.getRequest().readUrl();
+            HttpUtils httpUtils = new HttpUtils();
+            if(request.getRequest().readUrl().startsWith("https")){
+                httpUtils.configSSLSocketFactory(SSLSocketFactory.getSocketFactory());
+            }
+            RequestParams requestParams = new RequestParams();
+            StringBuffer sb = new StringBuffer();
+            sb.append(url);
+            int i=0;
+            for(NameValuePair nv:request.getUrlParams()){
+                if(i==0){
+                    sb.append("?"+nv.getName()+"="+nv.getValue());
+                }else{
+                    sb.append("&"+nv.getName()+"="+nv.getValue());
+                }
+                i++;
+            }
+            LogUtil.d(TAG, "requestUrl = " + sb.toString());
+            List<NameValuePair> list = new ArrayList<NameValuePair>();
+            requestParams.addHeaders(request.getPTHeader().headers);
+            requestParams.setHeaders(request.getPTHeader().overwirdeHeaders);
+            requestParams.addQueryStringParameter(request.getRequest().getUrlParams());
+            requestParams.addBodyParameter(request.getRequest().getBodyParams());
+            HttpEntity entity = request.getRequest().getBodyEntity();
+            if (entity != null) {
+                requestParams.setBodyEntity(entity);
+            }
+
+
+            HttpRequest.HttpMethod httpMethod = HttpRequest.HttpMethod.GET;
+            if (request.getHttpMethod().equals(PTRequest.GET)) {
+                httpMethod = HttpRequest.HttpMethod.GET;
+            } else if (request.getHttpMethod().equals(PTRequest.POST)) {
+                httpMethod = HttpRequest.HttpMethod.POST;
+            } else if (request.getHttpMethod().equals(PTRequest.PUT)) {
+                httpMethod = HttpRequest.HttpMethod.PUT;
+            } else if (request.getHttpMethod().equals(PTRequest.DELETE)) {
+                httpMethod = HttpRequest.HttpMethod.DELETE;
+            } else if (request.getHttpMethod().equals(PTRequest.CONNECT)) {
+                httpMethod = HttpRequest.HttpMethod.CONNECT;
+            } else if (request.getHttpMethod().equals(PTRequest.COPY)) {
+                httpMethod = HttpRequest.HttpMethod.COPY;
+            } else if (request.getHttpMethod().equals(PTRequest.HEAD)) {
+                httpMethod = HttpRequest.HttpMethod.HEAD;
+            } else if (request.getHttpMethod().equals(PTRequest.MOVE)) {
+                httpMethod = HttpRequest.HttpMethod.MOVE;
+            } else if (request.getHttpMethod().equals(PTRequest.OPTIONS)) {
+                httpMethod = HttpRequest.HttpMethod.OPTIONS;
+            } else if (request.getHttpMethod().equals(PTRequest.TRACE)) {
+                httpMethod = HttpRequest.HttpMethod.TRACE;
+            }
+            httpUtils.configCurrentHttpCacheExpiry(1000 * 1);
+            ResponseStream responseStream= httpUtils.sendSync(httpMethod, url, requestParams
+                    );
+            String str = StringUtil.stream2String(responseStream.getBaseStream());
+            LogUtil.d(TAG, "返回结果数据=" + str);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
 
 
     /**

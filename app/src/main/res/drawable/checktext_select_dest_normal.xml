@@ -5,9 +5,9 @@
     <solid android:color="@android:color/transparent" />
 
     <stroke
-        android:width="0.5dp"
-        android:color="@color/app_theme_color" />
+        android:width="1dp"
+        android:color="@color/home_title_color" />
 
-    <corners android:radius="14dp" />
+    <corners android:radius="5dp" />
 
 </shape>

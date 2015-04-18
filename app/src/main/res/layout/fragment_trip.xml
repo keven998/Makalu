@@ -1,40 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cube_dotview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_backgroud">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white">
+        android:layout_height="@dimen/operation_section_height">
 
-        <TextView
-            android:id="@+id/tv_title_bar_title"
-            android:layout_width="200dp"
+        <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
+            android:id="@+id/vp_travel"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/title_bar_height"
+            android:background="#f3d4df" />
+
+        <com.aizou.core.widget.DotView
+            android:id="@+id/dot_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="旅行"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="18sp" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="18dp"
+            cube_dotview:dot_radius="3dp"
+            cube_dotview:dot_selected_color="0xff08dca7"
+            cube_dotview:dot_span="10dp"
+            cube_dotview:dot_unselected_color="0xffffffff" />
 
-        <View
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/home_title_color"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_height="@dimen/title_bar_height"
+            android:background="@color/base_color_white">
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_title_bar_title"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="旅行"
+                android:textColor="@color/base_text_color_title"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/home_title_color"
+                android:layout_gravity="bottom"
+                />
+
+        </FrameLayout>
+
+    </FrameLayout>
 
     <EditText
         android:id="@+id/search_all_et"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="32dp"
         android:layout_margin="10dp"
         android:drawableLeft="@drawable/ic_search"
         android:paddingLeft="10dp"
@@ -58,22 +82,22 @@
             android:paddingRight="18dp"
             android:drawablePadding="15dp"
             android:gravity="center_vertical"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:drawableLeft="@drawable/ic_share_to_friend"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
             android:text="指路达人"
             android:textColor="@color/base_text_color_title"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text="旅行问题问达人"
             android:layout_gravity="right"
-            android:paddingTop="15dp"
+            android:paddingTop="12dp"
             android:layout_marginRight="30dp"
             android:textColor="@color/base_text_color_text_placeholder"
             />
@@ -89,32 +113,45 @@
         android:drawablePadding="15dp"
         android:gravity="center_vertical"
         android:layout_marginTop="20dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:drawableLeft="@drawable/ic_share_to_friend"
         android:background="@drawable/option_cell_selector"
         android:drawableRight="@drawable/right_arrow_icon"
         android:text="旅行计划"
         android:textColor="@color/base_text_color_title"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/lx_around"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="17dp"
-        android:paddingRight="18dp"
-        android:drawablePadding="15dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="1dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
-        android:drawableLeft="@drawable/ic_share_to_friend"
-        android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/right_arrow_icon"
-        android:text="身边哪儿好玩"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lx_around"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="17dp"
+            android:paddingRight="18dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawableLeft="@drawable/ic_share_to_friend"
+            android:background="@drawable/option_cell_selector"
+            android:drawableRight="@drawable/right_arrow_icon"
+            android:text="身边哪儿好玩"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="48dp"
+            android:background="@color/app_backgroud"
+            />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/lx_des"
@@ -125,13 +162,13 @@
         android:drawablePadding="15dp"
         android:gravity="center_vertical"
         android:layout_marginTop="20dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:drawableLeft="@drawable/ic_share_to_friend"
         android:background="@drawable/option_cell_selector"
         android:drawableRight="@drawable/right_arrow_icon"
         android:text="目的地"
         android:textColor="@color/base_text_color_title"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

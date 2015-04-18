@@ -3,24 +3,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_frame_white_card">
-
-    <View
-        android:layout_width="5dp"
-        android:layout_height="68dp"
-        android:background="@color/base_border_color"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="20dp"
-        />
+    android:background="@drawable/option_cell_selector">
 
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="0.8dp"
-        android:background="@color/base_border_color"
+        android:background="@color/base_gary_bg"
         android:layout_gravity="top"
         android:layout_marginLeft="35dp"
         />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -59,34 +52,37 @@
                 android:layout_alignTop="@id/spot_image_iv"
                 android:layout_toRightOf="@id/spot_image_iv"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="-4dp"
+                android:layout_marginTop="-3dp"
                 android:singleLine="true"
                 android:textColor="@color/base_text_color_title"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:text="fdsafd"/>
             <TextView
                 android:id="@+id/spot_rank_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:gravity="left"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 android:textColor="@color/base_text_color_text_hint"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="2dp"
                 android:layout_below="@id/spot_name_tv"
                 android:singleLine="true"
-                android:layout_toRightOf="@id/spot_image_iv"/>
+                android:layout_toRightOf="@id/spot_image_iv"
+                android:text="fdsaf"/>
 
             <TextView
                 android:id="@+id/spot_time_cost_tv"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/spot_image_iv"
                 android:layout_toRightOf="@id/spot_image_iv"
+                android:layout_below="@+id/spot_rank_tv"
+                android:layout_marginTop="2dp"
                 android:layout_marginLeft="15dp"
-                android:paddingBottom="2dp"
                 android:singleLine="true"
                 android:textColor="@color/main_color_second"
-                android:textSize="11sp"/>
+                android:textSize="11sp"
+                android:text="fdsf"/>
         </RelativeLayout>
 
         <ImageView

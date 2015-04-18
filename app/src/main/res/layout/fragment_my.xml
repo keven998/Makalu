@@ -69,12 +69,12 @@
                     android:layout_marginLeft="11dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1">
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/base_line"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:orientation="horizontal">
 
                         <TextView android:id="@+id/tv_nickname"
                             android:layout_width="wrap_content"
@@ -83,9 +83,10 @@
                             android:textColor="@color/base_color_white"
                             android:singleLine="true"
                             android:ellipsize="end"
-                            android:text="未登录"/>
+                            android:text="未登录"
+                            />
 
-                        <TextView
+                       <!-- <TextView
                             android:id="@+id/user_level"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -96,6 +97,7 @@
                             android:paddingLeft="3dp"
                             android:paddingRight="3dp"
                             android:layout_marginLeft="5dp"
+                            android:visibility="gone"
                             />
 
                         <TextView
@@ -106,7 +108,8 @@
                             android:textSize="12sp"
                             android:layout_marginLeft="5dp"
                             android:text="狮子座"
-                            />
+                            android:visibility="gone"
+                            />-->
 
                     </LinearLayout>
 
@@ -119,8 +122,7 @@
                         android:layout_marginTop="2dp"
                         android:textStyle="italic"
                         android:textColor="@color/base_color_white"
-                        android:text="dsf"
-                        android:visibility="gone"
+
                         />
 
                     <TextView android:id="@+id/tv_sign"
@@ -132,10 +134,9 @@
                         android:textStyle="italic"
                         android:maxLines="2"
                         android:textColor="@color/base_color_white"
-                        android:text="fdsafas"
-                        android:visibility="gone"/>
+                        />
 
-                    <Button android:id="@+id/btn_reg"
+                    <!--<Button android:id="@+id/btn_reg"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_login_button"
@@ -157,7 +158,7 @@
                         android:paddingRight="25dp"
                         android:text="登录"
                         android:textColor="@color/them_botton_text_color"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"/>-->
 
                 </RelativeLayout>
 
@@ -183,8 +184,8 @@
                     android:background="@drawable/option_cell_selector"
                     android:paddingLeft="17dp"
                     android:paddingRight="18dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:drawableLeft="@drawable/ic_setting_share"
                     android:drawablePadding="15dp"
                     android:drawableRight="@drawable/cell_accessory"
@@ -202,35 +203,48 @@
                     android:paddingRight="18dp"
                     android:drawablePadding="15dp"
                     android:layout_marginTop="1dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:drawableLeft="@drawable/ic_my_favorite"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector"
                     android:drawableRight="@drawable/right_arrow_icon"
                     android:text="我的收藏"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:visibility="visible"/>
 
-
-                <TextView
-                    android:id="@+id/ll_push_friends"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="17dp"
-                    android:paddingRight="18dp"
-                    android:drawablePadding="15dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="1dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
-                    android:drawableLeft="@drawable/ic_share_to_friend"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/right_arrow_icon"
-                    android:text="推荐给微信好友"
-                    android:textColor="@color/base_text_color_title"
-                    android:textSize="18sp" />
+                    >
+
+                    <TextView
+                        android:id="@+id/ll_push_friends"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="17dp"
+                        android:paddingRight="18dp"
+                        android:drawablePadding="15dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:drawableLeft="@drawable/ic_share_to_friend"
+                        android:background="@drawable/option_cell_selector"
+                        android:drawableRight="@drawable/right_arrow_icon"
+                        android:text="推荐给微信好友"
+                        android:textColor="@color/base_text_color_title"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="48dp"
+                        android:background="@color/app_backgroud"
+                        />
+                </FrameLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -247,43 +261,47 @@
                     android:paddingRight="18dp"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:drawableLeft="@drawable/ic_setting"
                     android:background="@drawable/option_cell_selector"
                     android:drawableRight="@drawable/right_arrow_icon"
                     android:text="设置"
                     android:textColor="@color/base_text_color_title"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/ll_about"
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="17dp"
-                    android:paddingRight="18dp"
-                    android:drawablePadding="15dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="1dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
-                    android:drawableLeft="@drawable/ic_about"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableRight="@drawable/right_arrow_icon"
-                    android:text="关于桃子旅行"
-                    android:textColor="@color/base_text_color_title"
-                    android:textSize="18sp" />
+                    android:layout_height="wrap_content">
 
+                    <TextView
+                        android:id="@+id/ll_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="17dp"
+                        android:paddingRight="18dp"
+                        android:drawablePadding="15dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:drawableLeft="@drawable/ic_about"
+                        android:background="@drawable/option_cell_selector"
+                        android:drawableRight="@drawable/right_arrow_icon"
+                        android:text="关于旅FM"
+                        android:textColor="@color/base_text_color_title"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="48dp"
+                        android:background="@color/app_backgroud"
+                        />
+
+                </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-
-
-
-    </FrameLayout>
-
 </FrameLayout>

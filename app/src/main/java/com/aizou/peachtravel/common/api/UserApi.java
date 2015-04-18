@@ -358,6 +358,20 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
     /**
+     * 同步获取好友列表
+     *
+     * @param
+     * @return
+     */
+    public static String getAsynContact() {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + CONTACTS);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        return HttpManager.aysnRequest(request);
+    }
+    /**
      * 请求添加好友
      * @param uid
      * @param callback

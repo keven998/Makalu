@@ -188,7 +188,13 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         });
 
         titleHeaderBar.getTitleTextView().setText("选择好友");
-        titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.push_bottom_out);
+            }
+        });
     }
 
     /**

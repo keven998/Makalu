@@ -74,6 +74,7 @@ public class LoginActivity extends PeachBaseActivity {
         if (EMChat.getInstance().isLoggedIn()) {
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            overridePendingTransition(0,R.anim.push_bottom_out);
             return;
         }
         initView();
@@ -148,7 +149,13 @@ public class LoginActivity extends PeachBaseActivity {
         });
 
         titleBar.getTitleTextView().setText("登录");
-        titleBar.enableBackKey(true);
+        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.push_bottom_out);
+            }
+        });
     }
 
     @Override
@@ -214,41 +221,30 @@ public class LoginActivity extends PeachBaseActivity {
                 // conversations in case we are auto login
                 EMGroupManager.getInstance().loadAllGroups();
                 EMChatManager.getInstance().loadAllConversations();
-                UserApi.getContact(new HttpCallBack<String>() {
-                    @Override
-                    public void doSucess(String result, String method) {
-                        CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                        if (contactResult.code == 0) {
-                            for (PeachUser peachUser : contactResult.result.contacts) {
-                                IMUser user = new IMUser();
-                                user.setUserId(peachUser.userId);
-                                user.setMemo(peachUser.memo);
-                                user.setNick(peachUser.nickName);
-                                user.setUsername(peachUser.easemobUser);
-                                user.setUnreadMsgCount(0);
-                                user.setAvatar(peachUser.avatar);
-                                user.setAvatarSmall(peachUser.avatarSmall);
-                                user.setSignature(peachUser.signature);
-                                user.setIsMyFriends(true);
-                                user.setGender(peachUser.gender);
-                                IMUtils.setUserHead(user);
-                                userlist.put(peachUser.easemobUser, user);
-                            }
-                            // 存入内存
-                            AccountManager.getInstance().setContactList(userlist);
-                            // 存入db
-                            List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                            IMUserRepository.saveContactList(mContext, users);
-                        }
-
+                String result=UserApi.getAsynContact();
+                CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
+                if (contactResult.code == 0) {
+                    for (PeachUser peachUser : contactResult.result.contacts) {
+                        IMUser user = new IMUser();
+                        user.setUserId(peachUser.userId);
+                        user.setMemo(peachUser.memo);
+                        user.setNick(peachUser.nickName);
+                        user.setUsername(peachUser.easemobUser);
+                        user.setUnreadMsgCount(0);
+                        user.setAvatar(peachUser.avatar);
+                        user.setAvatarSmall(peachUser.avatarSmall);
+                        user.setSignature(peachUser.signature);
+                        user.setIsMyFriends(true);
+                        user.setGender(peachUser.gender);
+                        IMUtils.setUserHead(user);
+                        userlist.put(peachUser.easemobUser, user);
                     }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        if (!isFinishing())
-                            ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                });
+                    // 存入内存
+                    AccountManager.getInstance().setContactList(userlist);
+                    // 存入db
+                    List<IMUser> netusers = new ArrayList<IMUser>(userlist.values());
+                    IMUserRepository.saveContactList(mContext, netusers);
+                }
                 // 进入主页面
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -257,7 +253,7 @@ public class LoginActivity extends PeachBaseActivity {
                         setResult(RESULT_OK);
                         finish();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
+                        overridePendingTransition(0,R.anim.push_bottom_out);
 
                     }
                 });

@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -64,7 +65,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     DynamicBox box;
     private List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
-
+    private Drawable add,selected;
 
     OnDestActionListener mOnDestActionListener;
 
@@ -426,17 +427,31 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-                CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+                final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
                 cityNameTv.setChecked(bean.isAdded);
+
+                //更新按钮的图片的
+                add= getResources().getDrawable(R.drawable.blue_add);
+                selected= getResources().getDrawable(R.drawable.ic_refresh_white_18dp);
+                /// 这一步必须要做,否则不会显示.
+                add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
+                selected.setBounds(0,0,selected.getMinimumWidth(),selected.getMinimumHeight());
+                if(!bean.isAdded){
+                    cityNameTv.setCompoundDrawables(add,null,null,null);
+                }else{
+                    cityNameTv.setCompoundDrawables(selected,null,null,null);
+                }
                 cityNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         bean.isAdded = !bean.isAdded;
                         if (mOnDestActionListener != null) {
                             if (bean.isAdded) {
+                                cityNameTv.setCompoundDrawables(selected,null,null,null);
                                 mOnDestActionListener.onDestAdded(bean);
                             } else {
+                                cityNameTv.setCompoundDrawables(add,null,null,null);
                                 mOnDestActionListener.onDestRemoved(bean);
                             }
                         }

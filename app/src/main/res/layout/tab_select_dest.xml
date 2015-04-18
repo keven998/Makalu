@@ -8,11 +8,11 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:paddingTop="9dp"
-        android:paddingBottom="10dp"
-        android:gravity="bottom|center_horizontal"
-        android:layout_gravity="bottom"
-        android:textColor="@color/radio_colors"
-        android:textSize="16sp" />
+        android:layout_margin="1dp"
+        android:gravity="center|center_horizontal"
+        android:layout_gravity="center"
+        android:textColor="@drawable/in_out_indicator_textcolor"
+        android:textSize="18sp"
+        />
 
 </FrameLayout>

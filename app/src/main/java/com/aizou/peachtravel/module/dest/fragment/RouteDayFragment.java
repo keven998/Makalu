@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.aizou.peachtravel.R;
@@ -42,6 +44,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
+import org.jivesoftware.smackx.carbons.Carbon;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -63,7 +67,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     Button addDayBtn;
     StrategyBean strategy;
     boolean isInEditMode;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -438,7 +441,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     if(!poiDetailBean.getFormatRank().equals("0")){
                         holder.rankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
                     }else{
-                        holder.rankTv.setText("");
+                        holder.rankTv.setText("假数据，看效果");
                     }
 
                     if (!isAnimationEnd && isEditableMode) {
@@ -622,7 +625,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             HeaderViewHolder holder = null;
             if (convertView == null) {
                 holder = new HeaderViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.row_drag_div, null);
+                convertView = View.inflate(getActivity(),R.layout.row_drag_div,null);
                 convertView.setTag(holder);
             } else {
                 holder = (HeaderViewHolder) convertView.getTag();
@@ -632,6 +635,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);
             holder.citysTv = (TextView) convertView.findViewById(R.id.tv_loc_list);
             holder.dayTv.setText("第" + (section + 1) + "天");
+            if(section==0){
+                convertView.setPadding(0, 0, 0, 0);
+            }else {
+                convertView.setPadding(0, 20, 0, 0);
+            }
+
             List<PoiDetailBean> poiList = routeDayMap.get(section);
             if (poiList.size() > 0) {
                 LinkedHashSet<String> citySet = new LinkedHashSet<String>();

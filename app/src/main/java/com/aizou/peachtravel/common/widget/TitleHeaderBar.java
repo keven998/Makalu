@@ -85,12 +85,12 @@ public class TitleHeaderBar extends HeaderBarBase {
 
     public void enableBackKey(boolean enable) {
         if (enable) {
-            findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)getContext()).finish();
-                }
-            });
+                findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((Activity)getContext()).finish();
+                    }
+                });
         } else {
             findViewById(R.id.ly_title_bar_left).setVisibility(GONE);
         }

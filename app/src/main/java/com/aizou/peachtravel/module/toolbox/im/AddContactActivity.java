@@ -104,7 +104,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //        });
 
         titleHeaderBar.getTitleTextView().setText("加好友");
-        titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.push_bottom_out);
+            }
+        });
     }
 
     /**

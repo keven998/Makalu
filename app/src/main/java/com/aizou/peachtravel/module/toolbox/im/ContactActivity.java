@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.toolbox.im;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.aizou.peachtravel.R;
@@ -28,7 +29,13 @@ public class ContactActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_contact);
         ButterKnife.inject(this);
         titleBar.getTitleTextView().setText("联系人");
-        titleBar.enableBackKey(true);
+        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.push_bottom_out);
+            }
+        });
         contactListFragment = new ContactlistFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()

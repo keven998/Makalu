@@ -57,6 +57,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private String guideId;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private HorizontalScrollView mScrollPanel;
+    private TextView next;
 
 
     @Override
@@ -79,6 +80,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 allAddCityList.remove(locBean);
                 if (allAddCityList.size() == 0) {
                     mBottomPanel.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
                 }
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestRemoved(locBean);
@@ -89,6 +91,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
         if (allAddCityList.size() > 0) {
             mBottomPanel.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
         }
 
         autoScrollPanel();
@@ -101,6 +104,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         allAddCityList.remove(locBean);
         if (allAddCityList.size() == 0) {
             mBottomPanel.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
         }
         autoScrollPanel();
     }
@@ -128,9 +132,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (FrameLayout) rootView.findViewById(R.id.bottom_panel);
+        next = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
-        rootView.findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent(mContext,"event_select_done_go_next");
@@ -178,9 +183,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
-        ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), LocalDisplay.dp2px(5));
-        colorBar.setWidth(LocalDisplay.dp2px(45));
-        indicatorViewPager.setIndicatorScrollBar(colorBar);
+       /* ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.home_title_color), LocalDisplay.dp2px(32));
+        colorBar.setWidth(LocalDisplay.dp2px(98));
+        indicatorViewPager.setIndicatorScrollBar(colorBar);*/
 //        indicatorViewPager.setIndicatorScrollBar(new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -272,6 +277,11 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             }
             TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
             textView.setText(tabNames[position]);
+            if(position==0){
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
+            }else if(position==1){
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
+            }
             return convertView;
         }
 

@@ -316,8 +316,9 @@ public class FragmentTabHost extends TabHost implements
 		setCurrentTabByTag(ss.curTab);
 	}
 
+
 	@Override
-	public void onTabChanged(String tabId) {
+	public void onTabChanged(String tabId ) {
 		if (mAttached) {
 			FragmentTransaction ft = doTabChanged(tabId, null);
 			if (ft != null) {

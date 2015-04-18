@@ -97,6 +97,7 @@ public class TalkFragment extends PeachBaseFragment {
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     private boolean hidden;
     private List<EMGroup> groups;
+    private int del_unread_item=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -121,11 +122,7 @@ public class TalkFragment extends PeachBaseFragment {
         tvTitleAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(EMChat.getInstance().isLoggedIn()){
-                    showActionDialog();}
-                else{
-                    showLogDialog();
-                }
+                    showActionDialog();
             }
         });
 //        // 搜索框
@@ -159,32 +156,11 @@ public class TalkFragment extends PeachBaseFragment {
         btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(EMChat.getInstance().isLoggedIn()){
                     Intent intent = new Intent(getActivity(), ContactActivity.class);
                     startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
-                }else{
-                    showLogDialog();
-                }
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
             }
         });
-        if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
-            return;
-
-        if(!EMChat.getInstance().isLoggedIn()){
-            return;
-        }
-        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
-//        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
-        // contact list
-        contactList = AccountManager.getInstance().getContactList(getActivity());
-//        if(EMGroupManager.getInstance().getAllGroups()==null){
-        EMGroupManager.getInstance().loadAllGroups();
-//        }
-        loadConversationsWithRecentChat();
-        updateGroupsInfo();
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -225,59 +201,24 @@ public class TalkFragment extends PeachBaseFragment {
                 return false;
             }
         });
-    }
 
-    public void showLogDialog(){
-        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
-        dialog.setTitle("提示");
-        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage("亲，需要登录哦!");
-        dialog.setPositiveButton("确定",new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(getActivity(),"正在切换");
-                AccountManager.getInstance().logout(getActivity(), false, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent =new Intent(getActivity(),LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                               // getActivity().finish();
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
+            return;
 
-                            }
-                        });
-                    }
+        if(!EMChat.getInstance().isLoggedIn()){
+            return;
+        }
 
-                    @Override
-                    public void onError(int i, String s) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.getInstance(getActivity()).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
-            }
-        });
-        dialog.setNegativeButton("取消",new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
+//        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
+        // contact list
+        contactList = AccountManager.getInstance().getContactList(getActivity());
+//        if(EMGroupManager.getInstance().getAllGroups()==null){
+        EMGroupManager.getInstance().loadAllGroups();
+//        }
+        loadConversationsWithRecentChat();
+        updateGroupsInfo();
     }
 
     private void showActionDialog() {
@@ -291,7 +232,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_create_new_talk");
                 startActivityForResult(new Intent( getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                 dialog.dismiss();
             }
         });
@@ -302,7 +243,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
                 startActivity(new Intent( getActivity(), AddContactActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                 dialog.dismiss();
             }
         });
@@ -356,10 +297,12 @@ public class TalkFragment extends PeachBaseFragment {
             // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
             InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
+
             refresh();
 
             // 更新消息未读数
-//			((MainActivity) getActivity()).updateUnreadLabel();
+			((MainActivity) getActivity()).updateUnreadMsgCount();
+
             if (adapter.getCount() <= 0) {
                 setEmptyView();
             }
@@ -440,7 +383,6 @@ public class TalkFragment extends PeachBaseFragment {
                     peachConversation.imUser = user;
                     conversationList.add(peachConversation);
                 } else {
-                    conversationIt.remove();
                 }
             }
         }
