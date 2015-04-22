@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/app_backgroud">
+    android:background="@color/app_backgroud"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,9 +17,10 @@
         <TextView
             android:id="@+id/expert_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:drawableLeft="@drawable/nav_back_normal"
-            android:layout_marginLeft="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
             android:layout_gravity="left|center_vertical"
             />
 
@@ -26,17 +29,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="桃子达人"
-            android:textColor="@color/base_color_black"
+            android:textColor="@color/base_font_color"
             android:textSize="18sp"
             />
 
         <TextView
             android:id="@+id/expert_right"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
             android:drawableRight="@drawable/favorite_filter"
-            android:layout_marginRight="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             />
 
         <View

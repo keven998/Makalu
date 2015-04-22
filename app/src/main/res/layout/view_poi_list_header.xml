@@ -4,21 +4,16 @@
     android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="20dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/content_card"
+        android:background="@color/base_color_white"
         android:orientation="horizontal">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="4dp"
-            android:background="@color/app_theme_color" />
 
         <TextView
             android:id="@+id/tv_poi_want_type"

@@ -29,94 +29,88 @@
             android:textColor="@color/base_color_white"
             android:layout_alignParentRight="true"
             android:textSize="14sp"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"/>
 
-        <CheckBox
-            android:id="@+id/iv_fav"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:drawableLeft="@drawable/checker_title_ic_favorite"
-            android:button="@null"
-            android:paddingLeft="14dp"
-            android:paddingTop="14dp"
-            android:layout_gravity="bottom|right"/>
+
     </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/ly2"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/ly1"
-        android:layout_marginTop="-20dp">
-        <ImageView android:id="@+id/tv_travel"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:textColor="@color/base_color_white"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:scaleType="centerInside"
-            android:src="@drawable/selector_ic_city_guide"
-            android:onClick="intentToTravel"
-            android:layout_marginLeft="10dp"/>
+        android:background="@color/base_color_white"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/tv_city_name"
             android:layout_width="match_parent"
             android:textSize="18sp"
-            android:textColor="@color/base_text_color_subtitle"
+            android:textColor="@color/base_color_black"
             android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/tv_travel"
-            android:layout_centerVertical="true"/>
+            android:gravity="center"/>
+
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_city_name"
+            android:layout_marginTop="10dp"
+            android:background="@color/app_backgroud"
+            />
 
         <TextView android:id="@+id/tv_city_name_en"
             android:layout_width="match_parent"
-            android:textSize="12sp"
-            android:textColor="@color/base_text_color_text_placeholder"
+            android:textSize="15sp"
+            android:textColor="@color/second_font_color"
             android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/tv_travel"
-            android:layout_below="@id/tv_city_name"/>
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="3dp"
+            android:layout_below="@id/line_view"/>
 
     </RelativeLayout>
 
     <LinearLayout android:id="@+id/ly_event"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/content_card"
+        android:background="@color/base_color_white"
         android:layout_below="@id/ly2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+
+        <TextView android:id="@+id/travel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/base_font_color"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#fe828f"/>
-
-        <TextView android:id="@+id/travel_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:textColor="@color/base_text_color_title"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/app_backgroud"
+            />
 
         <TextView
             android:id="@+id/tv_cost_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="3dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:textColor="@color/base_text_color_subtitle"/>
+            android:text="fdsaf"
+            android:textColor="@color/second_font_color"/>
 
         <com.aizou.core.widget.expandabletextview.ExpandableTextView
             xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
@@ -125,128 +119,162 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             expandableTextView:animDuration="200"
-            expandableTextView:maxCollapsedLines="2"
+            expandableTextView:maxCollapsedLines="3"
             expandableTextView:animAlphaStart="1"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
             expandableTextView:expandDrawable="@drawable/expand_drawable"
             expandableTextView:collapseDrawable="@drawable/collapase_drawable"
-            android:layout_marginTop="8dp">
+            >
 
             <TextView
                 android:id="@id/expandable_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:lineSpacingExtra="4dp"
-                android:textColor="@color/base_text_color_subtitle" />
+                android:textSize="15sp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="@color/second_font_color"
+                android:text="dfsa"/>
 
-            <ImageButton
-                android:id="@id/expand_collapse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="-4dp"
-                android:layout_gravity="right|bottom"
-                android:paddingLeft="100dp"
-                android:scaleType="center"
-                android:background="@null" />
+
+                <com.aizou.core.widget.ImageButtonWithText
+                    android:id="@id/expand_collapse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="-4dp"
+                    android:paddingLeft="10dp"
+                    android:layout_gravity="right|bottom"
+                    android:text="查看更多"
+                    android:scaleType="center"
+                    android:background="@null" />
+
         </com.aizou.core.widget.expandabletextview.ExpandableTextView>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="5dp">
+
+            <com.aizou.peachtravel.common.widget.DrawableCenterTextView
+                android:id="@+id/tv_travel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_font_color"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/ic_city_travel"
+                android:onClick="intentToTravel"
+                android:text="旅游指南"/>
 
             <com.aizou.peachtravel.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_spots"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/theme_color"
-                android:background="@drawable/city_detail_content_button"
-                android:drawableTop="@drawable/ic_city_spot_selector"
-                android:drawablePadding="-5dp"
-                android:textSize="17sp"
-                android:paddingTop="8dp"
+                android:textColor="@color/base_font_color"
+                android:drawableTop="@drawable/ic_city_spots"
+                android:drawablePadding="5dp"
+                android:textSize="15sp"
                 android:onClick="intentToFood"
                 android:text="景点"/>
 
             <com.aizou.peachtravel.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_restaurant"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/theme_color"
-                android:background="@drawable/city_detail_content_button"
-                android:drawableTop="@drawable/ic_city_delicious_selector"
-                android:drawablePadding="-5dp"
-                android:layout_centerHorizontal="true"
-                android:textSize="17sp"
-                android:paddingTop="8dp"
+                android:textColor="@color/base_font_color"
+                android:drawableTop="@drawable/ic_city_restaurant"
+                android:drawablePadding="5dp"
+                android:textSize="15sp"
                 android:onClick="intentToFood"
                 android:text="美食"/>
 
             <com.aizou.peachtravel.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_shopping"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:background="@drawable/city_detail_content_button"
-                android:drawableTop="@drawable/ic_city_shopping_selector"
-                android:drawablePadding="-5dp"
-                android:textColor="@color/theme_color"
-                android:layout_alignParentRight="true"
-                android:textSize="17sp"
-                android:paddingTop="8dp"
+                android:drawableTop="@drawable/ic_city_shopping"
+                android:drawablePadding="5dp"
+                android:textColor="@color/base_font_color"
+                android:textSize="15sp"
                 android:onClick="intentToShopping"
                 android:text="购物"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
-    <RelativeLayout android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ly_event"
         android:background="@color/base_color_white"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
         <TextView
+            android:id="@+id/jx_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="精选游记"
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_below="@+id/jx_title"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/app_backgroud"
+            />
+
+       <!-- <TextView
+            android:id="@+id/trip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="精选游记"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="12dp"
-            android:textColor="@color/app_theme_color_secondary"
-            android:textSize="17sp"/>
+            android:textColor="@color/second_font_color"
+            android:textSize="15sp"
+            android:layout_below="@id/jx_title"
+            android:layout_marginTop="15dp"
+            android:text="这个地方美得很啊"
+            />
+
+        <TextView
+            android:id="@+id/trip_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/third_font_color"
+            android:textSize="12sp"
+            android:layout_below="@id/trip_title"
+            android:layout_marginTop="5dp"
+            android:text="作者：的萨克地方撒娇  范德萨  的份上"
+            />
 
         <TextView
             android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="48dp"
-            android:paddingRight="12dp"
-            android:gravity="center"
+            android:gravity="right"
             android:layout_alignParentRight="true"
-            android:paddingTop="15dp"
-            android:paddingBottom="12dp"
+            android:layout_toRightOf="@id/trip_author"
+            android:layout_alignBottom="@id/trip_author"
             android:text="更多"
             android:textColor="@color/secondary_theme_color"
             android:drawableRight="@drawable/app_them_arrow_secondary"
             android:drawablePadding="1dp"
-            android:textSize="13sp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/app_theme_color_secondary"></View>
+            android:textSize="12sp"/>
+-->
 
     </RelativeLayout>
 

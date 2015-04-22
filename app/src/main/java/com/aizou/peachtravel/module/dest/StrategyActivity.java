@@ -513,8 +513,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"旅程", "美食收集", "购物收集",};
-        private int[] tabIcons = {R.drawable.checker_tab_plan_list, R.drawable.checker_tab_delicacy_list, R.drawable.checker_tab_shopping_list};
+        private String[] tabNames = {"旅行", "美食收集", "购物收集",};
+        private int[] tabIcons = {R.drawable.poi_tab_checker_trip, R.drawable.poi_tab_checker_food, R.drawable.poi_tab_checker_shop};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 

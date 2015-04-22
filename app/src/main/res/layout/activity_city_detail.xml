@@ -19,37 +19,69 @@
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/app_theme_color">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/base_color_white">
 
         <ImageView
             android:id="@+id/tv_title_bar_left"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/selector_city_detail_nav_back"
+            android:src="@drawable/ic_title_back"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"/>
 
         <TextView
             android:id="@+id/tv_title_bar_title"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="17sp"
-            android:textColor="@color/base_color_white"/>
+            android:ellipsize="end"
+            android:textSize="18sp"
+            android:textColor="@color/base_font_color"/>
 
         <ImageView
             android:id="@+id/tv_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentRight="true"
-            android:src="@drawable/selector_ic_action_option"
-            android:paddingLeft="30dp"
-            android:paddingRight="10dp"/>
+            android:src="@drawable/strategy_more"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"/>
+
+        <ImageView
+            android:id="@+id/city_detail_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_title_talk"
+            android:layout_toLeftOf="@id/tv_title_bar_right"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+
+
+        <CheckBox
+            android:id="@+id/iv_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_bar_height"
+            android:drawableLeft="@drawable/checker_title_ic_favorite"
+            android:button="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_toLeftOf="@id/city_detail_chat"/>
+
+
+
+        <View
+            android:id="@+id/title_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/app_theme_color"
+            android:layout_alignParentBottom="true"
+            />
 
     </RelativeLayout>
 

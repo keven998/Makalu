@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_backgroud">#f6f6f6</color>
+    <color name="app_backgroud">#f2f2f2</color>
     <color name="title_bar_background">#ffffff</color>
+    <color name="base_font_color">#2e2727</color>
+    <color name="second_font_color">#626262</color>
+    <color name="third_font_color">#cdcdcd</color>
+    <color name="app_theme_color">#1cc091</color>
 
-    <color name="app_theme_color">#fe828f</color>
     <color name="app_theme_color_highlight">#ad313e</color>
     <color name="app_theme_color_secondary">#6ed8dc</color>
     <color name="app_theme_color_secondary_selected">#1e888c</color>

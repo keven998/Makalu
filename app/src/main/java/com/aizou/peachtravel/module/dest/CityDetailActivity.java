@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.video.Utils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomBase;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
     private PullToZoomListViewEx mTravelLv;
     private RelativeLayout titleBar;
+    private View bottom_line;
     private TextView mTitleTv;
     private ImageView mCityIv;
     private TextView mCityNameTv;
@@ -61,7 +64,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private CheckBox mFavCb;
     private TextView mCostTimeTv;
     private ExpandableTextView bestMonthTv;
-    private TextView foodTv,shoppingTv,spotsTv;
+    private TextView foodTv,shoppingTv,spotsTv,travelTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
@@ -95,7 +98,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
         mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
+        bottom_line = (View) findViewById(R.id.title_bottom_line);
         mTitleTv = (TextView) findViewById(R.id.tv_title_bar_title);
+        mFavCb = (CheckBox)findViewById(R.id.iv_fav);
         setTitleAlpha(0);
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +113,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         travelLv.setHeaderView(hv);
 
-        travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
+       // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
 
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
         View zoomView = hv.findViewById(R.id.ly1);
@@ -118,7 +123,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityNameEn = (TextView) hv.findViewById(R.id.tv_city_name_en);
         mCostTimeTv = (TextView) hv.findViewById(R.id.tv_cost_time);
         bestMonthTv = (ExpandableTextView) hv.findViewById(R.id.tv_best_month);
-        mFavCb = (CheckBox) hv.findViewById(R.id.iv_fav);
+        travelTv = (TextView) hv.findViewById(R.id.tv_travel);
         spotsTv = (TextView) hv.findViewById(R.id.tv_spots);
         foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
         shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
@@ -131,7 +136,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
         travelLv.setAdapter(travelAdapter);
         travelLv.setParallax(false);
-        hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
+        //用来点击查看更多
+        /*hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext,"event_more_city_travel_notes");
@@ -139,7 +145,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 intent.putExtra("id", locId);
                 startActivity(intent);
             }
-        });
+        });*/
 
         final int max = LocalDisplay.dp2px(170);
         final int min = LocalDisplay.dp2px(80);
@@ -166,6 +172,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void setTitleAlpha(int alpha) {
 //        if (alpha <= 1) {
             titleBar.getBackground().setAlpha(alpha);
+            bottom_line.getBackground().setAlpha(alpha);
             mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
 //        }
     }
@@ -300,7 +307,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
-        mCityNameEn.setText(detailBean.enName);
+        travelTv.setOnClickListener(this);
+        if(detailBean.enName.equals("")||detailBean.enName==null){
+            mCityNameEn.setText("应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用");
+        }else{
+            mCityNameEn.setText(detailBean.enName);
+        }
         mTTview.setText(String.format("玩在%s", detailBean.zhName));
 
         mTitleTv.setText(detailBean.zhName);
@@ -308,11 +320,14 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     public void intentToTravel(View view){
         if(locDetailBean!=null){
+            ToastUtil.getInstance(this).showToast(locDetailBean.toString()+"00000000000000000000000000000000");
             MobclickAgent.onEvent(mContext,"event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
             intent.putExtra("title", "城市指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
+        }else{
+            Log.e("CLICK","没有数据");
         }
     }
 
@@ -350,6 +365,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_travel:
+                Log.e("CLICK","点击生效");
                 intentToTravel(v);
                 break;
             case R.id.tv_spots:

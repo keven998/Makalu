@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Display;
@@ -16,10 +17,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.ExpertBean;
+import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
+import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.List;
 
 /**
  * Created by lxp_dqm07 on 2015/4/14.
@@ -37,9 +50,9 @@ public class ExpertListActivity extends PeachBaseActivity {
     private TextView user_msg;
     private ExpertAdapter adapter;
     private LayoutInflater inflater;
-    private LinearLayout places_layout;
+    private TextView places_layout;
     private int layout_width;
-
+    private DynamicBox box;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +70,9 @@ public class ExpertListActivity extends PeachBaseActivity {
 
     private void initList(){
         listView=(ListView)findViewById(R.id.expert_list);
+        box=new DynamicBox(this,listView);
         listView.setOnItemClickListener(new DarenClick());
-        adapter=new ExpertAdapter();
-        listView.setAdapter(adapter);
+        getExpertData();
     }
 
     public class DarenClick implements AdapterView.OnItemClickListener {
@@ -70,30 +83,60 @@ public class ExpertListActivity extends PeachBaseActivity {
         }
     }
 
+    public void getExpertData(){
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        UserApi.searchExpertContact("expert","roles",new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                box.hideAll();
+                CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result , ExpertBean.class);
+                if(expertresult.code==0){
+                    adapter=new ExpertAdapter(ExpertListActivity.this,expertresult.result);
+                    listView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                box.hideAll();
+            }
+        });
+    }
+
     public class ExpertAdapter extends BaseAdapter{
+        private Context context;
         private String[] status={"空","忙","阻"};
-        private String[] places={"美国","澳大利亚","乌兹别克斯坦","日本"};
-        @Override
-        public int getCount() {
-            return 3;//这个当然是数据的length，暂时是3假数据
+        public List<ExpertBean> expertBean;
+        private DisplayImageOptions options;
+
+        public ExpertAdapter(Context context,List<ExpertBean> expert){
+            this.context=context;
+            this.expertBean=expert;
+            options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         }
 
         @Override
+        public int getCount() {
+            return expertBean.size();}
+
+        @Override
         public Object getItem(int position) {
-            return null;
+            return position;
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView==null){
+                inflater=LayoutInflater.from(this.context);
                 convertView=inflater.inflate(R.layout.expert_list_cont,null);
             }
-
             //初始化控件
             user_pic=(ImageView)convertView.findViewById(R.id.expert_pic);
             user_name=(TextView)convertView.findViewById(R.id.expert_name);
@@ -102,24 +145,28 @@ public class ExpertListActivity extends PeachBaseActivity {
             user_status_03=(TextView)convertView.findViewById(R.id.expert_status_03);
             user_level=(TextView)convertView.findViewById(R.id.expert_level);
             user_loc=(TextView)convertView.findViewById(R.id.expert_location);
-            places_layout=(LinearLayout)convertView.findViewById(R.id.places_layout);
+            places_layout=(TextView)convertView.findViewById(R.id.places_layout);
             user_msg=(TextView)convertView.findViewById(R.id.expert_msg);
 
             //获取接口数据进行加载
+            ImageLoader.getInstance().displayImage(expertBean.get(position).avatarSmall, user_pic, options);
+            user_name.setText(expertBean.get(position).nickName);
+            user_msg.setText(expertBean.get(position).signature);
+            user_level.setText("V"+expertBean.get(position).level);
+            user_loc.setText("现住地 "+expertBean.get(position).residence);
 
             //控制达人的状态
-            if(status[position]=="空"){
-                changeStatusBg(user_status_01,user_status_02,user_status_03,status[position]);
-            }else if(status[position]=="忙"){
+            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
+                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
+            }else/* if(status[position]=="忙"){
                 changeStatusBg(user_status_02,user_status_01,user_status_03,status[position]);
-            }else if(status[position]=="阻"){
-                changeStatusBg(user_status_03,user_status_02,user_status_01,status[position]);
-            }else{
-                //如果没有的话就不显示
+            }else if(status[position]=="阻")*/{
+                changeStatusBg(user_status_03,user_status_02,user_status_01,"阻");
             }
 
+            places_layout.setText("已经去过21个国家和地区");
             //动态添加达人去过的地方
-            places_layout.removeAllViews();
+            /*places_layout.removeAllViews();
             layout_width=places_layout.getMeasuredWidth();
             int all_views_width=0;
             for(int i=0;i<places.length;i++){
@@ -131,7 +178,7 @@ public class ExpertListActivity extends PeachBaseActivity {
                 if(all_views_width<=layout_width){
                     places_layout.addView(user_place);
                 }else{break;}
-            }
+            }*/
 
             return convertView;
         }

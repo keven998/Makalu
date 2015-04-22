@@ -24,7 +24,7 @@
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="18dp"
             cube_dotview:dot_radius="3dp"
-            cube_dotview:dot_selected_color="0xff08dca7"
+            cube_dotview:dot_selected_color="0xff1cc091"
             cube_dotview:dot_span="10dp"
             cube_dotview:dot_unselected_color="0xffffffff" />
 
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="旅行"
-                android:textColor="@color/base_text_color_title"
+                android:textColor="@color/base_font_color"
                 android:textSize="18sp" />
 
             <View
@@ -64,7 +64,7 @@
         android:paddingLeft="10dp"
         android:gravity="center"
         android:hint="目的地、景点、美食、酒店、游记"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:background="@drawable/search_white_radius_bg"
         android:textColor="@color/base_text_color_text_placeholder"
         />
@@ -84,11 +84,11 @@
             android:gravity="center_vertical"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:drawableLeft="@drawable/ic_share_to_friend"
+            android:drawableLeft="@drawable/ic_loc_expert"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
             android:text="指路达人"
-            android:textColor="@color/base_text_color_title"
+            android:textColor="@color/base_font_color"
             android:textSize="15sp" />
 
         <TextView
@@ -99,7 +99,7 @@
             android:layout_gravity="right"
             android:paddingTop="12dp"
             android:layout_marginRight="30dp"
-            android:textColor="@color/base_text_color_text_placeholder"
+            android:textColor="@color/third_font_color"
             />
 
     </FrameLayout>
@@ -115,11 +115,11 @@
         android:layout_marginTop="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:drawableLeft="@drawable/ic_share_to_friend"
+        android:drawableLeft="@drawable/ic_loc_plan"
         android:background="@drawable/option_cell_selector"
         android:drawableRight="@drawable/right_arrow_icon"
         android:text="旅行计划"
-        android:textColor="@color/base_text_color_title"
+        android:textColor="@color/base_font_color"
         android:textSize="15sp" />
 
     <FrameLayout
@@ -137,11 +137,11 @@
             android:layout_marginTop="0dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:drawableLeft="@drawable/ic_share_to_friend"
+            android:drawableLeft="@drawable/ic_loc_around"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
             android:text="身边哪儿好玩"
-            android:textColor="@color/base_text_color_title"
+            android:textColor="@color/base_font_color"
             android:textSize="15sp" />
 
         <View
@@ -164,11 +164,11 @@
         android:layout_marginTop="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:drawableLeft="@drawable/ic_share_to_friend"
+        android:drawableLeft="@drawable/ic_loc_des"
         android:background="@drawable/option_cell_selector"
         android:drawableRight="@drawable/right_arrow_icon"
         android:text="目的地"
-        android:textColor="@color/base_text_color_title"
+        android:textColor="@color/base_font_color"
         android:textSize="15sp" />
 
 </LinearLayout>

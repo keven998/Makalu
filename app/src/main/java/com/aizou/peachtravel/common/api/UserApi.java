@@ -462,6 +462,25 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
+
+    /**
+     * 达人信息列表
+     *
+     * @param key
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler searchExpertContact(String key,String field,HttpCallBack callback){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl("http://api2.taozilvxing.cn/taozi" + SEACH_CONTACT);
+        request.putUrlParams("keyword",key);
+        request.putUrlParams("field",field);
+        setDefaultParams(request);
+        return HttpManager.request(request,callback);
+    }
+
     /**
      * 根据环信ID获取联系人
      *

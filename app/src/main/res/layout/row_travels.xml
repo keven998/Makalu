@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/base_color_white"
         android:orientation="vertical"
-        android:paddingBottom="15dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/iv_travels"
@@ -28,11 +23,27 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="-2dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/iv_travels"
             android:singleLine="true"
-            android:textColor="@color/base_text_color_title"
-            android:textSize="17sp" />
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:text="fdjsaklfjdkljfdfsadfsafdsaffdfdsaddsa"/>
+
+        <TextView
+            android:id="@+id/trip_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_travels_name"
+            android:layout_alignTop="@id/tv_travels_name"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/base_color_orange"
+            android:singleLine="true"
+            android:text="费用￥6800"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_travels_desc"
@@ -43,33 +54,31 @@
             android:layout_marginTop="7dp"
             android:ellipsize="end"
             android:gravity="left|top"
-            android:lineSpacingExtra="3dp"
-            android:lines="3"
-            android:textColor="@color/normal_text_color"
-            android:textSize="12sp" />
+            android:singleLine="true"
+            android:textColor="@color/second_font_color"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_property"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/iv_travels"
             android:layout_marginBottom="-2dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"
-            android:gravity="right|bottom"
+            android:layout_below="@+id/tv_travels_desc"
+            android:layout_marginTop="7dp"
+            android:gravity="center_vertical"
             android:singleLine="true"
-            android:textColor="@color/base_text_color_text_hint"
-            android:textSize="10sp" />
+            android:textColor="@color/third_font_color"
+            android:textSize="14sp"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_send"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="100dp"
         >
 
         <Button
@@ -85,4 +94,11 @@
             android:textSize="13sp"
             android:visibility="visible" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_backgroud"
+        android:layout_gravity="bottom"
+        />
 </FrameLayout>

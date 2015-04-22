@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/base_color_black"
                 android:textSize="18sp"
-                android:drawableLeft="@drawable/ic_about"
+                android:drawableLeft="@drawable/time_tag"
                 android:drawablePadding="5dp"
                 android:text="第一天"/>
 
@@ -52,8 +52,9 @@
                 android:id="@+id/day_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_location"
+                android:src="@drawable/strategy_more"
                 android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
                 />
 
             <TextView

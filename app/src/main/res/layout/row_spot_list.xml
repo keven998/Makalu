@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:padding="10dp"
-        android:background="@drawable/content_card"
+        android:layout_marginTop="0.8dp"
+        android:background="@color/base_color_white"
        >
 
         <ImageView
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
                 android:singleLine="true"
-                android:textColor="@color/base_text_color_title"
+                android:textColor="@color/second_font_color"
                 android:textSize="18sp"
                 android:maxWidth="160dp"
                 android:ellipsize="end"
@@ -48,7 +49,7 @@
                 android:layout_marginLeft="12dp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textColor="@color/base_text_color_subtitle"
+                android:textColor="@color/third_font_color"
                 android:textSize="15sp"
                 android:text="安徽 合肥"/>
 
@@ -58,15 +59,15 @@
 
 
 
-        <!--<RatingBar
+        <RatingBar
             android:id="@+id/spot_rating"
             style="@style/custom_small_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spot_costtime_tv"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/spot_image_iv" />-->
+            android:layout_toRightOf="@id/spot_image_iv"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/spot_rank_tv"
@@ -76,11 +77,11 @@
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/spot_image_iv"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:singleLine="true"
-            android:textColor="@color/base_text_color_text_hint"
-            android:textSize="16sp"
-            android:text="fjdskalf"/>
+            android:textColor="@color/third_font_color"
+            android:textSize="15sp"
+            android:text="景点排名"/>
 
 
         <TextView
@@ -90,10 +91,10 @@
             android:layout_below="@id/spot_rank_tv"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/spot_image_iv"
             android:singleLine="true"
-            android:textColor="@color/home_title_color"
+            android:textColor="@color/app_theme_color"
             android:textSize="13sp"
             android:text="参考游玩时间"/>
 
@@ -110,7 +111,7 @@
             android:gravity="right|center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="选择"
+            android:text="收集"
             android:textColor="@color/base_color_white"
             android:textSize="13sp" />
 

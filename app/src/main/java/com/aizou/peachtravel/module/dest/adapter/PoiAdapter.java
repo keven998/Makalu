@@ -149,7 +149,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
             }
 
-            spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
+            //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
                 spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
             }
@@ -282,8 +282,8 @@ public class PoiAdapter extends BaseAdapter {
         TextView mSpotAddressTv;
         @InjectView(R.id.spot_costtime_tv)
         TextView mSpotCosttimeTv;
-        @InjectView(R.id.spot_rating)
-        RatingBar mSpotRating;
+        /*@InjectView(R.id.spot_rating)
+        RatingBar mSpotRating;*/
         @InjectView(R.id.spot_rank_tv)
         TextView mSpotRankTv;
 

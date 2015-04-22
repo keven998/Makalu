@@ -3,8 +3,4 @@
     android:shape="rectangle" >
     <corners android:radius="2dp" />
     <solid android:color="#ffffff" />
-    <stroke
-        android:dashGap="0dp"
-        android:width="0.75dp"
-        android:color="@color/base_divider_color" />
 </shape>

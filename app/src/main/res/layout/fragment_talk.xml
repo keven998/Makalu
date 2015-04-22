@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:drawableLeft="@drawable/ic_add_selector"
+            android:drawableLeft="@drawable/add_contact"
             android:paddingLeft="12dp"
             android:paddingRight="10dp" />
 
@@ -26,7 +26,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="Talk"
-            android:textColor="@color/base_text_color_title"
+            android:textColor="@color/base_font_color"
             android:textSize="17sp" />
 
         <RelativeLayout
@@ -39,12 +39,10 @@
                 android:id="@+id/btn_address_list"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:src="@drawable/tab_im_contacts"
+                android:src="@drawable/ic_contacts"
                 android:focusable="false"
                 android:scaleType="center"
-                android:gravity="center"
-                android:textColor="@color/im_tab_text_color"
-                android:textSize="10sp" />
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/unread_address_number"

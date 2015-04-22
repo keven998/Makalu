@@ -18,6 +18,6 @@
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:drawablePadding="10dp"
-        android:drawableLeft="@drawable/ic_refresh_white_18dp"/>
+        android:drawableLeft="@drawable/ic_cell_item_chooesed"/>
 
 </FrameLayout>

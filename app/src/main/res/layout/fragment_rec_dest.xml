@@ -29,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:drawableLeft="@drawable/mm_title_back"
-            android:text="返回"
+            android:drawableLeft="@drawable/ic_title_back"
             android:gravity="center_vertical"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/back_blue_color"
-            android:paddingLeft="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:drawablePadding="3dp"
             />
 
@@ -47,14 +47,14 @@
             android:singleLine="true"
             android:textSize="18sp"
             android:text="目的地"
-            android:textColor="@color/base_color_black"/>
+            android:textColor="@color/base_font_color"/>
 
         <ImageView
             android:id="@+id/tv_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:paddingRight="8dp"
+            android:paddingRight="10dp"
             android:paddingLeft="12dp"
             android:src="@drawable/ic_search"/>
 

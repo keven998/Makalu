@@ -272,7 +272,7 @@
                     android:textColor="@color/base_text_color_subtitle"
                     android:textSize="13sp" />
 
-                <ImageButton
+                <com.aizou.core.widget.ImageButtonWithText
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

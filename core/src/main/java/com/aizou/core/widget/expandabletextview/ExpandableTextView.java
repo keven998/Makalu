@@ -52,7 +52,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     protected TextView mTv;
 
-    protected ImageButton mButton; // Button to expand/collapse
+    protected com.aizou.core.widget.ImageButtonWithText mButton; // Button to expand/collapse
 
     private boolean mRelayout;
 
@@ -228,7 +228,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     private void findViews() {
         mTv = (TextView) findViewById(R.id.expandable_text);
         mTv.setOnClickListener(this);
-        mButton = (ImageButton) findViewById(R.id.expand_collapse);
+        mButton = (com.aizou.core.widget.ImageButtonWithText) findViewById(R.id.expand_collapse);
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mButton.setOnClickListener(this);
         mButton.setVisibility(View.GONE);

@@ -159,7 +159,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.talkView.setImageResource(R.drawable.right_arrow_icon);
-                vh.avatarView.setImageResource(R.drawable.ic_request);
+                vh.avatarView.setImageResource(R.drawable.ic_frend_request);
 				if(user.getUnreadMsgCount() > 0){
 					vh.unreadMsgView.setVisibility(View.VISIBLE);
                     vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
@@ -170,7 +170,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 			} else if (username.equals(Constant.GROUP_USERNAME)){
 				//群聊item
                 vh.nickView.setText(user.getNick());
-                vh.avatarView.setImageResource(R.drawable.groups_icon);
+                vh.avatarView.setImageResource(R.drawable.my_group);
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 vh.talkView.setImageResource(R.drawable.right_arrow_icon);
                 vh.unreadMsgView.setVisibility(View.GONE);

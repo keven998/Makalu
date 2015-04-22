@@ -70,8 +70,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/home_title_color"
+        android:layout_height="0.8dp"
+        android:background="@color/app_theme_color"
         android:layout_alignParentBottom="true"
         />
 

@@ -202,8 +202,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 cityNameTv.setChecked(bean.isAdded);
 
                 //更新按钮的图片的
-                add= getResources().getDrawable(R.drawable.blue_add);
-                selected= getResources().getDrawable(R.drawable.ic_refresh_white_18dp);
+                add= getResources().getDrawable(R.drawable.ic_cell_item_unchoose);
+                selected= getResources().getDrawable(R.drawable.ic_cell_item_chooesed);
                 /// 这一步必须要做,否则不会显示.
                 add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
                 selected.setBounds(0,0,selected.getMinimumWidth(),selected.getMinimumHeight());
