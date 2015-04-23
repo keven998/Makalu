@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_white_normal_shape"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_white_selector"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更多"
+                android:textColor="@color/base_font_color"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/strategy_more_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/third_font_color"
+                android:text="dfskfsdfdsa"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_divider_color"/>
+
+
+        <Button
+            android:id="@+id/strategy_edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="修改标题" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_divider_color"/>
+
+        <Button
+            android:id="@+id/strategy_goto_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="置顶" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_divider_color"/>
+
+        <Button
+            android:id="@+id/strategy_been"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="去过" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/strategy_btn_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/app_theme_color"
+        android:background="@drawable/btn_white_selector"
+        android:textSize="17sp"
+        android:text="取消" />
+
+</LinearLayout>

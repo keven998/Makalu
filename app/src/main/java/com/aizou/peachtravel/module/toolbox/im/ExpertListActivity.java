@@ -64,6 +64,12 @@ public class ExpertListActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        findViewById(R.id.expert_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.getInstance(ExpertListActivity.this).showToast("条件过滤达人");
+            }
+        });
         inflater=LayoutInflater.from(this);
         initList();
     }

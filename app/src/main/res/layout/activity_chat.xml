@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/base_color_white"
-                    android:gravity="center_vertical"
+                    android:gravity="bottom"
                     android:orientation="horizontal"
                     android:paddingBottom="6dp"
                     android:paddingTop="6dp">
@@ -44,10 +44,11 @@
                     <ImageView
                         android:id="@+id/btn_set_mode_voice"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/chat_bar_voice"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        android:paddingBottom="5dp"
                         android:onClick="setModeVoice"
                         />
 
@@ -65,7 +66,7 @@
                     <RelativeLayout
                         android:id="@+id/edittext_layout"
                         android:layout_width="0dp"
-                        android:layout_height="38dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/editor_with_border"
@@ -75,7 +76,7 @@
                         <LinearLayout
                             android:id="@+id/btn_press_to_speak"
                             android:layout_width="fill_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="36dp"
                             android:layout_weight="1"
                             android:background="@drawable/chat_press_speak_btn"
                             android:gravity="center"
@@ -120,7 +121,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/chat_bar_face"
                             android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_alignBottom="@+id/et_sendmessage"
+                            android:layout_marginBottom="2dp"
                             android:visibility="visible" />
 
                         <ImageView
@@ -128,11 +130,12 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/chat_bar_face"
                             android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_alignBottom="@+id/et_sendmessage"
+                            android:layout_marginBottom="2dp"
                             android:visibility="gone" />
 
                         <View
@@ -140,7 +143,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/app_backgroud"
-                            android:layout_alignParentBottom="true"/>
+                            android:layout_below="@+id/et_sendmessage"
+                            android:layout_marginTop="2dp"/>
 
 
                     </RelativeLayout>
@@ -149,9 +153,9 @@
                         android:id="@+id/btn_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="1dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        android:paddingBottom="5dp"
                         android:onClick="more"
                         android:scaleType="fitCenter"
                         android:src="@drawable/chat_bar_more" />
@@ -160,7 +164,7 @@
                         android:id="@+id/btn_send"
                         android:layout_width="48dp"
                         android:layout_height="33dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="bottom"
                         android:layout_marginTop="2dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="10dp"

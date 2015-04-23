@@ -37,7 +37,7 @@
             android:autoLink="web"
             android:textColor="@color/base_color_white"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg_normal" />
+            android:background="@drawable/chat_send" />
         
      <!--    <TextView
             android:id="@+id/tv_userid"

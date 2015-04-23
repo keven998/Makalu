@@ -1,13 +1,20 @@
 package com.aizou.peachtravel.module.toolbox;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,6 +50,8 @@ import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
 import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
+import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
+import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -304,7 +313,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
             TextView mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
             TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
-            ImageButton mEditTtitle = (ImageButton) convertView.findViewById(R.id.edit_title);
+            ImageButton mMore = (ImageButton) convertView.findViewById(R.id.edit_more);
             ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
 
 
@@ -370,26 +379,50 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mRlSend.setVisibility(View.GONE);
             }
 
+            mMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                       showMoreDialog(itemData);
+                }
+            });
 
-            mEditTtitle.setOnClickListener(new View.OnClickListener() {
+            mDeleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_edit_trip_title");
+                    deleteItem(itemData);
+                }
+            });
+        }
+
+        public void showMoreDialog(final StrategyBean strBean){
+            final Activity act = StrategyListActivity.this;
+            final AlertDialog dialog = new AlertDialog.Builder(act).create();
+            View contentView = View.inflate(act, R.layout.dialog_strategy_more_view, null);
+            TextView title = (TextView) contentView.findViewById(R.id.strategy_more_title);
+            Button edit_title = (Button) contentView.findViewById(R.id.strategy_edit_title);
+            Button goto_top = (Button) contentView.findViewById(R.id.strategy_goto_top);
+            Button been = (Button) contentView.findViewById(R.id.strategy_been);
+
+            title.setText(strBean.title);
+            edit_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
                     final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                     editDialog.setTitle("修改标题");
-                    editDialog.setMessage(itemData.title);
+                    editDialog.setMessage(strBean.title);
                     editDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             editDialog.dismiss();
                             DialogManager.getInstance().showLoadingDialog(mContext);
-                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
+                            TravelApi.modifyGuideTitle(strBean.id, editDialog.getMessage(), new HttpCallBack<String>() {
                                 @Override
                                 public void doSucess(String result, String method) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                     if (modifyResult.code == 0) {
-                                        itemData.title = editDialog.getMessage();
+                                        strBean.title = editDialog.getMessage();
                                         mStrategyListAdapter.notifyDataSetChanged();
                                         cachePage();
                                     } else {
@@ -410,13 +443,22 @@ public class StrategyListActivity extends PeachBaseActivity {
                     editDialog.show();
                 }
             });
-
-            mDeleteItem.setOnClickListener(new View.OnClickListener() {
+            contentView.findViewById(R.id.strategy_btn_cancle).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    deleteItem(itemData);
+                public void onClick(View v) {
+                    dialog.dismiss();
                 }
             });
+            dialog.show();
+            WindowManager windowManager = act.getWindowManager();
+            Window window = dialog.getWindow();
+            window.setContentView(contentView);
+            Display display = windowManager.getDefaultDisplay();
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = (int) (display.getWidth()); // 设置宽度
+            window.setAttributes(lp);
+            window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+            window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
         }
 
         @Override
@@ -448,7 +490,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         @InjectView(R.id.time_tv)
         TextView mTimeTv;
 
-        @InjectView(R.id.edit_title)
+
         ImageButton mEditTtitle;
         @InjectView(R.id.delete_item)
         ImageButton mDeleteItem;
