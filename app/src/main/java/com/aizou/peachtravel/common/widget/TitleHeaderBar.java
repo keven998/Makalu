@@ -99,6 +99,8 @@ public class TitleHeaderBar extends HeaderBarBase {
         containerRl.setBackgroundResource(res);
     }
 
+    public void setRightView(String str){mRightTextView.setText(str);}
+
     public void setRightOnClickListener(OnClickListener l) {
         findViewById(R.id.ly_title_bar_right).setOnClickListener(l);
     }

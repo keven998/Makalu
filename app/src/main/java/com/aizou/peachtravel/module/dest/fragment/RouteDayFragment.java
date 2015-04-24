@@ -1,15 +1,20 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -71,10 +76,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
-        addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
-        addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
+       // addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
+       // addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
         ButterKnife.inject(this, rootView);
-        mEditDslv.addFooterView(addDayFooter);
+        //mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
     }
@@ -223,7 +228,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
 //        }
 
 
-        addDayBtn.setOnClickListener(new View.OnClickListener() {
+       /* addDayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(),"event_add_day");
@@ -245,7 +250,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     }
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -631,15 +636,23 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 holder = (HeaderViewHolder) convertView.getTag();
             }
             holder.dayTv = (TextView) convertView.findViewById(R.id.tv_day_index);
-            holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
-            holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);
+           /* holder.addPoiIv = (Button) convertView.findViewById(R.id.iv_add_poi);
+            holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);*/
             holder.citysTv = (TextView) convertView.findViewById(R.id.tv_loc_list);
+            holder.doMore = (ImageView) convertView.findViewById(R.id.day_location);
             holder.dayTv.setText("第" + (section + 1) + "天");
             if(section==0){
                 convertView.setPadding(0, 0, 0, 0);
             }else {
                 convertView.setPadding(0, 20, 0, 0);
             }
+
+            holder.doMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMoreDialog(section);
+                }
+            });
 
             List<PoiDetailBean> poiList = routeDayMap.get(section);
             if (poiList.size() > 0) {
@@ -656,15 +669,15 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         des.append(" "+str);
                     }
                     holder.citysTv.setText(des);
-                    holder.citysTv.setTextColor(getResources().getColor(R.color.base_text_color_text_hint));
+                    holder.citysTv.setTextColor(getResources().getColor(R.color.second_font_color));
                 } else {
                     holder.citysTv.setText("");
                 }
             } else {
-                holder.citysTv.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
+                holder.citysTv.setTextColor(getResources().getColor(R.color.second_font_color));
                 holder.citysTv.setText("没有安排");
             }
-            if (isEditableMode) {
+            /*if (isEditableMode) {
                 holder.addPoiIv.setVisibility(View.VISIBLE);
                 holder.deleteDayIv.setVisibility(View.VISIBLE);
                 holder.addPoiIv.setOnClickListener(new View.OnClickListener() {
@@ -715,8 +728,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 holder.addPoiIv.setVisibility(View.GONE);
                 holder.deleteDayIv.setVisibility(View.GONE);
             }
-
-
+*/
             return convertView;
         }
 
@@ -805,6 +817,124 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             public TextView dayTv;
             public ImageView deleteDayIv;
             public Button addPoiIv;
+            public ImageView doMore;
+        }
+    }
+
+    public void showMoreDialog(final int position ){
+        final Activity act = getActivity();
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.strategy_more_action_view, null);
+
+        TextView day = (TextView) contentView.findViewById(R.id.strategy_day);
+        Button add_router = (Button) contentView.findViewById(R.id.strategy_add_router);
+        Button add_router_before = (Button) contentView.findViewById(R.id.strategy_add_day_before);
+        Button add_router_after = (Button) contentView.findViewById(R.id.strategy_add_day_after);
+        Button del_day = (Button) contentView.findViewById(R.id.strategy_del_day);
+
+        day.setText("第"+(position+1)+"天");
+
+        //添加一天在前面
+        add_router_before.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                addNewDayRouter(position,true);
+            }
+        });
+
+        //添加一天在后面
+        add_router_after.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                addNewDayRouter(position,false);
+            }
+        });
+
+        //添加行程
+        add_router.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                MobclickAgent.onEvent(getActivity(), "event_add_plan_in_agenda");
+                Intent intent = new Intent(getActivity(), AddPoiActivity.class);
+                intent.putParcelableArrayListExtra("locList", strategy.localities);
+                intent.putExtra("dayIndex", position);
+                intent.putParcelableArrayListExtra("poiList", routeDayMap.get(position));
+                getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
+            }
+        });
+
+        //删除这一天
+        del_day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                MobclickAgent.onEvent(getActivity(),"event_delete_day_agenda");
+                final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
+                deleteDialog.setTitle("提示");
+                deleteDialog.setMessage("删除这天安排");
+                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        routeDayMap.remove(position);
+                        strategy.itineraryDays--;
+                        routeDayAdpater.notifyDataSetChanged();
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteDialog.dismiss();
+                    }
+                });
+                deleteDialog.show();
+            }
+        });
+
+        contentView.findViewById(R.id.strategy_btn_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+
+    public void addNewDayRouter(int position,boolean isBefore){
+        MobclickAgent.onEvent(getActivity(),"event_add_day");
+        if(isBefore){
+            routeDayMap.add(position,new ArrayList<PoiDetailBean>());
+        }else{
+            routeDayMap.add(position+1,new ArrayList<PoiDetailBean>());
+        }
+        strategy.itineraryDays++;
+        routeDayAdpater.notifyDataSetChanged();
+        mEditDslv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
+            }
+        }, 50);
+        if(mOnEditModeChangeListener!=null){
+            if(!isInEditMode){
+                isInEditMode = true;
+                routeDayAdpater.setEditableMode(true);
+                routeDayAdpater.notifyDataSetChanged();
+                mOnEditModeChangeListener.onEditModeChange(true);
+            }
         }
     }
 

@@ -311,12 +311,13 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getStrategyList(int page,HttpCallBack callback) {
+    public static PTRequestHandler getStrategyPlannedList(int page,String status,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("status",status);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -377,6 +378,71 @@ public class TravelApi extends BaseApi{
 
         return HttpManager.request(request, callback);
     }
+
+    /**
+     * 攻略置顶
+     * @param id
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler modifyGuideTop
+    (String id, Long time,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + GUIDE);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id",id);
+            jsonObject.put("updateTime", time);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+
+        return HttpManager.request(request, callback);
+    }
+
+
+    /**
+     * 攻略去过
+     * @param id
+     * @param callback
+     * @return
+     */
+    public static PTRequestHandler modifyGuideVisited
+    (String id, String status,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + GUIDE);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id",id);
+            jsonObject.put("status", status);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+
+        return HttpManager.request(request, callback);
+    }
+
+
 
     /**
      * 修改攻略目的地

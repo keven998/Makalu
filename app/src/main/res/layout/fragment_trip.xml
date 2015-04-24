@@ -14,7 +14,6 @@
             android:id="@+id/vp_travel"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/title_bar_height"
             android:background="#f3d4df" />
 
         <com.aizou.core.widget.DotView
@@ -28,7 +27,7 @@
             cube_dotview:dot_span="10dp"
             cube_dotview:dot_unselected_color="0xffffffff" />
 
-        <FrameLayout
+        <!--<FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_bar_height"
             android:background="@color/base_color_white">
@@ -51,23 +50,25 @@
                 android:layout_gravity="bottom"
                 />
 
-        </FrameLayout>
+        </FrameLayout>-->
+
+        <EditText
+            android:id="@+id/search_all_et"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="10dp"
+            android:drawableLeft="@drawable/ic_search"
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:hint="目的地、景点、美食、酒店、游记"
+            android:textSize="15sp"
+            android:background="@drawable/search_white_radius_bg"
+            android:textColor="@color/base_text_color_text_placeholder"
+            />
 
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/search_all_et"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_margin="10dp"
-        android:drawableLeft="@drawable/ic_search"
-        android:paddingLeft="10dp"
-        android:gravity="center"
-        android:hint="目的地、景点、美食、酒店、游记"
-        android:textSize="15sp"
-        android:background="@drawable/search_white_radius_bg"
-        android:textColor="@color/base_text_color_text_placeholder"
-        />
+
 
     <FrameLayout
         android:layout_width="match_parent"

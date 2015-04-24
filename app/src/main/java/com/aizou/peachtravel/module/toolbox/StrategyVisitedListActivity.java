@@ -84,7 +84,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/12/1.
  */
-public class StrategyListActivity extends PeachBaseActivity {
+public class StrategyVisitedListActivity extends PeachBaseActivity {
 
     public static final int RESULT_PLAN_DETAIL = 1;
     public static final int REQUEST_CODE_NEW_PLAN = 2;
@@ -113,7 +113,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_my_trip_plans");
     }
 
@@ -126,7 +125,8 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-
+        TextView tv_null=(TextView)findViewById(R.id.desc_tv);
+        tv_null.setText("您还没有去过的行程~");
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
@@ -134,7 +134,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (isShare) {
+        if (!isShare) {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -142,12 +142,12 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(0,"planned");
+                getStrategyListData(0,"traveled");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(mCurrentPage + 1,"planned");
+                getStrategyListData(mCurrentPage + 1,"traveled");
             }
         });
 
@@ -169,7 +169,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     @Override
                     public void onClick(View v) {
                         MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
-                        Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
+                        Intent intent = new Intent(StrategyVisitedListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
                 }
@@ -180,35 +180,25 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         String action = getIntent().getAction();
         TitleHeaderBar tbar = mTitleBar;
-        tbar.setRightView("去过");
-        tbar.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(StrategyListActivity.this,StrategyVisitedListActivity.class);
-                intent.putExtra("isShare",false);
-                startActivity(intent);
-            }
-        });
         tbar.enableBackKey(true);
-        tbar.getTitleTextView().
-                setText("我的旅程");
+        tbar.getTitleTextView(). setText("已去过的旅程");
     }
 
     private void setupViewFromCache() {
         AccountManager account = AccountManager.getInstance();
-        String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
+        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
         if (!TextUtils.isEmpty(data)) {
             List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                     new TypeToken<List<StrategyBean>>() {
                     });
-            ToastUtil.getInstance(StrategyListActivity.this).showToast(String.valueOf(lists.size()));
+            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(String.valueOf(lists.size()));
             mStrategyListAdapter.getDataList().addAll(lists);
             mStrategyListAdapter.notifyDataSetChanged();
             if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
                 mMyStrategyLv.setHasMoreData(true);
                 mMyStrategyLv.setScrollLoadEnabled(true);
             }
-            getStrategyListData(0,"planned");
+            getStrategyListData(0,"traveled");
         } else {
             mMyStrategyLv.doPullRefreshing(true, 0);
         }
@@ -221,7 +211,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             size = OtherApi.PAGE_SIZE;
         }
         List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.user.userId), GsonTools.createGsonString(cd));
+        PreferenceUtils.cacheData(StrategyVisitedListActivity.this, String.format("%s_traveled", account.user.userId), GsonTools.createGsonString(cd));
     }
 
     @Override
@@ -252,8 +242,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         setupViewFromCache();
     }
 
-    private void getStrategyListData(final int page , String planned) {
-        TravelApi.getStrategyPlannedList(page, planned, new HttpCallBack<String>() {
+    private void getStrategyListData(final int page , String traveled) {
+        TravelApi.getStrategyPlannedList(page, traveled, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
@@ -274,7 +264,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.onPullDownRefreshComplete();
                 mMyStrategyLv.onPullUpRefreshComplete();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -354,7 +344,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             mDayTv.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
-            LogUtil.d(itemData.status+"====status");
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isSend) {
                 mRlSend.setVisibility(View.VISIBLE);
@@ -409,7 +398,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                       showMoreDialog(itemData);
+                    showMoreDialog(itemData);
                 }
             });
 
@@ -422,13 +411,17 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
 
         public void showMoreDialog(final StrategyBean strBean){
-            final Activity act = StrategyListActivity.this;
+            final Activity act = StrategyVisitedListActivity.this;
             final AlertDialog dialog = new AlertDialog.Builder(act).create();
             View contentView = View.inflate(act, R.layout.dialog_strategy_more_view, null);
             TextView title = (TextView) contentView.findViewById(R.id.strategy_more_title);
             Button edit_title = (Button) contentView.findViewById(R.id.strategy_edit_title);
+
             Button goto_top = (Button) contentView.findViewById(R.id.strategy_goto_top);
+            goto_top.setVisibility(View.GONE);
+
             Button been = (Button) contentView.findViewById(R.id.strategy_been);
+            been.setText("重置为计划");
 
             title.setText(strBean.title);
             edit_title.setOnClickListener(new View.OnClickListener() {
@@ -454,7 +447,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         cachePage();
                                     } else {
                                         if (!isFinishing())
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                     }
                                 }
 
@@ -462,7 +455,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                                 public void doFailure(Exception error, String msg, String method) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     if (!isFinishing())
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                 }
                             });
                         }
@@ -471,7 +464,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
             });
 
-            //置顶操作
+          /*  //置顶操作
             goto_top.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -479,16 +472,16 @@ public class StrategyListActivity extends PeachBaseActivity {
                     backToTop(strBean);
                 }
             });
+*/
 
-
-            //去过操作
+            //修改为计划操作
             been.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                     haveBeenVisited(strBean);
                     deleteThisItem(strBean);
-                    final ComfirmDialog dialog=new ComfirmDialog(StrategyListActivity.this);
+                    final ComfirmDialog dialog=new ComfirmDialog(StrategyVisitedListActivity.this);
                     dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                     dialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
                     dialog.setTitle("提示");
@@ -537,161 +530,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
     }
 
-    public class StrategyListViewHolder extends ViewHolderBase<StrategyBean> {
-        View rootView;
-        @InjectView(R.id.strategy_iv)
-        ImageView mStrategyIv;
-        @InjectView(R.id.day_tv)
-        TextView mDayTv;
-        @InjectView(R.id.citys_tv)
-        TextView mCitysTv;
-        @InjectView(R.id.name_tv)
-        TextView mNameTv;
-        @InjectView(R.id.time_tv)
-        TextView mTimeTv;
 
-
-        ImageButton mEditTtitle;
-        @InjectView(R.id.delete_item)
-        ImageButton mDeleteItem;
-
-
-        DisplayImageOptions poptions;
-        boolean isSend;
-        @InjectView(R.id.btn_send)
-        TextView mBtnSend;
-        @InjectView(R.id.rl_send)
-        RelativeLayout mRlSend;
-        @InjectView(R.id.swipe)
-        SwipeLayout swipe;
-
-
-        public StrategyListViewHolder(boolean isSend) {
-            poptions = UILUtils.getDefaultOption();
-            this.isSend = isSend;
-        }
-
-        @Override
-        public View createView(LayoutInflater layoutInflater) {
-            rootView = layoutInflater.inflate(R.layout.row_my_strategy, mMyStrategyLv.getRefreshableView(), false);
-            ButterKnife.inject(this, rootView);
-//            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(20));
-//            int height = width * 480 / 150;
-//            mStrategyIv.setLayoutParams(new RelativeLayout.LayoutParams(width,height));
-            return rootView;
-        }
-
-        @Override
-        public void showData(int position, final StrategyBean itemData) {
-            if (itemData.images != null && itemData.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, poptions);
-            } else {
-                mStrategyIv.setImageDrawable(null);
-            }
-            mDayTv.setText(String.valueOf(itemData.dayCnt));
-            mCitysTv.setText(itemData.summary);
-            mNameTv.setText(itemData.title);
-            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isSend) {
-                mRlSend.setVisibility(View.VISIBLE);
-                mBtnSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
-                            @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content) {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
-                                    @Override
-                                    public void onSuccess() {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("已发送~");
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onError(int i, String s) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
-
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                            }
-                        });
-                    }
-                });
-            } else {
-                mRlSend.setVisibility(View.GONE);
-            }
-
-
-            mEditTtitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_edit_trip_title");
-                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                    editDialog.setTitle("修改标题");
-                    editDialog.setMessage(itemData.title);
-                    editDialog.setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            editDialog.dismiss();
-                            DialogManager.getInstance().showLoadingDialog(mContext);
-                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
-                                @Override
-                                public void doSucess(String result, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
-                                    if (modifyResult.code == 0) {
-                                        itemData.title = editDialog.getMessage();
-                                        mStrategyListAdapter.notifyDataSetChanged();
-                                        cachePage();
-                                    } else {
-                                        if (!isFinishing())
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                    }
-                                }
-
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    if (!isFinishing())
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                }
-                            });
-                        }
-                    });
-                    editDialog.show();
-                }
-            });
-
-            mDeleteItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteItem(itemData);
-                }
-            });
-        }
-
-    }
 
     private void deleteItem(final StrategyBean itemData) {
         MobclickAgent.onEvent(mContext, "event_delete_trip_plan");
@@ -714,7 +553,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         } else {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())
-                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                                ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                         }
                     }
 
@@ -722,7 +561,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
-                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
             }
@@ -749,7 +588,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
     }
 
-    private void backToTop(final StrategyBean itemData1){
+    /*private void backToTop(final StrategyBean itemData1){
         DialogManager.getInstance().showLoadingDialog(mContext);
         Long time=System.currentTimeMillis();
         TravelApi.modifyGuideTop(itemData1.id, time, new HttpCallBack<String>() {
@@ -767,7 +606,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
-                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -775,19 +614,19 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
     private void addToTop(final StrategyBean topBean){
-                mStrategyListAdapter.getDataList().add(0, topBean);
-                mStrategyListAdapter.notifyDataSetChanged();
-    }
+        mStrategyListAdapter.getDataList().add(0, topBean);
+        mStrategyListAdapter.notifyDataSetChanged();
+    }*/
 
     private void haveBeenVisited(StrategyBean beenBean){
         DialogManager.getInstance().showLoadingDialog(mContext);
-        String visited="traveled";
+        String visited="planned";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -798,7 +637,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
-                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -806,7 +645,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

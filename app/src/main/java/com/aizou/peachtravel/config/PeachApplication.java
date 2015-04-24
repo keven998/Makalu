@@ -67,9 +67,9 @@ public class PeachApplication extends BaseApplication {
 
     private void initPeachConfig(){
         if(BuildConfig.DEBUG){
-            SystemConfig.BASE_URL = SystemConfig.DEBUG_BASE_URL;
-        }else{
             SystemConfig.BASE_URL = SystemConfig.RELEASE_BASE_URL;
+        }else{
+            SystemConfig.BASE_URL = SystemConfig.DEBUG_BASE_URL;
         }
 
     }

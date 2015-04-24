@@ -29,6 +29,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable{
     public Integer dayCnt;
     public Integer itineraryDays;
     public String detailUrl;
+    public String status;
 
     @Override
     public ShareDialogBean createShareBean() {

@@ -59,7 +59,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="30dp" />
 
-        <TextView
+       <!-- <TextView
             android:id="@+id/strategy_title"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
@@ -70,28 +70,31 @@
             android:textColor="@color/base_color_black"
             android:singleLine="true"
             android:ellipsize="end"
-            />
+            />-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/iv_edit"
-            android:src="@drawable/ic_location"
-            android:paddingRight="5dp"
-            android:paddingLeft="10dp"
-            />
 
         <CheckedTextView
             android:id="@+id/iv_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/iv_more"
+            android:layout_toLeftOf="@+id/iv_location"
             android:checked="false"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:paddingRight="5dp"
+            android:paddingRight="10dp"
             android:drawableLeft="@drawable/checker_ic_plan_edit"
             />
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_more"
+            android:src="@drawable/ic_location"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            />
+
 
         <ImageView
             android:id="@+id/iv_more"

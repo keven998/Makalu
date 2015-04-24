@@ -20,21 +20,21 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/strategy_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="更多"
                 android:textColor="@color/base_font_color"
                 android:layout_gravity="center"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 />
 
             <TextView
-                android:id="@+id/strategy_more_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/third_font_color"
-                android:text="dfskfsdfdsa"
+                android:text="请选择你要进行的操作"
                 android:layout_gravity="center"
                 android:singleLine="true"
                 android:ellipsize="end"
@@ -50,13 +50,13 @@
 
 
         <Button
-            android:id="@+id/strategy_edit_title"
+            android:id="@+id/strategy_add_router"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
-            android:text="修改标题" />
+            android:text="添加行程" />
 
         <View
             android:layout_width="match_parent"
@@ -64,13 +64,13 @@
             android:background="@color/base_divider_color"/>
 
         <Button
-            android:id="@+id/strategy_goto_top"
+            android:id="@+id/strategy_add_day_before"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
-            android:text="置顶" />
+            android:text="加一天在前面" />
 
         <View
             android:layout_width="match_parent"
@@ -78,13 +78,28 @@
             android:background="@color/base_divider_color"/>
 
         <Button
-            android:id="@+id/strategy_been"
+            android:id="@+id/strategy_add_day_after"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
-            android:text="去过" />
+            android:text="加一天在后面" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_divider_color"/>
+
+        <Button
+            android:id="@+id/strategy_del_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/base_color_red"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="删除这一天" />
+
 
     </LinearLayout>
 
