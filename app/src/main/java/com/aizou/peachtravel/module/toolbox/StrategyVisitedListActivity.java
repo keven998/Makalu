@@ -191,7 +191,6 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                     new TypeToken<List<StrategyBean>>() {
                     });
-            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(String.valueOf(lists.size()));
             mStrategyListAdapter.getDataList().addAll(lists);
             mStrategyListAdapter.notifyDataSetChanged();
             if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {

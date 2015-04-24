@@ -113,7 +113,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_my_trip_plans");
     }
 
@@ -201,7 +200,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                     new TypeToken<List<StrategyBean>>() {
                     });
-            ToastUtil.getInstance(StrategyListActivity.this).showToast(String.valueOf(lists.size()));
             mStrategyListAdapter.getDataList().addAll(lists);
             mStrategyListAdapter.notifyDataSetChanged();
             if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
@@ -300,6 +298,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                mMyStrategyLv.doPullRefreshing(true, 0);
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容");
             }
@@ -794,7 +793,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (visitedResult.code == 0) {
-
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())

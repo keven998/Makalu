@@ -72,6 +72,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     Button addDayBtn;
     StrategyBean strategy;
     boolean isInEditMode;
+    public boolean isInnerEdit=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -450,6 +451,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     }
 
                     if (!isAnimationEnd && isEditableMode) {
+                        ToastUtil.getInstance(getActivity()).showToast("yunxingle");
                         Animation animation = AnimationSimple.expand(holder.deleteIv);
                         animation.setAnimationListener(new Animation.AnimationListener() {
                             @Override
@@ -863,6 +865,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 intent.putExtra("dayIndex", position);
                 intent.putParcelableArrayListExtra("poiList", routeDayMap.get(position));
                 getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
+                if(mOnEditModeChangeListener!=null){
+                    if(!isInEditMode){
+                        isInEditMode = true;
+                        routeDayAdpater.setEditableMode(true);
+                        routeDayAdpater.notifyDataSetChanged();
+                        mOnEditModeChangeListener.onEditModeChange(true);
+                    }
+                }
             }
         });
 
@@ -882,6 +892,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         strategy.itineraryDays--;
                         routeDayAdpater.notifyDataSetChanged();
                         deleteDialog.dismiss();
+                        if(mOnEditModeChangeListener!=null){
+                            if(!isInEditMode){
+                                isInEditMode = true;
+                                routeDayAdpater.setEditableMode(true);
+                                routeDayAdpater.notifyDataSetChanged();
+                                mOnEditModeChangeListener.onEditModeChange(true);
+                            }
+                        }
                     }
                 });
                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -922,12 +940,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
         strategy.itineraryDays++;
         routeDayAdpater.notifyDataSetChanged();
-        mEditDslv.postDelayed(new Runnable() {
+        /*mEditDslv.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
             }
-        }, 50);
+        }, 50);*/
         if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;

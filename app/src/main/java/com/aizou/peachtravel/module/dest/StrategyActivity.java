@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -55,6 +57,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
+import com.tencent.open.utils.AsynLoadImg;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -96,6 +99,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     RestaurantFragment restFragment;
     ShoppingFragment shoppingFragment;
     private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
+    private ImageView iv_location,iv_more;
+    private TextView tv_back;
+    private RelativeLayout bottom_indicator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
     private void initView() {
         setContentView(R.layout.activity_strategy);
+        iv_location=(ImageView)findViewById(R.id.iv_location);
+        iv_more=(ImageView)findViewById(R.id.iv_more);
+        tv_back=(TextView)findViewById(R.id.tv_title_back);
+        bottom_indicator=(RelativeLayout)findViewById(R.id.bottom_indicator);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(false);
        // indexTv = (TextView)LayoutInflater.from(this).inflate(R.layout.tab_strategy,null);
@@ -405,10 +416,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     if (!cv.isChecked()) {
                         MobclickAgent.onEvent(mContext,"event_edit_plan");
                         gotoEditMode();
+                        ishideSomeIcons(true);
                         cv.setChecked(true);
                     } else {
                         MobclickAgent.onEvent(mContext,"event_edit_done");
                         saveStrategy(false);
+                        ishideSomeIcons(false);
                     }
                 }
             });
@@ -439,6 +452,21 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 //        setRVVisiable(false);
     }
 
+    private void ishideSomeIcons(boolean ishide){
+        if(ishide){
+            tv_back.setVisibility(View.GONE);
+            iv_location.setVisibility(View.GONE);
+            iv_more.setVisibility(View.GONE);
+            bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_out));
+            bottom_indicator.setVisibility(View.GONE);
+        }else{
+            tv_back.setVisibility(View.VISIBLE);
+            iv_location.setVisibility(View.VISIBLE);
+            iv_more.setVisibility(View.VISIBLE);
+            bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_in));
+            bottom_indicator.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void finish() {
         super.finish();
