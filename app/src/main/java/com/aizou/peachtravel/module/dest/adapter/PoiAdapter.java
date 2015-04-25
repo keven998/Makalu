@@ -112,19 +112,19 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_secondary_selector);
+                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
                     spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
-                    spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
+                    //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 }
             } else {
                 convertView = View.inflate(context, R.layout.row_poi_list, null);
                 poiViewHolder = new PoiViewHolder(convertView);
                 convertView.setTag(poiViewHolder);
                 if (!mIsCanAdd) {
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_secondary_selector);
+                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
                     poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
-                    poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
+                    //poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 }
             }
         } else {
@@ -159,7 +159,7 @@ public class PoiAdapter extends BaseAdapter {
                     spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_has_add);
                 } else {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_secondary_normal_shape);
+                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_normal_shape_radius_4);
                 }
                  spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -181,7 +181,7 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                spotViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离
+                spotViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离
                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -205,7 +205,7 @@ public class PoiAdapter extends BaseAdapter {
                     poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_has_add);
                 } else {
                     poiViewHolder.mBtnAdd.setText(mAddStr);
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_secondary_normal_shape);
+                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_normal_shape_radius_4);
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override

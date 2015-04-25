@@ -51,7 +51,8 @@
                 android:ellipsize="end"
                 android:textColor="@color/third_font_color"
                 android:textSize="15sp"
-                android:text="安徽 合肥"/>
+                android:text="安徽 合肥"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

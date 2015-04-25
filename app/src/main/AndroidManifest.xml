@@ -578,7 +578,7 @@
         <!-- 高德地图-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1ebc37fe421415484068dad4493ffccb" />
+            android:value="1ebc37fe421415484068dad4493ffccb"/>  <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
 
         <meta-data android:value="54376b1bfd98c554cf025d0c" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="Alpha" android:name="UMENG_CHANNEL"/>

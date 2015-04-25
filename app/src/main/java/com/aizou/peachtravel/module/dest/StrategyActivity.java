@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Display;
@@ -83,6 +84,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     ImageView mIvMore;
     @InjectView(R.id.tv_copy_guide)
     TextView mTvCopyGuide;
+    @InjectView(R.id.strategy_drawer_layout)
+    android.support.v4.widget.DrawerLayout drawerLayout;
     private IndicatorViewPager indicatorViewPager;
     @InjectView(R.id.strategy_viewpager)
     FixedViewPager mStrategyViewpager;
@@ -439,7 +442,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             mIvMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showActionDialog();
+                    //showActionDialog();
+                    //这个与群聊chat里面的侧边栏内容一样，后期实现请参考ChatActivity
+                    if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+                        drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
+                    } else {
+                        drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
+                    }
                 }
             });
         }

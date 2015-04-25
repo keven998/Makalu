@@ -4,13 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/rl_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:padding="10dp"
+        android:orientation="horizontal"
         android:layout_marginTop="1dp"
-        android:background="@color/base_color_white"
+        android:background="@color/base_color_white">
+
+        <ImageView
+            android:id="@+id/poi_delete_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_line_edit_delete"
+            android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="100dp"
+        android:padding="10dp"
         >
 
 
@@ -53,7 +72,8 @@
                 android:ellipsize="end"
                 android:textColor="@color/third_font_color"
                 android:textSize="15sp"
-                android:text="安徽 合肥"/>
+                android:text="安徽 合肥"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -127,10 +147,21 @@
             android:textSize="10sp"
             android:layout_marginRight="2dp"
             />
-
-
-
     </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/poi_drag_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_line_edit_drag"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </FrameLayout>

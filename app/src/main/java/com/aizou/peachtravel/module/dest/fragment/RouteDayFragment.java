@@ -451,7 +451,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     }
 
                     if (!isAnimationEnd && isEditableMode) {
-                        ToastUtil.getInstance(getActivity()).showToast("yunxingle");
                         Animation animation = AnimationSimple.expand(holder.deleteIv);
                         animation.setAnimationListener(new Animation.AnimationListener() {
                             @Override
@@ -868,9 +867,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        routeDayAdpater.setEditableMode(true);
-                        routeDayAdpater.notifyDataSetChanged();
                         mOnEditModeChangeListener.onEditModeChange(true);
+                        routeDayAdpater.setEditableMode(false);
+                        routeDayAdpater.notifyDataSetChanged();
                     }
                 }
             }
@@ -895,9 +894,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         if(mOnEditModeChangeListener!=null){
                             if(!isInEditMode){
                                 isInEditMode = true;
-                                routeDayAdpater.setEditableMode(true);
-                                routeDayAdpater.notifyDataSetChanged();
                                 mOnEditModeChangeListener.onEditModeChange(true);
+                                routeDayAdpater.setEditableMode(false);
+                                routeDayAdpater.notifyDataSetChanged();
                             }
                         }
                     }
@@ -949,9 +948,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;
-                routeDayAdpater.setEditableMode(true);
-                routeDayAdpater.notifyDataSetChanged();
                 mOnEditModeChangeListener.onEditModeChange(true);
+                routeDayAdpater.setEditableMode(false);
+                routeDayAdpater.notifyDataSetChanged();
             }
         }
     }

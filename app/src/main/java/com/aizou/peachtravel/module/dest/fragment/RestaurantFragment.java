@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -115,7 +116,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         mRestAdapter = new RestAdapter(isInEditMode);
         final DragSortListView listView = mEditDslv;
         View view = new View(getActivity());
-        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(10)));
+        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(0)));
         listView.addHeaderView(view);
         listView.setFloatViewManager(controller);
         listView.setOnTouchListener(controller);
@@ -209,13 +210,13 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             final ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.row_list_poi, null);
+                convertView = View.inflate(getActivity(), R.layout.row_poi_list, null);
                 holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
-                holder.deleteIv = (ImageView) convertView.findViewById(R.id.delete_iv);
-                holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.drag_handle);
-                holder.nearByTv = (TextView) convertView.findViewById(R.id.drag_nearby_tv);
+                holder.deleteIv = (ImageView) convertView.findViewById(R.id.poi_delete_iv);
+                holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.poi_drag_handle);
+                holder.nearByTv = (CheckedTextView) convertView.findViewById(R.id.btn_add);
                 holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
-                holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
+                holder.poiNameTv = (TextView) convertView.findViewById(R.id.tv_poi_name);
                 holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
@@ -367,7 +368,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         private class ItemViewHolder {
             public RelativeLayout contentRl;
             public ImageView deleteIv, dragHandleIv;
-            public TextView nearByTv;
+            public CheckedTextView nearByTv;
             public ImageView poiImageIv;
             public TextView poiNameTv;
             public TextView poiAddressTv;
