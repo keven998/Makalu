@@ -36,36 +36,54 @@
         android:layout_marginRight="1dp"
         android:background="#DBDBDB" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/dia_tv1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/btn_blue_normal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="防守"
         android:gravity="center"
-        android:orientation="horizontal" >
+        />
 
-        <Button
-            android:id="@+id/btn_cancle"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:textColor="@color/main_color"
-            android:textSize="17sp"
-            android:background="@android:color/transparent"
-            />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="1dp"
+        android:background="#DBDBDB" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="45dp"
-            android:layout_marginBottom="1dp"
-            android:background="#DBDBDB" />
+    <TextView
+        android:id="@+id/dia_tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/btn_blue_normal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="防守"
+        android:gravity="center"
+        />
 
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:textColor="@color/app_theme_color"
-            android:textSize="17sp"
-            android:background="@android:color/transparent" />
-    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="1dp"
+        android:background="#DBDBDB" />
+
+    <TextView
+        android:id="@+id/dia_tv3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/btn_blue_normal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="防守"
+        android:gravity="center"
+        />
+
+
 
 </LinearLayout>

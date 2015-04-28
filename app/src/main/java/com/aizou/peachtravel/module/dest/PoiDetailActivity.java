@@ -51,6 +51,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
@@ -93,8 +94,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Optional
     @InjectView(R.id.iv_fav)
     ImageView mIvFav;
-    @InjectView(R.id.iv_close)
-    ImageView mIvClose;
+    @InjectView(R.id.poi_title_bar)
+    TitleHeaderBar titleBar;
     @InjectView(R.id.tv_recommend)
     TextView mTvRecommend;
     @InjectView(R.id.iv_share)
@@ -131,8 +132,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
-        p.height = (int) (d.getHeight() - LocalDisplay.dp2px(64));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(28));
+        p.height = (int) (d.getHeight() );    /*- LocalDisplay.dp2px(64)*/
+        p.width = (int) (d.getWidth() );   /*- LocalDisplay.dp2px(28)*/
 
         getWindow().setAttributes(p);
         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
@@ -140,19 +141,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         mLvFoodshopDetail.addHeaderView(headerView);
         mLvFoodshopDetail.addFooterView(footerView);
-        ButterKnife.inject(this);
-
-        mIvClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishWithNoAnim();
-                overridePendingTransition(0, android.R.anim.fade_out);
-            }
-        });
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
                 return new CommentViewHolder();
+            }
+        });
+        ButterKnife.inject(this);
+        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.fade_out);
             }
         });
         mLvFoodshopDetail.setAdapter(commentAdapter);

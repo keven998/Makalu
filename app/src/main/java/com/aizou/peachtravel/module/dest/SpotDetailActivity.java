@@ -71,6 +71,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private ImageView favIv,shareIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
+    private TitleHeaderBar titleBar;
 
 
     @Override
@@ -100,24 +101,25 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_spot_detail);
+        titleBar=(TitleHeaderBar)findViewById(R.id.spot_title_bar);
+        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.fade_out);
+            }
+        });
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
-        p.height = (int) (d.getHeight() - LocalDisplay.dp2px(64));
-        p.width = (int) (d.getWidth() - LocalDisplay.dp2px(28));
+        p.height = (int) (d.getHeight());  /* - LocalDisplay.dp2px(64)*/
+        p.width = (int) (d.getWidth() ); /*- LocalDisplay.dp2px(28)*/
 //        p.alpha = 1.0f;      //设置本身透明度
 //        p.dimAmount = 0.0f;      //设置黑暗度
 //        getWindow().setAttributes(p);
         spotIv = (ImageView) findViewById(R.id.iv_spot);
-        closeIv = (ImageView) findViewById(R.id.iv_close);
-        closeIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishWithNoAnim();
-                SpotDetailActivity.this.overridePendingTransition(0, R.anim.fade_out);
-            }
-        });
+
         favIv = (ImageView) findViewById(R.id.iv_fav);
         shareIv = (ImageView) findViewById(R.id.iv_share);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);

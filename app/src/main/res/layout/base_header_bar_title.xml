@@ -21,6 +21,7 @@
             android:paddingRight="20dp"
             android:gravity="center_vertical"
             android:duplicateParentState="true"
+            android:textSize="15sp"
             android:drawableLeft="@drawable/selector_ic_nav_back"/>
 
     </RelativeLayout>

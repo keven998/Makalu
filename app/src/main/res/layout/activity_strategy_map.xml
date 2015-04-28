@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:id="@+id/map_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        />
+
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/strategy_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/title_bar_height"
+        android:layout_marginBottom="50dp"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/strategy_map_locations"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/base_color_white"
+        >
+
+        <HorizontalScrollView
+            android:id="@+id/map_days_name_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true">
+
+
+
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

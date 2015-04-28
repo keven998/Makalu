@@ -80,6 +80,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     TextView mTvTitleBack;
     @InjectView(R.id.iv_edit)
     CheckedTextView mIvEdit;
+    @InjectView(R.id.strategy_title)
+    TextView  topTitle;
     @InjectView(R.id.iv_more)
     ImageView mIvMore;
     @InjectView(R.id.tv_copy_guide)
@@ -105,6 +107,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private ImageView iv_location,iv_more;
     private TextView tv_back;
     private RelativeLayout bottom_indicator;
+    private View loading_view;
 
 
     @Override
@@ -136,6 +139,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
     private void initView() {
         setContentView(R.layout.activity_strategy);
+        loading_view=(View)findViewById(R.id.loading_view);
+        loading_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //啥也不执行
+            }
+        });
         iv_location=(ImageView)findViewById(R.id.iv_location);
         iv_more=(ImageView)findViewById(R.id.iv_more);
         tv_back=(TextView)findViewById(R.id.tv_title_back);
@@ -147,6 +157,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(2);
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
+        iv_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(StrategyActivity.this,StrategyMapActivity.class);
+                ArrayList<StrategyBean> list=new ArrayList<StrategyBean>(){};
+                list.add(getSaveStrategy());
+                intent.putParcelableArrayListExtra("strategy",list);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_from_right,0);
+            }
+        });
         mTvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,7 +445,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     } else {
                         MobclickAgent.onEvent(mContext,"event_edit_done");
                         saveStrategy(false);
-                        ishideSomeIcons(false);
                     }
                 }
             });
@@ -584,6 +604,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     routeDayFragment = new RouteDayFragment();
                     routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
+
                 return routeDayFragment;
             } else if (position == 1) {
                 if (restFragment == null) {
@@ -657,11 +678,16 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         if (restFragment != null) {
             StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
         }
-        DialogManager.getInstance().showLoadingDialog(mContext);
+        topTitle.setText("保存中...");
+        loading_view.setVisibility(View.VISIBLE);
+        //DialogManager.getInstance().showLoadingDialog(mContext);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+                topTitle.setText("");
+                loading_view.setVisibility(View.GONE);
+                ishideSomeIcons(false);
+                //DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {
                     originalStrategy = (StrategyBean) CommonUtils.clone(strategy);

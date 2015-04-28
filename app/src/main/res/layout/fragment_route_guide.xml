@@ -9,6 +9,7 @@
             android:id="@+id/edit_dslv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_marginBottom="62dp"
             android:dividerHeight="0dp"
             android:divider="@null"
             android:listSelector="@android:color/transparent"

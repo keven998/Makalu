@@ -46,6 +46,7 @@ import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.ComfirmDialog;
 import com.aizou.peachtravel.common.dialog.CustomDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachEditDialog;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
@@ -298,7 +299,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
                 mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                mMyStrategyLv.doPullRefreshing(true, 0);
+                //mMyStrategyLv.doPullRefreshing(true, 0);
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容");
             }
@@ -421,16 +422,15 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
 
         public void showMoreDialog(final StrategyBean strBean){
-            final Activity act = StrategyListActivity.this;
-            final AlertDialog dialog = new AlertDialog.Builder(act).create();
-            View contentView = View.inflate(act, R.layout.dialog_strategy_more_view, null);
-            TextView title = (TextView) contentView.findViewById(R.id.strategy_more_title);
-            Button edit_title = (Button) contentView.findViewById(R.id.strategy_edit_title);
-            Button goto_top = (Button) contentView.findViewById(R.id.strategy_goto_top);
-            Button been = (Button) contentView.findViewById(R.id.strategy_been);
 
-            title.setText(strBean.title);
-            edit_title.setOnClickListener(new View.OnClickListener() {
+            final MoreDialog dialog=new MoreDialog(StrategyListActivity.this);
+            dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+            dialog.setTitle("更多");
+            dialog.setMessage(strBean.title);
+            dialog.getTv1().setText("修改标题");
+            dialog.getTv2().setText("置顶");
+            dialog.getTv3().setText("去过");
+            dialog.getTv1().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -471,7 +471,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             });
 
             //置顶操作
-            goto_top.setOnClickListener(new View.OnClickListener() {
+            dialog.getTv2().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -481,43 +481,37 @@ public class StrategyListActivity extends PeachBaseActivity {
 
 
             //去过操作
-            been.setOnClickListener(new View.OnClickListener() {
+            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                     haveBeenVisited(strBean);
                     deleteThisItem(strBean);
-                    final ComfirmDialog dialog=new ComfirmDialog(StrategyListActivity.this);
-                    dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-                    dialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-                    dialog.setTitle("提示");
-                    dialog.setMessage(strBean.title+"已保存为去过，成为了您的旅历足迹");
-                    dialog.setPositiveButton("确定",new View.OnClickListener() {
+                    final ComfirmDialog cdialog=new ComfirmDialog(StrategyListActivity.this);
+                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                    cdialog.setTitle("提示");
+                    cdialog.setMessage(strBean.title+"已保存为去过，成为了您的旅历足迹");
+                    cdialog.setPositiveButton("确定",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            cdialog.dismiss();
                         }
                     });
-                    dialog.show();
-                }
-            });
-
-            contentView.findViewById(R.id.strategy_btn_cancle).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
+                    final Handler handler=new Handler(){
+                        public void handleMessage(Message msg) {
+                            switch (msg.what){
+                                case 1:
+                                    cdialog.show();
+                            }
+                            super.handleMessage(msg);
+                        }
+                    };
+                    Message message=handler.obtainMessage(1);
+                    handler.sendMessageDelayed(message,500);
                 }
             });
             dialog.show();
-            WindowManager windowManager = act.getWindowManager();
-            Window window = dialog.getWindow();
-            window.setContentView(contentView);
-            Display display = windowManager.getDefaultDisplay();
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = (int) (display.getWidth()); // 设置宽度
-            window.setAttributes(lp);
-            window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-            window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
         }
 
         @Override

@@ -65,7 +65,13 @@ public class SearchAllActivity extends PeachBaseActivity {
             mTitleBar.getTitleTextView().setText("搜索");
         }
 
-        mTitleBar.enableBackKey(true);
+        mTitleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.push_bottom_out);
+            }
+        });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

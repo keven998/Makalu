@@ -44,6 +44,7 @@ import com.aizou.peachtravel.common.widget.dslv.DragSortListView;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.module.dest.AddPoiActivity;
 import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
+import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -77,9 +78,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
-       // addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
+        //addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
        // addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
         ButterKnife.inject(this, rootView);
+       // addDayFooter.setVisibility(View.INVISIBLE);
         //mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
@@ -532,7 +534,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     holder.contentRl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            IntentUtils.intentToDetail(getActivity(), TravelApi.PeachType.SPOT, poiDetailBean.id);
+                           IntentUtils.intentToDetail(getActivity(), TravelApi.PeachType.SPOT, poiDetailBean.id);
+
                         }
                     });
 

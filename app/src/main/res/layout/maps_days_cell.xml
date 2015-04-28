@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:padding="10dp"
+    android:layout_marginTop="1dp">
+
+    <TextView
+        android:id="@+id/days_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="@color/base_font_color"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:text="第一天"/>
+
+
+
+    <ImageView
+        android:id="@+id/map_days_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/settings_selected"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

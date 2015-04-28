@@ -34,6 +34,7 @@
     <color name="base_color_light_black">#1C1C1C</color>
     <color name="base_color_light_green">#40E0D0</color>
 
+    <color name="half_transparent_color">#e0000000</color>
 
     <color name="base_content_color">#22b59a</color>
     <color name="base_gary_bg">#EAEAEA</color>

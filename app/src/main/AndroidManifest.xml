@@ -98,7 +98,8 @@
         <activity
             android:name=".module.dest.StrategyActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent">
         </activity>
         <activity
             android:name=".module.dest.AddPoiActivity"
@@ -174,7 +175,8 @@
         <activity
             android:name=".module.dest.SearchAllActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent">
         </activity>
         <activity
             android:name=".module.dest.TravelNoteSearchActivity"
@@ -503,6 +505,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
+        <!--攻略地图-->
+        <activity
+            android:name=".module.dest.StrategyMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent" >
+        </activity>
+
         <activity
             android:name=".module.dest.RecDestActivity"
             android:screenOrientation="portrait"

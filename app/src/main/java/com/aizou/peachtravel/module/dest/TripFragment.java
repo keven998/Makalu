@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +63,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
     private TextView lx_trip_plan;
     private TextView lx_around;
     private TextView lx_des;
+    private EditText search_all;
     private String[] weatherArray;
     private String weatherStr;
     private String city;
@@ -85,10 +87,12 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
         lx_trip_plan=(TextView)rootView.findViewById(R.id.lx_trip_plan);
         lx_around=(TextView)rootView.findViewById(R.id.lx_around);
         lx_des=(TextView)rootView.findViewById(R.id.lx_des);
+        search_all=(EditText)rootView.findViewById(R.id.search_all_et);
         lx_guide_favour.setOnClickListener(this);
         lx_trip_plan.setOnClickListener(this);
         lx_around.setOnClickListener(this);
         lx_des.setOnClickListener(this);
+        search_all.setOnClickListener(this);
 
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
@@ -266,6 +270,13 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 Intent intent=new Intent();
                 intent.setClass(getActivity(), RecDestActivity.class);
                 startActivity(intent);
+                break;
+
+
+            case R.id.search_all_et:
+                Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
+                startActivity(sear_intent);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                 break;
 
             default:

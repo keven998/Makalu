@@ -79,6 +79,10 @@ public class TitleHeaderBar extends HeaderBarBase {
         mReturnImageView.setCompoundDrawables(drawable,null,null,null);
     }
 
+    public void setLeftDrawableToNull(){
+        mReturnImageView.setCompoundDrawables(null,null,null,null);
+    }
+
     public void setRightViewImageRes(int res){
         mRightTextView.setCompoundDrawablesWithIntrinsicBounds(0,0,res,0);
     }

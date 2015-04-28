@@ -54,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/strategy_more"
                 android:layout_alignParentRight="true"
-                android:paddingRight="10dp"
+                android:paddingRight="20dp"
+                android:paddingLeft="30dp"
                 />
 
             <TextView

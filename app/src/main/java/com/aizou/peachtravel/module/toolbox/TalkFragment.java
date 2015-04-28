@@ -33,6 +33,7 @@ import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachConversation;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.config.PeachApplication;
@@ -222,12 +223,14 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
-        final Activity act = getActivity();
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
-        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setText("新建Talk");
-        btn.setOnClickListener(new View.OnClickListener() {
+        final MoreDialog dialog=new MoreDialog(getActivity());
+        dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+        dialog.hideInfoTitle();
+        dialog.getTv1().setText("新建Talk");
+        dialog.getTv2().setText("加好友");
+        dialog.getTv3().setText("");
+        dialog.getTv3().setVisibility(View.GONE);
+        dialog.getTv1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_create_new_talk");
@@ -236,9 +239,7 @@ public class TalkFragment extends PeachBaseFragment {
                 dialog.dismiss();
             }
         });
-        Button btn1 = (Button) contentView.findViewById(R.id.btn_go_share);
-        btn1.setText("加好友");
-        btn1.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
@@ -247,22 +248,7 @@ public class TalkFragment extends PeachBaseFragment {
                 dialog.dismiss();
             }
         });
-        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
         dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
 
