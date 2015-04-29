@@ -32,6 +32,7 @@ public class ContactActivity extends PeachBaseActivity {
         titleBar.getTitleTextView().setText("联系人");
         titleBar.getLeftTextView().setCompoundDrawables(null,null,null,null);
         titleBar.getLeftTextView().setText("取消");
+        titleBar.getLeftTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
         titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

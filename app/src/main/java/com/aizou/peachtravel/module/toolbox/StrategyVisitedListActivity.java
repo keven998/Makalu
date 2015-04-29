@@ -411,15 +411,13 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         }
 
         public void showMoreDialog(final StrategyBean strBean){
+            String[] names={"修改标题","重置为计划"};
             final MoreDialog dialog=new MoreDialog(StrategyVisitedListActivity.this);
+            dialog.setMoreStyle(true,2,names);
             dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
             dialog.setTitle("更多");
             dialog.setMessage(strBean.title);
-            dialog.getTv1().setText("修改标题");
-            dialog.getTv2().setText("重置为计划");
-            dialog.getTv3().setText("");
-            dialog.getTv3().setVisibility(View.GONE);
-            dialog.getTv1().setOnClickListener(new View.OnClickListener() {
+            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -459,7 +457,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                 }
             });
             //修改为计划操作
-            dialog.getTv2().setOnClickListener(new View.OnClickListener() {
+            dialog.getTv4().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -487,7 +485,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                         }
                     };
                     Message message=handler.obtainMessage(1);
-                    handler.sendMessageDelayed(message,500);
+                    handler.sendMessageDelayed(message,300);
                 }
             });
             dialog.show();

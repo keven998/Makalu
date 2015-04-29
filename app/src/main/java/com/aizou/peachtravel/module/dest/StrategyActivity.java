@@ -157,6 +157,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(2);
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
+            @Override
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                if(currentItem==0){iv_location.setVisibility(View.VISIBLE);}
+                else{iv_location.setVisibility(View.GONE);}
+            }
+        });
         iv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -496,6 +503,24 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             bottom_indicator.setVisibility(View.VISIBLE);
         }
     }
+
+    private void showSaveFailureIcons(){
+        tv_back.setVisibility(View.VISIBLE);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                intent.putExtra("strategy", originalStrategy);
+                setResult(RESULT_OK, intent);
+                finish();
+              /*  Intent intent = getIntent();
+                intent.putExtra("strategy", originalStrategy);
+                setResult(RESULT_OK, intent);
+                finish();*/
+            }
+        });
+    }
+
     @Override
     public void finish() {
         super.finish();
@@ -680,16 +705,19 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
         topTitle.setText("保存中...");
         loading_view.setVisibility(View.VISIBLE);
+        ishideSomeIcons(true);
         //DialogManager.getInstance().showLoadingDialog(mContext);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                topTitle.setText("");
-                loading_view.setVisibility(View.GONE);
-                ishideSomeIcons(false);
                 //DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {
+
+                    topTitle.setText("");
+                    loading_view.setVisibility(View.GONE);
+                    ishideSomeIcons(false);
+
                     originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
                     mIvEdit.setChecked(false);
                     for(OnStrategyModeChangeListener onEditModeChangeListener:mOnEditModeChangeListeners){
@@ -702,6 +730,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         finish();
                     }
                 } else {
+                    topTitle.setText("保存失败");
+                    loading_view.setVisibility(View.GONE);
+                    showSaveFailureIcons();
                     if (!isFinishing())
                         ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -709,8 +740,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+                //DialogManager.getInstance().dissMissLoadingDialog();
 //                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
+                topTitle.setText("保存失败");
+                loading_view.setVisibility(View.GONE);
+                showSaveFailureIcons();
                 if (!isFinishing())
                     ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
             }

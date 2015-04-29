@@ -34,6 +34,7 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
+import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.AnimationSimple;
@@ -70,19 +71,15 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
     View addDayFooter;
-    Button addDayBtn;
     StrategyBean strategy;
     boolean isInEditMode;
-    public boolean isInnerEdit=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
-        //addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
-       // addDayBtn = (Button) addDayFooter.findViewById(R.id.btn_add_day);
+        addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_bottom, null);
         ButterKnife.inject(this, rootView);
-       // addDayFooter.setVisibility(View.INVISIBLE);
-        //mEditDslv.addFooterView(addDayFooter);
+        mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
     }
@@ -148,13 +145,13 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     }
     private void setAddDayView(){
         final PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
-        if(addDayFooter!=null){
+       /* if(addDayFooter!=null){
             if (user.userId != strategy.userId) {
                 addDayFooter.setVisibility(View.GONE);
             }else{
                 addDayFooter.setVisibility(View.VISIBLE);
             }
-        }
+        }*/
 
     }
     private void initData() {
@@ -826,20 +823,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     }
 
     public void showMoreDialog(final int position ){
-        final Activity act = getActivity();
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.strategy_more_action_view, null);
-
-        TextView day = (TextView) contentView.findViewById(R.id.strategy_day);
-        Button add_router = (Button) contentView.findViewById(R.id.strategy_add_router);
-        Button add_router_before = (Button) contentView.findViewById(R.id.strategy_add_day_before);
-        Button add_router_after = (Button) contentView.findViewById(R.id.strategy_add_day_after);
-        Button del_day = (Button) contentView.findViewById(R.id.strategy_del_day);
-
-        day.setText("第"+(position+1)+"天");
-
+        String[] names={"添加行程","加一天在前面","加一天在后面","删除这一天"};
+        final MoreDialog dialog=new MoreDialog(getActivity());
+        dialog.setMoreStyle(true,4,names);
+        dialog.setTitle("第"+(position+1)+"天");
+        dialog.setMessage("请选择你要进行的操作");
+        dialog.getTv4().setTextColor(getResources().getColor(R.color.base_color_red));
         //添加一天在前面
-        add_router_before.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -848,7 +839,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         });
 
         //添加一天在后面
-        add_router_after.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -857,7 +848,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         });
 
         //添加行程
-        add_router.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -879,7 +870,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         });
 
         //删除这一天
-        del_day.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv4().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -913,23 +904,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 deleteDialog.show();
             }
         });
-
-        contentView.findViewById(R.id.strategy_btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
         dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
 

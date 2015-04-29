@@ -14,14 +14,18 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,6 +60,7 @@ public class ContactlistFragment extends Fragment {
     private TextView indexDialogTv;
 	private boolean hidden;
     private View emptyView;
+    private EditText search;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,12 +71,16 @@ public class ContactlistFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
 //		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		listView = (ListView) getView().findViewById(R.id.list);
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
+        search = (EditText) getView().findViewById(R.id.contact_search_tv);
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<IMUser>();

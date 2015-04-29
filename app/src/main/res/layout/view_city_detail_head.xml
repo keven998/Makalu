@@ -239,6 +239,19 @@
             android:background="@color/app_backgroud"
             />
 
+
+        <TextView
+            android:id="@+id/tv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="right|center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="更多"
+            android:textColor="@color/secondary_theme_color"
+            android:drawableRight="@drawable/app_them_arrow_secondary"
+            android:drawablePadding="1dp"
+            android:textSize="12sp"/>
+
        <!-- <TextView
             android:id="@+id/trip_title"
             android:layout_width="wrap_content"
@@ -261,19 +274,7 @@
             android:text="作者：的萨克地方撒娇  范德萨  的份上"
             />
 
-        <TextView
-            android:id="@+id/tv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/trip_author"
-            android:layout_alignBottom="@id/trip_author"
-            android:text="更多"
-            android:textColor="@color/secondary_theme_color"
-            android:drawableRight="@drawable/app_them_arrow_secondary"
-            android:drawablePadding="1dp"
-            android:textSize="12sp"/>
+
 -->
 
     </RelativeLayout>

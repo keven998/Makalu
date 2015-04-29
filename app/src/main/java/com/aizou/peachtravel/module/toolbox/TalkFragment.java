@@ -223,14 +223,10 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
+        String[] names={"新建Talk","加好友"};
         final MoreDialog dialog=new MoreDialog(getActivity());
-        dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-        dialog.hideInfoTitle();
-        dialog.getTv1().setText("新建Talk");
-        dialog.getTv2().setText("加好友");
-        dialog.getTv3().setText("");
-        dialog.getTv3().setVisibility(View.GONE);
-        dialog.getTv1().setOnClickListener(new View.OnClickListener() {
+        dialog.setMoreStyle(false,2,names);
+        dialog.getTv3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_create_new_talk");
@@ -239,7 +235,7 @@ public class TalkFragment extends PeachBaseFragment {
                 dialog.dismiss();
             }
         });
-        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
+        dialog.getTv4().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_add_new_friend");

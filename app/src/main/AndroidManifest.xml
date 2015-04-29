@@ -314,6 +314,7 @@
             android:name=".module.toolbox.im.ContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"
+            android:windowSoftInputMode="stateAlwaysHidden"
             >
         </activity>
         <activity

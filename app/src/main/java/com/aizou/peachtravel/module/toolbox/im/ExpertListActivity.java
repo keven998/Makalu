@@ -2,6 +2,7 @@ package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -53,6 +54,8 @@ public class ExpertListActivity extends PeachBaseActivity {
     private TextView places_layout;
     private int layout_width;
     private DynamicBox box;
+    private List<ExpertBean> expertBeans;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +88,11 @@ public class ExpertListActivity extends PeachBaseActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ToastUtil.getInstance(ExpertListActivity.this).showToast("点击进入达人详情页或聊天页,第"+(position+1)+"个达人");
+            Intent intent=new Intent();
+            intent.setClass(ExpertListActivity.this,ContactDetailActivity.class);
+            intent.putExtra("userId",expertBeans.get(position).userId);
+            startActivity(intent);
+            //ToastUtil.getInstance(ExpertListActivity.this).showToast("点击进入达人详情页或聊天页,第"+(position+1)+"个达人");
         }
     }
 
@@ -99,9 +106,12 @@ public class ExpertListActivity extends PeachBaseActivity {
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result , ExpertBean.class);
                 if(expertresult.code==0){
                     adapter=new ExpertAdapter(ExpertListActivity.this,expertresult.result);
+                    expertBeans=expertresult.result;
                     listView.setAdapter(adapter);
                 }
             }
+
+
 
             @Override
             public void doFailure(Exception error, String msg, String method) {

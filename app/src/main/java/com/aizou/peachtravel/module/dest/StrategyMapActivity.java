@@ -18,6 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -30,6 +31,7 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
@@ -53,6 +55,8 @@ public class StrategyMapActivity extends PeachBaseActivity {
     private ImageView selected;
     private PopupWindow mPop;
     private LinearLayout layout;
+    private LatLngBounds bounds;
+    com.amap.api.maps2d.model.LatLng latlng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,39 +143,38 @@ public class StrategyMapActivity extends PeachBaseActivity {
             }
         }
         all_locations.addView(layout);
-       /* ArrayList<com.amap.api.maps2d.model.LatLng> mLatLngs =new ArrayList<>();
+        ArrayList<com.amap.api.maps2d.model.LatLng> mLatLngs =new ArrayList<>();
         for(int j=0;j<coordinates.size();j++){
-            mLatLngs.add(new com.amap.api.maps2d.model.LatLng(coordinates.get(j)[0],coordinates.get(j)[1]));
-        }*/
-        setUpMap(coordinates, names);
+            mLatLngs.add(new com.amap.api.maps2d.model.LatLng(coordinates.get(j)[1],coordinates.get(j)[0]));
+        }
+        int size=mLatLngs.size();
+        com.amap.api.maps2d.model.LatLng[] mLatLngsArr = new  com.amap.api.maps2d.model.LatLng[size];
+        for(int j=0;j<size;j++){
+            mLatLngsArr[j]=mLatLngs.get(j);
+        }
+        setUpMap(names,coordinates, mLatLngsArr);
     }
 
-    private void setUpMap(ArrayList<double[]> latlngs,ArrayList<String> names){
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
-        if(latlngs.size()>0) {
-            aMap.addPolyline((new PolylineOptions()).add(
-                    new LatLng(latlngs.get(0)[0], latlngs.get(0)[1]),new LatLng(34.341568,108.940174)).color(
-                    Color.RED));
-
-            /*aMap.addPolyline((new PolylineOptions())
-                    .add(latlngs.get(0))
-                    .width(10).setDottedLine(true).geodesic(true)
-                    .color(Color.argb(255, 1, 1, 1)));
 
 
-*/
+    private void setUpMap(ArrayList<String> names,ArrayList<double[]> coor,com.amap.api.maps2d.model.LatLng... latLngs){
+      //  aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
+        if(coor.size()>0) {
+            aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
+
             for(int k=0;k<names.size();k++){
-
-               /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                        .position(new LatLng(39.9085350566,116.3974811279)).title("西安市")
-                        .snippet("成都市:34.341568, 108.940174").draggable(true));*/
-
                 aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                        .position(new LatLng(latlngs.get(0)[0], latlngs.get(0)[1])).title(names.get(k))
-                        .snippet("成都市:30.679879, 104.064855").draggable(true));
-
+                        .position(new LatLng(coor.get(k)[1], coor.get(k)[0])).title(names.get(k))
+                        .draggable(true));
             }
+            com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
+
+            for(com.amap.api.maps2d.model.LatLng ll:latLngs){
+                llBound.include(ll);
+            }
+            bounds=llBound.build();
         }
+        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
     }
 
 

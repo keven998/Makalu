@@ -136,8 +136,10 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
         travelLv.setAdapter(travelAdapter);
         travelLv.setParallax(false);
+
+
         //用来点击查看更多
-        /*hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
+        hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext,"event_more_city_travel_notes");
@@ -145,7 +147,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 intent.putExtra("id", locId);
                 startActivity(intent);
             }
-        });*/
+        });
 
         final int max = LocalDisplay.dp2px(170);
         final int min = LocalDisplay.dp2px(80);

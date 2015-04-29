@@ -41,6 +41,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     TextView mNoteNameTv;
     TextView mNoteDescTv;
     TextView mPropertyTv;
+    TextView mDays,mFee;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     OnSendClickListener mOnSendClickListener;
     Activity activity;
@@ -71,6 +72,9 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
         mNoteDescTv = (TextView) view.findViewById(R.id.tv_travels_desc);
         mPropertyTv = (TextView) view.findViewById(R.id.tv_property);
+
+        mDays = (TextView) view.findViewById(R.id.trip_days);
+        mFee = (TextView) view.findViewById(R.id.trip_fee);
         return view;
     }
 

@@ -46,6 +46,20 @@
             />
 
         <TextView
+            android:id="@+id/trip_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_travels_name"
+            android:layout_alignTop="@id/tv_travels_name"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/base_color_orange"
+            android:singleLine="true"
+            android:text="费用￥6800"
+            android:visibility="gone"
+            />
+
+        <TextView
             android:id="@+id/tv_travels_desc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
