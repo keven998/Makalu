@@ -186,10 +186,10 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                 showSelectGenderDialog();
                 break;
 
-            case R.id.ll_avatar:
+           /* case R.id.ll_avatar:
                 MobclickAgent.onEvent(mContext, "event_update_avatar");
                 showSelectPicDialog();
-                break;
+                break;*/
 
             case R.id.ll_modify_pwd:
                 MobclickAgent.onEvent(mContext, "event_update_password");
@@ -202,6 +202,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivity(bindPhoneIntent);
                 break;
+
             case R.id.ll_birthday:
                 DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -211,6 +212,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                 },1990,0,0);
                 dialog.show();
                 break;
+
             case R.id.ll_resident:
                 break;
 

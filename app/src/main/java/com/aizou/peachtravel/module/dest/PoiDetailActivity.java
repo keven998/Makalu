@@ -52,6 +52,7 @@ import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
@@ -94,8 +95,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Optional
     @InjectView(R.id.iv_fav)
     ImageView mIvFav;
-    @InjectView(R.id.poi_title_bar)
-    TitleHeaderBar titleBar;
+    @InjectView(R.id.iv_chat)
+    ImageView mChat;
+  /*  @InjectView(R.id.poi_title_bar)
+    TitleHeaderBar titleBar;*/
     @InjectView(R.id.tv_recommend)
     TextView mTvRecommend;
     @InjectView(R.id.iv_share)
@@ -106,6 +109,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
     TextView mTvRank;
     @InjectView(R.id.tv_more_cmt)
     TextView mTvMoreCmt;
+
+    @InjectView(R.id.poi_det_back)
+    private TextView titleBack;
+    @InjectView(R.id.poi_det_title)
+    private TextView title;
 
     View headerView;
     View footerView;
@@ -148,13 +156,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
         ButterKnife.inject(this);
-        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0,R.anim.fade_out);
+                overridePendingTransition(0, R.anim.fade_out);
             }
         });
+        title.setText("景点介绍");
         mLvFoodshopDetail.setAdapter(commentAdapter);
 
     }
@@ -342,9 +351,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
         commentAdapter.getDataList().addAll(bean.comments);
         if (bean.comments == null || bean.comments.size() < 2) {
+
             if (mLvFoodshopDetail.getFooterViewsCount() > 0) {
                 mLvFoodshopDetail.removeFooterView(footerView);
             }
+
         }
         if(bean.comments==null||bean.comments.size()==0){
             mIvCommentTopMark.setVisibility(View.GONE);

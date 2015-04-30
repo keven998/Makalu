@@ -1,16 +1,23 @@
 package com.aizou.peachtravel.module.my;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.DatePicker;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -26,10 +33,13 @@ import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.SelectPicUtils;
+import com.aizou.peachtravel.common.utils.video.Utils;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMCallBack;
@@ -61,8 +71,23 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @ViewInject(R.id.iv_gender)
     private ImageView genderIv;
 
+    @ViewInject(R.id.tv_gender)
+    private TextView genderTv;
+    @ViewInject(R.id.tv_resident)
+    private TextView residentTv;
+    @ViewInject(R.id.tv_brithday)
+    private TextView brithdayTv;
+    @ViewInject(R.id.tv_profession)
+    private TextView professinoTv;
+    @ViewInject(R.id.all_pics_sv)
+    private HorizontalScrollView all_pics;
+    @ViewInject(R.id.my_destination)
+    private FlowLayout my_destination;
+
     @ViewInject(R.id.tv_nickname)
     private TextView nickNameTv;
+    @ViewInject(R.id.tv_status)
+    private TextView status;
     @ViewInject(R.id.tv_id)
     private TextView idTv;
     @ViewInject(R.id.tv_sign)
@@ -80,6 +105,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     DisplayImageOptions options;
     private TextView tvGender;
 
+
+    private ImageView my_pics_cell;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -92,18 +120,72 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initView() {
         setContentView(R.layout.activity_account);
         ViewUtils.inject(this);
-        tvGender = (TextView) findViewById(R.id.tv_gender);
-        findViewById(R.id.ll_avatar).setOnClickListener(this);
+        //tvGender = (TextView) findViewById(R.id.tv_gender);
+        //findViewById(R.id.ll_avatar).setOnClickListener(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
+        findViewById(R.id.ll_status).setOnClickListener(this);
+
         findViewById(R.id.ll_sign).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
+        findViewById(R.id.ll_birthday).setOnClickListener(this);
+        findViewById(R.id.ll_resident).setOnClickListener(this);
+        findViewById(R.id.ll_profession).setOnClickListener(this);
+
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
+        findViewById(R.id.ll_foot_print).setOnClickListener(this);
+
         logoutBtn.setOnClickListener(this);
 
+        initScrollView();
+        initFlDestion();
+
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("个人信息");
+        titleBar.getTitleTextView().setText("我");
         titleBar.enableBackKey(true);
+    }
+
+    public void initFlDestion(){
+        my_destination.removeAllViews();
+        String[] names={"美国","日本","澳大利亚","乌兹别克斯坦","墨西哥"};
+        for(int j=0;j<5;j++){
+            View contentView = View.inflate(AccountActvity.this, R.layout.dest_select_city, null);
+            final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+            cityNameTv.setText(names[j]);
+            cityNameTv.setChecked(false);
+            my_destination.addView(contentView);
+        }
+    }
+
+    public void initScrollView(){
+        all_pics.removeAllViews();
+        LinearLayout llPics=new LinearLayout(this);
+        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        llPics.removeAllViews();
+        for(int i=0;i<3;i++){
+            View view=View.inflate(AccountActvity.this,R.layout.my_all_pics_cell,null);
+            my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
+            if(i==2){
+                my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
+                my_pics_cell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastUtil.getInstance(AccountActvity.this).showToast("添加图片");
+                    }
+                });
+            }
+            else{
+                my_pics_cell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastUtil.getInstance(AccountActvity.this).showToast("show pics");
+                    }
+                });
+
+            }
+            llPics.addView(view);
+        }
+        all_pics.addView(llPics);
     }
 
     @Override
@@ -121,7 +203,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
     private void bindView(PeachUser user){
         nickNameTv.setText(user.nickName);
-        tvGender.setText(user.getGenderDesc());
+        genderTv.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -132,9 +214,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         new RoundedBitmapDisplayer(LocalDisplay.dp2px(
                                 25))) // 设置成圆角图片
                 .build();
-        ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
-                options);
-        idTv.setText(user.userId + "");
+       /* ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
+                options);*/
+       /* idTv.setText(user.userId + "");*/
         signTv.setText(user.signature);
         phoneTv.setText(user.tel);
     }
@@ -174,9 +256,24 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 showSelectGenderDialog();
                 break;
 
-            case R.id.ll_avatar:
+            /*case R.id.ll_avatar:
                 MobclickAgent.onEvent(mContext,"event_update_avatar");
                 showSelectPicDialog();
+                break;*/
+
+            case R.id.ll_foot_print:
+                ToastUtil.getInstance(AccountActvity.this).showToast("旅行足迹");
+                break;
+
+            case R.id.ll_birthday:
+                DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                          brithdayTv.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                    }
+                },1990,0,0);
+                dialog.show();
+                //应该还差个上传动作
                 break;
 
             case R.id.ll_modify_pwd:
@@ -338,7 +435,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if(modifyResult.code==0){
                     user.gender = gender;
                     AccountManager.getInstance().saveLoginAccount(mContext,user);
-                    tvGender.setText(user.getGenderDesc());
+                    genderTv.setText(user.getGenderDesc());
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -357,13 +454,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void showSelectGenderDialog() {
-        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        String[] names={"美女","帅锅","不告诉你"};
+        final MoreDialog dialog=new MoreDialog(AccountActvity.this);
+        dialog.setMoreStyle(false,3,names);
+
+        /*final AlertDialog dialog = new AlertDialog.Builder(this).create();
         View contentView = View.inflate(this, R.layout.dialog_select_gender, null);
         Button ladyBtn = (Button) contentView.findViewById(R.id.gender_lady);
         Button manBtn = (Button) contentView.findViewById(R.id.gender_man);
         Button unknown = (Button) contentView.findViewById(R.id.gender_unknown);
-        Button cancel = (Button) contentView.findViewById(R.id.btn_cancle);
-        ladyBtn.setOnClickListener(new View.OnClickListener() {
+        Button cancel = (Button) contentView.findViewById(R.id.btn_cancle);*/
+        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -371,7 +472,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 modifyGender("F");
             }
         });
-        manBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv3().setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -380,7 +481,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         });
-        unknown.setOnClickListener(new View.OnClickListener() {
+        dialog.getTv4().setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -388,24 +489,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 modifyGender("U");
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
-            }
-        });
         dialog.show();
-        WindowManager windowManager = getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+
     }
 
     private void uploadAvatar(final File file){

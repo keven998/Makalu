@@ -63,7 +63,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
     private ImageView closeIv;
     private ImageView spotIv;
-    private LinearLayout descLl,priceLl,timeLl;
+    private RelativeLayout descLl,priceLl,timeLl;
     private RelativeLayout addressLl;
     private FrameLayout mBookFl;
     private TextView mSpotNameTv, descTv,mPriceDescTv, mAddressTv, mTimeTv;
@@ -123,9 +123,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
         favIv = (ImageView) findViewById(R.id.iv_fav);
         shareIv = (ImageView) findViewById(R.id.iv_share);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);
-        descLl = (LinearLayout) findViewById(R.id.ll_desc);
-        priceLl = (LinearLayout) findViewById(R.id.ll_price);
-        timeLl = (LinearLayout) findViewById(R.id.ll_time);
+        descLl = (RelativeLayout) findViewById(R.id.ll_desc);
+        priceLl = (RelativeLayout) findViewById(R.id.ll_price);
+        timeLl = (RelativeLayout) findViewById(R.id.ll_time);
         mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
         descTv = (TextView) findViewById(R.id.tv_desc);
         mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
