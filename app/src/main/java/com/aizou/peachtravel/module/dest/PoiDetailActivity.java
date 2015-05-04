@@ -111,9 +111,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
     TextView mTvMoreCmt;
 
     @InjectView(R.id.poi_det_back)
-    private TextView titleBack;
+    TextView titleBack;
     @InjectView(R.id.poi_det_title)
-    private TextView title;
+    TextView title;
 
     View headerView;
     View footerView;

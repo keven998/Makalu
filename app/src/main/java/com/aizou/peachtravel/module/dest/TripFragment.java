@@ -9,15 +9,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.DateUtil;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
@@ -92,8 +96,15 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
         lx_trip_plan.setOnClickListener(this);
         lx_around.setOnClickListener(this);
         lx_des.setOnClickListener(this);
-        search_all.setOnClickListener(this);
-
+        search_all.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
+                startActivity(sear_intent);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
+                return false;
+            }
+        });
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
@@ -272,12 +283,11 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 startActivity(intent);
                 break;
 
-
-            case R.id.search_all_et:
+           /* case R.id.search_all_et:
                 Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivity(sear_intent);
                 getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
-                break;
+                break;*/
 
             default:
                 break;

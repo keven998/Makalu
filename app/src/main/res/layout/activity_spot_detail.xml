@@ -3,99 +3,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shape_gray_dialog"
-    android:orientation="vertical">
+    android:background="@drawable/shape_gray_dialog">
 
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white"
-        >
-
-        <TextView
-            android:id="@+id/poi_det_back"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_title_back"
-            android:padding="12dp"
-            />
-
-        <TextView
-            android:id="@+id/poi_det_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/base_font_color"
-            android:textSize="18sp"
-            android:layout_centerInParent="true"
-            android:text="景点详情"
-            />
-
-        <ImageView
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="10dp"
-            android:layout_toLeftOf="@+id/iv_chat"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_poi_fav_normal" />
-
-        <ImageView
-            android:id="@+id/iv_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_chat_selected" />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_theme_color"
-            android:layout_alignParentBottom="true"
-            />
-
-
-    </RelativeLayout>
-
-   <!-- <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="5dp"
-        android:paddingLeft="60dp"
-        android:paddingRight="9dp"
-        android:paddingTop="5dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_poi_close_selector" />-->
-
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="@dimen/title_bar_height"
+        android:layout_height="match_parent"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:layout_marginTop="@dimen/title_bar_height"
+        android:overScrollMode="never">-->
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_bar_height"
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/top_zoom_bar_spot"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <FrameLayout
+                    android:id="@+id/top_zoom_bar_spot"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/spot_detail_picture_height"
                     android:foreground="@drawable/fg_mock_up">
 
                     <ImageView
@@ -112,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                    <!-- <ImageView
@@ -155,7 +87,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_poi_title"
                     android:textColor="@color/base_font_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:text="dfsafsa" />
 
                 <RatingBar
@@ -174,10 +106,11 @@
                     android:visibility="gone"/>
 
                 <TextView
+                    android:id="@+id/poi_rank_sm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dfsafd"
-                    android:textSize="18sp"
+                    android:text="景点排名"
+                    android:textSize="16sp"
                     android:textColor="@color/second_font_color"
                     android:layout_marginBottom="12dp"
                     android:layout_marginTop="7dp"
@@ -185,7 +118,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:background="@color/base_color_line_color"
                     />
 
@@ -194,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:text="实用信息"
                     android:textColor="@color/base_font_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     />
@@ -202,7 +135,7 @@
                 <RelativeLayout
                     android:id="@+id/ll_price"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector">
 
@@ -210,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="门票"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
@@ -219,7 +152,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_alignParentBottom="true"
                         android:background="@color/base_color_line_color"
                         />
@@ -231,7 +164,7 @@
                 <RelativeLayout
                     android:id="@+id/ll_time"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector">
 
@@ -239,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="建议游玩"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
@@ -247,11 +180,11 @@
                         />
 
                     <TextView
-                        android:id="@+id/fun_time"
+                        android:id="@+id/tv_spot_time"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/third_font_color"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         android:text="开放时间"
                         android:layout_alignParentRight="true"
                         android:gravity="center_vertical"
@@ -260,7 +193,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_alignParentBottom="true"
                         android:background="@color/base_color_line_color"
                         />
@@ -272,7 +205,7 @@
                 <RelativeLayout
                     android:id="@+id/fl_book"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector">
 
@@ -280,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="电话"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
@@ -289,7 +222,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_alignParentBottom="true"
                         android:background="@color/base_color_line_color"
                         />
@@ -300,7 +233,7 @@
                 <RelativeLayout
                     android:id="@+id/rl_address"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector">
 
@@ -308,7 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="地址"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
@@ -317,7 +250,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_alignParentBottom="true"
                         android:background="@color/base_color_line_color"
                         />
@@ -328,7 +261,7 @@
                 <RelativeLayout
                     android:id="@+id/ll_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/option_cell_selector">
 
@@ -336,7 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="景点介绍"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
@@ -345,7 +278,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_alignParentBottom="true"
                         android:background="@color/base_color_line_color"
                         />
@@ -359,82 +292,82 @@
                     android:layout_height="wrap_content"
                     android:text="景点攻略"
                     android:textColor="@color/base_font_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     />
 
 
-                <FrameLayout
+               <!-- <FrameLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp">-->
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_travel_guide"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/btn_spot_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:enabled="false"
                             android:gravity="center"
                             android:padding="15dp"
-                            android:textStyle="bold"
-                            android:text="景点\n体验"
-                            android:textColor="@color/theme_color"
-                            android:textSize="13sp" />
+                            android:drawableTop="@drawable/ic_city_spots"
+                            android:drawablePadding="10dp"
+                            android:text="景点攻略"
+                            android:textColor="@color/base_font_color"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_tips"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
-                            android:background="@drawable/btn_spot_detail"
                             android:enabled="false"
-                            android:textStyle="bold"
                             android:gravity="center"
                             android:padding="15dp"
-                            android:text="小\n贴士"
-                            android:textColor="@color/theme_color"
-                            android:textSize="13sp" />
+                            android:text="提示"
+                            android:drawablePadding="10dp"
+                            android:drawableTop="@drawable/ic_city_spots"
+                            android:textColor="@color/base_font_color"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_traffic_guide"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
-                            android:background="@drawable/btn_spot_detail"
                             android:enabled="false"
                             android:gravity="center"
-                            android:textStyle="bold"
+                            android:drawableTop="@drawable/ic_city_spots"
+                            android:drawablePadding="10dp"
                             android:padding="15dp"
-                            android:text="景点\n交通"
-                            android:textColor="@color/theme_color"
-                            android:textSize="13sp" />
+                            android:text="交通"
+                            android:textColor="@color/base_font_color"
+                            android:textSize="15sp" />
                     </LinearLayout>
-                </FrameLayout>
+
+
+                <!--</FrameLayout>-->
 
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:background="@color/base_color_line_color"
                     />
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
                     >
 
                     <TextView
@@ -442,8 +375,9 @@
                         android:layout_height="wrap_content"
                         android:text="网友点评"
                         android:textColor="@color/base_font_color"
-                        android:textSize="20sp"
-                        android:layout_gravity="center"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_centerInParent="true"
                         />
 
 
@@ -453,11 +387,12 @@
                         android:layout_height="wrap_content"
                         android:text="全部点评"
                         android:textColor="@color/third_font_color"
-                        android:textSize="15sp"
-                        android:layout_gravity="center_vertical|right"
+                        android:textSize="13sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         />
 
-                </LinearLayout>
+                </RelativeLayout>
 
 
             </LinearLayout>
@@ -492,6 +427,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    <!--</ScrollView>-->
 
 </RelativeLayout>

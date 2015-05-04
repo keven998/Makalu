@@ -2,9 +2,12 @@ package com.aizou.peachtravel.module.dest.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -19,6 +22,7 @@ import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.share.ICreateShareDialog;
 import com.aizou.peachtravel.common.utils.IMUtils;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -95,6 +99,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
             holder.mAddressTv.setText("");
+            holder.mAddressTv.setVisibility(View.GONE);
             if(locBean.images!=null&&locBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{
@@ -127,6 +132,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             poiBean = (PoiDetailBean) itemObject;
             holder.mAddressTv.setText(poiBean.address);
             holder.mNameTv.setText(poiBean.zhName);
+            if(poiBean.zhName.equals("")||poiBean.zhName==null){holder.mAddressTv.setVisibility(View.GONE);}
             if(poiBean.images!=null&&poiBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{
@@ -158,15 +164,15 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             if(position == 4) {
                 holder.mAllResultTv.setVisibility(View.VISIBLE);
                 if (typeBean.type.equals("loc")) {
-                    holder.mAllResultTv.setText("更多相关城市");
+                    holder.mAllResultTv.setText("查看全部城市");
                 } else if (typeBean.type.equals("vs")) {
-                    holder.mAllResultTv.setText("更多相关景点");
+                    holder.mAllResultTv.setText("查看全部景点");
                 } else if (typeBean.type.equals("hotel")) {
-                    holder.mAllResultTv.setText("更多相关酒店");
+                    holder.mAllResultTv.setText("查看全部酒店");
                 } else if (typeBean.type.equals("restaurant")) {
-                    holder.mAllResultTv.setText("更多相关美食");
+                    holder.mAllResultTv.setText("查看全部美食");
                 } else if (typeBean.type.equals("shopping")) {
-                    holder.mAllResultTv.setText("更多相关购物");
+                    holder.mAllResultTv.setText("查看全部购物");
                 }
                 holder.mAllResultTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -195,15 +201,15 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         TextView typeName = (TextView) convertView.findViewById(R.id.type_name_tv);
         SearchTypeBean typeBean = mSearchList.get(section);
         if(typeBean.type.equals("loc")){
-            typeName.setText("相关城市");
+            typeName.setText("城市");
         }else if(typeBean.type.equals("vs")){
-            typeName.setText("相关景点");
+            typeName.setText("景点");
         }else if(typeBean.type.equals("hotel")){
-            typeName.setText("相关酒店");
+            typeName.setText("酒店");
         }else if(typeBean.type.equals("restaurant")){
-            typeName.setText("相关美食");
+            typeName.setText("美食");
         }else if(typeBean.type.equals("shopping")){
-            typeName.setText("相关购物");
+            typeName.setText("购物");
         }
         return convertView;
     }

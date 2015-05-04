@@ -14,16 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.listHelper.ListViewDataAdapter;
+import com.aizou.core.widget.listHelper.ViewHolderBase;
+import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.dialog.DialogManager;
@@ -49,7 +54,11 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomBase;
+import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
+import com.aizou.peachtravel.module.dest.adapter.SpotDpViewHolder;
+import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -65,18 +74,21 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private ImageView spotIv;
     private RelativeLayout descLl,priceLl,timeLl;
     private RelativeLayout addressLl;
-    private FrameLayout mBookFl;
-    private TextView mSpotNameTv, descTv,mPriceDescTv, mAddressTv, mTimeTv;
+    private RelativeLayout mBookFl;
+    private TextView mSpotNameTv, mTimeTv;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView favIv,shareIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
-    private TitleHeaderBar titleBar;
+    private TextView ic_back,poi_rank_sm;
+    private ListViewDataAdapter adapter;
+    private BaseAdapter  bAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.spot_detail_list);
         initView();
         initData();
     }
@@ -100,9 +112,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
     }
 
     private void initView() {
-        setContentView(R.layout.activity_spot_detail);
-        titleBar=(TitleHeaderBar)findViewById(R.id.spot_title_bar);
-        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        ListView spotLv=(ListView) findViewById(R.id.spot_detail_list);
+        View hv;
+        hv=View.inflate(mContext,R.layout.activity_spot_detail,null);
+        spotLv.addHeaderView(hv);
+        ic_back=(TextView)findViewById(R.id.poi_det_back);
+        ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -115,28 +130,57 @@ public class SpotDetailActivity extends PeachBaseActivity {
         p.y = LocalDisplay.dp2px(5);
         p.height = (int) (d.getHeight());  /* - LocalDisplay.dp2px(64)*/
         p.width = (int) (d.getWidth() ); /*- LocalDisplay.dp2px(28)*/
-//        p.alpha = 1.0f;      //设置本身透明度
-//        p.dimAmount = 0.0f;      //设置黑暗度
-//        getWindow().setAttributes(p);
-        spotIv = (ImageView) findViewById(R.id.iv_spot);
-
+        spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
         favIv = (ImageView) findViewById(R.id.iv_fav);
-        shareIv = (ImageView) findViewById(R.id.iv_share);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar_spot);
-        descLl = (RelativeLayout) findViewById(R.id.ll_desc);
-        priceLl = (RelativeLayout) findViewById(R.id.ll_price);
-        timeLl = (RelativeLayout) findViewById(R.id.ll_time);
-        mSpotNameTv = (TextView) findViewById(R.id.tv_spot_name);
-        descTv = (TextView) findViewById(R.id.tv_desc);
-        mPriceDescTv = (TextView) findViewById(R.id.tv_price_desc);
-        mTimeTv = (TextView) findViewById(R.id.tv_spot_time);
-        addressLl = (RelativeLayout) findViewById(R.id.rl_address);
-        mAddressTv = (TextView) findViewById(R.id.tv_addr);
-        mBookFl = (FrameLayout) findViewById(R.id.fl_book);
-        tipsTv = (TextView) findViewById(R.id.tv_tips);
-        travelGuideTv = (TextView) findViewById(R.id.tv_travel_guide);
-        trafficGuideTv = (TextView) findViewById(R.id.tv_traffic_guide);
+        shareIv = (ImageView) hv.findViewById(R.id.iv_share);
+        ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
+        mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
+        mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
+        poi_rank_sm = (TextView) hv.findViewById(R.id.poi_rank_sm);
+        descLl = (RelativeLayout) hv.findViewById(R.id.ll_desc);
+        priceLl = (RelativeLayout) hv.findViewById(R.id.ll_price);
+        timeLl = (RelativeLayout) hv.findViewById(R.id.ll_time);
+        addressLl = (RelativeLayout) hv.findViewById(R.id.rl_address);
+        mBookFl = (RelativeLayout) hv.findViewById(R.id.fl_book);
+        tipsTv = (TextView) hv.findViewById(R.id.tv_tips);
+        travelGuideTv = (TextView) hv.findViewById(R.id.tv_travel_guide);
+        trafficGuideTv = (TextView) hv.findViewById(R.id.tv_traffic_guide);
+
+        //这个是备着以后读接口
+        /*adapter = new ListViewDataAdapter(new ViewHolderCreator() {
+            @Override
+            public ViewHolderBase createViewHolder() {
+                SpotDpViewHolder viewHolder = new SpotDpViewHolder(SpotDetailActivity.this);
+                return viewHolder;
+            }
+        });*/
+        bAdapter=new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return 3;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if(convertView==null){
+                    convertView=View.inflate(SpotDetailActivity.this,R.layout.spot_detail_view_cell,null);
+                }
+                return convertView;
+            }
+        };
+        spotLv.setAdapter(bAdapter);
     }
+
 
     private void initData() {
         mSpotId = getIntent().getStringExtra("id");
@@ -153,6 +197,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 if (detailResult.code == 0) {
                     spotDetailBean = detailResult.result;
                     bindView(detailResult.result);
+                    getDpView(detailResult.result.id);
                 }
 
             }
@@ -166,6 +211,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             }
         });
+    }
+
+    private void getDpView(String id){
+        //读取接口数据
     }
 
     private void refreshFav(SpotDetailBean detailBean) {
@@ -186,19 +235,20 @@ public class SpotDetailActivity extends PeachBaseActivity {
         });
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
+        poi_rank_sm.setText(result.zhName+" 景点排名1");
         if(TextUtils.isEmpty(result.desc)){
             descLl.setVisibility(View.GONE);
         }else{
             descLl.setVisibility(View.VISIBLE);
-            descTv.setText(result.desc);
+            //descTv.setText(result.desc);
         }
-        mPriceDescTv.setText("门票 "+result.priceDesc);
-        mTimeTv.setText(String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime));
-        if(TextUtils.isEmpty(result.address)){
+        //mPriceDescTv.setText("门票 "+result.priceDesc);
+        mTimeTv.setText("开放时间"+result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
+       /* if(TextUtils.isEmpty(result.address)){
             mAddressTv.setText(result.zhName);
         }else{
             mAddressTv.setText(result.address);
-        }
+        }*/
         addressLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +346,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            tipsTv.setTextColor(getResources().getColor(R.color.third_font_color));
             tipsTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.trafficInfoUrl)) {
@@ -311,6 +362,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            trafficGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
             trafficGuideTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.visitGuideUrl)) {
@@ -326,6 +378,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
+            travelGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
             travelGuideTv.setEnabled(false);
         }
     }
