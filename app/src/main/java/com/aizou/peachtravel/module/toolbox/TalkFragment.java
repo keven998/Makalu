@@ -189,6 +189,8 @@ public class TalkFragment extends PeachBaseFragment {
         });
         // 注册上下文菜单
         registerForContextMenu(listView);
+
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         listView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -209,8 +211,6 @@ public class TalkFragment extends PeachBaseFragment {
         if(!EMChat.getInstance().isLoggedIn()){
             return;
         }
-
-        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         // contact list

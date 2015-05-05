@@ -289,7 +289,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
 //        }
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
-                mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容");
             }
@@ -462,7 +462,6 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     haveBeenVisited(strBean);
-                    deleteThisItem(strBean);
                     final ComfirmDialog cdialog = new ComfirmDialog(StrategyVisitedListActivity.this);
                     cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                     cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
@@ -474,7 +473,6 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                             cdialog.dismiss();
                         }
                     });
-
                     final Handler handler=new Handler(){
                         public void handleMessage(Message msg) {
                             switch (msg.what){
@@ -601,7 +599,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         mStrategyListAdapter.notifyDataSetChanged();
     }*/
 
-    private void haveBeenVisited(StrategyBean beenBean){
+    private void haveBeenVisited(final StrategyBean beenBean){
         DialogManager.getInstance().showLoadingDialog(mContext);
         String visited="planned";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
@@ -610,7 +608,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (visitedResult.code == 0) {
-
+                    deleteThisItem(beenBean);
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())

@@ -114,6 +114,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //initData();
 //        MobclickAgent.onPageStart("page_my_trip_plans");
     }
 
@@ -298,7 +299,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 //        }
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
-                mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                 //mMyStrategyLv.doPullRefreshing(true, 0);
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容");
@@ -484,7 +485,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     haveBeenVisited(strBean);
-                    deleteThisItem(strBean);
                     final ComfirmDialog cdialog=new ComfirmDialog(StrategyListActivity.this);
                     cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                     cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
@@ -776,7 +776,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mStrategyListAdapter.notifyDataSetChanged();
     }
 
-    private void haveBeenVisited(StrategyBean beenBean){
+    private void haveBeenVisited(final StrategyBean beenBean){
         DialogManager.getInstance().showLoadingDialog(mContext);
         String visited="traveled";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
@@ -785,6 +785,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (visitedResult.code == 0) {
+                    deleteThisItem(beenBean);
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())

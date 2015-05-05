@@ -178,7 +178,8 @@ public class HttpManager {
             } else if (request.getHttpMethod().equals(PTRequest.TRACE)) {
                 httpMethod = HttpRequest.HttpMethod.TRACE;
             }
-            httpUtils.configCurrentHttpCacheExpiry(1000 * 10);
+            httpUtils.configCurrentHttpCacheExpiry(1000 * 1);
+            httpUtils.configTimeout(1000 * 10);
             HttpHandler handler = httpUtils.send(httpMethod, url, requestParams,
                     ajaxCallBack);
             PTRequestHandler ptHandler = new PTRequestHandler();

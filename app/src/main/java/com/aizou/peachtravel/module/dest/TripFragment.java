@@ -77,6 +77,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
     private double geoLng = -1;
     private AutoScrollViewPager mVpTravel;
     private DotView mDotView;
+    private boolean isScrollPicLoad;
 
     private LocationManagerProxy mLocationManagerProxy;
 
@@ -96,15 +97,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
         lx_trip_plan.setOnClickListener(this);
         lx_around.setOnClickListener(this);
         lx_des.setOnClickListener(this);
-        search_all.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
-                startActivity(sear_intent);
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
-                return false;
-            }
-        });
+        search_all.setOnClickListener(this);
         weatherArray = getResources().getStringArray(R.array.weather);
         mLocationManagerProxy = LocationManagerProxy.getInstance(getActivity());
         mLocationManagerProxy.setGpsEnable(false);
@@ -120,13 +113,15 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
             public void doSucess(String result, String method) {
                 CommonJson4List<OperateBean> operateResult = CommonJson4List.fromJson(result, OperateBean.class);
                 if (operateResult.code == 0) {
+                    isScrollPicLoad=true;
                     bindOperateView(operateResult.result);
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+               isScrollPicLoad=false;
+               ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -283,20 +278,23 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 startActivity(intent);
                 break;
 
-           /* case R.id.search_all_et:
+            case R.id.search_all_et:
                 Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivity(sear_intent);
                 getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
-                break;*/
+                break;
 
             default:
                 break;
         }
     }
 
-    public void reloadData() {
+    public void reloadDataAndPics() {
         if (TextUtils.isEmpty(weatherStr)) {
             requestWeather();
+        }
+        if(!isScrollPicLoad){
+            getOperateData();
         }
     }
 
@@ -369,6 +367,12 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        reloadData();
+        reloadDataAndPics();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        reloadDataAndPics();
     }
 }

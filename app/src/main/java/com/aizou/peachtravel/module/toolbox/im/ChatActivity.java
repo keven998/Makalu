@@ -1597,10 +1597,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 			iv_emoticons_normal.setVisibility(View.VISIBLE);
 			iv_emoticons_checked.setVisibility(View.GONE);
 		} else {
-            Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
+            finish();
+           /* Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityWithNoAnim(intent);
-            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);*/
 		}
 	}
 

@@ -17,8 +17,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="@drawable/mm_listitem"
+        android:background="@color/base_color_white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:padding="11dp">
+
+        <!--android:background="@drawable/mm_listitem"-->
 
         <EditText
             android:id="@+id/et_search"

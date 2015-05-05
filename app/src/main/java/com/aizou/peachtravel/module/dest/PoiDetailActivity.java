@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -93,10 +94,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @InjectView(R.id.tv_poi_desc)
     TextView mTvDesc;
     @Optional
-    @InjectView(R.id.iv_fav)
-    ImageView mIvFav;
-    @InjectView(R.id.iv_chat)
-    ImageView mChat;
+
   /*  @InjectView(R.id.poi_title_bar)
     TitleHeaderBar titleBar;*/
     @InjectView(R.id.tv_recommend)
@@ -115,6 +113,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @InjectView(R.id.poi_det_title)
     TextView title;
 
+    @InjectView(R.id.rl_address)
+    RelativeLayout rl_address;
+    @InjectView(R.id.rl_fee)
+    RelativeLayout rl_fee;
+    @InjectView(R.id.rl_level)
+    RelativeLayout rl_level;
+    @InjectView(R.id.rl_phone)
+    RelativeLayout rl_phone;
+    @InjectView(R.id.rl_poi_desc)
+    RelativeLayout rl_poi_desc;
+
+
     View headerView;
     View footerView;
     @InjectView(R.id.iv_comment_top_mark)
@@ -126,6 +136,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private String type;
     ListViewDataAdapter commentAdapter;
 
+    private ImageView mIvFav;
+    private ImageView mChat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +149,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_poi_detail);
+        mIvFav = (ImageView) findViewById(R.id.iv_fav);
+        mChat = (ImageView) findViewById(R.id.iv_chat);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
@@ -244,7 +259,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
         mTvPoiName.setText(bean.zhName);
         if (TextUtils.isEmpty(bean.priceDesc)) {
-            mTvPoiPrice.setVisibility(View.GONE);
+            rl_fee.setVisibility(View.GONE);
         } else {
             mTvPoiPrice.setText(bean.priceDesc);
         }
@@ -283,7 +298,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvTel.setVisibility(View.VISIBLE);
             mTvTel.setText(bean.tel.get(0));
         } else {
-            mTvTel.setVisibility(View.GONE);
+            rl_phone.setVisibility(View.GONE);
         }
 
         String address;
@@ -308,7 +323,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
         mTvAddr.setText(spanned);
 
-        mTvAddr.setOnClickListener(new View.OnClickListener() {
+        rl_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (bean.location != null && bean.location.coordinates != null) {
@@ -344,7 +359,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
         if (TextUtils.isEmpty(bean.desc)) {
-            mTvDesc.setVisibility(View.GONE);
+            rl_poi_desc.setVisibility(View.GONE);
         } else {
             mTvDesc.setVisibility(View.VISIBLE);
             mTvDesc.setText(bean.desc);
