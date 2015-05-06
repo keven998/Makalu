@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -28,6 +29,7 @@ import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.config.Constant;
+import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.InviteMessage;
 import com.aizou.peachtravel.db.InviteStatus;
@@ -96,13 +98,14 @@ public class MainActivity extends PeachBaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        /*if(!EMChat.getInstance().isLoggedIn()){
+       /* if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }*/
         setContentView(R.layout.activity_main);
         initView();
+        LogUtil.d("getIntent().getBooleanExtra(\"conflict\")="+getIntent().getBooleanExtra("conflict",false));
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog();
         }
@@ -434,6 +437,7 @@ public class MainActivity extends PeachBaseActivity {
             updateUnreadMsgCount();
             refreshChatHistoryFragment();
             notifyNewMessage(message);
+
             // 注销广播，否则在ChatActivity中会收到这个广播
             abortBroadcast();
         }

@@ -64,12 +64,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView nickNameTv;
     @ViewInject(R.id.tv_id)
     private TextView idTv;
-    @ViewInject(R.id.tv_sign)
-    private TextView signTv;
+    @ViewInject(R.id.tv_status)
+    private TextView statusTv;
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_my,null);
+        rootView = inflater.inflate(R.layout.fragment_my,null);
         ViewUtils.inject(this, rootView);
         rootView.findViewById(R.id.ll_share_account).setOnClickListener(this);
         rootView.findViewById(R.id.ll_about).setOnClickListener(this);
@@ -83,18 +84,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     public void refresh(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+        View view =rootView;
+        ViewUtils.inject(this, rootView);
         if(user == null) {
             genderIv.setVisibility(View.GONE);
-            View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
             ToastUtil.getInstance(getActivity()).showToast("null 啊 未登录");
             nickNameTv.setText("未登录");
             idTv.setText("赶快加入旅FM的世界吧");
-            signTv.setText("");
+            statusTv.setText("");
         } else {
             genderIv.setVisibility(View.VISIBLE);
-            View view = getView();
             view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
             if (user.gender.equalsIgnoreCase("M")) {
                 genderIv.setImageResource(R.drawable.ic_gender_man);
@@ -116,9 +117,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
             idTv.setText("ID: " + user.userId);
             if (TextUtils.isEmpty(user.signature)) {
-                signTv.setText("no签名");
+                statusTv.setText("暂时还没有状态");
             } else {
-                signTv.setText(user.signature);
+                statusTv.setText("其实本来写签名我就是拒绝的，暂时状态用签名替代吧"+user.signature);
             }
         }
     }

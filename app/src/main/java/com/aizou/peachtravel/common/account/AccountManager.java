@@ -2,16 +2,21 @@ package com.aizou.peachtravel.common.account;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
+import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.my.MyFragment;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 
@@ -64,7 +69,20 @@ public class AccountManager {
                 if (callBack != null) {
                     callBack.onSuccess();
                 }
-
+                /*MyFragment my=new MyFragment();
+                my.refresh();*/
+               /* Looper.prepare();
+                final PeachMessageDialog dialog=new PeachMessageDialog(context);
+                dialog.setMessage("下线");
+                dialog.setPositiveButton("确定",new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setCancelable(false);
+                dialog.show();
+                Looper.loop();*/
 
             }
 

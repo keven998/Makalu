@@ -97,10 +97,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
   /*  @InjectView(R.id.poi_title_bar)
     TitleHeaderBar titleBar;*/
-    @InjectView(R.id.tv_recommend)
-    TextView mTvRecommend;
-    @InjectView(R.id.iv_share)
-    ImageView mIvShare;
+    /*@InjectView(R.id.tv_recommend)
+    TextView mTvRecommend;*/
+   /* @InjectView(R.id.iv_share)
+    ImageView mIvShare;*/
     @InjectView(R.id.btn_book)
     TextView mBtnBook;
     @InjectView(R.id.tv_poi_rank)
@@ -127,10 +127,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     View headerView;
     View footerView;
-    @InjectView(R.id.iv_comment_top_mark)
+    /*@InjectView(R.id.iv_comment_top_mark)
     ImageView mIvCommentTopMark;
     @InjectView(R.id.iv_comment_bottom_mark)
-    ImageView mIvCommentBottomMark;
+    ImageView mIvCommentBottomMark;*/
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
@@ -151,6 +151,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_poi_detail);
         mIvFav = (ImageView) findViewById(R.id.iv_fav);
         mChat = (ImageView) findViewById(R.id.iv_chat);
+        mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
@@ -160,10 +161,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         getWindow().setAttributes(p);
         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
-        footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
-        mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
+        //footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
         mLvFoodshopDetail.addHeaderView(headerView);
-        mLvFoodshopDetail.addFooterView(footerView);
+        //mLvFoodshopDetail.addFooterView(footerView);
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -337,6 +337,32 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         });
+
+        rl_fee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        rl_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        rl_poi_desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        rl_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         refreshFav(bean);
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,12 +378,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         });
-        mIvShare.setOnClickListener(new View.OnClickListener() {
+       /* mIvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showActionDialog();
             }
-        });
+        });*/
         if (TextUtils.isEmpty(bean.desc)) {
             rl_poi_desc.setVisibility(View.GONE);
         } else {
@@ -373,8 +399,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         }
         if(bean.comments==null||bean.comments.size()==0){
-            mIvCommentTopMark.setVisibility(View.GONE);
-            mIvCommentBottomMark.setVisibility(View.GONE);
+           /* mIvCommentTopMark.setVisibility(View.GONE);
+            mIvCommentBottomMark.setVisibility(View.GONE);*/
         }
         commentAdapter.notifyDataSetChanged();
     }
@@ -453,12 +479,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.tv_property)
-        TextView mTvProperty;
+        @InjectView(R.id.poi_detail_dp_name)
+        TextView mTvName;
+        @InjectView(R.id.poi_detail_dp_time)
+        TextView mTvTime;
         @InjectView(R.id.tv_comment)
         TextView mTvComment;
-        @InjectView(R.id.comment_star)
-        RatingBar mCommentStar;
+        /*@InjectView(R.id.comment_star)
+        RatingBar mCommentStar;*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         @Override
@@ -470,7 +498,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
+            mTvName.setText(itemData.authorName);
+            mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
+            //mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
         }
     }

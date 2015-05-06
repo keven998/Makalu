@@ -41,6 +41,7 @@ import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.yweathergetter4a.WeatherInfo;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeather;
 import com.aizou.peachtravel.common.yweathergetter4a.YahooWeatherInfoListener;
+import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.NearbyActivity;
@@ -105,6 +106,14 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
         getOperateData();
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(((MainActivity)getActivity()).isConflict){
+            outState.putBoolean("isConflict", true);
+        }
     }
 
     private void getOperateData() {

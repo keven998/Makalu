@@ -29,7 +29,7 @@
                     android:scaleType="centerCrop" />
             </FrameLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -48,7 +48,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_poi_share_selector"
                     android:visibility="visible"/>
-            </LinearLayout>
+            </LinearLayout>-->
 
         </RelativeLayout>
 
@@ -299,6 +299,38 @@
             </RelativeLayout>
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingBottom="10dp"
+                android:layout_below="@+id/rl_poi_desc"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="网友点评"
+                    android:textColor="@color/base_font_color"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_more_cmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全部点评"
+                    android:textColor="@color/third_font_color"
+                    android:textSize="13sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
 
 
@@ -340,20 +372,20 @@
 
         </RelativeLayout>-->
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/iv_comment_top_mark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginLeft="12dp"
             android:src="@drawable/ic_quotation_l"
-            android:visibility="gone"/>
+            android:visibility="gone"/>-->
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -407,7 +439,7 @@
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -429,7 +461,7 @@
                 android:textColor="@color/base_text_color_subtitle"
                 android:textSize="13sp" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 </FrameLayout>

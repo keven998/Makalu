@@ -22,7 +22,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.bean.CmdAgreeBean;
@@ -30,6 +34,8 @@ import com.aizou.peachtravel.bean.CmdDeleteBean;
 import com.aizou.peachtravel.bean.CmdInvateBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
+import com.aizou.peachtravel.common.dialog.ComfirmDialog;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.hxsdk.controller.HXSDKHelper;
 import com.aizou.peachtravel.common.hxsdk.model.HXSDKModel;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -42,9 +48,12 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
 import com.aizou.peachtravel.module.SplashActivity;
+import com.aizou.peachtravel.module.my.MyFragment;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.aizou.peachtravel.module.toolbox.im.VoiceCallReceiver;
 import com.easemob.EMCallBack;
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
@@ -145,15 +154,38 @@ public class PeachHXSDKHelper extends HXSDKHelper {
             }
         };
     }
+
     
     @Override
-    protected void onConnectionConflict(){
-//        AccountManager.getInstance().logout(appContext,true,null);
-        Intent intent = new Intent(appContext, MainActivity.class);
+    protected void onConnectionConflict() {
+        AccountManager.getInstance().logout(appContext, true, null);
+        /*Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("conflict", true);
-        appContext.startActivity(intent);
+        appContext.startActivity(intent);*/
+
+        ToastUtil.getInstance(appContext).showToast("下线了");
+
+        //新线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ComfirmDialog dialog = new ComfirmDialog(appContext);
+                dialog.setMessage("下线");
+                dialog.setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                LogUtil.d("11111111");
+                dialog.show();
+                LogUtil.d("22222222");
+            }
+        }).start();
+
     }
+
     
     @Override
     protected void initListener(){

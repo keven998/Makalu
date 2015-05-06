@@ -97,7 +97,8 @@
             android:overScrollMode="never"
             android:listSelector="@android:color/transparent"
             android:scrollbars="none"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:paddingBottom="20dp"/>
 
 
 
