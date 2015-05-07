@@ -9,13 +9,13 @@
         android:id="@+id/lv_city_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:overScrollMode="never"
         android:fadingEdge="none"
         android:listSelector="@null" />
 
+   <!-- android:cachehintcolor-->
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"

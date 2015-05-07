@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.my;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.H5Url;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.ComfirmDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -32,6 +34,8 @@ import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.toolbox.FavListActivity;
 import com.easemob.EMCallBack;
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
@@ -66,7 +70,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView idTv;
     @ViewInject(R.id.tv_status)
     private TextView statusTv;
-    private View rootView;
+    private View rootView,unRootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,18 +88,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     public void refresh(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-        View view =rootView;
-        ViewUtils.inject(this, rootView);
         if(user == null) {
+            View view=getView();
             genderIv.setVisibility(View.GONE);
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
-            ToastUtil.getInstance(getActivity()).showToast("null 啊 未登录");
             nickNameTv.setText("未登录");
             idTv.setText("赶快加入旅FM的世界吧");
             statusTv.setText("");
         } else {
             genderIv.setVisibility(View.VISIBLE);
+            View view=getView();
             view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
             if (user.gender.equalsIgnoreCase("M")) {
                 genderIv.setImageResource(R.drawable.ic_gender_man);
@@ -124,10 +127,24 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         }
     }
 
+    Handler handler=new Handler();
+    Runnable  runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            //更新界面
+            refresh();
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+        new Thread(){
+            public void run(){
+                handler.post(runnableUi);
+            }
+        }.start();
+
 //        MobclickAgent.onPageStart("page_home_me");
     }
     @Override

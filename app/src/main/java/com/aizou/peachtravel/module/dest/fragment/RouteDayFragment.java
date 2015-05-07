@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -908,6 +910,52 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     }
 
 
+    /*public void delectWithAnim(final View v, final int index){
+            Animation.AnimationListener al = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationEnd(Animation arg0) {
+                    mEditDslv.removeItem(index);
+
+                    RecyclerView.ViewHolder vh = (RecyclerView.ViewHolder)v.getTag();
+                    vh.needInflate = true;
+
+                    mMyAnimListAdapter.notifyDataSetChanged();
+                }
+                @Override public void onAnimationRepeat(Animation animation) {}
+                @Override public void onAnimationStart(Animation animation) {}
+            };
+
+            collapse(v, al);
+    }*/
+
+    private void collapse(final View v, Animation.AnimationListener al) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation anim = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                }
+                else {
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        if (al!=null) {
+            anim.setAnimationListener(al);
+        }
+        anim.setDuration(500);
+        v.startAnimation(anim);
+    }
+
     public void addNewDayRouter(int position,boolean isBefore){
         MobclickAgent.onEvent(getActivity(),"event_add_day");
         if(isBefore){
@@ -932,6 +980,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             }
         }
     }
+
+
 
     public static class RouteDayMenu extends BlurDialogFragment {
         public int dayIndex;

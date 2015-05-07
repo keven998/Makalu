@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:text="fdjsaklfjdkljfdfsadfsafdsaffdfdsaddsa"/>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/trip_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:singleLine="true"
             android:text="费用￥6800"
             android:visibility="gone"
-            />
+            />-->
 
         <TextView
             android:id="@+id/tv_travels_desc"

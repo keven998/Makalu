@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module;
 
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.aizou.peachtravel.bean.ContactListBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.dialog.ComfirmDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
@@ -45,6 +47,8 @@ import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.GroupsActivity;
 import com.aizou.peachtravel.module.toolbox.im.IMMainActivity;
 import com.easemob.EMCallBack;
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
@@ -55,6 +59,7 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.NetUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,7 +69,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MainActivity extends PeachBaseActivity {
+public class MainActivity extends PeachBaseActivity{
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -105,9 +110,8 @@ public class MainActivity extends PeachBaseActivity {
         }*/
         setContentView(R.layout.activity_main);
         initView();
-        LogUtil.d("getIntent().getBooleanExtra(\"conflict\")="+getIntent().getBooleanExtra("conflict",false));
         if (getIntent().getBooleanExtra("conflict", false)){
-            showConflictDialog();
+            showConflictDialog(MainActivity.this);
         }
         List<String> blacklist = null;
         // 注册一个接收消息的BroadcastReceiver
@@ -118,8 +122,8 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (getIntent().getBooleanExtra("conflict", false) ){
-            showConflictDialog();
+        if (intent.getBooleanExtra("conflict", false) ){
+            showConflictDialog(MainActivity.this);
         }
         /*if(!EMChat.getInstance().isLoggedIn()){
             finish();
@@ -152,6 +156,7 @@ public class MainActivity extends PeachBaseActivity {
         // 注册群聊相关的listener
         groupChangeListener = new MyGroupChangeListener();
         EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
+
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
     }
@@ -335,13 +340,32 @@ public class MainActivity extends PeachBaseActivity {
     /**
      * 显示帐号在别处登录dialog
      */
-    protected void showConflictDialog() {
-        AccountManager.getInstance().logout(mContext,isConflict,null);
+    public void showConflictDialog(Context context) {
+        AccountManager.getInstance().logout(context,isConflict,new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                int i=mTabHost.getCurrentTab();
+                if(i==2){
+                    MyFragment my=(MyFragment)getSupportFragmentManager().findFragmentByTag("My");
+                    my.onResume();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
         if(isFinishing())
             return;
         try {
             if (conflictDialog == null){
-                conflictDialog= new PeachMessageDialog(mContext);
+                conflictDialog= new PeachMessageDialog(context);
                 conflictDialog.setTitle("下线通知");
                 conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
                 conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
@@ -657,4 +681,5 @@ public class MainActivity extends PeachBaseActivity {
         }
 
     }
+
 }

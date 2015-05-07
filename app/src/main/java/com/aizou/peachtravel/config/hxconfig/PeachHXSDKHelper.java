@@ -21,6 +21,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +68,7 @@ import com.easemob.chat.OnNotificationClickListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EasyUtils;
+import com.easemob.util.NetUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
@@ -158,32 +161,11 @@ public class PeachHXSDKHelper extends HXSDKHelper {
     
     @Override
     protected void onConnectionConflict() {
-        AccountManager.getInstance().logout(appContext, true, null);
-        /*Intent intent = new Intent(appContext, MainActivity.class);
+        //AccountManager.getInstance().logout(appContext, true, null);
+        Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("conflict", true);
-        appContext.startActivity(intent);*/
-
-        ToastUtil.getInstance(appContext).showToast("下线了");
-
-        //新线程
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final ComfirmDialog dialog = new ComfirmDialog(appContext);
-                dialog.setMessage("下线");
-                dialog.setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                LogUtil.d("11111111");
-                dialog.show();
-                LogUtil.d("22222222");
-            }
-        }).start();
-
+        intent.putExtra("conflict",true);
+        appContext.startActivity(intent);
     }
 
     

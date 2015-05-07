@@ -325,6 +325,7 @@ public class LoginActivity extends PeachBaseActivity {
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";

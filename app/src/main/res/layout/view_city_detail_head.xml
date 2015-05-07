@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <FrameLayout android:id="@+id/ly1"
         android:layout_width="fill_parent"
@@ -35,11 +37,11 @@
 
     </FrameLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/ly2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ly1"
+        android:orientation="vertical"
         android:background="@color/base_color_white"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
@@ -58,7 +60,6 @@
             android:id="@+id/line_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/tv_city_name"
             android:layout_marginTop="10dp"
             android:background="@color/app_backgroud"
             />
@@ -69,16 +70,15 @@
             android:textColor="@color/second_font_color"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:lineSpacingExtra="3dp"
-            android:layout_below="@id/line_view"/>
+            android:lineSpacingExtra="3dp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <LinearLayout android:id="@+id/ly_event"
+    <LinearLayout
+        android:id="@+id/ly_event"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/base_color_white"
-        android:layout_below="@id/ly2"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:orientation="vertical"
@@ -118,6 +118,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/base_color_white"
             expandableTextView:animDuration="200"
             expandableTextView:maxCollapsedLines="3"
             expandableTextView:animAlphaStart="1"
@@ -129,6 +130,7 @@
                 android:id="@id/expandable_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/base_color_white"
                 android:textSize="15sp"
                 android:lineSpacingExtra="3dp"
                 android:textColor="@color/second_font_color"
@@ -216,7 +218,6 @@
         android:id="@+id/fd"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ly_event"
         android:background="@color/base_color_white"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
@@ -280,4 +281,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

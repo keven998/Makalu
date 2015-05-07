@@ -286,7 +286,7 @@ public class TalkFragment extends PeachBaseFragment {
 			((MainActivity) getActivity()).updateUnreadMsgCount();
 
             if (adapter.getCount() <= 0) {
-                setEmptyView();
+                //setEmptyView();
             }
 
             return true;
@@ -470,7 +470,7 @@ public class TalkFragment extends PeachBaseFragment {
         }
         if(EMChat.getInstance().isLoggedIn()) {
             if (listView.getAdapter().getCount() <= 0) {
-                setEmptyView();
+                //setEmptyView();
             }
         }
     }
