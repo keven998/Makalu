@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,7 +54,7 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-    private PullToZoomListViewEx mTravelLv;
+    private PullToZoomListViewEx mTravelLv; //
     private RelativeLayout titleBar;
     private View bottom_line;
     private TextView mTitleTv;
@@ -96,12 +97,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void initView(){
         PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
+        //ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
         mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
         bottom_line = (View) findViewById(R.id.title_bottom_line);
         mTitleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         mFavCb = (CheckBox)findViewById(R.id.iv_fav);
-        setTitleAlpha(0);
+       // setTitleAlpha(0);
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +114,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         View hv;
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         travelLv.setHeaderView(hv);
-
        // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
 
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
@@ -149,7 +150,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        final int max = LocalDisplay.dp2px(170);
+        /*final int max = LocalDisplay.dp2px(170);
         final int min = LocalDisplay.dp2px(80);
         travelLv.setOnScrollYListener(new PullToZoomBase.OnScrollYListener() {
             @Override
@@ -168,7 +169,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     setTitleAlpha(alpha);
 
             }
-        });
+        });*/
+       // setTitleAlpha(10);
     }
 
     private void setTitleAlpha(int alpha) {

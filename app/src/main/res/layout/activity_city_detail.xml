@@ -7,13 +7,18 @@
 
     <com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx
         android:id="@+id/lv_city_detail"
+        android:layout_marginTop="@dimen/title_bar_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/base_color_white"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:cacheColorHint="@color/app_backgroud"
         android:overScrollMode="never"
         android:fadingEdge="none"
-        android:listSelector="@null" />
+        android:listSelector="@null"/>
+
+    <!---->
 
    <!-- android:cachehintcolor-->
     <RelativeLayout

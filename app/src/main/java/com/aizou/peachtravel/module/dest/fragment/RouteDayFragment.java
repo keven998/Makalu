@@ -17,10 +17,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -354,6 +356,9 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         private boolean isEditableMode;
         private DisplayImageOptions options;
         public boolean isAnimationEnd =true;
+        private View cellHeaderView,cellItemView;
+        /*private LinearLayout cell=new LinearLayout(getActivity());
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);*/
 
         public RouteDayAdapter(boolean isEditableMode) {
             super();
@@ -625,6 +630,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     });
                     break;
             }
+            cellItemView=convertView;
             return convertView;
         }
 
@@ -732,6 +738,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 holder.deleteDayIv.setVisibility(View.GONE);
             }
 */
+            cellHeaderView=convertView;
             return convertView;
         }
 
@@ -824,11 +831,11 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
     }
 
-    public void showMoreDialog(final int position ){
+    public void showMoreDialog(final int section){
         String[] names={"添加行程","加一天在前面","加一天在后面","删除这一天"};
         final MoreDialog dialog=new MoreDialog(getActivity());
         dialog.setMoreStyle(true,4,names);
-        dialog.setTitle("第"+(position+1)+"天");
+        dialog.setTitle("第"+(section+1)+"天");
         dialog.setMessage("请选择你要进行的操作");
         dialog.getTv4().setTextColor(getResources().getColor(R.color.base_color_red));
         //添加一天在前面
@@ -836,7 +843,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                addNewDayRouter(position,true);
+                addNewDayRouter(section,true);
             }
         });
 
@@ -845,7 +852,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                addNewDayRouter(position,false);
+                addNewDayRouter(section,false);
             }
         });
 
@@ -857,8 +864,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 MobclickAgent.onEvent(getActivity(), "event_add_plan_in_agenda");
                 Intent intent = new Intent(getActivity(), AddPoiActivity.class);
                 intent.putParcelableArrayListExtra("locList", strategy.localities);
-                intent.putExtra("dayIndex", position);
-                intent.putParcelableArrayListExtra("poiList", routeDayMap.get(position));
+                intent.putExtra("dayIndex", section);
+                intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
                 getActivity().startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
@@ -883,18 +890,25 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        routeDayMap.remove(position);
+                       /* routeDayMap.remove(section);
                         strategy.itineraryDays--;
                         routeDayAdpater.notifyDataSetChanged();
-                        deleteDialog.dismiss();
-                        if(mOnEditModeChangeListener!=null){
-                            if(!isInEditMode){
+                        if (mOnEditModeChangeListener != null) {
+                            if (!isInEditMode) {
                                 isInEditMode = true;
                                 mOnEditModeChangeListener.onEditModeChange(true);
                                 routeDayAdpater.setEditableMode(false);
                                 routeDayAdpater.notifyDataSetChanged();
                             }
+                        }*/
+                        deleteDialog.dismiss();
+                        int i=routeDayMap.get(section).size();
+                        //下文中的值6还需要通过计算具体的某个位置
+                        int new_sum=getCurrentItemPosition(section-1);
+                        for(int k=0;k<i;k++){
+                            delectWithAnim(section,mEditDslv.getChildAt(new_sum+1+k),false);
                         }
+                        delectWithAnim(section,mEditDslv.getChildAt(new_sum),true);
                     }
                 });
                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -909,27 +923,47 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         dialog.show();
     }
 
+    public int getCurrentItemPosition(int position){
+        int sum=0;
+        for(int i=0;i<routeDayMap.get(position).size();i++){
+            sum+=(routeDayMap.get(i).size()+1);
+        }
+        return sum;
+    }
 
-    /*public void delectWithAnim(final View v, final int index){
+
+    public void delectWithAnim(final int section,final View mItem,boolean isHeader){
+
             Animation.AnimationListener al = new Animation.AnimationListener() {
+                boolean flag=true;
                 @Override
                 public void onAnimationEnd(Animation arg0) {
-                    mEditDslv.removeItem(index);
-
-                    RecyclerView.ViewHolder vh = (RecyclerView.ViewHolder)v.getTag();
-                    vh.needInflate = true;
-
-                    mMyAnimListAdapter.notifyDataSetChanged();
+                    if(flag) {
+                        routeDayMap.remove(section);
+                        strategy.itineraryDays--;
+                        routeDayAdpater.notifyDataSetChanged();
+                        if (mOnEditModeChangeListener != null) {
+                            if (!isInEditMode) {
+                                isInEditMode = true;
+                                mOnEditModeChangeListener.onEditModeChange(true);
+                                routeDayAdpater.setEditableMode(false);
+                                routeDayAdpater.notifyDataSetChanged();
+                            }
+                        }
+                        flag=false;
+                        arg0.cancel();
+                    }
+                        //
                 }
                 @Override public void onAnimationRepeat(Animation animation) {}
                 @Override public void onAnimationStart(Animation animation) {}
             };
 
-            collapse(v, al);
-    }*/
+            collapse(mItem, al,isHeader);
+    }
 
-    private void collapse(final View v, Animation.AnimationListener al) {
-        final int initialHeight = v.getMeasuredHeight();
+    private void collapse(final View item,Animation.AnimationListener al,boolean isHeader) {
+        /*final int initialHeight = v.getMeasuredHeight();
 
         Animation anim = new Animation() {
             @Override
@@ -947,13 +981,36 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             public boolean willChangeBounds() {
                 return true;
             }
-        };
+        };*/
+
+        Animation Animation=AnimationUtils.loadAnimation(item.getContext(),R.anim.slide_out_to_right);
+        Animation itemAnimation=AnimationUtils.loadAnimation(item.getContext(),R.anim.slide_out_to_right);
 
         if (al!=null) {
-            anim.setAnimationListener(al);
+            Animation.setAnimationListener(al);
         }
-        anim.setDuration(500);
-        v.startAnimation(anim);
+
+        itemAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        if(isHeader){
+            item.startAnimation(Animation);
+        }else{
+            item.startAnimation(itemAnimation);
+        }
     }
 
     public void addNewDayRouter(int position,boolean isBefore){
