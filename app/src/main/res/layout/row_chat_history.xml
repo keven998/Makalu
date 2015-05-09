@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:padding="10dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="11dp"
+    android:paddingRight="11dp"
     android:id="@+id/list_item_layout"
     android:background="@color/base_color_white"
     android:gravity="center_vertical" >
@@ -11,13 +14,14 @@
         android:id="@+id/avatar_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:layout_alignParentLeft="true" >
 
       <ImageView
             android:id="@+id/avatar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_centerVertical="true"
             android:scaleType="centerCrop"
             android:src="@drawable/avatar_placeholder" />
@@ -38,11 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:singleLine="true"
-                android:layout_marginTop="6dp"
                 android:textColor="@color/base_text_color_title"
                 android:text="放大镜看是否打开"
                 android:ellipsize="end"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="0dp"
@@ -85,7 +88,7 @@
         android:orientation="horizontal"
         android:layout_below="@+id/top"
         android:layout_toRightOf="@+id/avatar_container"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         >
 
         <TextView
@@ -99,7 +102,7 @@
             android:drawablePadding="5dp"
             android:paddingRight="10dp"
             android:textColor="@color/base_text_color_subtitle"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:text="fjdsfkjdasfj"/>
 
         <TextView
@@ -108,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textColor="@color/base_text_color_text_hint"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:text="123"/>
 
     </LinearLayout>

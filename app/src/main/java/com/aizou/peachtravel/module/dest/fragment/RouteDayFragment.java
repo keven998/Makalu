@@ -356,7 +356,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         private boolean isEditableMode;
         private DisplayImageOptions options;
         public boolean isAnimationEnd =true;
-        private View cellHeaderView,cellItemView;
+       // private View cellHeaderView,cellItemView;
         /*private LinearLayout cell=new LinearLayout(getActivity());
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);*/
 
@@ -407,7 +407,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
 
         @Override
-        public View getItemView(final int section, int position, View convertView, ViewGroup parent) {
+        public View getItemView(final int section, final int position, View convertView, ViewGroup parent) {
             int type = getContentItemViewType(section, position);
             ItemViewHolder holder = null;
             if (convertView == null) {
@@ -422,6 +422,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.spotNameTv = (TextView) convertView.findViewById(R.id.spot_name_tv);
                         holder.spotCostTimeTv = (TextView) convertView.findViewById(R.id.spot_time_cost_tv);
                         holder.rankTv = (TextView) convertView.findViewById(R.id.spot_rank_tv);
+
+                        convertView.setTag(holder);
                         break;
                     case POI:
                         convertView = View.inflate(getActivity(), R.layout.row_routeday_poi, null);
@@ -433,9 +435,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                         holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                         holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
+
+                        convertView.setTag(holder);
                         break;
                 }
-                convertView.setTag(holder);
             } else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
@@ -477,7 +480,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.deleteIv.startAnimation(animation);
                         animation = AnimationSimple.expand(holder.dragHandleIv);
                         holder.dragHandleIv.startAnimation(animation);
-
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -488,9 +490,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        routeDayMap.get(section).remove(poiDetailBean);
-                                        notifyDataSetChanged();
+                                        LogUtil.d("执行");
                                         deleteDialog.dismiss();
+                                        delectWithAnim(section,mEditDslv.getChildAt(getCurrentItemPosition(section-1,position)),poiDetailBean);
+                                        /*routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();*/
                                     }
                                 });
                                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -516,9 +521,11 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        routeDayMap.get(section).remove(poiDetailBean);
-                                        notifyDataSetChanged();
                                         deleteDialog.dismiss();
+                                        delectWithAnim(section,mEditDslv.getChildAt(getCurrentItemPosition(section-1,position)),poiDetailBean);
+                                        /*routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();*/
                                     }
                                 });
                                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -590,7 +597,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.deleteIv.startAnimation(animation);
                         animation = AnimationSimple.expand(holder.dragHandleIv);
                         holder.dragHandleIv.startAnimation(animation);
-
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -600,9 +606,11 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        routeDayMap.get(section).remove(poiDetailBean);
-                                        notifyDataSetChanged();
                                         deleteDialog.dismiss();
+                                        delectWithAnim(section,mEditDslv.getChildAt(getCurrentItemPosition(section-1,position)),poiDetailBean);
+                                        /*routeDayMap.get(section).remove(poiDetailBean);
+                                        notifyDataSetChanged();
+                                        deleteDialog.dismiss();*/
                                     }
                                 });
                                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -630,7 +638,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     });
                     break;
             }
-            cellItemView=convertView;
+
             return convertView;
         }
 
@@ -738,7 +746,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 holder.deleteDayIv.setVisibility(View.GONE);
             }
 */
-            cellHeaderView=convertView;
             return convertView;
         }
 
@@ -890,7 +897,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       /* routeDayMap.remove(section);
+                        routeDayMap.remove(section);
                         strategy.itineraryDays--;
                         routeDayAdpater.notifyDataSetChanged();
                         if (mOnEditModeChangeListener != null) {
@@ -900,15 +907,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                                 routeDayAdpater.setEditableMode(false);
                                 routeDayAdpater.notifyDataSetChanged();
                             }
-                        }*/
-                        deleteDialog.dismiss();
-                        int i=routeDayMap.get(section).size();
-                        //下文中的值6还需要通过计算具体的某个位置
-                        int new_sum=getCurrentItemPosition(section-1);
-                        for(int k=0;k<i;k++){
-                            delectWithAnim(section,mEditDslv.getChildAt(new_sum+1+k),false);
                         }
-                        delectWithAnim(section,mEditDslv.getChildAt(new_sum),true);
+                        deleteDialog.dismiss();
                     }
                 });
                 deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -923,33 +923,26 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         dialog.show();
     }
 
-    public int getCurrentItemPosition(int position){
+    public int getCurrentItemPosition(int section,int position){
         int sum=0;
-        for(int i=0;i<routeDayMap.get(position).size();i++){
+        for(int i=0;i<=section;i++){
             sum+=(routeDayMap.get(i).size()+1);
         }
+        sum+=(position+1);
+        sum-=mEditDslv.getFirstVisiblePosition();
         return sum;
     }
 
 
-    public void delectWithAnim(final int section,final View mItem,boolean isHeader){
+    public void delectWithAnim(final int section,final View mItem,final PoiDetailBean poiDetailBean){
 
             Animation.AnimationListener al = new Animation.AnimationListener() {
                 boolean flag=true;
                 @Override
                 public void onAnimationEnd(Animation arg0) {
                     if(flag) {
-                        routeDayMap.remove(section);
-                        strategy.itineraryDays--;
+                        routeDayMap.get(section).remove(poiDetailBean);
                         routeDayAdpater.notifyDataSetChanged();
-                        if (mOnEditModeChangeListener != null) {
-                            if (!isInEditMode) {
-                                isInEditMode = true;
-                                mOnEditModeChangeListener.onEditModeChange(true);
-                                routeDayAdpater.setEditableMode(false);
-                                routeDayAdpater.notifyDataSetChanged();
-                            }
-                        }
                         flag=false;
                         arg0.cancel();
                     }
@@ -959,58 +952,11 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 @Override public void onAnimationStart(Animation animation) {}
             };
 
-            collapse(mItem, al,isHeader);
-    }
-
-    private void collapse(final View item,Animation.AnimationListener al,boolean isHeader) {
-        /*final int initialHeight = v.getMeasuredHeight();
-
-        Animation anim = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                }
-                else {
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };*/
-
-        Animation Animation=AnimationUtils.loadAnimation(item.getContext(),R.anim.slide_out_to_right);
-        Animation itemAnimation=AnimationUtils.loadAnimation(item.getContext(),R.anim.slide_out_to_right);
-
+        Animation Animation=AnimationUtils.loadAnimation(mItem.getContext(),R.anim.slide_out_to_right);
         if (al!=null) {
             Animation.setAnimationListener(al);
         }
-
-        itemAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        if(isHeader){
-            item.startAnimation(Animation);
-        }else{
-            item.startAnimation(itemAnimation);
-        }
+        mItem.startAnimation(Animation);
     }
 
     public void addNewDayRouter(int position,boolean isBefore){
@@ -1022,12 +968,12 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
         strategy.itineraryDays++;
         routeDayAdpater.notifyDataSetChanged();
-        /*mEditDslv.postDelayed(new Runnable() {
+        mEditDslv.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
             }
-        }, 50);*/
+        }, 50);
         if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;

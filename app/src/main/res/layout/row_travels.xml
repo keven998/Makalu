@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="11dp">
 
         <ImageView
             android:id="@+id/iv_travels"
-            android:layout_width="@dimen/note_picture_size"
-            android:layout_height="@dimen/note_picture_size"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:background="@drawable/bg_common_default"
             android:scaleType="centerCrop" />
 
@@ -23,11 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/iv_travels"
             android:singleLine="true"
             android:textColor="@color/base_font_color"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:ellipsize="end"
             android:text="fdjsaklfjdkljfdfsadfsafdsaffdfdsaddsa"/>
 
@@ -70,7 +69,7 @@
             android:gravity="left|top"
             android:singleLine="true"
             android:textColor="@color/second_font_color"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_property"
@@ -85,7 +84,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textColor="@color/third_font_color"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
 
     </RelativeLayout>
 

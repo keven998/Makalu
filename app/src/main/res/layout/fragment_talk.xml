@@ -15,8 +15,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:drawableLeft="@drawable/add_contact"
-            android:paddingLeft="12dp"
-            android:paddingRight="10dp" />
+            android:paddingLeft="21dp"
+            android:paddingRight="30dp" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -31,7 +31,7 @@
 
         <RelativeLayout
             android:id="@+id/btn_container_address_list"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true">
 

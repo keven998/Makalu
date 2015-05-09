@@ -318,7 +318,7 @@
                             android:enabled="false"
                             android:gravity="center"
                             android:padding="15dp"
-                            android:drawableTop="@drawable/ic_city_spots"
+                            android:drawableTop="@drawable/ic_nrq_spot"
                             android:drawablePadding="10dp"
                             android:text="景点攻略"
                             android:textColor="@color/base_font_color"
@@ -334,7 +334,7 @@
                             android:padding="15dp"
                             android:text="提示"
                             android:drawablePadding="10dp"
-                            android:drawableTop="@drawable/ic_city_spots"
+                            android:drawableTop="@drawable/ic_nrq_spot"
                             android:textColor="@color/base_font_color"
                             android:textSize="15sp" />
 
@@ -345,7 +345,7 @@
                             android:layout_marginLeft="30dp"
                             android:enabled="false"
                             android:gravity="center"
-                            android:drawableTop="@drawable/ic_city_spots"
+                            android:drawableTop="@drawable/ic_nrq_spot"
                             android:drawablePadding="10dp"
                             android:padding="15dp"
                             android:text="交通"

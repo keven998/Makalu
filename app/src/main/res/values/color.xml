@@ -24,6 +24,7 @@
     <color name="route_desc_num_color">#F5AE43</color>
     <color name="avatar_border">#FFFFFF</color>
     <color name="section_bg_color">#EAEAEA</color>
+    <color name="unread_text_bg">#FF5D38</color>
 
     <color name="base_color_white">#ffffff</color>
     <color name="base_color_white_trans">#ddffffff</color>

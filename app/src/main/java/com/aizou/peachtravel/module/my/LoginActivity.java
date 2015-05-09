@@ -66,6 +66,9 @@ public class LoginActivity extends PeachBaseActivity {
     public JSONObject uploadJson;
     private int request_code;
     private boolean autoLogin = false;
+    private boolean isBackWeixinLoginPage=true;
+    private boolean isWeixinClickLogin=false;
+    CustomLoadingDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class LoginActivity extends PeachBaseActivity {
             if (autoLogin) {
                 return;
         }
+        if(isBackWeixinLoginPage&&isWeixinClickLogin){dialog.dismiss();}
 
     }
 
@@ -156,6 +160,13 @@ public class LoginActivity extends PeachBaseActivity {
                 overridePendingTransition(0,R.anim.push_bottom_out);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(0,R.anim.push_bottom_out);
     }
 
     @Override
@@ -315,17 +326,18 @@ public class LoginActivity extends PeachBaseActivity {
 
 
     public void weixinLogin() {
+        isWeixinClickLogin=true;
         ShareUtils.configPlatforms(this);
-        final CustomLoadingDialog dialog =DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
+        dialog =DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
         WeixinApi.getInstance().auth(this, new WeixinApi.WeixinAuthListener() {
             @Override
             public void onComplete(String code) {
+                isBackWeixinLoginPage=false;
                 ToastUtil.getInstance(mContext).showToast("授权成功");
                 dialog.setContent("正在登录");
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";
@@ -347,17 +359,21 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void onError(int errCode) {
+                isBackWeixinLoginPage=false;
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权失败");
             }
 
             @Override
             public void onCancel() {
+                isBackWeixinLoginPage=false;
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权取消");
             }
-        });
 
+
+        });
+        //dialog.dismiss();
     }
 
 

@@ -191,13 +191,13 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivityWithNoAnim(logActivity);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(R.anim.push_bottom_in, 0);
                 break;
 
             case R.id.sp_reg:
                 Intent regActivity = new Intent(SplashActivity.this, RegActivity.class);
                 startActivityWithNoAnim(regActivity);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(R.anim.push_bottom_in, 0);
                 break;
 
             case R.id.sp_bounce:

@@ -164,10 +164,10 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textColor="@color/base_font_color"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:gravity="center"
-                android:drawablePadding="5dp"
-                android:drawableTop="@drawable/ic_city_travel"
+                android:drawablePadding="11dp"
+                android:drawableTop="@drawable/ic_nrq_trip"
                 android:onClick="intentToTravel"
                 android:text="旅游指南"/>
 
@@ -178,9 +178,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/base_font_color"
-                android:drawableTop="@drawable/ic_city_spots"
-                android:drawablePadding="5dp"
-                android:textSize="15sp"
+                android:drawableTop="@drawable/ic_nrq_spot"
+                android:drawablePadding="11dp"
+                android:textSize="13sp"
                 android:onClick="intentToFood"
                 android:text="景点"/>
 
@@ -191,9 +191,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/base_font_color"
-                android:drawableTop="@drawable/ic_city_restaurant"
-                android:drawablePadding="5dp"
-                android:textSize="15sp"
+                android:drawableTop="@drawable/ic_nrq_food"
+                android:drawablePadding="11dp"
+                android:textSize="13sp"
                 android:onClick="intentToFood"
                 android:text="美食"/>
 
@@ -203,10 +203,10 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_city_shopping"
-                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/ic_nrq_shop"
+                android:drawablePadding="11dp"
                 android:textColor="@color/base_font_color"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:onClick="intentToShopping"
                 android:text="购物"/>
 
@@ -217,12 +217,10 @@
     <RelativeLayout
         android:id="@+id/fd"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="41dp"
         android:background="@color/base_color_white"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
+        android:paddingRight="11dp"
+        android:paddingLeft="11dp">
 
         <TextView
             android:id="@+id/jx_title"
@@ -230,14 +228,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="精选游记"
+            android:layout_centerVertical="true"
             android:textColor="@color/base_font_color"
             android:textSize="18sp"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_below="@+id/jx_title"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/app_backgroud"
             />
 
