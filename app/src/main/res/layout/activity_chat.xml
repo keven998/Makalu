@@ -28,7 +28,7 @@
 
                 <View
                     android:layout_width="fill_parent"
-                    android:layout_height="1px"
+                    android:layout_height="2px"
                     android:background="@color/app_theme_color" />
 
                 <LinearLayout

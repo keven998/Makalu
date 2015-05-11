@@ -38,9 +38,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:drawableRight="@drawable/favorite_filter"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
+            android:drawableRight="@drawable/navigation_filter"
+            android:paddingRight="13dp"
+            android:paddingLeft="30dp"
             />
 
         <View
@@ -54,15 +54,19 @@
     <EditText
         android:id="@+id/search_expert_name"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:drawableLeft="@drawable/ic_search"
+        android:layout_height="28dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:drawableLeft="@drawable/navigation_surch"
         android:gravity="center"
         android:hint="姓名或拼音首字母"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:background="@drawable/search_box_half_radius"
-        android:textColor="@color/base_text_color_text_placeholder"
+        android:textColor="@color/search_edit_text_hint_color"
         android:layout_gravity="center_horizontal"
         />
 

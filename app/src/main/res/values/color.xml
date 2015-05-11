@@ -47,10 +47,21 @@
     <color name="base_text_color_text_hint">#999999</color>
     <color name="base_text_color_text_placeholder">#aaaaaa</color>
 
-    <color name="base_border_color">#b3b3b3</color>
+    <color name="base_border_color">#e3e3e3</color>
     <color name="base_divider_color">#eeeeee</color>
     <color name="base_highlight_color">#f4f4f4</color>
     <color name="back_blue_color">#0000FF</color>
+
+    <color name="light_gray_text_color">#B3B3B3</color>
+    <color name="search_edit_text_hint_color">#cdcdcd</color>
+    <color name="status_bg_01">#1FCE9C</color>
+    <color name="status_bg_02">#F27B23</color>
+    <color name="status_bg_03">#414141</color>
+    <color name="level_box_bg">#F4B713</color>
+    <color name="fourth_text_color">#A6A6A6</color>
+    <color name="green_text_color">#04B985</color>
+    <color name="cell_sm_text_color">#A4A4A4</color>
+    <color name="des_box_selected_bg_color">#1CC091</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">#eeeeee</drawable>

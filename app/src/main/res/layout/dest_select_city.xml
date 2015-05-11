@@ -7,7 +7,7 @@
     <CheckedTextView
         android:id="@+id/tv_cell_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="26dp"
         android:textColor="@color/select_dest_text_color"
         android:background="@drawable/checker_cell_select_bg"
         android:drawablePadding="10dp"
@@ -15,7 +15,7 @@
         android:layout_gravity="center_vertical"
         android:clickable="true"
         android:singleLine="true"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="2dp"

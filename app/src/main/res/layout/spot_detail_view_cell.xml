@@ -18,7 +18,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder"/>
+            android:src="@drawable/poi_comment_pic"/>
 
         <TextView
             android:id="@+id/spot_detail_dp_name"

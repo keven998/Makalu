@@ -18,6 +18,10 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="11dp"
+        android:paddingBottom="11dp"
+        android:paddingRight="11dp"
+        android:paddingLeft="13dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -39,9 +43,8 @@
 
             <ImageView
                 android:id="@+id/spot_image_iv"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:layout_marginLeft="15dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:layout_centerVertical="true"
                 android:background="@color/app_backgroud"
                 android:scaleType="centerCrop" />
@@ -53,7 +56,7 @@
                 android:layout_alignTop="@id/spot_image_iv"
                 android:layout_toRightOf="@id/spot_image_iv"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="-3dp"
+                android:layout_marginTop="1dp"
                 android:singleLine="true"
                 android:textColor="@color/base_text_color_title"
                 android:textSize="15sp"
@@ -66,7 +69,7 @@
                 android:gravity="left"
                 android:textSize="14sp"
                 android:textColor="@color/base_text_color_text_hint"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="6dp"
                 android:layout_below="@id/spot_name_tv"
                 android:singleLine="true"
                 android:layout_toRightOf="@id/spot_image_iv"
@@ -78,11 +81,11 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/spot_image_iv"
                 android:layout_below="@+id/spot_rank_tv"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginLeft="15dp"
                 android:singleLine="true"
-                android:textColor="@color/main_color_second"
-                android:textSize="11sp"
+                android:textColor="@color/green_text_color"
+                android:textSize="12sp"
                 android:text="fdsf"/>
         </RelativeLayout>
 

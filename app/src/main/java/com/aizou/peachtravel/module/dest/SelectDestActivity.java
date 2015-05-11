@@ -172,12 +172,14 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putParcelableArrayListExtra("destinations", allAddCityList);
                         startActivityForResult(intent,REQUEST_CODE_NEW_PLAN);
+                        finish();
                     }
 
                 } else {
                     ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_LOGIN);
+                    overridePendingTransition(R.anim.push_bottom_in,0);
                 }
             }
         });
@@ -276,7 +278,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 convertView = inflater.inflate(R.layout.tab_select_dest, container, false);
             }
             TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
-            textView.setTextSize(15);
             textView.setText(tabNames[position]);
             if(position==0){
                 textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);

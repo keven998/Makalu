@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@color/base_color_white"
-    android:padding="10dp"
+    android:padding="11dp"
     >
 
     <ImageView
         android:id="@+id/expert_pic"
-        android:layout_width="62dp"
-        android:layout_height="62dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:background="@drawable/round_iv_bg"
         android:src="@drawable/avatar_placeholder"
         android:scaleType="fitCenter"
         />
@@ -19,7 +20,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="14dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -33,15 +34,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="达人就是我"
-                android:textSize="16sp"
-                android:textColor="@color/base_color_black"
+                android:textSize="15sp"
+                android:textColor="@color/base_font_color"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView
             android:id="@+id/expert_status_01"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:layout_width="wrap_content"
             android:background="@drawable/expert_status_1_bg"
             android:textColor="@color/base_color_white"
@@ -49,12 +50,13 @@
             android:layout_toRightOf="@+id/expert_name"
             android:layout_marginRight="5sp"
             android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:visibility="gone"
             />
 
             <TextView
                 android:id="@+id/expert_status_02"
-                android:layout_height="wrap_content"
+                android:layout_height="14dp"
                 android:layout_width="wrap_content"
                 android:background="@drawable/expert_status_2_bg"
                 android:textColor="@color/base_color_white"
@@ -62,12 +64,13 @@
                 android:layout_toRightOf="@+id/expert_name"
                 android:layout_marginRight="5sp"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:visibility="gone"
                 />
 
             <TextView
                 android:id="@+id/expert_status_03"
-                android:layout_height="wrap_content"
+                android:layout_height="14dp"
                 android:layout_width="wrap_content"
                 android:background="@drawable/expert_status_3_bg"
                 android:textColor="@color/base_color_white"
@@ -75,19 +78,21 @@
                 android:layout_toRightOf="@+id/expert_name"
                 android:layout_marginRight="5sp"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:visibility="gone"
                 />
 
             <TextView
                 android:id="@+id/expert_level"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="14dp"
                 android:background="@drawable/expert_level_bg"
                 android:textSize="10sp"
                 android:textColor="@color/base_color_white"
                 android:text="V30"
                 android:layout_toRightOf="@+id/expert_status"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 />
 
             <TextView
@@ -98,7 +103,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="right"
                 android:textSize="12sp"
-                android:textColor="@color/third_font_color"
+                android:textColor="@color/fourth_text_color"
                 android:text="现住地 洛杉矶"
                 />
 
@@ -108,10 +113,10 @@
             android:id="@+id/places_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textColor="@color/second_font_color"
+            android:textColor="@color/base_font_color"
             android:textSize="14sp"
             android:text="已经去过21个国家和地区"
             />
@@ -122,10 +127,10 @@
             android:layout_height="wrap_content"
             android:text="带你飞啊飞非积分我就减肥发的撒加"
             android:textSize="12sp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textColor="@color/third_font_color"
+            android:textColor="@color/fourth_text_color"
             />
 
     </LinearLayout>

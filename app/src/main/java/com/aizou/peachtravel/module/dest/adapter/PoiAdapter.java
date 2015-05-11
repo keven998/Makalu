@@ -227,7 +227,7 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                poiViewHolder.mBtnAdd.setText(poiDetailBean.distance);     //TODO 添加距离 导航
+                poiViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离 导航
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

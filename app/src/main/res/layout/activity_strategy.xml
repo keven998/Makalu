@@ -36,7 +36,7 @@
     <RelativeLayout
         android:id="@+id/bottom_indicator"
         android:layout_width="fill_parent"
-        android:layout_height="62dp"
+        android:layout_height="47dp"
         android:layout_gravity="bottom"
         android:background="@color/base_color_white"
         >
@@ -88,7 +88,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:drawableLeft="@drawable/ic_title_back"
-            android:paddingLeft="12dp"
+            android:paddingLeft="20dp"
             android:paddingRight="30dp" />
 
        <TextView
@@ -119,8 +119,8 @@
             android:layout_toLeftOf="@+id/iv_location"
             android:checked="false"
             android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:drawableLeft="@drawable/checker_ic_plan_edit"
             />
 
@@ -130,8 +130,8 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/iv_more"
             android:src="@drawable/ic_location"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
             />
 
 
@@ -139,10 +139,10 @@
             android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="11dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_more"
+            android:src="@drawable/ic_menu_navigationbar"
             />
 
         <TextView

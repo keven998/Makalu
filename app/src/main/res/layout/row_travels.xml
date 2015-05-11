@@ -8,7 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="11dp">
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="9dp">
 
         <ImageView
             android:id="@+id/iv_travels"
@@ -22,8 +25,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"
+            android:layout_marginTop="4dp"
             android:singleLine="true"
             android:textColor="@color/base_font_color"
             android:textSize="15sp"
@@ -64,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/tv_travels_name"
             android:layout_below="@id/tv_travels_name"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:gravity="left|top"
             android:singleLine="true"
@@ -80,7 +83,7 @@
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"
             android:layout_below="@+id/tv_travels_desc"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="6dp"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textColor="@color/third_font_color"
@@ -91,7 +94,7 @@
     <RelativeLayout
         android:id="@+id/rl_send"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="85dp"
         >
 
         <Button

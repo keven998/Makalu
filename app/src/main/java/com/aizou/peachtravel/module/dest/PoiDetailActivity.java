@@ -247,9 +247,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void refreshFav(PoiDetailBean detailBean) {
         if (detailBean.isFavorite) {
-            mIvFav.setImageResource(R.drawable.ic_poi_fav_selected);
+            mIvFav.setImageResource(R.drawable.ic_favorite_sleceted);
         } else {
-            mIvFav.setImageResource(R.drawable.ic_poi_fav_normal);
+            mIvFav.setImageResource(R.drawable.ic_favorite_normal);
         }
     }
 

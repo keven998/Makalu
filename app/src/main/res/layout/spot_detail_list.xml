@@ -45,20 +45,20 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
-            android:paddingRight="10dp"
+            android:paddingRight="13dp"
             android:layout_toLeftOf="@+id/iv_chat"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_poi_fav_normal" />
+            android:src="@drawable/checker_title_ic_favorite" />
 
         <ImageView
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="12dp"
             android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_chat_selected" />
+            android:src="@drawable/ic_title_chat" />
 
 
         <View

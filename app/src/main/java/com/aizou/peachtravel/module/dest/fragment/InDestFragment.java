@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -412,17 +413,22 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     private class InCityViewHolder extends ViewHolderBase<InDestBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
+        private FrameLayout des_display_box;
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View contentView = layoutInflater.inflate(R.layout.dest_in_item, null);
             sectionTv = (TextView) contentView.findViewById(R.id.tv_section);
             cityListFl = (FlowLayout) contentView.findViewById(R.id.fl_city_list);
+            des_display_box = (FrameLayout) contentView.findViewById(R.id.des_display_box);
             return contentView;
         }
 
         @Override
         public void showData(int position, final InDestBean itemData) {
+            if(position==0){
+                des_display_box.setPadding(0,0,0,0);
+            }
             sectionTv.setText(itemData.section);
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
@@ -432,8 +438,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 cityNameTv.setChecked(bean.isAdded);
 
                 //更新按钮的图片的
-                add= getResources().getDrawable(R.drawable.ic_cell_item_unchoose);
-                selected= getResources().getDrawable(R.drawable.ic_cell_item_chooesed);
+                add= getResources().getDrawable(R.drawable.ic_green_add_icon);
+                selected= getResources().getDrawable(R.drawable.ic_white_selected_icon);
                 /// 这一步必须要做,否则不会显示.
                 add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
                 selected.setBounds(0,0,selected.getMinimumWidth(),selected.getMinimumHeight());

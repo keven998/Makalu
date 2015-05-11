@@ -4,15 +4,13 @@
 
     android:id="@+id/strategy_tab_title"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="37dp"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
     android:textColor="@color/poi_tab_checker_text_color"
-    android:drawablePadding="3dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="3dp"
-    android:textSize="9sp"
+    android:drawablePadding="0dp"
+    android:textSize="10sp"
     android:text="dfs"/>
     <!-- android:layout_width="match_parent"
        android:layout_height="match_parent">

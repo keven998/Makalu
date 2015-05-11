@@ -21,20 +21,19 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="14dp"
+            android:layout_height="41dp"
             android:paddingRight="10dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="14dp">
+            android:paddingLeft="13dp">
 
             <TextView
                 android:id="@+id/tv_day_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/base_color_black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:drawableLeft="@drawable/time_tag"
-                android:drawablePadding="5dp"
+                android:layout_centerVertical="true"
+                android:drawablePadding="10dp"
                 android:text="第一天"/>
 
             <!--<Button
@@ -51,10 +50,11 @@
             <ImageView
                 android:id="@+id/day_location"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/strategy_more"
                 android:layout_alignParentRight="true"
-                android:paddingRight="20dp"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"
                 android:paddingLeft="30dp"
                 />
 

@@ -84,18 +84,72 @@
                     android:id="@+id/tv_spot_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="14dp"
                     android:background="@drawable/bg_poi_title"
                     android:textColor="@color/base_font_color"
                     android:textSize="18sp"
                     android:text="dfsafsa" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="7dp">
+
+                    <ImageView
+                        android:id="@+id/poi_level_star_01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:src="@drawable/poi_level_star"
+                    />
+
+                    <ImageView
+                        android:id="@+id/poi_level_star_02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/poi_level_star"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/poi_level_star_03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/poi_level_star"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/poi_level_star_04"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/poi_level_star"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/poi_level_star_05"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/poi_level_star"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        />
+
+                </LinearLayout>
 
                 <RatingBar
                     android:id="@+id/ratingBar_spot"
                     style="@style/custom_small_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp" />
+                    android:layout_marginTop="7dp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_pic_num"
@@ -110,9 +164,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="景点排名"
-                    android:textSize="16sp"
-                    android:textColor="@color/second_font_color"
-                    android:layout_marginBottom="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/light_gray_text_color"
+                    android:layout_marginBottom="14dp"
                     android:layout_marginTop="7dp"
                     />
 
@@ -143,11 +197,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:text="门票"
                         android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/spot_det_ticket"
+                        android:drawablePadding="11dp"
+                        android:paddingLeft="1dp"
                         />
 
                     <View
@@ -172,18 +227,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:text="建议游玩"
                         android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/spot_det_suggest"
+                        android:drawablePadding="10dp"
                         />
 
                     <TextView
                         android:id="@+id/tv_spot_time"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@color/third_font_color"
+                        android:textColor="@color/cell_sm_text_color"
                         android:textSize="13sp"
                         android:text="开放时间"
                         android:layout_alignParentRight="true"
@@ -213,11 +268,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:text="电话"
                         android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/spot_det_phone"
+                        android:drawablePadding="12dp"
+                        android:paddingLeft="3dp"
                         />
 
                     <View
@@ -241,11 +297,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:text="地址"
                         android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/spot_det_map"
+                        android:drawablePadding="12dp"
+                        android:paddingLeft="3dp"
                         />
 
                     <View
@@ -269,11 +326,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/second_font_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:text="景点介绍"
                         android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/spot_det_introduction"
+                        android:drawablePadding="12dp"
+                        android:paddingLeft="3dp"
                         />
 
                     <View
@@ -294,7 +352,7 @@
                     android:textColor="@color/base_font_color"
                     android:textSize="18sp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="20dp"
                     />
 
 
@@ -318,7 +376,7 @@
                             android:enabled="false"
                             android:gravity="center"
                             android:padding="15dp"
-                            android:drawableTop="@drawable/ic_nrq_spot"
+                            android:drawableTop="@drawable/poi_det_img_checker_01"
                             android:drawablePadding="10dp"
                             android:text="景点攻略"
                             android:textColor="@color/base_font_color"
@@ -334,7 +392,7 @@
                             android:padding="15dp"
                             android:text="提示"
                             android:drawablePadding="10dp"
-                            android:drawableTop="@drawable/ic_nrq_spot"
+                            android:drawableTop="@drawable/poi_det_img_checker_02"
                             android:textColor="@color/base_font_color"
                             android:textSize="15sp" />
 
@@ -345,7 +403,7 @@
                             android:layout_marginLeft="30dp"
                             android:enabled="false"
                             android:gravity="center"
-                            android:drawableTop="@drawable/ic_nrq_spot"
+                            android:drawableTop="@drawable/poi_det_img_checker"
                             android:drawablePadding="10dp"
                             android:padding="15dp"
                             android:text="交通"

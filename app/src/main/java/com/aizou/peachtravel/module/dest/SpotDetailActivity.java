@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -219,9 +220,9 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void refreshFav(SpotDetailBean detailBean) {
         if (detailBean.isFavorite) {
-            favIv.setImageResource(R.drawable.ic_poi_fav_selected);
+            favIv.setImageResource(R.drawable.ic_favorite_sleceted);
         } else {
-            favIv.setImageResource(R.drawable.ic_poi_fav_normal);
+            favIv.setImageResource(R.drawable.ic_favorite_normal);
         }
     }
 
@@ -346,7 +347,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            tipsTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            //tipsTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            tipsTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_little_disabled),null,null);
             tipsTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.trafficInfoUrl)) {
@@ -362,7 +364,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            trafficGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            //trafficGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            trafficGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_travle_disabled),null,null);
             trafficGuideTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.visitGuideUrl)) {
@@ -378,7 +381,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            travelGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            //travelGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
+            travelGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_spots_disabled),null,null);
             travelGuideTv.setEnabled(false);
         }
     }

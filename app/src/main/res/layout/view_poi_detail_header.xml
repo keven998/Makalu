@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
-            android:paddingTop="12dp">
+            android:paddingTop="14dp">
 
             <TextView
                 android:id="@+id/tv_poi_name"
@@ -86,10 +86,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:gravity="center"
-                android:textColor="@color/second_font_color"
+                android:textColor="@color/light_gray_text_color"
                 android:layout_below="@+id/ratingBar_poi"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:text="fdsa"/>
 
 
@@ -100,7 +100,7 @@
                 android:layout_height="0.5dp"
                 android:background="@color/base_color_line_color"
                 android:layout_below="@+id/tv_poi_rank"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 />
 
 
@@ -132,11 +132,11 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textColor="@color/second_font_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:text=""
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_search"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="10dp"
                     />
 
                 <TextView
@@ -179,11 +179,11 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textColor="@color/second_font_color"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:text="等级/评级"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="5dp"
+                android:drawablePadding="10dp"
                 />
 
             <View
@@ -212,11 +212,11 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textColor="@color/second_font_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:text="地址"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_search"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="10dp"
                     />
 
 
@@ -246,11 +246,11 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textColor="@color/second_font_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:text="电话"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_search"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="10dp"
                     />
 
 
@@ -280,11 +280,11 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textColor="@color/second_font_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:text="poi简介"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_search"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="10dp"
                     />
 
 
@@ -301,7 +301,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="42dp"
                 android:paddingBottom="10dp"
                 android:layout_below="@+id/rl_poi_desc"
                 >
