@@ -100,12 +100,13 @@
 
                 <ImageView
                     android:id="@+id/web_view_go_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_title_back"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/webview_back_checker"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
                     />
 
 
@@ -114,10 +115,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/right_arrow_icon"
+                    android:src="@drawable/webview_next_checker"
                     android:layout_gravity="center_vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
                     />
 
                 <ImageView
@@ -126,9 +127,9 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_refresh_grey_18"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
+                    android:src="@drawable/webview_refresh_checker"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     />
 
                 <ImageView
@@ -139,6 +140,7 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
                     android:src="@drawable/ic_setting_share"
+                    android:visibility="gone"
                     />
 
         </LinearLayout>

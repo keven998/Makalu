@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:background="@drawable/bg_peach_dialog"
@@ -8,15 +8,14 @@
     <TextView
         android:id="@+id/tv_dialog_title"
         android:layout_width="fill_parent"
-        android:paddingLeft="20dp"
+        android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:gravity="center_vertical"
         android:drawablePadding="15dp"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/base_color_white"
+        android:textColor="@color/base_font_color"
         android:textSize="18sp"
-        android:background="@drawable/bg_peach_dialog_title"
         android:layout_height="wrap_content"
         android:text="" />
 
@@ -25,29 +24,24 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textSize="14sp"
-        android:gravity="center"
-        android:textColor="@color/base_text_color_title"
+        android:textColor="@color/second_font_color"
         android:text="" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@drawable/dash"
+        android:background="@color/app_theme_color"
         android:layerType="software"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:orientation="horizontal" >
 
         <Button
@@ -55,20 +49,27 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:textColor="@color/base_color_white"
+            android:textColor="@color/base_font_color"
             android:textSize="14sp"
-            android:visibility="gone"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/theme_button_selctor" />
+            android:background="@drawable/bg_peach_dialog"
+            android:text=""/>
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/app_theme_color"
+            android:layerType="software"/>
 
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:textColor="@color/base_color_white"
+            android:textColor="@color/app_theme_color"
             android:textSize="14sp"
-            android:background="@drawable/theme_button_selctor" />
+            android:background="@drawable/bg_peach_dialog"
+            android:text=""/>
     </LinearLayout>
 
 </LinearLayout>

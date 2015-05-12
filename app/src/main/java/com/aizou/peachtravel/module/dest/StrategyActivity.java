@@ -21,9 +21,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -108,6 +110,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private TextView tv_back;
     private RelativeLayout bottom_indicator;
     private View loading_view;
+    private TextView draw_title,draw_share,draw_transfer;
+    private ListView draw_list;
+    private DrawAdapter adapter;
 
 
     @Override
@@ -149,6 +154,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         iv_location=(ImageView)findViewById(R.id.iv_location);
         iv_more=(ImageView)findViewById(R.id.iv_more);
         tv_back=(TextView)findViewById(R.id.tv_title_back);
+
+        draw_title=(TextView)findViewById(R.id.jh_title);
+        draw_share=(TextView)findViewById(R.id.strategy_share);
+        draw_transfer=(TextView)findViewById(R.id.strategy_transfer);
+        draw_list=(ListView)findViewById(R.id.strategy_user_been_place_list);
+
         bottom_indicator=(RelativeLayout)findViewById(R.id.bottom_indicator);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(false);
@@ -188,6 +199,43 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 }
             }
         });
+
+        draw_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.END);
+                final Handler handler=new Handler(){
+                    public void handleMessage(Message msg) {
+                        switch (msg.what){
+                            case 1:
+                                ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
+                        }
+                        super.handleMessage(msg);
+                    }
+                };
+                Message message=handler.obtainMessage(1);
+                handler.sendMessageDelayed(message,300);
+            }
+        });
+
+        draw_transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.END);
+                final Handler handler=new Handler(){
+                    public void handleMessage(Message msg) {
+                        switch (msg.what){
+                            case 1:
+                                ToastUtil.getInstance(StrategyActivity.this).showToast("转发");
+                        }
+                        super.handleMessage(msg);
+                    }
+                };
+                Message message=handler.obtainMessage(1);
+                handler.sendMessageDelayed(message,300);
+            }
+        });
+
     }
 
     @Override
@@ -371,7 +419,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         destinations = result.localities;
         strategy = result;
         originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
-//        mTitleBar.getTitleTextView().setText(result.title);
+        draw_title.setText(result.title);
+        adapter = new DrawAdapter(StrategyActivity.this);
+        draw_list.setAdapter(adapter);
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
 
         if (user.userId != result.userId) {
@@ -662,7 +712,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 destinations = data.getParcelableArrayListExtra("destinations");
                 strategy.localities = destinations;
                 originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
-                showLocDialog();
+                adapter.notifyDataSetChanged();
             }
         }
 
@@ -886,6 +936,87 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
+    public class DrawAdapter extends BaseAdapter{
+        private TextView place;
+        private Context drawContext;
+
+        public DrawAdapter(Context context){
+            drawContext=context;
+        }
+
+        @Override
+        public int getCount() {
+            return destinations.size()+1;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView=View.inflate(drawContext,R.layout.strategy_draw_list_cell,null);
+            }
+            place=(TextView)convertView.findViewById(R.id.user_been_place);
+            if(position==destinations.size()){
+                place.setText("添加");
+                place.setCompoundDrawablesWithIntrinsicBounds(StrategyActivity.this.getResources().getDrawable(R.drawable.add_contact),null,null,null);
+                place.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        drawerLayout.closeDrawer(GravityCompat.END);
+                        final Handler handler=new Handler(){
+                            public void handleMessage(Message msg) {
+                                switch (msg.what){
+                                    case 1:
+                                        Intent intent = new Intent(mContext,SelectDestActivity.class);
+                                        intent.putExtra("locList",destinations);
+                                        intent.putExtra("guide_id",strategy.id);
+                                        intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
+                                        startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message=handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message,300);
+                    }
+                });
+            }else{
+                place.setText(destinations.get(position).zhName);
+                place.setCompoundDrawablesWithIntrinsicBounds(null,null,StrategyActivity.this.getResources().getDrawable(R.drawable.right_arrow_icon),null);
+                place.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        drawerLayout.closeDrawer(GravityCompat.END);
+                        final Handler handler=new Handler(){
+                            public void handleMessage(Message msg) {
+                                switch (msg.what){
+                                    case 1:
+                                        MobclickAgent.onEvent(mContext, "event_go_city_detail");
+                                        Intent intent = new Intent(mContext, CityDetailActivity.class);
+                                        intent.putExtra("id", destinations.get(position).id);
+                                        startActivity(intent);
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message=handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message,300);
+
+                    }
+                });
+            }
+            return convertView;
+        }
+    }
 }
 
 

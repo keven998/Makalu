@@ -263,6 +263,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.ll_foot_print:
                 ToastUtil.getInstance(AccountActvity.this).showToast("旅行足迹");
+                Intent intent=new Intent(AccountActvity.this,MyFootPrinterActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.ll_birthday:
@@ -319,7 +321,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void warnLogout() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
-        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+       // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定退出已登陆账号吗？");
         dialog.setPositiveButton("确定",new View.OnClickListener() {
             @Override
