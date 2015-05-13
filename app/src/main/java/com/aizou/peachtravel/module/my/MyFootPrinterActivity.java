@@ -18,7 +18,7 @@ import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
 import com.aizou.peachtravel.module.dest.fragment.OutCountryFragment;
 import com.amap.api.maps2d.AMap;
-import com.baidu.mapapi.map.MapView;
+import com.amap.api.maps2d.MapView;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -30,7 +30,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
-    private com.amap.api.maps2d.MapView mapView;
+    private MapView mapView;
     private AMap aMap;
 
     @Override
@@ -49,11 +49,11 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         super.onCreate(savedInstanceState);
         View rootView= View.inflate(mContext, R.layout.activity_my_footprinter,null);
         setContentView(rootView);
-        mapView = (com.amap.api.maps2d.MapView) findViewById(R.id.strategy_map);
+        mapView = (com.amap.api.maps2d.MapView)rootView.findViewById(R.id.my_footprinter_map);
         mapView.onCreate(savedInstanceState);
         initMapView();
-        inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
-        mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
+        inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.my_footprinter_in_out_indicator);
+        mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.my_footprinter_select_dest_viewPager);
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
         mSelectDestVp.setCanScroll(false);
@@ -117,10 +117,10 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         @Override
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
-                InDestFragment inDestFragment = new InDestFragment();
+                InDestFragment inDestFragment = new InDestFragment(false);
                 return inDestFragment;
             } else if (position == 1) {
-                OutCountryFragment outCountryFragment = new OutCountryFragment();
+                OutCountryFragment outCountryFragment = new OutCountryFragment(false);
                 return outCountryFragment;
             }
             return null;

@@ -22,13 +22,14 @@
         android:textColor="@color/base_color_white"
         android:textSize="13sp"
         android:background="@drawable/in_out_search_bg"
+        android:visibility="gone"
         />
 
     <ListView
         android:id="@+id/lv_in_city"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="41dp"
+        android:layout_below="@+id/in_out_search_tv"
         android:cacheColorHint="@null"
         android:divider="@null"
         android:dividerHeight="0dp"

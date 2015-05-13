@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.dest.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
@@ -55,6 +57,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/12/3.
  */
+@SuppressLint("ValidFragment")
 public class InDestFragment extends PeachBaseFragment implements OnDestActionListener {
     @InjectView(R.id.lv_in_city)
     ListView mLvInCity;
@@ -62,13 +65,19 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     SideBar mSbIndex;
     @InjectView(R.id.dialog)
     TextView mDialog;
+    @InjectView(R.id.in_out_search_tv)
+    EditText in_out_search;
 
     DynamicBox box;
-    private List<InDestBean> incityList = new ArrayList<InDestBean>();
+    protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
     private Drawable add,selected;
-
+    private boolean isClickable;
     OnDestActionListener mOnDestActionListener;
+
+    public InDestFragment(boolean isClickable){
+        this.isClickable=isClickable;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,9 +90,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return new InCityViewHolder();
             }
         });
-        View view = new View(getActivity());
-        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
-        mLvInCity.addFooterView(view);
+        if(isClickable) {
+            in_out_search.setVisibility(View.VISIBLE);
+            View view = new View(getActivity());
+            view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
+            mLvInCity.addFooterView(view);
+        }
         mLvInCity.setAdapter(inCityAdapter);
 //        mSbIndex.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
 //            @Override
@@ -101,6 +113,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     private void initData() {
+
+        //这里还需要判断读取不同的接口数据
         String data = PreferenceUtils.getCacheData(getActivity(), "destination_indest_group");
         if (!TextUtils.isEmpty(data)) {
             CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(data, GroupLocBean.class);
@@ -114,7 +128,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     private void getInLocList() {
-
+        //这个地方也需要判断一下做出接口读取的选择
         String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_group_last_modify");
         TravelApi.getInDestListByGroup(lastModify, new HttpCallBack<String>() {
             @Override
@@ -156,7 +170,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
     private void bindInView(List<GroupLocBean> result) {
         ArrayList<LocBean> allSelectLoc = null;
-        if (getActivity() != null) {
+        if (getActivity() != null && isClickable) {
             allSelectLoc = ((SelectDestActivity) getActivity()).getAllSelectedLoc();
         }
         incityList.clear();
@@ -197,26 +211,30 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
     @Override
     public void onDestAdded(LocBean locBean) {
-        for (InDestBean inDestBean : incityList) {
-            for (LocBean kLocBean : inDestBean.locList) {
-                if (locBean.id.equals(kLocBean.id)) {
-                    kLocBean.isAdded = true;
+        if(isClickable) {
+            for (InDestBean inDestBean : incityList) {
+                for (LocBean kLocBean : inDestBean.locList) {
+                    if (locBean.id.equals(kLocBean.id)) {
+                        kLocBean.isAdded = true;
+                    }
                 }
             }
+            inCityAdapter.notifyDataSetChanged();
         }
-        inCityAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDestRemoved(LocBean locBean) {
-        for (InDestBean inDestBean : incityList) {
-            for (LocBean kLocBean : inDestBean.locList) {
-                if (locBean.id.equals(kLocBean.id)) {
-                    kLocBean.isAdded = false;
+        if(isClickable) {
+            for (InDestBean inDestBean : incityList) {
+                for (LocBean kLocBean : inDestBean.locList) {
+                    if (locBean.id.equals(kLocBean.id)) {
+                        kLocBean.isAdded = false;
+                    }
                 }
             }
+            inCityAdapter.notifyDataSetChanged();
         }
-        inCityAdapter.notifyDataSetChanged();
     }
 
     private class InCityAdapter2 extends BaseSectionAdapter {
@@ -435,35 +453,38 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
                 final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
-                cityNameTv.setChecked(bean.isAdded);
 
-                //更新按钮的图片的
-                add= getResources().getDrawable(R.drawable.ic_green_add_icon);
-                selected= getResources().getDrawable(R.drawable.ic_white_selected_icon);
-                /// 这一步必须要做,否则不会显示.
-                add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
-                selected.setBounds(0,0,selected.getMinimumWidth(),selected.getMinimumHeight());
-                if(!bean.isAdded){
-                    cityNameTv.setCompoundDrawables(add,null,null,null);
-                }else{
-                    cityNameTv.setCompoundDrawables(selected,null,null,null);
-                }
-                cityNameTv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bean.isAdded = !bean.isAdded;
-                        if (mOnDestActionListener != null) {
-                            if (bean.isAdded) {
-                                cityNameTv.setCompoundDrawables(selected,null,null,null);
-                                mOnDestActionListener.onDestAdded(bean);
-                            } else {
-                                cityNameTv.setCompoundDrawables(add,null,null,null);
-                                mOnDestActionListener.onDestRemoved(bean);
-                            }
-                        }
-                        inCityAdapter.notifyDataSetChanged();
+                if(isClickable) {
+                    cityNameTv.setChecked(bean.isAdded);
+
+                    //更新按钮的图片的
+                    add = getResources().getDrawable(R.drawable.ic_green_add_icon);
+                    selected = getResources().getDrawable(R.drawable.ic_white_selected_icon);
+                    /// 这一步必须要做,否则不会显示.
+                    add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
+                    selected.setBounds(0, 0, selected.getMinimumWidth(), selected.getMinimumHeight());
+                    if (!bean.isAdded) {
+                        cityNameTv.setCompoundDrawables(add, null, null, null);
+                    } else {
+                        cityNameTv.setCompoundDrawables(selected, null, null, null);
                     }
-                });
+                    cityNameTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            bean.isAdded = !bean.isAdded;
+                            if (mOnDestActionListener != null) {
+                                if (bean.isAdded) {
+                                    cityNameTv.setCompoundDrawables(selected, null, null, null);
+                                    mOnDestActionListener.onDestAdded(bean);
+                                } else {
+                                    cityNameTv.setCompoundDrawables(add, null, null, null);
+                                    mOnDestActionListener.onDestRemoved(bean);
+                                }
+                            }
+                            inCityAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
 
                 cityListFl.addView(contentView);
             }

@@ -47,6 +47,7 @@ public class StrategyMapActivity extends PeachBaseActivity {
     private MapView mapView;
     private AMap aMap;
 
+
     private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
     private ArrayList<StrategyBean> allBeans;
