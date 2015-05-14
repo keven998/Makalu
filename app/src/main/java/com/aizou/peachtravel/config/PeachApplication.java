@@ -1,6 +1,8 @@
 package com.aizou.peachtravel.config;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.BuildConfig;
 
 import com.aizou.core.base.BaseApplication;
@@ -25,6 +27,7 @@ public class PeachApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         initPeachConfig();
         initImageLoader();
 //        refreshUserInfo();

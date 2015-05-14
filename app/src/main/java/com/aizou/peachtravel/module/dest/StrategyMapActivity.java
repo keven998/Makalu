@@ -3,6 +3,7 @@ package com.aizou.peachtravel.module.dest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.airbnb.android.airmapview.AirMapMarker;
+import com.airbnb.android.airmapview.AirMapPolyline;
+import com.airbnb.android.airmapview.AirMapView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
@@ -38,15 +42,20 @@ import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
+
+import butterknife.InjectView;
 
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
 public class StrategyMapActivity extends PeachBaseActivity {
-    private MapView mapView;
+    private AirMapView mapView;
     private AMap aMap;
-
 
     private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
@@ -115,9 +124,10 @@ public class StrategyMapActivity extends PeachBaseActivity {
                 });
             }
         });
-        mapView = (com.amap.api.maps2d.MapView) findViewById(R.id.strategy_map);
-        mapView.onCreate(savedInstanceState);
-        initMapView();
+        mapView = (AirMapView) findViewById(R.id.strategy_map);
+        mapView.initialize(getSupportFragmentManager());
+        //mapView.onCreate(savedInstanceState);
+        //initMapView();
         all_locations = (HorizontalScrollView) findViewById(R.id.map_days_name_list);
         layout=new LinearLayout(getApplicationContext());
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LocalDisplay.dp2px(50)));
@@ -161,13 +171,18 @@ public class StrategyMapActivity extends PeachBaseActivity {
     private void setUpMap(ArrayList<String> names,ArrayList<double[]> coor,com.amap.api.maps2d.model.LatLng... latLngs){
       //  aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
         if(coor.size()>0) {
-            aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
+            List<com.google.android.gms.maps.model.LatLng> points=null;
+            //aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
 
             for(int k=0;k<names.size();k++){
-                aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+               /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                         .position(new LatLng(coor.get(k)[1], coor.get(k)[0])).title(names.get(k))
-                        .draggable(true));
+                        .draggable(true));*/
+                mapView.addMarker(new AirMapMarker(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]),k).setTitle(names.get(k)));
+                points.add(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]));
             }
+            mapView.addPolyline(new AirMapPolyline(points,5));
+
             com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
 
             for(com.amap.api.maps2d.model.LatLng ll:latLngs){
@@ -188,34 +203,34 @@ public class StrategyMapActivity extends PeachBaseActivity {
 
 
 
-    private void initMapView() {
+   /* private void initMapView() {
         if (aMap == null) {
             aMap = mapView.getMap();
         }
-    }
+    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
+       // mapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mapView.onPause();
+       // mapView.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+       // mapView.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+       // mapView.onDestroy();
     }
 
     @Override

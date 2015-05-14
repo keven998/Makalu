@@ -12,7 +12,7 @@
         android:layout_height="@dimen/title_bar_height"
         />
 
-    <com.amap.api.maps2d.MapView
+    <com.airbnb.android.airmapview.AirMapView
         android:id="@+id/strategy_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
