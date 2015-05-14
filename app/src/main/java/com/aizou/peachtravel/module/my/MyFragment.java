@@ -94,8 +94,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
             nickNameTv.setText("未登录");
-            idTv.setText("赶快加入旅FM的世界吧");
-            statusTv.setText("");
+            idTv.setText("L");
+            statusTv.setText("加入旅行派，陪你一起去旅行");
         } else {
             genderIv.setVisibility(View.VISIBLE);
             View view=getView();
