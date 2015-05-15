@@ -25,6 +25,10 @@
     <!-- 使用定位功能所需权限,demo已集成百度定位SDK,不使用定位功能可去掉以下6项 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.intent.RECEIVE" />
+
     <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
 
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
@@ -517,6 +521,7 @@
         <activity
             android:name=".module.dest.StrategyMapActivity"
             android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
             android:theme="@style/Transparent" >
         </activity>
 
@@ -592,10 +597,19 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <!-- 高德地图-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="7af8e3a6095b6cc1cc4aa3dae90a0d34"/>  <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyB129WN9KPdWsTg2Kz0kQ3XheA_nec03XI" />
+
 
         <meta-data android:value="54376b1bfd98c554cf025d0c" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="Alpha" android:name="UMENG_CHANNEL"/>

@@ -18,9 +18,14 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.airbnb.android.airmapview.AirMapInterface;
 import com.airbnb.android.airmapview.AirMapMarker;
 import com.airbnb.android.airmapview.AirMapPolyline;
 import com.airbnb.android.airmapview.AirMapView;
+import com.airbnb.android.airmapview.AirMapViewTypes;
+import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
+import com.airbnb.android.airmapview.GoogleChinaMapType;
+import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
@@ -34,12 +39,12 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
-import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,9 +58,9 @@ import butterknife.InjectView;
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
-public class StrategyMapActivity extends PeachBaseActivity {
+public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener {
     private AirMapView mapView;
-    private AMap aMap;
+   // private AMap aMap;
 
     private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
@@ -67,6 +72,8 @@ public class StrategyMapActivity extends PeachBaseActivity {
     private LinearLayout layout;
     private LatLngBounds bounds;
     com.amap.api.maps2d.model.LatLng latlng;
+    private DefaultAirMapViewBuilder mapViewBuilder;
+    private AirMapInterface airMapInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +131,12 @@ public class StrategyMapActivity extends PeachBaseActivity {
                 });
             }
         });
+        mapViewBuilder = new DefaultAirMapViewBuilder(this);
+        airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
         mapView = (AirMapView) findViewById(R.id.strategy_map);
-        mapView.initialize(getSupportFragmentManager());
+        mapView.setOnMapInitializedListener(this);
+        mapView.initialize(getSupportFragmentManager(), airMapInterface);
+        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         //mapView.onCreate(savedInstanceState);
         //initMapView();
         all_locations = (HorizontalScrollView) findViewById(R.id.map_days_name_list);
@@ -136,7 +147,7 @@ public class StrategyMapActivity extends PeachBaseActivity {
     }
 
     private void initData(int pos){
-        aMap.clear();
+  //      aMap.clear();
         ArrayList<double[]> coordinates=new ArrayList<double[]>();
         ArrayList<String> names=new ArrayList<String>();
         all_locations.removeAllViews();
@@ -171,7 +182,128 @@ public class StrategyMapActivity extends PeachBaseActivity {
     private void setUpMap(ArrayList<String> names,ArrayList<double[]> coor,com.amap.api.maps2d.model.LatLng... latLngs){
       //  aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
         if(coor.size()>0) {
-            List<com.google.android.gms.maps.model.LatLng> points=null;
+            List<com.google.android.gms.maps.model.LatLng> points=new List<com.google.android.gms.maps.model.LatLng>() {
+                @Override
+                public void add(int location, com.google.android.gms.maps.model.LatLng object) {
+
+                }
+
+                @Override
+                public boolean add(com.google.android.gms.maps.model.LatLng object) {
+                    return false;
+                }
+
+                @Override
+                public boolean addAll(int location, Collection<? extends com.google.android.gms.maps.model.LatLng> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean addAll(Collection<? extends com.google.android.gms.maps.model.LatLng> collection) {
+                    return false;
+                }
+
+                @Override
+                public void clear() {
+
+                }
+
+                @Override
+                public boolean contains(Object object) {
+                    return false;
+                }
+
+                @Override
+                public boolean containsAll(Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public com.google.android.gms.maps.model.LatLng get(int location) {
+                    return null;
+                }
+
+                @Override
+                public int indexOf(Object object) {
+                    return 0;
+                }
+
+                @Override
+                public boolean isEmpty() {
+                    return false;
+                }
+
+                @NonNull
+                @Override
+                public Iterator<com.google.android.gms.maps.model.LatLng> iterator() {
+                    return null;
+                }
+
+                @Override
+                public int lastIndexOf(Object object) {
+                    return 0;
+                }
+
+                @NonNull
+                @Override
+                public ListIterator<com.google.android.gms.maps.model.LatLng> listIterator() {
+                    return null;
+                }
+
+                @NonNull
+                @Override
+                public ListIterator<com.google.android.gms.maps.model.LatLng> listIterator(int location) {
+                    return null;
+                }
+
+                @Override
+                public com.google.android.gms.maps.model.LatLng remove(int location) {
+                    return null;
+                }
+
+                @Override
+                public boolean remove(Object object) {
+                    return false;
+                }
+
+                @Override
+                public boolean removeAll(Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean retainAll(Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public com.google.android.gms.maps.model.LatLng set(int location, com.google.android.gms.maps.model.LatLng object) {
+                    return null;
+                }
+
+                @Override
+                public int size() {
+                    return 0;
+                }
+
+                @NonNull
+                @Override
+                public List<com.google.android.gms.maps.model.LatLng> subList(int start, int end) {
+                    return null;
+                }
+
+                @NonNull
+                @Override
+                public Object[] toArray() {
+                    return new Object[0];
+                }
+
+                @NonNull
+                @Override
+                public <T> T[] toArray(T[] array) {
+                    return null;
+                }
+            };
             //aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
 
             for(int k=0;k<names.size();k++){
@@ -190,7 +322,7 @@ public class StrategyMapActivity extends PeachBaseActivity {
             }
             bounds=llBound.build();
         }
-        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+      //  aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
     }
 
 
@@ -236,6 +368,20 @@ public class StrategyMapActivity extends PeachBaseActivity {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    @Override
+    public void onMapInitialized() {
+        final LatLng airbnbLatLng = new LatLng(37.771883, -122.405224);
+        addMarker("Airbnb HQ", airbnbLatLng);
+        addMarker("Performance Bikes", new LatLng(37.773975,-122.40205));
+        addMarker("REI", new LatLng(37.772127, -122.404411));
+        mapView.animateCenterZoom(airbnbLatLng, 10);
+    }
+
+    private void addMarker(String title, LatLng latLng) {
+        mapView.addMarker(new AirMapMarker(latLng, 1)
+                .setTitle(title));
     }
 
 
