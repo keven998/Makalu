@@ -31,8 +31,8 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
     private EditText newPwdEt;
     @ViewInject(R.id.et_re_password)
     private EditText rePwdEt;
-    @ViewInject(R.id.btn_ok)
-    private Button okBtn;
+   /* @ViewInject(R.id.btn_ok)
+    private Button okBtn;*/
     private PeachUser user;
 
     @Override
@@ -41,18 +41,21 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_pwd);
         ViewUtils.inject(this);
-        okBtn.setOnClickListener(this);
+       // okBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("修改密码");
+        titleBar.getTitleTextView().setText("密码修改");
+        titleBar.getRightTextView().setText("确定");
+        titleBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+        titleBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(this);
         titleBar.enableBackKey(true);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_ok:
+            case R.id.ly_title_bar_right:
                 if(!RegexUtils.isPwdOk(oldPwdEt.getText().toString().trim())){
                     ToastUtil.getInstance(this).showToast("请输入你的当前密码");
                 }else if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())){

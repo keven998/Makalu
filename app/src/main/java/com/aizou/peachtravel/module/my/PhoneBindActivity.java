@@ -34,8 +34,8 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
     private EditText phoneEt;
     @ViewInject(R.id.et_sms)
     private EditText smsEt;
-    @ViewInject(R.id.btn_next)
-    private Button nextBtn;
+  /*  @ViewInject(R.id.btn_next)
+    private Button nextBtn;*/
     @ViewInject(R.id.btn_time_down)
     private Button downTimeBtn;
     private CountDownTimer countDownTimer;
@@ -49,12 +49,15 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_phone);
         ViewUtils.inject(this);
-        nextBtn.setOnClickListener(this);
+        //nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("绑定手机");
+        titleBar.getRightTextView().setText("提交");
+        titleBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+        titleBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(this);
         titleBar.enableBackKey(true);
     }
 
@@ -114,7 +117,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 });
 
                 break;
-            case R.id.btn_next:
+            case R.id.ly_title_bar_right:
                 if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;

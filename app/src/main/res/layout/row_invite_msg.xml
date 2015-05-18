@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="54dp"
+    android:layout_height="60dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="60dp"
         android:gravity="center_vertical"
-        android:background="@drawable/shape_white_bar"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:background="@drawable/shape_white_bar">
 
         <ImageView android:id="@+id/avatar"
             android:layout_width="39dp"
@@ -29,7 +27,8 @@
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/avatar"
             android:textColor="@color/base_text_color_title"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:text="dfs"/>
 
         <!--
          <TextView
@@ -64,18 +63,17 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/base_text_color_text_hint"
-            android:textSize="12sp" />
+            android:textSize="13sp"
+            android:text="fdsa"/>
 
         <Button
             android:id="@+id/user_state"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="9dp"
             android:focusable="false"
-            android:layout_marginRight="10dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:layout_marginRight="24dp"
             android:background="@drawable/theme_button_selctor"
             android:text="同意"
             android:textColor="@color/base_color_white"
@@ -115,7 +113,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="fdsafdfdsafdsa"
                 android:id="@+id/tv_groupName"
                  android:textColor="#888888"
                 />

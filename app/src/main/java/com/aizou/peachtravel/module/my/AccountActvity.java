@@ -54,6 +54,7 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.net.utils.UResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,7 +106,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     DisplayImageOptions options;
     private TextView tvGender;
 
-
+    private int RESIDENT=1;
+    private int STATUS=2;
+    private int SEX=3;
     private ImageView my_pics_cell;
 
     @Override
@@ -149,10 +152,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         my_destination.removeAllViews();
         String[] names={"美国","日本","澳大利亚","乌兹别克斯坦","墨西哥"};
         for(int j=0;j<5;j++){
-            View contentView = View.inflate(AccountActvity.this, R.layout.dest_select_city, null);
-            final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+            View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style, null);
+            final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
             cityNameTv.setText(names[j]);
-            cityNameTv.setChecked(false);
             my_destination.addView(contentView);
         }
     }
@@ -253,7 +255,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.ll_gender:
                 MobclickAgent.onEvent(mContext,"event_update_gender");
-                showSelectGenderDialog();
+                //showSelectGenderDialog();
+                Intent sexIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
+                sexIntent.putExtra("type","sex");
+                startActivityForResult(sexIntent, SEX);
+                break;
+
+
+            case R.id.ll_status:
+                Intent statusIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
+                statusIntent.putExtra("type","status");
+                startActivityForResult(statusIntent, STATUS);
                 break;
 
             /*case R.id.ll_avatar:
@@ -278,6 +290,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 //应该还差个上传动作
                 break;
 
+
+            case R.id.ll_resident:
+                Intent residentIntent = new Intent(mContext, SelectResidentActivity.class);
+                startActivityForResult(residentIntent,RESIDENT);
+                overridePendingTransition(R.anim.fade_in,0);
+                break;
+
+
             case R.id.ll_modify_pwd:
                 MobclickAgent.onEvent(mContext,"event_update_password");
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
@@ -296,6 +316,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
         }
     }
+
+
     private void refreshUserInfo(){
         PeachUser user = AccountManager.getInstance().getLoginAccount(this);
         if(user!=null){
@@ -566,10 +588,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                uploadAvatar(tempImage);
 
             }
+        } else if (requestCode == RESIDENT){
+            residentTv.setText(data.getExtras().getString("result"));
+        } else if (requestCode == SEX){
+            String sex=data.getExtras().getString("result");
+            if(sex.equals("美女")){modifyGender("F");}
+            else if(sex.equals("帅锅")){modifyGender("M");}
+            else if(sex.equals("一言难尽")){modifyGender("U");}
+            else if(sex.equals("保密")){modifyGender("S");}
 
-
-
-
+        } else if (requestCode == STATUS){
+            status.setText(data.getExtras().getString("result"));
         }
     }
 

@@ -308,8 +308,14 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".module.my.ModifyStatusOrSexActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".module.toolbox.im.ExpertListActivity"
             android:label="@string/app_name"
+            android:theme="@style/Transparent"
             android:screenOrientation="portrait" >
         </activity>
 
@@ -320,6 +326,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".module.toolbox.HisMainPageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
         </activity>
         <activity
             android:name=".module.toolbox.im.ContactActivity"
@@ -510,6 +521,11 @@
             android:name=".module.toolbox.NearbyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
+        </activity>
+        <activity
+            android:name=".module.toolbox.ExpertFilterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent" >
         </activity>
         <!--去过页面-->
         <activity

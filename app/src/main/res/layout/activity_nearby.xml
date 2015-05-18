@@ -8,9 +8,9 @@
     <com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView
         android:id="@+id/nearby_indicator"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
+        android:layout_height="39dp"
         android:layout_marginTop="@dimen/title_bar_height"
-        android:background="@drawable/bg_titlebar" />
+        android:background="@color/base_gary_bg" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
         android:layout_height="30dp"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:background="#a0000000">
+        android:background="@color/half_transparent_color">
 
         <TextView
             android:id="@+id/tv_address"

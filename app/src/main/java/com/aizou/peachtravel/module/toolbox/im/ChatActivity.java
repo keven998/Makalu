@@ -69,6 +69,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -189,7 +190,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	private View buttonSend;
 	private View buttonPressToSpeak;
 	private ViewPager expressionViewpager;
-	private LinearLayout expressionContainer;
+	private RelativeLayout expressionContainer;
 	private LinearLayout btnContainer;
 //	private ImageView locationImgview;
 	private View more;
@@ -222,6 +223,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	private ImageView btnMore;
 	public String playMsgId;
     private String myUserInfoJson;
+    private DotView dots;
+    private ImageView[] imageViews;
+    private ImageView imageView;
 	
 
 	private Handler micImageHandler = new Handler() {
@@ -259,7 +263,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		buttonSend = findViewById(R.id.btn_send);
 		buttonPressToSpeak = findViewById(R.id.btn_press_to_speak);
 		expressionViewpager = (ViewPager) findViewById(R.id.vPager);
-		expressionContainer = (LinearLayout) findViewById(R.id.ll_face_container);
+        dots = (DotView) findViewById(R.id.face_dot_view);
+		expressionContainer = (RelativeLayout) findViewById(R.id.ll_face_container);
 		btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
 //		locationImgview = (ImageView) findViewById(R.id.btn_location);
 		iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
@@ -283,12 +288,30 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		// 表情list
 		reslist = getExpressionRes(35);
 		// 初始化表情viewpager
-		List<View> views = new ArrayList<View>();
-		View gv1 = getGridChildView(1);
-		View gv2 = getGridChildView(2);
-		views.add(gv1);
-		views.add(gv2);
+        List<View> views = new ArrayList<View>();
+        View gv1 = getGridChildView(1);
+        View gv2 = getGridChildView(2);
+        views.add(gv1);
+        views.add(gv2);
+        final int num=views.size();
+        dots.setNum(num);
 		expressionViewpager.setAdapter(new ExpressionPagerAdapter(views));
+        expressionViewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                dots.setSelected(position % num);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 		edittext_layout.requestFocus();
 		voiceRecorder = new VoiceRecorder(micImageHandler);
 		buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());

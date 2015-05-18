@@ -58,7 +58,7 @@ import butterknife.InjectView;
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
-public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener {
+public class StrategyMapActivity extends PeachBaseActivity{
     private AirMapView mapView;
    // private AMap aMap;
 
@@ -74,6 +74,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     com.amap.api.maps2d.model.LatLng latlng;
     private DefaultAirMapViewBuilder mapViewBuilder;
     private AirMapInterface airMapInterface;
+    private AirMapPolyline airMapPolyline;
+    private long POLY_LINE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +136,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         mapViewBuilder = new DefaultAirMapViewBuilder(this);
         airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
         mapView = (AirMapView) findViewById(R.id.strategy_map);
-        mapView.setOnMapInitializedListener(this);
+        //mapView.setOnMapInitializedListener(this);
         mapView.initialize(getSupportFragmentManager(), airMapInterface);
         mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         //mapView.onCreate(savedInstanceState);
@@ -147,7 +149,10 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
     private void initData(int pos){
-  //      aMap.clear();
+        mapView.clearMarkers();
+        if(airMapPolyline!=null){
+            mapView.removePolyline(airMapPolyline);
+        }
         ArrayList<double[]> coordinates=new ArrayList<double[]>();
         ArrayList<String> names=new ArrayList<String>();
         all_locations.removeAllViews();
@@ -174,12 +179,12 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         for(int j=0;j<size;j++){
             mLatLngsArr[j]=mLatLngs.get(j);
         }
-        setUpMap(names,coordinates, mLatLngsArr);
+        setUpMap(names,coordinates, pos);
     }
 
 
 
-    private void setUpMap(ArrayList<String> names,ArrayList<double[]> coor,com.amap.api.maps2d.model.LatLng... latLngs){
+    private void setUpMap(final ArrayList<String> names,ArrayList<double[]> coor,int pos){
       //  aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
         if(coor.size()>0) {
             List<com.google.android.gms.maps.model.LatLng> points=new List<com.google.android.gms.maps.model.LatLng>() {
@@ -283,7 +288,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
                 @Override
                 public int size() {
-                    return 0;
+                    return names.size();
                 }
 
                 @NonNull
@@ -310,17 +315,20 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                         .position(new LatLng(coor.get(k)[1], coor.get(k)[0])).title(names.get(k))
                         .draggable(true));*/
-                mapView.addMarker(new AirMapMarker(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]),k).setTitle(names.get(k)));
+                mapView.addMarker(new AirMapMarker(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]),k).setTitle(names.get(k)).setIconId(R.drawable.icon_marka));
                 points.add(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]));
             }
-            mapView.addPolyline(new AirMapPolyline(points,5));
-
-            com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
+            airMapPolyline=new AirMapPolyline(points,pos);
+            mapView.addPolyline(airMapPolyline);
+            mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 10);
+            /*com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
 
             for(com.amap.api.maps2d.model.LatLng ll:latLngs){
                 llBound.include(ll);
             }
-            bounds=llBound.build();
+            bounds=llBound.build();*/
+        }else{
+            mapView.animateCenterZoom(new LatLng(37.771883, -122.405224), 10);
         }
       //  aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
     }
@@ -368,20 +376,6 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     @Override
     public void finish() {
         super.finish();
-    }
-
-    @Override
-    public void onMapInitialized() {
-        final LatLng airbnbLatLng = new LatLng(37.771883, -122.405224);
-        addMarker("Airbnb HQ", airbnbLatLng);
-        addMarker("Performance Bikes", new LatLng(37.773975,-122.40205));
-        addMarker("REI", new LatLng(37.772127, -122.404411));
-        mapView.animateCenterZoom(airbnbLatLng, 10);
-    }
-
-    private void addMarker(String title, LatLng latLng) {
-        mapView.addMarker(new AirMapMarker(latLng, 1)
-                .setTitle(title));
     }
 
 

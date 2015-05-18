@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
@@ -10,39 +10,54 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-    <TextView android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tips_reg"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="请确保你的手机畅通，接收短信验证码"
-        android:textSize="13sp"
+        android:gravity="center"
+        android:text="请保持手机畅通，接收验证码"
+        android:textSize="10sp"
         android:textColor="@color/base_text_color_text_hint"/>
+
+
+    <LinearLayout
+        android:id="@+id/reg_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tips_reg"
+        android:layout_marginTop="5dp"
+        android:background="@color/base_color_white"
+        android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="43dp"
         android:gravity="center_vertical"
         android:background="@color/base_color_white"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="23dp"
+            android:paddingLeft="25dp"
             android:textColor="@color/base_text_color_title"
             android:textSize="15sp"
-            android:text="手机: "/>
+            android:text="手机号: "/>-->
 
         <EditText
             android:id="@+id/et_phone"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="43dp"
             android:inputType="phone"
             android:imeOptions="actionNext"
             android:background="@null"
-            android:paddingLeft="6dp"
-            android:textSize="14sp"
+            android:paddingLeft="25dp"
+            android:textSize="15sp"
             android:singleLine="true"
             android:textColor="@color/base_text_color_title"
             android:hint="请输入有效手机号"
@@ -51,59 +66,85 @@
 
     </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/base_border_color"
+            android:layout_marginLeft="25dp"
+            />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="43dp"
         android:gravity="center_vertical"
         android:background="@color/base_color_white"
-        android:layout_marginTop="0.8dp"
         android:orientation="horizontal">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="23dp"
             android:textColor="@color/base_text_color_title"
             android:textSize="15sp"
-            android:text="密码: "/>
+            android:text="密码: "/>-->
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="43dp"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
             android:background="@null"
-            android:paddingLeft="6dp"
-            android:textSize="14sp"
+            android:textSize="15sp"
+            android:layout_marginLeft="25dp"
             android:singleLine="true"
-            android:hint="输入6~16位数字、字母"
+            android:hint="输入6~16位数字、字母密码"
             android:textColorHint="#aaaaaa"
             android:textColor="@color/base_text_color_title"
             android:paddingRight="10dp"/>
 
     </LinearLayout>
 
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_reg"
+        android:layout_below="@+id/reg_box"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textSize="15sp"
+        android:layout_height="44dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="18sp"
         android:textColor="@color/base_color_white"
         android:background="@drawable/theme_button_selctor"
-        android:text="提交"/>
+        android:text="注册"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_below="@+id/btn_reg"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="14dp"
-        android:text="点击“提交”表明你已阅读并同意 桃子旅行用户协议"
-        android:textSize="13sp"
+        android:layout_marginTop="38dp"
+        android:text="点击注册即表明你已阅读并同意《旅行派用户协议》"
+        android:textSize="10sp"
         android:textColor="@color/base_text_color_text_hint"/>
 
+    <TextView
+        android:id="@+id/user_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="22dp"
+        android:text="用户协议"
+        android:textSize="10dp"
+        android:textColor="#0048FF"
+        />
 
-</LinearLayout>
+
+</RelativeLayout>

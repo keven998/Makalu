@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:id="@+id/expert_filter_title"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="vertical"
+        >
+
+        <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+            android:id="@+id/expert_in_out_indicator"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/in_out_indicator"
+            />
+
+    </RelativeLayout>
+
+    <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
+        android:id="@+id/expert_select_dest_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

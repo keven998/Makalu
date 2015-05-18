@@ -16,7 +16,9 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.ScrollIndicatorView;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.DrawableBar;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ScrollBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -101,8 +103,14 @@ public class NearbyActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
         mTvAddress.setText("正在定位...");
-        DrawableBar colorBar = new DrawableBar(mContext, R.drawable.ic_tab_arr);
-        mNearbyIndicator.setScrollBar(colorBar);
+        DrawableBar colorBar = new DrawableBar(mContext, R.drawable.ic_score_start_small);
+        colorBar.setWidth(200);
+        colorBar.setColor(getResources().getColor(R.color.app_theme_color));
+
+        ColorBar cBar=new ColorBar(mContext,getResources().getColor(R.color.app_theme_color),LocalDisplay.dp2px(10));
+
+
+        mNearbyIndicator.setScrollBar(cBar);
 
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
@@ -263,7 +271,7 @@ public class NearbyActivity extends PeachBaseActivity {
             }
             CheckedTextView textView = (CheckedTextView) convertView;
             textView.setText(tabTitles[position]);
-            textView.setCompoundDrawablesWithIntrinsicBounds(0, tabRes[position], 0, 0);
+          //  textView.setCompoundDrawablesWithIntrinsicBounds(0, tabRes[position], 0, 0);
             return convertView;
         }
 

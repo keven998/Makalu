@@ -63,6 +63,7 @@
     <color name="cell_sm_text_color">#A4A4A4</color>
     <color name="des_box_selected_bg_color">#1CC091</color>
     <color name="red_text_color">#FF2D2D</color>
+    <color name="tips_text_gray_color">#909090</color>
 
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">#eeeeee</drawable>

@@ -255,7 +255,7 @@
                         android:drawablePadding="15dp"
                         android:text="旅行足迹"/>
 
-                    <TextView
+                    <!--<TextView
                         android:id="@+id/tv_qg_foot_print"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -264,14 +264,14 @@
                         android:text="（12个国家）"
                         android:textSize="14sp"
                         android:textColor="@color/third_font_color"
-                        />
+                        />-->
 
                     <TextView android:id="@+id/tv_add_foot_print"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:drawableRight="@drawable/right_arrow_icon"
-                        android:textColor="@color/base_text_color_subtitle"
+                        android:textColor="@color/app_theme_color"
                         android:gravity="center_vertical|right"
                         android:textSize="14sp"
                         android:drawablePadding="10dp"

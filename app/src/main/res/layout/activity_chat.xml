@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cube_dotview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -186,7 +187,7 @@
 
                     <!-- 表情图片 -->
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/ll_face_container"
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
@@ -197,7 +198,33 @@
                             android:id="@+id/vPager"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </LinearLayout>
+
+
+                        <com.aizou.core.widget.DotView
+                            android:id="@+id/face_dot_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            cube_dotview:dot_radius="3dp"
+                            cube_dotview:dot_selected_color="0xff1cc091"
+                            cube_dotview:dot_span="10dp"
+                            cube_dotview:dot_unselected_color="0xffffffff" />
+
+                       <!-- <LinearLayout
+                        android:id="@+id/viewGroup"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal" >-->
+                    <!--</LinearLayout>-->
+
+                    </RelativeLayout>
 
                     <!-- 图片，表情，名片等按钮 -->
 

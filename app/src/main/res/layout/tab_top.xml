@@ -3,8 +3,8 @@
     android:id="@+id/tv_title"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:paddingTop="7dp"
     android:textColor="@color/nearby_tab_text_color"
     android:drawablePadding="1dp"
-    android:textSize="10sp" />
+    android:textSize="15sp" />

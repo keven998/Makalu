@@ -13,19 +13,19 @@
     <EditText
         android:id="@+id/et_nickname"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="43dp"
         android:layout_marginTop="20dp"
         android:background="@color/base_color_white"
-        android:paddingLeft="23dp"
+        android:paddingLeft="17dp"
         android:paddingRight="20dp"
         android:gravity="center_vertical"
         android:textSize="15sp"
         android:textColor="@color/base_text_color_title"
         android:singleLine="true"
-        android:hint="取个好听的名字吧"
+        android:hint="姓名或昵称"
         android:textColorHint="@color/base_text_color_text_placeholder"/>
 
-    <Button
+   <!-- <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -35,6 +35,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textColor="@color/base_color_white"
-        android:background="@drawable/theme_button_selctor"/>
+        android:background="@drawable/theme_button_selctor"/>-->
 
 </LinearLayout>

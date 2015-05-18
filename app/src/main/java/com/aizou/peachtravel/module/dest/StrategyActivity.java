@@ -113,6 +113,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private TextView draw_title,draw_share,draw_transfer;
     private ListView draw_list;
     private DrawAdapter adapter;
+    private RelativeLayout plan_title,selected_place_title;
 
 
     @Override
@@ -159,6 +160,23 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         draw_share=(TextView)findViewById(R.id.strategy_share);
         draw_transfer=(TextView)findViewById(R.id.strategy_transfer);
         draw_list=(ListView)findViewById(R.id.strategy_user_been_place_list);
+
+        plan_title=(RelativeLayout)findViewById(R.id.plan_title);
+        selected_place_title=(RelativeLayout)findViewById(R.id.selected_place_title);
+
+        plan_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        selected_place_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         bottom_indicator=(RelativeLayout)findViewById(R.id.bottom_indicator);
         ButterKnife.inject(this);

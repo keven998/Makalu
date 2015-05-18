@@ -1,5 +1,7 @@
 package com.aizou.peachtravel.module.my;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,6 +19,10 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.StartCity;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.LocationManagerProxy;
+import com.amap.api.location.LocationProviderProxy;
 
 import java.util.ArrayList;
 
@@ -29,11 +35,15 @@ import butterknife.InjectView;
 public class SelectResidentActivity extends PeachBaseActivity {
     @InjectView(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar titleHeaderBar;
-    @InjectView(R.id.et_search)
-    EditText etSearch;
+   /* @InjectView(R.id.et_search)
+    EditText etSearch;*/
     @InjectView(R.id.elv_city)
     ExpandableListView elvCity;
+    @InjectView(R.id.tv_loc_name)
+    TextView loc_name;
 
+
+    private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<StartCity> startCitys = new ArrayList<StartCity>();
     private ArrayList<StartCity> allCitys;
     private CityListAdapter aAdapter;
@@ -42,9 +52,18 @@ public class SelectResidentActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_resident);
         ButterKnife.inject(this);
-        titleHeaderBar.getTitleTextView().setText("设置居住地");
-        titleHeaderBar.enableBackKey(true);
-        etSearch.addTextChangedListener(new TextWatcher() {
+        titleHeaderBar.getTitleTextView().setText("现住地");
+        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0,R.anim.fade_out);
+            }
+        });
+        mLocationManagerProxy = LocationManagerProxy.getInstance(SelectResidentActivity.this);
+        mLocationManagerProxy.setGpsEnable(false);
+        requestLocation();
+        /*etSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
@@ -72,8 +91,56 @@ public class SelectResidentActivity extends PeachBaseActivity {
                 }
 
 
-        });
+        });*/
         initData();
+    }
+
+    private void requestLocation() {
+        if(mLocationManagerProxy == null){
+            mLocationManagerProxy = LocationManagerProxy.getInstance(SelectResidentActivity.this);
+            mLocationManagerProxy.setGpsEnable(false);
+        }
+        mLocationManagerProxy.requestLocationData(
+                LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+                    @Override
+                    public void onLocationChanged(final AMapLocation aMapLocation) {
+                        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+                            //获取位置信息
+                            loc_name.setText(aMapLocation.getCity());
+                            loc_name.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent=new Intent();
+                                    intent.putExtra("result",aMapLocation.getCity());
+                                    setResult(RESULT_OK,intent);
+                                    finish();
+                                    overridePendingTransition(0,R.anim.fade_out);
+                                }
+                            });
+                        }
+
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+
+                    }
+                });
     }
 
     private void initData() {
@@ -176,9 +243,9 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
             if (city.childs != null && city.childs.size() > 0) {
                 if (isExpanded) {
-                    arrIv.setBackgroundResource(R.drawable.ic_offlinemap_arr_up);
+                    arrIv.setBackgroundResource(R.drawable.right_arrow_icon);
                 } else {
-                    arrIv.setBackgroundResource(R.drawable.ic_offlinemap_arr_down);
+                    arrIv.setBackgroundResource(R.drawable.right_arrow_icon);
                 }
                 convertView.setOnClickListener(new View.OnClickListener() {
 
@@ -197,7 +264,11 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent=new Intent();
+                        intent.putExtra("result",city.name);
+                        setResult(RESULT_OK,intent);
+                        finish();
+                        overridePendingTransition(0,R.anim.fade_out);
                     }
                 });
                 arrIv.setBackgroundDrawable(null);
@@ -217,7 +288,7 @@ public class SelectResidentActivity extends PeachBaseActivity {
                     .findViewById(R.id.tv_city_child_name);
             ImageView arrIv = (ImageView) convertView
                     .findViewById(R.id.iv_child_arr);
-            arrIv.setVisibility(View.INVISIBLE);
+            //arrIv.setVisibility(View.INVISIBLE);
             final StartCity city = startCitys.get(groupPosition).childs
                     .get(childPosition);
             nameTv.setText(city.name);
@@ -226,6 +297,11 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
                 @Override
                 public void onClick(View v) {
+                    Intent intent=new Intent();
+                    intent.putExtra("result",city.name);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                    overridePendingTransition(0,R.anim.fade_out);
 
                 }
             });

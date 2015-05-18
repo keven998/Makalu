@@ -10,21 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-    <EditText
-        android:id="@+id/et_sign"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
         android:layout_marginTop="20dp"
-        android:padding="10dp"
-        android:gravity="left|top"
-        android:textSize="15sp"
-        android:textColor="@color/base_text_color_title"
-        android:lines="3"
-        android:hint="编辑签名"
-        android:textColorHint="#aaaaaa"/>
+        android:background="@color/base_color_white">
 
-    <Button
+
+        <EditText
+            android:id="@+id/et_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/base_color_white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="20dp"
+            android:gravity="left|top"
+            android:textSize="15sp"
+            android:textColor="@color/base_text_color_title"
+            android:hint="我的签名..."
+            android:textColorHint="#aaaaaa"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/et_sign"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/app_backgroud"
+            />
+
+    </RelativeLayout>
+
+
+
+    <!--<Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -34,6 +58,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textColor="@color/base_color_white"
-        android:background="@drawable/theme_button_selctor"/>
+        android:background="@drawable/theme_button_selctor"/>-->
 
 </LinearLayout>

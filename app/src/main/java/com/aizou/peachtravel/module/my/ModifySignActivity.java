@@ -37,9 +37,10 @@ public class ModifySignActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
         ViewUtils.inject(this);
-        titleHeaderBar.getTitleTextView().setText("旅行签名");
+        titleHeaderBar.getTitleTextView().setText("个性签名");
         titleHeaderBar.enableBackKey(true);
-        findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+        titleHeaderBar.getRightTextView().setText("保存");
+        titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
                                                            @Override
                                                            public void onClick(View view) {
                                                                if(TextUtils.isEmpty(signEt.getText())){

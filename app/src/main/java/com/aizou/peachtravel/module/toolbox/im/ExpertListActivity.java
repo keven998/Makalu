@@ -30,6 +30,8 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.DynamicBox;
 import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
+import com.aizou.peachtravel.module.toolbox.ExpertFilterActivity;
+import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -55,6 +57,7 @@ public class ExpertListActivity extends PeachBaseActivity {
     private int layout_width;
     private DynamicBox box;
     private List<ExpertBean> expertBeans;
+    private int EXPERT_DES=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,9 @@ public class ExpertListActivity extends PeachBaseActivity {
         findViewById(R.id.expert_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.getInstance(ExpertListActivity.this).showToast("条件过滤达人");
+                Intent intent=new Intent(ExpertListActivity.this, ExpertFilterActivity.class);
+                startActivityForResult(intent,EXPERT_DES);
+                overridePendingTransition(R.anim.push_bottom_in,0);
             }
         });
         inflater=LayoutInflater.from(this);
@@ -89,7 +94,7 @@ public class ExpertListActivity extends PeachBaseActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent=new Intent();
-            intent.setClass(ExpertListActivity.this,ContactDetailActivity.class);
+            intent.setClass(ExpertListActivity.this,HisMainPageActivity.class);
             intent.putExtra("userId",expertBeans.get(position).userId);
             startActivity(intent);
             //ToastUtil.getInstance(ExpertListActivity.this).showToast("点击进入达人详情页或聊天页,第"+(position+1)+"个达人");
@@ -215,5 +220,16 @@ public class ExpertListActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode!=RESULT_OK){
+            return;
+        }else{
+            if(requestCode==EXPERT_DES){
+                //刷新本页
+            }
+        }
     }
 }

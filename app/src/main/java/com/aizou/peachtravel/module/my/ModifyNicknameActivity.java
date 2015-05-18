@@ -46,9 +46,10 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         ViewUtils.inject(this);
 
         titleHeaderBar.getTitleTextView().setText("修改昵称");
+        titleHeaderBar.getRightTextView().setText("保存");
         titleHeaderBar.enableBackKey(true);
 
-        findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
