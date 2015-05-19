@@ -961,19 +961,22 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
 
     public void addNewDayRouter(int position,boolean isBefore){
         MobclickAgent.onEvent(getActivity(),"event_add_day");
+        final int sectionPos;
         if(isBefore){
             routeDayMap.add(position,new ArrayList<PoiDetailBean>());
+            sectionPos=position;
         }else{
             routeDayMap.add(position+1,new ArrayList<PoiDetailBean>());
+            sectionPos=position+1;
         }
         strategy.itineraryDays++;
         routeDayAdpater.notifyDataSetChanged();
         mEditDslv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mEditDslv.setSelection(routeDayAdpater.getCount() - 1);
+                mEditDslv.setSelection(sectionPos);
             }
-        }, 50);
+        }, 50);  //routeDayAdpater.getCount() - 1
         if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;

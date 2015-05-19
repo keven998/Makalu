@@ -109,7 +109,7 @@
             android:textSize="15sp"
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="11dp"
-            android:text="fdsaf"
+            android:text=""
             android:textColor="@color/second_font_color"/>
 
         <com.aizou.core.widget.expandabletextview.ExpandableTextView
@@ -134,7 +134,7 @@
                 android:textSize="15sp"
                 android:lineSpacingExtra="11dp"
                 android:textColor="@color/second_font_color"
-                android:text="dfsa"/>
+                android:text=""/>
 
 
                 <com.aizou.core.widget.ImageButtonWithText

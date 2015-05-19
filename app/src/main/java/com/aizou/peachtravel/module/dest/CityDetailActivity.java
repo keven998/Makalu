@@ -57,7 +57,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private PullToZoomListViewEx mTravelLv; //
     private RelativeLayout titleBar;
     private View bottom_line;
-    private TextView mTitleTv;
     private ImageView mCityIv;
     private TextView mCityNameTv;
     private TextView mCityNameEn;
@@ -69,6 +68,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
+    private ImageView shareToChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +101,15 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
         bottom_line = (View) findViewById(R.id.title_bottom_line);
-        mTitleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         mFavCb = (CheckBox)findViewById(R.id.iv_fav);
-       // setTitleAlpha(0);
+        shareToChat = (ImageView)findViewById(R.id.city_detail_chat);
+        shareToChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_city_share_to_talk");
+                IMUtils.onClickImShare(CityDetailActivity.this);
+            }
+        });
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +121,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         travelLv.setHeaderView(hv);
        // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
-
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
         View zoomView = hv.findViewById(R.id.ly1);
         travelLv.setZoomView(zoomView);
@@ -177,7 +182,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //        if (alpha <= 1) {
             titleBar.getBackground().setAlpha(alpha);
             bottom_line.getBackground().setAlpha(alpha);
-            mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
+       //   mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
 //        }
     }
 
@@ -306,25 +311,25 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             detailBean.imageCnt=100;
         }
         mCityNameTv.setText(detailBean.zhName);
-        mCostTimeTv.setText(String.format("推荐旅程安排 %s", detailBean.timeCostDesc));
-        bestMonthTv.setText(String.format("最佳旅行时节 %s", detailBean.travelMonth));
+        mCostTimeTv.setText(String.format("参考游玩时间： %s", detailBean.timeCostDesc));
+        bestMonthTv.setText(String.format("最佳旅行时节： %s", detailBean.travelMonth));
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
         travelTv.setOnClickListener(this);
         if(detailBean.enName.equals("")||detailBean.enName==null){
-            mCityNameEn.setText("应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用，应该就是这个地方的介绍吧，假数据，测试用");
+            mCityNameEn.setText(detailBean.desc);
         }else{
             mCityNameEn.setText(detailBean.enName);
         }
-        mTTview.setText(String.format("玩在%s", detailBean.zhName));
+        mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
-        mTitleTv.setText(detailBean.zhName);
+       // mTitleTv.setText(detailBean.zhName);
     }
 
     public void intentToTravel(View view){
         if(locDetailBean!=null){
-            ToastUtil.getInstance(this).showToast(locDetailBean.toString()+"00000000000000000000000000000000");
+            //ToastUtil.getInstance(this).showToast(locDetailBean.toString()+"00000000000000000000000000000000");
             MobclickAgent.onEvent(mContext,"event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
@@ -393,19 +398,19 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void showActionDialog() {
-        final Activity act = this;
+        /*final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
         contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {*/
                 MobclickAgent.onEvent(mContext,"event_create_new_trip_plan_city");
-                Intent intent = new Intent(act, SelectDestActivity.class);
+                Intent intent = new Intent(this, SelectDestActivity.class);
                 ArrayList<LocBean> locList = new ArrayList<LocBean>();
                 locList.add(locDetailBean);
                 intent.putExtra("locList",locList);
                 startActivity(intent);
-                dialog.dismiss();
+          /*      dialog.dismiss();
             }
         });
         contentView.findViewById(R.id.btn_go_share).setOnClickListener(new View.OnClickListener() {
@@ -431,7 +436,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         lp.width = (int) (display.getWidth()); // 设置宽度
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画*/
     }
 
 }

@@ -96,6 +96,7 @@ public class ModifyStatusOrSexActivity extends PeachBaseActivity implements View
                 Intent fintent=new Intent();
                 fintent.putExtra("result",fourth.getText());
                 setResult(RESULT_OK,fintent);
+                finish();
                 overridePendingTransition(0,R.anim.fade_out);
                 break;
         }

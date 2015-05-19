@@ -11,7 +11,8 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="@dimen/title_bar_height"
         android:paddingRight="10dp"
-        android:paddingLeft="4dp">
+        android:paddingLeft="4dp"
+        android:paddingBottom="10dp">
 
         <com.aizou.peachtravel.common.widget.freeflow.core.FreeFlowContainer
             android:id="@+id/rec_dest_container"

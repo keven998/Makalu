@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class PeachUser implements Serializable{
     public static final String M="M";
@@ -18,6 +19,12 @@ public class PeachUser implements Serializable{
     public String easemobUser;
     public String easemobPwd;
     public String memo="";
+    public String travelStatus;
+    public String residence;
+    public String level;
+    public String zodiac;
+    public String birthday;
+    public ArrayList tracks=new ArrayList<>();
 
     public String getGenderDesc() {
         if ("F".equals(gender)) {

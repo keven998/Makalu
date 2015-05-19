@@ -303,9 +303,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         String address;
         if (TextUtils.isEmpty(bean.address)) {
-            address = "<img src=\"" + R.drawable.ic_poi_address + "\" />  " + bean.zhName;
+            address =  bean.zhName;
         } else {
-            address = "<img src=\"" + R.drawable.ic_poi_address + "\" />  " + bean.address;
+            address = bean.address;   //"<img src=\"" + R.drawable.ic_poi_address + "\" />  " +
         }
 //        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
 

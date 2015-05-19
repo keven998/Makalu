@@ -19,7 +19,7 @@
         android:hint="输入城市名或拼音"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/base_color_white"
+        android:textColor="@color/second_font_color"
         android:textSize="13sp"
         android:background="@drawable/in_out_search_bg"
         android:visibility="gone"

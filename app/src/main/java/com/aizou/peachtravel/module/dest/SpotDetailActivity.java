@@ -78,7 +78,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private RelativeLayout mBookFl;
     private TextView mSpotNameTv, mTimeTv;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
-    private ImageView favIv,shareIv;
+    private ImageView favIv,shareIv,chatIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
     private TextView ic_back,poi_rank_sm;
@@ -133,6 +133,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         p.width = (int) (d.getWidth() ); /*- LocalDisplay.dp2px(28)*/
         spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
         favIv = (ImageView) findViewById(R.id.iv_fav);
+        chatIv = (ImageView) findViewById(R.id.iv_chat);
         shareIv = (ImageView) hv.findViewById(R.id.iv_share);
         ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
         mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
@@ -282,12 +283,19 @@ public class SpotDetailActivity extends PeachBaseActivity {
             mBookFl.setVisibility(View.GONE);
 
         }
-        shareIv.setOnClickListener(new View.OnClickListener() {
+        chatIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(mContext,"event_spot_share_to_talk");
+                IMUtils.onClickImShare(SpotDetailActivity.this);
+            }
+        });
+        /*shareIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showActionDialog();
             }
-        });
+        });*/
         refreshFav(spotDetailBean);
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override

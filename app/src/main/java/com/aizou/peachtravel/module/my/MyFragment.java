@@ -122,7 +122,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             if (TextUtils.isEmpty(user.signature)) {
                 statusTv.setText("暂时还没有状态");
             } else {
-                statusTv.setText("其实本来写签名我就是拒绝的，暂时状态用签名替代吧"+user.signature);
+                statusTv.setText(user.travelStatus);
             }
         }
     }

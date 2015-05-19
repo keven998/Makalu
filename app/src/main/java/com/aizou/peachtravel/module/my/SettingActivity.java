@@ -11,14 +11,18 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.peachtravel.bean.UpdateBean;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.utils.UpdateUtil;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.module.MainActivity;
+import com.easemob.EMCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
@@ -90,6 +94,23 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
             case R.id.ll_clear_cache:
                 MobclickAgent.onEvent(mContext,"event_clear_cache");
+                clearCache();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void clearCache(){
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage("确定清除缓存？");
+        dialog.setPositiveButton("确定",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
                 DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
                 new Thread(new Runnable() {
                     @Override
@@ -105,12 +126,16 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                     }
                 }).start();
 
+            }
+        });
+        dialog.setNegativeButton("取消",new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
 
-                break;
-
-            default:
-                break;
-        }
     }
 
     private void update() {

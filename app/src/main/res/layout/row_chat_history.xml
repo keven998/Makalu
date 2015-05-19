@@ -34,18 +34,38 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_toRightOf="@+id/avatar_container"
         >
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
+                android:maxWidth="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:singleLine="true"
+                android:layout_gravity="center_vertical"
                 android:textColor="@color/base_text_color_title"
-                android:text="放大镜看是否打开"
+                android:text="放大镜镜是否打否打开的的"
                 android:ellipsize="end"
                 android:textSize="15sp" />
+
+
+            <TextView
+                android:id="@+id/unread_msg_number"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:background="@drawable/bg_history_unread_msg"
+                android:minWidth="22dp"
+                android:textSize="14sp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:gravity="center"
+                android:text="999"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/base_color_white"
+                android:visibility="visible" />
 
             <ImageView
                 android:layout_width="0dp"
@@ -58,18 +78,17 @@
                 />
 
             <TextView
-                android:id="@+id/unread_msg_number"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:background="@drawable/bg_history_unread_msg"
-                android:minWidth="22dp"
-                android:textSize="14sp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/base_color_white"
-                android:visibility="visible" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical|right"
+                android:gravity="right"
+                android:textColor="@color/base_text_color_text_hint"
+                android:textSize="13sp"
+                android:text="12月12日 12:59"/>
+
+
     </LinearLayout>
     <!--<ImageView-->
         <!--android:id="@+id/msg_state"-->
@@ -105,14 +124,7 @@
             android:textSize="13sp"
             android:text="fjdsfkjdasfj"/>
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/base_text_color_text_hint"
-            android:textSize="13sp"
-            android:text="123"/>
+
 
     </LinearLayout>
 </RelativeLayout>

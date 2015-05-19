@@ -135,7 +135,7 @@
                     android:textSize="15sp"
                     android:text=""
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_search"
+                    android:drawableLeft="@drawable/poi_money"
                     android:drawablePadding="10dp"
                     />
 
@@ -182,7 +182,7 @@
                 android:textSize="15sp"
                 android:text="等级/评级"
                 android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_search"
+                android:drawableLeft="@drawable/poi_level"
                 android:drawablePadding="10dp"
                 />
 
@@ -215,7 +215,7 @@
                     android:textSize="15sp"
                     android:text="地址"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_search"
+                    android:drawableLeft="@drawable/spot_det_map"
                     android:drawablePadding="10dp"
                     />
 
@@ -249,7 +249,7 @@
                     android:textSize="15sp"
                     android:text="电话"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_search"
+                    android:drawableLeft="@drawable/poi_phone"
                     android:drawablePadding="10dp"
                     />
 
@@ -283,7 +283,7 @@
                     android:textSize="15sp"
                     android:text="poi简介"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_search"
+                    android:drawableLeft="@drawable/spot_det_introduction"
                     android:drawablePadding="10dp"
                     />
 

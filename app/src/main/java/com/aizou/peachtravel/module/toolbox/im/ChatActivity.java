@@ -756,13 +756,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 //            } catch (JSONException e) {
 //                e.printStackTrace();
 //            }
-        } else if (id == R.id.btn_travels) {
-            MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
+        } /*else if (id == R.id.btn_location) {
+            ToastUtil.getInstance(this).showToast("发送位置");*/
+           /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
             intent.putExtra("chatType",chatType);
             intent.putExtra("toId",toChatUsername);
             intent.setAction("action.chat");
-            startActivity(intent);
+            startActivity(intent);*/
 //            // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
 //            try {
@@ -774,12 +775,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 //            } catch (JSONException e) {
 //                e.printStackTrace();
 //            }
-        }else if (id == R.id.btn_take_picture) {
+        //}
+        else if (id == R.id.btn_take_picture) {
 			selectPicFromCamera();// 点击照相图标
 		} else if (id == R.id.btn_picture) {
 			selectPicFromLocal(); // 点击图片图标
-//		} else if (id == R.id.btn_location) { // 位置
-//			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
+		} else if (id == R.id.btn_location) { // 位置
+			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
 		} else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
 			more.setVisibility(View.VISIBLE);
 			iv_emoticons_normal.setVisibility(View.GONE);

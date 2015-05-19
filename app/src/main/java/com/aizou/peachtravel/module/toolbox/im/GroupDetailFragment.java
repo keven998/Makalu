@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -66,7 +67,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
     private static final int REQUEST_CODE_MODIFY_GROUP_NAME = 4;
 
-    private ExpandGridView memberGv;
+    private ListView memberGv;
     private String groupId;
     private Button exitBtn;
     private Button deleteBtn;
@@ -78,6 +79,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private RelativeLayout rl_switch_block_groupmsg;
     private LinearLayout rl_groupName;
     private TextView groupNameTv;
+    private TextView addGroup;
 
     private boolean isInDeleteMode;
     private MemberAdapter memberAdapter;
@@ -103,7 +105,16 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        memberGv = (ExpandGridView) getView().findViewById(R.id.gv_members);
+        memberGv = (ListView) getView().findViewById(R.id.gv_members);
+        addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
+        addGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 进入选人页面
+                startActivityForResult(
+                        (new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())), REQUEST_CODE_ADD_USER);
+            }
+        });
         clearAllHistory = (RelativeLayout) getView().findViewById(R.id.clear_all_history);
 //		userGridview = (ExpandGridView) findViewById(R.id.gridview);
         exitBtn = (Button) getView().findViewById(R.id.btn_exit_grp);
@@ -372,6 +383,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 return new MemberViewHolder();
             }
         });
+
         memberGv.setAdapter(memberAdapter);
         memberGv.setOnTouchListener(new View.OnTouchListener() {
             @Override

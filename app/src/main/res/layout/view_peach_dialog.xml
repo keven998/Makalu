@@ -34,7 +34,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/app_theme_color"
         android:layerType="software"/>
 
@@ -56,7 +56,8 @@
 
 
         <View
-            android:layout_width="1dp"
+            android:id="@+id/dialog_mid_line"
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
             android:background="@color/app_theme_color"
             android:layerType="software"/>

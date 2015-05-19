@@ -152,7 +152,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         my_destination.removeAllViews();
         String[] names={"美国","日本","澳大利亚","乌兹别克斯坦","墨西哥"};
         for(int j=0;j<5;j++){
-            View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style, null);
+            View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
             cityNameTv.setText(names[j]);
             my_destination.addView(contentView);
@@ -286,6 +286,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                           brithdayTv.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
                     }
                 },1990,0,0);
+                dialog.setCancelable(true);
                 dialog.show();
                 //应该还差个上传动作
                 break;

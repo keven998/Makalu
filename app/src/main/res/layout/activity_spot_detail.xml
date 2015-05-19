@@ -90,58 +90,6 @@
                     android:textSize="18sp"
                     android:text="dfsafsa" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="7dp">
-
-                    <ImageView
-                        android:id="@+id/poi_level_star_01"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:src="@drawable/poi_level_star"
-                    />
-
-                    <ImageView
-                        android:id="@+id/poi_level_star_02"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/poi_level_star"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        />
-
-                    <ImageView
-                        android:id="@+id/poi_level_star_03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/poi_level_star"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        />
-
-                    <ImageView
-                        android:id="@+id/poi_level_star_04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/poi_level_star"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        />
-
-                    <ImageView
-                        android:id="@+id/poi_level_star_05"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/poi_level_star"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        />
-
-                </LinearLayout>
 
                 <RatingBar
                     android:id="@+id/ratingBar_spot"
@@ -149,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/tv_pic_num"

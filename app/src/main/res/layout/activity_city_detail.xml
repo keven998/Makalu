@@ -46,6 +46,7 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="18sp"
+            android:text="城市详情"
             android:textColor="@color/base_font_color"/>
 
         <ImageView
@@ -53,15 +54,15 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentRight="true"
-            android:src="@drawable/strategy_more"
+            android:src="@drawable/city_add_strategy"
             android:paddingLeft="10dp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="15dp"/>
 
         <ImageView
             android:id="@+id/city_detail_chat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_title_talk"
+            android:src="@drawable/city_share_chat"
             android:layout_toLeftOf="@id/tv_title_bar_right"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

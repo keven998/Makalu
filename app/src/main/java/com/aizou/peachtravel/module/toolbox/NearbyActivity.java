@@ -103,15 +103,8 @@ public class NearbyActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
         mTvAddress.setText("正在定位...");
-        DrawableBar colorBar = new DrawableBar(mContext, R.drawable.ic_score_start_small);
-        colorBar.setWidth(200);
-        colorBar.setColor(getResources().getColor(R.color.app_theme_color));
-
-        ColorBar cBar=new ColorBar(mContext,getResources().getColor(R.color.app_theme_color),LocalDisplay.dp2px(10));
-
-
+        ColorBar cBar=new ColorBar(mContext,getResources().getColor(R.color.app_theme_color),LocalDisplay.dp2px(2));
         mNearbyIndicator.setScrollBar(cBar);
-
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
         indicatorViewPager.setAdapter(mNAdapter = new NearbyAdapter(getSupportFragmentManager()));

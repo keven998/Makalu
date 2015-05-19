@@ -66,11 +66,12 @@ public class ExpertFragment extends PeachBaseFragment {
             for (int i=0;i<in.length;i++) {
             View contentView = View.inflate(getActivity(), R.layout.des_text_style, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText(in[i]);
+            cityNameTv.setText(in[i]+"(30)");
             cityNameTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //进入达人列表
+                    getActivity().finish();
                 }
             });
             fl.addView(contentView);
@@ -79,11 +80,12 @@ public class ExpertFragment extends PeachBaseFragment {
             for (int i=0;i<out.length;i++) {
                 View contentView = View.inflate(getActivity(), layout.des_text_style, null);
                 final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-                cityNameTv.setText(out[i]);
+                cityNameTv.setText(out[i]+"(25)");
                 cityNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //进入达人列表
+                        getActivity().finish();
                     }
                 });
                 fl.addView(contentView);

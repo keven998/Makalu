@@ -23,6 +23,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ExpertBean;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;

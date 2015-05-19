@@ -98,8 +98,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         if(itemObject instanceof LocBean){
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
-            holder.mAddressTv.setText("");
-            holder.mAddressTv.setVisibility(View.GONE);
+            holder.mAddressTv.setText(locBean.zhName);
+           // holder.mAddressTv.setVisibility(View.GONE);
             if(locBean.images!=null&&locBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{

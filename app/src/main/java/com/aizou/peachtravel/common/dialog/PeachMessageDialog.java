@@ -19,6 +19,7 @@ public class PeachMessageDialog extends Dialog {
     private TextView mContetTv;
     private Button mOkBtn;
     private Button mCancleBtn;
+    private View midView;
 
     public PeachMessageDialog(Context context) {
         super(context, R.style.ComfirmDialog);
@@ -53,12 +54,20 @@ public class PeachMessageDialog extends Dialog {
         mContetTv = (TextView) findViewById(R.id.tv_dialog_message);
         mOkBtn = (Button) findViewById(R.id.btn_ok);
         mCancleBtn = (Button) findViewById(R.id.btn_cancle);
+        midView = (View) findViewById(R.id.dialog_mid_line);
     }
 
     public void setPositiveButton(String str, View.OnClickListener listener) {
 
         mOkBtn.setText(str);
         mOkBtn.setOnClickListener(listener);
+    }
+
+    public void isCancle(boolean isCancle){
+        if(!isCancle){
+            mCancleBtn.setVisibility(View.GONE);
+            midView.setVisibility(View.GONE);
+        }
     }
 
     public void setNegativeButton(String str, View.OnClickListener listener) {

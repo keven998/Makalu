@@ -367,7 +367,7 @@ public class MainActivity extends PeachBaseActivity{
             if (conflictDialog == null){
                 conflictDialog= new PeachMessageDialog(context);
                 conflictDialog.setTitle("下线通知");
-                conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
+                //conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
                 conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
                 conflictDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
@@ -380,7 +380,7 @@ public class MainActivity extends PeachBaseActivity{
                     }
                 });
                 conflictDialog.show();
-                conflictDialog.setCancelable(false);
+                conflictDialog.isCancle(false);
             }
             conflictDialog.show();
             isConflict=true;

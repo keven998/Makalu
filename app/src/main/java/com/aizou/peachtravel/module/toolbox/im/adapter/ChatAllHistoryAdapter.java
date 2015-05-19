@@ -231,7 +231,11 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                 Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_send_fail);
                 drawable.setBounds(1, 1, LocalDisplay.dp2px(15), LocalDisplay.dp2px(15));
                 holder.message.setCompoundDrawables(drawable, null, null, null);
-            } else {
+            } else if(lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.INPROGRESS){
+                Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_inprogress);
+                drawable.setBounds(1, 1, LocalDisplay.dp2px(15), LocalDisplay.dp2px(15));
+                holder.message.setCompoundDrawables(drawable, null, null, null);
+            }  else {
 //                holder.msgState.setVisibility(View.GONE);
                 holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
