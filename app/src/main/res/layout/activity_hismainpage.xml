@@ -75,11 +75,10 @@ android:background="@color/app_backgroud">
                  android:background="@color/route_desc_num_color"
                  android:textColor="@color/base_color_white"
                  android:textSize="12sp"
-                 android:text="V2"
+                 android:text=""
                  android:paddingLeft="3dp"
                  android:paddingRight="3dp"
                  android:layout_marginLeft="5dp"
-                 android:visibility="gone"
                  />
 
              <TextView
@@ -89,8 +88,7 @@ android:background="@color/app_backgroud">
                  android:textColor="@color/base_color_white"
                  android:textSize="12sp"
                  android:layout_marginLeft="5dp"
-                 android:text="狮子座"
-                 android:visibility="gone"
+                 android:text=""
                  />
 
             <ImageView android:id="@+id/iv_his_gender"
@@ -100,7 +98,6 @@ android:background="@color/app_backgroud">
                 android:layout_alignBottom="@id/iv_avatar"
                 android:layout_marginLeft="4dp"
                 android:layout_marginBottom="4dp"
-                android:visibility="gone"
                 android:scaleType="fitCenter"/>
 
         </LinearLayout>
@@ -119,10 +116,9 @@ android:background="@color/app_backgroud">
         <TextView android:id="@+id/tv_his_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_id"
+            android:layout_below="@id/tv_his_id"
             android:textSize="13sp"
             android:layout_marginTop="2dp"
-            android:textStyle="italic"
             android:maxLines="2"
             android:textColor="@color/base_color_white"
             />

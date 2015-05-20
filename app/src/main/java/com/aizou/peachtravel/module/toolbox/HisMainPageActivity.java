@@ -30,6 +30,11 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +61,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     TextView foot_print;
     @ViewInject(R.id.his_destination)
     FlowLayout his_destinations;
-    @ViewInject(R.id.ll_his_trip_plan)
+    @ViewInject(R.id.tv_his_plan)
     TextView his_trip_plan;
     @ViewInject(R.id.tv_his_status)
     TextView his_status;
@@ -79,6 +84,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private int userId;
     private ImageView my_pics_cell;
+    private ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,23 +118,41 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         title_name.setText(bean.get(0).nickName);
         his_name.setText(bean.get(0).nickName);
         ImageLoader.getInstance().displayImage(bean.get(0).avatarSmall, his_avatar, options);
-        his_level.setText(bean.get(0).level);
+        his_level.setText("V" + bean.get(0).level);
         if(bean.get(0).gender.equals("F")){
             his_gender.setImageResource(R.drawable.girl);
         }else if(bean.get(0).gender.equals("F")){
             his_gender.setImageResource(R.drawable.boy);
         }
-        xingzuo.setText(bean.get(0).zodiac);
+        xingzuo.setText(bean.get(0).zodiac);LogUtil.d(bean.get(0).zodiac);
         his_id.setText(String.valueOf(bean.get(0).userId));
         if(!TextUtils.isEmpty(bean.get(0).travelStatus)){
             his_status.setText(bean.get(0).travelStatus);
         }
         sign.setText(bean.get(0).signature);
         resident.setText(bean.get(0).residence);
-        age.setText(getAge(bean.get(0).birthday));
-        LogUtil.d(bean.get(0).tracks.toString());
+        age.setText(/*getAge(bean.get(0).birthday)*/"25");
 
-        //initFlDestion(bean.get(0).tracks);
+        try {
+            int countries=0;
+            int citys;
+            JSONObject jsonObject = new JSONObject(bean.get(0).tracks.toString());
+            Iterator iterator=jsonObject.keys();
+            if(iterator.hasNext()){
+                countries++;
+                String key=(String)iterator.next();
+                for(int i=0;i<bean.get(0).tracks.get(key).size();i++){
+                    all_foot_print_list.add(bean.get(0).tracks.get(key).get(i));
+                }
+            }
+            citys=all_foot_print_list.size();
+            foot_print.setText("已经去过"+countries+"个国家， "+citys+"个城市");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        initFlDestion(all_foot_print_list);
     }
 
 
@@ -165,8 +189,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initFlDestion(List<LocBean> locBeans){
         his_destinations.removeAllViews();
-        String[] names={"美国","日本","澳大利亚","乌兹别克斯坦","墨西哥"};
-        foot_print.setText("去过"+locBeans.size()+"个城市");
         for(int j=0;j<locBeans.size();j++){
             View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);

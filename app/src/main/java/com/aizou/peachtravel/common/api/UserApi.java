@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,8 @@ public class UserApi extends BaseApi {
     public final static String REQUEST_ADD_CONTACTS="/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
+    //搜索达人足迹
+    public final static String SEARCH_EXPERT_FOOTPRINT = "/users/expert/tracks";
     //根据环信ID获取用户信息
     public final static String GET_CONTACT_BY_HX = "/users/easemob";
     //通讯录匹配
@@ -474,9 +477,27 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler searchExpertContact(String key,String field,HttpCallBack callback){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl("http://api2.taozilvxing.cn/taozi" + SEACH_CONTACT);
+        request.setUrl(SystemConfig.BASE_URL+ SEACH_CONTACT);
         request.putUrlParams("keyword",key);
         request.putUrlParams("field",field);
+        setDefaultParams(request);
+        return HttpManager.request(request,callback);
+    }
+
+
+    /**
+     * 达人足迹列表
+     *
+     * @param abroad
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler searchExpertFootPrint(boolean abroad,HttpCallBack callback){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL+ SEARCH_EXPERT_FOOTPRINT);
+        request.putUrlParams("abroad",String.valueOf(abroad));
         setDefaultParams(request);
         return HttpManager.request(request,callback);
     }
@@ -502,6 +523,41 @@ public class UserApi extends BaseApi {
                 jsonArray.put(user);
             }
             jsonObject.put("easemob", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        return HttpManager.request(request, callback);
+    }
+
+
+    /**
+     * 根据达人目的地id获取达人列表
+     *
+     * @param locId
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler getExpertById(ArrayList<String> locId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + GET_CONTACT_BY_HX);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            JSONArray jsonArray = new JSONArray();
+            for (String id : locId) {
+                jsonArray.put(id);
+            }
+            jsonObject.put("locId", jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }

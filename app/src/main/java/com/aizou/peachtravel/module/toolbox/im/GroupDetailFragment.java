@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,9 +39,11 @@ import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.ExpandGridView;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
+import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
 import com.aizou.peachtravel.config.PeachApplication;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.MainActivity;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
@@ -79,7 +83,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private RelativeLayout rl_switch_block_groupmsg;
     private LinearLayout rl_groupName;
     private TextView groupNameTv;
-    private TextView addGroup;
+    private TextView addGroup,delGroupMember;
 
     private boolean isInDeleteMode;
     private MemberAdapter memberAdapter;
@@ -107,6 +111,15 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         super.onActivityCreated(savedInstanceState);
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
+        delGroupMember = (TextView) getView().findViewById(R.id.tv_del_to_group);
+        delGroupMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isInDeleteMode=true;
+                delGroupMember.setVisibility(View.GONE);
+                memberAdapter.notifyDataSetChanged();
+            }
+        });
         addGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -390,6 +403,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             public boolean onTouch(View v, MotionEvent event) {
                 if(isInDeleteMode){
                     isInDeleteMode=false;
+                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+                        delGroupMember.setVisibility(View.VISIBLE);
+                    }
                     memberAdapter.notifyDataSetChanged();
                 }else{
 
@@ -406,6 +422,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
             exitBtn.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.VISIBLE);
+            delGroupMember.setVisibility(View.VISIBLE);
             rl_groupName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -427,6 +444,59 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
         }
     }
+
+   /* public class MemberAdapter2 extends BaseAdapter{
+        private ImageView avatarIv, removeIv;
+        private TextView nicknameTv;
+        private DisplayImageOptions picOptions;
+        private TextView groupHolderName;
+        private  IMUser imUser;
+
+        public MemberAdapter2(IMUser imUser){
+            this.imUser=imUser;
+            picOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .showImageOnLoading(R.drawable.avatar_placeholder)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
+//				    .decodingOptions(D)
+//                  .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6)))
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+        }
+
+        @Override
+        public int getCount() {
+            return imUser.;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView=View.inflate(getActivity(),R.layout.group_member_list,null);
+            }
+
+            avatarIv = (ImageView) convertView.findViewById(R.id.iv_avatar);
+            removeIv = (ImageView) convertView.findViewById(R.id.badge_delete);
+            nicknameTv = (TextView) convertView.findViewById(R.id.tv_nickname);
+            groupHolderName = (TextView) convertView.findViewById(R.id.group_holder_name);
+
+            return convertView;
+        }
+    }*/
+
     private void setUpGroupMemeber(){
         final List<String> members=group.getMembers();
         final List<String> unkownMembers= new ArrayList<String>();
@@ -577,14 +647,14 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         @Override
         public int getCount() {
-            return super.getCount()+2;
+            return super.getCount();
         }
     }
 
     private class MemberViewHolder extends ViewHolderBase<IMUser> {
         private View contentView;
         private ImageView avatarIv, removeIv;
-        private TextView nicknameTv;
+        private TextView nicknameTv,viewHolderName;
         private DisplayImageOptions picOptions;
 
         public MemberViewHolder() {
@@ -605,16 +675,17 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            contentView = layoutInflater.inflate(R.layout.grid, null);
+            contentView = layoutInflater.inflate(R.layout.group_member_list, null);
             avatarIv = (ImageView) contentView.findViewById(R.id.iv_avatar);
             removeIv = (ImageView) contentView.findViewById(R.id.badge_delete);
             nicknameTv = (TextView) contentView.findViewById(R.id.tv_nickname);
+            //viewHolderName = (TextView) contentView.findViewById(R.id.group_holder_name);
             return contentView;
         }
 
         @Override
         public void showData(int position, final IMUser itemData) {
-            if(position==memberAdapter.getCount()-1){
+           /* if(position==memberAdapter.getCount()-1){
                 avatarIv.setImageResource(R.drawable.smiley_minus_btn);
                 nicknameTv.setText("");
                 removeIv.setVisibility(View.INVISIBLE);
@@ -637,7 +708,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         });
                     }
                 }
-            }else if(position==memberAdapter.getCount()-2){
+            }else*/ /*if(position==memberAdapter.getCount()-2){
                 avatarIv.setImageResource(R.drawable.smiley_add_btn);
                 nicknameTv.setText("");
                 removeIv.setVisibility(View.INVISIBLE);
@@ -661,22 +732,41 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         }
                     });
                 }
-            }else{
+            }else*/{
 //                avatarIv.setImageResource(R.drawable.avatar_placeholder);
                 nicknameTv.setText(itemData.getNick());
                 ImageLoader.getInstance().displayImage(itemData.getAvatarSmall(), avatarIv, picOptions);
                 if (isInDeleteMode) {
+                    removeIv.setVisibility(View.VISIBLE);
                     if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                        removeIv.setVisibility(View.VISIBLE);
-                        contentView.setOnClickListener(new View.OnClickListener() {
+                        //viewHolderName.setText("群主");
+                        removeIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                deleteMembersFromGroup(itemData);
+                                final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+                                dialog.setTitle("提示");
+                                dialog.setMessage("确定要移除该用户吗？");
+                                dialog.setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                        deleteMembersFromGroup(itemData);
+
+                                    }
+                                });
+                                dialog.setNegativeButton("取消", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                dialog.show();
                             }
                         });
                     }
-                } else {
-                    removeIv.setVisibility(View.INVISIBLE);
+                }
+            else {
+                    removeIv.setVisibility(View.GONE);
                     contentView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

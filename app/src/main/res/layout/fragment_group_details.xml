@@ -5,17 +5,17 @@
     android:background="@color/base_color_white"
     android:orientation="vertical">
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/base_color_white">
+        android:background="@color/base_color_white">-->
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:paddingBottom="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical">-->
 
 
             <LinearLayout
@@ -123,57 +123,59 @@
                 android:layout_marginLeft="28dp"
                 android:background="#E6E6E6" />
 
-            <LinearLayout
-                android:id="@+id/ll_group_dismiss"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/title_bar_height"
-                android:background="@drawable/option_cell_selector"
-                android:orientation="horizontal"
-                android:layout_marginLeft="28dp"
-                android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/ll_group_dismiss"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/option_cell_selector"
+        android:orientation="horizontal"
+        android:layout_marginLeft="28dp"
+        android:gravity="center_vertical">
 
 
-                <Button
-                    android:id="@+id/btn_exit_grp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="@dimen/title_bar_height"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="25dp"
-                    android:paddingLeft="38dp"
-                    android:paddingRight="38dp"
-                    android:background="@null"
-                    android:onClick="exitGroup"
-                    android:text="退出群聊"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="16sp" />
+        <Button
+            android:id="@+id/btn_exit_grp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="38dp"
+            android:paddingRight="38dp"
+            android:background="@null"
+            android:onClick="exitGroup"
+            android:text="退出群聊"
+            android:textColor="@color/second_font_color"
+            android:textSize="16sp" />
 
 
-                <Button
-                    android:id="@+id/btn_exitdel_grp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="@dimen/title_bar_height"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="25dp"
-                    android:onClick="exitDeleteGroup"
-                    android:background="@null"
-                    android:paddingLeft="38dp"
-                    android:paddingRight="38dp"
-                    android:text="解散群聊"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
+        <Button
+            android:id="@+id/btn_exitdel_grp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:onClick="exitDeleteGroup"
+            android:background="@null"
+            android:paddingLeft="38dp"
+            android:paddingRight="38dp"
+            android:text="解散群聊"
+            android:textColor="@color/second_font_color"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
 
 
-            </LinearLayout>
+    </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:layout_marginLeft="28dp"
-                android:background="#E6E6E6" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="#E6E6E6"
+        android:layout_marginLeft="28dp"/>
+
 
 
             <LinearLayout
@@ -203,7 +205,7 @@
                     android:textSize="15sp" />
 
 
-               <!-- <View
+                <View
                     android:layout_width="0.8dp"
                     android:layout_height="match_parent"
                     android:background="#E6E6E6" />
@@ -220,10 +222,11 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:text="移除"
+                    android:visibility="gone"
                     android:drawableLeft="@drawable/ic_poi_close"
                     android:drawablePadding="10dp"
                     android:textColor="@color/second_font_color"
-                    android:textSize="15sp" />-->
+                    android:textSize="15sp" />
 
 
 
@@ -233,9 +236,13 @@
             <ListView
                 android:id="@+id/gv_members"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="28dp"
+                android:layout_marginBottom="10dp"
                 />
+
+
+
 
             <!--<com.aizou.peachtravel.common.widget.ExpandGridView
                 android:id="@+id/gv_members"
@@ -349,7 +356,7 @@
                           android:layout_centerVertical="true"
                           android:button="@drawable/checkbox_bg_selector" />
                   </RelativeLayout> -->
-        </LinearLayout>
-    </ScrollView>
+        <!--</LinearLayout>-->
+   <!-- </ScrollView>-->
 
 </LinearLayout>

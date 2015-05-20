@@ -1,6 +1,8 @@
 package com.aizou.peachtravel.bean;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lxp_dqm07 on 2015/4/21.
@@ -20,5 +22,10 @@ public class ExpertBean {
     public String birthday;
     public String zodiac;
     public String memo;
-    public ArrayList tracks=new ArrayList<>();
+    public Map<String,ArrayList<LocBean>> tracks;
+
+
+
 }
+
+

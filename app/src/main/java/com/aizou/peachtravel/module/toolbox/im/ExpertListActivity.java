@@ -36,6 +36,7 @@ import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,6 +60,7 @@ public class ExpertListActivity extends PeachBaseActivity {
     private DynamicBox box;
     private List<ExpertBean> expertBeans;
     private int EXPERT_DES=1;
+    private int GET_LOCATION=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +125,7 @@ public class ExpertListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 box.hideAll();
+                ToastUtil.getInstance(ExpertListActivity.this).showToast("好像没有网络额~");
             }
         });
     }
@@ -223,6 +226,33 @@ public class ExpertListActivity extends PeachBaseActivity {
         super.onPause();
     }
 
+    public void refreshView(String locId){
+        ArrayList<String> strs=new ArrayList<String>();
+        strs.add(locId);
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        UserApi.getExpertById(strs, new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                listView.removeAllViews();
+                CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result , ExpertBean.class);
+                if(expertresult.code==0){
+                    adapter=new ExpertAdapter(ExpertListActivity.this,expertresult.result);
+                    expertBeans=expertresult.result;
+                    listView.setAdapter(adapter);
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                ToastUtil.getInstance(ExpertListActivity.this).showToast("好像没有网络额~");
+            }
+        });
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode!=RESULT_OK){
@@ -230,6 +260,8 @@ public class ExpertListActivity extends PeachBaseActivity {
         }else{
             if(requestCode==EXPERT_DES){
                 //刷新本页
+                String id=getIntent().getExtras().getString("locId");
+                refreshView(id);
             }
         }
     }
