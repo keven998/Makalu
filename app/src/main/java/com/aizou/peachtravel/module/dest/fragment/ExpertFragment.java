@@ -32,12 +32,14 @@ import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,6 +64,8 @@ public class ExpertFragment extends PeachBaseFragment {
     private ExpertDesAdapter expertDesAdapter;
     private ArrayList<LocBean> inLocs = new ArrayList<LocBean>();
     private ArrayList<LocBean> outLocs = new ArrayList<LocBean>();
+    private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<String> ids = new ArrayList<>();
 
     public ExpertFragment(int pos){
         this.pos=pos;
@@ -85,13 +89,13 @@ public class ExpertFragment extends PeachBaseFragment {
         getData(pos);
     }
 
-    public void bindView(ArrayList<LocBean> beans){
+    public void bindView(ArrayList<String> names,ArrayList<String> ids){
         fl.removeAllViews();
-        for (int i=0;i<beans.size();i++) {
+        for (int i=0;i<names.size();i++) {
             View contentView = View.inflate(getActivity(), R.layout.des_text_style, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText(beans.get(i).zhName);
-            final String id=beans.get(i).id;
+            cityNameTv.setText(names.get(i));
+            final String id=ids.get(i);
             cityNameTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -128,94 +132,19 @@ public class ExpertFragment extends PeachBaseFragment {
                     try {
                         jsonObject = new JSONObject(result);
                         JSONObject object=(JSONObject)jsonObject.get("result");
-                        Map<String,ArrayList<LocBean>> res=new Map<String, ArrayList<LocBean>>() {
-                            @Override
-                            public void clear() {
-
-                            }
-
-                            @Override
-                            public boolean containsKey(Object key) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean containsValue(Object value) {
-                                return false;
-                            }
-
-                            @NonNull
-                            @Override
-                            public Set<Entry<String, ArrayList<LocBean>>> entrySet() {
-                                return null;
-                            }
-
-                            @Override
-                            public ArrayList<LocBean> get(Object key) {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean isEmpty() {
-                                return false;
-                            }
-
-                            @NonNull
-                            @Override
-                            public Set<String> keySet() {
-                                return null;
-                            }
-
-                            @Override
-                            public ArrayList<LocBean> put(String key, ArrayList<LocBean> value) {
-                                return null;
-                            }
-
-                            @Override
-                            public void putAll(Map<? extends String, ? extends ArrayList<LocBean>> map) {
-
-                            }
-
-                            @Override
-                            public ArrayList<LocBean> remove(Object key) {
-                                return null;
-                            }
-
-                            @Override
-                            public int size() {
-                                return 0;
-                            }
-
-                            @NonNull
-                            @Override
-                            public Collection<ArrayList<LocBean>> values() {
-                                return null;
-                            }
-                        };
                         Iterator iterator=object.keys();
-                        if(iterator.hasNext()){
+                        while(iterator.hasNext()){
                             String name=String.valueOf(iterator.next());
-                            ArrayList<LocBean> list=new ArrayList<LocBean>();
-                            for(int j=0;j<object.getJSONArray(name).length();j++){
-                                list.add((LocBean)object.getJSONArray(name).get(j));
-                            }
-                            res.put(name, list);
-                        }
-                        if(iterator.hasNext()){
-                            String key=(String)iterator.next();
-                            for(int i=0;i<res.get(key).size();i++){
-                                inLocs.add(res.get(key).get(i));
+                            JSONArray value=object.getJSONArray(name);
+                            for(int i=0;i<value.length();i++){
+                                names.add(value.getJSONObject(i).getString("zhName"));
+                                ids.add(value.getJSONObject(i).getString("id"));
                             }
                         }
-                        bindView(inLocs);
+                        bindView(names,ids);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    CommonJson4List<ExpertFootprintBean> footPrintResult = CommonJson4List.fromJson(result, ExpertFootprintBean.class);
-
-                    LogUtil.d("+++++++++++++++++++++++"+footPrintResult.toString());
-                   // =footPrintResult;
                 }
 
                 @Override

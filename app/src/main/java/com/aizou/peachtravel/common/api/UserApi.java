@@ -545,7 +545,7 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getExpertById(ArrayList<String> locId, HttpCallBack callback) {
+    public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + GET_CONTACT_BY_HX);

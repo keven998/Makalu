@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.android.airmapview.AirMapInterface;
 import com.airbnb.android.airmapview.AirMapMarker;
@@ -25,7 +26,9 @@ import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.AirMapViewTypes;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.GoogleChinaMapType;
+import com.airbnb.android.airmapview.listeners.OnInfoWindowClickListener;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
+import com.airbnb.android.airmapview.listeners.OnMapMarkerClickListener;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
@@ -44,6 +47,7 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -58,7 +62,8 @@ import butterknife.InjectView;
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
-public class StrategyMapActivity extends PeachBaseActivity{
+public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener,OnMapMarkerClickListener
+           ,OnInfoWindowClickListener{
     private AirMapView mapView;
    // private AMap aMap;
 
@@ -76,6 +81,8 @@ public class StrategyMapActivity extends PeachBaseActivity{
     private AirMapInterface airMapInterface;
     private AirMapPolyline airMapPolyline;
     private long POLY_LINE = 1;
+    boolean isShow=false;
+    private TextView spinnet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,12 +140,8 @@ public class StrategyMapActivity extends PeachBaseActivity{
                 });
             }
         });
-        mapViewBuilder = new DefaultAirMapViewBuilder(this);
-        airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
         mapView = (AirMapView) findViewById(R.id.strategy_map);
-        //mapView.setOnMapInitializedListener(this);
-        mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        spinnet = (TextView) findViewById(R.id.spinnet);
         //mapView.onCreate(savedInstanceState);
         //initMapView();
         all_locations = (HorizontalScrollView) findViewById(R.id.map_days_name_list);
@@ -149,9 +152,8 @@ public class StrategyMapActivity extends PeachBaseActivity{
     }
 
     private void initData(int pos){
-        mapView.clearMarkers();
-        if(airMapPolyline!=null){
-            mapView.removePolyline(airMapPolyline);
+        if(mapView!=null){
+            mapView.removeAllViews();
         }
         ArrayList<double[]> coordinates=new ArrayList<double[]>();
         ArrayList<String> names=new ArrayList<String>();
@@ -184,153 +186,55 @@ public class StrategyMapActivity extends PeachBaseActivity{
 
 
 
-    private void setUpMap(final ArrayList<String> names,ArrayList<double[]> coor,int pos){
-      //  aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
+    private void setUpMap(final ArrayList<String> names, final ArrayList<double[]> coor,int pos){
         if(coor.size()>0) {
-            List<com.google.android.gms.maps.model.LatLng> points=new List<com.google.android.gms.maps.model.LatLng>() {
+            final List<LatLng> points=new ArrayList<LatLng>();
+
+            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
                 @Override
-                public void add(int location, com.google.android.gms.maps.model.LatLng object) {
-
+                public void onMapInitialized() {
+                    for(int k=0;k<names.size();k++){
+                        mapView.addMarker(new AirMapMarker(new LatLng(coor.get(k)[1], coor.get(k)[0]), k+1)
+                                .setTitle(names.get(k)));
+                        points.add(new LatLng(coor.get(k)[1], coor.get(k)[0]));
+                    }
+                    airMapPolyline=new AirMapPolyline(points,POLY_LINE);
+                    mapView.addPolyline(airMapPolyline);
+                    mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 10);
                 }
+            });
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
+            mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-                @Override
-                public boolean add(com.google.android.gms.maps.model.LatLng object) {
-                    return false;
-                }
-
-                @Override
-                public boolean addAll(int location, Collection<? extends com.google.android.gms.maps.model.LatLng> collection) {
-                    return false;
-                }
-
-                @Override
-                public boolean addAll(Collection<? extends com.google.android.gms.maps.model.LatLng> collection) {
-                    return false;
-                }
-
-                @Override
-                public void clear() {
-
-                }
-
-                @Override
-                public boolean contains(Object object) {
-                    return false;
-                }
-
-                @Override
-                public boolean containsAll(Collection<?> collection) {
-                    return false;
-                }
-
-                @Override
-                public com.google.android.gms.maps.model.LatLng get(int location) {
-                    return null;
-                }
-
-                @Override
-                public int indexOf(Object object) {
-                    return 0;
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    return false;
-                }
-
-                @NonNull
-                @Override
-                public Iterator<com.google.android.gms.maps.model.LatLng> iterator() {
-                    return null;
-                }
-
-                @Override
-                public int lastIndexOf(Object object) {
-                    return 0;
-                }
-
-                @NonNull
-                @Override
-                public ListIterator<com.google.android.gms.maps.model.LatLng> listIterator() {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public ListIterator<com.google.android.gms.maps.model.LatLng> listIterator(int location) {
-                    return null;
-                }
-
-                @Override
-                public com.google.android.gms.maps.model.LatLng remove(int location) {
-                    return null;
-                }
-
-                @Override
-                public boolean remove(Object object) {
-                    return false;
-                }
-
-                @Override
-                public boolean removeAll(Collection<?> collection) {
-                    return false;
-                }
-
-                @Override
-                public boolean retainAll(Collection<?> collection) {
-                    return false;
-                }
-
-                @Override
-                public com.google.android.gms.maps.model.LatLng set(int location, com.google.android.gms.maps.model.LatLng object) {
-                    return null;
-                }
-
-                @Override
-                public int size() {
-                    return names.size();
-                }
-
-                @NonNull
-                @Override
-                public List<com.google.android.gms.maps.model.LatLng> subList(int start, int end) {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public Object[] toArray() {
-                    return new Object[0];
-                }
-
-                @NonNull
-                @Override
-                public <T> T[] toArray(T[] array) {
-                    return null;
-                }
-            };
             //aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
-
-            for(int k=0;k<names.size();k++){
-               /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+            /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                         .position(new LatLng(coor.get(k)[1], coor.get(k)[0])).title(names.get(k))
                         .draggable(true));*/
-                mapView.addMarker(new AirMapMarker(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]),k).setTitle(names.get(k)).setIconId(R.drawable.icon_marka));
-                points.add(new com.google.android.gms.maps.model.LatLng(coor.get(k)[1], coor.get(k)[0]));
-            }
-            airMapPolyline=new AirMapPolyline(points,pos);
-            mapView.addPolyline(airMapPolyline);
-            mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 10);
             /*com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
-
             for(com.amap.api.maps2d.model.LatLng ll:latLngs){
                 llBound.include(ll);
             }
             bounds=llBound.build();*/
         }else{
-            mapView.animateCenterZoom(new LatLng(37.771883, -122.405224), 10);
+            refreshNullMap();
         }
       //  aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+    }
+
+
+    private void refreshNullMap(){
+        mapViewBuilder = new DefaultAirMapViewBuilder(this);
+        airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+        mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+            @Override
+            public void onMapInitialized() {
+                mapView.animateCenterZoom(new LatLng(20,20), 20);
+            }
+        });
+        mapView.initialize(getSupportFragmentManager(), airMapInterface);
+        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
@@ -339,6 +243,15 @@ public class StrategyMapActivity extends PeachBaseActivity{
         String[] deal2=deal1[1].split("天");
         int value=Integer.valueOf(deal2[0]);
         return value;
+    }
+
+
+    @Override public void onMapInitialized() {
+    }
+
+    private void addMarker(String title, LatLng latLng) {
+        mapView.addMarker(new AirMapMarker(latLng, 1)
+                .setTitle(title));
     }
 
 
@@ -377,6 +290,44 @@ public class StrategyMapActivity extends PeachBaseActivity{
     public void finish() {
         super.finish();
     }
+
+    @Override
+    public void onMapMarkerClick(com.google.android.gms.maps.model.Marker marker) {
+        if(!isShow){
+            ToastUtil.getInstance(this).showToast(marker.getTitle());
+            spinnet.setText(marker.getTitle());
+            spinnet.setVisibility(View.VISIBLE);
+            isShow=true;
+        }else{
+            isShow=false;
+            spinnet.setText("");
+            spinnet.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onInfoWindowClick(long l) {
+
+    }
+
+    @Override
+    public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
+        ToastUtil.getInstance(this).showToast("123");
+    }
+
+    @Override
+    public void onMapMarkerClick(long l) {
+        if(!isShow){
+            ToastUtil.getInstance(this).showToast("hfhd");
+
+            isShow=true;
+        }else{
+            isShow=false;
+
+        }
+    }
+
+
 
 
     public class MapsDayAdapter extends BaseAdapter {

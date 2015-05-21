@@ -227,8 +227,8 @@ public class ExpertListActivity extends PeachBaseActivity {
     }
 
     public void refreshView(String locId){
-        ArrayList<String> strs=new ArrayList<String>();
-        strs.add(locId);
+        String[] strs=new String[1];
+        strs[0]=locId;
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getExpertById(strs, new HttpCallBack<String>() {
             @Override
