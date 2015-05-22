@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.toolbox;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -29,11 +30,13 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,16 +84,30 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     TextView title_name;
     @ViewInject(R.id.all_his_pics_sv)
     HorizontalScrollView his_pics_sv;
+    @ViewInject(R.id.ll_his_trip_plan)
+    LinearLayout ll_his_trip_plan;
 
     private int userId;
     private ImageView my_pics_cell;
     private ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
+    private ArrayList<String> all_pics=new ArrayList<String>();
+    DisplayImageOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
         userId=getIntent().getExtras().getInt("userId");
+        options= new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                .showImageOnFail(R.drawable.avatar_placeholder_round)
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .cacheOnDisc(true)
+                        // 设置下载的图片是否缓存在SD卡中
+                .displayer(
+                        new RoundedBitmapDisplayer(LocalDisplay.dp2px(
+                                0))) // 设置成圆角图片
+                .build();
         ViewUtils.inject(this);
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,13 +121,21 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
             }
         });
+        ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(HisMainPageActivity.this,StrategyListActivity.class);
+                intent.putExtra("userId",userId+"");
+                startActivity(intent);
+            }
+        });
         initData(userId);
     }
 
 
     public void initData(int id){
         getUserInfo(id);
-        initScrollView();
+        initScrollView(id);
     }
 
     public void refreshView(List<ExpertBean> bean){
@@ -138,7 +163,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             int citys;
             JSONObject jsonObject = new JSONObject(bean.get(0).tracks.toString());
             Iterator iterator=jsonObject.keys();
-            if(iterator.hasNext()){
+            while(iterator.hasNext()){
                 countries++;
                 String key=(String)iterator.next();
                 for(int i=0;i<bean.get(0).tracks.get(key).size();i++){
@@ -183,6 +208,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
+                ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
             }
         });
     }
@@ -197,15 +223,45 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
     }
 
-    public void initScrollView(){
+    public void initScrollView(int userId){
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if(jsonObject.getInt("code")==0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        for (int i = 0; i < object.length(); i++) {
+                            JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
+                            all_pics.add(imgArray.getJSONObject(0).getString("url"));
+                        }
+                        refreshUserPics(all_pics);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
+            }
+        });
+    }
+
+    public void refreshUserPics(ArrayList<String> pics){
         his_pics_sv.removeAllViews();
         LinearLayout llPics=new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llPics.removeAllViews();
-        for(int i=0;i<3;i++){
+        for(int i=0;i<pics.size();i++){
             View view=View.inflate(HisMainPageActivity.this,R.layout.my_all_pics_cell,null);
             my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
-            if(i==2){
+            LogUtil.d(pics.get(i)+"====================");
+            ImageLoader.getInstance().displayImage(pics.get(i), my_pics_cell, options);
+           /* if(i==pics.size()-1){
                 my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -214,15 +270,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 });
             }
-            else{
+            else*/
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ToastUtil.getInstance(HisMainPageActivity.this).showToast("show pics");
-                    }
-                });
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        ToastUtil.getInstance(HisMainPageActivity.this).showToast("show pics");
+                                                    }
+                                                }
+                );
 
-            }
             llPics.addView(view);
         }
         his_pics_sv.addView(llPics);

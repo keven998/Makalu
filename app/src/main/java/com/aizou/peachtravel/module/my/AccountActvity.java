@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.UploadTokenBean;
@@ -56,10 +58,19 @@ import com.qiniu.android.storage.UploadOptions;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.net.utils.UResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -78,8 +89,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView residentTv;
     @ViewInject(R.id.tv_brithday)
     private TextView brithdayTv;
-    @ViewInject(R.id.tv_profession)
-    private TextView professinoTv;
+    /*@ViewInject(R.id.tv_profession)
+    private TextView professinoTv;*/
     @ViewInject(R.id.all_pics_sv)
     private HorizontalScrollView all_pics;
     @ViewInject(R.id.my_destination)
@@ -110,6 +121,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int STATUS=2;
     private int SEX=3;
     private ImageView my_pics_cell;
+    private ArrayList<String> pics=new ArrayList<String>();
+    LinearLayout llPics;
+    ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +146,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_gender).setOnClickListener(this);
         findViewById(R.id.ll_birthday).setOnClickListener(this);
         findViewById(R.id.ll_resident).setOnClickListener(this);
-        findViewById(R.id.ll_profession).setOnClickListener(this);
+        //findViewById(R.id.ll_profession).setOnClickListener(this);
 
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
@@ -140,47 +154,90 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
         logoutBtn.setOnClickListener(this);
 
-        initScrollView();
-        initFlDestion();
-
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("我");
         titleBar.enableBackKey(true);
     }
 
-    public void initFlDestion(){
+    public void getUserPics(Long userId){
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if(jsonObject.getInt("code")==0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        for (int i = 0; i < object.length(); i++) {
+                            JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
+                            pics.add(imgArray.getJSONObject(0).getString("url"));
+                        }
+                        initScrollView(pics);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                ToastUtil.getInstance(AccountActvity.this).showToast("好像没有网络额~");
+            }
+        });
+    }
+
+    public void initFlDestion(Map<String,ArrayList<LocBean>> tracks){
+
+        try {
+            JSONObject jsonObject = new JSONObject(tracks.toString());
+            Iterator iterator=jsonObject.keys();
+            while(iterator.hasNext()){
+                String key=(String)iterator.next();
+                for(int i=0;i<tracks.get(key).size();i++){
+                    all_foot_print_list.add(tracks.get(key).get(i));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         my_destination.removeAllViews();
-        String[] names={"美国","日本","澳大利亚","乌兹别克斯坦","墨西哥"};
-        for(int j=0;j<5;j++){
+        for(int j=0;j<all_foot_print_list.size();j++){
             View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText(names[j]);
+            cityNameTv.setText(all_foot_print_list.get(j).zhName);
             my_destination.addView(contentView);
         }
     }
 
-    public void initScrollView(){
+    public void initScrollView(final ArrayList<String> picList){
         all_pics.removeAllViews();
-        LinearLayout llPics=new LinearLayout(this);
+        llPics=new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llPics.removeAllViews();
-        for(int i=0;i<3;i++){
+        for(int i=0;i<=picList.size();i++){
             View view=View.inflate(AccountActvity.this,R.layout.my_all_pics_cell,null);
             my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
-            if(i==2){
+            if(i==picList.size()){
                 my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.getInstance(AccountActvity.this).showToast("添加图片");
+                        showSelectPicDialog();
                     }
                 });
             }
             else{
+                final String uri=picList.get(i);
+                ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, options);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtil.getInstance(AccountActvity.this).showToast("show pics");
+                        try {
+                            showChangePicDialog(new File(new URI(uri)));
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -193,7 +250,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        user = AccountManager.getInstance().getLoginAccount(this);
+       // initData();
 //        MobclickAgent.onPageStart("page_personal_profile");
     }
 
@@ -214,17 +272,18 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(
                         new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                                25))) // 设置成圆角图片
+                                0))) // 设置成圆角图片
                 .build();
        /* ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
                 options);*/
        /* idTv.setText(user.userId + "");*/
         signTv.setText(user.signature);
         phoneTv.setText(user.tel);
+        getUserPics(user.userId);
+        initFlDestion(user.tracks);
     }
 
     private void initData() {
-        user = AccountManager.getInstance().getLoginAccount(this);
         bindView(user);
 
 
@@ -283,7 +342,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                          brithdayTv.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                          //brithdayTv.setText(year+"-"+monthOfYear+1+"-"+dayOfMonth);
+                          editBirthdayToInterface(year+"-"+monthOfYear+1+"-"+dayOfMonth);
                     }
                 },1990,0,0);
                 dialog.setCancelable(true);
@@ -393,6 +453,56 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         });
         dialog.show();
 
+    }
+
+    private void showChangePicDialog(final File file) {
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View contentView = View.inflate(this,
+                R.layout.dialog_change_user_pic, null);
+        Button changeBtn = (Button) contentView
+                .findViewById(R.id.btn_pic_touserpic);
+        Button zoomBig = (Button) contentView.findViewById(R.id.btn_pic_zoom_big);
+        Button delBtn = (Button) contentView.findViewById(R.id.btn_del_user_pic_album);
+        Button cancleBtn = (Button) contentView.findViewById(R.id.btn_user_pic_cancle);
+        changeBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                changeUserAvatar(file);
+
+            }
+        });
+        delBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //删除接口
+                //tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
+                dialog.dismiss();
+
+            }
+        });
+        cancleBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        // dialog.setView(contentView);
+        // dialog.setContentView(contentView);
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (display.getWidth()); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
 
@@ -520,6 +630,64 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     private void uploadAvatar(final File file){
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
+        OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
+                if (tokenResult.code == 0) {
+                    String token = tokenResult.result.uploadToken;
+                    String key = tokenResult.result.key;
+                    UploadManager uploadManager = new UploadManager();
+                    uploadManager.put(file, key, token,
+                            new UpCompletionHandler() {
+                                @Override
+                                public void complete(String key, ResponseInfo info, JSONObject response) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    if (info.isOK()) {
+                                        LogUtil.d(response.toString());
+//                                        try {
+
+                                        //很明显这段的代码是更改用户的头像的作用
+                                            /*String imageUrl = response.getString("url");
+                                            String urlSmall = response.getString("urlSmall");
+                                            user.avatar = imageUrl;
+                                            user.avatarSmall = urlSmall;
+                                            AccountManager.getInstance().saveLoginAccount(mContext, user);*/
+
+                                        //ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), addImageView, options);
+                                        pics.add(Uri.fromFile(file).toString());
+                                        initScrollView(pics);
+                                       /* } catch () {
+                                            e.printStackTrace();
+                                        }*/
+                                    }
+
+                                }
+                            }, new UploadOptions(null, null, false,
+                                    new UpProgressHandler() {
+                                        public void progress(String key, double percent) {
+                                            progressDialog.setContent((int) (percent * 100) + "%");
+                                            LogUtil.d("progress", percent + "");
+                                        }
+                                    }, null));
+                } else {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+    }
+
+
+
+    private void changeUserAvatar(final File file){
+        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -536,12 +704,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                     if (info.isOK()) {
                                         LogUtil.d(response.toString());
                                         try {
+                                            //很明显这段的代码是更改用户的头像的作用
                                             String imageUrl = response.getString("url");
                                             String urlSmall = response.getString("urlSmall");
                                             user.avatar = imageUrl;
                                             user.avatarSmall = urlSmall;
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                            ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -551,8 +719,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             }, new UploadOptions(null, null, false,
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
-                                            progressDialog.setContent((int) (percent*100)+"%");
-                                            LogUtil.d("progress",percent+"");
+                                            progressDialog.setContent((int) (percent * 100) + "%");
+                                            LogUtil.d("progress", percent + "");
                                         }
                                     }, null));
                 } else {
@@ -568,6 +736,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
         });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -590,17 +759,120 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         } else if (requestCode == RESIDENT){
-            residentTv.setText(data.getExtras().getString("result"));
+            editResidenceToInterface(data.getExtras().getString("result"));
+            //接口
         } else if (requestCode == SEX){
             String sex=data.getExtras().getString("result");
             if(sex.equals("美女")){modifyGender("F");}
             else if(sex.equals("帅锅")){modifyGender("M");}
             else if(sex.equals("一言难尽")){modifyGender("U");}
             else if(sex.equals("保密")){modifyGender("S");}
-
         } else if (requestCode == STATUS){
-            status.setText(data.getExtras().getString("result"));
+            editStatusToInterface(data.getExtras().getString("result"));
         }
+    }
+
+    private void editStatusToInterface(final String sstatus){
+        if(!CommonUtils.isNetWorkConnected(mContext)){
+            ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        UserApi.editUserStatus(user, sstatus, new HttpCallBack<String>() {
+
+
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                if(modifyResult.code==0){
+                    user.travelStatus = sstatus;
+                    AccountManager.getInstance().saveLoginAccount(mContext,user);
+                    status.setText(sstatus);
+                    ToastUtil.getInstance(mContext).showToast("修改成功");
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void onStart() {
+            }
+        });
+    }
+
+    private void editResidenceToInterface(final String residence){
+        if(!CommonUtils.isNetWorkConnected(mContext)){
+            ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        UserApi.editUserResidence(user, residence, new HttpCallBack<String>() {
+
+
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                if(modifyResult.code==0){
+                    user.residence = residence;
+                    AccountManager.getInstance().saveLoginAccount(mContext,user);
+                    residentTv.setText(residence);
+                    ToastUtil.getInstance(mContext).showToast("修改成功");
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void onStart() {
+            }
+        });
+    }
+
+
+    private void editBirthdayToInterface(final String birth){
+        if(!CommonUtils.isNetWorkConnected(mContext)){
+            ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        UserApi.editUserBirthday(user, birth, new HttpCallBack<String>() {
+
+
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result,ModifyResult.class);
+                if(modifyResult.code==0){
+                    user.birthday = birth;
+                    AccountManager.getInstance().saveLoginAccount(mContext,user);
+                    brithdayTv.setText(birth);
+                    ToastUtil.getInstance(mContext).showToast("修改成功");
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void onStart() {
+            }
+        });
     }
 
     @Override

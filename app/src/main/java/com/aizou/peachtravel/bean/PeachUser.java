@@ -2,6 +2,7 @@ package com.aizou.peachtravel.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class PeachUser implements Serializable{
     public static final String M="M";
@@ -24,7 +25,7 @@ public class PeachUser implements Serializable{
     public String level;
     public String zodiac;
     public String birthday;
-    public ArrayList tracks=new ArrayList<>();
+    public Map<String,ArrayList<LocBean>> tracks;
 
     public String getGenderDesc() {
         if ("F".equals(gender)) {

@@ -131,6 +131,7 @@ public class ExpertFragment extends PeachBaseFragment {
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(result);
+                        if(jsonObject.getInt("code")==0){
                         JSONObject object=(JSONObject)jsonObject.get("result");
                         Iterator iterator=object.keys();
                         while(iterator.hasNext()){
@@ -142,6 +143,7 @@ public class ExpertFragment extends PeachBaseFragment {
                             }
                         }
                         bindView(names,ids);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

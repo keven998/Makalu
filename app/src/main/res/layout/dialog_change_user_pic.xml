@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_white_normal_shape"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_pic_touserpic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color_secondary"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="设置为头像" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.75dp"
+            android:background="@color/base_divider_color"
+            ></View>
+
+
+        <Button
+            android:id="@+id/btn_pic_zoom_big"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_color_secondary"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="查看大图" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.75dp"
+            android:background="@color/base_divider_color"
+            ></View>
+
+
+        <Button
+            android:id="@+id/btn_del_user_pic_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red_text_color"
+            android:background="@drawable/btn_white_selector"
+            android:textSize="18sp"
+            android:text="删除" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_user_pic_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/app_theme_color_secondary"
+        android:background="@drawable/btn_white_selector"
+        android:textSize="18sp"
+        android:text="取消" />
+
+</LinearLayout>

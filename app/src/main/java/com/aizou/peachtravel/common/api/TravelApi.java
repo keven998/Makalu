@@ -311,7 +311,7 @@ public class TravelApi extends BaseApi{
      * @param callback
      * @return
      */
-    public static PTRequestHandler getStrategyPlannedList(int page,String status,HttpCallBack callback) {
+    public static PTRequestHandler getStrategyPlannedList(String userId,int page,String status,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + GUIDE);
@@ -319,6 +319,7 @@ public class TravelApi extends BaseApi{
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("status",status);
         setDefaultParams(request);
+        request.setHeader("UserId", userId);
         return HttpManager.request(request, callback);
     }
 

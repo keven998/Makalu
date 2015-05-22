@@ -140,6 +140,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         iv_switch_unblock_groupmsg = (ImageView) getView().findViewById(R.id.iv_switch_unblock_groupmsg);
 
         rl_switch_block_groupmsg.setOnClickListener(this);
+        exitBtn.setOnClickListener(this);
+        deleteBtn.setOnClickListener(this);
 
         Drawable referenceDrawable = getResources().getDrawable(R.drawable.smiley_add_btn);
         referenceWidth = referenceDrawable.getIntrinsicWidth();
@@ -225,9 +227,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     /**
      * 点击退出群组按钮
      *
-     * @param view
+     * @param
      */
-    public void exitGroup(View view) {
+    public void exitGroupTips() {
         final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
         dialog.setTitle("提示");
         dialog.setMessage("退出后，将不再接收此群聊消息");
@@ -250,9 +252,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     /**
      * 点击解散群组按钮
      *
-     * @param view
+     * @param
      */
-    public void exitDeleteGroup(View view) {
+    public void exitDeleteGroupTips() {
         final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
         dialog.setTitle("提示");
         dialog.setMessage(getString(R.string.dissolution_group_hint));
@@ -280,7 +282,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
 
         EMChatManager.getInstance().clearConversation(group.getGroupId());
-//		adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
+		//adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 
 
     }
@@ -631,7 +633,17 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     }
                 }
                 break;
-            default:
+
+
+            case R.id.btn_exit_grp:
+                exitGroupTips();
+                break;
+
+            case R.id.btn_exitdel_grp:
+                exitDeleteGroupTips();
+                break;
+
+            default:break;
         }
 
     }

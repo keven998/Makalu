@@ -23,6 +23,7 @@ public class OtherApi extends BaseApi {
 
     public static class Scenario{
          public final static String PORTRAIT="portrait";
+         public final static String ALBUM="album";
     }
     //封面图片
     public final static String COVER_STORY="/misc/cover-stories";
@@ -83,7 +84,12 @@ public class OtherApi extends BaseApi {
      * @return
      */
     public static PTRequestHandler getAvatarUploadToken(HttpCallBack callback) {
-       return getUploadToken(Scenario.PORTRAIT,callback);
+        return getUploadToken(Scenario.PORTRAIT,callback);
+    }
+
+
+    public static PTRequestHandler getAvatarAlbumUploadToken(HttpCallBack callback) {
+        return getUploadToken(Scenario.ALBUM,callback);
     }
 
     /**

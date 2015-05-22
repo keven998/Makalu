@@ -234,7 +234,8 @@ public class ExpertListActivity extends PeachBaseActivity {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                listView.removeAllViews();
+                //
+                //  listView.removeAllViews();
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result , ExpertBean.class);
                 if(expertresult.code==0){
                     adapter=new ExpertAdapter(ExpertListActivity.this,expertresult.result);
@@ -255,14 +256,17 @@ public class ExpertListActivity extends PeachBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(requestCode!=RESULT_OK){
             return;
-        }else{
-            if(requestCode==EXPERT_DES){
-                //刷新本页
-                String id=getIntent().getExtras().getString("locId");
+        }
+        if(requestCode==EXPERT_DES){
+            //刷新本页
+            if(data!=null){
+                String id=data.getExtras().getString("locId");
                 refreshView(id);
             }
         }
+
     }
 }

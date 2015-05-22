@@ -102,11 +102,13 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     int chatType;
     String toId;
     private StrategyBean originalStrategy;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
+        userId=getIntent().getExtras().getString("userId");
         initView();
         initData();
     }
@@ -243,7 +245,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     }
 
     private void getStrategyListData(final int page , String traveled) {
-        TravelApi.getStrategyPlannedList(page, traveled, new HttpCallBack<String>() {
+        TravelApi.getStrategyPlannedList(userId, page, traveled, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);

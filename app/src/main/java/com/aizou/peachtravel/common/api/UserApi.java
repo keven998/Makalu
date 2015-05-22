@@ -75,6 +75,9 @@ public class UserApi extends BaseApi {
     //通讯录匹配
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
 
+    //根据足迹获取达人
+    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
+
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -294,23 +297,36 @@ public class UserApi extends BaseApi {
     }
 
     public static PTRequestHandler editUserAvatar(PeachUser user, String avatar, HttpCallBack callBack) {
-        return editUserInfo(user, avatar, null, null, null, callBack);
+        return editUserInfo(user, avatar, null, null, null,null,null,null, callBack);
     }
 
     public static PTRequestHandler editUserNickName(PeachUser user, String nickname, HttpCallBack callBack) {
-        return editUserInfo(user, null, nickname, null, null, callBack);
+        return editUserInfo(user, null, nickname, null, null,null,null,null, callBack);
     }
 
     public static PTRequestHandler editUserSignature(PeachUser user, String signature, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, signature, null, callBack);
+        return editUserInfo(user, null, null, signature, null,null,null,null, callBack);
     }
 
     public static PTRequestHandler editUserGender(PeachUser user, String gender, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, gender, callBack);
+        return editUserInfo(user, null, null, null, gender, null,null,null,callBack);
+    }
+
+    public static PTRequestHandler editUserResidence(PeachUser user, String residence, HttpCallBack callBack) {
+        return editUserInfo(user, null, null, null, null, residence,null,null,callBack);
+    }
+
+    public static PTRequestHandler editUserBirthday(PeachUser user, String birthday, HttpCallBack callBack) {
+        return editUserInfo(user, null, null, null, null, null,birthday,null,callBack);
+    }
+
+    public static PTRequestHandler editUserStatus(PeachUser user, String status, HttpCallBack callBack) {
+        return editUserInfo(user, null, null, null, null, null,null,status,callBack);
     }
 
 
-    public static PTRequestHandler editUserInfo(PeachUser user, String avatar, String nickName, String signature, String gender, HttpCallBack callback) {
+    public static PTRequestHandler editUserInfo(PeachUser user, String avatar, String nickName, String signature, String gender, String residence,
+                                                String birthday, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + USERINFO + user.userId);
@@ -330,6 +346,15 @@ public class UserApi extends BaseApi {
             }
             if (!TextUtils.isEmpty(gender)) {
                 jsonObject.put("gender", gender);
+            }
+            if (!TextUtils.isEmpty(gender)) {
+                jsonObject.put("residence", residence);
+            }
+            if (!TextUtils.isEmpty(gender)) {
+                jsonObject.put("birthday", birthday);
+            }
+            if (!TextUtils.isEmpty(gender)) {
+                jsonObject.put("status", status);
             }
 
         } catch (JSONException e) {
@@ -502,6 +527,24 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request,callback);
     }
 
+
+    /**
+     * 获取相册
+     *
+     * @param userId
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler getUserPicAlbumn(String userId,HttpCallBack callback){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL+ USERINFO + userId + "/albums");
+        setDefaultParams(request);
+        return HttpManager.request(request,callback);
+    }
+
+
     /**
      * 根据环信ID获取联系人
      *
@@ -548,7 +591,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + GET_CONTACT_BY_HX);
+        request.setUrl(SystemConfig.BASE_URL + EXPERT_BY_TRACK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
