@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -783,12 +784,18 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		} else if (id == R.id.btn_location) { // 位置
 			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
 		} else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
-			more.setVisibility(View.VISIBLE);
-			iv_emoticons_normal.setVisibility(View.GONE);
-			iv_emoticons_checked.setVisibility(View.VISIBLE);
-			btnContainer.setVisibility(View.GONE);
-			expressionContainer.setVisibility(View.VISIBLE);
 			hideKeyboard();
+
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					more.setVisibility(View.VISIBLE);
+					iv_emoticons_normal.setVisibility(View.GONE);
+					iv_emoticons_checked.setVisibility(View.VISIBLE);
+					btnContainer.setVisibility(View.GONE);
+					expressionContainer.setVisibility(View.VISIBLE);
+				}
+			}, 150);
 		} else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
 			iv_emoticons_normal.setVisibility(View.VISIBLE);
 			iv_emoticons_checked.setVisibility(View.GONE);
@@ -1153,22 +1160,27 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 * 
 	 * @param view
 	 */
-	public void setModeVoice(View view) {
+	public void setModeVoice(final View view) {
 		hideKeyboard();
-        mEditTextContent.setVisibility(View.GONE);
-		more.setVisibility(View.GONE);
-		view.setVisibility(View.GONE);
-		buttonSetModeKeyboard.setVisibility(View.VISIBLE);
-		buttonSend.setVisibility(View.GONE);
-		btnMore.setVisibility(View.VISIBLE);
-		buttonPressToSpeak.setVisibility(View.VISIBLE);
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				mEditTextContent.setVisibility(View.GONE);
+				more.setVisibility(View.GONE);
+				view.setVisibility(View.GONE);
+				buttonSetModeKeyboard.setVisibility(View.VISIBLE);
+				buttonSend.setVisibility(View.GONE);
+				btnMore.setVisibility(View.VISIBLE);
+				buttonPressToSpeak.setVisibility(View.VISIBLE);
 
-		iv_emoticons_normal.setVisibility(View.GONE);
-        findViewById(R.id.chat_underline).setVisibility(View.GONE);
+				iv_emoticons_normal.setVisibility(View.GONE);
+				findViewById(R.id.chat_underline).setVisibility(View.GONE);
 
-		iv_emoticons_checked.setVisibility(View.GONE);
-		btnContainer.setVisibility(View.VISIBLE);
-		expressionContainer.setVisibility(View.GONE);
+				iv_emoticons_checked.setVisibility(View.GONE);
+				btnContainer.setVisibility(View.VISIBLE);
+				expressionContainer.setVisibility(View.GONE);
+			}
+		}, 150);
 
 	}
 
@@ -1235,11 +1247,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 */
 	public void more(View view) {
 		if (more.getVisibility() == View.GONE) {
-			System.out.println("more gone");
 			hideKeyboard();
-			more.setVisibility(View.VISIBLE);
-			btnContainer.setVisibility(View.VISIBLE);
-			expressionContainer.setVisibility(View.GONE);
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					more.setVisibility(View.VISIBLE);
+					btnContainer.setVisibility(View.VISIBLE);
+					expressionContainer.setVisibility(View.GONE);
+				}
+			}, 150);
 		} else {
 			if (expressionContainer.getVisibility() == View.VISIBLE) {
 				expressionContainer.setVisibility(View.GONE);
@@ -1579,8 +1595,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 */
 	private void hideKeyboard() {
 		if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-			if (getCurrentFocus() != null)
+			if (getCurrentFocus() != null) {
 				manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			}
 		}
 	}
 
