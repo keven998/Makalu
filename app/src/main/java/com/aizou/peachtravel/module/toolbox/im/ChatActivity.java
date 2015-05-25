@@ -1174,7 +1174,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 				buttonPressToSpeak.setVisibility(View.VISIBLE);
 
 				iv_emoticons_normal.setVisibility(View.GONE);
-				findViewById(R.id.chat_underline).setVisibility(View.GONE);
 
 				iv_emoticons_checked.setVisibility(View.GONE);
 				btnContainer.setVisibility(View.VISIBLE);
@@ -1208,7 +1207,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		// buttonSend.setVisibility(View.VISIBLE);
 		buttonPressToSpeak.setVisibility(View.GONE);
         iv_emoticons_normal.setVisibility(View.VISIBLE);
-        findViewById(R.id.chat_underline).setVisibility(View.VISIBLE);
 		if (TextUtils.isEmpty(mEditTextContent.getText())) {
 			btnMore.setVisibility(View.VISIBLE);
 			buttonSend.setVisibility(View.GONE);
