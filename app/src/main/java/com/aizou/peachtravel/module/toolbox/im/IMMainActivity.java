@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
@@ -59,6 +60,7 @@ import com.aizou.peachtravel.db.InviteStatus;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.db.respository.InviteMsgRepository;
 import com.aizou.peachtravel.module.MainActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
@@ -71,6 +73,10 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -79,7 +85,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class IMMainActivity extends ChatBaseActivity {
+public class IMMainActivity extends ChatBaseActivity  implements HandleImMessage.MessagerHandler{
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
@@ -363,6 +369,11 @@ public class IMMainActivity extends ChatBaseActivity {
 //                ToastUtil.getInstance(IMMainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
+    }
+
+    @Override
+    public void onMsgArrive(Message m) {
+
     }
 
     private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {

@@ -1,6 +1,7 @@
 package com.aizou.peachtravel.module.my;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Dialog;
@@ -34,6 +35,7 @@ import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.MainActivity;
+import com.alibaba.fastjson.JSON;
 import com.easemob.EMCallBack;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
@@ -43,6 +45,12 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
+import com.lv.user.LoginSuccessListener;
+import com.lv.user.User;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -50,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends PeachBaseActivity {
+public class LoginActivity extends PeachBaseActivity implements HandleImMessage.MessagerHandler {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
@@ -73,6 +81,29 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HandleImMessage.registerMessageListener(this);
+        User.login("100010",new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                System.out.println("登陆成功");
+                IMClient.getInstance().sendTextMessage("first","100002",null,new SendMsgListener() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+
+                    }
+                },"single");
+            }
+
+            @Override
+            public void OnFailed(int code) {
+
+            }
+        });
         // 如果用户名密码都有，直接进入主页面
         if (EMChat.getInstance().isLoggedIn()) {
             autoLogin = true;
@@ -233,8 +264,10 @@ public class LoginActivity extends PeachBaseActivity {
                 EMGroupManager.getInstance().loadAllGroups();
                 EMChatManager.getInstance().loadAllConversations();
                 String result=UserApi.getAsynContact();
+                System.out.println("result "+result);
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                if (contactResult.code == 0) {
+              //  CommonJson<ContactListBean> contactResult=JSON.parseObject(result,ContactListBean.class);
+                    if (contactResult.code == 0) {
                     for (PeachUser peachUser : contactResult.result.contacts) {
                         IMUser user = new IMUser();
                         user.setUserId(peachUser.userId);
@@ -315,7 +348,8 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+error.printStackTrace();
+                System.out.println(msg+"  "+method);
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -402,4 +436,8 @@ public class LoginActivity extends PeachBaseActivity {
         }
     }
 
+    @Override
+    public void onMsgArrive(Message m) {
+
+    }
 }

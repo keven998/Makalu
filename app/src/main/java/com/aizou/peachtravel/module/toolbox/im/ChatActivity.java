@@ -121,6 +121,10 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -138,7 +142,7 @@ import java.util.List;
  * 聊天页面
  * 
  */
-public class ChatActivity extends ChatBaseActivity implements OnClickListener {
+public class ChatActivity extends ChatBaseActivity implements OnClickListener,HandleImMessage.MessagerHandler{
 
 	private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
 	public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -456,8 +460,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 
                 }
             });
-
-
 
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,true);
@@ -869,7 +871,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 	 *            message content
 	 */
 	private void sendText(String content,int extType) {
+        IMClient.getInstance().sendTextMessage(content,100002+"",null,new SendMsgListener() {
+            @Override
+            public void onSuccess() {
 
+            }
+
+            @Override
+            public void onFailed(int code) {
+
+            }
+        },"single");
 		if (content.length() > 0) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             TextMessageBody txtBody;
@@ -1268,6 +1280,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		}
 
 	}
+
+    @Override
+    public void onMsgArrive(Message m) {
+
+    }
 
 
     /**
