@@ -31,13 +31,11 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.LayoutBar;
-import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ScrollBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
@@ -60,7 +58,6 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.module.dest.fragment.RestaurantFragment;
 import com.aizou.peachtravel.module.dest.fragment.RouteDayFragment;
 import com.aizou.peachtravel.module.dest.fragment.ShoppingFragment;
-import com.tencent.open.utils.AsynLoadImg;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -969,7 +966,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return destinations.get(position);
         }
 
         @Override
@@ -980,10 +977,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             if(convertView==null){
-                convertView=View.inflate(drawContext,R.layout.strategy_draw_list_cell,null);
+                convertView=View.inflate(drawContext, R.layout.strategy_draw_list_cell,null);
             }
             place=(TextView)convertView.findViewById(R.id.user_been_place);
-            if(position==destinations.size()){
+            if(position == destinations.size()){
                 place.setText("添加");
                 place.setCompoundDrawablesWithIntrinsicBounds(StrategyActivity.this.getResources().getDrawable(R.drawable.add_contact),null,null,null);
                 place.setOnClickListener(new View.OnClickListener() {

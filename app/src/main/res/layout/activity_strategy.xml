@@ -199,26 +199,16 @@
                 android:paddingLeft="20dp">
 
                 <TextView
-                    android:id="@+id/jhm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/second_font_color"
-                    android:layout_centerVertical="true"
-                    android:textSize="15sp"
-                    android:text="计划名"
-                    />
-
-                <TextView
                     android:id="@+id/jh_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:layout_toRightOf="@+id/jhm"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
                     android:textColor="@color/base_font_color"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     />
 
                 <View
@@ -233,14 +223,15 @@
             <TextView
                 android:id="@+id/strategy_share"
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
+                android:layout_height="44dp"
                 android:textColor="@color/base_font_color"
                 android:textSize="15sp"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/strategy_share"
+                android:background="@drawable/option_cell_selector"
                 android:paddingLeft="35dp"
-                android:text="分享"
+                android:text="发给好友"
                 />
 
             <View
@@ -253,12 +244,13 @@
             <TextView
                 android:id="@+id/strategy_transfer"
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
+                android:layout_height="44dp"
                 android:textColor="@color/base_font_color"
                 android:textSize="15sp"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/strategy_transfer"
+                android:background="@drawable/option_cell_selector"
                 android:paddingLeft="35dp"
                 android:text="转发到其他平台"
                 />
@@ -272,13 +264,13 @@
             <RelativeLayout
                 android:id="@+id/selected_place_title"
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
+                android:layout_height="44dp"
                 android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/second_font_color"
+                    android:textColor="@color/base_text_color_text_placeholder"
                     android:layout_centerVertical="true"
                     android:textSize="15sp"
                     android:text="已选目的地"
