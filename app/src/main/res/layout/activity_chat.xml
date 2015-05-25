@@ -279,7 +279,7 @@
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:drawablePadding="3dp"
-                                android:drawableTop="@drawable/chat_love_selected"
+                                android:drawableTop="@drawable/chat_save_select"
                                 android:gravity="center_horizontal"
                                 android:onClick="onClick"
                                 android:text="收藏夹"

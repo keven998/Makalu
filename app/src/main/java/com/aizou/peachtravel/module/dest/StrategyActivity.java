@@ -445,6 +445,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         if (user.userId != result.userId) {
             mIvEdit.setVisibility(View.GONE);
             mIvMore.setVisibility(View.GONE);
+            iv_location.setVisibility(View.GONE);
             mTvCopyGuide.setVisibility(View.VISIBLE);
             mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -524,6 +525,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 }
             });
             mIvMore.setVisibility(View.VISIBLE);
+            iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
 //            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
 //            mTitleBar.getRightTextView().setText("");

@@ -132,7 +132,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             poiBean = (PoiDetailBean) itemObject;
             holder.mAddressTv.setText(poiBean.address);
             holder.mNameTv.setText(poiBean.zhName);
-            if(poiBean.zhName.equals("")||poiBean.zhName==null){holder.mAddressTv.setVisibility(View.GONE);}
+            if(poiBean.address.equals("")||poiBean.address==null){holder.mAddressTv.setText(poiBean.zhName);}
             if(poiBean.images!=null&&poiBean.images.size()>0){
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             }else{

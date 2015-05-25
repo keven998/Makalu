@@ -102,6 +102,13 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(0,R.anim.push_bottom_out);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

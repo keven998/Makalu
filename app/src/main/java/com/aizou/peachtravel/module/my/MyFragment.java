@@ -118,6 +118,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
                     .build();
             ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
+            LogUtil.d(user.avatarSmall+"====================================");
             idTv.setText("ID: " + user.userId);
             if (TextUtils.isEmpty(user.signature)) {
                 statusTv.setText("暂时还没有状态");

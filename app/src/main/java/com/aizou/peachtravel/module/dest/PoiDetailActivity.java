@@ -485,6 +485,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView mTvTime;
         @InjectView(R.id.tv_comment)
         TextView mTvComment;
+        @InjectView(R.id.poi_detail_dp_pic)
+        ImageView mImageView;
         /*@InjectView(R.id.comment_star)
         RatingBar mCommentStar;*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -500,6 +502,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         public void showData(int position, final CommentBean itemData) {
             mTvName.setText(itemData.authorName);
             mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
+            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, UILUtils.getDefaultOption());
             //mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
         }

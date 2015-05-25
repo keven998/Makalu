@@ -263,6 +263,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
                     Intent intent=new Intent(getActivity(), StrategyListActivity.class);
                     intent.putExtra("userId",user.userId+"");
+                    intent.putExtra("isExpertPlan",false);
                     startActivity(intent);
                 }else{
                     Intent LoginIntent=new Intent(getActivity(), LoginActivity.class);

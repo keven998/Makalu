@@ -69,7 +69,9 @@ public class SpotDpViewHolder extends ViewHolderBase<TravelNoteBean> {
     public void showData(int position, final TravelNoteBean itemData) {
         ImageLoader.getInstance().displayImage(itemData.getNoteImage(), dp_pic, picOptions);
         //添加字段值
-
+        dp_name.setText(itemData.authorName);
+        dp_time.setText(itemData.publishTime+"");
+        dp_msg.setText(itemData.summary);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +81,7 @@ public class SpotDpViewHolder extends ViewHolderBase<TravelNoteBean> {
                 intent.putExtra("travelNote", itemData);
                 intent.putExtra("id", itemData.id);
                 activity.startActivity(intent);*/
-                ToastUtil.getInstance(activity).showToast("详情页");
+                //ToastUtil.getInstance(activity).showToast("详情页");
             }
         });
 
