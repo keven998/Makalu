@@ -1,19 +1,15 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,20 +19,16 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ExpertBean;
-import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.api.UserApi;
-import com.aizou.peachtravel.common.dialog.CustomLoadingDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.widget.DynamicBox;
-import com.aizou.peachtravel.common.widget.freeflow.core.AbsLayoutContainer;
 import com.aizou.peachtravel.module.toolbox.ExpertFilterActivity;
 import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -119,8 +111,6 @@ public class ExpertListActivity extends PeachBaseActivity {
                 }
             }
 
-
-
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -174,22 +164,24 @@ public class ExpertListActivity extends PeachBaseActivity {
             user_msg=(TextView)convertView.findViewById(R.id.expert_msg);
 
             //获取接口数据进行加载
-            ImageLoader.getInstance().displayImage(expertBean.get(position).avatarSmall, user_pic, options);
-            user_name.setText(expertBean.get(position).nickName);
-            user_msg.setText(expertBean.get(position).signature);
-            user_level.setText("V"+expertBean.get(position).level);
-            user_loc.setText("现住地 "+expertBean.get(position).residence);
+            ExpertBean eb = expertBean.get(position);
+            ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
+            user_name.setText(eb.nickName);
+            user_msg.setText(eb.signature);
+            user_level.setText("V"+eb.level);
+            user_loc.setText(eb.residence);
 
             //控制达人的状态
-            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
-                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
-            }else/* if(status[position]=="忙"){
-                changeStatusBg(user_status_02,user_status_01,user_status_03,status[position]);
-            }else if(status[position]=="阻")*/{
-                changeStatusBg(user_status_03,user_status_02,user_status_01,"阻");
-            }
+            user_status_01.setText(eb.getRolesDescription());
+//            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
+//                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
+//            }else/* if(status[position]=="忙"){
+//                changeStatusBg(user_status_02,user_status_01,user_status_03,status[position]);
+//            }else if(status[position]=="阻")*/{
+//                changeStatusBg(user_status_03,user_status_02,user_status_01,"阻");
+//            }
 
-            places_layout.setText("已经去过21个国家和地区");
+            places_layout.setText(eb.getTraceDescription());
             //动态添加达人去过的地方
             /*places_layout.removeAllViews();
             layout_width=places_layout.getMeasuredWidth();

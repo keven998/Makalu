@@ -6,10 +6,9 @@
     <color name="second_font_color">#626262</color>
     <color name="third_font_color">#cdcdcd</color>
     <color name="app_theme_color">#1cc091</color>
-
-    <color name="app_theme_color_highlight">#ad313e</color>
-    <color name="app_theme_color_secondary">#6ed8dc</color>
-    <color name="app_theme_color_secondary_selected">#1e888c</color>
+    <color name="app_theme_color_highlight">#00a071</color>
+    <color name="app_theme_color_secondary">#00a071</color>
+    <color name="app_theme_color_secondary_selected">#1cc091</color>
     <color name="app_theme_color_trans">#fd818e</color>
 
     <drawable name="highlight_btn_color">#fd818e</drawable>
@@ -54,7 +53,7 @@
 
     <color name="light_gray_text_color">#B3B3B3</color>
     <color name="search_edit_text_hint_color">#cdcdcd</color>
-    <color name="status_bg_01">#1FCE9C</color>
+    <color name="status_bg_01">@color/app_theme_color</color>
     <color name="status_bg_02">#F27B23</color>
     <color name="status_bg_03">#414141</color>
     <color name="level_box_bg">#F4B713</color>

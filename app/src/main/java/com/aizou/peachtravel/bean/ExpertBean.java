@@ -22,9 +22,28 @@ public class ExpertBean {
     public String birthday;
     public String zodiac;
     public String memo;
+    public String[] roles;
     public Map<String,ArrayList<LocBean>> tracks;
 
 
+    public String getRolesDescription() {
+        if (roles == null || roles.length == 0) return "";
+        if ("expert".equals(roles[0])) {
+            return "达";
+        }
+        return "";
+    }
+
+    public String getTraceDescription() {
+        if (tracks == null) return "";
+        int cityCount = 0;
+        int coutryCount = 0;
+        for (Map.Entry<String, ArrayList<LocBean>> entry : tracks.entrySet()) {
+            coutryCount++;
+            cityCount += entry.getValue().size();
+        }
+        return String.format("%d国 %d个城市", coutryCount, cityCount);
+    }
 
 }
 
