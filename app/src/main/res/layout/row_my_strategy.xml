@@ -13,6 +13,7 @@
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp">
         <LinearLayout
+            android:id="@+id/swipe_bg_ll"
             android:layout_width="120dp"
             android:layout_height="@dimen/my_plan_img_height"
             android:gravity="center">

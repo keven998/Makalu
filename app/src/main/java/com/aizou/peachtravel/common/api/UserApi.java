@@ -546,6 +546,27 @@ public class UserApi extends BaseApi {
 
 
     /**
+     * 删除相册中的图片
+     *
+     * @param userId
+     * @param picId
+     * @param callback
+     * @return
+     */
+
+    public static PTRequestHandler delUserAlbumPic(String userId,String picId,HttpCallBack callback){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.BASE_URL+ USERINFO + userId + "/albums/" + picId);
+        setDefaultParams(request);
+        return HttpManager.request(request,callback);
+    }
+
+
+
+
+
+    /**
      * 根据环信ID获取联系人
      *
      * @param users

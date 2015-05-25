@@ -25,7 +25,12 @@ import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
+import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
+import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -52,8 +57,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     @ViewInject(R.id.his_add_friend)
     TextView add_friend;
-    @ViewInject(R.id.his_query)
-    TextView query;
+    /*@ViewInject(R.id.his_query)
+    TextView query;*/
     @ViewInject(R.id.tv_his_brithday)
     TextView age;
     @ViewInject(R.id.tv_his_resident)
@@ -109,23 +114,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                                 0))) // 设置成圆角图片
                 .build();
         ViewUtils.inject(this);
-        add_friend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        query.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(HisMainPageActivity.this,StrategyListActivity.class);
                 intent.putExtra("userId",userId+"");
+                intent.putExtra("isExpertPlan",true);
                 startActivity(intent);
             }
         });
@@ -138,7 +132,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         initScrollView(id);
     }
 
-    public void refreshView(List<ExpertBean> bean){
+    public void refreshView(final List<ExpertBean> bean){
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         title_name.setText(bean.get(0).nickName);
         his_name.setText(bean.get(0).nickName);
@@ -156,7 +150,41 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
         sign.setText(bean.get(0).signature);
         resident.setText(bean.get(0).residence);
-        age.setText(/*getAge(bean.get(0).birthday)*/"25");
+        age.setText(getAge(bean.get(0).birthday)+"");
+
+
+        if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.get(0).easemobUser)){
+            add_friend.setText("咨询达人");
+            add_friend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PeachUser user = new PeachUser();
+                    user.nickName = bean.get(0).nickName;
+                    user.userId = bean.get(0).userId;
+                    user.easemobUser = bean.get(0).easemobUser;
+                    user.avatar = bean.get(0).avatar;
+                    user.avatarSmall = bean.get(0).avatarSmall;
+                    user.signature = bean.get(0).signature;
+                    user.gender = bean.get(0).gender;
+                    user.memo = bean.get(0).memo;
+                    Intent intent = new Intent(HisMainPageActivity.this, SeachContactDetailActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                }
+            });
+
+        }else{
+            add_friend.setText("加为好友");
+            add_friend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
+                    intent.putExtra("userId", (long)bean.get(0).userId);
+                    intent.putExtra("userNick", bean.get(0).nickName);
+                    startActivity(intent);
+                }
+            });
+        }
 
         try {
             int countries=0;
@@ -183,12 +211,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public int getAge(String birth){
         int age=0;
-        String[] birthType=new String[3];
-        birthType=birth.split("-");
-        int birthYear=Integer.getInteger(birthType[0]);
+        String birthType=birth.substring(0,4).toString();
+        int birthYear=Integer.parseInt(birthType);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
         String date=sdf.format(new java.util.Date());
-        age=Integer.getInteger(date)-birthYear;
+        age=Integer.parseInt(date)-birthYear;
         return age;
     }
 
@@ -251,7 +278,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
     }
 
-    public void refreshUserPics(ArrayList<String> pics){
+    public void refreshUserPics(final ArrayList<String> pics){
         his_pics_sv.removeAllViews();
         LinearLayout llPics=new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -259,7 +286,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         for(int i=0;i<pics.size();i++){
             View view=View.inflate(HisMainPageActivity.this,R.layout.my_all_pics_cell,null);
             my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
-            LogUtil.d(pics.get(i)+"====================");
             ImageLoader.getInstance().displayImage(pics.get(i), my_pics_cell, options);
            /* if(i==pics.size()-1){
                 my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
@@ -274,7 +300,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
-                                                        ToastUtil.getInstance(HisMainPageActivity.this).showToast("show pics");
+                                                        IntentUtils.intentToPicGallery2(HisMainPageActivity.this, pics, 0);
                                                     }
                                                 }
                 );

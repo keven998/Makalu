@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -31,10 +34,6 @@
                     android:id="@+id/all_pics_sv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="11dp"
-                    android:paddingRight="0dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     />
 
                 <View
@@ -553,3 +552,20 @@
     </ScrollView>
 
 </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/ac_zoom_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/base_color_black"
+        android:visibility="invisible">
+
+        <com.aizou.core.widget.HackyViewPager
+            android:id="@+id/ac_vp_zoom_pic"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            />
+    </RelativeLayout>
+
+   </RelativeLayout>

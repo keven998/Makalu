@@ -76,7 +76,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private RelativeLayout descLl,priceLl,timeLl;
     private RelativeLayout addressLl;
     private RelativeLayout mBookFl;
-    private TextView mSpotNameTv, mTimeTv;
+    private TextView mSpotNameTv, mTimeTv, mAllEvaluation;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView favIv,shareIv,chatIv;
     private SpotDetailBean spotDetailBean;
@@ -147,16 +147,17 @@ public class SpotDetailActivity extends PeachBaseActivity {
         tipsTv = (TextView) hv.findViewById(R.id.tv_tips);
         travelGuideTv = (TextView) hv.findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (TextView) hv.findViewById(R.id.tv_traffic_guide);
+        mAllEvaluation = (TextView) hv.findViewById(R.id.all_evaluation);
 
         //这个是备着以后读接口
-        /*adapter = new ListViewDataAdapter(new ViewHolderCreator() {
+        adapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
                 SpotDpViewHolder viewHolder = new SpotDpViewHolder(SpotDetailActivity.this);
                 return viewHolder;
             }
-        });*/
-        bAdapter=new BaseAdapter() {
+        });
+        /*bAdapter=new BaseAdapter() {
             @Override
             public int getCount() {
                 return 3;
@@ -179,8 +180,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 }
                 return convertView;
             }
-        };
-        spotLv.setAdapter(bAdapter);
+        };*/
+        spotLv.setAdapter(adapter);
     }
 
 
@@ -235,6 +236,17 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 IntentUtils.intentToPicGallery(SpotDetailActivity.this, result.images, 0);
             }
         });
+
+        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                intent.putExtra("title", "更多评论");
+                intent.putExtra("url", result.lyPoiUrl);
+                startActivity(intent);
+            }
+        });
+
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
         poi_rank_sm.setText(result.zhName+" 景点排名1");
