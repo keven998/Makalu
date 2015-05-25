@@ -7,7 +7,7 @@
     android:paddingLeft="11dp"
     android:paddingRight="11dp"
     android:id="@+id/list_item_layout"
-    android:background="@color/base_color_white"
+    android:background="@drawable/option_cell_selector"
     android:gravity="center_vertical" >
 
     <RelativeLayout

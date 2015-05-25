@@ -1522,9 +1522,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
 		List<String> reslist = new ArrayList<String>();
 		for (int x = 1; x <= getSum; x++) {
 			String filename = "ee_" + x;
-
 			reslist.add(filename);
-
 		}
 		return reslist;
 
