@@ -249,16 +249,14 @@ public class ExpertListActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode!=RESULT_OK){
-            return;
-        }
-        if(requestCode==EXPERT_DES){
-            //刷新本页
-            if(data!=null){
-                String id=data.getExtras().getString("locId");
-                refreshView(id);
+        if(requestCode==RESULT_OK){
+            if(requestCode==EXPERT_DES){
+                //刷新本页
+                if(data!=null){
+                    String id=data.getExtras().getString("locId");
+                    refreshView(id);
+                }
             }
         }
-
     }
 }

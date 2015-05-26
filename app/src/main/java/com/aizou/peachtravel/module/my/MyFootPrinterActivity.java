@@ -16,6 +16,7 @@ import com.airbnb.android.airmapview.AirMapViewTypes;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.GoogleChinaMapType;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
@@ -47,16 +48,46 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private DefaultAirMapViewBuilder mapViewBuilder;
     private AirMapInterface airMapInterface;
     private AirMapPolyline airMapPolyline;
-    private long POLY_LINE = 1;
+    private long MARKER = 1;
+    private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
 
     @Override
     public void onDestAdded(LocBean locBean) {
-
+        allAddCityList.add(locBean);
+        refreshMapView(allAddCityList);
     }
 
     @Override
     public void onDestRemoved(LocBean locBean) {
+        allAddCityList.remove(locBean);
+        refreshMapView(allAddCityList);
+    }
 
+    private void refreshMapView(final ArrayList<LocBean> bean){
+        if(bean.size()>0){
+            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                @Override
+                public void onMapInitialized() {
+                    for (int j = 0; j < bean.size();j++) {
+                        mapView.addMarker(new AirMapMarker(new LatLng(bean.get(j).location.coordinates[1], bean.get(j).location.coordinates[0]), j + 1));
+                    }
+                    mapView.animateCenterZoom(new LatLng(bean.get(0).location.coordinates[1], bean.get(0).location.coordinates[0]), 2);
+                }
+            });
+        }else{
+            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                @Override
+                public void onMapInitialized() {
+                    mapView.animateCenterZoom(new LatLng(0, 0), 2);
+                }
+            });
+        }
+        mapView.initialize(getSupportFragmentManager(), airMapInterface);
+        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
@@ -94,56 +125,8 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             }
         });
 
-        //setUpMap();
+        refreshMapView(allAddCityList);
     }
-
-    private void setUpMap(final ArrayList<String> names, final ArrayList<double[]> coor,int pos){
-        if(coor.size()>0) {
-            final List<LatLng> points=new ArrayList<LatLng>();
-            mapViewBuilder = new DefaultAirMapViewBuilder(this);
-            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-                @Override
-                public void onMapInitialized() {
-                    for(int k=0;k<names.size();k++){
-                        mapView.addMarker(new AirMapMarker(new LatLng(coor.get(k)[1], coor.get(k)[0]), k+1)
-                                .setTitle(names.get(k)));
-                        points.add(new LatLng(coor.get(k)[1], coor.get(k)[0]));
-                    }
-                    airMapPolyline=new AirMapPolyline(points,POLY_LINE);
-                    mapView.addPolyline(airMapPolyline);
-                    mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 10);
-                }
-            });
-            mapView.initialize(getSupportFragmentManager(), airMapInterface);
-            mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
-
-        }else{
-            refreshNullMap();
-        }
-    }
-
-
-    private void refreshNullMap(){
-        mapViewBuilder = new DefaultAirMapViewBuilder(this);
-        airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-        mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-            @Override
-            public void onMapInitialized() {
-                mapView.animateCenterZoom(new LatLng(20,20), 20);
-            }
-        });
-        mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-    }
-
-
-   /* private void initMapView() {
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
-    }*/
 
     private class InOutFragmentAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         private String[] tabNames = { "国内", "国外"};
@@ -191,13 +174,11 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     protected void onResume() {
         super.onResume();
-        //mapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //mapView.onPause();
     }
 
     @Override
@@ -208,13 +189,11 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       //mapView.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mapView.onDestroy();
     }
 
 }

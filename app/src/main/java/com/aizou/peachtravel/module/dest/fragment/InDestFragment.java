@@ -91,7 +91,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
         });
         if(isClickable) {
-            in_out_search.setVisibility(View.VISIBLE);
+            //in_out_search.setVisibility(View.VISIBLE);
             View view = new View(getActivity());
             view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
             mLvInCity.addFooterView(view);
@@ -444,19 +444,17 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
         @Override
         public void showData(int position, final InDestBean itemData) {
-            if(position==0){
+            /*if(position==0){
                 des_display_box.setPadding(0,0,0,0);
-            }
+            }*/
             sectionTv.setText(itemData.section);
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
                 final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
-
                 if(isClickable) {
                     cityNameTv.setChecked(bean.isAdded);
-
                     //更新按钮的图片的
                     add = getResources().getDrawable(R.drawable.ic_green_add_icon);
                     selected = getResources().getDrawable(R.drawable.ic_white_selected_icon);
@@ -484,10 +482,28 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                             inCityAdapter.notifyDataSetChanged();
                         }
                     });
+                }else{
+                    bean.isAdded=false;
+                    cityNameTv.setChecked(bean.isAdded);
+                    cityNameTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bean.isAdded = !bean.isAdded;
+                            if(mOnDestActionListener != null){
+                                if(bean.isAdded){
+                                    mOnDestActionListener.onDestAdded(bean);
+                                } else {
+                                    mOnDestActionListener.onDestRemoved(bean);
+                                }
+                            }
+                        }
+                    });
                 }
+
 
                 cityListFl.addView(contentView);
             }
         }
     }
+
 }

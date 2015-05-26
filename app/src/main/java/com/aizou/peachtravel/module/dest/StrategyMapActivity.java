@@ -182,6 +182,15 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if(mPop.isShowing()){
+            mPop.dismiss();
+        }else {
+            super.onBackPressed();
+        }
+    }
+
     private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords){
         if(mCoords.size()>0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);

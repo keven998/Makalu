@@ -60,7 +60,7 @@ public class ContactlistFragment extends Fragment {
     private TextView indexDialogTv;
 	private boolean hidden;
     private View emptyView;
-    private EditText search;
+   // private EditText search;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,9 +78,9 @@ public class ContactlistFragment extends Fragment {
 		listView = (ListView) getView().findViewById(R.id.list);
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
-        search = (EditText) getView().findViewById(R.id.contact_search_tv);
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        //search = (EditText) getView().findViewById(R.id.contact_search_tv);
+        /*InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);*/
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<IMUser>();

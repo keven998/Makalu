@@ -468,6 +468,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            iv_location.setVisibility(View.GONE);
                             if (!isFinishing())
                                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }

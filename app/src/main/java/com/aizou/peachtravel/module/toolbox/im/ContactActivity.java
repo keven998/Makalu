@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,7 +45,8 @@ public class ContactActivity extends PeachBaseActivity {
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.getInstance(ContactActivity.this).showToast("添加新用户");
+                startActivity(new Intent(ContactActivity.this, AddContactActivity.class));
+                ContactActivity.this.overridePendingTransition(R.anim.push_bottom_in, 0);
             }
         });
         contactListFragment = new ContactlistFragment();

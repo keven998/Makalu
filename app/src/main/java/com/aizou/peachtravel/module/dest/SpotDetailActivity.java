@@ -240,10 +240,10 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mAllEvaluation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+               /* Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", "更多评论");
                 intent.putExtra("url", result.lyPoiUrl);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
 

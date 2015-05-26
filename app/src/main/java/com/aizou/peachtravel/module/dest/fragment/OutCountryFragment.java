@@ -209,9 +209,9 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
                 final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
+                cityNameTv.setChecked(bean.isAdded);
 
                 if(isClickable) {
-                    cityNameTv.setChecked(bean.isAdded);
 
                     //更新按钮的图片的
                     add = getResources().getDrawable(R.drawable.ic_cell_item_unchoose);
@@ -242,6 +242,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                         }
                     });
 
+                }else{
+                    cityNameTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bean.isAdded = !bean.isAdded;
+                            if(mOnDestActionListener != null){
+                                if(bean.isAdded){
+                                    mOnDestActionListener.onDestAdded(bean);
+                                } else {
+                                    mOnDestActionListener.onDestRemoved(bean);
+                                }
+                            }
+                        }
+                    });
                 }
 
                 cityListFl.addView(contentView);
