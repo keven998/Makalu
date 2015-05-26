@@ -38,7 +38,7 @@ public class ExpertListActivity extends PeachBaseActivity {
 
     private ListView listView;
     private ImageView user_pic;
-    private EditText search_expert;
+    //private EditText search_expert;
     private TextView user_name;
     private TextView user_status_01,user_status_02,user_status_03;
     private TextView user_level;
@@ -58,7 +58,7 @@ public class ExpertListActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expert);
-        search_expert=(EditText)findViewById(R.id.search_expert_name);
+        //search_expert=(EditText)findViewById(R.id.search_expert_name);
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +115,7 @@ public class ExpertListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 box.hideAll();
-                ToastUtil.getInstance(ExpertListActivity.this).showToast("好像没有网络额~");
+                ToastUtil.getInstance(ExpertListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }

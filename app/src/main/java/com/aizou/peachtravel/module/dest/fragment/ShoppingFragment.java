@@ -219,6 +219,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                 holder.poiRankTv = (TextView) convertView.findViewById(R.id.poi_rank_tv);
+                holder.costTimeDesc = (TextView) convertView.findViewById(R.id.poi_costtime_tv);
                 convertView.setTag(holder);
             } else {
                 holder = (ItemViewHolder) convertView.getTag();
@@ -228,7 +229,9 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             }else{
                 holder.poiImageIv.setImageDrawable(null);
             }
+            holder.nearByTv.setText("地图");
             holder.poiNameTv.setText(poiDetailBean.zhName);
+            holder.costTimeDesc.setText(poiDetailBean.timeCostDesc);
 
             String locName="";
             if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
@@ -374,6 +377,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             public TextView poiPriceTv;
             public RatingBar poiRating;
             public TextView poiRankTv;
+            public TextView costTimeDesc;
         }
     }
 }

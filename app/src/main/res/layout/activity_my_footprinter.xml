@@ -11,7 +11,7 @@
         android:orientation="vertical"
         >
 
-        <com.amap.api.maps2d.MapView
+        <com.airbnb.android.airmapview.AirMapView
             android:layout_width="match_parent"
             android:layout_height="195dp"
             android:id="@+id/my_footprinter_map"
