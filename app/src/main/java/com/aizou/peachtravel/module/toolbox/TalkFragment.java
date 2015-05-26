@@ -66,25 +66,25 @@ public class TalkFragment extends PeachBaseFragment {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
     @InjectView(R.id.tv_title_add)
     TextView tvTitleAdd;
-    @InjectView(R.id.tv_title_bar_title)
-    TextView tvTitleBarTitle;
-    @InjectView(R.id.btn_address_list)
-    ImageView btnAddressList;
+//    @InjectView(R.id.tv_title_bar_title)
+//    TextView tvTitleBarTitle;
+//    @InjectView(R.id.btn_address_list)
+//    ImageView btnAddressList;
     @InjectView(R.id.unread_address_number)
     TextView unreadAddressNumber;
     @InjectView(R.id.btn_container_address_list)
     RelativeLayout btnContainerAddressList;
-    @InjectView(R.id.list)
-    ListView list;
-    @InjectView(R.id.start_chat)
-    ImageView startChat;
-    @InjectView(R.id.empty_view)
-    LinearLayout emptyView;
+//    @InjectView(R.id.list)
+//    ListView list;
+//    @InjectView(R.id.start_chat)
+//    ImageView startChat;
+//    @InjectView(R.id.empty_view)
+//    LinearLayout emptyView;
 
 
     private InputMethodManager inputMethodManager;
     private ListView listView;
-    private Map<String, IMUser> contactList;
+//    private Map<String, IMUser> contactList;
     private ChatAllHistoryAdapter adapter;
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     private boolean hidden;
@@ -161,7 +161,7 @@ public class TalkFragment extends PeachBaseFragment {
                 String username = conversation.getUserName();
                 if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
-                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");
+                    ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
@@ -205,7 +205,7 @@ public class TalkFragment extends PeachBaseFragment {
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         // contact list
-        contactList = AccountManager.getInstance().getContactList(getActivity());
+//        contactList = AccountManager.getInstance().getContactList(getActivity());
 //        if(EMGroupManager.getInstance().getAllGroups()==null){
         EMGroupManager.getInstance().loadAllGroups();
 //        }

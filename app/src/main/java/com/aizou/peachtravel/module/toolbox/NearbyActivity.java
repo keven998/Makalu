@@ -60,11 +60,11 @@ public class NearbyActivity extends PeachBaseActivity {
 
     private String[] tabTitles;
     private String[] tabTypes = {"vs", "restaurant", "shopping", "hotel"};
-    private int[] tabRes = {R.drawable.checker_tab_nearby_ic_spot,
-            R.drawable.checker_tab_nearby_ic_delicacy,
-            R.drawable.checker_tab_nearby_ic_shopping,
-            R.drawable.checker_tab_nearby_ic_stay
-    };
+//    private int[] tabRes = {R.drawable.checker_tab_nearby_ic_spot,
+//            R.drawable.checker_tab_nearby_ic_delicacy,
+//            R.drawable.checker_tab_nearby_ic_shopping,
+//            R.drawable.checker_tab_nearby_ic_stay
+//    };
 
     private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<OnLocationChangeListener> onLocationChangeListenerList = new ArrayList<OnLocationChangeListener>();

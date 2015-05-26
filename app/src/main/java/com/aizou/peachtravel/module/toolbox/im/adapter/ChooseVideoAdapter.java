@@ -108,7 +108,6 @@ public class ChooseVideoAdapter extends BaseAdapter {
 		
 		@Override
 		public void onImageLoad(Integer t, Bitmap bitmap) {
-			System.out.println("posiIOn:"+t);
 			ImageView  view=(ImageView) gridView.findViewWithTag(t);
 			if(view!=null)
 			{
@@ -118,7 +117,6 @@ public class ChooseVideoAdapter extends BaseAdapter {
 		
 		@Override
 		public void onError(Integer t) {
-			System.out.println("onerror:"+t);
 			VideoEntity entity=getItem(t);
 			ImageView view=(ImageView) gridView.findViewWithTag(entity);
 			if(view!=null)

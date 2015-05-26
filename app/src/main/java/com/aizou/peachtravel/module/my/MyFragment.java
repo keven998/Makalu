@@ -178,7 +178,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             case R.id.ll_about:
                 Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
                 aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
-                aboutIntent.putExtra("title", "关于桃子旅行");
+                aboutIntent.putExtra("title", "关于旅行派");
                 startActivity(aboutIntent);
                 break;
 
@@ -317,7 +317,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(getActivity()).showToast("欢迎来到桃子旅行");
+                        ToastUtil.getInstance(getActivity()).showToast("欢迎来到旅行派");
                         refresh();
 
                     }

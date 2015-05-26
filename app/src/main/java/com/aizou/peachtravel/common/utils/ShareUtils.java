@@ -60,7 +60,7 @@ public class ShareUtils {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
                 .inflate(act, R.layout.view_share_bar, null);
-        TextView talkTv = (TextView) contentView.findViewById(R.id.tv_tao_talk);
+//        TextView talkTv = (TextView) contentView.findViewById(R.id.tv_tao_talk);
         TextView wxcircleTv = (TextView) contentView
                 .findViewById(R.id.tv_wxcircle);
         TextView wechatTv = (TextView) contentView.findViewById(R.id.tv_wechat);
@@ -70,13 +70,13 @@ public class ShareUtils {
         TextView qqTv = (TextView) contentView.findViewById(R.id.tv_qq);
         TextView cancleIv = (TextView) contentView
                 .findViewById(R.id.tv_share_cancel);
-        talkTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                IMUtils.onClickImShare(act);
-            }
-        });
+//        talkTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                IMUtils.onClickImShare(act);
+//            }
+//        });
         wxcircleTv.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -162,9 +162,9 @@ public class ShareUtils {
         UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
-        circleMedia.setTitle("推荐\"桃子旅行\"给你。");
+        circleMedia.setTitle("推荐\"旅行派\"给你。");
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("能和旅伴一起讨论旅行，还有便利的自由行规划工具，陪你一起去旅行");
+            circleMedia.setShareContent("能跟旅行达人们互动，需求帮助的旅行应用");
         } else {
             circleMedia.setShareContent(content);
         }

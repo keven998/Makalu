@@ -80,7 +80,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             });
 
             CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
-            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_note_fav_selector, 0);
+            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_title_ic_favorite, 0);
             txtView.setVisibility(View.VISIBLE);
             txtView.setOnClickListener(new View.OnClickListener() {
                 @Override

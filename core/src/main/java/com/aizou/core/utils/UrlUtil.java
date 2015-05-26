@@ -183,8 +183,6 @@ public class UrlUtil {
 		Bitmap bitmap = null;
 		// 获取视频的缩略图
 		bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, kind);
-		System.out.println("w" + bitmap.getWidth());
-		System.out.println("h" + bitmap.getHeight());
 		bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 		return bitmap;

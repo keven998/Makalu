@@ -69,7 +69,7 @@ public class UpdateUtil {
         down.allowScanningByMediaScanner();
 		down.setVisibleInDownloadsUi(true);
 		down.setTitle("更新") // 用于信息查看
-				.setDescription("正在下载桃子旅行"); // 用于信息查看
+				.setDescription("正在下旅行派"); // 用于信息查看
 		// 设置下载后文件存放的位置
 		down.setDestinationInExternalFilesDir(context,
 				Environment.DIRECTORY_DOWNLOADS, "TaoziLvxing.apk");

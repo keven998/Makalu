@@ -43,7 +43,7 @@
 
                     <ImageView
                         android:id="@+id/btn_set_mode_voice"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="48dp"
                         android:src="@drawable/chat_bar_voice"
                         android:paddingLeft="10dp"
@@ -54,13 +54,13 @@
 
                     <ImageView
                         android:id="@+id/btn_set_mode_keyboard"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="48dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
                         android:onClick="setModeKeyboard"
-                        android:src="@drawable/ic_more"
+                        android:src="@drawable/ic_keyboard"
                         android:visibility="gone" />
 
 

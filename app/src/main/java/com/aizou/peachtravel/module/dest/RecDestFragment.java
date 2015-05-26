@@ -65,8 +65,8 @@ public class RecDestFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent(getActivity(),"event_go_search");
                 Intent intent = new Intent(getActivity(),SearchAllActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
+                startActivityWithNoAnim(intent);
+                getActivity().overridePendingTransition(android.R.anim.fade_in, 0);
             }
         });
         rootView.findViewById(R.id.des_back).setOnClickListener(new View.OnClickListener(){
