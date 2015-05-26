@@ -191,7 +191,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 });
             }else {
                 actionButton.setText("邀请");
-                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.cell_accessory,0);
+                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.arr_poi_guide,0);
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -199,7 +199,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         intent.setAction(Intent.ACTION_SENDTO);
                         //需要发短息的号码
                         intent.setData(Uri.parse("smsto:" + itemData.tel));
-                        intent.putExtra("sms_body", String.format("我正在用桃子旅行，有些旅行相关的事儿想跟你八八。桃子旅行搜索：%s 加我", AccountManager.getInstance().getLoginAccount(AddPhoneContactActivity.this).nickName));
+                        intent.putExtra("sms_body", String.format("我正在用旅行派，可以和达人互动的旅行应用。搜索：%s 加我", AccountManager.getInstance().getLoginAccount(AddPhoneContactActivity.this).nickName));
                         startActivity(intent);
                     }
                 });

@@ -181,7 +181,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:drawablePadding="15dp"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/arr_poi_guide"
                     android:gravity="center_vertical"
                     android:text="分享绑定"
                     android:textColor="@color/base_text_color_title"
