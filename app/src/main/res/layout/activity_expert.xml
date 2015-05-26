@@ -51,7 +51,7 @@
 
     </FrameLayout>
 
-    <EditText
+    <!--<EditText
         android:id="@+id/search_expert_name"
         android:layout_width="match_parent"
         android:layout_height="28dp"
@@ -68,7 +68,7 @@
         android:background="@drawable/search_box_half_radius"
         android:textColor="@color/search_edit_text_hint_color"
         android:layout_gravity="center_horizontal"
-        />
+        />-->
 
     <ListView
         android:id="@+id/expert_list"

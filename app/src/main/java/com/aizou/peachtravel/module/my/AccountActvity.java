@@ -362,7 +362,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                           //brithdayTv.setText(year+"-"+monthOfYear+1+"-"+dayOfMonth);
-                          editBirthdayToInterface(year+"-"+monthOfYear+1+"-"+dayOfMonth);
+                          monthOfYear++;
+                          editBirthdayToInterface(year+"-"+(monthOfYear)+"-"+dayOfMonth);
                     }
                 },1990,0,0);
                 dialog.setCancelable(true);

@@ -221,6 +221,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
                 holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
                 holder.poiRankTv = (TextView) convertView.findViewById(R.id.poi_rank_tv);
+                holder.costTimeDesc = (TextView) convertView.findViewById(R.id.poi_costtime_tv);
                 convertView.setTag(holder);
             } else {
                 holder = (ItemViewHolder) convertView.getTag();
@@ -230,7 +231,9 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             } else {
                 holder.poiImageIv.setImageDrawable(null);
             }
+            holder.nearByTv.setText("地图");
             holder.poiNameTv.setText(poiDetailBean.zhName);
+            holder.costTimeDesc.setText(poiDetailBean.timeCostDesc);
             String locName="";
             if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
                 locName="["+poiDetailBean.locality.zhName+"]";
@@ -326,7 +329,6 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             } else {
                 holder.deleteIv.setVisibility(View.GONE);
                 holder.dragHandleIv.setVisibility(View.GONE);
-
                 holder.nearByTv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -375,6 +377,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             public TextView poiPriceTv;
             public TextView poiRankTv;
             public RatingBar poiRating;
+            public TextView costTimeDesc;
         }
 
 
