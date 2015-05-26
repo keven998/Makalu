@@ -32,7 +32,7 @@
             android:layout_width="120dp"
             android:layout_height="45dp"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg_normal"
+            android:background="@drawable/chat_send"
             android:orientation="horizontal">
 
             <ImageView

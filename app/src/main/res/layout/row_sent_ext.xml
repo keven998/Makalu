@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg_normal">
+            android:background="@drawable/chat_send">
 
             <RelativeLayout
                 android:id="@+id/rl_image"
