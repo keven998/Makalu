@@ -33,7 +33,7 @@ public class ExpertFilterActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expertfilter);
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.expert_filter_title);
-        titleHeaderBar.getTitleTextView().setText("根据目的地筛选");
+        titleHeaderBar.getTitleTextView().setText("根据城市筛选");
         titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -249,8 +249,8 @@
             android:gravity="right|center_vertical"
             android:layout_alignParentRight="true"
             android:text="更多"
-            android:textColor="@color/secondary_theme_color"
-            android:drawableRight="@drawable/app_them_arrow_secondary"
+            android:textColor="@color/app_theme_color"
+            android:drawableRight="@drawable/arr_poi_guide"
             android:drawablePadding="1dp"
             android:textSize="12sp"/>
 
