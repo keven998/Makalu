@@ -320,7 +320,7 @@ private String chatType;
     @SuppressLint("NewApi")
     public View getView(final int position, View convertView, ViewGroup parent) {
          MessageBean message = getItem(position);
-         System.out.println("message "+message.getMessage());
+         System.out.println("message "+message.getMessage()+"  "+message.getStatus());
          ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -993,6 +993,15 @@ private String chatType;
 //                }
             }
             return;
+        }
+
+        String filePath= message.getMessage();
+
+         if (filePath != null && new File(filePath).exists()) {
+        //showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
+             showImageView(filePath, holder.iv, filePath, null, message);
+        } else {
+         showImageView(filePath, holder.iv, filePath, IMAGE_DIR, message);
         }
 
         // 发送的消息
@@ -1668,16 +1677,17 @@ private String chatType;
      * @return the image exists or not
      */
     private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
-                                  final EMMessage message) {
+                                  final MessageBean message) {
         // String imagename =
         // localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
         // localFullSizePath.length());
         // final String remote = remoteDir != null ? remoteDir+imagename :
         // imagename;
-        final String remote = remoteDir;
+         String remote = remoteDir;
         EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
         // first check if the thumbnail image already loaded into cache
-        Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
+      // Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
+        Bitmap bitmap=BitmapFactory.decodeFile(thumbernailPath);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
             iv.setImageBitmap(bitmap);
@@ -1697,26 +1707,26 @@ private String chatType;
                         // ShowBigImage needs to download it from the server
                         // first
                         // intent.putExtra("", message.get);
-                        ImageMessageBody body = (ImageMessageBody) message.getBody();
-                        intent.putExtra("secret", body.getSecret());
-                        intent.putExtra("remotepath", remote);
+//                        ImageMessageBody body = (ImageMessageBody) message.getBody();
+//                        intent.putExtra("secret", body.getSecret());
+//                        intent.putExtra("remotepath", remote);
                     }
-                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
-                            && message.getChatType() != ChatType.GroupChat) {
-                        try {
-                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-                            message.isAcked = true;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+//                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
+//                            && message.getChatType() != ChatType.GroupChat) {
+//                        try {
+//                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+//                            message.isAcked = true;
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                     ((BaseActivity) activity).startActivityWithNoAnim(intent);
                 }
             });
             return true;
         } else {
 
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
+        //    new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
             return true;
         }
 

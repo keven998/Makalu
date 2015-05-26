@@ -74,7 +74,7 @@ public class SendMsgAsyncTask {
                         String msgId = obj.get("msgId").toString();
                         Long timestamp = Long.parseLong(obj.get("timestamp").toString());
                         IMClient.getInstance().setLastMsg(conversation1, Integer.parseInt(msgId));
-                        IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS);
+                        IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS,null);
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "发送成功，消息更新！");
                         }
@@ -127,7 +127,7 @@ public class SendMsgAsyncTask {
                     String msgId = obj.get("msgId").toString();
                     Long timestamp = Long.parseLong(obj.get("timestamp").toString());
                     IMClient.getInstance().setLastMsg(currentFri, Integer.parseInt(msgId));
-                    IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS);
+                    IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null);
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "发送成功，消息更新！");
                     }

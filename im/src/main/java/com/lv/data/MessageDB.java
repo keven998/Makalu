@@ -295,12 +295,15 @@ public class MessageDB {
         closeDB();
     }
 
-    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status) {
+    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         ContentValues values = new ContentValues();
         values.put("ServerId", msgId);
         //values.put("conversation",conversation);
+        if (message!=null){
+            values.put("Message", message);
+        }
         values.put("CreateTime", timestamp);
         values.put("Status", status);
         int num = mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});

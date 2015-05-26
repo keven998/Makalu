@@ -1,6 +1,8 @@
 package com.lv.net;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.util.Log;
 
 import com.lv.Listener.UploadListener;
@@ -41,7 +43,17 @@ public class UploadUtils {
     public boolean saveBitmapToJpegFile(Bitmap bitmap, String filePath) {
         return PictureUtil.saveBitmapToJpegFile(bitmap, filePath, 75);
     }
-
+    public String uploadImageByUrl(Bitmap bitmap, String sender, String receive, int msgType, long localId, UploadListener listener,String chatType) {
+        File path = new File(Config.imagepath);
+        if (!path.exists()) path.mkdirs();
+        String imagepath1 = Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
+        if (saveBitmapToJpegFile(bitmap, imagepath1))
+            upload(imagepath1, sender, receive, msgType, localId, listener,chatType);
+        else if (Config.isDebug){
+            Log.i(Config.TAG, "文件出错！ ");
+        }
+        return imagepath1;
+    }
     public String uploadImage(Bitmap bitmap, String sender, String receive, int msgType, long localId, UploadListener listener,String chatType) {
         File path = new File(Config.imagepath);
         if (!path.exists()) path.mkdirs();
@@ -53,7 +65,35 @@ public class UploadUtils {
         }
         return imagepath1;
     }
-
+    private Bitmap getImageThumbnail(String imagePath, int width, int height) {
+        Bitmap bitmap = null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        // 获取这个图片的宽和高，注意此处的bitmap为null
+        bitmap = BitmapFactory.decodeFile(imagePath, options);
+        options.inJustDecodeBounds = false; // 设为 false
+        // 计算缩放比
+        int h = options.outHeight;
+        int w = options.outWidth;
+        int beWidth = w / width;
+        int beHeight = h / height;
+        int be = 1;
+        if (beWidth < beHeight) {
+            be = beWidth;
+        } else {
+            be = beHeight;
+        }
+        if (be <= 0) {
+            be = 1;
+        }
+        options.inSampleSize = be;
+        // 重新读入图片，读取缩放后的bitmap，注意这次要把options.inJustDecodeBounds 设为 false
+        bitmap = BitmapFactory.decodeFile(imagePath, options);
+        // 利用ThumbnailUtils来创建缩略图，这里要指定要缩放哪个Bitmap对象
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        return bitmap;
+    }
     public void uploadFile(File file, UploadListener listener) {
         // upload(file.getAbsolutePath(), listener);
     }
@@ -85,7 +125,7 @@ public class UploadUtils {
                                 String msgId = obj.get("msgId").toString();
                                 long timestamp = (Double.valueOf(obj.get("timestamp").toString())).longValue();
                                 IMClient.getInstance().setLastMsg(receive, Integer.parseInt(msgId));
-                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS);
+                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,filePath);
                                 if(Config.isDebug){
                                     Log.i(Config.TAG,"发送成功，消息更新！");
                                 }

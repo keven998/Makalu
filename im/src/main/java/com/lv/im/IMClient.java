@@ -2,6 +2,7 @@ package com.lv.im;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -255,14 +256,20 @@ public class IMClient {
      * @param friendId friendId
      * @param listener listener
      */
-    public void sendImageMessage(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe) {
-
+    public MessageBean sendImageMessage(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe) {
+        Bitmap bitmap1 = BitmapFactory.decodeFile(path);
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.IMAGE_MSG, path);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        UploadUtils.getInstance().uploadImage(bitmap, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, localId, listener, chatTpe);
-    }
+        String localpath=UploadUtils.getInstance().uploadImage(bitmap1, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, localId, listener, chatTpe);
 
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, localpath, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        m.setLocalId((int) localId);
+        return m;
+    }
+    public void sendImageMessageByUrl(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe){
+
+    }
     /**
      * 发送位置信息
      *
@@ -290,8 +297,8 @@ public class IMClient {
         SendMsgAsyncTask.sendMessage(conversation, friendId, message, localId, null, chatType);
     }
 
-    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status) {
-        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status);
+    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message) {
+        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status,message);
     }
 
     private MessageBean imessage2Bean(IMessage message) {

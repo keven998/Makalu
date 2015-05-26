@@ -124,6 +124,7 @@ import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
@@ -571,13 +572,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			break;
 		}
 	}
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-
     /**
 	 * onActivityResult
 	 */
@@ -905,7 +899,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
                 if (Config.isDebug){
                     Log.i(Config.TAG, "发送成功");
                 }
-
+                messageList=IMClient.getInstance().getMessages(toChatUsername,0);
+                adapter.refresh();
             }
             @Override
             public void onFailed(int code) {
@@ -949,8 +944,25 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param filePath
 	 */
 	private void sendPicture(final String filePath) {
+    MessageBean m = IMClient.getInstance().sendImageMessage(filePath,null,toChatUsername,new UploadListener(){
 
-		listView.setAdapter(adapter);
+    @Override
+    public void onSucess(String fileUrl) {
+        System.out.println("上传图片成功");
+        adapter.refresh();
+    }
+
+    @Override
+    public void onError(int errorCode, String msg) {
+
+    }
+
+    @Override
+    public void onProgress(int progress) {
+
+    }
+},chatType);
+        messageList.add(m);
 		adapter.refresh();
 		listView.setSelection(listView.getCount() - 1);
 		setResult(RESULT_OK);
@@ -1011,7 +1023,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		}
 
 	}
+   private void updateStatus(MessageBean m){
 
+   }
 	/**
 	 * 发送位置信息
 	 * 
