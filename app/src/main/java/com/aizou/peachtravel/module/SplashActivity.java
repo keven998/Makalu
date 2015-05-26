@@ -204,7 +204,6 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                 Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
                 startActivityWithNoAnim(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                System.out.print("test ....................");
                 break;
 
             default:break;

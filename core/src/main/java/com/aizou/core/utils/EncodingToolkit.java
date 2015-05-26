@@ -23,10 +23,7 @@ import java.io.UnsupportedEncodingException;
 public class EncodingToolkit { 
 
         public static void main(String[] args) {
-                String han = "汉";
 
-
-                System.out.println("---------");
         } 
 
         /** 

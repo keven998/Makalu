@@ -561,7 +561,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         switch (v.getId()) {
             case R.id.rl_switch_block_groupmsg:
                 if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
-                    System.out.println("change to unblock group msg");
+//                    System.out.println("change to unblock group msg");
                     try {
 //				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
                         List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
@@ -579,7 +579,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         //todo: 显示错误给用户
                     }
                 } else {
-                    System.out.println("change to block group msg");
                     try {
 //				    EMGroupManager.getInstance().blockGroupMessage(groupId);
                         List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();

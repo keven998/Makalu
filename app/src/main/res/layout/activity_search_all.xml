@@ -30,9 +30,10 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:paddingLeft="8dp"
+            android:inputType="text"
             android:textSize="14sp"
             android:textColorHint="@color/base_text_color_text_hint"
-            android:hint="城市、景点、美食购物酒店等"
+            android:hint="城市、景点、美食、酒店"
             android:textColor="@color/base_text_color_title"
             android:imeOptions="actionSearch"
             android:singleLine="true"
@@ -52,7 +53,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
@@ -64,5 +65,16 @@
             android:dividerHeight="0dp"
             android:fadingEdge="none"
             android:visibility="visible" />
+
+        <TextView android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/base_text_color_text_placeholder"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="36dp"
+            android:lineSpacingExtra="8dp"
+            android:visibility="gone"
+            android:text="旅行搜搜\n搜索旅行中的城市、景点、美食、酒店"/>
     </FrameLayout>
 </LinearLayout>
