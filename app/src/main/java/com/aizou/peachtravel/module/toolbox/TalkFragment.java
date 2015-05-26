@@ -214,24 +214,30 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
-        String[] names={"新建Talk","加好友"};
-        final MoreDialog dialog=new MoreDialog(getActivity());
-        dialog.setMoreStyle(false,2,names);
+        String[] names = {"新建聊天", "添加好友", "取消"};
+        final MoreDialog dialog = new MoreDialog(getActivity());
+        dialog.setMoreStyle(false, 3, names);
+        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MobclickAgent.onEvent(getActivity(), "event_create_new_talk");
+                startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
+                dialog.dismiss();
+            }
+        });
         dialog.getTv3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent( getActivity(),"event_create_new_talk");
-                startActivityForResult(new Intent( getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
+                MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
+                startActivity(new Intent(getActivity(), AddContactActivity.class));
                 getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                 dialog.dismiss();
             }
         });
         dialog.getTv4().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
-                startActivity(new Intent( getActivity(), AddContactActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
+            public void onClick(View v) {
                 dialog.dismiss();
             }
         });

@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="目的地"
+        android:text="热门城市"
         android:textColor="@color/base_text_color_subtitle"
         android:textSize="20sp" />
 

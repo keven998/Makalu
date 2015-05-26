@@ -1,5 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="240dp"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="24dp"
+    android:layout_marginRight="24dp"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:background="@drawable/bg_peach_dialog"
@@ -20,8 +22,7 @@
         android:paddingTop="10dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/base_font_color"
-        android:text="" />
+        android:textColor="@color/base_font_color" />
 
     <TextView
         android:id="@+id/tv_dialog_message"
@@ -33,12 +34,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/base_font_color"
-        android:text="" />
+        android:textColor="@color/base_font_color"/>
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.8dp"
         android:background="#DBDBDB" />
 
 
@@ -60,13 +60,13 @@
         android:textColor="@color/btn_blue_normal"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="防守"
+        android:background="@drawable/option_cell_selector"
         android:gravity="center"
         />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.8dp"
         android:layout_marginRight="1dp"
         android:background="#DBDBDB" />
 
@@ -87,15 +87,15 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/btn_blue_normal"
+        android:background="@drawable/option_cell_selector"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="防守"
         android:gravity="center"
         />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.8dp"
         android:layout_marginRight="1dp"
         android:background="#DBDBDB" />
 
@@ -116,16 +116,16 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/btn_blue_normal"
+        android:background="@drawable/option_cell_selector"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="防守"
         android:gravity="center"
         />
 
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.8dp"
             android:layout_marginRight="1dp"
             android:background="#DBDBDB" />
 
@@ -147,7 +147,7 @@
             android:textColor="@color/btn_blue_normal"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="防守"
+            android:background="@drawable/option_cell_selector"
             android:gravity="center"
             />
 

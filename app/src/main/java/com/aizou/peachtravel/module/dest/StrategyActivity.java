@@ -867,7 +867,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             }
         });
         Button btn2 = (Button) contentView.findViewById(R.id.btn_go_share);
-        btn2.setText("目的地");
+        btn2.setText("热门城市");
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
