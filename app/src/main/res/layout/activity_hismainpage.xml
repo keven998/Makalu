@@ -160,7 +160,8 @@ android:background="@color/app_backgroud">
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="46dp">
 
         <LinearLayout
             android:layout_width="fill_parent"

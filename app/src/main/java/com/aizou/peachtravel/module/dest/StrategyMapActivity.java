@@ -34,6 +34,7 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
@@ -83,63 +84,71 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private long POLY_LINE = 1;
     boolean isShow=false;
     private TextView spinnet;
+    private boolean isExpertFootPrint;
+    private ArrayList<LocBean> all_print_print;
+    private ArrayList<double[]> coords=new ArrayList<double[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_strategy_map);
         allBeans=getIntent().getParcelableArrayListExtra("strategy");
-        final int day_sums=allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size()-1).dayIndex+1;
+        isExpertFootPrint=getIntent().getBooleanExtra("isExpertFootPrint",false);
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.map_title_bar);
-        titleHeaderBar.getRightTextView().setText("确定");
-        titleHeaderBar.getLeftTextView().setText("第1天");
-        titleHeaderBar.getLeftTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
         titleHeaderBar.getTitleTextView().setText("地图");
-        titleHeaderBar.setLeftDrawableToNull();
-        titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(0, R.anim.slide_out_to_right);
-            }
-        });
-        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//自定义布局
-                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-                        R.layout.map_day_select, null, true);
-                TextView pop_dismiss=(TextView)menuView.findViewById(R.id.pop_dismiss);
-
-                ListView lv=(ListView)menuView.findViewById(R.id.map_days_list);
-                adapter=new MapsDayAdapter(day_sums,DealWithDays(titleHeaderBar.getLeftTextView().getText().toString()));
-                lv.setAdapter(adapter);
-                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-                mPop.setContentView(menuView );//设置包含视图
-                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setAnimationStyle(R.style.PopAnimation);
-                mPop.showAtLocation(findViewById(R.id.parent), Gravity.BOTTOM,0,0);
-                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+        if(!isExpertFootPrint){
+            if(allBeans.size()>0) {
+                final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
+                titleHeaderBar.getRightTextView().setText("确定");
+                titleHeaderBar.getLeftTextView().setText("第1天");
+                titleHeaderBar.getLeftTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+                titleHeaderBar.setLeftDrawableToNull();
+                titleHeaderBar.enableBackKey(true);
+                titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mPop.dismiss();
+                        finish();
+                        overridePendingTransition(0, R.anim.slide_out_to_right);
                     }
                 });
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        titleHeaderBar.getLeftTextView().setText("第"+(position+1)+"天");
-                        initData(position);
-                        mPop.dismiss();
+                    public void onClick(View v) {
+
+                        LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                        ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                                R.layout.map_day_select, null, true);
+                        TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                        ListView lv = (ListView) menuView.findViewById(R.id.map_days_list);
+                        adapter = new MapsDayAdapter(day_sums, DealWithDays(titleHeaderBar.getLeftTextView().getText().toString()));
+                        lv.setAdapter(adapter);
+                        mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                                FlowLayout.LayoutParams.MATCH_PARENT, true);
+                        mPop.setContentView(menuView);//设置包含视图
+                        mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                        mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                        mPop.setAnimationStyle(R.style.PopAnimation);
+                        mPop.showAtLocation(findViewById(R.id.parent), Gravity.BOTTOM, 0, 0);
+                        pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPop.dismiss();
+                            }
+                        });
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                titleHeaderBar.getLeftTextView().setText("第" + (position + 1) + "天");
+                                initData(position);
+                                mPop.dismiss();
+                            }
+                        });
                     }
                 });
             }
-        });
+        }
         mapView = (AirMapView) findViewById(R.id.strategy_map);
         spinnet = (TextView) findViewById(R.id.spinnet);
         //mapView.onCreate(savedInstanceState);
@@ -148,7 +157,49 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         layout=new LinearLayout(getApplicationContext());
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LocalDisplay.dp2px(50)));
         layout.setGravity(Gravity.CENTER_VERTICAL);
-        initData(0);
+        if(isExpertFootPrint){
+            all_print_print=getIntent().getParcelableArrayListExtra("ExpertFootPrintBean");
+            loadExpertFootPrintMap(all_print_print);
+        }else {
+            if(allBeans.size()>0) {
+                initData(0);
+            }
+        }
+    }
+
+    private void loadExpertFootPrintMap(ArrayList<LocBean> footPrint){
+        all_locations.removeAllViews();
+        layout.removeAllViews();
+        for(int k=0;k<footPrint.size();k++){
+            View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
+            TextView location=(TextView)view.findViewById(R.id.map_places);
+            location.setText(footPrint.get(k).zhName);
+            layout.addView(view);
+            coords.add(footPrint.get(k).location.coordinates);
+        }
+        all_locations.addView(layout);
+        setUpExpertFootPrintMap(coords);
+    }
+
+
+    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords){
+        if(mCoords.size()>0) {
+            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                @Override
+                public void onMapInitialized() {
+                    for(int k=0;k<mCoords.size();k++){
+                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k+1));
+                    }
+                    mapView.animateCenterZoom(new LatLng(mCoords.get(0)[1], mCoords.get(0)[0]), 2);
+                }
+            });
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
+            mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }else{
+            refreshNullMap();
+        }
     }
 
     private void initData(int pos){

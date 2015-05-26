@@ -3,11 +3,21 @@ package com.aizou.peachtravel.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +33,8 @@ import com.aizou.peachtravel.bean.PoiDetailBean;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
+import com.aizou.peachtravel.common.widget.FlowLayout;
+import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.module.dest.adapter.PoiAdapter;
 import com.aizou.peachtravel.module.dest.adapter.StringSpinnerAdapter;
 import com.umeng.analytics.MobclickAgent;
@@ -41,18 +53,26 @@ public class AddPoiActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_POI=101;
     @InjectView(R.id.lv_poi_list)
     PullToRefreshListView mLvPoiList;
-    @InjectView(R.id.loc_spinner)
+    /*@InjectView(R.id.loc_spinner)
     Spinner mLocSpinner;
 //    @InjectView(R.id.btn_ok)
 //    Button mBtnOk;
     @InjectView(R.id.type_spinner)
-    Spinner mTypeSpinner;
+    Spinner mTypeSpinner;*/
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
     Button mBtnSearch;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTilteView;
+    @InjectView(R.id.filter_icon)
+    ImageView filter_icon;
+    @InjectView(R.id.add_poi_bottom_panel)
+    FrameLayout bottomFrame;
+    @InjectView(R.id.add_poi_scroll_panel)
+    HorizontalScrollView hsView;
+    @InjectView(R.id.poi_add_ll)
+    LinearLayout hsViewLL;
     private String mType;
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
@@ -64,6 +84,11 @@ public class AddPoiActivity extends PeachBaseActivity {
     private PoiAdapter mPoiAdapter;
     private StringSpinnerAdapter mLocSpinnerAdapter, mTypeSpinnerAdapter;
     private String mKeyWord="";
+
+    private CityAdapter cityAdapter;
+    private PopupWindow mPop;
+    private ImageView selected;
+    private int globalFlag=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +123,22 @@ public class AddPoiActivity extends PeachBaseActivity {
             public void onPoiAdded(PoiDetailBean poi) {
                 hasAddList.add(poi);
                 mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
+                View view=View.inflate(AddPoiActivity.this,R.layout.poi_select_name,null);
+                TextView location=(TextView)view.findViewById(R.id.names);
+                location.setText(poi.zhName);
+                hsViewLL.addView(view);
+                if(hasAddList.size()>0){bottomFrame.setVisibility(View.VISIBLE);}
+                autoScrollPanel();
             }
 
             @Override
             public void onPoiRemoved(PoiDetailBean poi) {
+                int index = hasAddList.indexOf(poi);
+                hsViewLL.removeViewAt(index);
                 hasAddList.remove(poi);
                 mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
+                if(hasAddList.size()==0){bottomFrame.setVisibility(View.GONE);}
+                autoScrollPanel();
             }
 
             @Override
@@ -153,6 +188,157 @@ public class AddPoiActivity extends PeachBaseActivity {
             }
         });
     }
+
+
+    private void autoScrollPanel() {
+        hsView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hsView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 100);
+    }
+
+    private void showFilterPage(final List<String> cityNames){
+        LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+        ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                R.layout.poi_filter_page, null, true);
+        TitleHeaderBar titleHeaderBar=(TitleHeaderBar)menuView.findViewById(R.id.poi_filter_title);
+        final CheckedTextView food = (CheckedTextView) menuView.findViewById(R.id.poi_filter_food);
+        final CheckedTextView shop = (CheckedTextView) menuView.findViewById(R.id.poi_filter_shop);
+        final CheckedTextView spot = (CheckedTextView) menuView.findViewById(R.id.poi_filter_spot);
+        final CheckedTextView hotel = (CheckedTextView) menuView.findViewById(R.id.poi_filter_hotel);
+        if(mType==poiTypeValueArray[0]){
+            setCheckAction(spot,food,shop,hotel);
+        }else if(mType==poiTypeValueArray[1]){
+            setCheckAction(hotel,food,shop,spot);
+        }else if(mType==poiTypeValueArray[2]){
+            setCheckAction(food,spot,shop,hotel);
+        }else if(mType==poiTypeValueArray[3]){
+            setCheckAction(shop,food,spot,hotel);
+        }
+        spot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCheckAction(spot,food,shop,hotel);
+            }
+        });
+        food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCheckAction(food,spot,shop,hotel);
+            }
+        });
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCheckAction(shop,food,spot,hotel);
+            }
+        });
+        hotel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCheckAction(hotel,food,shop,spot);
+            }
+        });
+        final ListView lv = (ListView) menuView.findViewById(R.id.poi_city_list);
+
+        cityAdapter=new CityAdapter(cityNames,globalFlag);
+        lv.setAdapter(cityAdapter);
+        mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                FlowLayout.LayoutParams.MATCH_PARENT, true);
+        mPop.setContentView(menuView);//设置包含视图
+        mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+        mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+        mPop.setAnimationStyle(R.style.PopAnimation);
+        mPop.showAtLocation(findViewById(R.id.filter_parent), Gravity.BOTTOM, 0, 0);
+        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPop.dismiss();
+            }
+        });
+        titleHeaderBar.getRightTextView().setText("确定");
+        titleHeaderBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+        titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPop.dismiss();
+                if(food.isChecked()){
+                    mType = poiTypeValueArray[2];
+                }else if(shop.isChecked()){
+                    mType = poiTypeValueArray[3];
+                }else if(spot.isChecked()){
+                    mType = poiTypeValueArray[0];
+                }else if(hotel.isChecked()){
+                    mType = poiTypeValueArray[1];
+                }
+                curLoc = locList.get(globalFlag);
+                mPoiAdapter.getDataList().clear();
+                mPoiAdapter.notifyDataSetChanged();
+                mLvPoiList.onPullUpRefreshComplete();
+                mLvPoiList.onPullDownRefreshComplete();
+                mLvPoiList.doPullRefreshing(true,500);
+            }
+        });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                globalFlag=position;
+                cityAdapter=new CityAdapter(cityNames,globalFlag);
+                lv.setAdapter(cityAdapter);
+            }
+        });
+    }
+
+    public void setCheckAction(CheckedTextView v1,CheckedTextView v2,CheckedTextView v3,CheckedTextView v4){
+        v1.setChecked(true);
+        v2.setChecked(false);
+        v3.setChecked(false);
+        v4.setChecked(false);
+    }
+
+
+    public class CityAdapter extends BaseAdapter{
+
+        private List<String> citys;
+        private int pos;
+
+        public CityAdapter(List<String> citys,int pos){
+            this.citys=citys;
+            this.pos=pos;
+        }
+
+        @Override
+        public int getCount() {
+            return citys.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return citys.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView=View.inflate(AddPoiActivity.this,R.layout.maps_days_cell,null);
+
+            }
+            TextView days_title=(TextView)convertView.findViewById(R.id.days_title);
+            days_title.setText(citys.get(position));
+            selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
+            if(position==pos){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
+            return convertView;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -162,7 +348,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         finish();
     }
 
-    private void initSpinnerListener() {
+    /*private void initSpinnerListener() {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -199,28 +385,45 @@ public class AddPoiActivity extends PeachBaseActivity {
             }
         });
 
-    }
+    }*/
 
 
     private void initData() {
         dayIndex = getIntent().getIntExtra("dayIndex", -1);
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+        if(hasAddList.size()>0){bottomFrame.setVisibility(View.VISIBLE);}
+        for(int i=0;i<hasAddList.size();i++){
+            View view=View.inflate(AddPoiActivity.this,R.layout.poi_select_name,null);
+            TextView location=(TextView)view.findViewById(R.id.names);
+            location.setText(hasAddList.get(i).zhName);
+            hsViewLL.addView(view);
+        }
+        autoScrollPanel();
         poiTypeArray = getResources().getStringArray(R.array.poi_type);
         poiTypeValueArray = getResources().getStringArray(R.array.poi_type_value);
-        mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(poiTypeArray));
-        mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
+
+        //mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(poiTypeArray));
+       // mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
         locList = getIntent().getParcelableArrayListExtra("locList");
-        List<String> cityStrList = new ArrayList<String>();
+        final List<String> cityStrList = new ArrayList<String>();
         for (LocBean locBean : locList) {
             cityStrList.add(locBean.zhName);
         }
-        mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
-        mLocSpinner.setAdapter(mLocSpinnerAdapter);
-        mTypeSpinner.setSelection(0, true);
-        mLocSpinner.setSelection(0, true);
-        initSpinnerListener();
         curLoc = locList.get(0);
         mType = poiTypeValueArray[0];
+
+        filter_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterPage(cityStrList);
+            }
+        });
+
+        mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
+       /* mLocSpinner.setAdapter(mLocSpinnerAdapter);
+        mTypeSpinner.setSelection(0, true);
+        mLocSpinner.setSelection(0, true);
+        initSpinnerListener();*/
         mLvPoiList.doPullRefreshing(true,500);
 //        getPoiListByLoc(mType, curLoc.id, 0);
 
