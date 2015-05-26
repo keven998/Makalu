@@ -74,14 +74,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_my,null);
+        rootView = inflater.inflate(R.layout.fragment_my, null);
         ViewUtils.inject(this, rootView);
         rootView.findViewById(R.id.ll_share_account).setOnClickListener(this);
         rootView.findViewById(R.id.ll_about).setOnClickListener(this);
         rootView.findViewById(R.id.ll_setting).setOnClickListener(this);
         rootView.findViewById(R.id.ll_message_center).setOnClickListener(this);
         rootView.findViewById(R.id.ll_push_friends).setOnClickListener(this);
-        rootView.findViewById(R.id.rl_user_info).setOnClickListener(this);
+        rootView.findViewById(R.id.login_frame).setOnClickListener(this);
        // rootView.findViewById(R.id.guide_favour).setOnClickListener(this);  //新添的指路达人
         return rootView;
     }
@@ -94,8 +94,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             view.findViewById(R.id.indicator).setVisibility(View.GONE);
             avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
             nickNameTv.setText("未登录");
-            idTv.setText("L");
-            statusTv.setText("加入旅行派，陪你一起去旅行");
+            idTv.setText("点击登录旅行派，享受更多旅行服务");
+            statusTv.setText("");
         } else {
             genderIv.setVisibility(View.VISIBLE);
             View view=getView();
@@ -120,7 +120,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
             idTv.setText("ID: " + user.userId);
             if (TextUtils.isEmpty(user.signature)) {
-                statusTv.setText("暂时还没有状态");
+                statusTv.setText("");
             } else {
                 statusTv.setText(user.travelStatus);
             }
@@ -156,13 +156,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.rl_user_info:
+            case R.id.login_frame:
                 PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) {
                     Intent logIntent=new Intent(getActivity(),LoginActivity.class);
                     startActivity(logIntent);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
-                }else{
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
+                } else {
                     Intent accountIntent = new Intent(getActivity(), AccountActvity.class);
                     startActivity(accountIntent);
                 }
@@ -352,7 +352,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 PeachUser user = (PeachUser) data.getSerializableExtra("user");
                 DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
                 imLogin(user);
-
             } else if (requestCode == CODE_FAVORITE) {
                 startActivity(new Intent(getActivity(), FavListActivity.class));
             }

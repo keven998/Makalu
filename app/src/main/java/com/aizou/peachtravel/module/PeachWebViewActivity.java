@@ -1,6 +1,5 @@
 package com.aizou.peachtravel.module;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -9,13 +8,11 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.BaseWebViewActivity;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.NumberProgressBar;
-import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -60,9 +57,11 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         initWebView();
         mCurrentUrl = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-        if(!TextUtils.isEmpty(title)){
+        if(!TextUtils.isEmpty(title)) {
             ((TextView)findViewById(R.id.tv_title_bar_title)).setText(title);
-        }else{title="分享";}
+        } else {
+            title="分享";
+        }
         strategy=new StrategyBean();
         strategy.detailUrl=mCurrentUrl;
         strategy.title=title;
@@ -71,7 +70,6 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         refresh.setOnClickListener(this);
         share.setOnClickListener(this);
         mWebView.loadUrl(mCurrentUrl);
-
     }
 
 

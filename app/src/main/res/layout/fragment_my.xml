@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <LinearLayout android:id="@+id/login_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -116,7 +116,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/base_line"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:layout_marginTop="2dp"
                         android:textColor="@color/base_color_white"
 
@@ -126,10 +126,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_id"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:layout_marginTop="2dp"
-                        android:textStyle="italic"
-                        android:maxLines="2"
                         android:textColor="@color/base_color_white"
                         />
 

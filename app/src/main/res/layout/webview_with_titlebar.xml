@@ -79,6 +79,7 @@
     </WebView>
 
     <RelativeLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/base_color_white"
