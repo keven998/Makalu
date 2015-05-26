@@ -180,7 +180,6 @@
                     android:paddingRight="18dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:drawableLeft="@drawable/ic_setting_share"
                     android:drawablePadding="15dp"
                     android:drawableRight="@drawable/cell_accessory"
                     android:gravity="center_vertical"
