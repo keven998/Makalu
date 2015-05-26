@@ -166,7 +166,7 @@ public class MessageDB {
         IMClient.getInstance().setLastMsg(conversation, entity.getServerId());
         add2Conversion(Long.parseLong(chater), entity.getCreateTime(), table_name, entity.getServerId(), conversation,chatType);
         closeDB();
-        IMClient.getInstance().add2ConversationList(new ConversationBean(Integer.parseInt(chater), entity.getCreateTime(), null, entity.getServerId(), 0, conversation, entity.getMessage(),chatType));
+        IMClient.getInstance().add2ConversationList(new ConversationBean(Integer.parseInt(chater), entity.getCreateTime(), null, entity.getServerId(), 0, conversation, entity.getMessage(),chatType,entity.getType()));
         return 0;
     }
 
@@ -272,13 +272,15 @@ public class MessageDB {
             String chatType = c.getString(c.getColumnIndex("chatType"));
             if (conversation == null) conversation = "0";
             IMClient.getInstance().setLastMsg(conversation, lastmsgId);
-            Cursor cursor = mdb.rawQuery("SELECT Message FROM " + table + " order by ServerId desc limit 1", null);
+            Cursor cursor = mdb.rawQuery("SELECT Message,Type FROM " + table + " order by ServerId desc limit 1", null);
             String lastMessage=null;
+            int messageType=0;
             if (cursor.getCount()>0) {
                 cursor.moveToLast();
                 lastMessage = cursor.getString(0);
+                messageType=cursor.getInt(1);
             }
-            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType));
+            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType,messageType));
            // new Conversation(lastMessage,time,isRead,friend_id,0,conversation,chatType);
             //IMClient.getInstance().add2ConversationList(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType));
             cursor.close();

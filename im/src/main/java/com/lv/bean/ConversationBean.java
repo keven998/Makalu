@@ -17,6 +17,15 @@ public class ConversationBean {
     private int isRead; //0:有未读  1：已读
     private String conversation;
 
+    public int getType() {
+        return Type;
+    }
+
+    public void setType(int type) {
+        Type = type;
+    }
+
+    private int Type;
     public String getChatType() {
         return chatType;
     }
@@ -46,7 +55,7 @@ public class ConversationBean {
 
 
 
-    public ConversationBean(int friendId, long lastChatTime, String HASH, int Last_rev_msgId, int isRead,String conversation,String lastMessage,String chatType) {
+    public ConversationBean(int friendId, long lastChatTime, String HASH, int Last_rev_msgId, int isRead,String conversation,String lastMessage,String chatType,int type) {
         LastChatTime = lastChatTime;
         this.HASH = HASH;
         FriendId = friendId;
@@ -55,6 +64,7 @@ public class ConversationBean {
         this.conversation=conversation;
         this.lastMessage=lastMessage;
         this.chatType=chatType;
+        this.Type=type;
     }
 
     public int getFriendId() {

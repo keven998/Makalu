@@ -60,6 +60,12 @@ import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
+import com.lv.user.LoginSuccessListener;
+import com.lv.user.User;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -69,7 +75,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MainActivity extends PeachBaseActivity{
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessagerHandler{
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -103,6 +109,17 @@ public class MainActivity extends PeachBaseActivity{
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
+//        User.login("100010", new LoginSuccessListener() {
+//            @Override
+//            public void OnSuccess() {
+//                System.out.println("登陆成功");
+//            }
+//
+//            @Override
+//            public void OnFailed(int code) {
+//                System.out.println("登陆失败 :" + code);
+//            }
+//        });
        /* if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -162,7 +179,6 @@ public class MainActivity extends PeachBaseActivity{
     }
 
     private void getContactFromServer() {
-
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -317,6 +333,7 @@ public class MainActivity extends PeachBaseActivity{
 
     @Override
     protected void onResume() {
+        HandleImMessage.registerMessageListener(this);
         super.onResume();
         if (!isConflict){
             updateUnreadMsgCount();
@@ -328,6 +345,7 @@ public class MainActivity extends PeachBaseActivity{
     @Override
     protected void onPause() {
         super.onPause();
+        HandleImMessage.unregisterMessageListener(this);
     }
 
     @Override
@@ -431,6 +449,12 @@ public class MainActivity extends PeachBaseActivity{
             }
         }
     };
+
+
+    @Override
+    public void onMsgArrive(Message m) {
+        System.out.println("message :"+m.getContents());
+    }
 
     /**
      * 新消息广播接收者
@@ -657,6 +681,7 @@ public class MainActivity extends PeachBaseActivity{
             }
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

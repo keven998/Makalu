@@ -196,9 +196,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	private ViewPager expressionViewpager;
 	private RelativeLayout expressionContainer;
 	private LinearLayout btnContainer;
-//	private ImageView locationImgview;
 	private View more;
-	private int position;
 	private ClipboardManager clipboard;
 	private InputMethodManager manager;
 	private List<String> reslist;
@@ -230,8 +228,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
     private DotView dots;
     private ImageView[] imageViews;
     private ImageView imageView;
-	
-
+	private String CurrentFriend;
+    private String conversation;
+    private String chatType;
 	private Handler micImageHandler = new Handler() {
 		@Override
 		public void handleMessage(android.os.Message msg) {
@@ -245,6 +244,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
+        CurrentFriend = getIntent().getStringExtra("friend_id");
+        conversation = getIntent().getStringExtra("conversation");
+        chatType = getIntent().getStringExtra("chatType");
 		initView();
 		setUpView();
 	}
@@ -417,9 +419,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
 		// 判断单聊还是群聊
-		chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
 
-		if (chatType == CHATTYPE_SINGLE) { // 单聊
+		if ("single".equals(chatType)) { // 单聊
 			toChatUsername = getIntent().getStringExtra("userId");
             toChatUser = AccountManager.getInstance().getContactList(mContext).get(toChatUsername);
             if(toChatUser==null){
@@ -722,6 +723,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
 			String s = mEditTextContent.getText().toString();
 			sendText(s,0);
+            //IMClient.getInstance().sendTextMessage(s)
 		}else if (id == R.id.btn_my_guide) {
             MobclickAgent.onEvent(mContext,"event_share_plan_extra");
             Intent intent = new Intent(mContext, StrategyListActivity.class);
@@ -871,17 +873,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 *            message content
 	 */
 	private void sendText(String content,int extType) {
-        IMClient.getInstance().sendTextMessage(content,100002+"",null,new SendMsgListener() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailed(int code) {
-
-            }
-        },"single");
+//        IMClient.getInstance().sendTextMessage(content,100002+"",null,new SendMsgListener() {
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onFailed(int code) {
+//
+//            }
+//        },"single");
 		if (content.length() > 0) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             TextMessageBody txtBody;

@@ -8,6 +8,16 @@ public class Conversation {
     private String conversation;
     private String chatType;
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    private String messageType;
+
     public String getConversation() {
         return conversation;
     }

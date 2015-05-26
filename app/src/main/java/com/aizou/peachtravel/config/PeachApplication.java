@@ -11,6 +11,8 @@ import com.aizou.peachtravel.config.hxconfig.PeachHXSDKHelper;
 import com.aizou.peachtravel.db.DaoMaster;
 import com.aizou.peachtravel.db.DaoSession;
 import com.lv.im.IMClient;
+import com.lv.user.LoginSuccessListener;
+import com.lv.user.User;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,7 +45,6 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
-        IMClient.initIM(this);
     }
 
     private void setupDatabase() {

@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
@@ -55,6 +56,9 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.bean.Conversation;
+import com.lv.bean.ConversationBean;
+import com.lv.im.HandleImMessage;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -71,7 +75,7 @@ import butterknife.InjectView;
 /**
  * Created by rjm on 2015/3/16.
  */
-public class TalkFragment extends PeachBaseFragment {
+public class TalkFragment extends PeachBaseFragment{
     public static final int NEW_CHAT_REQUEST_CODE = 101;
     @InjectView(R.id.tv_title_add)
     TextView tvTitleAdd;
@@ -99,7 +103,8 @@ public class TalkFragment extends PeachBaseFragment {
     private boolean hidden;
     private List<EMGroup> groups;
     private int del_unread_item=0;
-
+    //private List<Conversation>
+    private List<ConversationBean> con_list=new ArrayList<ConversationBean>();
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_talk, null);
@@ -113,6 +118,7 @@ public class TalkFragment extends PeachBaseFragment {
             outState.putBoolean("isConflict", true);
         }
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

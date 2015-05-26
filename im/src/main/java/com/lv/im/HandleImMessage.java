@@ -27,15 +27,20 @@ public class HandleImMessage {
     private Context c;
     private long lastTime;
     private static HashMap<MessagerHandler, String> openStateMap = new HashMap<>();
+//    static {
+//        Looper.prepare();
+//    }
     private HandleImMessage() {
         MessageReceiver.registerListener(listener, "IM");
         queue.setDequeueListener(dequeueListener);
+       // Looper.prepare();
     }
 
     public static HandleImMessage getInstance() {
         if (instance == null) {
             instance = new HandleImMessage();
         }
+            System.out.println(Thread.currentThread());
         return instance;
     }
 
@@ -80,9 +85,11 @@ public class HandleImMessage {
     public static Handler handler = new Handler() {
         @Override
         public void handleMessage(android.os.Message message) {
+            System.out.println("new Message");
             switch (message.what) {
                 case Config.TEXT_MSG:
                     Message newMessage = (Message) message.obj;
+                    System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
                     for (MessagerHandler handler : ehList) {
                         handler.onMsgArrive(newMessage);
                     }
