@@ -14,7 +14,7 @@
         android:drawableTop="@drawable/ic_new_talk"
         android:drawablePadding="8dp"
         android:gravity="center"
-        android:text="Talk"
+        android:text="发起聊天"
         android:paddingLeft="40dp"
         android:paddingBottom="40dp"
         android:paddingTop="40dp"

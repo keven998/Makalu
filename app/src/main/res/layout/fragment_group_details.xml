@@ -21,6 +21,7 @@
             <LinearLayout
                 android:id="@+id/ll_group_name"
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="@dimen/title_bar_height"
                 android:background="@drawable/option_cell_selector"
                 android:gravity="center_vertical">
@@ -123,69 +124,15 @@
                 android:layout_marginLeft="28dp"
                 android:background="#E6E6E6" />
 
-    <LinearLayout
-        android:id="@+id/ll_group_dismiss"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/option_cell_selector"
-        android:orientation="horizontal"
-        android:layout_marginLeft="28dp"
-        android:gravity="center_vertical">
-
-
-        <Button
-            android:id="@+id/btn_exit_grp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/title_bar_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:paddingLeft="38dp"
-            android:paddingRight="38dp"
-            android:background="@null"
-            android:onClick="exitGroup"
-            android:text="退出群聊"
-            android:textColor="@color/second_font_color"
-            android:textSize="16sp" />
-
-
-        <Button
-            android:id="@+id/btn_exitdel_grp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/title_bar_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:onClick="exitDeleteGroup"
-            android:background="@null"
-            android:paddingLeft="38dp"
-            android:paddingRight="38dp"
-            android:text="解散群聊"
-            android:textColor="@color/second_font_color"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-
-
-    </LinearLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="#E6E6E6"
-        android:layout_marginLeft="28dp"/>
-
-
-
             <LinearLayout
                 android:id="@+id/ll_group_add"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_bar_height"
                 android:background="@drawable/option_cell_selector"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginLeft="28dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
 
                 <TextView
@@ -200,7 +147,7 @@
                     android:ellipsize="end"
                     android:text="邀请"
                     android:drawableLeft="@drawable/ic_green_add_icon"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="4dp"
                     android:textColor="@color/app_theme_color"
                     android:textSize="15sp" />
 
@@ -208,10 +155,12 @@
                 <View
                     android:layout_width="0.8dp"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
                     android:background="#E6E6E6" />
 
 
-                <TextView
+                <CheckedTextView
                     android:id="@+id/tv_del_to_group"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -221,14 +170,12 @@
                     android:paddingRight="10dp"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:text="移除"
+                    android:text="删除"
                     android:visibility="gone"
-                    android:drawableLeft="@drawable/ic_poi_close"
-                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/checker_edit_chat_group"
+                    android:drawablePadding="4dp"
                     android:textColor="@color/second_font_color"
                     android:textSize="15sp" />
-
-
 
             </LinearLayout>
 
@@ -239,6 +186,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="28dp"
                 android:layout_marginBottom="10dp"
+                android:divider="@null"
+                android:dividerHeight="0dp"
                 />
 
 

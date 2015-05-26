@@ -105,7 +105,7 @@
                 android:onClick="startChat"
                 android:paddingLeft="38dp"
                 android:paddingRight="38dp"
-                android:text="Talk"
+                android:text="发送消息"
                 android:textColor="@color/base_color_white"
                 android:textSize="15sp" />
         </LinearLayout>
