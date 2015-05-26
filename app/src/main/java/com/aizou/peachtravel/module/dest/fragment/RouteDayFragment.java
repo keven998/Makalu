@@ -456,7 +456,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                     if(!poiDetailBean.getFormatRank().equals("0")){
                         holder.rankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
                     }else{
-                        holder.rankTv.setText("假数据，看效果");
+                        holder.rankTv.setText("暂无排名");
                     }
 
                     if (!isAnimationEnd && isEditableMode) {

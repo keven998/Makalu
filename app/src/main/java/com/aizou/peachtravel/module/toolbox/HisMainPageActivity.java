@@ -29,6 +29,7 @@ import com.aizou.peachtravel.common.utils.IntentUtils;
 import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.dest.StrategyMapActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.lidroid.xutils.ViewUtils;
@@ -91,6 +92,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     HorizontalScrollView his_pics_sv;
     @ViewInject(R.id.ll_his_trip_plan)
     LinearLayout ll_his_trip_plan;
+    @ViewInject(R.id.ll_foot_print)
+    LinearLayout ll_foot_print;
 
     private int userId;
     private ImageView my_pics_cell;
@@ -117,9 +120,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HisMainPageActivity.this,StrategyListActivity.class);
-                intent.putExtra("userId",userId+"");
-                intent.putExtra("isExpertPlan",true);
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
+                intent.putExtra("userId", userId + "");
+                intent.putExtra("isExpertPlan", true);
                 startActivity(intent);
             }
         });
@@ -158,6 +161,18 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
+                    intent.putExtra("userId", (long)bean.get(0).userId);
+                    intent.putExtra("userNick", bean.get(0).nickName);
+                    startActivity(intent);
+                }
+            });
+
+        }else{
+            add_friend.setText("加为好友");
+            add_friend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     PeachUser user = new PeachUser();
                     user.nickName = bean.get(0).nickName;
                     user.userId = bean.get(0).userId;
@@ -169,18 +184,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     user.memo = bean.get(0).memo;
                     Intent intent = new Intent(HisMainPageActivity.this, SeachContactDetailActivity.class);
                     intent.putExtra("user", user);
-                    startActivity(intent);
-                }
-            });
-
-        }else{
-            add_friend.setText("加为好友");
-            add_friend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
-                    intent.putExtra("userId", (long)bean.get(0).userId);
-                    intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);
                 }
             });
@@ -206,6 +209,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
         initFlDestion(all_foot_print_list);
+        ll_foot_print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
+                intent.putExtra("isExpertFootPrint", true);
+                intent.putParcelableArrayListExtra("ExpertFootPrintBean",all_foot_print_list);
+                startActivity(intent);
+            }
+        });
     }
 
 

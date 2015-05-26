@@ -808,40 +808,4 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
 
     }
 
-    public static class BlurMenu extends BlurDialogFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
-            View customView = getActivity().getLayoutInflater().inflate(R.layout.im_main_dialog_menu, null);
-            connectionDialog.setContentView(customView);
-//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dismiss();
-//                }
-//            });
-            customView.findViewById(R.id.new_talk).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getActivity().startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
-                    dismiss();
-                }
-            });
-
-            customView.findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), AddContactActivity.class));
-                    dismiss();
-                }
-            });
-            return connectionDialog;
-        }
-    }
-
 }

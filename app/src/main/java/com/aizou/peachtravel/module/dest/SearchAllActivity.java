@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -62,14 +64,14 @@ public class SearchAllActivity extends PeachBaseActivity {
         if(!TextUtils.isEmpty(toId)){
             mTitleBar.getTitleTextView().setText("发送地点");
         }else{
-            mTitleBar.getTitleTextView().setText("搜索");
+            mTitleBar.getTitleTextView().setText("旅行搜搜");
         }
 
         mTitleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(0,R.anim.push_bottom_out);
+                finishWithNoAnim();
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -100,13 +102,35 @@ public class SearchAllActivity extends PeachBaseActivity {
                 return false;
             }
         });
+
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    mSearchAllLv.setAdapter(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        View emptyView = findViewById(R.id.empty_text);
+        mSearchAllLv.setEmptyView(emptyView);
     }
 
 
     @Override
     public void onBackPressed() {
-        finish();
-        overridePendingTransition(0,R.anim.push_bottom_out);
+        finishWithNoAnim();
+        overridePendingTransition(0, android.R.anim.fade_out);
     }
 
     @Override
@@ -186,25 +210,24 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
-                MobclickAgent.onEvent(mContext,"event_click_more_search_result");
+                MobclickAgent.onEvent(mContext, "event_click_more_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
-                intent.putExtra("chatType",chatType);
-                intent.putExtra("toId",toId);
+                intent.putExtra("chatType", chatType);
+                intent.putExtra("toId", toId);
                 startActivity(intent);
             }
 
             @Override
-            public void onItemOnClick(String type,String id,Object object) {
-                   MobclickAgent.onEvent(mContext,"event_click_search_result_item");
-                   IntentUtils.intentToDetail(SearchAllActivity.this,type,id);
-
+            public void onItemOnClick(String type, String id, Object object) {
+                MobclickAgent.onEvent(mContext, "event_click_search_result_item");
+                IntentUtils.intentToDetail(SearchAllActivity.this, type, id);
             }
 
             @Override
             public void onSendClick(String type, String id, Object object) {
-                IMUtils.showImShareDialog(mContext, (ICreateShareDialog)object, new IMUtils.OnDialogShareCallBack() {
+                IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
                         DialogManager.getInstance().showLoadingDialog(mContext);
@@ -247,7 +270,6 @@ public class SearchAllActivity extends PeachBaseActivity {
             }
         });
         mSearchAllLv.setAdapter(searchAllAdapter);
-
     }
 
 

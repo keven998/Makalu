@@ -16,7 +16,7 @@
         android:textColor="@color/base_font_color"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
-        android:text="第一天"/>
+        android:text=""/>
 
 
 
@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/settings_selected"
-        android:visibility="gone"
+        android:src="@drawable/ic_gray_complete"
+        android:visibility="visible"
         />
 
 </RelativeLayout>

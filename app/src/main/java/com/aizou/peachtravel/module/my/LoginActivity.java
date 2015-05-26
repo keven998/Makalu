@@ -214,12 +214,12 @@ public class LoginActivity extends PeachBaseActivity{
                 IMUserRepository.saveContactList(mContext, users);
                 // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
                 final long startTime = System.currentTimeMillis();
-                LogUtil.d("getGroupFromServer", startTime + "");
+//                LogUtil.d("getGroupFromServer", startTime + "");
                 EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
                     @Override
                     public void onSuccess(List<EMGroup> emGroups) {
-                        long endTime = System.currentTimeMillis();
-                        LogUtil.d("getGroupFromServer", endTime - startTime + "--groudSize=" + emGroups.size());
+//                        long endTime = System.currentTimeMillis();
+//                        LogUtil.d("getGroupFromServer", endTime - startTime + "--groudSize=" + emGroups.size());
 
                     }
 

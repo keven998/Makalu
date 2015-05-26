@@ -213,8 +213,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_attr_dots"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/ic_poi_address" />
+                    android:gravity="center_vertical"/>
 
                 <View
                     android:layout_width="60dp"

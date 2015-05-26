@@ -60,7 +60,7 @@ public class ShareUtils {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
                 .inflate(act, R.layout.view_share_bar, null);
-        TextView talkTv = (TextView) contentView.findViewById(R.id.tv_tao_talk);
+//        TextView talkTv = (TextView) contentView.findViewById(R.id.tv_tao_talk);
         TextView wxcircleTv = (TextView) contentView
                 .findViewById(R.id.tv_wxcircle);
         TextView wechatTv = (TextView) contentView.findViewById(R.id.tv_wechat);
@@ -70,13 +70,13 @@ public class ShareUtils {
         TextView qqTv = (TextView) contentView.findViewById(R.id.tv_qq);
         TextView cancleIv = (TextView) contentView
                 .findViewById(R.id.tv_share_cancel);
-        talkTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                IMUtils.onClickImShare(act);
-            }
-        });
+//        talkTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                IMUtils.onClickImShare(act);
+//            }
+//        });
         wxcircleTv.setOnClickListener(new View.OnClickListener() {
 
             @Override

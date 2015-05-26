@@ -81,33 +81,4 @@
         android:background="@color/app_backgroud"
             android:listSelector="@android:color/transparent" />
 
-    <LinearLayout
-        android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/start_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="90dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_new_talk" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:lineSpacingExtra="3dp"
-            android:text="桃·Talk\n你的旅行朋友圈"
-            android:textColor="@color/base_text_color_text_hint"
-            android:textSize="14sp" />
-
-    </LinearLayout>
 </LinearLayout>
