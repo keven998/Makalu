@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/base_color_white"
+    android:background="@drawable/option_cell_selector"
     android:padding="11dp"
     >
 
