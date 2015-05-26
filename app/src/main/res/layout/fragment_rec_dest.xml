@@ -47,7 +47,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:textSize="18sp"
-            android:text="目的地"
+            android:text="热门城市"
             android:textColor="@color/base_font_color"/>
 
         <ImageView

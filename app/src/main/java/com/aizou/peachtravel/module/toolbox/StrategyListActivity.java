@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
 import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
+import com.aizou.peachtravel.common.widget.swipelistview.util.Attributes;
 import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
@@ -103,12 +105,14 @@ public class StrategyListActivity extends PeachBaseActivity {
     String toId;
     private StrategyBean originalStrategy;
     private String userId;
+    private boolean isExpertPlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
+        isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
         initView();
         initData();
     }
@@ -137,7 +141,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (isShare) {
+        if (isShare||isExpertPlan) {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -190,6 +194,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 Intent intent =new Intent(StrategyListActivity.this,StrategyVisitedListActivity.class);
                 intent.putExtra("isShare",false);
                 intent.putExtra("userId",userId);
+                intent.putExtra("isExpertPlan",isExpertPlan);
                 startActivity(intent);
             }
         });
@@ -315,11 +320,13 @@ public class StrategyListActivity extends PeachBaseActivity {
         protected ArrayList<StrategyBean> mItemDataList = new ArrayList<StrategyBean>();
         DisplayImageOptions poptions;
         boolean isSend;
+        private LinearLayout swipe_ll;
 
         public StrategyAdapter(boolean isSend) {
             poptions = UILUtils.getDefaultOption();
             this.isSend = isSend;
         }
+
 
         @Override
         public int getSwipeLayoutResourceId(int position) {
@@ -333,11 +340,14 @@ public class StrategyListActivity extends PeachBaseActivity {
         @Override
         public View generateView(int position, ViewGroup parent) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.row_my_strategy, null);
+            swipe_ll = (LinearLayout)v.findViewById(R.id.swipe_bg_ll);
             return v;
         }
 
+
+
         @Override
-        public void fillValues(int position, View convertView) {
+        public void fillValues(final int position, View convertView) {
             ImageView mStrategyIv = (ImageView) convertView.findViewById(R.id.strategy_iv);
             TextView mDayTv = (TextView) convertView.findViewById(R.id.day_tv);
             TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
@@ -360,9 +370,19 @@ public class StrategyListActivity extends PeachBaseActivity {
             mNameTv.setText(itemData.title);
             LogUtil.d(itemData.status+"====status");
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isSend) {
+            if (isExpertPlan) {  //isSend
                 mRlSend.setVisibility(View.VISIBLE);
-                mBtnSend.setOnClickListener(new View.OnClickListener() {
+                mBtnSend.setVisibility(View.GONE);
+                mRlSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                        Intent intent = new Intent(mContext, StrategyActivity.class);
+                        intent.putExtra("id", bean.id);
+                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                    }
+                });
+                /*mBtnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
@@ -405,10 +425,13 @@ public class StrategyListActivity extends PeachBaseActivity {
                             }
                         });
                     }
-                });
-            } else {
+                });*/
+            }
+            else {
                 mRlSend.setVisibility(View.GONE);
             }
+
+
 
             mMore.setOnClickListener(new View.OnClickListener() {
                 @Override

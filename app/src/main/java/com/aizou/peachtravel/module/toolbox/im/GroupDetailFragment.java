@@ -7,12 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +30,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ScrollBar;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseFragment;
 import com.aizou.peachtravel.bean.PeachUser;
@@ -73,17 +77,15 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     private ListView memberGv;
     private String groupId;
-    private Button exitBtn;
-    private Button deleteBtn;
     private EMGroup group;
-    //	private GridAdapter adapter;
     private int referenceWidth;
     private int referenceHeight;
 
     private RelativeLayout rl_switch_block_groupmsg;
     private LinearLayout rl_groupName;
     private TextView groupNameTv;
-    private TextView addGroup,delGroupMember;
+    private TextView addGroup;
+    private CheckedTextView delGroupMember;
 
     private boolean isInDeleteMode;
     private MemberAdapter memberAdapter;
@@ -111,12 +113,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         super.onActivityCreated(savedInstanceState);
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
-        delGroupMember = (TextView) getView().findViewById(R.id.tv_del_to_group);
+        delGroupMember = (CheckedTextView) getView().findViewById(R.id.tv_del_to_group);
         delGroupMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isInDeleteMode=true;
-                delGroupMember.setVisibility(View.GONE);
+                CheckedTextView view = (CheckedTextView) v;
+                if (!isInDeleteMode) {
+                    isInDeleteMode = true;
+                    view.setText("完成");
+                } else {
+                    isInDeleteMode = false;
+                    view.setText("删除");
+                }
+                view.setChecked(isInDeleteMode);
                 memberAdapter.notifyDataSetChanged();
             }
         });
@@ -129,9 +138,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             }
         });
         clearAllHistory = (RelativeLayout) getView().findViewById(R.id.clear_all_history);
-//		userGridview = (ExpandGridView) findViewById(R.id.gridview);
-        exitBtn = (Button) getView().findViewById(R.id.btn_exit_grp);
-        deleteBtn = (Button) getView().findViewById(R.id.btn_exitdel_grp);
         rl_groupName = (LinearLayout) getView().findViewById(R.id.ll_group_name);
         groupNameTv = (TextView) getView().findViewById(R.id.tv_groupName);
 
@@ -140,8 +146,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         iv_switch_unblock_groupmsg = (ImageView) getView().findViewById(R.id.iv_switch_unblock_groupmsg);
 
         rl_switch_block_groupmsg.setOnClickListener(this);
-        exitBtn.setOnClickListener(this);
-        deleteBtn.setOnClickListener(this);
 
         Drawable referenceDrawable = getResources().getDrawable(R.drawable.smiley_add_btn);
         referenceWidth = referenceDrawable.getIntrinsicWidth();
@@ -399,43 +403,53 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             }
         });
 
-        memberGv.setAdapter(memberAdapter);
-        memberGv.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(isInDeleteMode){
-                    isInDeleteMode=false;
-                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                        delGroupMember.setVisibility(View.VISIBLE);
-                    }
-                    memberAdapter.notifyDataSetChanged();
-                }else{
-
-                }
-                return false;
-            }
-        });
-        setUpGroupMemeber();
         // 如果自己是群主，显示解散按钮
         if (group.getOwner() == null || "".equals(group.getOwner())) {
-            exitBtn.setVisibility(View.GONE);
-            deleteBtn.setVisibility(View.GONE);
-        }
-        if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-            exitBtn.setVisibility(View.GONE);
-            deleteBtn.setVisibility(View.VISIBLE);
-            delGroupMember.setVisibility(View.VISIBLE);
-            rl_groupName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
-                    intent.putExtra("groupId", groupId);
-                    startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-                }
-            });
+//            exitBtn.setVisibility(View.GONE);
+//            deleteBtn.setVisibility(View.GONE);
         } else {
-            getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
+            if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+                if (memberGv.getFooterViewsCount() == 0) {
+                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+                    memberGv.addFooterView(view);
+                    Button btn = (Button) view.findViewById(R.id.footer_btn);
+                    btn.setText("解散该群");
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            exitDeleteGroupTips();
+                        }
+                    });
+                }
+
+                delGroupMember.setVisibility(View.VISIBLE);
+                rl_groupName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
+                        intent.putExtra("groupId", groupId);
+                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+                    }
+                });
+            } else {
+                getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
+
+                View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+                memberGv.addFooterView(view);
+                Button btn = (Button) view.findViewById(R.id.footer_btn);
+                btn.setText("退出此群");
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exitGroupTips();
+                    }
+                });
+            }
         }
+
+        memberGv.setAdapter(memberAdapter);
+        setUpGroupMemeber();
+
         groupNameTv.setText(group.getGroupName());
         List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
         if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
@@ -596,7 +610,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         switch (v.getId()) {
             case R.id.rl_switch_block_groupmsg:
                 if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
-                    System.out.println("change to unblock group msg");
                     try {
 //				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
                         List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
@@ -614,7 +627,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         //todo: 显示错误给用户
                     }
                 } else {
-                    System.out.println("change to block group msg");
                     try {
 //				    EMGroupManager.getInstance().blockGroupMessage(groupId);
                         List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
@@ -632,15 +644,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         //todo: 显示错误给用户
                     }
                 }
-                break;
-
-
-            case R.id.btn_exit_grp:
-                exitGroupTips();
-                break;
-
-            case R.id.btn_exitdel_grp:
-                exitDeleteGroupTips();
                 break;
 
             default:break;

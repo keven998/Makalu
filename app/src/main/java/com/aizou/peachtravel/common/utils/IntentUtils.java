@@ -10,6 +10,7 @@ import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.module.dest.CityDetailActivity;
 import com.aizou.peachtravel.module.dest.PicPagerActivity;
+import com.aizou.peachtravel.module.dest.PicPagerActivity2;
 import com.aizou.peachtravel.module.dest.PoiDetailActivity;
 import com.aizou.peachtravel.module.dest.SpotDetailActivity;
 import com.aizou.peachtravel.module.dest.TravelNoteDetailActivity;
@@ -63,6 +64,18 @@ public class IntentUtils {
             act.startActivity(intent);
             act.overridePendingTransition(0, R.anim.fade_in);
         }
+
+    }
+
+
+    public static void intentToPicGallery2(Activity act, ArrayList<String> urls, int pos) {
+
+            Intent intent = new Intent(act, PicPagerActivity2.class);
+            intent.putStringArrayListExtra("imageStringUrlList", urls);
+            intent.putExtra("pos", pos);
+            act.startActivity(intent);
+            act.overridePendingTransition(0, R.anim.fade_in);
+
 
     }
 

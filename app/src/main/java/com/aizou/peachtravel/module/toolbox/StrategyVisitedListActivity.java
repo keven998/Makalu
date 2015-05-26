@@ -103,12 +103,14 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     String toId;
     private StrategyBean originalStrategy;
     private String userId;
+    private boolean isExpertPlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
+        isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
         initView();
         initData();
     }
@@ -309,6 +311,9 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             this.isSend = isSend;
         }
 
+
+
+
         @Override
         public int getSwipeLayoutResourceId(int position) {
             return R.id.swipe;
@@ -325,7 +330,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         }
 
         @Override
-        public void fillValues(int position, View convertView) {
+        public void fillValues(final int position, View convertView) {
             ImageView mStrategyIv = (ImageView) convertView.findViewById(R.id.strategy_iv);
             TextView mDayTv = (TextView) convertView.findViewById(R.id.day_tv);
             TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
@@ -347,9 +352,18 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isSend) {
+            if (isExpertPlan) {
                 mRlSend.setVisibility(View.VISIBLE);
-                mBtnSend.setOnClickListener(new View.OnClickListener() {
+                mRlSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                        Intent intent = new Intent(mContext, StrategyActivity.class);
+                        intent.putExtra("id", bean.id);
+                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                    }
+                });
+                /*mBtnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
@@ -392,24 +406,25 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                             }
                         });
                     }
-                });
+                });*/
             } else {
                 mRlSend.setVisibility(View.GONE);
             }
 
-            mMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMoreDialog(itemData);
-                }
-            });
 
-            mDeleteItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteItem(itemData);
-                }
-            });
+                mMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showMoreDialog(itemData);
+                    }
+                });
+
+                mDeleteItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteItem(itemData);
+                    }
+                });
         }
 
         public void showMoreDialog(final StrategyBean strBean){

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<LinearLayout
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="vertical"
@@ -174,18 +179,14 @@ android:background="@color/app_backgroud">
                     android:id="@+id/all_his_pics_sv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="11dp"
-                    android:paddingRight="0dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     />
 
-                <View
+                <!--<View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
                     android:background="@color/base_color_line_color"
-                    />
+                    />-->
 
             </RelativeLayout>
 
@@ -423,49 +424,53 @@ android:background="@color/app_backgroud">
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@color/base_color_white">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="加为好友"
-                    android:gravity="center"
-                    android:textColor="@color/app_theme_color"
-                    android:textSize="15sp"
-                    android:layout_weight="1"
-                    android:id="@+id/his_add_friend"
-                    />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/base_border_color"
-                    />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="咨询达人"
-                    android:gravity="center"
-                    android:textColor="@color/app_theme_color"
-                    android:textSize="15sp"
-                    android:layout_weight="1"
-                    android:id="@+id/his_query"
-                    />
-
-
-
-            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/base_color_white">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text=""
+            android:gravity="center"
+            android:textColor="@color/app_theme_color"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:id="@+id/his_add_friend"
+            />
+
+        <!--<View
+            android:layout_width="1dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/base_border_color"
+            />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="咨询达人"
+            android:gravity="center"
+            android:textColor="@color/app_theme_color"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:id="@+id/his_query"
+            />
+-->
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
