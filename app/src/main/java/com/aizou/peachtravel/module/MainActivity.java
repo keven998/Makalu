@@ -97,17 +97,18 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-//        User.login("100010", new LoginSuccessListener() {
-//            @Override
-//            public void OnSuccess() {
-//                System.out.println("登陆成功");
-//            }
-//
-//            @Override
-//            public void OnFailed(int code) {
-//                System.out.println("登陆失败 :" + code);
-//            }
-//        });
+        //User.getUser().setCurrentUser("100002");
+        User.login("100002", new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                System.out.println("登陆成功");
+            }
+
+            @Override
+            public void OnFailed(int code) {
+                System.out.println("登陆失败 :" + code);
+            }
+        });
        /* if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -321,7 +322,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     protected void onResume() {
-        HandleImMessage.registerMessageListener(this);
+        HandleImMessage.getInstance().registerMessageListener(this);
         super.onResume();
         if (!isConflict){
             updateUnreadMsgCount();
@@ -333,7 +334,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onPause() {
         super.onPause();
-        HandleImMessage.unregisterMessageListener(this);
+        HandleImMessage.getInstance().unregisterMessageListener(this);
     }
 
     @Override

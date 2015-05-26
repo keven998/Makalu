@@ -41,6 +41,7 @@ import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -123,7 +124,9 @@ import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.lv.Listener.SendMsgListener;
+import com.lv.Utils.Config;
 import com.lv.bean.Message;
+import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -137,6 +140,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -202,8 +206,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	private InputMethodManager manager;
 	private List<String> reslist;
 	private Drawable[] micImages;
-	private int chatType;
-	private EMConversation conversation;
+	//private int chatType;
+	//private EMConversation conversation;
 	private NewMessageBroadcastReceiver receiver;
 	public static ChatActivity activityInstance = null;
 	// 给谁发送消息
@@ -232,6 +236,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	private String CurrentFriend;
     private String conversation;
     private String chatType;
+    public static List<MessageBean> messageList =new LinkedList<>();
 	private Handler micImageHandler = new Handler() {
 		@Override
 		public void handleMessage(android.os.Message msg) {
@@ -248,9 +253,20 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         CurrentFriend = getIntent().getStringExtra("friend_id");
         conversation = getIntent().getStringExtra("conversation");
         chatType = getIntent().getStringExtra("chatType");
+
+        //test
+        toChatUsername=100010+"";
+        chatType="single";
+        conversation="0";
 		initView();
 		setUpView();
+        initdata();
 	}
+
+    private void initdata() {
+        messageList=IMClient.getInstance().getMessages(toChatUsername,0);
+        adapter.refresh();
+    }
 
 
     /**
@@ -422,24 +438,24 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		// 判断单聊还是群聊
 
 		if ("single".equals(chatType)) { // 单聊
-			toChatUsername = getIntent().getStringExtra("userId");
-            toChatUser = AccountManager.getInstance().getContactList(mContext).get(toChatUsername);
-            if(toChatUser==null){
-                finish();
-            }
-			titleHeaderBar.getTitleTextView().setText(toChatUser.getNick());
+			//toChatUsername = getIntent().getStringExtra("userId");
+           // toChatUser = AccountManager.getInstance().getContactList(mContext).get(toChatUsername);
+//            if(toChatUser==null){
+//                finish();
+//            }
+			titleHeaderBar.getTitleTextView().setText(toChatUsername);
 
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,false);
 		} else {
 			// 群聊
-            toChatUsername = getIntent().getStringExtra("groupId");
+           // toChatUsername = getIntent().getStringExtra("groupId");
             titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
-            group = EMGroupManager.getInstance().getGroup(toChatUsername);
+           // group = EMGroupManager.getInstance().getGroup(toChatUsername);
 
-            if(group!=null){
-                titleHeaderBar.getTitleTextView().setText(group.getGroupName());
-            }
+            //if(group!=null){
+                titleHeaderBar.getTitleTextView().setText(toChatUsername);
+            //}
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId",toChatUsername);
@@ -466,10 +482,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,true);
 		}
-		conversation = EMChatManager.getInstance().getConversation(toChatUsername);
+		//conversation = EMChatManager.getInstance().getConversation(toChatUsername);
 		// 把此会话的未读数置为0
-		conversation.resetUnsetMsgCount();
-		adapter = new MessageAdapter(this, toChatUsername, chatType);
+		//conversation.resetUnsetMsgCount();
+		adapter = new MessageAdapter(this, toChatUsername, chatType,conversation);
 		// 显示消息
 		listView.setAdapter(adapter);
 		listView.setOnScrollListener(new ListScrollListener());
@@ -575,29 +591,29 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
 			switch (resultCode) {
 			case RESULT_CODE_COPY: // 复制消息
-				EMMessage copyMsg = ((EMMessage) adapter.getItem(data.getIntExtra("position", -1)));
-				if (copyMsg.getType() == EMMessage.Type.IMAGE) {
-					ImageMessageBody imageBody = (ImageMessageBody) copyMsg.getBody();
-					// 加上一个特定前缀，粘贴时知道这是要粘贴一个图片
-					clipboard.setText(COPY_IMAGE + imageBody.getLocalUrl());
-				} else {
-					// clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
-					// ((TextMessageBody) copyMsg.getBody()).getMessage()));
-					clipboard.setText(((TextMessageBody) copyMsg.getBody()).getMessage());
-				}
+//				EMMessage copyMsg = ((EMMessage) adapter.getItem(data.getIntExtra("position", -1)));
+//				if (copyMsg.getType() == EMMessage.Type.IMAGE) {
+//					ImageMessageBody imageBody = (ImageMessageBody) copyMsg.getBody();
+//					// 加上一个特定前缀，粘贴时知道这是要粘贴一个图片
+//					clipboard.setText(COPY_IMAGE + imageBody.getLocalUrl());
+//				} else {
+//					// clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
+//					// ((TextMessageBody) copyMsg.getBody()).getMessage()));
+//					clipboard.setText(((TextMessageBody) copyMsg.getBody()).getMessage());
+//				}
 				break;
 			case RESULT_CODE_DELETE: // 删除消息
-				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
-				conversation.removeMessage(deleteMsg.getMsgId());
-				adapter.refresh();
-				listView.setSelection(data.getIntExtra("position", adapter.getCount()) - 1);
+//				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
+//				conversation.removeMessage(deleteMsg.getMsgId());
+//				adapter.refresh();
+//				listView.setSelection(data.getIntExtra("position", adapter.getCount()) - 1);
 				break;
 
 			case RESULT_CODE_FORWARD: // 转发消息
-				EMMessage forwardMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", 0));
-				Intent intent = new Intent(this, ForwardMessageActivity.class);
-				intent.putExtra("forward_msg_id", forwardMsg.getMsgId());
-				startActivity(intent);
+//				EMMessage forwardMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", 0));
+//				Intent intent = new Intent(this, ForwardMessageActivity.class);
+//				intent.putExtra("forward_msg_id", forwardMsg.getMsgId());
+//				startActivity(intent);
 
 				break;
 
@@ -701,9 +717,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 
 				}
 			} else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
-				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
-				addUserToBlacklist(deleteMsg.getFrom());
-			} else if (conversation.getMsgCount() > 0) {
+			//	EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
+			//	addUserToBlacklist(deleteMsg.getFrom());
+			} else if (messageList.size()> 0) {
 				adapter.refresh();
 				setResult(RESULT_OK);
 			} else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
@@ -880,64 +896,28 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 *            message content
 	 */
 	private void sendText(String content,int extType) {
-//        IMClient.getInstance().sendTextMessage(content,100002+"",null,new SendMsgListener() {
-//            @Override
-//            public void onSuccess() {
-//
-//            }
-//
-//            @Override
-//            public void onFailed(int code) {
-//
-//            }
-//        },"single");
-		if (content.length() > 0) {
-			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            TextMessageBody txtBody;
-            if(extType>0){
-                txtBody = new TextMessageBody("");
-                message.setAttribute("tzType",extType);
-                message.setAttribute("content",content);
-            }else {
-                txtBody = new TextMessageBody(content);
-            }
+        if (TextUtils.isEmpty(content)) {
+            return;
+        }
+        MessageBean messageBean=IMClient.getInstance().sendTextMessage(content,toChatUsername ,conversation, new SendMsgListener(){
+            @Override
+            public void onSuccess() {
+                if (Config.isDebug){
+                    Log.i(Config.TAG, "发送成功");
+                }
 
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-
-			// 设置消息body
-			message.addBody(txtBody);
-			// 设置要发给谁,用户username或者群聊groupid
-			message.setReceipt(toChatUsername);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
             }
-//            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-//                @Override
-//                public void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                public void onError(int i, String s) {
-//
-//                }
-//
-//                @Override
-//                public void onProgress(int i, String s) {
-//
-//                }
-//            });
-			// 把messgage加到conversation中
-			conversation.addMessage(message);
+            @Override
+            public void onFailed(int code) {
+                System.out.println("failed code : " + code);
+            }
+        },chatType);
+        messageList.add(messageBean);
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			mEditTextContent.setText("");
 			setResult(RESULT_OK);
-
-		}
 	}
 
 	/**
@@ -953,18 +933,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			return;
 		}
 		try {
-			final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-			message.setReceipt(toChatUsername);
-			int len = Integer.parseInt(length);
-			VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
-			message.addBody(body);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
-            }
-			conversation.addMessage(message);
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			setResult(RESULT_OK);
@@ -981,28 +949,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param filePath
 	 */
 	private void sendPicture(final String filePath) {
-		String to = toChatUsername;
-		// create and add image message in view
-		final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-
-		message.setReceipt(to);
-		ImageMessageBody body = new ImageMessageBody(new File(filePath));
-		// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
-//		 body.setSendOriginalImage(true);
-		message.addBody(body);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
-        }
-		conversation.addMessage(message);
 
 		listView.setAdapter(adapter);
 		adapter.refresh();
 		listView.setSelection(listView.getCount() - 1);
 		setResult(RESULT_OK);
-		// more(more);
 	}
 
 	/**
@@ -1013,26 +964,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		if (!videoFile.exists()) {
 			return;
 		}
-		try {
-			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VIDEO);
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-			String to = toChatUsername;
-			message.setReceipt(to);
-			VideoMessageBody body = new VideoMessageBody(videoFile, thumbPath, length, videoFile.length());
-			message.addBody(body);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext,message);
-            }
-			conversation.addMessage(message);
+
+
 			listView.setAdapter(adapter);
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			setResult(RESULT_OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 
 	}
 
@@ -1083,17 +1021,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param locationAddress
 	 */
 	private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-		LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
-		message.addBody(locBody);
-		message.setReceipt(toChatUsername);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
-        }
-		conversation.addMessage(message);
+
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		listView.setSelection(listView.getCount() - 1);
@@ -1107,63 +1035,63 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param uri
 	 */
 	private void sendFile(Uri uri) {
-		String filePath = null;
-		if ("content".equalsIgnoreCase(uri.getScheme())) {
-			String[] projection = { "_data" };
-			Cursor cursor = null;
-
-			try {
-				cursor = getContentResolver().query(uri, projection, null, null, null);
-				int column_index = cursor.getColumnIndexOrThrow("_data");
-				if (cursor.moveToFirst()) {
-					filePath = cursor.getString(column_index);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else if ("file".equalsIgnoreCase(uri.getScheme())) {
-			filePath = uri.getPath();
-		}
-		File file = new File(filePath);
-		if (file == null || !file.exists()) {
-//			Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(getApplicationContext()).showToast("文件不存在");
-			return;
-		}
-		if (file.length() > 10 * 1024 * 1024) {
-//			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(getApplicationContext()).showToast("文件太太太大了");
-			return;
-		}
-
-		// 创建一个文件消息
-		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.FILE);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-
-		message.setReceipt(toChatUsername);
-		// add message body
-		NormalFileMessageBody body = new NormalFileMessageBody(new File(filePath));
-		message.addBody(body);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
-        }
-		conversation.addMessage(message);
-		listView.setAdapter(adapter);
-		adapter.refresh();
-		listView.setSelection(listView.getCount() - 1);
-		setResult(RESULT_OK);
+//		String filePath = null;
+//		if ("content".equalsIgnoreCase(uri.getScheme())) {
+//			String[] projection = { "_data" };
+//			Cursor cursor = null;
+//
+//			try {
+//				cursor = getContentResolver().query(uri, projection, null, null, null);
+//				int column_index = cursor.getColumnIndexOrThrow("_data");
+//				if (cursor.moveToFirst()) {
+//					filePath = cursor.getString(column_index);
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		} else if ("file".equalsIgnoreCase(uri.getScheme())) {
+//			filePath = uri.getPath();
+//		}
+//		File file = new File(filePath);
+//		if (file == null || !file.exists()) {
+////			Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
+//            ToastUtil.getInstance(getApplicationContext()).showToast("文件不存在");
+//			return;
+//		}
+//		if (file.length() > 10 * 1024 * 1024) {
+////			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
+//            ToastUtil.getInstance(getApplicationContext()).showToast("文件太太太大了");
+//			return;
+//		}
+//
+//		// 创建一个文件消息
+//		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.FILE);
+//		// 如果是群聊，设置chattype,默认是单聊
+//		if (chatType == CHATTYPE_GROUP)
+//			message.setChatType(ChatType.GroupChat);
+//
+//		message.setReceipt(toChatUsername);
+//		// add message body
+//		NormalFileMessageBody body = new NormalFileMessageBody(new File(filePath));
+//		message.addBody(body);
+//        if(chatType==CHATTYPE_GROUP){
+//            IMUtils.setMessageWithTaoziUserInfo(mContext,message);
+//        }
+//		conversation.addMessage(message);
+//		listView.setAdapter(adapter);
+//		adapter.refresh();
+//		listView.setSelection(listView.getCount() - 1);
+//		setResult(RESULT_OK);
 	}
 
 	/**
 	 * 重发消息
 	 */
 	private void resendMessage() {
-		EMMessage msg = null;
-		msg = conversation.getMessage(resendPos);
-		// msg.setBackSend(true);
-		msg.status = EMMessage.Status.CREATE;
+//		EMMessage msg = null;
+//		msg = conversation.getMessage(resendPos);
+//		// msg.setBackSend(true);
+//		msg.status = EMMessage.Status.CREATE;
 
 		adapter.refresh();
 		listView.setSelection(resendPos);
@@ -1299,9 +1227,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 
     @Override
     public void onMsgArrive(Message m) {
-
+        MessageBean messageBean = Msg2Bean(m);
+        messageBean.setSendType(1);
+        messageList.add(messageBean);
+        adapter.refresh();
     }
-
+    public static MessageBean Msg2Bean(Message msg) {
+        return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
+    }
 
     /**
 	 * 消息广播接收者
@@ -1570,6 +1503,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	@Override
 	protected void onResume() {
 		super.onResume();
+        HandleImMessage.getInstance().registerMessageListener(this,"555ec6fca3bbc40001803359");
 //        MobclickAgent.onPageStart("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(false);
@@ -1585,6 +1519,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	@Override
 	protected void onPause() {
 		super.onPause();
+        HandleImMessage.getInstance().unregisterMessageListener(this, "555ec6fca3bbc40001803359");
 //        MobclickAgent.onPageEnd("page_talking");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
@@ -1675,14 +1610,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 				if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
 					loadmorePB.setVisibility(View.VISIBLE);
 					// sdk初始化加载的聊天记录为20条，到顶时去db里获取更多
-					List<EMMessage> messages;
+					List<EMMessage> messages=null;
 					try {
 						// 获取更多messges，调用此方法的时候从db获取的messages
 						// sdk会自动存入到此conversation中
-						if (chatType == CHATTYPE_SINGLE)
-							messages = conversation.loadMoreMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
-						else
-							messages = conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
+
 					} catch (Exception e1) {
 						loadmorePB.setVisibility(View.GONE);
 						return;
@@ -1691,11 +1623,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 						Thread.sleep(300);
 					} catch (InterruptedException e) {
 					}
-					if (messages.size() != 0) {
+					if (messageList.size() != 0) {
 						// 刷新ui
 						adapter.notifyDataSetChanged();
-						listView.setSelection(messages.size() - 1);
-						if (messages.size() != pagesize)
+						listView.setSelection(messageList.size() - 1);
+						if (messageList.size() != pagesize)
 							haveMoreData = false;
 					} else {
 						haveMoreData = false;

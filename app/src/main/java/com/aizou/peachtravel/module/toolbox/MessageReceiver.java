@@ -1,4 +1,4 @@
-package com.lv.im;
+package com.aizou.peachtravel.module.toolbox;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +12,8 @@ import com.lv.Listener.MsgListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.JsonValidator;
 import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,11 +34,13 @@ public class MessageReceiver extends BroadcastReceiver {
      */
     public static void registerListener(MsgListener listener, String routeKey) {
         if (!routeMap.containsKey(routeKey)) {
-            routeMap.put(routeKey, new ArrayList<>());
+            routeMap.put(routeKey, new ArrayList<MsgListener>());
         }
         routeMap.get(routeKey).add(listener);
     }
-
+static {
+    registerListener(HandleImMessage.getInstance().listener,"IM");
+}
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -64,6 +68,7 @@ public class MessageReceiver extends BroadcastReceiver {
                                     String m = object.getString("message");
                                     Message newmsg = JSON.parseObject(m, Message.class);
                                     newmsg.setSendType(1);
+                                    System.out.println("size "+routeMap.get(routeKey).size());
                                     for (MsgListener listener : routeMap.get(routeKey)) {
                                         listener.OnMessage(context, newmsg);
                                     }

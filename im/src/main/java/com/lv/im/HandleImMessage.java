@@ -3,7 +3,6 @@ package com.lv.im;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.lv.Listener.DequeueListener;
@@ -18,8 +17,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import rx.Observable;
-
 
 public class HandleImMessage {
     private static HandleImMessage instance;
@@ -31,7 +28,7 @@ public class HandleImMessage {
 //        Looper.prepare();
 //    }
     private HandleImMessage() {
-        MessageReceiver.registerListener(listener, "IM");
+      //  MessageReceiver.registerListener(listener, "IM");
         queue.setDequeueListener(dequeueListener);
        // Looper.prepare();
     }
@@ -40,7 +37,6 @@ public class HandleImMessage {
         if (instance == null) {
             instance = new HandleImMessage();
         }
-            System.out.println(Thread.currentThread());
         return instance;
     }
 
@@ -58,7 +54,7 @@ public class HandleImMessage {
      * Activity注册消息listener
      * @param listener listener
      */
-    public static void registerMessageListener(MessagerHandler listener) {
+    public  void registerMessageListener(MessagerHandler listener) {
         ehList.add(listener);
     }
 
@@ -66,18 +62,18 @@ public class HandleImMessage {
      * 解除注册
      * @param listener listener
      */
-    public static void unregisterMessageListener(MessagerHandler listener) {
+    public  void unregisterMessageListener(MessagerHandler listener) {
         ehList.remove(listener);
     }
 
-    public static void registerMessageListener(MessagerHandler listener, String conversation) {
+    public void registerMessageListener(MessagerHandler listener, String conversation) {
         ehList.add(listener);
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
 
     }
 
-    public static void unregisterMessageListener(MessagerHandler listener, String conversation) {
+    public  void unregisterMessageListener(MessagerHandler listener, String conversation) {
         ehList.remove(listener);
         openStateMap.clear();
     }
@@ -105,7 +101,7 @@ public class HandleImMessage {
         }
     };
 
-    MsgListener listener = new MsgListener() {
+    public MsgListener listener = new MsgListener() {
         @Override
         public void OnMessage(Context context, Message message) {
             c = context;

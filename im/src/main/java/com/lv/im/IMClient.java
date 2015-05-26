@@ -51,7 +51,7 @@ public class IMClient {
         lastMsgMap = new HashMap<>();
         acklist = new JSONArray();
         conList = new ArrayList<>();
-        HandleImMessage.getInstance();
+       // HandleImMessage.getInstance();
     }
 
     public static IMClient getInstance() {
@@ -198,6 +198,7 @@ public class IMClient {
     public MessageBean sendTextMessage(String text, String friendId, String conversation, SendMsgListener listen, String chatType) {
         if (TextUtils.isEmpty(text)) return null;
         if ("0".equals(conversation)) conversation = null;
+      //  IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
