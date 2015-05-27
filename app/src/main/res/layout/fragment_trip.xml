@@ -67,6 +67,7 @@
             android:focusable="false"
             android:gravity="center"
             android:hint="城市、景点、美食、购物"
+            android:textColorHint="@color/base_text_color_text_placeholder"
             android:ellipsize="end"
             android:textSize="15sp"
             android:background="@drawable/search_white_radius_bg"

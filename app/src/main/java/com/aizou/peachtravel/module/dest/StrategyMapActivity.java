@@ -184,7 +184,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
     @Override
     public void onBackPressed() {
-        if(mPop.isShowing()){
+        if(mPop != null && mPop.isShowing()){
             mPop.dismiss();
         }else {
             super.onBackPressed();

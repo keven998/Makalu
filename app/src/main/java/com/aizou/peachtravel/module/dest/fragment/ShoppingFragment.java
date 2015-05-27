@@ -128,14 +128,14 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(),"event_add_shopping_schedule");
-                if(mOnEditModeChangeListener!=null){
-                    if(!isInEditMode){
-                        isInEditMode = true;
-                        mShoppingAdapter.setEditableMode(true);
-                        mShoppingAdapter.notifyDataSetChanged();
-                        mOnEditModeChangeListener.onEditModeChange(true);
-                    }
-                }
+//                if(mOnEditModeChangeListener!=null){
+//                    if(!isInEditMode){
+//                        isInEditMode = true;
+//                        mShoppingAdapter.setEditableMode(true);
+//                        mShoppingAdapter.notifyDataSetChanged();
+//                        mOnEditModeChangeListener.onEditModeChange(true);
+//                    }
+//                }
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                 intent.putExtra("canAdd", true);

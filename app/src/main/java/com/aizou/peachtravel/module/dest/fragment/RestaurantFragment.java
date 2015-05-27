@@ -126,14 +126,14 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(),"event_add_delicacy_schedule");
-                if(mOnEditModeChangeListener!=null){
-                    if(!isInEditMode){
-                        isInEditMode = true;
-                        mRestAdapter.setEditableMode(true);
-                        mRestAdapter.notifyDataSetChanged();
-                        mOnEditModeChangeListener.onEditModeChange(true);
-                    }
-                }
+//                if(mOnEditModeChangeListener!=null){
+//                    if(!isInEditMode){
+//                        isInEditMode = true;
+//                        mRestAdapter.setEditableMode(true);
+//                        mRestAdapter.notifyDataSetChanged();
+//                        mOnEditModeChangeListener.onEditModeChange(true);
+//                    }
+//                }
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                 intent.putExtra("canAdd", true);
