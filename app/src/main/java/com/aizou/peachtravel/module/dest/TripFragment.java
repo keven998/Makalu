@@ -282,7 +282,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
             case R.id.search_all_et:
                 Intent sear_intent = new Intent(getActivity(),SearchAllActivity.class);
                 startActivityWithNoAnim(sear_intent);
-                getActivity().overridePendingTransition(android.R.anim.fade_in, 0);
+                getActivity().overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
                 break;
 
             default:

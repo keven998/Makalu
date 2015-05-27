@@ -745,7 +745,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
             intent.putExtra("toId",toChatUsername);
             intent.setAction("action.chat");
             startActivityWithNoAnim(intent);
-			overridePendingTransition(android.R.anim.fade_in, 0);
+			overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
             // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
 //            try {
