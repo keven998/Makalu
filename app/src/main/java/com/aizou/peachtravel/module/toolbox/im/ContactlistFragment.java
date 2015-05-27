@@ -14,7 +14,6 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,10 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,7 +35,6 @@ import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,8 +55,6 @@ public class ContactlistFragment extends Fragment {
     private SideBar indexBar;
     private TextView indexDialogTv;
 	private boolean hidden;
-    private View emptyView;
-   // private EditText search;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -217,22 +211,6 @@ public class ContactlistFragment extends Fragment {
 				public void run() {
 					getContactList();
 					adapter.notifyDataSetChanged();
-                    if (contactList.size() <= 1 && emptyView == null) {
-                        emptyView = getView().findViewById(R.id.empty_view);
-                        emptyView.setVisibility(View.VISIBLE);
-                        getView().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(getActivity(), AddContactActivity.class));
-                            }
-                        });
-                    } else if (contactList.size() > 1) {
-                        if (emptyView != null) {
-                            emptyView.setVisibility(View.GONE);
-                            emptyView = null;
-                        }
-                    }
-
 				}
 			});
 		} catch (Exception e) {

@@ -38,7 +38,6 @@ public class ContactActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0, R.anim.push_bottom_out);
             }
         });
         titleBar.setRightViewImageRes(R.drawable.ic_add_friend);
@@ -65,5 +64,11 @@ public class ContactActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void finish() {
+        super.finishWithNoAnim();
+        overridePendingTransition(0, R.anim.push_bottom_out);
     }
 }

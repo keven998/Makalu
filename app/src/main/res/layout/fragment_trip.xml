@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="旅行问题问达人"
+            android:text="达人帮你去旅行"
             android:layout_gravity="right"
             android:paddingTop="12dp"
             android:layout_marginRight="30dp"

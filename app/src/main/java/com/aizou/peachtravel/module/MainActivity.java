@@ -271,11 +271,11 @@ public class MainActivity extends PeachBaseActivity{
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if(!EMChat.getInstance().isLoggedIn()){
+                    if (!EMChat.getInstance().isLoggedIn()) {
                         mTabHost.setCurrentTab(1);
-                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(logIntent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
+                        overridePendingTransition(R.anim.push_bottom_in, 0);
                     }
                 } else if (s.equals(mTagArray[1])) {
                   /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
@@ -285,7 +285,12 @@ public class MainActivity extends PeachBaseActivity{
                 }
             }
         });
-        mTabHost.setCurrentTab(1);
+
+        if (EMChat.getInstance().isLoggedIn()) {
+            mTabHost.setCurrentTab(0);
+        } else {
+            mTabHost.setCurrentTab(1);
+        }
     }
 
     /**
