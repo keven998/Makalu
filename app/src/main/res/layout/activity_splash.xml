@@ -10,10 +10,11 @@
         android:background="@color/base_color_white"
         android:scaleType="centerCrop"/>
 
-    <RelativeLayout
+    <RelativeLayout android:id="@+id/bar_lyt"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@drawable/bar_denglu_dicengse"
+        android:visibility="gone"
         android:layout_gravity="bottom">
 
         <Button
