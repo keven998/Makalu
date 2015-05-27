@@ -41,6 +41,9 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         setContentView(R.layout.webview_with_titlebar);
         ButterKnife.inject(this);
 //        titleHeaderBar.enableBackKey(true);
+        if (getIntent().getBooleanExtra("enable_bottom_bar", false)) {
+            findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);
+        }
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

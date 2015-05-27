@@ -147,7 +147,7 @@
             android:drawableLeft="@drawable/ic_loc_around"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
-            android:text="身边哪儿好玩"
+            android:text="身边哪好玩"
             android:textColor="@color/base_font_color"
             android:textSize="15sp" />
 

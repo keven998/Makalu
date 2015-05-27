@@ -95,12 +95,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
     TextView mTvDesc;
     @Optional
 
-  /*  @InjectView(R.id.poi_title_bar)
-    TitleHeaderBar titleBar;*/
-    /*@InjectView(R.id.tv_recommend)
-    TextView mTvRecommend;*/
-   /* @InjectView(R.id.iv_share)
-    ImageView mIvShare;*/
     @InjectView(R.id.btn_book)
     TextView mBtnBook;
     @InjectView(R.id.tv_poi_rank)
@@ -137,8 +131,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     ListViewDataAdapter commentAdapter;
 
     private ImageView mIvFav;
-    private ImageView mChat;
-
+//    private ImageView mChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,14 +143,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_poi_detail);
         mIvFav = (ImageView) findViewById(R.id.iv_fav);
-        mChat = (ImageView) findViewById(R.id.iv_chat);
+//        mChat = (ImageView) findViewById(R.id.iv_chat);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
-        p.height = (int) (d.getHeight() );    /*- LocalDisplay.dp2px(64)*/
-        p.width = (int) (d.getWidth() );   /*- LocalDisplay.dp2px(28)*/
+        p.height = (int) (d.getHeight());    /*- LocalDisplay.dp2px(64)*/
+        p.width = (int) (d.getWidth());   /*- LocalDisplay.dp2px(28)*/
 
         getWindow().setAttributes(p);
         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
@@ -272,6 +265,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     MobclickAgent.onEvent(mContext,"event_go_booking_room");
                     Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+                    intent.putExtra("enable_bottom_bar", true);
                     intent.putExtra("url",bean.lyPoiUrl);
                     intent.putExtra("title",bean.zhName);
                     startActivity(intent);

@@ -368,10 +368,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     public void intentToTravel(View view){
         if(locDetailBean!=null){
-            MobclickAgent.onEvent(mContext,"event_city_information");
+            MobclickAgent.onEvent(mContext, "event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
-            intent.putExtra("title", "城市指南");//String.format("玩转%s", mCityNameTv.getText()));
+            intent.putExtra("enable_bottom_bar", true);
+            intent.putExtra("title", "旅游指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
         }else{
             Log.e("CLICK","没有数据");
