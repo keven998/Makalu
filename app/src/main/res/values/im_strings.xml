@@ -64,6 +64,6 @@
  <string name="exit_group_hint">退出后，将不再接收此群聊信息</string>
     <string name="dissolution_group_hint">确定解散此群</string>
       <string name="exit_group">确定</string>
-      <string name="connect_conflict">同一帐号已在其他设备登录</string>
+      <string name="connect_conflict">同一帐号在其他设备登录</string>
       
 </resources>

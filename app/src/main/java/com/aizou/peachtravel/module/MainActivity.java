@@ -129,10 +129,12 @@ public class MainActivity extends PeachBaseActivity{
         mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 
         // 注册一个接收消息的BroadcastReceiver
-        msgReceiver = new NewMessageBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(3);
-        registerReceiver(msgReceiver, intentFilter);
+        if (msgReceiver == null) {
+            msgReceiver = new NewMessageBroadcastReceiver();
+            IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+            intentFilter.setPriority(3);
+            registerReceiver(msgReceiver, intentFilter);
+        }
 
         // 注册一个ack回执消息的BroadcastReceiver
         IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
@@ -361,11 +363,12 @@ public class MainActivity extends PeachBaseActivity{
                 conflictDialog.setTitle("下线通知");
                 //conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
                 conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
-                conflictDialog.setPositiveButton("确定",new View.OnClickListener() {
+                conflictDialog.setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         conflictDialog.dismiss();
                         conflictDialog = null;
+                        mTabHost.setCurrentTab(1);
                         if(isAccountAbout){
                             finish();
                         }
