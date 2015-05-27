@@ -53,7 +53,7 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-    private PullToZoomListViewEx mTravelLv; //
+    private PullToZoomListViewEx mTravelLv;
     private RelativeLayout titleBar;
     private View bottom_line;
     private ImageView mCityIv;
