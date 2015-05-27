@@ -23,20 +23,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <FrameLayout
-                    android:id="@+id/top_zoom_bar_spot"
+                <ImageView
+                    android:id="@+id/iv_spot"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/spot_detail_picture_height"
-                    android:foreground="@drawable/fg_mock_up">
-
-                    <ImageView
-                        android:id="@+id/iv_spot"
-                        android:layout_width="fill_parent"
-                        android:layout_height="@dimen/spot_detail_picture_height"
-                        android:background="@color/base_gary_bg"
-                        android:scaleType="centerCrop" />
-
-                </FrameLayout>
+                    android:background="@color/base_gary_bg"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

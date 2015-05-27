@@ -34,13 +34,15 @@ public class ExpertFilterActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_expertfilter);
         titleHeaderBar = (TitleHeaderBar) findViewById(R.id.expert_filter_title);
         titleHeaderBar.getTitleTextView().setText("根据城市筛选");
-        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(0,R.anim.push_bottom_out);
-            }
-        });
+//        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+        titleHeaderBar.setLeftDrawableToNull();
+        titleHeaderBar.getLeftTextView().setText("取消");
+        titleHeaderBar.enableBackKey(true);
         inOutIndicator = (FixedIndicatorView) findViewById(R.id.expert_in_out_indicator);
         mSelectDestVp = (FixedViewPager) findViewById(R.id.expert_select_dest_viewPager);
         indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
@@ -107,6 +109,7 @@ public class ExpertFilterActivity extends PeachBaseActivity {
 
     @Override
     public void finish() {
-        super.finish();
+        super.finishWithNoAnim();
+        overridePendingTransition(0, R.anim.push_bottom_out);
     }
 }
