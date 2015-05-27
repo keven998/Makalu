@@ -209,4 +209,5 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
             default:break;
         }
     }
+
 }

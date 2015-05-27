@@ -10,22 +10,22 @@
         android:background="@color/base_color_white"
         android:scaleType="centerCrop"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:layout_gravity="bottom"
-        >
+        android:layout_height="64dp"
+        android:background="#ddcccccc"
+        android:layout_gravity="bottom">
 
         <Button
             android:id="@+id/sp_reg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
             android:background="@color/back_blue_color"
-            android:layout_marginRight="20dp"
-            android:textSize="20sp"
+            android:layout_marginLeft="44dp"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
             android:textColor="@color/base_color_white"
             android:text="注册"
             android:visibility="gone"
@@ -33,30 +33,36 @@
 
         <Button
             android:id="@+id/sp_log"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
             android:background="@color/base_color_red"
-            android:textSize="20sp"
+            android:layout_toRightOf="@id/sp_reg"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
             android:textColor="@color/base_color_white"
             android:text="登录"
             android:visibility="gone"
             />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/sp_bounce"
+            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="跳过"
+            android:textColor="@color/base_color_purple"
+            android:textSize="15sp"
+            android:layout_gravity="right"
+            android:layout_marginRight="40dp"
+            android:visibility="gone"
+            />
 
-    <TextView
-        android:id="@+id/sp_bounce"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="跳过"
-        android:textColor="@color/base_color_purple"
-        android:textSize="20dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="80dp"
-        android:layout_marginRight="10dp"
-        android:visibility="gone"
-        />
+    </RelativeLayout>
 
 
 </FrameLayout>
