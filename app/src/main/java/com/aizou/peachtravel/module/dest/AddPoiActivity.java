@@ -342,7 +342,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(mPop.isShowing()){
+        if(mPop != null && mPop.isShowing()){
             mPop.dismiss();
         }else {
         Intent intent = new Intent();
