@@ -220,8 +220,8 @@ public class IMShareActivity extends PeachBaseActivity {
             super();
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
-                    .showImageOnFail(R.drawable.avatar_placeholder)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                    .showImageOnFail(R.drawable.avatar_placeholder_round)
                     .cacheOnDisc(true)
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6))) // 设置成圆角图片
@@ -267,11 +267,11 @@ public class IMShareActivity extends PeachBaseActivity {
 
                                     LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                     if(bitmap==null){
-                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder);
+                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
                                     }
                                     membersAvatars.add(bitmap);
                                 }else{
-                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder);
+                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
                                     membersAvatars.add(bitmap);
                                 }
                             }
@@ -287,7 +287,7 @@ public class IMShareActivity extends PeachBaseActivity {
                         }
                     }).start();
                 }else{
-                    mAvatar.setImageResource(R.drawable.group_icon);
+                    mAvatar.setImageResource(R.drawable.avatar_placeholder_round);
                 }
                 mName.setText(contact.getNick() != null ? contact.getNick() : username);
             } else {

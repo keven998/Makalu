@@ -58,7 +58,7 @@
             android:layout_height="60dp"
             android:scaleType="fitXY"
             android:layout_marginTop="10dp"
-            android:src="@drawable/avatar_placeholder" />
+            android:src="@drawable/avatar_placeholder_round" />
         
         <TextView
             android:id="@+id/tv_nick"

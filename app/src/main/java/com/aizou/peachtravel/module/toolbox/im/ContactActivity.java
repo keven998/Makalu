@@ -1,5 +1,6 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,14 +38,14 @@ public class ContactActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0, R.anim.push_bottom_out);
             }
         });
         titleBar.setRightViewImageRes(R.drawable.ic_add_friend);
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.getInstance(ContactActivity.this).showToast("添加新用户");
+                startActivity(new Intent(ContactActivity.this, AddContactActivity.class));
+                ContactActivity.this.overridePendingTransition(R.anim.push_bottom_in, 0);
             }
         });
         contactListFragment = new ContactlistFragment();
@@ -63,5 +64,11 @@ public class ContactActivity extends PeachBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void finish() {
+        super.finishWithNoAnim();
+        overridePendingTransition(0, R.anim.push_bottom_out);
     }
 }

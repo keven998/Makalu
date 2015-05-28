@@ -3,10 +3,17 @@ package com.aizou.peachtravel.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,6 +39,7 @@ import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.DrawableCenterTextView;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.module.PeachWebViewActivity;
 import com.aizou.peachtravel.module.dest.adapter.TravelNoteViewHolder;
@@ -45,7 +53,7 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-    private PullToZoomListViewEx mTravelLv; //
+    private PullToZoomListViewEx mTravelLv;
     private RelativeLayout titleBar;
     private View bottom_line;
     private ImageView mCityIv;
@@ -60,6 +68,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private LocBean locDetailBean;
     private String locId;
     private ImageView shareToChat;
+    private PopupWindow mPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void initData() {
         locId = getIntent().getStringExtra("id");
         getCityDetailData(locId);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            if(mPop!=null&&mPop.isShowing()){
+                mPop.dismiss();
+            }else{
+                finish();
+            }
+        }
+        return false;
     }
 
     private void initView(){
@@ -313,6 +334,33 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         }else{
             mCityNameEn.setText(detailBean.enName);
         }
+        mCityNameEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                        R.layout.text_diaplay, null, true);
+                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+                tv.setText(detailBean.desc);
+                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+                mPop.setContentView(menuView);//设置包含视图
+                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setAnimationStyle(R.style.PopAnimation);
+                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
+                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPop.dismiss();
+                    }
+                });
+            }
+        });
         mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
        // mTitleTv.setText(detailBean.zhName);
@@ -320,11 +368,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     public void intentToTravel(View view){
         if(locDetailBean!=null){
-            //ToastUtil.getInstance(this).showToast(locDetailBean.toString()+"00000000000000000000000000000000");
-            MobclickAgent.onEvent(mContext,"event_city_information");
+            MobclickAgent.onEvent(mContext, "event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
-            intent.putExtra("title", "城市指南");//String.format("玩转%s", mCityNameTv.getText()));
+            intent.putExtra("enable_bottom_bar", true);
+            intent.putExtra("title", "旅游指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
         }else{
             Log.e("CLICK","没有数据");

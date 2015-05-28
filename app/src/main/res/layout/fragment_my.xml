@@ -48,7 +48,7 @@
                         android:layout_height="58dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/my_unlogin_avater_bg"/>
+                        android:src="@drawable/avatar_placeholder_round"/>
 
                     <ImageView android:id="@+id/iv_gender"
                         android:layout_width="wrap_content"
@@ -181,7 +181,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:drawablePadding="15dp"
-                    android:drawableRight="@drawable/cell_accessory"
+                    android:drawableRight="@drawable/arr_poi_guide"
                     android:gravity="center_vertical"
                     android:text="分享绑定"
                     android:textColor="@color/base_text_color_title"

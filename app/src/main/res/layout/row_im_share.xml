@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder" />
+            android:src="@drawable/avatar_placeholder_round" />
 
         <TextView
             android:id="@+id/name"

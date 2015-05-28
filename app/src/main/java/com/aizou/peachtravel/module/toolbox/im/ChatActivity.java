@@ -765,7 +765,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
             intent.putExtra("toId",toChatUsername);
             intent.setAction("action.chat");
             startActivityWithNoAnim(intent);
-			overridePendingTransition(android.R.anim.fade_in, 0);
+			overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
             // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
 //            try {
@@ -1688,7 +1688,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
                             public void run() {
                                 //如果正在与此用户的聊天页面
                                 if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
-//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他桃友列表里移除", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
                                     ToastUtil.getInstance(ChatActivity.this).showToast("聊天已被中断");
                                     ChatActivity.activityInstance.finish();
                                 }

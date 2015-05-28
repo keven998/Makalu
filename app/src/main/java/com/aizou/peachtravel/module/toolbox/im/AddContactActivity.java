@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -37,6 +38,7 @@ import com.aizou.peachtravel.common.utils.ShareUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
+import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.umeng.analytics.MobclickAgent;
 
 public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {
@@ -157,15 +159,15 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                                 IMUtils.setUserHead(imUser);
                                 AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(),imUser);
                                 IMUserRepository.saveContact(mContext,imUser);
-                                Intent intent = new Intent(mContext, ContactDetailActivity.class);
-                                intent.putExtra("userId", user.userId);
-                                intent.putExtra("userNick", user.nickName);
+                                Intent intent = new Intent(mContext, HisMainPageActivity.class);
+                                intent.putExtra("userId", (int)user.userId);
+                               // intent.putExtra("userNick", user.nickName);
                                 startActivity(intent);
                                 return;
                             }
-                            Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
-                            intent.putExtra("isSeach",true);
-                            intent.putExtra("user", seachResult.result.get(0));
+                            Intent intent = new Intent(mContext, HisMainPageActivity.class);
+                            //intent.putExtra("isSeach",true);
+                            intent.putExtra("userId", (int)user.userId);
                             startActivity(intent);
                         } else {
                             ToastUtil.getInstance(mContext).showToast("没有找到她~");
@@ -203,7 +205,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 
             case R.id.tv_weixin_contacts:
                 MobclickAgent.onEvent(mContext,"event_notify_weichat_friends");
-                ShareUtils.shareAppToWx(this,String.format("我正在用桃子旅行，搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
+                ShareUtils.shareAppToWx(this,String.format("我正在用旅行派，搜索: %s 加我",AccountManager.getInstance().getLoginAccount(this).nickName));
                 break;
         }
     }

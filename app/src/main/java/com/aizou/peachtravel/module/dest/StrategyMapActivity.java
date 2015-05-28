@@ -182,6 +182,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
 
+
     private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords){
         if(mCoords.size()>0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
@@ -281,7 +282,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
             @Override
             public void onMapInitialized() {
-                mapView.animateCenterZoom(new LatLng(20,20), 20);
+                mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 10);
             }
         });
         mapView.initialize(getSupportFragmentManager(), airMapInterface);

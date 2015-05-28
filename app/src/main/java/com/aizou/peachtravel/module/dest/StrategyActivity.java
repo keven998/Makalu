@@ -468,6 +468,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
+                            iv_location.setVisibility(View.GONE);
                             if (!isFinishing())
                                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
@@ -662,7 +663,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"行程计划", "美食计划", "购物计划",};
+        private String[] tabNames = {"行程计划", "美食清单", "购物清单",};
         private int[] tabIcons = {R.drawable.poi_tab_checker_trip, R.drawable.poi_tab_checker_food, R.drawable.poi_tab_checker_shop};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;

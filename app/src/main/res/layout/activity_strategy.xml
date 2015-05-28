@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/iv_more"
-            android:src="@drawable/ic_location"
+            android:src="@drawable/ic_trip_mapview_ios"
             android:paddingRight="15dp"
             android:paddingLeft="15dp"
             />

@@ -134,6 +134,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private ArrayList<JSONObject> objects=new ArrayList<JSONObject>();
     LinearLayout llPics;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
+    private int FOOTPRINT=4;
     /*private ImageZoomAnimator2 zoomAnimator;
 
     @ViewInject(R.id.ac_zoom_container)
@@ -218,11 +219,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        initFootPrint(all_foot_print_list);
+    }
+
+    private void initFootPrint(final ArrayList<LocBean> prints){
         my_destination.removeAllViews();
-        for(int j=0;j<all_foot_print_list.size();j++){
+        for(int j=0;j<prints.size();j++){
             View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText(all_foot_print_list.get(j).zhName);
+            cityNameTv.setText(prints.get(j).zhName);
             my_destination.addView(contentView);
         }
     }
@@ -354,7 +359,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_foot_print:
                 ToastUtil.getInstance(AccountActvity.this).showToast("旅行足迹");
                 Intent intent=new Intent(AccountActvity.this,MyFootPrinterActivity.class);
-                startActivity(intent);
+                intent.putParcelableArrayListExtra("myfootprint",all_foot_print_list);
+                startActivityForResult(intent,FOOTPRINT);
+               // startActivity(intent);
                 break;
 
             case R.id.ll_birthday:
@@ -871,6 +878,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             else if(sex.equals("保密")){modifyGender("S");}
         } else if (requestCode == STATUS){
             editStatusToInterface(data.getExtras().getString("result"));
+        } else if (requestCode == FOOTPRINT){
+            all_foot_print_list=data.getParcelableArrayListExtra("footprint");
+            initFootPrint(all_foot_print_list);
         }
     }
 

@@ -17,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="11dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder" />
+            android:src="@drawable/avatar_placeholder_round" />
 
         <TextView
             android:id="@+id/name"
@@ -74,9 +74,9 @@
             android:layout_marginTop="9dp"
             android:focusable="false"
             android:layout_marginRight="24dp"
-            android:background="@drawable/theme_button_selctor"
+            android:background="@drawable/accept_box"
             android:text="同意"
-            android:textColor="@color/base_color_white"
+            android:textColor="@color/second_font_color"
             android:textSize="13sp" />
     </RelativeLayout>
 

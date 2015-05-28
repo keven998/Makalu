@@ -5,7 +5,7 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <EditText
+    <!--<EditText
         android:id="@+id/contact_search_tv"
         android:layout_width="match_parent"
         android:layout_height="28dp"
@@ -21,13 +21,13 @@
         android:textColor="@color/base_color_black"
         android:textSize="15sp"
         android:background="@drawable/in_out_search_bg"
-        />
+        />-->
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="25dp"
         android:background="@color/app_backgroud"
         android:cacheColorHint="#00000000"
         android:descendantFocusability="afterDescendants"
@@ -55,13 +55,5 @@
         android:textColor="@color/base_color_white"
         android:textSize="28sp"
         android:visibility="gone" />
-
-    <include
-        android:id="@+id/empty_view"
-        layout="@layout/fragment_contact_list_empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:visibility="gone"></include>
 
 </RelativeLayout>

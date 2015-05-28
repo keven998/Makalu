@@ -110,6 +110,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 //        MobclickAgent.onPageEnd("page_add_agenda");
     }
 
+
     private void initView() {
         setContentView(R.layout.activity_add_poi);
         ButterKnife.inject(this);
@@ -341,11 +342,15 @@ public class AddPoiActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
+        if(mPop != null && mPop.isShowing()){
+            mPop.dismiss();
+        }else {
         Intent intent = new Intent();
         intent.putParcelableArrayListExtra("poiList", hasAddList);
         intent.putExtra("dayIndex", dayIndex);
         setResult(RESULT_OK, intent);
         finish();
+        }
     }
 
     /*private void initSpinnerListener() {

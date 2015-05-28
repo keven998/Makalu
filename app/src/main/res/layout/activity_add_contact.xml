@@ -55,7 +55,7 @@
             android:layout_marginLeft="12dp"
             android:paddingLeft="10dp"
             android:background="@drawable/button_normal_shape"
-            android:hint="桃子昵称或手机号"
+            android:hint="昵称或手机号"
             android:imeOptions="actionSearch"
             android:singleLine="true"
             android:textColorHint="@color/base_text_color_text_placeholder"
@@ -85,7 +85,7 @@
         android:paddingLeft="20dp"
         android:background="@drawable/option_cell_selector"
         android:paddingRight="11dp"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/arr_poi_guide"
         android:gravity="left|center_vertical"
         android:layout_marginTop="10dp"
         android:text="添加通讯录好友"/>
@@ -98,7 +98,7 @@
         android:paddingLeft="20dp"
         android:background="@drawable/option_cell_selector"
         android:paddingRight="11dp"
-        android:drawableRight="@drawable/cell_accessory"
+        android:drawableRight="@drawable/arr_poi_guide"
         android:gravity="left|center_vertical"
         android:layout_marginTop="1dp"
         android:text="邀请微信好友"/>

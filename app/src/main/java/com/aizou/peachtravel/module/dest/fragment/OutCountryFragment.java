@@ -34,6 +34,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.expandablelayout.ExpandableLayoutItem;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
+import com.aizou.peachtravel.module.my.MyFootPrinterActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import org.apache.http.Header;
@@ -137,6 +138,8 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         ArrayList<LocBean> allSelectLoc = null;
         if(getActivity()!=null&&isClickable){
             allSelectLoc = ((SelectDestActivity)getActivity()).getAllSelectedLoc();
+        }else if(getActivity() != null && !isClickable){
+            allSelectLoc = ((MyFootPrinterActivity) getActivity()).getAllSelectedLoc();
         }
         if(allSelectLoc!=null){
             for(CountryBean countryBean:result){
@@ -162,7 +165,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
     @Override
     public void onDestAdded(LocBean locBean) {
-        if(outCountryAdapter!=null&&isClickable){
+        if(outCountryAdapter!=null){
             for(CountryBean countryBean:outCountryAdapter.getDataList()){
                 for(LocBean kLocBean :countryBean.destinations ){
                     if(locBean.id.equals(kLocBean.id)){
@@ -177,7 +180,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
     @Override
     public void onDestRemoved(LocBean locBean) {
-        if(outCountryAdapter!=null&&isClickable){
+        if(outCountryAdapter!=null){
             for(CountryBean countryBean:outCountryAdapter.getDataList()){
                 for(LocBean kLocBean :countryBean.destinations ){
                     if(locBean.id.equals(kLocBean.id)){
@@ -209,9 +212,9 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
                 final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(bean.zhName);
+                cityNameTv.setChecked(bean.isAdded);
 
-                if(isClickable) {
-                    cityNameTv.setChecked(bean.isAdded);
+                /*if(isClickable) {*/
 
                     //更新按钮的图片的
                     add = getResources().getDrawable(R.drawable.ic_cell_item_unchoose);
@@ -220,9 +223,13 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                     add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
                     selected.setBounds(0, 0, selected.getMinimumWidth(), selected.getMinimumHeight());
                     if (!bean.isAdded) {
-                        cityNameTv.setCompoundDrawables(add, null, null, null);
+                        if(isClickable) {
+                            cityNameTv.setCompoundDrawables(add, null, null, null);
+                        }
                     } else {
-                        cityNameTv.setCompoundDrawables(selected, null, null, null);
+                        if(isClickable) {
+                            cityNameTv.setCompoundDrawables(selected, null, null, null);
+                        }
                     }
 
                     cityNameTv.setOnClickListener(new View.OnClickListener() {
@@ -231,10 +238,14 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                             bean.isAdded = !bean.isAdded;
                             if (mOnDestActionListener != null) {
                                 if (bean.isAdded) {
+                                    if(isClickable){
                                     cityNameTv.setCompoundDrawables(selected, null, null, null);
+                                    }
                                     mOnDestActionListener.onDestAdded(bean);
                                 } else {
+                                    if(isClickable){
                                     cityNameTv.setCompoundDrawables(add, null, null, null);
+                                    }
                                     mOnDestActionListener.onDestRemoved(bean);
                                 }
                             }
@@ -242,7 +253,21 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                         }
                     });
 
-                }
+               /* }else{
+                    cityNameTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bean.isAdded = !bean.isAdded;
+                            if(mOnDestActionListener != null){
+                                if(bean.isAdded){
+                                    mOnDestActionListener.onDestAdded(bean);
+                                } else {
+                                    mOnDestActionListener.onDestRemoved(bean);
+                                }
+                            }
+                        }
+                    });
+                }*/
 
                 cityListFl.addView(contentView);
             }

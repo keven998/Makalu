@@ -14,7 +14,6 @@
 package com.aizou.peachtravel.module.toolbox.im;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,23 +21,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.SideBar;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,8 +57,6 @@ public class ContactlistFragment extends Fragment {
     private SideBar indexBar;
     private TextView indexDialogTv;
 	private boolean hidden;
-    private View emptyView;
-    private EditText search;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,9 +74,9 @@ public class ContactlistFragment extends Fragment {
 		listView = (ListView) getView().findViewById(R.id.list);
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
-        search = (EditText) getView().findViewById(R.id.contact_search_tv);
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        //search = (EditText) getView().findViewById(R.id.contact_search_tv);
+        /*InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);*/
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<IMUser>();
@@ -113,7 +109,7 @@ public class ContactlistFragment extends Fragment {
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
-					startActivity(new Intent(getActivity(), ContactDetailActivity.class).putExtra("userId", adapter.getItem(position).getUserId()).putExtra("userNick", adapter.getItem(position).getNick()));
+					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
 				}
 			}
 		});
@@ -217,22 +213,6 @@ public class ContactlistFragment extends Fragment {
 				public void run() {
 					getContactList();
 					adapter.notifyDataSetChanged();
-                    if (contactList.size() <= 1 && emptyView == null) {
-                        emptyView = getView().findViewById(R.id.empty_view);
-                        emptyView.setVisibility(View.VISIBLE);
-                        getView().findViewById(R.id.add_friend).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(getActivity(), AddContactActivity.class));
-                            }
-                        });
-                    } else if (contactList.size() > 1) {
-                        if (emptyView != null) {
-                            emptyView.setVisibility(View.GONE);
-                            emptyView = null;
-                        }
-                    }
-
 				}
 			});
 		} catch (Exception e) {

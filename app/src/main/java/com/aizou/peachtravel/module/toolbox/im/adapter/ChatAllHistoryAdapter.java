@@ -73,8 +73,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
         handler = new Handler();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .showImageForEmptyUri(R.drawable.avatar_placeholder)
-                .showImageOnFail(R.drawable.avatar_placeholder)
+                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                .showImageOnFail(R.drawable.avatar_placeholder_round)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10))) // 设置成圆角图片
@@ -137,11 +137,11 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
 
                                     LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                     if (bitmap == null) {
-                                        bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+                                        bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
                                     }
                                     membersAvatars.add(bitmap);
                                 } else {
-                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
                                     membersAvatars.add(bitmap);
                                 }
                             }
@@ -157,10 +157,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<PeachConversation> {
                         }
                     }).start();
                 } else {
-                    holder.avatar.setImageResource(R.drawable.group_icon);
+                    holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
                 }
             } else {
-                holder.avatar.setImageResource(R.drawable.group_icon);
+                holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
             }
             if (contact != null) {
                 holder.name.setText(contact.getNick() != null ? contact.getNick() : username);

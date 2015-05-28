@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -124,6 +125,15 @@ public class SearchAllActivity extends PeachBaseActivity {
 
         View emptyView = findViewById(R.id.empty_text);
         mSearchAllLv.setEmptyView(emptyView);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mEtSearch.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 600);
     }
 
 

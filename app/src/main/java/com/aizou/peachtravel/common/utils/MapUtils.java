@@ -22,7 +22,7 @@ public class MapUtils {
     // 调用地图客户端uri
     // 例子：map_uri("龙泽","北京南站","北京");
     public final static String COMPANY_NAME = "aizou";
-    public final static String APP_NAME = "桃子旅行";
+    public final static String APP_NAME = "旅行派";
 
     private static String getBDMapMarkerUri(double lat, double lng, String title, String content) {
         return "intent://map/marker?location=" + lat + "," + lng + "&title=" + title + "&content" +

@@ -249,9 +249,6 @@ public class ExpertListActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode!=RESULT_OK){
-            return;
-        }
         if(requestCode==EXPERT_DES){
             //刷新本页
             if(data!=null){
@@ -259,6 +256,8 @@ public class ExpertListActivity extends PeachBaseActivity {
                 refreshView(id);
             }
         }
+        if(requestCode==RESULT_OK){
 
+        }
     }
 }

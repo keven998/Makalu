@@ -433,17 +433,18 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 });
             } else {
                 getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
-
-                View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
-                memberGv.addFooterView(view);
-                Button btn = (Button) view.findViewById(R.id.footer_btn);
-                btn.setText("退出此群");
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        exitGroupTips();
-                    }
-                });
+                if (memberGv.getFooterViewsCount() == 0) {
+                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+                    memberGv.addFooterView(view);
+                    Button btn = (Button) view.findViewById(R.id.footer_btn);
+                    btn.setText("退出此群");
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            exitGroupTips();
+                        }
+                    });
+                }
             }
         }
 
@@ -678,9 +679,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.avatar_placeholder)
-                    .showImageOnLoading(R.drawable.avatar_placeholder)
-                    .showImageForEmptyUri(R.drawable.avatar_placeholder)
+                    .showImageOnFail(R.drawable.avatar_placeholder_round)
+                    .showImageOnLoading(R.drawable.avatar_placeholder_round)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
 //				    .decodingOptions(D)
 //                  .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6)))

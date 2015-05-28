@@ -88,6 +88,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                             startActivityWithNoAnim(mainActivity);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         }else{
+                            findViewById(R.id.bar_lyt).setVisibility(View.VISIBLE);
                             sp_log.setVisibility(View.VISIBLE);
                             sp_reg.setVisibility(View.VISIBLE);
                             sp_bounce.setVisibility(View.VISIBLE);
@@ -211,4 +212,5 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
             default:break;
         }
     }
+
 }
