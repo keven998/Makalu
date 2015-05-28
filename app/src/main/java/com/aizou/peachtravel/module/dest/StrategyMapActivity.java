@@ -148,6 +148,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     }
                 });
             }
+        }else{
+            titleHeaderBar.enableBackKey(true);
         }
         mapView = (AirMapView) findViewById(R.id.strategy_map);
         spinnet = (TextView) findViewById(R.id.spinnet);

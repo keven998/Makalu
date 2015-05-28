@@ -337,7 +337,7 @@
         <activity
             android:name=".module.toolbox.HisMainPageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/Transparent" >
         </activity>
         <activity
             android:name=".module.toolbox.im.ContactActivity"

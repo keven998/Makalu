@@ -97,15 +97,19 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
     }
     private void setAddView(StrategyBean strategyBean){
         final PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
-        if(addFooter!=null){
-            if (user.userId != strategyBean.userId) {
-                addFooter.setVisibility(View.GONE);
-            }else{
-                addFooter.setVisibility(View.VISIBLE);
+        if(user == null){
+            addFooter.setVisibility(View.GONE);
+        }else {
+            if (addFooter != null) {
+                if (user.userId != strategyBean.userId) {
+                    addFooter.setVisibility(View.GONE);
+                } else {
+                    addFooter.setVisibility(View.VISIBLE);
+                }
             }
         }
-
     }
+
     private void initData() {
         final StrategyBean strategyBean = getStrategy();
         setAddView(strategyBean);
@@ -211,7 +215,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                 convertView = View.inflate(getActivity(), R.layout.row_poi_list, null);
                 holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                 holder.deleteIv = (ImageView) convertView.findViewById(R.id.poi_delete_iv);
-                holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.poi_drag_handle);
+               // holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.poi_drag_handle);
                 holder.nearByTv = (CheckedTextView) convertView.findViewById(R.id.btn_add);
                 holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                 holder.poiNameTv = (TextView) convertView.findViewById(R.id.tv_poi_name);
@@ -270,8 +274,8 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                     }
                 });
                 view.startAnimation(animation);
-                animation = AnimationSimple.expand(holder.dragHandleIv);
-                holder.dragHandleIv.startAnimation(animation);
+                //animation = AnimationSimple.expand(holder.dragHandleIv);
+                //holder.dragHandleIv.startAnimation(animation);
 
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -301,7 +305,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             } else if (isEditableMode) {
                 holder.deleteIv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setVisibility(View.GONE);
-                holder.dragHandleIv.setVisibility(View.VISIBLE);
+                //holder.dragHandleIv.setVisibility(View.VISIBLE);
 
                 holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -328,7 +332,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                 });
             } else {
                 holder.deleteIv.setVisibility(View.GONE);
-                holder.dragHandleIv.setVisibility(View.GONE);
+                //holder.dragHandleIv.setVisibility(View.GONE);
                 holder.nearByTv.setVisibility(View.VISIBLE);
 
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +373,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
 
         private class ItemViewHolder {
             public RelativeLayout contentRl;
-            public ImageView deleteIv, dragHandleIv;
+            public ImageView deleteIv;
             public CheckedTextView nearByTv;
             public ImageView poiImageIv;
             public TextView poiNameTv;

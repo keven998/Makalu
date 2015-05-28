@@ -139,7 +139,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (!isShare) {
+        if (!isShare||isExpertPlan) {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -190,21 +190,25 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     }
 
     private void setupViewFromCache() {
-        AccountManager account = AccountManager.getInstance();
-        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
-        if (!TextUtils.isEmpty(data)) {
-            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
-                    new TypeToken<List<StrategyBean>>() {
-                    });
-            mStrategyListAdapter.getDataList().addAll(lists);
-            mStrategyListAdapter.notifyDataSetChanged();
-            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
-                mMyStrategyLv.setHasMoreData(true);
-                mMyStrategyLv.setScrollLoadEnabled(true);
+        if(!isExpertPlan) {
+            AccountManager account = AccountManager.getInstance();
+            String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
+            if (!TextUtils.isEmpty(data)) {
+                List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+                        new TypeToken<List<StrategyBean>>() {
+                        });
+                mStrategyListAdapter.getDataList().addAll(lists);
+                mStrategyListAdapter.notifyDataSetChanged();
+                if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                    mMyStrategyLv.setHasMoreData(true);
+                    mMyStrategyLv.setScrollLoadEnabled(true);
+                }
+                getStrategyListData(0, "traveled");
+            } else {
+                mMyStrategyLv.doPullRefreshing(true, 0);
             }
+        }else{
             getStrategyListData(0,"traveled");
-        } else {
-            mMyStrategyLv.doPullRefreshing(true, 0);
         }
     }
 
@@ -354,6 +358,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isExpertPlan) {
                 mRlSend.setVisibility(View.VISIBLE);
+                mBtnSend.setVisibility(View.GONE);
                 mRlSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

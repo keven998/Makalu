@@ -38,6 +38,7 @@ import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
+import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.account.StrategyManager;
@@ -120,6 +121,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mMyStrategyLv.doPullRefreshing(true, 0);
         //initData();
 //        MobclickAgent.onPageStart("page_my_trip_plans");
     }
@@ -204,22 +206,26 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void setupViewFromCache() {
-        AccountManager account = AccountManager.getInstance();
-        String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
-        if (!TextUtils.isEmpty(data)) {
-            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
-                    new TypeToken<List<StrategyBean>>() {
-                    });
-            mStrategyListAdapter.getDataList().addAll(lists);
-            mStrategyListAdapter.notifyDataSetChanged();
-            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
-                mMyStrategyLv.setHasMoreData(true);
-                mMyStrategyLv.setScrollLoadEnabled(true);
-            }
-            getStrategyListData(0,"planned");
-        } else {
-            mMyStrategyLv.doPullRefreshing(true, 0);
-        }
+      if(!isExpertPlan) {
+          AccountManager account = AccountManager.getInstance();
+          String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
+          if (!TextUtils.isEmpty(data)) {
+              List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+                      new TypeToken<List<StrategyBean>>() {
+                      });
+              mStrategyListAdapter.getDataList().addAll(lists);
+              mStrategyListAdapter.notifyDataSetChanged();
+              if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                  mMyStrategyLv.setHasMoreData(true);
+                  mMyStrategyLv.setScrollLoadEnabled(true);
+              }
+              getStrategyListData(0, "planned");
+          } else {
+              mMyStrategyLv.doPullRefreshing(true, 0);
+          }
+      }else{
+          getStrategyListData(0, "planned");
+      }
     }
 
     private void cachePage() {
@@ -515,7 +521,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                     cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
                     cdialog.setTitle("提示");
-                    cdialog.setMessage(strBean.title+"已保存为去过，成为了您的旅历足迹");
+                    cdialog.setMessage(strBean.title+"已保存为去过，成为了您的历史足迹");
                     cdialog.setPositiveButton("确定",new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
