@@ -31,6 +31,7 @@
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
         android:id="@+id/expert_select_dest_viewPager"
         android:layout_width="match_parent"
+        android:background="@color/app_backgroud"
         android:layout_height="match_parent"/>
 
 </LinearLayout>

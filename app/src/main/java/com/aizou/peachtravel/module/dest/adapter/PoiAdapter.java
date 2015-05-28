@@ -181,15 +181,16 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                spotViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离
-                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (mOnPoiActionListener != null) {
-                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
-                        }
-                    }
-                });
+                spotViewHolder.mBtnAdd.setVisibility(View.GONE);
+//                spotViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离
+//                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if (mOnPoiActionListener != null) {
+//                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
+//                        }
+//                    }
+//                });
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -227,16 +228,17 @@ public class PoiAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                poiViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离 导航
-                poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //TODO
-                        if (mOnPoiActionListener != null) {
-                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
-                        }
-                    }
-                });
+                poiViewHolder.mBtnAdd.setVisibility(View.GONE);
+//                poiViewHolder.mBtnAdd.setText("地图");     //TODO 添加距离 导航
+//                poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        //TODO
+//                        if (mOnPoiActionListener != null) {
+//                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
+//                        }
+//                    }
+//                });
             }
             poiViewHolder.mPoiPriceTv.setText(poiDetailBean.priceDesc);
             poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
@@ -305,7 +307,7 @@ public class PoiAdapter extends BaseAdapter {
         ImageView mPoiImageIv;
         @InjectView(R.id.poi_address_tv)
         TextView mPoiAddressTv;
-        @InjectView(R.id.poi_price_tv)
+        @InjectView(R.id.poi_costtime_tv)
         TextView mPoiPriceTv;
         @InjectView(R.id.poi_rating)
         RatingBar mPoiRating;

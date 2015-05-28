@@ -287,7 +287,7 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler updateUserFootPrint(String userId, String type, ArrayList<String> id, HttpCallBack callback) {
+    public static PTRequestHandler updateUserFootPrint(String userId, String type, String[] id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/tracks");
@@ -296,7 +296,11 @@ public class UserApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", type);
-            jsonObject.put("tracks", id);
+            JSONArray jsonArray = new JSONArray();
+            for (String sid : id) {
+                jsonArray.put(sid);
+            }
+            jsonObject.put("tracks", jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }

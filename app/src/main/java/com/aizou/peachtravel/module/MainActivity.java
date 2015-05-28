@@ -88,6 +88,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private String mTagArray[] = {"Talk", "Travel", "My"};
     private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
+    String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +191,18 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     newFriends.setIsMyFriends(true);
                     newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
                     userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+
+                    //添加默认服务号
+                    IMUser paiServerUser = new IMUser();
+                    paiServerUser.setUserId((long)10000);
+                    paiServerUser.setUsername(serverName);
+                    paiServerUser.setNick("旅行派团队");
+                    paiServerUser.setHeader("");
+                    paiServerUser.setAvatar(getResources().getResourceName(R.drawable.ic_news));
+                    paiServerUser.setAvatarSmall(getResources().getResourceName(R.drawable.ic_news));
+                    paiServerUser.setIsMyFriends(true);
+                    userlist.put(serverName, paiServerUser);
+
 //                    // 添加"群聊"
 //                    IMUser groupUser = new IMUser();
 //                    groupUser.setUsername(Constant.GROUP_USERNAME);
@@ -217,7 +230,22 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     List<IMUser> users = new ArrayList<IMUser>(userlist.values());
                     IMUserRepository.saveContactList(mContext, users);
                     AccountManager.getInstance().setContactList(userlist);
+                    //给服务号发送消息
+                    EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                    TextMessageBody body = new TextMessageBody("");
+                    contentMsg.setMsgId(UUID.randomUUID().toString());
+                    contentMsg.addBody(body);
+                    contentMsg.setTo(serverName);
+                    contentMsg.setFrom(AccountManager.getInstance().getLoginAccount(MainActivity.this).easemobUser);
+                    contentMsg.setMsgTime(System.currentTimeMillis());
+                    contentMsg.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
+                    contentMsg.setUnread(false);
+                    contentMsg.setAttribute(Constant.MSG_CONTENT,String.format("欢迎回来",paiServerUser.getNick()));
+                    EMChatManager.getInstance().saveMessage(contentMsg);
+
+
                     refreshChatHistoryFragment();
+
 
                 }
 

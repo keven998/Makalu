@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class PoiListActivity extends PeachBaseActivity {
     @InjectView(R.id.tv_title_bar_title)
     TextView mTitle;
     @InjectView(R.id.tv_poi_want_type)
-    TextView mTvPoiWantType;
+    ImageView mTvPoiWantType;
     private PullToRefreshListView mPoiListLv;
     private View headerView;
     private String type;
@@ -170,12 +171,11 @@ public class PoiListActivity extends PeachBaseActivity {
 //                mPoiListLv.doPullRefreshing(true, 200);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setText("美食\n攻略");
+                    mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     mTitle.setText(String.format("%s购物", curLoc.zhName));
-                    mTvPoiWantType.setText("购物\n攻略");
+                    mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
                 }
-
                 loadPageData();
             }
 
@@ -201,15 +201,12 @@ public class PoiListActivity extends PeachBaseActivity {
             }
         });
 
-//        mPoiListLv.doPullRefreshing(true, 200);
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
-            mTvPoiWantType.setText("美食\n" +
-                    "攻略");
+            mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-            mTvPoiWantType.setText("购物\n" +
-                    "攻略");
+            mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
         }
 
         loadPageData();
