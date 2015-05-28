@@ -249,7 +249,9 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             holder.poiAddressTv.setText(ss);
             holder.poiAddressTv.append(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
-            holder.poiPriceTv.setText(poiDetailBean.priceDesc);
+            if(!TextUtils.isEmpty(poiDetailBean.priceDesc)) {
+                holder.poiPriceTv.setText(poiDetailBean.priceDesc+"");
+            }
             if(!poiDetailBean.getFormatRank().equals("0")){
 //                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 holder.poiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));

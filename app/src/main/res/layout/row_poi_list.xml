@@ -115,6 +115,21 @@
             android:text="参考游玩时间"/>
 
 
+        <TextView
+            android:id="@+id/poi_price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/poi_costtime_tv"
+            android:layout_below="@+id/btn_add"
+            android:text="dfsa"
+            android:gravity="right"
+            android:textSize="10sp"
+            android:textColor="@color/third_font_color"
+            android:layout_alignBaseline="@+id/poi_costtime_tv"
+            />
+
+
         <CheckedTextView
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"

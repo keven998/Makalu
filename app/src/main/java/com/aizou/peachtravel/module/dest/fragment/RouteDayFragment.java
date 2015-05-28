@@ -893,8 +893,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        mOnEditModeChangeListener.onEditModeChange(false);
-                        routeDayAdpater.setEditableMode(false);
+                        mOnEditModeChangeListener.onEditModeChange(true);
+                        routeDayAdpater.setEditableMode(true);
                         routeDayAdpater.notifyDataSetChanged();
                     }
                 }
@@ -916,14 +916,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         routeDayMap.remove(section);
                         strategy.itineraryDays--;
                         routeDayAdpater.notifyDataSetChanged();
-                        /*if (mOnEditModeChangeListener != null) {
+                        if (mOnEditModeChangeListener != null) {
                             if (!isInEditMode) {
                                 isInEditMode = true;
                                 mOnEditModeChangeListener.onEditModeChange(true);
                                 routeDayAdpater.setEditableMode(false);
                                 routeDayAdpater.notifyDataSetChanged();
                             }
-                        }*/
+                        }
                         deleteDialog.dismiss();
                     }
                 });
@@ -993,14 +993,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 mEditDslv.setSelection(sectionPos);
             }
         }, 50);  //routeDayAdpater.getCount() - 1*/
-        /*if(mOnEditModeChangeListener!=null){
+        if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;
                 mOnEditModeChangeListener.onEditModeChange(true);
                 routeDayAdpater.setEditableMode(false);
                 routeDayAdpater.notifyDataSetChanged();
             }
-        }*/
+        }
     }
 
 
