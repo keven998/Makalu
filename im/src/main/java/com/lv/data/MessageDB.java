@@ -13,6 +13,9 @@ import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.lv.user.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -138,7 +141,33 @@ public class MessageDB {
             table_name = "chat_" + CryptUtils.getMD5String(groupId + "");
             chater = groupId + "";
         }
+        if (entity.getType()==1) {
 
+            try {
+                JSONObject object=new JSONObject(entity.getMessage());
+                String url=object.getString("url");
+                String path= Config.DownLoadAudio_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(url) + ".amr";
+                object.put("path",path);
+                object.put("isRead",false);
+                entity.setMessage(object.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (entity.getType()==2) {
+            try {
+                JSONObject object=new JSONObject(entity.getMessage());
+                String url=object.getString("thumb");
+                String path= Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(url) + ".jpeg";
+                String full=object.getString("full");
+                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
+                object.put("localPath",localPath);
+                object.put("thumbPath",path);
+                entity.setMessage(object.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         if (Config.isDebug) {
             Log.i(Config.TAG, "table_name " + table_name);
         }

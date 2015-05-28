@@ -12,7 +12,11 @@ import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
 import com.lv.bean.Message;
 import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 import com.lv.user.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -35,20 +39,18 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (Config.ACTION_START.equals(intent.getAction())) {
             Message message = (Message)intent.getSerializableExtra("msg");
-            if (!downlaodMap.containsKey(message.getUrl())) {
-              //  DownloadTask task = new DownloadTask(message);
-               // task.start();
+        //    if (!downlaodMap.containsKey(message.getUrl())) {
                 new DownloadTask1().execute(message);
                 downlaodMap.put(message.getUrl(),message);
                 if (Config.isDebug){
                     Log.i(Config.TAG,"开始下载！ "+message.getUrl());
-                }
-            }
-            else {
-                notice(message);
-                if (Config.isDebug){
-                    Log.i(Config.TAG,"已下载 ");
-                }
+//                }
+//            }
+//            else {
+//                notice(message,newfilename);
+//                if (Config.isDebug){
+//                    Log.i(Config.TAG,"已下载 ");
+//                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -136,17 +138,17 @@ public class DownloadService extends Service {
                         bos.close();
                         bm.recycle();
                     }
-                    else notice(msg);
+                  //  else notice(msg,newfilename);
                     if (Config.isDebug){
                         Log.i(Config.TAG, "下载完成");
                     }
                 }
-                notice(msg);
+                notice(msg,newfilename);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 msg.setStatus(1);
-                notice(msg);
+                notice(msg,newfilename);
                 if (Config.isDebug){
                     Log.i(Config.TAG,"下载失败");
                 }
@@ -166,102 +168,30 @@ public class DownloadService extends Service {
             return null;
         }
     }
-
-    class DownloadTask extends Thread {
-        private String url;
-        private Message msg;
-        private int msgType;
-
-        DownloadTask(Message message) {
-            this.url = message.getUrl();
-            this.msgType = message.getMsgType();
-            this.msg=message;
-            downlaodMap.put(url,message);
-        }
-
-        @Override
-        public void run() {
-            HttpURLConnection conn = null;
-          //  OutputStream output = null;
-            String newfilename=null;
+    private void notice(Message msg,String path){
+        if (msg.getMsgType()==1){
             try {
-                URL downloadUrl = new URL(url);
-                conn = (HttpURLConnection) downloadUrl.openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setRequestMethod("GET");
-                if (Config.isDebug){
-                    Log.i(Config.TAG,"downlaod code: "+conn.getResponseCode() );
-                }
-                if (conn.getResponseCode() == 200) {
-                  int length = conn.getContentLength();
-                    if (length < 0) {
-                        return;
-                    }
-                    File path = null;
-                    File file= null;
-                    String user=CryptUtils.getMD5String(User.getUser().getCurrentUser());
-                    String name=CryptUtils.getMD5String(msg.getUrl());
-                    switch (msgType) {
-                        case 1:
-                            path = new File(Config.DownLoadAudio_path +user);
-                            file = new File(path, name+ ".amr");
-                            newfilename=Config.DownLoadAudio_path +user+name+ ".amr";
-                            break;
-                        case 2:
-                            path = new File(Config.DownLoadImage_path +user);
-                            file = new File(path, name+ ".jpeg");
-                            newfilename=Config.DownLoadImage_path +user+"/"+name+ ".jpeg";
-                            break;
-                    }
-
-                    if (!path.exists()) {
-                        path.mkdirs();
-                    }
-                   if (file.exists()){
-                       file.delete();
-                      //notice(msg);
-                      // System.out.println("已下载 ");
-                    //  return;
-                   }
-                    System.out.println(newfilename);
-                    File newfile = new File(newfilename);
-                    if (!newfile.createNewFile())
-                        Log.i(Config.TAG,"DownloadService failed to createFile!");
-                    InputStream input = conn.getInputStream();
-
-//                    if (newfilename != null) {
-//                        output = new FileOutputStream(newfile);
-//                    }
-//                    ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
-//                    byte[] buffer = new byte[1024];
-//                    int l=0;
-//                    while ((l=input.read(buffer))!= -1) {
-//                        outputStream.write(buffer,0,l);
-//                    }
-                    Bitmap bm= BitmapFactory.decodeStream(input);
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfilename));
-                    bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
-                    bos.flush();
-                    bos.close();
-                    bm.recycle();
-                    if (Config.isDebug) {
-                        System.out.println("下载完成！");
-                    }
-                }
-                notice(msg);
-            } catch (Exception e) {
+                JSONObject o=new JSONObject(msg.getContents());
+                o.put("path",path);
+                o.put("isRead",false);
+                msg.setContents(o.toString());
+            } catch (JSONException e) {
                 e.printStackTrace();
-                notice(msg);
-                System.out.println("下载失败！");
-            }finally {
-                      //  output.close();
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
             }
         }
-    }
-    private void notice(Message msg){
+        if (msg.getMsgType()==2){
+            try {
+                JSONObject o=new JSONObject(msg.getContents());
+                String full=o.getString("full");
+                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
+                o.put("localPath",localPath);
+                o.put("thumbPath",path);
+                msg.setContents(o.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //IMClient.getInstance().updateMessage();
         android.os.Message message= android.os.Message.obtain();
         message.obj=msg;
         message.what=Config.DOWNLOAD_SUCCESS;

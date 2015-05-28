@@ -61,6 +61,8 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 			if (message.getSendType() == 0) {
 				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
 			} else {
+
+
 				return null;
 			}
 		}

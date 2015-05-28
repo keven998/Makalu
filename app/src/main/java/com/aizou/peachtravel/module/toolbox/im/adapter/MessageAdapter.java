@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.text.Spannable;
@@ -804,10 +805,11 @@ private String chatType;
             } else {
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
-              String filepath= getImagepath(message);
-    if (filepath!=null){
-       Bitmap image = BitmapFactory.decodeFile(filepath);
-      holder.iv.setImageBitmap(image);
+                holder.iv.setImageBitmap(defaultImage);
+                String thumbpath= getImagepath(message,"thumbPath");
+                String romotePath= getImagepath(message,"full");
+    if (thumbpath!=null){
+        showImageView(thumbpath, holder.iv, null,romotePath , message);
     }
 
 
@@ -833,7 +835,7 @@ private String chatType;
             return;
         }
 
-        String localPath=getImagepath(message);
+        String localPath=getImagepath(message,"localPath");
         String thumbPath=getThumbImagepath(message);
          if (localPath != null && new File(localPath).exists()) {
         showImageView(thumbPath, holder.iv, localPath, null, message);
@@ -914,10 +916,10 @@ private String chatType;
         }
     }
 
-    private String getImagepath(MessageBean message) {
+    private String getImagepath(MessageBean message,String name) {
         try {
             JSONObject object=new JSONObject(message.getMessage());
-            return  object.getString("localPath");
+            return  object.getString(name);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -1074,10 +1076,11 @@ private String chatType;
      * @param convertView
      */
     private void handleVoiceMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
-        String filepath=(String)getVoiceFilepath(message,"path");
-        String durtime=(String)getVoiceFilepath(message,"durtime");
-        boolean isRead=(boolean)getVoiceFilepath(message,"isRead");
-        holder.tv.setText(durtime + "\"");
+
+            String  filepath=(String)getVoiceFilepath(message,"path");
+            String durtime=getVoiceFilepath(message,"duration")+"";
+            boolean  isRead=(boolean)getVoiceFilepath(message,"isRead");
+        holder.tv.setText(durtime.substring(0,1) + "\"");
         holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, friendId,chatType,isRead,filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -1155,7 +1158,9 @@ private String chatType;
             }
             return;
         }
-
+      //   String filepath=(String)getVoiceFilepath(message,"path");
+       // String durtime=(int)getVoiceFilepath(message,"duration")+"";
+       //  boolean isRead=(boolean)getVoiceFilepath(message,"isRead");
         // until here, deal with send voice msg
         switch (message.getStatus()) {
             case 0:

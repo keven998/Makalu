@@ -229,7 +229,7 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
         try {
             object.put("isRead", false);
             object.put("path", path);
-            object.put("durtime", durtime);
+            object.put("duration", durtime);
         } catch (JSONException e) {
             e.printStackTrace();
         }

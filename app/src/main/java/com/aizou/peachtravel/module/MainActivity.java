@@ -99,7 +99,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             return;
         }
         //User.getUser().setCurrentUser("100002");
-        User.login("100002", new LoginSuccessListener() {
+        User.login("100010", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
@@ -110,11 +110,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 System.out.println("登陆失败 :" + code);
             }
         });
-       /* if(!EMChat.getInstance().isLoggedIn()){
+       /*
+       if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
-        }*/
+        }
+        */
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){

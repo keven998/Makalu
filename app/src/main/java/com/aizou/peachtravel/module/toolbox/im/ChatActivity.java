@@ -258,7 +258,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         chatType = getIntent().getStringExtra("chatType");
 
         //test
-        toChatUsername=100010+"";
+        toChatUsername=100002+"";
         chatType="single";
         conversation="0";
 		initView();
@@ -850,8 +850,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			return;
 		}
 
-		cameraFile = new File(PathUtil.getInstance().getImagePath(), AccountManager.getInstance().getLoginAccount(this).easemobUser
-				+ System.currentTimeMillis() + ".jpg");
+	//	cameraFile = new File(PathUtil.getInstance().getImagePath(), AccountManager.getInstance().getLoginAccount(this).easemobUser
+	//			+ System.currentTimeMillis() + ".jpg");
+        cameraFile=new File(Config.imagepath ,TimeUtils.getTimestamp() + "_image.jpeg");
 		cameraFile.getParentFile().mkdirs();
 		startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
 				REQUEST_CODE_CAMERA);

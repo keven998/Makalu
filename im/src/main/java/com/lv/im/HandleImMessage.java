@@ -155,7 +155,6 @@ public class HandleImMessage {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Intent dlA_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
                         String aurl = null;
                         try {
                              aurl = object.getString("url");
@@ -166,6 +165,7 @@ public class HandleImMessage {
                             e.printStackTrace();
                         }
                         messageBean.setUrl(aurl);
+                        Intent dlA_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
                         dlA_intent.putExtra("msg", messageBean);
                         c.startService(dlA_intent);
                         break;
