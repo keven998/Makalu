@@ -60,8 +60,7 @@
                 android:textColor="@color/second_font_color"
                 android:textSize="15sp"
                 android:maxWidth="160dp"
-                android:ellipsize="end"
-                android:text="名字很长怎么办怎么办"/>
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/poi_address_tv"
@@ -72,7 +71,6 @@
                 android:ellipsize="end"
                 android:textColor="@color/third_font_color"
                 android:textSize="14sp"
-                android:text="安徽 合肥"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -132,20 +130,6 @@
             android:textColor="@color/base_color_white"
             android:textSize="12sp" />
 
-
-        <TextView
-            android:id="@+id/poi_price_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/poi_costtime_tv"
-            android:layout_alignBottom="@+id/poi_costtime_tv"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:singleLine="true"
-            android:textColor="@color/third_font_color"
-            android:textSize="10sp"
-            android:layout_marginRight="2dp"
-            />
     </RelativeLayout>
 
         <!--<ImageView

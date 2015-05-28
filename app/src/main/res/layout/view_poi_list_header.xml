@@ -15,17 +15,13 @@
         android:orientation="horizontal">
 
 
-        <TextView
-            android:id="@+id/tv_poi_want_type"
+        <ImageView android:id="@+id/tv_poi_want_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_poi_guide"
-            android:gravity="center"
-            android:textColor="@color/app_theme_color"
-            android:textSize="15sp"
             android:layout_marginTop="18dp"
             android:layout_marginLeft="10dp"
-            android:paddingBottom="4dp"/>
+            android:scaleType="centerInside"
+            />
 
         <TextView
             android:id="@+id/tv_city_poi_desc"

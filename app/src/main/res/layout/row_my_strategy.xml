@@ -126,7 +126,9 @@
                 android:layout_height="@dimen/my_plan_img_height"
                 android:layout_marginLeft="11dp">
 
-                <!--android:background="@drawable/bg_send"-->
+               <!-- android:layout_marginLeft="11dp"
+                android:background="@drawable/bg_send"
+                android:visibility="gone">-->
                 <TextView
                     android:id="@+id/btn_send"
                     android:layout_width="wrap_content"
