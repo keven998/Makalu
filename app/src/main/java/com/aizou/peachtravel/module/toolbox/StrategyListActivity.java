@@ -1,23 +1,15 @@
 package com.aizou.peachtravel.module.toolbox;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,25 +19,19 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
-import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.ComfirmDialog;
-import com.aizou.peachtravel.common.dialog.CustomDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachEditDialog;
@@ -53,33 +39,23 @@ import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
-import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
 import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
-import com.aizou.peachtravel.common.widget.swipelistview.util.Attributes;
-import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
-import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
-import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -103,9 +79,10 @@ public class StrategyListActivity extends PeachBaseActivity {
     int mCurrentPage = 0;
     int chatType;
     String toId;
-    private StrategyBean originalStrategy;
+//    private StrategyBean originalStrategy;
     private String userId;
     private boolean isExpertPlan;
+    private boolean swipeEnable = false; //侧滑补丁
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +90,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
         isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
+        swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().user.userId));
         initView();
         initData();
     }
@@ -141,7 +119,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (isShare||isExpertPlan) {
+        if (isShare || isExpertPlan) {
             mEditBtn.setVisibility(View.GONE);
         }
 
@@ -180,31 +158,32 @@ public class StrategyListActivity extends PeachBaseActivity {
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
                 }
-
         );
 
 //        mTitleBar.enableBackKey(true);
-
-        String action = getIntent().getAction();
+//        String action = getIntent().getAction();
         TitleHeaderBar tbar = mTitleBar;
         tbar.setRightView("去过");
         tbar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(StrategyListActivity.this,StrategyVisitedListActivity.class);
-                intent.putExtra("isShare",false);
-                intent.putExtra("userId",userId);
-                intent.putExtra("isExpertPlan",isExpertPlan);
+                Intent intent = new Intent(StrategyListActivity.this, StrategyVisitedListActivity.class);
+                intent.putExtra("isShare", isShare);
+                intent.putExtra("userId", userId);
+                intent.putExtra("isExpertPlan", isExpertPlan);
                 startActivity(intent);
             }
         });
         tbar.enableBackKey(true);
-        tbar.getTitleTextView().
-                setText("我的旅程");
+        tbar.getTitleTextView().setText("旅行计划");
     }
 
     private void setupViewFromCache() {
         AccountManager account = AccountManager.getInstance();
+        if (userId != null && !userId.equals(account.user.userId)) {
+            mMyStrategyLv.doPullRefreshing(true, 0);
+            return;
+        }
         String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
         if (!TextUtils.isEmpty(data)) {
             List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
@@ -224,6 +203,9 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void cachePage() {
         AccountManager account = AccountManager.getInstance();
+        if (userId != null && !userId.equals(account.user.userId)) {
+            return;
+        }
         int size = mStrategyListAdapter.getCount();
         if (size > OtherApi.PAGE_SIZE) {
             size = OtherApi.PAGE_SIZE;
@@ -261,7 +243,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void getStrategyListData(final int page , String planned) {
-        TravelApi.getStrategyPlannedList(userId,page, planned, new HttpCallBack<String>() {
+        TravelApi.getStrategyPlannedList(userId, page, planned, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
@@ -274,7 +256,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
                 mMyStrategyLv.onPullDownRefreshComplete();
                 mMyStrategyLv.onPullUpRefreshComplete();
-
             }
 
             @Override
@@ -344,8 +325,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             return v;
         }
 
-
-
         @Override
         public void fillValues(final int position, View convertView) {
             ImageView mStrategyIv = (ImageView) convertView.findViewById(R.id.strategy_iv);
@@ -355,7 +334,8 @@ public class StrategyListActivity extends PeachBaseActivity {
             TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
             ImageButton mMore = (ImageButton) convertView.findViewById(R.id.edit_more);
             ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
-
+            SwipeLayout slyt = (SwipeLayout) convertView.findViewById(R.id.swipe);
+            slyt.setSwipeEnabled(swipeEnable);
 
             final StrategyBean itemData = (StrategyBean) getItem(position);
             TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
@@ -368,21 +348,21 @@ public class StrategyListActivity extends PeachBaseActivity {
             mDayTv.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
-            LogUtil.d(itemData.status+"====status");
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isExpertPlan) {  //isSend
+            if (isSend) {  //isSend
+//                mRlSend.setVisibility(View.VISIBLE);
+//                mBtnSend.setVisibility(View.GONE);
+//                mRlSend.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+//                        Intent intent = new Intent(mContext, StrategyActivity.class);
+//                        intent.putExtra("id", bean.id);
+//                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+//                    }
+//                });
                 mRlSend.setVisibility(View.VISIBLE);
-                mBtnSend.setVisibility(View.GONE);
-                mRlSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                        Intent intent = new Intent(mContext, StrategyActivity.class);
-                        intent.putExtra("id", bean.id);
-                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
-                    }
-                });
-                /*mBtnSend.setOnClickListener(new View.OnClickListener() {
+                mBtnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
@@ -425,13 +405,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                             }
                         });
                     }
-                });*/
+                });
             }
             else {
                 mRlSend.setVisibility(View.GONE);
             }
-
-
 
             mMore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -439,7 +417,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                        showMoreDialog(itemData);
                 }
             });
-
             mDeleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -582,7 +559,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         @InjectView(R.id.swipe)
         SwipeLayout swipe;
 
-
         public StrategyListViewHolder(boolean isSend) {
             poptions = UILUtils.getDefaultOption();
             this.isSend = isSend;
@@ -658,7 +634,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             } else {
                 mRlSend.setVisibility(View.GONE);
             }
-
 
             mEditTtitle.setOnClickListener(new View.OnClickListener() {
                 @Override

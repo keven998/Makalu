@@ -1,23 +1,14 @@
 package com.aizou.peachtravel.module.toolbox;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,25 +17,18 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.widget.listHelper.ListViewDataAdapter;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
-import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
-import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.ModifyResult;
 import com.aizou.peachtravel.bean.StrategyBean;
 import com.aizou.peachtravel.common.account.AccountManager;
-import com.aizou.peachtravel.common.account.StrategyManager;
 import com.aizou.peachtravel.common.api.BaseApi;
 import com.aizou.peachtravel.common.api.OtherApi;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.dialog.ComfirmDialog;
-import com.aizou.peachtravel.common.dialog.CustomDialog;
 import com.aizou.peachtravel.common.dialog.DialogManager;
 import com.aizou.peachtravel.common.dialog.MoreDialog;
 import com.aizou.peachtravel.common.dialog.PeachEditDialog;
@@ -52,32 +36,22 @@ import com.aizou.peachtravel.common.dialog.PeachMessageDialog;
 import com.aizou.peachtravel.common.gson.CommonJson;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
-import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.utils.PreferenceUtils;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout;
 import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapter;
-import com.aizou.peachtravel.module.dest.OnStrategyModeChangeListener;
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
-import com.aizou.peachtravel.module.toolbox.im.AddContactActivity;
-import com.aizou.peachtravel.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.easemob.EMCallBack;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -105,12 +79,15 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     private String userId;
     private boolean isExpertPlan;
 
+    private boolean swipeEnable = false; //侧滑补丁
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
         isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
+        swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().user.userId));
         initView();
         initData();
     }
@@ -182,30 +159,30 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         );
 
 //        mTitleBar.enableBackKey(true);
-
-        String action = getIntent().getAction();
+//        String action = getIntent().getAction();
         TitleHeaderBar tbar = mTitleBar;
         tbar.enableBackKey(true);
         tbar.getTitleTextView(). setText("已去过的旅程");
     }
 
     private void setupViewFromCache() {
-        AccountManager account = AccountManager.getInstance();
-        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
-        if (!TextUtils.isEmpty(data)) {
-            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
-                    new TypeToken<List<StrategyBean>>() {
-                    });
-            mStrategyListAdapter.getDataList().addAll(lists);
-            mStrategyListAdapter.notifyDataSetChanged();
-            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
-                mMyStrategyLv.setHasMoreData(true);
-                mMyStrategyLv.setScrollLoadEnabled(true);
-            }
-            getStrategyListData(0,"traveled");
-        } else {
-            mMyStrategyLv.doPullRefreshing(true, 0);
-        }
+        mMyStrategyLv.doPullRefreshing(true, 0);
+//        AccountManager account = AccountManager.getInstance();
+//        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
+//        if (!TextUtils.isEmpty(data)) {
+//            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+//                    new TypeToken<List<StrategyBean>>() {
+//                    });
+//            mStrategyListAdapter.getDataList().addAll(lists);
+//            mStrategyListAdapter.notifyDataSetChanged();
+//            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+//                mMyStrategyLv.setHasMoreData(true);
+//                mMyStrategyLv.setScrollLoadEnabled(true);
+//            }
+//            getStrategyListData(0,"traveled");
+//        } else {
+//            mMyStrategyLv.doPullRefreshing(true, 0);
+//        }
     }
 
     private void cachePage() {
@@ -254,13 +231,12 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                 if (strategyListResult.code == 0) {
                     mCurrentPage = page;
                     bindView(strategyListResult.result);
-                    if (page == 0 || mStrategyListAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
-                        cachePage();
-                    }
+//                    if (page == 0 || mStrategyListAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
+//                        cachePage();
+//                    }
                 }
                 mMyStrategyLv.onPullDownRefreshComplete();
                 mMyStrategyLv.onPullUpRefreshComplete();
-
             }
 
             @Override
@@ -339,6 +315,8 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             ImageButton mMore = (ImageButton) convertView.findViewById(R.id.edit_more);
             ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
 
+            SwipeLayout slyt = (SwipeLayout) convertView.findViewById(R.id.swipe);
+            slyt.setSwipeEnabled(swipeEnable);
 
             final StrategyBean itemData = (StrategyBean) getItem(position);
             TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
@@ -352,18 +330,18 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isExpertPlan) {
+            if (isSend) {
                 mRlSend.setVisibility(View.VISIBLE);
-                mRlSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                        Intent intent = new Intent(mContext, StrategyActivity.class);
-                        intent.putExtra("id", bean.id);
-                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
-                    }
-                });
-                /*mBtnSend.setOnClickListener(new View.OnClickListener() {
+//                mRlSend.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+//                        Intent intent = new Intent(mContext, StrategyActivity.class);
+//                        intent.putExtra("id", bean.id);
+//                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+//                    }
+//                });
+                mBtnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
@@ -406,7 +384,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                             }
                         });
                     }
-                });*/
+                });
             } else {
                 mRlSend.setVisibility(View.GONE);
             }
@@ -454,7 +432,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                                     if (modifyResult.code == 0) {
                                         strBean.title = editDialog.getMessage();
                                         mStrategyListAdapter.notifyDataSetChanged();
-                                        cachePage();
+//                                        cachePage();
                                     } else {
                                         if (!isFinishing())
                                             ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -483,7 +461,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                     cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                     cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
                     cdialog.setTitle("提示");
-                    cdialog.setMessage(strBean.title + "已保存为去过，成为了您的旅历足迹");
+                    cdialog.setMessage(strBean.title + "已保存为去过，成为旅行足迹");
                     cdialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -576,7 +554,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         if (mStrategyListAdapter.getCount() == 0) {
             mMyStrategyLv.doPullRefreshing(true, 0);
         } else if (index <= OtherApi.PAGE_SIZE) {
-            cachePage();
+//            cachePage();
         }
     }
 
