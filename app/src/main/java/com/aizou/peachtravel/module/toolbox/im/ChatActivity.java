@@ -123,9 +123,11 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
+import com.lv.Audio.MediaRecordFunc;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
+import com.lv.Utils.TimeUtils;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
@@ -597,6 +599,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 //				}
 				break;
 			case RESULT_CODE_DELETE: // 删除消息
+               // MessageBean deleteMsg=adapter.getItem(data.getIntExtra("position", -1));
+                messageList.remove(data.getIntExtra("position", -1));
+                adapter.refresh();
+				listView.setSelection(data.getIntExtra("position", adapter.getCount()) - 1);
 //				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
 //				conversation.removeMessage(deleteMsg.getMsgId());
 //				adapter.refresh();
@@ -894,20 +900,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         if (TextUtils.isEmpty(content)) {
             return;
         }
-        MessageBean messageBean=IMClient.getInstance().sendTextMessage(content,toChatUsername ,conversation, new SendMsgListener(){
-            @Override
-            public void onSuccess() {
-                if (Config.isDebug){
-                    Log.i(Config.TAG, "发送成功");
-                }
-                messageList=IMClient.getInstance().getMessages(toChatUsername,0);
-                adapter.refresh();
-            }
-            @Override
-            public void onFailed(int code) {
-                System.out.println("failed code : " + code);
-            }
-        },chatType);
+        MessageBean messageBean=IMClient.getInstance().createTextMessage(content,toChatUsername,chatType);
         messageList.add(messageBean);
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refresh();
@@ -929,6 +922,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			return;
 		}
 		try {
+            MessageBean m =IMClient.getInstance().createAudioMessage(filePath,toChatUsername,length,chatType);
+            messageList.add(m);
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			setResult(RESULT_OK);
@@ -945,28 +940,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param filePath
 	 */
 	private void sendPicture(final String filePath) {
-    MessageBean m = IMClient.getInstance().sendImageMessage(filePath,null,toChatUsername,new UploadListener(){
-
-    @Override
-    public void onSucess(String fileUrl) {
-        System.out.println("上传图片成功");
-        adapter.refresh();
-    }
-
-    @Override
-    public void onError(int errorCode, String msg) {
-
-    }
-
-    @Override
-    public void onProgress(int progress) {
-
-    }
-},chatType);
-        messageList.add(m);
-		adapter.refresh();
-		listView.setSelection(listView.getCount() - 1);
-		setResult(RESULT_OK);
+    MessageBean m =IMClient.getInstance().CreateImageMessage(filePath,toChatUsername,chatType);
+      if (m!=null) {
+          messageList.add(m);
+          adapter.refresh();
+          listView.setSelection(listView.getCount() - 1);
+          setResult(RESULT_OK);
+      }
 	}
 
 	/**
@@ -1241,14 +1221,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	}
 
     @Override
-    public void onMsgArrive(Message m) {
-        MessageBean messageBean = Msg2Bean(m);
-        messageBean.setSendType(1);
-        messageList.add(messageBean);
-        adapter.refresh();
-    }
-    public static MessageBean Msg2Bean(Message msg) {
-        return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
+    public void onMsgArrive(MessageBean m) {
+        if (!toChatUsername.equals(String.valueOf(m.getSenderId()))&&"single".equals(chatType)) {
+            m.setSendType(1);
+            Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+        } else {
+            m.setSendType(1);
+            messageList.add(m);
+            adapter.refresh();
+            int curSelection = listView.getFirstVisiblePosition();
+            if (curSelection > listView.getCount() / 2) {
+                listView.setSelection(listView.getCount() - 1);
+            }
+        }
     }
 
     /**
@@ -1358,7 +1343,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 					recordingContainer.setVisibility(View.VISIBLE);
 					recordingHint.setText(getString(R.string.move_up_to_cancel));
 					recordingHint.setBackgroundColor(Color.TRANSPARENT);
-					voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
+                    MediaRecordFunc.getInstance().startRecordAndFile();
+					//voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
 				} catch (Exception e) {
 					e.printStackTrace();
 					v.setPressed(false);
@@ -1394,13 +1380,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 				} else {
 					// stop recording and send voice file
 					try {
-						int length = voiceRecorder.stopRecoding();
-						if (length > 0) {
-							sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername),
-									Integer.toString(length), false);
-						} else {
-                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
-						}
+                        final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
+                        long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
+						//int length = voiceRecorder.stopRecoding();
+						//if (length > 0) {
+							sendVoice(path, null,Long.toString(time/1000), false);
+//						} else {
+//                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
+//						}
 					} catch (Exception e) {
 						e.printStackTrace();
 //						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();

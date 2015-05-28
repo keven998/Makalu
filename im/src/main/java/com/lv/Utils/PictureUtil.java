@@ -16,9 +16,11 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,6 +37,88 @@ public class PictureUtil {
     public static final String IMAGE_UNSPECIFIED = "image/*";
     private static int maxWidth = 720;
     private static int maxHeight = 1080;
+
+    public static String reSizeImage(String OriginalPath ){
+
+        String imagePath= Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        // 不读取像素数组到内存中，仅读取图片的信息
+        opts.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(OriginalPath, opts);
+        // 从Options中获取图片的分辨率
+        int imageHeight = opts.outHeight;
+        int imageWidth = opts.outWidth;
+
+        // 获取Android屏幕的服务
+        //WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        // 获取屏幕的分辨率，getHeight()、getWidth已经被废弃掉了
+        // 应该使用getSize()，但是这里为了向下兼容所以依然使用它们
+        int windowHeight = 1920;
+        int windowWidth = 1080;
+        int scale = 1;
+if (imageWidth>windowHeight&&imageHeight>windowHeight) {
+    // 计算采样率
+    int scaleX = imageWidth / windowWidth;
+    int scaleY = imageHeight / windowHeight;
+    // 采样率依照最大的方向为准
+    if (scaleX > scaleY && scaleY >= 1) {
+        scale = scaleX;
+    }
+    if (scaleX < scaleY && scaleX >= 1) {
+        scale = scaleY;
+    }
+}
+        opts.inJustDecodeBounds = false;
+        // 采样率
+        opts.inSampleSize = scale;
+        Bitmap bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
+        if (saveBitmapToJpegFile(bitmap,imagePath,100))return imagePath;
+        return null;
+    }
+
+    public static String getThumbImagePath(String path,int width,int height){
+        Bitmap bitmap = null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        // 获取这个图片的宽和高，注意此处的bitmap为null
+        bitmap = BitmapFactory.decodeFile(path, options);
+        options.inJustDecodeBounds = false; // 设为 false
+        // 计算缩放比
+        int h = options.outHeight;
+        int w = options.outWidth;
+        int beWidth = w / width;
+        int beHeight = h / height;
+        int be = 1;
+        if (beWidth < beHeight) {
+            be = beWidth;
+        } else {
+            be = beHeight;
+        }
+        if (be <= 0) {
+            be = 1;
+        }
+        options.inSampleSize = be;
+        bitmap = BitmapFactory.decodeFile(path, options);
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        String thumbImageName= path.substring(path.lastIndexOf("/") + 1, path.length());
+        String thumbPath=Config.imagepath+"th_"+thumbImageName;
+        File file=new File(thumbPath);
+        try {
+            FileOutputStream out=new FileOutputStream(file);
+            if(bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)){
+                out.flush();
+                out.close();
+            }
+            bitmap.recycle();
+            return thumbPath;
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 将图片存储至SD卡，需判断是否装有SD卡、是否可读写、是否有空间，否则提示出错
@@ -352,15 +436,13 @@ public class PictureUtil {
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
                 out.flush();
                 out.close();
-
+                bitmap.recycle();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            System.out.println(e);
             return false;
             }
             catch (IOException e) {
                 e.printStackTrace();
-                System.out.println(e);
                 return false;
             }
 

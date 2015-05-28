@@ -45,6 +45,15 @@ public class Message implements Serializable{
     private long GroupId;
     private String ChatType;//聊天类型
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    private int status;
     public long getGroupId() {
         return GroupId;
     }

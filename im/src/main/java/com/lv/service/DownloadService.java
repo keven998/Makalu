@@ -130,7 +130,7 @@ public class DownloadService extends Service {
                     }
                     if (msgType==2) {
                         Bitmap bm = BitmapFactory.decodeStream(input);
-                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfilename));
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfile));
                         bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
                         bos.flush();
                         bos.close();
@@ -145,6 +145,7 @@ public class DownloadService extends Service {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                msg.setStatus(1);
                 notice(msg);
                 if (Config.isDebug){
                     Log.i(Config.TAG,"下载失败");

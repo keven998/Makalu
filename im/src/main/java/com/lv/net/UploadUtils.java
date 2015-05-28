@@ -9,6 +9,7 @@ import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
+import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
@@ -54,16 +55,22 @@ public class UploadUtils {
         }
         return imagepath1;
     }
-    public String uploadImage(Bitmap bitmap, String sender, String receive, int msgType, long localId, UploadListener listener,String chatType) {
+    public String handleImage(Bitmap bitmap){
         File path = new File(Config.imagepath);
         if (!path.exists()) path.mkdirs();
-        String imagepath1 = Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
-        if (saveBitmapToJpegFile(bitmap, imagepath1))
-            upload(imagepath1, sender, receive, msgType, localId, listener,chatType);
-        else if (Config.isDebug){
-            Log.i(Config.TAG, "文件出错！ ");
+        String imagePath= Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
+        saveBitmapToJpegFile(bitmap, imagePath);
+        return imagePath;
+    }
+    public void uploadImage( MessageBean messageBean,String sender, String receive, int msgType, long localId, UploadListener listener,String chatType) {
+        String path=null;
+        try {
+            JSONObject object=new JSONObject(messageBean.getMessage());
+            path=object.getString("localPath");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        return imagepath1;
+        upload(path, sender, receive, msgType, localId, listener,chatType);
     }
     private Bitmap getImageThumbnail(String imagePath, int width, int height) {
         Bitmap bitmap = null;
@@ -125,7 +132,7 @@ public class UploadUtils {
                                 String msgId = obj.get("msgId").toString();
                                 long timestamp = (Double.valueOf(obj.get("timestamp").toString())).longValue();
                                 IMClient.getInstance().setLastMsg(receive, Integer.parseInt(msgId));
-                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,filePath);
+                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null);
                                 if(Config.isDebug){
                                     Log.i(Config.TAG,"发送成功，消息更新！");
                                 }
@@ -136,6 +143,7 @@ public class UploadUtils {
                                 listener.onSucess(null);
                             }
                         } else {
+                            IMClient.getInstance().updateMessage(receive, localId, null, null, 0, Config.STATUS_FAILED,null);
                             if (listener != null) {
                                 if (info!=null)
                                 listener.onError(info.statusCode, info.error);

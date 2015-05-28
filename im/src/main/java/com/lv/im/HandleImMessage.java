@@ -10,6 +10,7 @@ import com.lv.Listener.MsgListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Message;
+import com.lv.bean.MessageBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +48,7 @@ public class HandleImMessage {
          *
          * @param m 收到的消息
          */
-        public void onMsgArrive(Message m);
+        public void onMsgArrive(MessageBean m);
     }
 
     /**
@@ -87,14 +88,14 @@ public class HandleImMessage {
                     Message newMessage = (Message) message.obj;
                     System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
                     for (MessagerHandler handler : ehList) {
-                        handler.onMsgArrive(newMessage);
+                        handler.onMsgArrive(Msg2Bean(newMessage));
                     }
                     break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
                     for (MessagerHandler handler : ehList) {
-                        handler.onMsgArrive(newMediaMessage);
+                        handler.onMsgArrive(Msg2Bean(newMediaMessage));
                     }
                     break;
             }
@@ -194,4 +195,7 @@ public class HandleImMessage {
             }
         }
     };
+    private static MessageBean Msg2Bean(Message msg) {
+        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
+    }
 }

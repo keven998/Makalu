@@ -85,7 +85,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class IMMainActivity extends ChatBaseActivity  implements HandleImMessage.MessagerHandler{
+public class IMMainActivity extends ChatBaseActivity  {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
@@ -372,10 +372,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         });
     }
 
-    @Override
-    public void onMsgArrive(Message m) {
 
-    }
 
     private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
 

@@ -51,6 +51,7 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
 import com.lv.Listener.SendMsgListener;
 import com.lv.bean.Message;
+import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.user.LoginSuccessListener;
@@ -289,12 +290,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if(!EMChat.getInstance().isLoggedIn()){
-                        mTabHost.setCurrentTab(1);
-                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
-                        startActivity(logIntent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
-                    }
+                    /**
+                     * 注释掉登陆
+                     */
+//                    if(!EMChat.getInstance().isLoggedIn()){
+//                        mTabHost.setCurrentTab(1);
+//                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+//                        startActivity(logIntent);
+//                        overridePendingTransition(R.anim.push_bottom_in,0);
+//                    }
                 } else if (s.equals(mTagArray[1])) {
                   /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
                     if (fg != null) {
@@ -441,9 +445,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     @Override
-    public void onMsgArrive(Message m) {
-        System.out.println("message :"+m.getContents());
+    public void onMsgArrive(MessageBean m) {
+        System.out.println("message :"+m.getMessage());
     }
+
 
     /**
      * 新消息广播接收者

@@ -19,9 +19,16 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.media.ThumbnailUtils;
 
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
+import com.lv.Utils.Config;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ImageUtils {
 //	public static String getThumbnailImagePath(String imagePath) {

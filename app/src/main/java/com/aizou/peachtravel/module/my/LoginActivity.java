@@ -76,18 +76,21 @@ public class LoginActivity extends PeachBaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 如果用户名密码都有，直接进入主页面
-        if (EMChat.getInstance().isLoggedIn()) {
+        /**
+         * 注释掉登陆
+         */
+      //  if (EMChat.getInstance().isLoggedIn()) {
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(0,R.anim.push_bottom_out);
             return;
-        }
-        initView();
-        request_code=getIntent().getIntExtra("request_code",0);
-        if(request_code==REQUEST_CODE_REG){
-            Intent intent = new Intent(mContext, RegActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_REG);
-        }
+      //  }
+     //   initView();
+//        request_code=getIntent().getIntExtra("request_code",0);
+//        if(request_code==REQUEST_CODE_REG){
+//            Intent intent = new Intent(mContext, RegActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE_REG);
+//        }
     }
     @Override
     protected void onResume() {

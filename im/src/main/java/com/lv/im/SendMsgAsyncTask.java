@@ -83,6 +83,7 @@ public class SendMsgAsyncTask {
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "发送失败：code " + code);
                         }
+                        IMClient.getInstance().updateMessage(currentFri, localId, null, null,0, Config.STATUS_FAILED,null);
                         listen.onFailed(code);
                     }
                 } catch (Exception e) {

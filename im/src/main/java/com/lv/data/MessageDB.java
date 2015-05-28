@@ -299,12 +299,13 @@ public class MessageDB {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         ContentValues values = new ContentValues();
+        if (msgId!=null)
         values.put("ServerId", msgId);
         //values.put("conversation",conversation);
         if (message!=null){
             values.put("Message", message);
         }
-        values.put("CreateTime", timestamp);
+        if (timestamp!=0)values.put("CreateTime", timestamp);
         values.put("Status", status);
         int num = mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});
         updateConversation(fri_ID, conversation, Integer.parseInt(msgId));

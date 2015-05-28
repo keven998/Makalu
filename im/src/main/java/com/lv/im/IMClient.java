@@ -3,6 +3,7 @@ package com.lv.im;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
+import com.lv.Utils.HandleImageTask;
+import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by q on 2015/4/21.
@@ -187,39 +191,25 @@ public class IMClient {
         return db.getAllMsg(friendId, page);
     }
 
-    /**
-     * 发送文本消息
-     *
-     * @param text         消息内容
-     * @param friendId     friendId
-     * @param conversation 会话Id
-     * @param listen       listener
-     * @return MessageBean
-     */
-    public MessageBean sendTextMessage(String text, String friendId, String conversation, SendMsgListener listen, String chatType) {
-        if (TextUtils.isEmpty(text)) return null;
-        if ("0".equals(conversation)) conversation = null;
-      //  IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
-        MessageBean messageBean = imessage2Bean(message);
-        long localId = db.saveMsg(friendId, messageBean, chatType);
-        System.out.println("send  CurrentFriend " + friendId + " conversation" + conversation);
-        SendMsgAsyncTask.sendMessage(conversation, friendId, message, localId, listen, chatType);
-        return baseMessage(text, friendId, localId);
-    }
 
+    public void sendTextMessage(MessageBean message, String conversation, SendMsgListener listen, String chatType) {
+        if ("0".equals(conversation)) conversation = null;
+        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(message.getSenderId()), Config.TEXT_MSG, message.getMessage());
+        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
+    }
+public MessageBean createTextMessage(String text, String friendId ,String chatType){
+    if (TextUtils.isEmpty(text)) return null;
+    IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
+    MessageBean messageBean = imessage2Bean(message);
+    long localId = db.saveMsg(friendId, messageBean, chatType);
+    MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+    m.setLocalId((int) localId);
+    return m;
+}
     public MessageBean baseMessage(String text, String friendId, long localId) {
         MessageBean messageBean = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         messageBean.setLocalId((int) localId);
         return messageBean;
-    }
-
-    public MessageBean sendSingleTextMessage(String text, String friendId, String conversation, SendMsgListener listen) {
-        return sendTextMessage(text, friendId, conversation, listen, "single");
-    }
-
-    public MessageBean sendGroupTextMessage(String text, String friendId, String conversation, SendMsgListener listen) {
-        return sendTextMessage(text, friendId, conversation, listen, "group");
     }
 
     /**
@@ -231,41 +221,47 @@ public class IMClient {
      * @param listener listener
      * @param chatTpe  聊天类型
      */
-    public void sendAudioMessage(String path, String friendId, long durtime, UploadListener listener, String chatTpe) {
-        if (TextUtils.isEmpty(path)) return;
+    public void sendAudioMessage(MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
+        UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
+    }
+    public MessageBean createAudioMessage(String path, String friendId, String durtime, String chatTpe){
         JSONObject object = new JSONObject();
         try {
+            object.put("isRead", false);
             object.put("path", path);
             object.put("durtime", durtime);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.AUDIO_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, localId, listener, chatTpe);
-
-    }
-
-    /**
-     * 发送图片消息
-     *
-     * @param path     路径
-     * @param bitmap   图片
-     * @param friendId friendId
-     * @param listener listener
-     */
-    public MessageBean sendImageMessage(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe) {
-        Bitmap bitmap1 = BitmapFactory.decodeFile(path);
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.IMAGE_MSG, path);
-        MessageBean messageBean = imessage2Bean(message);
-        long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        String localpath=UploadUtils.getInstance().uploadImage(bitmap1, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, localId, listener, chatTpe);
-
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, localpath, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.AUDIO_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
         return m;
+    }
+
+    public  MessageBean CreateImageMessage(String path,String friendId,String chatTpe){
+
+       String sdkPath=PictureUtil.reSizeImage(path);
+       String thumbnailPath=PictureUtil.getThumbImagePath(sdkPath,160,160);
+        JSONObject object=new JSONObject();
+        try {
+            object.put("localPath",sdkPath);
+            object.put("thumbPath",thumbnailPath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.IMAGE_MSG, object.toString());
+        MessageBean messageBean = imessage2Bean(message);
+        System.out.println("message "+ messageBean.getMessage());
+        long localId = db.saveMsg(friendId, messageBean, chatTpe);
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        m.setLocalId((int) localId);
+        return m;
+    }
+    public void sendImageMessage(MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
+        UploadUtils.getInstance().uploadImage( messageBean,User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
     }
     public void sendImageMessageByUrl(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe){
 
