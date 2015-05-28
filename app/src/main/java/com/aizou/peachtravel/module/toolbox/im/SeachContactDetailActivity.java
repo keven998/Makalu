@@ -125,7 +125,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-//                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "请求添加好友失败", Toast.LENGTH_SHORT).show();
                                 ToastUtil.getInstance(SeachContactDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
@@ -149,7 +149,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 //                    jsonObject.put("avatar",myUser.avatar);
 //                    jsonObject.put("gender",myUser.gender);
 //                    jsonObject.put("easemobUser",myUser.easemobUser);
-//                    jsonObject.put("attachMsg","加个桃友, 一起去旅行呗");
+//                    jsonObject.put("attachMsg","加个好友, 分享旅行");
 //                    cmdMsg.setAttribute("content",jsonObject.toString());
 //                    DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
 //                    EMChatManager.getInstance().sendMessage(cmdMsg, new EMCallBack() {
@@ -172,7 +172,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 //                                @Override
 //                                public void run() {
 //                                    DialogManager.getInstance().dissMissLoadingDialog();
-//                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败:" + s, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "请求添加好友失败:" + s, Toast.LENGTH_SHORT).show();
 //                                }
 //                            });
 //

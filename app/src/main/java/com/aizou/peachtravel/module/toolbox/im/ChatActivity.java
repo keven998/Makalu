@@ -1736,7 +1736,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener {
                             public void run() {
                                 //如果正在与此用户的聊天页面
                                 if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
-//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他桃友列表里移除", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
                                     ToastUtil.getInstance(ChatActivity.this).showToast("聊天已被中断");
                                     ChatActivity.activityInstance.finish();
                                 }

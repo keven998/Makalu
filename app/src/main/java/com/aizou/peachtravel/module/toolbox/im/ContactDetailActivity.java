@@ -270,7 +270,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         }
 
         nickNameTv.setText("昵称：" + imUser.getNick());
-        idTv.setText("桃号：" + imUser.getUserId());
+        idTv.setText("ID：" + imUser.getUserId());
         signTv.setText("旅行签名：" + imUser.getSignature());
     }
 
