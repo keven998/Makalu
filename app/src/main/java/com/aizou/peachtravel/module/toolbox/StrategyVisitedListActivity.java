@@ -116,7 +116,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (!isShare) {
+        if (isShare || isExpertPlan) {
             mEditBtn.setVisibility(View.GONE);
         }
 
