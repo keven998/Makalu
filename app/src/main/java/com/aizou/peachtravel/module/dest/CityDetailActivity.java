@@ -67,11 +67,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private String locId;
     private ImageView shareToChat;
     private PopupWindow mPop;
+    private boolean isFromStrategy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
+        isFromStrategy=getIntent().getBooleanExtra("isFromStrategy",false);
         initView();
         initData();
     }
@@ -245,6 +247,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void bindView(final LocBean detailBean){
         locDetailBean = detailBean;
+        if(isFromStrategy) {
+            findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
+        }
         findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import com.aizou.peachtravel.common.widget.swipelistview.adapters.BaseSwipeAdapt
 import com.aizou.peachtravel.module.dest.SelectDestActivity;
 import com.aizou.peachtravel.module.dest.StrategyActivity;
 import com.easemob.EMCallBack;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -107,7 +109,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-        TextView tv_null=(TextView)findViewById(R.id.desc_tv);
+        TextView tv_null = (TextView) findViewById(R.id.desc_tv);
         tv_null.setText("您还没有去过的行程~");
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
@@ -117,55 +119,77 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
         if (isShare || isExpertPlan) {
-            mEditBtn.setVisibility(View.GONE);
-        }
-
-        listView.getRefreshableView().setAdapter(mStrategyListAdapter);
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(0,"traveled");
+            if (!isShare || isExpertPlan) {
+                mEditBtn.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(mCurrentPage + 1,"traveled");
-            }
-        });
-
-        listView.getRefreshableView().setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                        Intent intent = new Intent(mContext, StrategyActivity.class);
-                        intent.putExtra("id", bean.id);
-                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
-                    }
+            listView.getRefreshableView().setAdapter(mStrategyListAdapter);
+            listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+                @Override
+                public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                    getStrategyListData(0, "traveled");
                 }
 
-        );
-
-        mEditBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
-                        Intent intent = new Intent(StrategyVisitedListActivity.this, SelectDestActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
-                    }
+                @Override
+                public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                    getStrategyListData(mCurrentPage + 1, "traveled");
                 }
+            });
 
-        );
+            listView.getRefreshableView().setOnItemClickListener(
+                    new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                            Intent intent = new Intent(mContext, StrategyActivity.class);
+                            intent.putExtra("id", bean.id);
+                            startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                        }
+                    }
+
+            );
+
+            mEditBtn.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
+                            Intent intent = new Intent(StrategyVisitedListActivity.this, SelectDestActivity.class);
+                            startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
+                        }
+                    }
+
+            );
 
 //        mTitleBar.enableBackKey(true);
 //        String action = getIntent().getAction();
-        TitleHeaderBar tbar = mTitleBar;
-        tbar.enableBackKey(true);
-        tbar.getTitleTextView(). setText("已去过的旅程");
+            TitleHeaderBar tbar = mTitleBar;
+            tbar.enableBackKey(true);
+            tbar.getTitleTextView().setText("已去过的旅程");
+        }
     }
 
     private void setupViewFromCache() {
+        if(!isExpertPlan) {
+            AccountManager account = AccountManager.getInstance();
+            String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
+            if (!TextUtils.isEmpty(data)) {
+                List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+                        new TypeToken<List<StrategyBean>>() {
+                        });
+                mStrategyListAdapter.getDataList().addAll(lists);
+                mStrategyListAdapter.notifyDataSetChanged();
+                if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+                    mMyStrategyLv.setHasMoreData(true);
+                    mMyStrategyLv.setScrollLoadEnabled(true);
+                }
+                getStrategyListData(0, "traveled");
+            } else {
+                mMyStrategyLv.doPullRefreshing(true, 0);
+            }
+        }else{
+            getStrategyListData(0,"traveled");
+        }
         mMyStrategyLv.doPullRefreshing(true, 0);
 //        AccountManager account = AccountManager.getInstance();
 //        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
@@ -332,6 +356,16 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
             if (isSend) {
                 mRlSend.setVisibility(View.VISIBLE);
+                mBtnSend.setVisibility(View.GONE);
+                mRlSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                        Intent intent = new Intent(mContext, StrategyActivity.class);
+                        intent.putExtra("id", bean.id);
+                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                    }
+                });
 //                mRlSend.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {

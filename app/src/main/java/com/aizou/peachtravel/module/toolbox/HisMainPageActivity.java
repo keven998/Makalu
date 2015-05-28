@@ -32,6 +32,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.StrategyMapActivity;
+import com.aizou.peachtravel.module.my.LoginActivity;
 import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
@@ -72,7 +73,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @ViewInject(R.id.tv_his_foot_print)
     TextView foot_print;
     @ViewInject(R.id.his_destination)
-    FlowLayout his_destinations;
+    TextView his_destinations;
     @ViewInject(R.id.tv_his_plan)
     TextView his_trip_plan;
     @ViewInject(R.id.tv_his_status)
@@ -97,18 +98,22 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     LinearLayout ll_his_trip_plan;
     @ViewInject(R.id.ll_foot_print)
     LinearLayout ll_foot_print;
+    @ViewInject(R.id.tv_title_back)
+    TextView tv_back;
 
     private int userId;
     private ImageView my_pics_cell;
     private ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
+    PeachUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
         userId=getIntent().getExtras().getInt("userId");
+        user= AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         options= new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -120,6 +125,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                                 0))) // 设置成圆角图片
                 .build();
         ViewUtils.inject(this);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +146,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initData(int id){
         getUserInfo(id);
-        initScrollView(id);
+        if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+            initScrollView(id);
+        }
     }
 
     public void refreshView(final List<ExpertBean> bean){
@@ -176,9 +189,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
-                    IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long)bean.get(0).userId);
-                    startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
-                    finish();
+                    if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+                        IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long)bean.get(0).userId);
+                        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
+                        finish();
+                    }else{
+                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_bottom_in,0);
+                        finish();
+                    }
                 }
             });
 
@@ -200,34 +220,41 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("user", user);
                     startActivity(intent);
 */
-                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                    editDialog.setTitle("输入验证信息");
-                    editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).nickName));
-                    editDialog.setPositiveButton("确定",new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            editDialog.dismiss();
-                            DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
-                            UserApi.requestAddContact(bean.get(0).userId+"",editDialog.getMessage(),new HttpCallBack() {
-                                @Override
-                                public void doSucess(Object result, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                        editDialog.setTitle("输入验证信息");
+                        editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).nickName));
+                        editDialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                editDialog.dismiss();
+                                DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                                UserApi.requestAddContact(bean.get(0).userId + "", editDialog.getMessage(), new HttpCallBack() {
+                                    @Override
+                                    public void doSucess(Object result, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
-                                    finish();
-                                }
+                                        ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
+                                        finish();
+                                    }
 
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
-                                    ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                }
-                            });
-                        }
-                    });
+                                        ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                    }
+                                });
+                            }
+                        });
 
-                    editDialog.show();
+                        editDialog.show();
+                    }else{
+                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_bottom_in,0);
+                        finish();
+                    }
                 }
             });
         }
@@ -296,19 +323,22 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void initFlDestion(List<LocBean> locBeans){
-        his_destinations.removeAllViews();
+        String destinations="";
         if(locBeans.size()>0){
             for(int j=0;j<locBeans.size();j++){
-                View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
+               /* View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
                 final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
                 cityNameTv.setText(locBeans.get(j).zhName);
-                his_destinations.addView(contentView);
+                his_destinations.addView(contentView);*/
+                destinations+=(locBeans.get(j).zhName+"  ");
             }
+            his_destinations.setText(destinations);
         }else{
-            View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
+           /* View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText("还没有我的足迹");
-            his_destinations.addView(contentView);
+            cityNameTv.setText("还没有我的足迹");*/
+            his_destinations.setText("还没有我的足迹");
+            //his_destinations.addView(contentView);
         }
     }
 

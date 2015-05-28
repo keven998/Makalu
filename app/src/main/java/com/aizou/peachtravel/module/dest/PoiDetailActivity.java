@@ -146,7 +146,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_poi_detail);
         mIvFav = (ImageView) findViewById(R.id.iv_fav);
-//        mChat = (ImageView) findViewById(R.id.iv_chat);
+        mChat = (ImageView) findViewById(R.id.iv_chat);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高

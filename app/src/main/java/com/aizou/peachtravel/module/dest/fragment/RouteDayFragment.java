@@ -77,12 +77,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     View addDayFooter;
     StrategyBean strategy;
     boolean isInEditMode;
+    PeachUser user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
         addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_bottom, null);
         ButterKnife.inject(this, rootView);
+        user= AccountManager.getInstance().getLoginAccount(getActivity());
         mEditDslv.addFooterView(addDayFooter);
         initData();
         return rootView;
@@ -135,6 +137,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
         return false;
     }
+
 
     public ArrayList<ArrayList<PoiDetailBean>> getRouteDayMap() {
         if (routeDayMap == null) {
@@ -378,6 +381,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             }
 
         }
+
+
         public void setEditableMode(boolean mode){
             isEditableMode = mode;
             isAnimationEnd=false;
@@ -659,6 +664,15 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             holder.deleteDayIv = (ImageView) convertView.findViewById(R.id.iv_delete_day);*/
             holder.citysTv = (TextView) convertView.findViewById(R.id.tv_loc_list);
             holder.doMore = (ImageView) convertView.findViewById(R.id.day_location);
+
+            if(user==null){
+                holder.doMore.setVisibility(View.GONE);
+            }else {
+                if (user.userId != strategy.userId) {
+                    holder.doMore.setVisibility(View.GONE);
+                }
+            }
+
             holder.dayTv.setText("第" + (section + 1) + "天");
             if(section==0){
                 convertView.setPadding(0, 0, 0, 0);
@@ -879,7 +893,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                 if(mOnEditModeChangeListener!=null){
                     if(!isInEditMode){
                         isInEditMode = true;
-                        mOnEditModeChangeListener.onEditModeChange(true);
+                        mOnEditModeChangeListener.onEditModeChange(false);
                         routeDayAdpater.setEditableMode(false);
                         routeDayAdpater.notifyDataSetChanged();
                     }
@@ -902,14 +916,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         routeDayMap.remove(section);
                         strategy.itineraryDays--;
                         routeDayAdpater.notifyDataSetChanged();
-                        if (mOnEditModeChangeListener != null) {
+                        /*if (mOnEditModeChangeListener != null) {
                             if (!isInEditMode) {
                                 isInEditMode = true;
                                 mOnEditModeChangeListener.onEditModeChange(true);
                                 routeDayAdpater.setEditableMode(false);
                                 routeDayAdpater.notifyDataSetChanged();
                             }
-                        }
+                        }*/
                         deleteDialog.dismiss();
                     }
                 });
@@ -973,20 +987,20 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }
         strategy.itineraryDays++;
         routeDayAdpater.notifyDataSetChanged();
-        mEditDslv.postDelayed(new Runnable() {
+        /*mEditDslv.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mEditDslv.setSelection(sectionPos);
             }
-        }, 50);  //routeDayAdpater.getCount() - 1
-        if(mOnEditModeChangeListener!=null){
+        }, 50);  //routeDayAdpater.getCount() - 1*/
+        /*if(mOnEditModeChangeListener!=null){
             if(!isInEditMode){
                 isInEditMode = true;
                 mOnEditModeChangeListener.onEditModeChange(true);
                 routeDayAdpater.setEditableMode(false);
                 routeDayAdpater.notifyDataSetChanged();
             }
-        }
+        }*/
     }
 
 

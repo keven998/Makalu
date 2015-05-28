@@ -182,6 +182,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(2);
+        mStrategyIndicator.setDividerDrawable(getResources().getDrawable(R.color.gray_normal));
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
@@ -223,7 +224,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     public void handleMessage(Message msg) {
                         switch (msg.what){
                             case 1:
-                                ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
+                                IMUtils.onClickImShare(StrategyActivity.this);
                         }
                         super.handleMessage(msg);
                     }
@@ -241,7 +242,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     public void handleMessage(Message msg) {
                         switch (msg.what){
                             case 1:
-                                ToastUtil.getInstance(StrategyActivity.this).showToast("转发");
+                                ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
                         }
                         super.handleMessage(msg);
                     }
@@ -387,8 +388,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                iv_location.setVisibility(View.GONE);
                 if (!isFinishing())
-                    DialogManager.getInstance().dissMissLoadingDialog();
+                DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
@@ -416,6 +418,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                     }
 
                 } else {
+                    iv_location.setVisibility(View.GONE);
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -424,6 +427,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                iv_location.setVisibility(View.GONE);
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
@@ -439,40 +443,63 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         draw_list.setAdapter(adapter);
         final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
 
-        if (user.userId != result.userId) {
+        if(user==null){
             mIvEdit.setVisibility(View.GONE);
             mIvMore.setVisibility(View.GONE);
-            iv_location.setVisibility(View.GONE);
-            mTvCopyGuide.setVisibility(View.VISIBLE);
-            mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //todo:复制路线
-                    DialogManager.getInstance().showLoadingDialog(mContext);
-                    TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
-                        @Override
-                        public void doSucess(String resultStr, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
-                            if (modifyResult.code == 0) {
-                                strategy.id = modifyResult.result.id;
-                                strategy.userId = user.userId;
-                                bindView(strategy);
-                                if (!isFinishing()) {
-                                    ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
-                                }
+            iv_location.setVisibility(View.VISIBLE);
+            mTvCopyGuide.setVisibility(View.GONE);
+        }else {
+            if (user.userId != result.userId) {
+                mIvEdit.setVisibility(View.GONE);
+                mIvMore.setVisibility(View.GONE);
+                iv_location.setVisibility(View.GONE);
+                mTvCopyGuide.setVisibility(View.VISIBLE);
+                mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //todo:复制路线
+
+                        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+                        dialog.setTitle("提示");
+                        dialog.setMessage("确定保存到我的旅程？");
+                        dialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
+                                    @Override
+                                    public void doSucess(String resultStr, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
+                                        if (modifyResult.code == 0) {
+                                            strategy.id = modifyResult.result.id;
+                                            strategy.userId = user.userId;
+                                            bindView(strategy);
+                                            if (!isFinishing()) {
+                                                ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        if (!isFinishing())
+                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                    }
+                                });
                             }
+                        });
 
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            iv_location.setVisibility(View.GONE);
-                            if (!isFinishing())
-                                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                        }
-                    });
+                        dialog.setNegativeButton("取消", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
 
 //                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
 //                    dialog.setTitle("提示");
@@ -503,28 +530,28 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 //                            dialog.dismiss();
 //                        }
 //                    });
-                }
-            });
-        } else {
-            mIvEdit.setVisibility(View.VISIBLE);
-            mIvEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CheckedTextView cv = (CheckedTextView) v;
-                    if (!cv.isChecked()) {
-                        MobclickAgent.onEvent(mContext,"event_edit_plan");
-                        gotoEditMode();
-                        ishideSomeIcons(true);
-                        cv.setChecked(true);
-                    } else {
-                        MobclickAgent.onEvent(mContext,"event_edit_done");
-                        saveStrategy(false);
                     }
-                }
-            });
-            mIvMore.setVisibility(View.VISIBLE);
-            iv_location.setVisibility(View.VISIBLE);
-            mTvCopyGuide.setVisibility(View.GONE);
+                });
+            } else {
+                mIvEdit.setVisibility(View.VISIBLE);
+                mIvEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CheckedTextView cv = (CheckedTextView) v;
+                        if (!cv.isChecked()) {
+                            MobclickAgent.onEvent(mContext, "event_edit_plan");
+                            gotoEditMode();
+                            ishideSomeIcons(true);
+                            cv.setChecked(true);
+                        } else {
+                            MobclickAgent.onEvent(mContext, "event_edit_done");
+                            saveStrategy(false);
+                        }
+                    }
+                });
+                mIvMore.setVisibility(View.VISIBLE);
+                iv_location.setVisibility(View.VISIBLE);
+                mTvCopyGuide.setVisibility(View.GONE);
 //            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
 //            mTitleBar.getRightTextView().setText("");
 //            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
@@ -534,18 +561,19 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 //                }
 //            });
 
-            mIvMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //showActionDialog();
-                    //这个与群聊chat里面的侧边栏内容一样，后期实现请参考ChatActivity
-                    if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
-                        drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
-                    } else {
-                        drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
+                mIvMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //showActionDialog();
+                        //这个与群聊chat里面的侧边栏内容一样，后期实现请参考ChatActivity
+                        if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+                            drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
+                        } else {
+                            drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         indicatorViewPager.setCurrentItem(curIndex, false);
@@ -564,16 +592,23 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_out));
             bottom_indicator.setVisibility(View.GONE);
         }else{
+            if(indicatorViewPager.getCurrentItem()==0) {
+                iv_location.setVisibility(View.VISIBLE);
+            }else{
+                iv_location.setVisibility(View.GONE);
+            }
             tv_back.setVisibility(View.VISIBLE);
-            iv_location.setVisibility(View.VISIBLE);
             iv_more.setVisibility(View.VISIBLE);
+            mIvEdit.setVisibility(View.VISIBLE);
             bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_in));
             bottom_indicator.setVisibility(View.VISIBLE);
+
         }
     }
 
     private void showSaveFailureIcons(){
         tv_back.setVisibility(View.VISIBLE);
+        mIvEdit.setVisibility(View.VISIBLE);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -749,11 +784,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
     private boolean checkIsEditableMode() {
-        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
+        if (routeDayFragment != null && (routeDayFragment.isEditableMode())) {
             return true;
-        } else if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
+        } else if (shoppingFragment != null && (shoppingFragment.isEditableMode())) {
             return true;
-        } else if (restFragment != null && restFragment.isEditableMode()) {
+        } else if (restFragment != null && (restFragment.isEditableMode())) {
             return true;
         }
         return false;
@@ -773,6 +808,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
         topTitle.setText("保存中...");
         loading_view.setVisibility(View.VISIBLE);
+        mIvEdit.setVisibility(View.GONE);
         ishideSomeIcons(true);
         //DialogManager.getInstance().showLoadingDialog(mContext);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
@@ -1021,6 +1057,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                         MobclickAgent.onEvent(mContext, "event_go_city_detail");
                                         Intent intent = new Intent(mContext, CityDetailActivity.class);
                                         intent.putExtra("id", destinations.get(position).id);
+                                        intent.putExtra("isFromStrategy",true);
                                         startActivity(intent);
                                 }
                                 super.handleMessage(msg);
