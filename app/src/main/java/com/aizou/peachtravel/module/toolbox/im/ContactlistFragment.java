@@ -27,11 +27,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.SideBar;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.config.Constant;
 import com.aizou.peachtravel.db.IMUser;
+import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.aizou.peachtravel.module.toolbox.im.adapter.ContactAdapter;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
@@ -107,7 +109,7 @@ public class ContactlistFragment extends Fragment {
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
-					startActivity(new Intent(getActivity(), ContactDetailActivity.class).putExtra("userId", adapter.getItem(position).getUserId()).putExtra("userNick", adapter.getItem(position).getNick()));
+					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
 				}
 			}
 		});

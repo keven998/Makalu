@@ -21,8 +21,10 @@ import com.aizou.peachtravel.base.PeachBaseActivity;
 import com.aizou.peachtravel.bean.ExpertBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
+import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
 import com.aizou.peachtravel.common.dialog.DialogManager;
+import com.aizou.peachtravel.common.dialog.PeachEditDialog;
 import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.IntentUtils;
@@ -30,6 +32,7 @@ import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.db.IMUser;
 import com.aizou.peachtravel.db.respository.IMUserRepository;
 import com.aizou.peachtravel.module.dest.StrategyMapActivity;
+import com.aizou.peachtravel.module.toolbox.im.ChatActivity;
 import com.aizou.peachtravel.module.toolbox.im.ContactDetailActivity;
 import com.aizou.peachtravel.module.toolbox.im.SeachContactDetailActivity;
 import com.lidroid.xutils.ViewUtils;
@@ -152,8 +155,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             his_status.setText(bean.get(0).travelStatus);
         }
         sign.setText(bean.get(0).signature);
+        if(bean.get(0).residence.equals("")||bean.get(0).residence==null){
+            resident.setText("未设置");
+        }else{
         resident.setText(bean.get(0).residence);
+        }
+        if(getAge(bean.get(0).birthday)==0){
+            age.setText("未设置");
+        }else{
         age.setText(getAge(bean.get(0).birthday)+"");
+        }
 
 
         if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.get(0).easemobUser)){
@@ -161,10 +172,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
+                   /* Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long)bean.get(0).userId);
+                    startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
+                    finish();
                 }
             });
 
@@ -173,7 +187,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PeachUser user = new PeachUser();
+                   /* PeachUser user = new PeachUser();
                     user.nickName = bean.get(0).nickName;
                     user.userId = bean.get(0).userId;
                     user.easemobUser = bean.get(0).easemobUser;
@@ -185,6 +199,35 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     Intent intent = new Intent(HisMainPageActivity.this, SeachContactDetailActivity.class);
                     intent.putExtra("user", user);
                     startActivity(intent);
+*/
+                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                    editDialog.setTitle("输入验证信息");
+                    editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).nickName));
+                    editDialog.setPositiveButton("确定",new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editDialog.dismiss();
+                            DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                            UserApi.requestAddContact(bean.get(0).userId+"",editDialog.getMessage(),new HttpCallBack() {
+                                @Override
+                                public void doSucess(Object result, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
+                                    ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
+                                    finish();
+                                }
+
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
+                                    ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                }
+                            });
+                        }
+                    });
+
+                    editDialog.show();
                 }
             });
         }
@@ -254,10 +297,17 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initFlDestion(List<LocBean> locBeans){
         his_destinations.removeAllViews();
-        for(int j=0;j<locBeans.size();j++){
+        if(locBeans.size()>0){
+            for(int j=0;j<locBeans.size();j++){
+                View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
+                final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
+                cityNameTv.setText(locBeans.get(j).zhName);
+                his_destinations.addView(contentView);
+            }
+        }else{
             View contentView = View.inflate(HisMainPageActivity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-            cityNameTv.setText(locBeans.get(j).zhName);
+            cityNameTv.setText("还没有我的足迹");
             his_destinations.addView(contentView);
         }
     }

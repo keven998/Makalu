@@ -40,6 +40,8 @@ import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -49,6 +51,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
@@ -69,6 +72,7 @@ public class LoginActivity extends PeachBaseActivity {
     private boolean isBackWeixinLoginPage=true;
     private boolean isWeixinClickLogin=false;
     CustomLoadingDialog dialog;
+    String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +203,17 @@ public class LoginActivity extends PeachBaseActivity {
                 newFriends.setHeader("");
                 newFriends.setIsMyFriends(true);
                 userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+
+                //添加默认服务号
+                IMUser paiServerUser = new IMUser();
+                paiServerUser.setUserId((long)10000);
+                paiServerUser.setUsername(serverName);
+                paiServerUser.setNick("旅行派团队");
+                paiServerUser.setHeader("");
+                paiServerUser.setAvatar(getResources().getResourceName(R.drawable.ic_news));
+                paiServerUser.setAvatarSmall(getResources().getResourceName(R.drawable.ic_news));
+                paiServerUser.setIsMyFriends(true);
+                userlist.put(serverName, paiServerUser);
 //                    // 添加"群聊"
 //                    IMUser groupUser = new IMUser();
 //                    groupUser.setUsername(Constant.GROUP_USERNAME);
@@ -210,6 +225,21 @@ public class LoginActivity extends PeachBaseActivity {
                 AccountManager.getInstance().setContactList(userlist);
                 List<IMUser> users = new ArrayList<IMUser>(userlist.values());
                 IMUserRepository.saveContactList(mContext, users);
+
+                //给服务号发送消息
+                EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                TextMessageBody body = new TextMessageBody("");
+                contentMsg.setMsgId(UUID.randomUUID().toString());
+                contentMsg.addBody(body);
+                contentMsg.setTo(serverName);
+                contentMsg.setFrom(user.easemobUser);
+                contentMsg.setMsgTime(System.currentTimeMillis());
+                contentMsg.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
+                contentMsg.setUnread(false);
+                contentMsg.setAttribute(Constant.MSG_CONTENT,String.format("欢迎回来",paiServerUser.getNick()));
+                EMChatManager.getInstance().saveMessage(contentMsg);
+
+
                 // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
                 final long startTime = System.currentTimeMillis();
 //                LogUtil.d("getGroupFromServer", startTime + "");

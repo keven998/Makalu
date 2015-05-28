@@ -369,6 +369,8 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         @Override
         public int getContentItemViewType(int section, int position) {
             String type = routeDayMap.get(section).get(position).type;
+            int a=section;
+            int b=position;
             if (type.equals(TravelApi.PeachType.SPOT)) {
                 return SPOT;
             } else {

@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ import com.aizou.peachtravel.common.imageloader.UILUtils;
 import com.aizou.peachtravel.common.utils.CommonUtils;
 import com.aizou.peachtravel.common.utils.IMUtils;
 import com.aizou.peachtravel.common.widget.BlurDialogMenu.BlurDialogFragment;
+import com.aizou.peachtravel.common.widget.FlowLayout;
 import com.aizou.peachtravel.common.widget.TitleHeaderBar;
 import com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.aizou.peachtravel.common.widget.swipebacklayout.Utils;
@@ -131,7 +133,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
     ListViewDataAdapter commentAdapter;
 
     private ImageView mIvFav;
-//    private ImageView mChat;
+    private ImageView mChat;
+    private PopupWindow mPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,6 +276,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
             });
         }
 
+        mChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
+                IMUtils.onClickImShare(PoiDetailActivity.this);
+            }
+        });
+
         mPoiStar.setRating(bean.getRating());
         if (!poiDetailBean.getFormatRank().equals("0")) {
 //            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
@@ -341,12 +352,37 @@ public class PoiDetailActivity extends PeachBaseActivity {
         rl_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MobclickAgent.onEvent(mContext,"event_go_booking_room");
+                Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+                intent.putExtra("url",bean.lyPoiUrl);
+                intent.putExtra("title",bean.zhName);
+                startActivity(intent);
             }
         });
         rl_poi_desc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                        R.layout.text_diaplay, null, true);
+                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+                tv.setText(bean.desc);
+                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+                mPop.setContentView(menuView);//设置包含视图
+                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setAnimationStyle(R.style.PopAnimation);
+                mPop.showAtLocation(findViewById(R.id.poi_det_parent), Gravity.BOTTOM, 0, 0);
+                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPop.dismiss();
+                    }
+                });
 
             }
         });

@@ -287,6 +287,30 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
+    public static PTRequestHandler updateUserFootPrint(String userId, String type, ArrayList<String> id, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/tracks");
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("action", type);
+            jsonObject.put("tracks", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+
+        return HttpManager.request(request, callback);
+    }
+
     public static PTRequestHandler getUserInfo(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
