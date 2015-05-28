@@ -2,13 +2,13 @@ package com.aizou.peachtravel.module.toolbox.im;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +28,8 @@ import com.aizou.peachtravel.module.toolbox.ExpertFilterActivity;
 import com.aizou.peachtravel.module.toolbox.HisMainPageActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.List;
 
@@ -122,14 +124,21 @@ public class ExpertListActivity extends PeachBaseActivity {
 
     public class ExpertAdapter extends BaseAdapter{
         private Context context;
-        private String[] status={"空","忙","阻"};
+//        private String[] status={"空","忙","阻"};
         public List<ExpertBean> expertBean;
         private DisplayImageOptions options;
 
         public ExpertAdapter(Context context,List<ExpertBean> expert){
             this.context=context;
             this.expertBean=expert;
-            options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
+            options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(R.drawable.avatar_placeholder_round)
+                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(4)))
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
         @Override
