@@ -25,10 +25,13 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.PeachBaseActivity;
+import com.aizou.peachtravel.bean.GroupLocBean;
 import com.aizou.peachtravel.bean.LocBean;
 import com.aizou.peachtravel.bean.PeachUser;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.UserApi;
+import com.aizou.peachtravel.common.gson.CommonJson;
+import com.aizou.peachtravel.common.gson.CommonJson4List;
 import com.aizou.peachtravel.module.dest.OnDestActionListener;
 import com.aizou.peachtravel.module.dest.fragment.InDestFragment;
 import com.aizou.peachtravel.module.dest.fragment.OutCountryFragment;
@@ -78,14 +81,19 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     }
 
     private void updataUserFootPrint(String type,String id){
-        ArrayList<String> ids=new ArrayList<String>();
-        ids.add(id);
+        String[] ids=new String[1];
+        ids[0]=id;
         PeachUser user= AccountManager.getInstance().getLoginAccount(this);
 
-        UserApi.updateUserFootPrint(user.userId+"",type,ids,new HttpCallBack() {
+        UserApi.updateUserFootPrint(user.userId+"",type,ids,new HttpCallBack<String>() {
             @Override
-            public void doSucess(Object result, String method) {
-                ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("修改成功");
+            public void doSucess(String result, String method) {
+                /*CommonJson4List<GroupLocBean> addResult= CommonJson4List.fromJson(result, GroupLocBean.class);
+                if(addResult.code==0){*/
+                    ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("修改成功");
+                /*}else{
+                    ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("更改足迹失败");
+                }*/
             }
 
             @Override
