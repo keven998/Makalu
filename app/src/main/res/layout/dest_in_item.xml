@@ -26,7 +26,7 @@
 
         </FrameLayout>
 
-        <com.aizou.peachtravel.common.widget.FlowLayout
+        <com.xuejian.client.lxp.common.widget.FlowLayout
             android:id="@+id/fl_city_list"
             android:layout_width="fill_parent"
             android:paddingLeft="5dp"

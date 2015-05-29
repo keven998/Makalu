@@ -93,7 +93,7 @@
                         </LinearLayout>
 
 
-                        <com.aizou.peachtravel.common.widget.PasteEditText
+                        <com.xuejian.client.lxp.common.widget.PasteEditText
                             android:id="@+id/et_sendmessage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -328,7 +328,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <com.aizou.peachtravel.common.widget.TitleHeaderBar
+            <com.xuejian.client.lxp.common.widget.TitleHeaderBar
                 android:id="@+id/title_bar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_bar_height" />

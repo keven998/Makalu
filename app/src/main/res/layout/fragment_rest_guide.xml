@@ -5,7 +5,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <com.aizou.peachtravel.common.widget.dslv.DragSortListView
+        <com.xuejian.client.lxp.common.widget.dslv.DragSortListView
             xmlns:dslv="http://schemas.android.com/apk/res-auto"
             android:id="@+id/edit_dslv"
             android:layout_width="match_parent"

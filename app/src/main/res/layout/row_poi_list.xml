@@ -122,7 +122,7 @@
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/poi_costtime_tv"
             android:layout_below="@+id/btn_add"
-            android:text="dfsa"
+            android:text=""
             android:gravity="right"
             android:textSize="10sp"
             android:textColor="@color/third_font_color"

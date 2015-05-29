@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
+    <com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="142dp"
@@ -145,6 +145,6 @@
         </RelativeLayout>
 
 
-    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
+    </com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout>
 
 </FrameLayout>

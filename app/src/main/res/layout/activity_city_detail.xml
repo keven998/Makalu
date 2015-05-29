@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/city_parent">
 
-    <com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx
+    <com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx
         android:id="@+id/lv_city_detail"
         android:layout_marginTop="@dimen/title_bar_height"
         android:layout_width="match_parent"

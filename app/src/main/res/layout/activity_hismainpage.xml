@@ -48,6 +48,17 @@ android:background="@color/app_backgroud">
                 android:paddingLeft="20dp"
                 android:paddingRight="30dp" />
 
+
+            <TextView
+                android:id="@+id/tv_title_del"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/strategy_more"
+                android:layout_gravity="right"
+                android:paddingLeft="20dp"
+                android:paddingRight="30dp" />
+
         </FrameLayout>
 
     <LinearLayout android:id="@+id/rl_his_user_info"

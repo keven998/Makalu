@@ -12,7 +12,7 @@
         android:layerType="software"
         />
 
-    <com.aizou.peachtravel.common.widget.FlowLayout
+    <com.xuejian.client.lxp.common.widget.FlowLayout
         app:fillLines="none"
         android:id="@+id/fl_city_list"
         android:layout_width="fill_parent"
