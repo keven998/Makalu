@@ -253,14 +253,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-        CurrentFriend = getIntent().getStringExtra("friend_id");
-        conversation = getIntent().getStringExtra("conversation");
-        chatType = getIntent().getStringExtra("chatType");
+        Intent intent=getIntent();
 
+        toChatUsername = intent.getStringExtra("friend_id");
+        conversation = intent.getStringExtra("conversation");
+        chatType = intent.getStringExtra("chatType");
         //test
-        toChatUsername=100002+"";
-        chatType="single";
-        conversation="0";
+       // toChatUsername=100006+"";
+       // chatType="single";
+      //  conversation="0";
 		initView();
 		setUpView();
         initdata();
@@ -390,7 +391,16 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			}
 		});
 	}
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("chatActivity resume");
+        HandleImMessage.getInstance().registerMessageListener(this,conversation);
+//        MobclickAgent.onPageStart("page_talking");
+        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        options.setNoticeBySound(false);
+        refresh();
+    }
     protected void updateGroup() {
         new Thread(new Runnable() {
             public void run() {
@@ -1484,6 +1494,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+        System.out.println("chatActivity destroy");
+        HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
 		activityInstance = null;
 		EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
 		// 注销广播
@@ -1503,16 +1515,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-        HandleImMessage.getInstance().registerMessageListener(this,"555ec6fca3bbc40001803359");
-//        MobclickAgent.onPageStart("page_talking");
-        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-        options.setNoticeBySound(false);
-        refresh();
-	}
-
     public void refresh(){
         if(adapter!=null){
             adapter.refresh();
@@ -1522,8 +1524,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	@Override
 	protected void onPause() {
 		super.onPause();
-        HandleImMessage.getInstance().unregisterMessageListener(this, "555ec6fca3bbc40001803359");
 //        MobclickAgent.onPageEnd("page_talking");
+        System.out.println("chatActivity pause");
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
 		if (wakeLock.isHeld())
@@ -1600,7 +1602,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		}
 	}
 
-	/**
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("chatActivity stop");
+    }
+
+    /**
 	 * listview滑动监听listener
 	 * 
 	 */

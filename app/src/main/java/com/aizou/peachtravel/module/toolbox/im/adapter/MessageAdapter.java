@@ -49,6 +49,7 @@ import com.aizou.peachtravel.bean.TravelNoteBean;
 import com.aizou.peachtravel.common.account.AccountManager;
 import com.aizou.peachtravel.common.api.TravelApi;
 import com.aizou.peachtravel.common.imageloader.UILUtils;
+import com.aizou.peachtravel.common.task.DownloadImage;
 import com.aizou.peachtravel.common.task.LoadImageTask;
 import com.aizou.peachtravel.common.task.LoadVideoImageTask;
 import com.aizou.peachtravel.common.utils.IMUtils;
@@ -92,6 +93,8 @@ import com.easemob.util.LatLng;
 import com.easemob.util.TextFormater;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
+import com.lv.Utils.Config;
+import com.lv.Utils.CryptUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -566,7 +569,7 @@ private String chatType;
         Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
        // holder.tv.setText(span, BufferType.SPANNABLE);
-        holder.tv.setText(message.getMessage());
+        holder.tv.setText(SmileUtils.getSmiledText(context, message.getMessage()));
         // 设置长按事件监听
         holder.tv.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -802,14 +805,19 @@ private String chatType;
                 holder.iv.setImageBitmap(defaultImage);
                 showDownloadImageProgress(message, holder);
                 // downloadImage(message, holder);
-            } else {
+            }
+            else if (message.getStatus() == 2){
+                return;
+            }
+            else if (message.getStatus() == 0){
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
                 holder.iv.setImageBitmap(defaultImage);
                 String thumbpath= getImagepath(message,"thumbPath");
                 String romotePath= getImagepath(message,"full");
+                String BigImageFilename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(romotePath)+".jpeg";
     if (thumbpath!=null){
-        showImageView(thumbpath, holder.iv, null,romotePath , message);
+        showImageView(thumbpath, holder.iv, BigImageFilename,romotePath , message);
     }
 
 
@@ -1430,7 +1438,41 @@ private String chatType;
             holder.pb.setVisibility(View.VISIBLE);
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
+        String thumburl=getImagepath(message, "thumb");
+        String filename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(thumburl)+".jpeg";
+new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener() {
+    @Override
+    public void onSuccess() {
+        activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // message.setBackReceive(false);
+                       // if (message.getType() == Type.IMAGE) {
+                            holder.pb.setVisibility(View.GONE);
+                            holder.tv.setVisibility(View.GONE);
+                      //  }
+                            message.setStatus(0);
+                        notifyDataSetChanged();
+                    }
+                });
+    }
 
+    @Override
+    public void onProgress(final int progress) {
+        activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.tv.setText(progress + "%");
+
+                        }
+                    });
+    }
+
+    @Override
+    public void onFail() {
+        message.setStatus(2);
+    }
+});
 //        msgbody.setDownloadCallback(new EMCallBack() {
 //
 //            @Override
@@ -1611,17 +1653,12 @@ private String chatType;
      * @param iv
      * @return the image exists or not
      */
-    private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
+    private boolean showImageView(final String thumbernailPath, final ImageView iv,final String localFullSizePath,final String remoteDir,
                                   final MessageBean message) {
-        // String imagename =
-        // localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
-        // localFullSizePath.length());
-        // final String remote = remoteDir != null ? remoteDir+imagename :
-        // imagename;
          String remote = remoteDir;
         EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
-        // first check if the thumbnail image already loaded into cache
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
+        System.out.println("thumbernailPath"+thumbernailPath);
         //Bitmap bitmap=BitmapFactory.decodeFile(thumbernailPath);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
@@ -1632,12 +1669,20 @@ private String chatType;
                 public void onClick(View v) {
 //                    System.err.println("image view on click");
                     Intent intent = new Intent(activity, ShowBigImage.class);
+                    System.out.println("32 localFullSizePath "+localFullSizePath);
                     File file = new File(localFullSizePath);
                     if (file.exists()) {
                         Uri uri = Uri.fromFile(file);
                         intent.putExtra("uri", uri);
+                        intent.putExtra("downloadFilePath", localFullSizePath);
+                        System.out.println("exist localFullSizePath ");
 //                        System.err.println("here need to check why download everytime");
                     } else {
+                        System.out.println("localFullSizePath "+localFullSizePath);
+                        intent.putExtra("downloadFilePath", localFullSizePath);
+                        intent.putExtra("remotepath", remoteDir);
+
+
                         // The local full size pic does not exist yet.
                         // ShowBigImage needs to download it from the server
                         // first

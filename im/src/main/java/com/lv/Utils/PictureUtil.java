@@ -40,6 +40,10 @@ public class PictureUtil {
 
     public static String reSizeImage(String OriginalPath ){
 
+        File path= new File(Config.imagepath);
+        if (!path.exists())
+            path.mkdirs();
+
         String imagePath= Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
         BitmapFactory.Options opts = new BitmapFactory.Options();
         // 不读取像素数组到内存中，仅读取图片的信息
@@ -430,9 +434,7 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
             f.delete();
         }
         try {
-            FileOutputStream out = null;
-
-                out = new FileOutputStream(f);
+            FileOutputStream  out = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
                 out.flush();
                 out.close();

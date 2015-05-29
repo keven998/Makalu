@@ -17,6 +17,25 @@ public class ConversationBean {
     private int isRead; //0:有未读  1：已读
     private String conversation;
 
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
+    }
+
+    public int getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(int sendType) {
+        this.sendType = sendType;
+    }
+
+    private int Status;
+    private int sendType;
+
     public int getType() {
         return Type;
     }
@@ -55,7 +74,7 @@ public class ConversationBean {
 
 
 
-    public ConversationBean(int friendId, long lastChatTime, String HASH, int Last_rev_msgId, int isRead,String conversation,String lastMessage,String chatType,int type) {
+    public ConversationBean(int friendId, long lastChatTime, String HASH, int Last_rev_msgId, int isRead,String conversation,String lastMessage,String chatType,int type,int status,int sendType) {
         LastChatTime = lastChatTime;
         this.HASH = HASH;
         FriendId = friendId;
@@ -65,6 +84,8 @@ public class ConversationBean {
         this.lastMessage=lastMessage;
         this.chatType=chatType;
         this.Type=type;
+        this.Status=status;
+        this.sendType=sendType;
     }
 
     public int getFriendId() {

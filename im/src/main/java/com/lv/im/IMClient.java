@@ -49,14 +49,13 @@ public class IMClient {
     private static List<Conversation> conList;
     private static List<ConversationBean> convercationList;
     //private static HashMap<String,MessageBean> messageMap;
-
+    private int count;
     private IMClient() {
-        convercationList = new ArrayList<>();
+        convercationList=new ArrayList<>();
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
         acklist = new JSONArray();
         conList = new ArrayList<>();
-       // HandleImMessage.getInstance();
     }
 
     public static IMClient getInstance() {
@@ -139,30 +138,30 @@ public class IMClient {
      * @return List<ConversationBean>
      */
     public List<ConversationBean> getConversationList() {
-//        if (convercationList.size()==0){
-//            convercationList=db.getConversationList();
-//        }
-
-        convercationList = db.getConversationList();
+    convercationList = db.getConversationList();
+        count=0;
+        for (ConversationBean c:convercationList){
+            count+=c.getIsRead();
+        }
         return convercationList;
     }
-
+public int getUnReadCount(){
+   return count;
+}
     public void deleteConversation(String friend) {
         db.deleteConversation(friend);
     }
 
-    public List<ConversationBean> getConversationListCache() {
-
-        return convercationList;
-    }
-
     public void add2ConversationList(ConversationBean conversationBean) {
-        for (ConversationBean c : convercationList) {
-            if (c.getFriendId() == conversationBean.getFriendId()) {
-
+        boolean flag=true;
+        for (int i=0;i<convercationList.size();i++) {
+            if (convercationList.get(i).getFriendId() == conversationBean.getFriendId()) {
+                    convercationList.set(i,conversationBean);
+                    flag=false;
+                break;
             }
         }
-        convercationList.add(conversationBean);
+        if (flag)convercationList.add(conversationBean);
     }
 
     public void addToConversationList(Conversation conversation) {
@@ -206,18 +205,12 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
     m.setLocalId((int) localId);
     return m;
 }
-    public MessageBean baseMessage(String text, String friendId, long localId) {
-        MessageBean messageBean = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
-        messageBean.setLocalId((int) localId);
-        return messageBean;
-    }
 
     /**
      * 发送语音消息
      *
      * @param path     路径
      * @param friendId friendId
-     * @param durtime  持续时间
      * @param listener listener
      * @param chatTpe  聊天类型
      */

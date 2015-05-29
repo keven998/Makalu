@@ -30,8 +30,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 
+import com.aizou.core.secure.PBECoder;
 import com.aizou.peachtravel.R;
 import com.aizou.peachtravel.base.ChatBaseActivity;
+import com.aizou.peachtravel.common.task.DownloadImage;
 import com.aizou.peachtravel.common.task.LoadLocalBigImgTask;
 import com.aizou.peachtravel.common.utils.ImageCache;
 import com.aizou.peachtravel.common.widget.photoview.PhotoView;
@@ -60,6 +62,7 @@ public class ShowBigImage extends ChatBaseActivity {
 	private Bitmap bitmap;
 	private boolean isDownloaded;
 	private ProgressBar loadLocalPb;
+    private String downloadFilePath;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -78,6 +81,7 @@ public class ShowBigImage extends ChatBaseActivity {
 		Uri uri = getIntent().getParcelableExtra("uri");
 		String remotepath = getIntent().getExtras().getString("remotepath");
 		String secret = getIntent().getExtras().getString("secret");
+        downloadFilePath=getIntent().getStringExtra("downloadFilePath");
 //		System.err.println("show big image uri:" + uri + " remotepath:" + remotepath);
 
 		//本地存在，直接显示本地的图片
@@ -100,15 +104,7 @@ public class ShowBigImage extends ChatBaseActivity {
 				image.setImageBitmap(bitmap);
 			}
 		} else if (remotepath != null) { //去服务器下载图片
-//			System.err.println("download remote image");
-			Map<String, String> maps = new HashMap<String, String>();
-			String accessToken = EMChatManager.getInstance().getAccessToken();
-			maps.put("Authorization", "Bearer " + accessToken);
-			if (!TextUtils.isEmpty(secret)) {
-				maps.put("share-secret", secret);
-			}
-			maps.put("Accept", "application/octet-stream");
-			downloadImage(remotepath, maps);
+			downloadImage(remotepath,downloadFilePath);
 		} else {
 			image.setImageResource(default_res);
 		}
@@ -121,34 +117,16 @@ public class ShowBigImage extends ChatBaseActivity {
         });
 	}
 
-	/**
-	 * 下载图片
-	 * 
-	 * @param remoteFilePath
-	 */
-	private void downloadImage(final String remoteFilePath, final Map<String, String> headers) {
+	private void downloadImage(final String url,final String filename ) {
 		pd = new ProgressDialog(this);
 		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pd.setCanceledOnTouchOutside(false);
 		pd.setMessage("下载图片: 0%");
 		pd.show();
-		if (!showAvator) {
-			if (remoteFilePath.contains("/"))
-				localFilePath = PathUtil.getInstance().getImagePath().getAbsolutePath() + "/"
-						+ remoteFilePath.substring(remoteFilePath.lastIndexOf("/") + 1);
-			else
-				localFilePath = PathUtil.getInstance().getImagePath().getAbsolutePath() + "/" + remoteFilePath;
-		} else {
-			if (remoteFilePath.contains("/"))
-				localFilePath = PathUtil.getInstance().getImagePath().getAbsolutePath() + "/"
-						+ remoteFilePath.substring(remoteFilePath.lastIndexOf("/") + 1);
-			else
-				localFilePath = PathUtil.getInstance().getImagePath().getAbsolutePath() + "/" + remoteFilePath;
 
-		}
-		final HttpFileManager httpFileMgr = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
-		final CloudOperationCallback callback = new CloudOperationCallback() {
-			public void onSuccess(String resultMsg) {
+        new DownloadImage(url,filename).download(new DownloadImage.DownloadListener() {
+            @Override
+			public void onSuccess() {
 
 				runOnUiThread(new Runnable() {
 					@Override
@@ -157,13 +135,12 @@ public class ShowBigImage extends ChatBaseActivity {
 						getWindowManager().getDefaultDisplay().getMetrics(metrics);
 						int screenWidth = metrics.widthPixels;
 						int screenHeight = metrics.heightPixels;
-
-						bitmap = ImageUtils.decodeScaleImage(localFilePath, screenWidth, screenHeight);
+						bitmap = ImageUtils.decodeScaleImage(filename, screenWidth, screenHeight);
 						if (bitmap == null) {
 							image.setImageResource(default_res);
 						} else {
 							image.setImageBitmap(bitmap);
-							ImageCache.getInstance().put(localFilePath, bitmap);
+							ImageCache.getInstance().put(url, bitmap);
 							isDownloaded = true;
 
 						}
@@ -173,9 +150,8 @@ public class ShowBigImage extends ChatBaseActivity {
 					}
 				});
 			}
-
-			public void onError(String msg) {
-				Log.e("###", "offline file transfer error:" + msg);
+            @Override
+			public void onFail() {
 				File file = new File(localFilePath);
 				if (file.exists()) {
 					file.delete();
@@ -188,7 +164,7 @@ public class ShowBigImage extends ChatBaseActivity {
 					}
 				});
 			}
-
+            @Override
 			public void onProgress(final int progress) {
 				Log.d("ease", "Progress: " + progress);
 				runOnUiThread(new Runnable() {
@@ -198,18 +174,25 @@ public class ShowBigImage extends ChatBaseActivity {
 					}
 				});
 			}
-		};
+            });
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				httpFileMgr.downloadFile(remoteFilePath, localFilePath, EMChatConfig.getInstance().APPKEY, headers, callback);
-			}
-		}).start();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				httpFileMgr.downloadFile(remoteFilePath, localFilePath, EMChatConfig.getInstance().APPKEY, headers, callback);
+//			}
+//		}).start();
 
 	}
 
-	@Override
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (pd!=null)
+        pd.dismiss();
+    }
+
+    @Override
 	public void onBackPressed() {
 		if (isDownloaded)
 			setResult(RESULT_OK);

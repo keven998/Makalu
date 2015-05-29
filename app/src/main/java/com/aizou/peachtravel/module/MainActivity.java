@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
@@ -99,18 +100,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        //User.getUser().setCurrentUser("100002");
-        User.login("100010", new LoginSuccessListener() {
-            @Override
-            public void OnSuccess() {
-                System.out.println("登陆成功");
-            }
-
-            @Override
-            public void OnFailed(int code) {
-                System.out.println("登陆失败 :" + code);
-            }
-        });
        /*
        if(!EMChat.getInstance().isLoggedIn()){
             finish();
@@ -127,7 +116,26 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
         initData();
+        User.login("100006", new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                System.out.println("登陆成功");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if(talkFragment != null){
+                            talkFragment.loadConversation();
+                        }
+                    }
+                });
+            }
 
+            @Override
+            public void OnFailed(int code) {
+                System.out.println("登陆失败 :" + code);
+            }
+        });
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -322,6 +330,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
+                    if (!User.getUser().isLogin()){
+                        Toast.makeText(MainActivity.this,"正在登陆",Toast.LENGTH_LONG).show();
+                    }
                     /**
                      * 注释掉登陆
                      */
@@ -340,10 +351,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             }
         });
-
-        if (EMChat.getInstance().isLoggedIn()) {
+        if (User.getUser().isLogin()) {
             mTabHost.setCurrentTab(0);
         } else {
+//        if (EMChat.getInstance().isLoggedIn()) {
+//            mTabHost.setCurrentTab(0);
+//        } else {
             mTabHost.setCurrentTab(1);
         }
     }
@@ -364,19 +377,18 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     protected void onResume() {
-        HandleImMessage.getInstance().registerMessageListener(this);
         super.onResume();
+        System.out.println("MainActivity resume");
+        HandleImMessage.getInstance().registerMessageListener(this);
         if (!isConflict){
+            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+            if(talkFragment != null){
+                talkFragment.loadConversation();
+            }
             updateUnreadMsgCount();
             EMChatManager.getInstance().activityResumed();
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        HandleImMessage.getInstance().unregisterMessageListener(this);
     }
 
     @Override
@@ -465,7 +477,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
                 //对方同意了加好友请求(好友添加)
                 else if (cmdType == 2) {
-                    updateUnreadMsgCount();
+                   // updateUnreadMsgCount();
                     refreshChatHistoryFragment();
 
 
@@ -486,6 +498,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     public void onMsgArrive(MessageBean m) {
         System.out.println("message :"+m.getMessage());
+        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+        if(talkFragment != null){
+            talkFragment.loadConversation();
+        }
+        updateUnreadMsgCount();
     }
 
 
@@ -664,7 +681,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     public void updateUnreadMsgCount(){
         int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount()+getUnreadAddressCountTotal();
+       // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+getUnreadAddressCountTotal();
+        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
             unreadMsg.setText(unreadMsgCountTotal+"");
@@ -716,9 +734,23 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("MainActivity pause");
+        HandleImMessage.getInstance().unregisterMessageListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("MainActivity stop");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         // 注销广播接收者
+        System.out.println("MainActivity destroy");
         try {
             unregisterReceiver(msgReceiver);
         } catch (Exception e) {

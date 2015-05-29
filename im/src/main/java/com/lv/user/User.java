@@ -7,6 +7,15 @@ public class User {
     private static User user;
     private String userId;
 
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean isLogin) {
+        this.isLogin = isLogin;
+    }
+
+    private boolean isLogin;
     private User() {
     }
 

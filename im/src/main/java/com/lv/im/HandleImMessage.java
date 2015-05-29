@@ -134,12 +134,13 @@ public class HandleImMessage {
                 Log.i(Config.TAG, "result :" + result);
             }
             if (result == 0) {
-                for (MessagerHandler handler : ehList) {
-                    if (openStateMap.containsKey(handler)) {
-                         IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
+                System.out.println("ehList size: "+ehList.size());
+              //  for (MessagerHandler handler : ehList) {
+                    if (openStateMap.containsKey(ehList.get(0))) {
+                         IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
                     }
                     else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                }
+             //   }
                 String content = messageBean.getContents();
                 JSONObject object = null;
                 switch (messageBean.getMsgType()) {

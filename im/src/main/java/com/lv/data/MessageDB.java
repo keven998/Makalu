@@ -195,7 +195,6 @@ public class MessageDB {
         IMClient.getInstance().setLastMsg(conversation, entity.getServerId());
         add2Conversion(Long.parseLong(chater), entity.getCreateTime(), table_name, entity.getServerId(), conversation,chatType);
         closeDB();
-        IMClient.getInstance().add2ConversationList(new ConversationBean(Integer.parseInt(chater), entity.getCreateTime(), null, entity.getServerId(), 0, conversation, entity.getMessage(),chatType,entity.getType()));
         return 0;
     }
 
@@ -282,9 +281,8 @@ public class MessageDB {
             mdb.insert(con_table_name, null, values);
         } else mdb.update(con_table_name, values, "Friend_Id=?", new String[]{Friend_Id + ""});
         cursor.close();
+        //IMClient.getInstance().add2ConversationList(new ConversationBean(Friend_Id, lastTime, lastMessage, entity.getServerId(), 0, conversation, lastMessage,chatType,messageType,status,sendType));
         closeDB();
-        //IMClient.getInstance().addToConversationList(new Conversation());
-      //  new ConversationBean(Friend_Id, lastTime, null, lastmsgId, isRead, conversation, lastMessage,chatType)
     }
 
     public List<ConversationBean> getConversationList() {
@@ -301,15 +299,19 @@ public class MessageDB {
             String chatType = c.getString(c.getColumnIndex("chatType"));
             if (conversation == null) conversation = "0";
             IMClient.getInstance().setLastMsg(conversation, lastmsgId);
-            Cursor cursor = mdb.rawQuery("SELECT Message,Type FROM " + table + " order by ServerId desc limit 1", null);
+            Cursor cursor = mdb.rawQuery("SELECT Message,Type,Status,SendType FROM " + table + " order by ServerId desc limit 1", null);
             String lastMessage=null;
             int messageType=0;
+            int status=0;
+            int sendType=0;
             if (cursor.getCount()>0) {
                 cursor.moveToLast();
                 lastMessage = cursor.getString(0);
                 messageType=cursor.getInt(1);
+                status=cursor.getInt(2);
+                sendType=cursor.getInt(3);
             }
-            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType,messageType));
+            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType,messageType,status,sendType));
            // new Conversation(lastMessage,time,isRead,friend_id,0,conversation,chatType);
             //IMClient.getInstance().add2ConversationList(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType));
             cursor.close();
