@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/base_color_white">
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"/>

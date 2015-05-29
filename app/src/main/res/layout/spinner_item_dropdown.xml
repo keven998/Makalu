@@ -11,10 +11,12 @@
         android:ellipsize="end"
         android:gravity="center"
         android:singleLine="true"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
         android:textColor="@color/theme_color"
         android:textSize="13sp" />
+
+
+   <!-- android:paddingLeft="5dp"
+    android:paddingRight="5dp"-->
 
     <View
         android:layout_width="fill_parent"

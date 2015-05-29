@@ -60,7 +60,7 @@
                 android:singleLine="true"
                 android:textColor="@color/base_text_color_title"
                 android:textSize="15sp"
-                android:text="fdsafd"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/spot_rank_tv"
                 android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 android:layout_below="@id/spot_name_tv"
                 android:singleLine="true"
                 android:layout_toRightOf="@id/spot_image_iv"
-                android:text="fdsaf"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/spot_time_cost_tv"
@@ -86,7 +86,7 @@
                 android:singleLine="true"
                 android:textColor="@color/green_text_color"
                 android:textSize="12sp"
-                android:text="fdsf"/>
+                android:text=""/>
         </RelativeLayout>
 
         <ImageView

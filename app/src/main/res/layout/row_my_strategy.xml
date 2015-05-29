@@ -6,7 +6,7 @@
     android:background="@color/app_backgroud"
     android:orientation="horizontal">
 
-    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
+    <com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -165,6 +165,6 @@
 
         </RelativeLayout>
 
-    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
+    </com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout>
 
 </FrameLayout>

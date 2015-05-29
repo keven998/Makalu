@@ -23,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="200dp">
 
-        <com.aizou.peachtravel.common.widget.FlowLayout
+        <com.xuejian.client.lxp.common.widget.FlowLayout
             android:id="@+id/fl_loc_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
