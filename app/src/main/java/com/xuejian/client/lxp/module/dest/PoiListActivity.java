@@ -68,6 +68,8 @@ public class PoiListActivity extends PeachBaseActivity {
     private int curPage = 0;
     private LocBean curLoc;
     private String mKeyWord;
+    private boolean isFromCityDetail;
+    private String value;
 
 
     @Override
@@ -101,6 +103,8 @@ public class PoiListActivity extends PeachBaseActivity {
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         locList = getIntent().getParcelableArrayListExtra("locList");
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+        isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail",false);
+        value = getIntent().getStringExtra("value");
 
         if (locList.size() > 1) {
             mLocSpinner.setVisibility(View.VISIBLE);
@@ -257,7 +261,7 @@ public class PoiListActivity extends PeachBaseActivity {
             public void doSucess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
                 if (poiGuideResult.code == 0) {
-                    bindGuideView(poiGuideResult.result);
+                    bindGuideView(poiGuideResult.result,value);
                 }
 
             }
@@ -271,34 +275,38 @@ public class PoiListActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindGuideView(final PoiGuideBean result) {
-        if (TextUtils.isEmpty(result.desc)) {
-            headerView.setVisibility(View.GONE);
-        } else {
-            headerView.setVisibility(View.VISIBLE);
-            mTvCityPoiDesc.setText(result.desc);
-        }
-        findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    MobclickAgent.onEvent(mContext,"event_delicacy_strategy");
-                    intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
-                    intent.putExtra("title", "美食攻略");
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    MobclickAgent.onEvent(mContext,"event_shopping_strategy");
-                    intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
-                    intent.putExtra("title", "购物攻略");
+    private void bindGuideView(final PoiGuideBean result,String value) {
+
+            if (TextUtils.isEmpty(result.desc)) {
+                headerView.setVisibility(View.GONE);
+            } else {
+                headerView.setVisibility(View.VISIBLE);
+                if(isFromCityDetail) {
+                    mTvCityPoiDesc.setText(value);
+                }else{
+                    mTvCityPoiDesc.setText(result.desc);
                 }
-                startActivity(intent);
-
             }
-        });
+            findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                        MobclickAgent.onEvent(mContext, "event_delicacy_strategy");
+                        intent.putExtra("url", result.detailUrl);
+//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
+                        intent.putExtra("title", "美食攻略");
+                    } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                        MobclickAgent.onEvent(mContext, "event_shopping_strategy");
+                        intent.putExtra("url", result.detailUrl);
+//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
+                        intent.putExtra("title", "购物攻略");
+                    }
+                    startActivity(intent);
 
-    }
+                }
+            });
+        }
 
     private void getPoiListData(final String type, final String cityId, final int page) {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {

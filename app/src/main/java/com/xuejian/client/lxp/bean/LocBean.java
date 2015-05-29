@@ -30,6 +30,8 @@ public class LocBean implements Parcelable,ICreateShareDialog {
     public int imageCnt;
     public boolean isFavorite;
     public String playGuide;
+    public String diningTitles;
+    public String shoppingTitles;
 
 
     public LocBean() {
