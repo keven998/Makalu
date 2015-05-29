@@ -61,7 +61,7 @@ public class TwoWayView extends RecyclerView {
         try {
             final int dotIndex = name.indexOf('.');
             if (dotIndex == -1) {
-                name = "com.aizou.peachtravel.common.widget.twowayview.layout." + name;
+                name = "com.xuejian.client.lxp.common.widget.twowayview.layout." + name;
             } else if (dotIndex == 0) {
                 final String packageName = context.getPackageName();
                 name = packageName + "." + name;
