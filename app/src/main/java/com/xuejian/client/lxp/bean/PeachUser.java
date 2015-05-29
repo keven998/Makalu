@@ -26,6 +26,7 @@ public class PeachUser implements Serializable{
     public String zodiac;
     public String birthday;
     public Map<String,ArrayList<LocBean>> tracks;
+    public int guideCnt;
 
     public String getGenderDesc() {
         if ("F".equals(gender)) {

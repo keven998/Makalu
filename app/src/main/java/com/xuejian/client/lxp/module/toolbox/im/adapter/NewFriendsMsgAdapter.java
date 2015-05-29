@@ -46,6 +46,7 @@ import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
 
 import java.util.List;
@@ -184,7 +185,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 contentMsg.setAttribute(Constant.MSG_CONTENT, String.format(context.getResources().getString(R.string.has_add_contact), imUser.getNick()));
                 EMChatManager.getInstance().saveMessage(contentMsg);
 
-                ((Activity) context).startActivity(new Intent(context, ContactDetailActivity.class).putExtra("userId", msg.getUserId()).putExtra("userNick", msg.getNickname()));
+                ((Activity) context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }
 
             @Override

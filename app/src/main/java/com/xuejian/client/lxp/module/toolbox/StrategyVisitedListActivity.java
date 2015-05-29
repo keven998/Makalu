@@ -119,9 +119,8 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
         if (isShare || isExpertPlan) {
-            if (!isShare || isExpertPlan) {
-                mEditBtn.setVisibility(View.GONE);
-            }
+            mEditBtn.setVisibility(View.GONE);
+        }
 
             listView.getRefreshableView().setAdapter(mStrategyListAdapter);
             listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -167,7 +166,6 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
             tbar.enableBackKey(true);
             tbar.getTitleTextView().setText("已去过的旅程");
         }
-    }
 
     private void setupViewFromCache() {
         if(!isExpertPlan) {
@@ -190,7 +188,8 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         }else{
             getStrategyListData(0,"traveled");
         }
-        mMyStrategyLv.doPullRefreshing(true, 0);
+
+       // mMyStrategyLv.doPullRefreshing(true, 0);
 //        AccountManager account = AccountManager.getInstance();
 //        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
 //        if (!TextUtils.isEmpty(data)) {
@@ -248,6 +247,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     }
 
     private void getStrategyListData(final int page , String traveled) {
+
         TravelApi.getStrategyPlannedList(userId, page, traveled, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {

@@ -200,7 +200,7 @@ public class StrategyListActivity extends PeachBaseActivity {
       }else{
           getStrategyListData(0, "planned");
       }
-        AccountManager account = AccountManager.getInstance();
+        /*AccountManager account = AccountManager.getInstance();
         if (userId != null && !userId.equals(account.user.userId)) {
             mMyStrategyLv.doPullRefreshing(true, 0);
             return;
@@ -219,7 +219,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             getStrategyListData(0,"planned");
         } else {
             mMyStrategyLv.doPullRefreshing(true, 0);
-        }
+        }*/
     }
 
     private void cachePage() {

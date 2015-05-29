@@ -244,36 +244,37 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     }
 
-    public void refreshView(final List<ExpertBean> bean){
+    public void refreshView(final PeachUser bean){
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
-        title_name.setText(bean.get(0).nickName);
-        his_name.setText(bean.get(0).nickName);
-        ImageLoader.getInstance().displayImage(bean.get(0).avatarSmall, his_avatar, options);
-        his_level.setText("V" + bean.get(0).level);
-        if(bean.get(0).gender.equals("F")){
+        title_name.setText(bean.nickName);
+        his_name.setText(bean.nickName);
+        ImageLoader.getInstance().displayImage(bean.avatarSmall, his_avatar, options);
+        his_level.setText("V" + bean.level);
+        if(bean.gender.equals("F")){
             his_gender.setImageResource(R.drawable.girl);
-        }else if(bean.get(0).gender.equals("F")){
+        }else if(bean.gender.equals("F")){
             his_gender.setImageResource(R.drawable.boy);
         }
-        xingzuo.setText(bean.get(0).zodiac);LogUtil.d(bean.get(0).zodiac);
-        his_id.setText(String.valueOf(bean.get(0).userId));
-        if(!TextUtils.isEmpty(bean.get(0).travelStatus)){
-            his_status.setText(bean.get(0).travelStatus);
+        xingzuo.setText(bean.zodiac);
+        his_id.setText(String.valueOf(bean.userId));
+        if(!TextUtils.isEmpty(bean.travelStatus)){
+            his_status.setText(bean.travelStatus);
         }
-        sign.setText(bean.get(0).signature);
-        if(bean.get(0).residence.equals("")||bean.get(0).residence==null){
+        sign.setText(bean.signature);
+        his_trip_plan.setText("共"+bean.guideCnt+"篇旅行计划");
+        if(bean.residence.equals("")||bean.residence==null){
             resident.setText("未设置");
         }else{
-        resident.setText(bean.get(0).residence);
+        resident.setText(bean.residence);
         }
-        if(getAge(bean.get(0).birthday)==0){
+        if(getAge(bean.birthday)==0){
             age.setText("未设置");
         }else{
-        age.setText(getAge(bean.get(0).birthday)+"");
+        age.setText(getAge(bean.birthday)+"");
         }
 
 
-        if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.get(0).easemobUser)){
+        if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
             add_friend.setText("咨询达人");
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -283,7 +284,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
                     if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
-                        IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long) bean.get(0).userId);
+                        IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long) bean.userId);
                         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
                         finish();
                     }else{
@@ -322,7 +323,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             public void onClick(View v) {
                                 editDialog.dismiss();
                                 DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
-                                UserApi.requestAddContact(bean.get(0).userId + "", editDialog.getMessage(), new HttpCallBack() {
+                                UserApi.requestAddContact(bean.userId + "", editDialog.getMessage(), new HttpCallBack() {
                                     @Override
                                     public void doSucess(Object result, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -355,13 +356,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         try {
             int countries=0;
             int citys;
-            JSONObject jsonObject = new JSONObject(bean.get(0).tracks.toString());
+            JSONObject jsonObject = new JSONObject(bean.tracks.toString());
             Iterator iterator=jsonObject.keys();
             while(iterator.hasNext()){
                 countries++;
                 String key=(String)iterator.next();
-                for(int i=0;i<bean.get(0).tracks.get(key).size();i++){
-                    all_foot_print_list.add(bean.get(0).tracks.get(key).get(i));
+                for(int i=0;i<bean.tracks.get(key).size();i++){
+                    all_foot_print_list.add(bean.tracks.get(key).get(i));
                 }
             }
             citys=all_foot_print_list.size();
@@ -396,11 +397,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void getUserInfo(int userid){
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.seachContact(String.valueOf(userid), new HttpCallBack<String>() {
+        UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson4List<ExpertBean> expertInfo = CommonJson4List.fromJson(result, ExpertBean.class);
+                CommonJson<PeachUser> expertInfo = CommonJson.fromJson(result, PeachUser.class);
                 if (expertInfo.code == 0) {
                     refreshView(expertInfo.result);
                 }
