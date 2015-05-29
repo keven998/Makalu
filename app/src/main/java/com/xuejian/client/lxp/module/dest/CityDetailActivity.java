@@ -399,6 +399,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         locList.add(locDetailBean);
         intent.putParcelableArrayListExtra("locList", locList);
         intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+        intent.putExtra("value",locDetailBean.diningTitles);
+        intent.putExtra("isFromCityDetail",true);
         startActivity(intent);
     }
 
@@ -409,6 +411,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         locList.add(locDetailBean);
         intent.putParcelableArrayListExtra("locList", locList);
         intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+        intent.putExtra("value",locDetailBean.shoppingTitles);
+        intent.putExtra("isFromCityDetail",true);
         startActivity(intent);
     }
 
