@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -73,8 +74,12 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -148,7 +153,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         initView();
         refreshUserInfo();
-
     }
 
     private void initView() {
@@ -368,11 +372,23 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                          //brithdayTv.setText(year+"-"+monthOfYear+1+"-"+dayOfMonth);
                           monthOfYear++;
-                          editBirthdayToInterface(year+"-"+(monthOfYear)+"-"+dayOfMonth);
+                        String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        try {
+                            Date date = format.parse(dateString);
+                            if (date.after(new Date())) {
+                                warn("无效的生日设置");
+                            } else {
+                                editBirthdayToInterface(dateString);
+                            }
+                        } catch (ParseException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
                 },1990,0,0);
+                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.setCancelable(true);
                 dialog.show();
                 //应该还差个上传动作
@@ -426,6 +442,21 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 }
             });
         }
+    }
+
+    private void warn(String msg) {
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage(msg);
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        dialog.isCancle(false);
     }
 
     private void warnLogout() {
