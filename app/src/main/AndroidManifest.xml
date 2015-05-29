@@ -40,10 +40,10 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="getui.permission.GetuiService.com.aizou.peachtravel"/>
+    <uses-permission android:name="getui.permission.GetuiService.com.xuejian.lvxingpai"/>
     <!--自定义权限-->
     <permission
-        android:name="getui.permission.GetuiService.com.aizou.peachtravel"
+        android:name="getui.permission.GetuiService.com.xuejian.lvxingpai"
         android:protectionLevel="normal">
     </permission>
 
@@ -560,7 +560,7 @@
             android:theme="@style/horizontal_slide" >
         </activity>
 
-        <receiver android:name="com.aizou.peachtravel.common.receiver.UpdateReceiver" >
+        <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
