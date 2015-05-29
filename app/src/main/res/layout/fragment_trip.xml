@@ -96,7 +96,7 @@
             android:drawableLeft="@drawable/ic_loc_expert"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
-            android:text="指路达人"
+            android:text="达人指路"
             android:textColor="@color/base_font_color"
             android:textSize="15sp" />
 
@@ -148,7 +148,7 @@
             android:drawableLeft="@drawable/ic_loc_around"
             android:background="@drawable/option_cell_selector"
             android:drawableRight="@drawable/right_arrow_icon"
-            android:text="身边哪好玩"
+            android:text="附近好玩的"
             android:textColor="@color/base_font_color"
             android:textSize="15sp" />
 
