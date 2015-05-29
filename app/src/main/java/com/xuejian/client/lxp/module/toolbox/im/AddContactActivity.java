@@ -109,7 +109,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0,R.anim.push_bottom_out);
             }
         });
     }
@@ -148,7 +147,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                             }
 
                             if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).easemobUser)) {
-                                ToastUtil.getInstance(mContext).showToast("此用户已是你的好友");
+                                ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");
                                 IMUser imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
                                 imUser.setNick(user.nickName);
                                 imUser.setAvatar(user.avatar);
@@ -169,7 +168,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                             intent.putExtra("userId", (int) user.userId);
                             startActivity(intent);
                         } else {
-                            ToastUtil.getInstance(mContext).showToast("没有找到她~");
+                            ToastUtil.getInstance(mContext).showToast("查无此用户~");
                         }
 
                     } else if (!TextUtils.isEmpty(seachResult.err.message)) {

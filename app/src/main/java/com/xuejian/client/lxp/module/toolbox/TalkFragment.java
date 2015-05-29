@@ -229,7 +229,6 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View view) {
                 MobclickAgent.onEvent( getActivity(),"event_add_new_friend");
                 startActivity(new Intent(getActivity(), AddContactActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_bottom_in,0);
                 dialog.dismiss();
             }
         });

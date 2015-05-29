@@ -44,7 +44,6 @@ public class ContactActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ContactActivity.this, AddContactActivity.class));
-                ContactActivity.this.overridePendingTransition(R.anim.push_bottom_in, 0);
             }
         });
         contactListFragment = new ContactlistFragment();
