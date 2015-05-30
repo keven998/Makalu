@@ -139,12 +139,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-        tv_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActionDialog();
-            }
-        });
+        if(userId!=10000){
+            tv_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showActionDialog();
+                }
+            });
+        }else{
+            tv_del.setVisibility(View.GONE);
+        }
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

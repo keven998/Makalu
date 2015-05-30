@@ -161,7 +161,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     @Override
-    public void onDestAdded(LocBean locBean) {
+    public void onDestAdded(LocBean locBean,boolean isEdit) {
         if(outCountryAdapter!=null){
             for(CountryBean countryBean:outCountryAdapter.getDataList()){
                 for(LocBean kLocBean :countryBean.destinations ){
@@ -238,7 +238,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                                     if(isClickable){
                                     cityNameTv.setCompoundDrawables(selected, null, null, null);
                                     }
-                                    mOnDestActionListener.onDestAdded(bean);
+                                    mOnDestActionListener.onDestAdded(bean,true);
                                 } else {
                                     if(isClickable){
                                     cityNameTv.setCompoundDrawables(add, null, null, null);

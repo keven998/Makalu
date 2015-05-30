@@ -57,13 +57,15 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
 
     @Override
-    public void onDestAdded(LocBean locBean) {
+    public void onDestAdded(LocBean locBean,boolean isEdit) {
         if(allAddCityList.contains(locBean)){
             return;
         }
         allAddCityList.add(locBean);
         refreshMapView(allAddCityList);
-        updataUserFootPrint("add", locBean.id);
+        if(isEdit) {
+            updataUserFootPrint("add", locBean.id);
+        }
     }
 
     @Override
@@ -169,9 +171,9 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         });
         if(hasSelectLoc!=null&&hasSelectLoc.size()>0){
             for(LocBean locBean:hasSelectLoc){
-                onDestAdded(locBean);
+                onDestAdded(locBean,false);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestAdded(locBean);
+                    onDestActionListener.onDestAdded(locBean,false);
                 }
             }
         }else{

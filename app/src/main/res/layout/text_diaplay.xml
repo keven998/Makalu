@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textSize="15sp"
-        android:lineSpacingExtra="3dp"
+        android:lineSpacingExtra="7dp"
         android:textColor="@color/second_font_color"
         android:text=""/>
 
