@@ -6,7 +6,7 @@
     android:background="@color/app_backgroud"
     android:orientation="horizontal">
 
-    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
+    <com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,8 +124,11 @@
                 android:id="@+id/rl_send"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/my_plan_img_height"
-                android:layout_marginLeft="11dp"
-                android:background="@drawable/bg_send">
+                android:layout_marginLeft="11dp">
+
+               <!-- android:layout_marginLeft="11dp"
+                android:background="@drawable/bg_send"
+                android:visibility="gone">-->
                 <TextView
                     android:id="@+id/btn_send"
                     android:layout_width="wrap_content"
@@ -162,6 +165,6 @@
 
         </RelativeLayout>
 
-    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
+    </com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout>
 
 </FrameLayout>

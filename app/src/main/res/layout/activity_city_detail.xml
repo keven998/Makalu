@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/city_parent">
 
-    <com.aizou.peachtravel.common.widget.pulltozoomview.PullToZoomListViewEx
+    <com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx
         android:id="@+id/lv_city_detail"
         android:layout_marginTop="@dimen/title_bar_height"
         android:layout_width="match_parent"
@@ -50,36 +50,45 @@
             android:text="城市详情"
             android:textColor="@color/base_font_color"/>
 
-        <ImageView
-            android:id="@+id/tv_title_bar_right"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/title_bar_height"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/city_add_strategy"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"/>
-
-        <ImageView
-            android:id="@+id/city_detail_chat"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/city_share_chat"
-            android:layout_toLeftOf="@id/tv_title_bar_right"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
 
 
-        <CheckBox
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/title_bar_height"
-            android:drawableLeft="@drawable/checker_title_ic_favorite"
-            android:button="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_toLeftOf="@id/city_detail_chat"/>
+            <CheckBox
+                android:id="@+id/iv_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/title_bar_height"
+                android:drawableLeft="@drawable/checker_title_ic_favorite"
+                android:button="@null"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
 
+
+
+            <ImageView
+                android:id="@+id/city_detail_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/city_share_chat"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                />
+
+
+
+
+            <ImageView
+                android:id="@+id/tv_title_bar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/title_bar_height"
+                android:src="@drawable/city_add_strategy"
+                android:paddingLeft="5dp"
+                android:paddingRight="15dp"/>
+
+        </LinearLayout>
 
 
         <View

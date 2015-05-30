@@ -4,7 +4,7 @@
     android:layout_gravity="center"
     android:background="@drawable/bg_toast_content_view" >
 
-    <com.aizou.peachtravel.common.widget.circularprogressbar.RateTextCircularProgressBar
+    <com.xuejian.client.lxp.common.widget.circularprogressbar.RateTextCircularProgressBar
         android:id="@+id/pb_rate"
         android:layout_width="64dp"
         android:layout_height="64dp"

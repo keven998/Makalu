@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.aizou.peachtravel.common.widget.FlowLayout
+        <com.xuejian.client.lxp.common.widget.FlowLayout
             android:id="@+id/fl_expert_city_list"
             android:layout_width="match_parent"
             android:paddingLeft="14dp"

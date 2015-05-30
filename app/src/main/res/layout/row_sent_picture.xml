@@ -35,7 +35,7 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@id/iv_userhead" >
 
-            <com.aizou.peachtravel.common.widget.MaskImage
+            <com.xuejian.client.lxp.common.widget.MaskImage
                 android:id="@+id/iv_sendPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

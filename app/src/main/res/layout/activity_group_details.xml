@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
@@ -21,7 +21,7 @@
             android:paddingBottom="30dp"
             android:orientation="vertical">
 
-            <com.aizou.peachtravel.common.widget.ExpandGridView
+            <com.xuejian.client.lxp.common.widget.ExpandGridView
                 android:id="@+id/gv_members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

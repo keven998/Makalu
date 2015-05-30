@@ -193,44 +193,6 @@
 
 
 
-            <!--<com.aizou.peachtravel.common.widget.ExpandGridView
-                android:id="@+id/gv_members"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="13dp"
-                android:padding="10dp"
-                android:columnWidth="52dp"
-                android:background="@color/base_color_white"
-                android:gravity="start"
-                android:horizontalSpacing="10dp"
-                android:listSelector="@android:color/transparent"
-                android:numColumns="4"
-                android:verticalSpacing="10dp" />-->
-
-            <!-- <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/btn_style_one"
-                android:onClick="groupChat"
-                android:text="@string/enter_group_chat"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" /> -->
-
-
-
-
-
-
-
-
-
-
-
-
 
             <!--       <RelativeLayout
                       android:layout_width="match_parent"

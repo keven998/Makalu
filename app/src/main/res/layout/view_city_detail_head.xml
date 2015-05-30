@@ -162,7 +162,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="20dp">
 
-            <com.aizou.peachtravel.common.widget.DrawableCenterTextView
+            <com.xuejian.client.lxp.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_travel"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -175,7 +175,7 @@
                 android:onClick="intentToTravel"
                 android:text="旅游指南"/>
 
-            <com.aizou.peachtravel.common.widget.DrawableCenterTextView
+            <com.xuejian.client.lxp.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_spots"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -188,7 +188,7 @@
                 android:onClick="intentToFood"
                 android:text="景点"/>
 
-            <com.aizou.peachtravel.common.widget.DrawableCenterTextView
+            <com.xuejian.client.lxp.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_restaurant"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -201,7 +201,7 @@
                 android:onClick="intentToFood"
                 android:text="美食"/>
 
-            <com.aizou.peachtravel.common.widget.DrawableCenterTextView
+            <com.xuejian.client.lxp.common.widget.DrawableCenterTextView
                 android:id="@+id/tv_shopping"
                 android:layout_width="0dp"
                 android:layout_weight="1"

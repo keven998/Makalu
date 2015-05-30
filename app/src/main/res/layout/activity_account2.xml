@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/app_backgroud">
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />

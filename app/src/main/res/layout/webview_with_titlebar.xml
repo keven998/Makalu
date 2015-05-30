@@ -63,7 +63,7 @@
 
     </FrameLayout>
 
-    <com.aizou.peachtravel.common.widget.NumberProgressBar
+    <com.xuejian.client.lxp.common.widget.NumberProgressBar
         android:id="@+id/numberbar1"
         android:layout_width="match_parent"
         android:layout_alignBottom="@id/ly_header_bar_title_wrap"

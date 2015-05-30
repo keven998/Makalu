@@ -5,165 +5,196 @@
     android:layout_height="match_parent"
     >
 
-<LinearLayout
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/app_backgroud"
+        android:layout_marginBottom="50dp">
+
+    <LinearLayout
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="vertical"
 android:background="@color/app_backgroud">
 
-<LinearLayout
+
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/login_frame_bg">
 
-<TextView
-    android:id="@+id/tv_his_title_bar_title"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:singleLine="true"
-    android:textSize="18sp"
-    android:text="谁"
-    android:textColor="@color/base_color_white"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
-<LinearLayout android:id="@+id/rl_his_user_info"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="20dp">
+            <TextView
+                android:id="@+id/tv_his_title_bar_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="18sp"
+                android:text="谁"
+                android:textColor="@color/base_color_white"/>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="17dp"
-        android:layout_gravity="center_vertical">
+            <TextView
+                android:id="@+id/tv_title_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/ic_title_back"
+                android:paddingLeft="20dp"
+                android:paddingRight="30dp" />
 
-        <ImageView android:id="@+id/iv_his_avatar"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder_round"/>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_title_del"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/strategy_more"
+                android:layout_gravity="right"
+                android:paddingLeft="20dp"
+                android:paddingRight="30dp" />
 
-    <RelativeLayout
+        </FrameLayout>
+
+    <LinearLayout android:id="@+id/rl_his_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/base_line"
-            android:orientation="horizontal">
+            android:layout_marginLeft="17dp"
+            android:layout_gravity="center_vertical">
 
-            <TextView android:id="@+id/tv_his_nickname"
+            <ImageView android:id="@+id/iv_his_avatar"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitCenter"
+                android:src="@drawable/avatar_placeholder_round"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:id="@+id/base_line"
+                android:orientation="horizontal">
+
+                <TextView android:id="@+id/tv_his_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/base_color_white"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:text="未登录"
+                    />
+
+                 <TextView
+                     android:id="@+id/user_his_level"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/route_desc_num_color"
+                     android:textColor="@color/base_color_white"
+                     android:textSize="12sp"
+                     android:text=""
+                     android:paddingLeft="3dp"
+                     android:paddingRight="3dp"
+                     android:layout_marginLeft="5dp"
+                     />
+
+                 <TextView
+                     android:id="@+id/user_his_xingzuo"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/base_color_white"
+                     android:textSize="12sp"
+                     android:layout_marginLeft="5dp"
+                     android:text=""
+                     />
+
+                <ImageView android:id="@+id/iv_his_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/iv_avatar"
+                    android:layout_alignBottom="@id/iv_avatar"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:scaleType="fitCenter"/>
+
+            </LinearLayout>
+
+
+            <TextView android:id="@+id/tv_his_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/base_line"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
                 android:textColor="@color/base_color_white"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:text="未登录"
+
                 />
 
-             <TextView
-                 android:id="@+id/user_his_level"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:background="@color/route_desc_num_color"
-                 android:textColor="@color/base_color_white"
-                 android:textSize="12sp"
-                 android:text=""
-                 android:paddingLeft="3dp"
-                 android:paddingRight="3dp"
-                 android:layout_marginLeft="5dp"
-                 />
-
-             <TextView
-                 android:id="@+id/user_his_xingzuo"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/base_color_white"
-                 android:textSize="12sp"
-                 android:layout_marginLeft="5dp"
-                 android:text=""
-                 />
-
-            <ImageView android:id="@+id/iv_his_gender"
+            <TextView android:id="@+id/tv_his_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/iv_avatar"
-                android:layout_alignBottom="@id/iv_avatar"
-                android:layout_marginLeft="4dp"
-                android:layout_marginBottom="4dp"
-                android:scaleType="fitCenter"/>
+                android:layout_below="@id/tv_his_id"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:textColor="@color/base_color_white"
+                />
 
-        </LinearLayout>
+            <!--<Button android:id="@+id/btn_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_login_button"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:layout_marginRight="10dp"
+                android:text="注册"
+                android:textColor="@color/them_botton_text_color"
+                android:textSize="14sp"/>
 
+            <Button android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_login_button"
+                android:layout_toRightOf="@id/btn_reg"
+                android:layout_alignTop="@id/btn_reg"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:text="登录"
+                android:textColor="@color/them_botton_text_color"
+                android:textSize="14sp"/>-->
 
-        <TextView android:id="@+id/tv_his_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/base_line"
-            android:textSize="13sp"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/base_color_white"
+        </RelativeLayout>
 
-            />
-
-        <TextView android:id="@+id/tv_his_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_his_id"
-            android:textSize="13sp"
-            android:layout_marginTop="2dp"
-            android:maxLines="2"
-            android:textColor="@color/base_color_white"
-            />
-
-        <!--<Button android:id="@+id/btn_reg"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:background="@drawable/btn_login_button"
-            android:layout_marginLeft="8dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:layout_marginRight="10dp"
-            android:text="注册"
-            android:textColor="@color/them_botton_text_color"
-            android:textSize="14sp"/>
-
-        <Button android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:background="@drawable/btn_login_button"
-            android:layout_toRightOf="@id/btn_reg"
-            android:layout_alignTop="@id/btn_reg"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:text="登录"
-            android:textColor="@color/them_botton_text_color"
-            android:textSize="14sp"/>-->
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
 
-</LinearLayout>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="46dp">
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/app_backgroud"
@@ -225,13 +256,14 @@ android:background="@color/app_backgroud">
 
 
             <LinearLayout
+                android:id="@+id/ll_foot_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/option_cell_selector"
                 android:orientation="vertical">
 
-                <LinearLayout android:id="@+id/ll_foot_print"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     android:orientation="horizontal">
@@ -256,17 +288,22 @@ android:background="@color/app_backgroud">
                         android:gravity="center_vertical|right"
                         android:textSize="15sp"
                         android:drawablePadding="10dp"
-                        android:text="18个国家"
+                        android:text=""
                         android:paddingRight="11dp" />
 
                 </LinearLayout>
 
-                <com.aizou.peachtravel.common.widget.FlowLayout
+                <TextView
                     android:id="@+id/his_destination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@color/third_font_color"
+                    android:textSize="14sp"
                     android:paddingLeft="11dp"
                     android:paddingRight="11dp"
+                    android:paddingBottom="5dp"
                     />
 
             </LinearLayout>
@@ -428,24 +465,33 @@ android:background="@color/app_backgroud">
 
         </LinearLayout>
 
-    </ScrollView>
 
 </LinearLayout>
 
+
+</ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:orientation="horizontal"
+        android:layout_height="50dp"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:background="@color/base_color_white">
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_border_color"
+            />
+
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text=""
             android:gravity="center"
             android:textColor="@color/app_theme_color"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:id="@+id/his_add_friend"
             />

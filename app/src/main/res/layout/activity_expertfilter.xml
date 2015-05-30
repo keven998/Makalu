@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.aizou.peachtravel.common.widget.TitleHeaderBar
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:id="@+id/expert_filter_title"

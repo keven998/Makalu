@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#80fd818e">
-        <com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView
+        <com.xuejian.client.lxp.common.widget.shimmer.ShimmerTextView
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textSize="17sp"
             app:reflectionColor="@color/base_color_white"
             android:text="开启旅行>>">
-        </com.aizou.peachtravel.common.widget.shimmer.ShimmerTextView>
+        </com.xuejian.client.lxp.common.widget.shimmer.ShimmerTextView>
 
     </FrameLayout>
 
