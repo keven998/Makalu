@@ -28,7 +28,7 @@ public class RecDestActivity extends PeachBaseActivity implements OnDestActionLi
     }
 
     @Override
-    public void onDestAdded(LocBean locBean) {
+    public void onDestAdded(LocBean locBean,boolean isEdit) {
 
     }
 

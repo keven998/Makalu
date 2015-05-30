@@ -208,7 +208,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     @Override
-    public void onDestAdded(LocBean locBean) {
+    public void onDestAdded(LocBean locBean,boolean isEdit) {
             for (InDestBean inDestBean : incityList) {
                 for (LocBean kLocBean : inDestBean.locList) {
                     if (locBean.id.equals(kLocBean.id)) {
@@ -293,7 +293,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                         bean.isAdded = !bean.isAdded;
                         if (mOnDestActionListener != null) {
                             if (bean.isAdded) {
-                                mOnDestActionListener.onDestAdded(bean);
+                                mOnDestActionListener.onDestAdded(bean,true);
                             } else {
                                 mOnDestActionListener.onDestRemoved(bean);
                             }
@@ -472,7 +472,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                                 if (bean.isAdded) {
                                     cityNameTv.setCompoundDrawables(selected, null, null, null);
 
-                                    mOnDestActionListener.onDestAdded(bean);
+                                    mOnDestActionListener.onDestAdded(bean,true);
                                 } else {
                                     cityNameTv.setCompoundDrawables(add, null, null, null);
 

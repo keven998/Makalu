@@ -82,6 +82,7 @@ import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
@@ -597,10 +598,10 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (IMUserRepository.isMyFriend(context, message.getFrom())) {
-                        Intent intent = new Intent(context, ContactDetailActivity.class);
+                        Intent intent = new Intent(context, HisMainPageActivity.class);
                         IMUser user = IMUserRepository.getContactByUserName(context, message.getFrom());
-                        intent.putExtra("userId", user.getUserId());
-                        intent.putExtra("userNick", user.getNick());
+                        intent.putExtra("userId", user.getUserId().intValue());
+                        //intent.putExtra("userNick", user.getNick());
                         context.startActivity(intent);
                     } else {
                         IMUser itemData = IMUserRepository.getContactByUserName(context, message.getFrom());
