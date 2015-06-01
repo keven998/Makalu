@@ -42,50 +42,6 @@ public class CommonJson4List<T> implements Serializable {
         this.type = (Class<T>) getClass();
     }
 
-    public List<T> result;
-
-    public List<T> getData() {
-        return result;
-    }
-
-    public void setData(List<T> data) {
-        this.result = result;
-    }
-
-    public static CommonJson4List fromJson(String json, Class clazz) {
-        Gson gson = new Gson();
-        Type objectType = type(CommonJson4List.class, clazz);
-        return gson.fromJson(json, objectType);
-    }
-
-    public CommonJson4List<T> fromJsonList(String json, TypeToken<T> token) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, token.getType());
-    }
-
-    public String toJson(Class<T> clazz) {
-        Gson gson = new Gson();
-        Type objectType = type(CommonJson4List.class, clazz);
-        return gson.toJson(this, objectType);
-    }
-
-    static ParameterizedType type(final Class raw, final Type... args) {
-        return new ParameterizedType() {
-            public Type getRawType() {
-                return raw;
-            }
-
-            public Type[] getActualTypeArguments() {
-                return args;
-            }
-
-            public Type getOwnerType() {
-                return null;
-            }
-        };
-    }
-	}
-
 	public List<T> result;
 
 	public List<T> getData() {
@@ -128,5 +84,4 @@ public class CommonJson4List<T> implements Serializable {
 			}
 		};
 	}
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/common/gson/CommonJson4List.java
 }

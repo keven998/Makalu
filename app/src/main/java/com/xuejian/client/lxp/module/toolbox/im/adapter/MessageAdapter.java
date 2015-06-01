@@ -44,11 +44,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.LocationMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.util.DateUtils;
-import com.easemob.util.EMLog;
 import com.easemob.util.LatLng;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
@@ -331,7 +329,7 @@ private String chatType;
                 break;
             case LOC_MSG: // 位置
                 handleGroupMessage(position, convertView, message, holder);
-             //   handleLocationMessage(message, holder, position, convertView);
+                handleLocationMessage(message, holder, position, convertView);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             case VOICE_MSG: // 语音
@@ -796,8 +794,8 @@ private String chatType;
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
                 holder.iv.setImageBitmap(defaultImage);
-                String thumbpath= getImagepath(message,"thumbPath");
-                String romotePath= getImagepath(message,"full");
+                String thumbpath= getStringAttr(message, "thumbPath");
+                String romotePath= getStringAttr(message, "full");
                 String BigImageFilename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(romotePath)+".jpeg";
     if (thumbpath!=null){
         showImageView(thumbpath, holder.iv, BigImageFilename,romotePath , message);
@@ -826,7 +824,7 @@ private String chatType;
             return;
         }
 
-        String localPath=getImagepath(message,"localPath");
+        String localPath= getStringAttr(message, "localPath");
         String thumbPath=getThumbImagepath(message);
          if (localPath != null && new File(localPath).exists()) {
         showImageView(thumbPath, holder.iv, localPath, null, message);
@@ -906,8 +904,17 @@ private String chatType;
              //sendPictureMessage(message, holder);
         }
     }
+    private double getDoubleAttr(MessageBean message, String name) {
+        try {
+            JSONObject object=new JSONObject(message.getMessage());
+            return  object.getDouble(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return 0;
+        }
 
-    private String getImagepath(MessageBean message,String name) {
+    }
+    private String getStringAttr(MessageBean message, String name) {
         try {
             JSONObject object=new JSONObject(message.getMessage());
             return  object.getString(name);
@@ -1327,12 +1334,14 @@ private String chatType;
      * @param position
      * @param convertView
      */
-    private void handleLocationMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
+    private void handleLocationMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
-        LocationMessageBody locBody = (LocationMessageBody) message.getBody();
-        locationView.setText(locBody.getAddress());
-        LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
-        locationView.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
+       double lat= getDoubleAttr(message, "lat");
+        double lng=getDoubleAttr(message, "lng");
+        String name=getStringAttr(message,"name");
+        String desc=getStringAttr(message,"desc");
+        locationView.setText(name);
+        locationView.setOnClickListener(new MapClickListener(lat, lng,desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1343,20 +1352,20 @@ private String chatType;
             }
         });
 
-        if (message.direct == EMMessage.Direct.RECEIVE) {
+        if (message.getSendType() == TYPE_REV) {
             return;
         }
         // deal with send message
-        switch (message.status) {
-            case SUCCESS:
+        switch (message.getStatus()) {
+            case 0:
                 holder.pb.setVisibility(View.GONE);
                 holder.staus_iv.setVisibility(View.GONE);
                 break;
-            case FAIL:
+            case 2:
                 holder.pb.setVisibility(View.GONE);
                 holder.staus_iv.setVisibility(View.VISIBLE);
                 break;
-            case INPROGRESS:
+            case 1:
                 holder.pb.setVisibility(View.VISIBLE);
                 break;
             default:
@@ -1421,7 +1430,7 @@ private String chatType;
             holder.pb.setVisibility(View.VISIBLE);
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
-        String thumburl=getImagepath(message, "thumb");
+        String thumburl= getStringAttr(message, "thumb");
         String filename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(thumburl)+".jpeg";
 new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener() {
     @Override
@@ -1602,34 +1611,20 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
                 if (message.getType() == VIDEO_MSG) {
                     holder.tv.setVisibility(View.GONE);
                 }
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/adapter/MessageAdapter.java
                 if (message.getStatus() == 0) {
 //                    if (message.getType() == EMMessage.Type.FILE) {
 //                        holder.pb.setVisibility(View.INVISIBLE);
 //                        holder.staus_iv.setVisibility(View.INVISIBLE);
 //                    } else {
-=======
-                if (message.status == EMMessage.Status.SUCCESS) {
-                    if (message.getType() == Type.FILE) {
-                        holder.pb.setVisibility(View.INVISIBLE);
-                        holder.staus_iv.setVisibility(View.INVISIBLE);
-                    } else {
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/adapter/MessageAdapter.java
+
                         holder.pb.setVisibility(View.GONE);
                         holder.staus_iv.setVisibility(View.GONE);
                  //   }
 
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/adapter/MessageAdapter.java
                 } else if (message.getStatus() == 2) {
 //                    if (message.getType() == EMMessage.Type.FILE) {
 //                        holder.pb.setVisibility(View.INVISIBLE);
 //                    } else {
-=======
-                } else if (message.status == EMMessage.Status.FAIL) {
-                    if (message.getType() == Type.FILE) {
-                        holder.pb.setVisibility(View.INVISIBLE);
-                    } else {
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/adapter/MessageAdapter.java
                         holder.pb.setVisibility(View.GONE);
 //                    }
                     holder.staus_iv.setVisibility(View.VISIBLE);
@@ -1654,12 +1649,10 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
     private boolean showImageView(final String thumbernailPath, final ImageView iv,final String localFullSizePath,final String remoteDir,
                                   final MessageBean message) {
          String remote = remoteDir;
-        EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
         System.out.println("thumbernailPath"+thumbernailPath);
-        //Bitmap bitmap=BitmapFactory.decodeFile(thumbernailPath);
         if (bitmap != null) {
-            // thumbnail image is already loaded, reuse the drawable
+            System.out.println("thumbnail image is already loaded, reuse the drawable");
             iv.setImageBitmap(bitmap);
             iv.setClickable(true);
             iv.setOnClickListener(new OnClickListener() {
@@ -1674,7 +1667,6 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
                         intent.putExtra("uri", uri);
                         intent.putExtra("downloadFilePath", localFullSizePath);
                         System.out.println("exist localFullSizePath ");
-//                        System.err.println("here need to check why download everytime");
                     } else {
                         System.out.println("localFullSizePath "+localFullSizePath);
                         intent.putExtra("downloadFilePath", localFullSizePath);
@@ -1792,11 +1784,13 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
      */
     class MapClickListener implements OnClickListener {
 
-        LatLng location;
+        double latitude;
+        double longitude;
         String address;
 
-        public MapClickListener(LatLng loc, String address) {
-            location = loc;
+        public MapClickListener(double lat,double lng, String address) {
+            latitude = lat;
+            longitude = lng;
             this.address = address;
 
         }
@@ -1805,8 +1799,8 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
         public void onClick(View v) {
             Intent intent;
             intent = new Intent(context, BaiduMapActivity.class);
-            intent.putExtra("latitude", location.latitude);
-            intent.putExtra("longitude", location.longitude);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
             intent.putExtra("address", address);
             activity.startActivity(intent);
         }

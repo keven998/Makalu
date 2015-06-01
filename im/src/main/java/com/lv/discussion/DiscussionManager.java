@@ -1,6 +1,5 @@
 package com.lv.discussion;
 
-import com.lv.group.CreateSuccessListener;
 import com.lv.user.HttpManager;
 import com.lv.user.UserDao;
 
@@ -22,10 +21,10 @@ public class DiscussionManager {
         return discussionManager;
     }
 
-    public void createDiscussion(String groupName, String groupType, boolean isPublic, List<Long> groupMember, CreateSuccessListener listener) {
-        long row = UserDao.getInstance().addGroup2User(groupName, groupType, isPublic, null, groupMember);
-        HttpManager.createGroup(groupName, groupType, isPublic, null, groupMember, row, listener);
-    }
+//    public void createDiscussion(String groupName, String groupType, boolean isPublic, List<Long> groupMember, CreateSuccessListener listener) {
+//        long row = UserDao.getInstance().addGroup2User(groupName, groupType, isPublic, null, groupMember);
+//     //   HttpManager.createGroup(groupName, groupType, isPublic, null, groupMember, row, listener);
+//    }
 
     public void addMembers(String groupId, List<Long> members, boolean isPublic) {
         HttpManager.addMembers(groupId, members, isPublic);

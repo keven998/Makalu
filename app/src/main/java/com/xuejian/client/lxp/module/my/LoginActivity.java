@@ -243,12 +243,8 @@ public class LoginActivity extends PeachBaseActivity{
                 // conversations in case we are auto login
                 EMGroupManager.getInstance().loadAllGroups();
                 EMChatManager.getInstance().loadAllConversations();
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/my/LoginActivity.java
                 String result=UserApi.getAsynContact();
                 System.out.println("result "+result);
-=======
-                String result= UserApi.getAsynContact();
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/my/LoginActivity.java
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
               //  CommonJson<ContactListBean> contactResult=JSON.parseObject(result,ContactListBean.class);
                     if (contactResult.code == 0) {

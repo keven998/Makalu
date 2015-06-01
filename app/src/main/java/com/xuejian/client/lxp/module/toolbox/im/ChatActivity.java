@@ -891,55 +891,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 *            message content
 	 */
 	private void sendText(String content,int extType) {
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
         if (TextUtils.isEmpty(content)) {
             return;
         }
         MessageBean messageBean=IMClient.getInstance().createTextMessage(content,toChatUsername,chatType);
         messageList.add(messageBean);
-=======
-
-		if (content.length() > 0) {
-			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            TextMessageBody txtBody;
-            if(extType>0){
-                txtBody = new TextMessageBody("");
-                message.setAttribute("tzType",extType);
-                message.setAttribute("content",content);
-            }else {
-                txtBody = new TextMessageBody(content);
-            }
-
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-
-			// 设置消息body
-			message.addBody(txtBody);
-			// 设置要发给谁,用户username或者群聊groupid
-			message.setReceipt(toChatUsername);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-            }
-//            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-//                @Override
-//                public void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                public void onError(int i, String s) {
-//
-//                }
-//
-//                @Override
-//                public void onProgress(int i, String s) {
-//
-//                }
-//            });
-			// 把messgage加到conversation中
-			conversation.addMessage(message);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
@@ -960,23 +916,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			return;
 		}
 		try {
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
             MessageBean m =IMClient.getInstance().createAudioMessage(filePath,toChatUsername,length,chatType);
             messageList.add(m);
-=======
-			final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-			message.setReceipt(toChatUsername);
-			int len = Integer.parseInt(length);
-			VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
-			message.addBody(body);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-            }
-			conversation.addMessage(message);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
 			setResult(RESULT_OK);
@@ -993,7 +934,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param filePath
 	 */
 	private void sendPicture(final String filePath) {
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
     MessageBean m =IMClient.getInstance().CreateImageMessage(filePath,toChatUsername,chatType);
       if (m!=null) {
           messageList.add(m);
@@ -1001,30 +941,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
           listView.setSelection(listView.getCount() - 1);
           setResult(RESULT_OK);
       }
-=======
-		String to = toChatUsername;
-		// create and add image message in view
-		final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-
-		message.setReceipt(to);
-		ImageMessageBody body = new ImageMessageBody(new File(filePath));
-		// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
-//		 body.setSendOriginalImage(true);
-		message.addBody(body);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-        }
-		conversation.addMessage(message);
-
-		listView.setAdapter(adapter);
-		adapter.refresh();
-		listView.setSelection(listView.getCount() - 1);
-		setResult(RESULT_OK);
-		// more(more);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
 	}
 
 	/**
@@ -1035,24 +951,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		if (!videoFile.exists()) {
 			return;
 		}
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
-
-
-=======
-		try {
-			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VIDEO);
-			// 如果是群聊，设置chattype,默认是单聊
-			if (chatType == CHATTYPE_GROUP)
-				message.setChatType(ChatType.GroupChat);
-			String to = toChatUsername;
-			message.setReceipt(to);
-			VideoMessageBody body = new VideoMessageBody(videoFile, thumbPath, length, videoFile.length());
-			message.addBody(body);
-            if(chatType==CHATTYPE_GROUP){
-                IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-            }
-			conversation.addMessage(message);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
 			listView.setAdapter(adapter);
 			adapter.refresh();
 			listView.setSelection(listView.getCount() - 1);
@@ -1110,21 +1008,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param locationAddress
 	 */
 	private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
 
-=======
-		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-		LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
-		message.addBody(locBody);
-		message.setReceipt(toChatUsername);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-        }
-		conversation.addMessage(message);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
+
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		listView.setSelection(listView.getCount() - 1);
@@ -1138,7 +1023,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param uri
 	 */
 	private void sendFile(Uri uri) {
-<<<<<<< HEAD:app/src/main/java/com/aizou/peachtravel/module/toolbox/im/ChatActivity.java
 //		String filePath = null;
 //		if ("content".equalsIgnoreCase(uri.getScheme())) {
 //			String[] projection = { "_data" };
@@ -1186,55 +1070,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 //		adapter.refresh();
 //		listView.setSelection(listView.getCount() - 1);
 //		setResult(RESULT_OK);
-=======
-		String filePath = null;
-		if ("content".equalsIgnoreCase(uri.getScheme())) {
-			String[] projection = { "_data" };
-			Cursor cursor = null;
-
-			try {
-				cursor = getContentResolver().query(uri, projection, null, null, null);
-				int column_index = cursor.getColumnIndexOrThrow("_data");
-				if (cursor.moveToFirst()) {
-					filePath = cursor.getString(column_index);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else if ("file".equalsIgnoreCase(uri.getScheme())) {
-			filePath = uri.getPath();
-		}
-		File file = new File(filePath);
-		if (file == null || !file.exists()) {
-//			Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(getApplicationContext()).showToast("文件不存在");
-			return;
-		}
-		if (file.length() > 10 * 1024 * 1024) {
-//			Toast.makeText(getApplicationContext(), "文件不能大于10M", Toast.LENGTH_SHORT).show();
-            ToastUtil.getInstance(getApplicationContext()).showToast("文件太太太大了");
-			return;
-		}
-
-		// 创建一个文件消息
-		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.FILE);
-		// 如果是群聊，设置chattype,默认是单聊
-		if (chatType == CHATTYPE_GROUP)
-			message.setChatType(ChatType.GroupChat);
-
-		message.setReceipt(toChatUsername);
-		// add message body
-		NormalFileMessageBody body = new NormalFileMessageBody(new File(filePath));
-		message.addBody(body);
-        if(chatType==CHATTYPE_GROUP){
-            IMUtils.setMessageWithTaoziUserInfo(mContext, message);
-        }
-		conversation.addMessage(message);
-		listView.setAdapter(adapter);
-		adapter.refresh();
-		listView.setSelection(listView.getCount() - 1);
-		setResult(RESULT_OK);
->>>>>>> origin/develop:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ChatActivity.java
 	}
 
 	/**

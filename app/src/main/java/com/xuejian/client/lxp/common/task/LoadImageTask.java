@@ -60,7 +60,24 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 			if (message.getSendType() == 0) {
 				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
 			} else {
-
+               // String thumburl=getImagepath(message, "thumb");
+//                new DownloadImage(thumburl,thumbnailPath).download(new DownloadImage.DownloadListener() {
+//
+//                    @Override
+//                    public void onSuccess() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int progress) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFail() {
+//
+//                    }
+//                }
 
 				return null;
 			}
@@ -86,9 +103,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 							Uri uri = Uri.fromFile(file);
 							intent.putExtra("uri", uri);
 						} else {
-							// The local full size pic does not exist yet.
-							// ShowBigImage needs to download it from the server
-							// first
+                            intent.putExtra("downloadFilePath", localFullSizePath);
 							intent.putExtra("remotepath", remotePath);
 						}
 //						if (message.getChatType() != ChatType.Chat) {

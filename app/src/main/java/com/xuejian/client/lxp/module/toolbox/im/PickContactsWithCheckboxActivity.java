@@ -73,6 +73,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private ListView listView;
     private RecyclerView toBeAddContactsRv;
     private List<IMUser> toBeAddContacts;
+    private List<Long> userList;
     /**
      * 是否为一个新建的群组
      */
@@ -563,7 +564,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         private LayoutInflater layoutInflater;
         private DisplayImageOptions picOptions;
         private StretchAnimation stretchanimation;
-
         public PickContactAdapter(Context context, int resource, List<IMUser> users) {
             super(context, resource, users);
             isCheckedArray = new boolean[users.size()];

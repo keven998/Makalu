@@ -1,6 +1,6 @@
-package com.lv.group;
+package com.xuejian.client.lxp.module.toolbox.im.group;
 
-import com.lv.user.HttpManager;
+import com.xuejian.client.lxp.module.toolbox.im.group.HttpManager;
 import com.lv.user.UserDao;
 
 import java.util.List;

@@ -7,7 +7,7 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(2, "com.aizou.peachtravel");
+        Schema schema = new Schema(2, "com.xuejian.client.lxp");
         Entity user = schema.addEntity("IMUser");
         user.addLongProperty("userId");
         user.addStringProperty("username").primaryKey();

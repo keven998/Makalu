@@ -1,4 +1,4 @@
-package com.lv.group;
+package com.xuejian.client.lxp.module.toolbox.im.group;
 
 /**
  * Created by q on 2015/5/12.
