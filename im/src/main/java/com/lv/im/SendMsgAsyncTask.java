@@ -79,7 +79,7 @@ public class SendMsgAsyncTask {
                         String msgId = obj.get("msgId").toString();
                         Long timestamp = Long.parseLong(obj.get("timestamp").toString());
                         IMClient.getInstance().setLastMsg(conversation1, Integer.parseInt(msgId));
-                        IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS,null);
+                        IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS,null,msg.getMsgType());
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "发送成功，消息更新！");
                         }
@@ -88,7 +88,7 @@ public class SendMsgAsyncTask {
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "发送失败：code " + code);
                         }
-                        IMClient.getInstance().updateMessage(currentFri, localId, null, null,0, Config.STATUS_FAILED,null);
+                        IMClient.getInstance().updateMessage(currentFri, localId, null, null,0, Config.STATUS_FAILED,null,msg.getMsgType());
                         listen.onFailed(code);
                     }
                 } catch (Exception e) {
@@ -133,7 +133,7 @@ public class SendMsgAsyncTask {
                     String msgId = obj.get("msgId").toString();
                     Long timestamp = Long.parseLong(obj.get("timestamp").toString());
                     IMClient.getInstance().setLastMsg(currentFri, Integer.parseInt(msgId));
-                    IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null);
+                    IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null,msg.getMsgType());
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "发送成功，消息更新！");
                     }

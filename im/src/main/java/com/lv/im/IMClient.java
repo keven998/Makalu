@@ -261,14 +261,18 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
     }
     /**
      * 发送位置信息
-     *
-     * @param name            地点名称
-     * @param latitude        维度
-     * @param longitude       经度
-     * @param imagePath       图片路径
-     * @param locationAddress 地址
+     * @param message
+     * @param conversation
+     * @param listen
+     * @param chatType
      */
-    public void sendLocationMessage(String name, String conversation, String friendId, String chatType, double latitude, double longitude, String imagePath, String locationAddress) {
+    public void sendLocationMessage(MessageBean message, String conversation, SendMsgListener listen, String chatType) {
+        if ("0".equals(conversation)) conversation = null;
+        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(message.getSenderId()), Config.LOC_MSG, message.getMessage());
+        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
+    }
+
+    public MessageBean CreateLocationMessage(String name, String conversation, String friendId, String chatType, double latitude, double longitude , String locationAddress){
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
@@ -282,12 +286,12 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        System.out.println("send  CurrentFriend " + friendId + " conversation" + conversation);
-        SendMsgAsyncTask.sendMessage(conversation, friendId, message, localId, null, chatType);
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.LOC_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        m.setLocalId((int) localId);
+        return m;
     }
-
-    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message) {
-        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status,message);
+    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message,int Type) {
+        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status,message,Type);
     }
 
     private MessageBean imessage2Bean(IMessage message) {

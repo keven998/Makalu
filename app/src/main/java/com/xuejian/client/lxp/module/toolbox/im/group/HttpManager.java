@@ -137,28 +137,31 @@ public class HttpManager {
 
     public static void editGroupMembers(final String GroupId, final JSONObject obj) {
 
-        exec.execute(()->{
-                HttpPost post = new HttpPost(Config.HOST + "/groups/" + GroupId);
-                post.addHeader("UserId", 100002 + "");
-                HttpResponse httpResponse = null;
-                try {
-                    System.out.println(obj.toString());
-                    StringEntity entity = new StringEntity(obj.toString(),
-                            HTTP.UTF_8);
-                    entity.setContentType("application/json");
-                    post.setEntity(entity);
-                    httpResponse = new DefaultHttpClient().execute(post);
-                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
-                    if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                        HttpEntity res = httpResponse.getEntity();
-                        if (Config.isDebug) {
-                            Log.i(Config.TAG, "edit member Result : " + EntityUtils.toString(res));
-                        }
+        exec.execute(new Runnable() {
+                         @Override
+                         public void run() {
+                             HttpPost post = new HttpPost(Config.HOST + "/groups/" + GroupId);
+                             post.addHeader("UserId", 100002 + "");
+                             HttpResponse httpResponse = null;
+                             try {
+                                 System.out.println(obj.toString());
+                                 StringEntity entity = new StringEntity(obj.toString(),
+                                         HTTP.UTF_8);
+                                 entity.setContentType("application/json");
+                                 post.setEntity(entity);
+                                 httpResponse = new DefaultHttpClient().execute(post);
+                                 System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
+                                 if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                                     HttpEntity res = httpResponse.getEntity();
+                                     if (Config.isDebug) {
+                                         Log.i(Config.TAG, "edit member Result : " + EntityUtils.toString(res));
+                                     }
 
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                                 }
+                             } catch (Exception e) {
+                                 e.printStackTrace();
+                             }
+                         }
         });
     }
 
@@ -173,7 +176,9 @@ public class HttpManager {
     }
 
     private static void getInformations(final String url, String type) {
-        exec.execute(()->{
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
                 HttpGet get = new HttpGet(url);
                 get.addHeader("UserId", User.getUser().getCurrentUser() + "");
                 try {
@@ -185,12 +190,15 @@ public class HttpManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
         });
     }
 
     public static void getUserGroupInfo(String userId) {
         final String url = Config.HOST + "/users/100001/groups";
-        exec.execute(()->{
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
                 HttpGet get = new HttpGet(url);
                 get.addHeader("UserId", 100001 + "");
                 try {
@@ -203,17 +211,20 @@ public class HttpManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
         });
     }
 
     public static void searchGroup(final String tag, final String value) {
         final String url = Config.HOST + "/groups/search";
 
-        exec.execute(()->{
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
                 RequestParams params = new RequestParams();
                 params.put(tag, value);
-               // params.add("UserId",100001+"");
-                client.addHeader("UserId",100001l+"");
+                // params.add("UserId",100001+"");
+                client.addHeader("UserId", 100001l + "");
                 client.get(url, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
@@ -230,6 +241,7 @@ public class HttpManager {
                         }
                     }
                 });
+            }
         });
     }
 }

@@ -326,7 +326,7 @@ public class MessageDB {
         closeDB();
     }
 
-    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message) {
+    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message,int Type) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         ContentValues values = new ContentValues();
@@ -338,6 +338,7 @@ public class MessageDB {
         }
         if (timestamp!=0)values.put("CreateTime", timestamp);
         values.put("Status", status);
+        values.put("Type",Type);
         int num = mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});
         updateConversation(fri_ID, conversation, Integer.parseInt(msgId));
         closeDB();

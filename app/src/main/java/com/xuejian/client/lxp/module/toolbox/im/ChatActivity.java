@@ -1008,8 +1008,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param locationAddress
 	 */
 	private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-
-
+        MessageBean m =IMClient.getInstance().CreateLocationMessage("haha",conversation,toChatUsername,chatType,latitude,longitude,locationAddress);
+        messageList.add(m);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		listView.setSelection(listView.getCount() - 1);

@@ -91,6 +91,12 @@ public class HandleImMessage {
                         handler.onMsgArrive(Msg2Bean(newMessage));
                     }
                     break;
+                case Config.LOC_MSG:
+                    Message newLocMessage = (Message) message.obj;
+                    for (MessagerHandler handler : ehList) {
+                        handler.onMsgArrive(Msg2Bean(newLocMessage));
+                    }
+                    break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
@@ -150,6 +156,13 @@ public class HandleImMessage {
                         handlermsg.what = Config.TEXT_MSG;
                         handler.sendMessage(handlermsg);
                         break;
+                    case Config.LOC_MSG:
+                        android.os.Message loc_msg = android.os.Message.obtain();
+                        loc_msg.obj = messageBean;
+                        loc_msg.what = Config.LOC_MSG;
+                        handler.sendMessage(loc_msg);
+                        break;
+
                     case Config.AUDIO_MSG:
                         try {
                             object = new JSONObject(content);
