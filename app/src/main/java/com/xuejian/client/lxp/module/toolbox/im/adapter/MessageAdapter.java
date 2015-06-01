@@ -383,7 +383,7 @@ private String chatType;
                 // demo用username代替nick
 //                IMUser user = groupMembers.get(message.getSenderId()+"");
 //                if (user == null) {
-//                    user = IMUserRepository.getContactByUserName(context, message.getSenderId()+"");
+//                    user = UserRepository.getContactByUserName(context, message.getSenderId()+"");
 //                    if (user == null) {
 //                        user = IMUtils.getUserInfoFromMessage(context, message);
 //                    }

@@ -64,10 +64,30 @@ public class UserDBManager  {
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER)");
         //mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
     }
-    public PeachUser getMyFriendByUserName(String userId){
+    public User getMyFriendByUserId(String UserId){
         mdb=getDB();
-       Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{userId});
-        return null;
+       Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{UserId});
+        long userId=cursor.getLong(0);
+        String nickName= cursor.getString(1);
+        String avatar= cursor.getString(2);
+        String avatarSmall= cursor.getString(3);
+        String gender= cursor.getString(4);
+        String signature= cursor.getString(5);
+        String tel= cursor.getString(6);
+        String secToken= cursor.getString(7);
+        String countryCode= cursor.getString(8);
+        String email= cursor.getString(9);
+        String memo= cursor.getString(10);
+        String travelStatus= cursor.getString(11);
+        String residence= cursor.getString(12);
+        String level= cursor.getString(13);
+        String zodiac= cursor.getString(14);
+        String birthday= cursor.getString(15);
+        String tracks= cursor.getString(16);
+        int guideCnt= cursor.getInt(17);
+        int Type= cursor.getInt(18);
+String ext=cursor.getString(19);
+        return new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
+                email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext);
     }
-
 }

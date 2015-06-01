@@ -30,7 +30,7 @@ public class MyDaoGenerator {
         user.addStringProperty("guideCnt");
         user.addIntProperty("Type");
         user.addStringProperty("Ext");
-
+        user.addBooleanProperty("isFriend");
 
 
 
