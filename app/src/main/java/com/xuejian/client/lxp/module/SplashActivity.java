@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.easemob.chat.EMChat;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -45,6 +46,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 		super.onCreate(savedInstanceState);
 		initView();
 		initData();
+        IMClient.initIM(this);
 //        MobclickAgent.openActivityDurationTrack(false);
 	}
 

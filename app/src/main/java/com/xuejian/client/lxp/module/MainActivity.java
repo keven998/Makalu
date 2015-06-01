@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
@@ -26,6 +27,14 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.NetUtils;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.bean.MessageBean;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
+import com.lv.user.LoginSuccessListener;
+import com.lv.user.User;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -56,7 +65,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MainActivity extends PeachBaseActivity {
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessagerHandler{
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -91,11 +100,13 @@ public class MainActivity extends PeachBaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-       /* if(!EMChat.getInstance().isLoggedIn()){
+       /*
+       if(!EMChat.getInstance().isLoggedIn()){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
-        }*/
+        }
+        */
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){
@@ -105,7 +116,26 @@ public class MainActivity extends PeachBaseActivity {
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
         initData();
+        User.login("100006", new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                System.out.println("登陆成功");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if(talkFragment != null){
+                            talkFragment.loadConversation();
+                        }
+                    }
+                });
+            }
 
+            @Override
+            public void OnFailed(int code) {
+                System.out.println("登陆失败 :" + code);
+            }
+        });
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -152,7 +182,6 @@ public class MainActivity extends PeachBaseActivity {
     }
 
     private void getContactFromServer() {
-
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -301,12 +330,19 @@ public class MainActivity extends PeachBaseActivity {
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if (!EMChat.getInstance().isLoggedIn()) {
-                        mTabHost.setCurrentTab(1);
-                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(logIntent);
-                        overridePendingTransition(R.anim.push_bottom_in, 0);
+                    if (!User.getUser().isLogin()){
+                        Toast.makeText(MainActivity.this,"正在登陆",Toast.LENGTH_LONG).show();
                     }
+                    /**
+                     * 注释掉登陆
+                     */
+//                    if(!EMChat.getInstance().isLoggedIn()){
+//                        mTabHost.setCurrentTab(1);
+//                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+//                        startActivity(logIntent);
+//                        overridePendingTransition(R.anim.push_bottom_in,0);
+//                    }
+
                 } else if (s.equals(mTagArray[1])) {
                   /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
                     if (fg != null) {
@@ -315,10 +351,12 @@ public class MainActivity extends PeachBaseActivity {
                 }
             }
         });
-
-        if (EMChat.getInstance().isLoggedIn()) {
+        if (User.getUser().isLogin()) {
             mTabHost.setCurrentTab(0);
         } else {
+//        if (EMChat.getInstance().isLoggedIn()) {
+//            mTabHost.setCurrentTab(0);
+//        } else {
             mTabHost.setCurrentTab(1);
         }
     }
@@ -340,16 +378,17 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        System.out.println("MainActivity resume");
+        HandleImMessage.getInstance().registerMessageListener(this);
         if (!isConflict){
+            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+            if(talkFragment != null){
+                talkFragment.loadConversation();
+            }
             updateUnreadMsgCount();
             EMChatManager.getInstance().activityResumed();
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -438,7 +477,7 @@ public class MainActivity extends PeachBaseActivity {
                 }
                 //对方同意了加好友请求(好友添加)
                 else if (cmdType == 2) {
-                    updateUnreadMsgCount();
+                   // updateUnreadMsgCount();
                     refreshChatHistoryFragment();
 
 
@@ -454,6 +493,18 @@ public class MainActivity extends PeachBaseActivity {
             }
         }
     };
+
+
+    @Override
+    public void onMsgArrive(MessageBean m) {
+        System.out.println("message :"+m.getMessage());
+        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+        if(talkFragment != null){
+            talkFragment.loadConversation();
+        }
+        updateUnreadMsgCount();
+    }
+
 
     /**
      * 新消息广播接收者
@@ -630,7 +681,8 @@ public class MainActivity extends PeachBaseActivity {
 
     public void updateUnreadMsgCount(){
         int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount()+getUnreadAddressCountTotal();
+       // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+getUnreadAddressCountTotal();
+        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
             unreadMsg.setText(unreadMsgCountTotal+"");
@@ -680,10 +732,25 @@ public class MainActivity extends PeachBaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("MainActivity pause");
+        HandleImMessage.getInstance().unregisterMessageListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("MainActivity stop");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // 注销广播接收者
+        System.out.println("MainActivity destroy");
         try {
             unregisterReceiver(msgReceiver);
         } catch (Exception e) {

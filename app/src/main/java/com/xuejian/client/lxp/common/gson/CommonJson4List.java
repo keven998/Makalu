@@ -8,34 +8,39 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CommonJson4List<T> implements Serializable {
 
-	/**
+    /**
      *
      */
-	private static final long serialVersionUID = -369558847578246550L;
+    private static final long serialVersionUID = -369558847578246550L;
 
-	/**
-	 * 是否成功
-	 */
-	public int code = 1;
-	public ErrBean err;
+    /**
+     * 是否成功
+     */
+    public int code = 1;
+    public ErrBean err;
 
-	public class ErrBean {
-		public String message;
-		public String extro;
-	}
+    public class ErrBean {
+        public String message;
+        public String extro;
+    }
 
-	/**
-	 * 数据
-	 */
-	 Class<T> type;
-	 
-	
-	public CommonJson4List() {
-		super();
+    /**
+     * 数据
+     */
+    Class<T> type;
+
+
+    public CommonJson4List() {
+        super();
         this.type = (Class<T>) getClass();
-	}
+    }
 
 	public List<T> result;
 

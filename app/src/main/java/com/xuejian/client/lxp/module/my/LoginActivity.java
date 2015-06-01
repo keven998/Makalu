@@ -1,6 +1,11 @@
 package com.xuejian.client.lxp.module.my;
 
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +16,8 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
+import com.alibaba.fastjson.JSON;
 import com.easemob.EMCallBack;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
@@ -46,7 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends PeachBaseActivity {
+public class LoginActivity extends PeachBaseActivity{
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
@@ -71,18 +78,21 @@ public class LoginActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 如果用户名密码都有，直接进入主页面
-        if (EMChat.getInstance().isLoggedIn()) {
+        /**
+         * 注释掉登陆
+         */
+     //  if (EMChat.getInstance().isLoggedIn()) {
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(0,R.anim.push_bottom_out);
             return;
-        }
-        initView();
-        request_code=getIntent().getIntExtra("request_code",0);
-        if(request_code==REQUEST_CODE_REG){
-            Intent intent = new Intent(mContext, RegActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_REG);
-        }
+      //  }
+//        initView();
+//        request_code=getIntent().getIntExtra("request_code",0);
+//        if(request_code==REQUEST_CODE_REG){
+//            Intent intent = new Intent(mContext, RegActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE_REG);
+//        }
     }
     @Override
     protected void onResume() {
@@ -233,9 +243,11 @@ public class LoginActivity extends PeachBaseActivity {
                 // conversations in case we are auto login
                 EMGroupManager.getInstance().loadAllGroups();
                 EMChatManager.getInstance().loadAllConversations();
-                String result= UserApi.getAsynContact();
+                String result=UserApi.getAsynContact();
+                System.out.println("result "+result);
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                if (contactResult.code == 0) {
+              //  CommonJson<ContactListBean> contactResult=JSON.parseObject(result,ContactListBean.class);
+                    if (contactResult.code == 0) {
                     for (PeachUser peachUser : contactResult.result.contacts) {
                         IMUser user = new IMUser();
                         user.setUserId(peachUser.userId);
@@ -316,7 +328,8 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+error.printStackTrace();
+                System.out.println(msg+"  "+method);
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));

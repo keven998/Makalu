@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
@@ -53,6 +54,10 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
@@ -77,7 +82,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class IMMainActivity extends ChatBaseActivity {
+public class IMMainActivity extends ChatBaseActivity  {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
@@ -106,7 +111,8 @@ public class IMMainActivity extends ChatBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_main);
         initView();
-
+        System.out.println("IMMainActivity");
+ToastUtil.getInstance(this).showToast("IMMainActivity");
         //这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
         //显示所有人消息记录的fragment
@@ -362,6 +368,8 @@ public class IMMainActivity extends ChatBaseActivity {
             }
         });
     }
+
+
 
     private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
 

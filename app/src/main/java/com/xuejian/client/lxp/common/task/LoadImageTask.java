@@ -25,6 +25,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.util.ImageUtils;
+import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
@@ -37,8 +38,8 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 	String localFullSizePath = null;
 	String thumbnailPath = null;
 	String remotePath = null;
-	EMMessage message = null;
-	ChatType chatType;
+	MessageBean message = null;
+	String chatType;
 	Activity activity;
 
 	@Override
@@ -46,19 +47,38 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 		thumbnailPath = (String) args[0];
 		localFullSizePath = (String) args[1];
 		remotePath = (String) args[2];
-		chatType = (ChatType) args[3];
+		chatType = (String) args[3];
 		iv = (ImageView) args[4];
 		// if(args[2] != null) {
 		activity = (Activity) args[5];
 		// }
-		message = (EMMessage) args[6];
+		message = (MessageBean) args[6];
 		File file = new File(thumbnailPath);
 		if (file.exists()) {
 			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
 		} else {
-			if (message.direct == EMMessage.Direct.SEND) {
+			if (message.getSendType() == 0) {
 				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
 			} else {
+               // String thumburl=getImagepath(message, "thumb");
+//                new DownloadImage(thumburl,thumbnailPath).download(new DownloadImage.DownloadListener() {
+//
+//                    @Override
+//                    public void onSuccess() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int progress) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFail() {
+//
+//                    }
+//                }
+
 				return null;
 			}
 		}
@@ -83,38 +103,36 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 							Uri uri = Uri.fromFile(file);
 							intent.putExtra("uri", uri);
 						} else {
-							// The local full size pic does not exist yet.
-							// ShowBigImage needs to download it from the server
-							// first
+                            intent.putExtra("downloadFilePath", localFullSizePath);
 							intent.putExtra("remotepath", remotePath);
 						}
-						if (message.getChatType() != ChatType.Chat) {
-							// delete the image from server after download
-						}
-						if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked) {
-							message.isAcked = true;
-							try {
-								// 看了大图后发个已读回执给对方
-								EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
+//						if (message.getChatType() != ChatType.Chat) {
+//							// delete the image from server after download
+//						}
+//						if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked) {
+//							message.isAcked = true;
+//							try {
+//								// 看了大图后发个已读回执给对方
+//								EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+//							} catch (Exception e) {
+//								e.printStackTrace();
+//							}
+//						}
                         ((BaseActivity)activity).startActivityWithNoAnim(intent);
 					}
 				}
 			});
 		} else {
-			if (message.status == EMMessage.Status.FAIL) {
-				if (CommonUtils.isNetWorkConnected(activity)) {
-					new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							EMChatManager.getInstance().asyncFetchMessage(message);
-						}
-					}).start();
-				}
+			if (message.getStatus() == 2) {
+//				if (CommonUtils.isNetWorkConnected(activity)) {
+//					new Thread(new Runnable() {
+//
+//						@Override
+//						public void run() {
+//							EMChatManager.getInstance().asyncFetchMessage(message);
+//						}
+//					}).start();
+//				}
 			}
 
 		}

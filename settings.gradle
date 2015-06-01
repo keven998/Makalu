@@ -1,2 +1,2 @@
-include ':app', ':core', ':MyDaoGenerator'
+include ':app', ':core', ':MyDaoGenerator', ':im'
 include ':social_sdk_library_project'
