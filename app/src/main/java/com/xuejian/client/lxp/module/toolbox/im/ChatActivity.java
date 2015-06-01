@@ -816,7 +816,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			btnContainer.setVisibility(View.VISIBLE);
 			expressionContainer.setVisibility(View.GONE);
 			more.setVisibility(View.GONE);
-
+			showKeyboadrd(mEditTextContent);
 //		} else if (id == R.id.btn_video) {
 //			// 点击摄像图标
 //			Intent intent = new Intent(ChatActivity.this, ImageGridActivity.class);
@@ -1144,7 +1144,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			btnMore.setVisibility(View.GONE);
 			buttonSend.setVisibility(View.VISIBLE);
 		}
-
+		showKeyboadrd(mEditTextContent);
 	}
 
 	/**
@@ -1536,6 +1536,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 				manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			}
 		}
+	}
+
+	private void showKeyboadrd(View view) {
+		manager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 	/**

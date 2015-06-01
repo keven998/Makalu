@@ -370,11 +370,11 @@ public class UserApi extends BaseApi {
             if (!TextUtils.isEmpty(residence)) {
                 jsonObject.put("residence", residence);
             }
-            if (!TextUtils.isEmpty(birthday)) {
-                jsonObject.put("birthday", birthday);
-            }
             if (!TextUtils.isEmpty(status)) {
                 jsonObject.put("travelStatus", status);
+            }
+            if (!TextUtils.isEmpty(birthday)) {
+                jsonObject.put("birthday", birthday);
             }
 
         } catch (JSONException e) {

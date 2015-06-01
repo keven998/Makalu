@@ -131,6 +131,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     LinearLayout llPics;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private int FOOTPRINT=4;
+    private boolean birthTimeFlag=false;
     /*private ImageZoomAnimator2 zoomAnimator;
 
     @ViewInject(R.id.ac_zoom_container)
@@ -236,7 +237,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             View view=View.inflate(AccountActvity.this,R.layout.my_all_pics_cell,null);
             my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
             if(i==picList.size()){
-                my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
+                my_pics_cell.setImageResource(R.drawable.ic_add_selected);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -352,7 +353,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;*/
 
             case R.id.ll_foot_print:
-                ToastUtil.getInstance(AccountActvity.this).showToast("旅行足迹");
                 Intent intent=new Intent(AccountActvity.this,MyFootPrinterActivity.class);
                 intent.putParcelableArrayListExtra("myfootprint",all_foot_print_list);
                 startActivityForResult(intent,FOOTPRINT);
@@ -363,26 +363,30 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                          monthOfYear++;
-                        String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        try {
-                            Date date = format.parse(dateString);
-                            if (date.after(new Date())) {
-                                warn("无效的生日设置");
-                            } else {
-                                editBirthdayToInterface(dateString);
+                        if (!birthTimeFlag) {
+                            monthOfYear++;
+                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date date = format.parse(dateString);
+                                if (date.after(new Date())) {
+                                    warn("无效的生日设置");
+                                } else {
+                                    editBirthdayToInterface(dateString);
+                                }
+                            } catch (ParseException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
                             }
-                        } catch (ParseException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            birthTimeFlag=true;
+                        }else{
+                            birthTimeFlag=false;
                         }
                     }
                 },1990,0,0);
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.setCancelable(true);
                 dialog.show();
-                //应该还差个上传动作
                 break;
 
 
@@ -982,8 +986,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
         UserApi.editUserBirthday(user, birth, new HttpCallBack<String>() {
-
-
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();

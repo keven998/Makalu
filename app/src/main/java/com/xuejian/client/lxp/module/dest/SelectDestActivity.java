@@ -59,7 +59,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
 
     @Override
-    public void onDestAdded(final LocBean locBean) {
+    public void onDestAdded(final LocBean locBean,boolean isEdit) {
         MobclickAgent.onEvent(mContext,"event_select_city");
         if(allAddCityList.contains(locBean)){
             ToastUtil.getInstance(mContext).showToast("已添加");
@@ -205,9 +205,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         hasSelectLoc = getIntent().getParcelableArrayListExtra("locList");
         if(hasSelectLoc!=null){
             for(LocBean locBean:hasSelectLoc){
-                onDestAdded(locBean);
+                onDestAdded(locBean,true);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestAdded(locBean);
+                    onDestActionListener.onDestAdded(locBean,true);
                 }
             }
 
@@ -305,9 +305,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_SEARCH_LOC) {
                 LocBean locBean = data.getParcelableExtra("loc");
-                onDestAdded(locBean);
+                onDestAdded(locBean,true);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestAdded(locBean);
+                    onDestActionListener.onDestAdded(locBean,true);
                 }
             } else if (requestCode == REQUEST_CODE_LOGIN) {
                 Intent intent = new Intent(mContext, StrategyActivity.class);

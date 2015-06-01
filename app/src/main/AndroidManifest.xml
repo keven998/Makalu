@@ -640,7 +640,7 @@
         <!-- 高德地图-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1ebc37fe421415484068dad4493ffccb"/>  <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
+            android:value="5e52974b98ed60f5fd81ce6de1860deb"/>  <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
