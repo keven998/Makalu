@@ -228,7 +228,11 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
-        poi_rank_sm.setText(result.zhName+" 景点排名"+result.getRank());
+        if(result.getRank().equals(0)) {
+            poi_rank_sm.setText("");
+        }else{
+            poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
+        }
         if(TextUtils.isEmpty(result.desc)){
             descLl.setVisibility(View.GONE);
         }else{

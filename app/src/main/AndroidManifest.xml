@@ -634,7 +634,7 @@
             android:value="AIzaSyB129WN9KPdWsTg2Kz0kQ3XheA_nec03XI" />
 
 
-        <meta-data android:value="54376b1bfd98c554cf025d0c" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="556bde0b67e58ea2ba003b0b" android:name="UMENG_APPKEY"></meta-data>   <!--54376b1bfd98c554cf025d0c-->
         <meta-data android:value="Alpha" android:name="UMENG_CHANNEL"/>
 
     </application>

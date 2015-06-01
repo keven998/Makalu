@@ -279,7 +279,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
         if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
-            add_friend.setText("咨询达人");
+            add_friend.setText("开始聊天");
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
