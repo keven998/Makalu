@@ -5,7 +5,6 @@ package com.xuejian.client.lxp.db.userDB;
  * Entity mapped to table USER.
  */
 public class User {
-
     private Long userId;
     private String nickName;
     private String avatar;

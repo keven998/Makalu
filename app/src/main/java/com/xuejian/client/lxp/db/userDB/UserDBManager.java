@@ -28,7 +28,9 @@ public class UserDBManager  {
     private SQLiteDatabase mdb;
     private AtomicInteger mOpenCounter = new AtomicInteger();
 
-    private UserDBManager(String User_Id) {
+    private UserDBManager() {
+    }
+    public void initDB(String User_Id){
         String path = CryptUtils.getMD5String(User_Id);
         fri_table_name = "FRI_" + path;
         String DATABASE_PATH = Config.DB_PATH + path;
@@ -40,7 +42,7 @@ public class UserDBManager  {
     }
     public static UserDBManager getInstance() {
         if (instance == null) {
-            instance = new UserDBManager(AccountManager.getInstance().getCurrentUserId());
+            instance = new UserDBManager();
         }
         return instance;
     }
@@ -136,7 +138,7 @@ public class UserDBManager  {
         closeDB();
         return (type&1)==1;
     }
-    public List<User> getContactList(){
+    public List<User> getContactListWithoutGroup(){
         mdb=getDB();
         List<User> list=new ArrayList<>();
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name ,null);
@@ -161,6 +163,7 @@ public class UserDBManager  {
             int guideCnt = cursor.getInt(17);
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
+            if (isMyFriend(userId))
             list.add(new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
                     email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext));
         }
@@ -168,6 +171,7 @@ public class UserDBManager  {
         closeDB();
         return list;
     }
+
     public void saveContact(User user){
         mdb=getDB();
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
