@@ -53,6 +53,9 @@ public class UserDBManager  {
         }
         return instance;
     }
+
+
+    
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
