@@ -28,6 +28,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.Utils.HanziToPinyin;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -35,6 +36,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ import java.util.List;
  * 简单的好友Adapter实现
  *
  */
-public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionIndexer{
+public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexer{
 
 	private LayoutInflater layoutInflater;
 	private EditText query;
@@ -56,7 +58,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 	private int res;
     private DisplayImageOptions picOptions;
 
-	public ContactAdapter(Context context, int resource, List<IMUser> objects) {
+	public ContactAdapter(Context context, int resource, List<User> objects) {
 		super(context, resource, objects);
 		this.res = resource;
 		layoutInflater = LayoutInflater.from(context);
@@ -133,9 +135,9 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh = (ViewHolder1)convertView.getTag();
             }
 
-			final IMUser user = getItem(position);
-			String username = user.getUsername();
-			String header = user.getHeader();
+			final User user = getItem(position);
+			String username = user.getNickName();
+			String header = null;
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
@@ -157,16 +159,16 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
                 vh.avatarView.setImageResource(R.drawable.ic_frend_request);
-				if(user.getUnreadMsgCount() > 0){
-					vh.unreadMsgView.setVisibility(View.VISIBLE);
-                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
-				}else{
+//				if(user.getUnreadMsgCount() > 0){
+//					vh.unreadMsgView.setVisibility(View.VISIBLE);
+//                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
+//				}else{
                     vh.unreadMsgView.setVisibility(View.GONE);
-				}
+			//	}
 //                vh.avatarView.setVisibility(View.GONE);
 			} else if (username.equals(Constant.GROUP_USERNAME)){
 				//群聊item
-                vh.nickView.setText(user.getNick());
+                vh.nickView.setText(user.getNickName());
                 vh.avatarView.setImageResource(R.drawable.my_group);
                 vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
@@ -174,7 +176,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //                vh.avatarView.setVisibility(View.VISIBLE);
 			} else {
 //                vh.avatarView.setVisibility(View.VISIBLE);
-                vh.nickView.setText(user.getNick());
+                vh.nickView.setText(user.getNickName());
 //				if(unreadMsgView != null)
 //					unreadMsgView.setVisibility(View.INVISIBLE);
 //                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
@@ -184,7 +186,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
                 vh.talkView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getContext().startActivity(new Intent(getContext(), ChatActivity.class).putExtra("userId", user.getUsername()));
+                        getContext().startActivity(new Intent(getContext(), ChatActivity.class).putExtra("userId", user.getUserId()));
                     }
                 });
                 vh.unreadMsgView.setVisibility(View.GONE);
@@ -195,7 +197,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 	}
 	
 	@Override
-	public IMUser getItem(int position) {
+	public User getItem(int position) {
 		return  super.getItem(position);
 	}
 
@@ -236,7 +238,7 @@ public class ContactAdapter extends ArrayAdapter<IMUser>  implements SectionInde
 //        sectionOfPosition.put(0, 0);
         int section=0;
         for (int i = 0; i < count; i++) {
-            String letter = getItem(i).getHeader();
+            String letter =getItem(i).getHeader();
             String beforeLetter ="";
             if(i>0){
                 beforeLetter = getItem(i-1).getHeader();

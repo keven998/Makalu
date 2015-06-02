@@ -26,6 +26,15 @@ public class User {
     private Integer Type;
     private String Ext;
 
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    private String header;
     public User() {
     }
 
@@ -51,7 +60,6 @@ public class User {
         this.Type = Type;
         this.Ext = Ext;
     }
-
     public Long getUserId() {
         return userId;
     }

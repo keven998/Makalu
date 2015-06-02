@@ -49,6 +49,7 @@ import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
@@ -150,6 +151,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private void initData(){
         //网络更新好友列表
+        for (long i=100005;i<=100010;i++){
+            com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+            user.setUserId(i);
+            user.setNickName("user"+i);
+            user.setHeader("a");
+            UserDBManager.getInstance().saveContact(user);
+        }
         getContactFromServer();
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());

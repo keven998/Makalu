@@ -26,6 +26,8 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.widget.Sidebar;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 	private ListView listView;
 	private Sidebar sidebar;
 	protected ContactAdapter contactAdapter;
-	private List<IMUser> contactList;
+	private List<User> contactList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 		listView = (ListView) findViewById(R.id.list);
 		sidebar = (Sidebar) findViewById(R.id.sidebar);
 		sidebar.setListView(listView);
-		contactList = new ArrayList<IMUser>();
+		contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
@@ -69,7 +71,7 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 	protected void onListItemClick(int position) {
 		if (position != 0) {
 			setResult(RESULT_OK, new Intent().putExtra("username", contactAdapter.getItem(position)
-					.getUsername()));
+					.getUserId()));
 			finish();
 		}
 	}
@@ -80,19 +82,20 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 
 	private void getContactList() {
 		contactList.clear();
-		Map<String, IMUser> users = AccountManager.getInstance().getContactList(this);
-		Iterator<Entry<String, IMUser>> iterator = users.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<String, IMUser> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
-				contactList.add(entry.getValue());
-		}
+        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+//		Map<String, IMUser> users = AccountManager.getInstance().getContactList(this);
+//		Iterator<Entry<String, IMUser>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Entry<String, IMUser> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
+//				contactList.add(entry.getValue());
+//		}
 		// 排序
-		Collections.sort(contactList, new Comparator<IMUser>() {
+		Collections.sort(contactList, new Comparator<User>() {
 
 			@Override
-			public int compare(IMUser lhs, IMUser rhs) {
-				return lhs.getUsername().compareTo(rhs.getUsername());
+			public int compare(User lhs, User rhs) {
+				return lhs.getNickName().compareTo(rhs.getNickName());
 			}
 		});
 	}

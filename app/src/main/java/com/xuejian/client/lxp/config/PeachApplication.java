@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.DaoMaster;
 import com.xuejian.client.lxp.db.DaoSession;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.io.File;
 
@@ -44,6 +45,7 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
+        UserDBManager.getInstance().initDB(100006+"");
     }
 
     private void setupDatabase() {

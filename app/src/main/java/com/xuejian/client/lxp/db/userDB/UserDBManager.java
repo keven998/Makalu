@@ -39,6 +39,13 @@ public class UserDBManager  {
         if (!dir.exists())
             dir.mkdir();
         db = SQLiteDatabase.openOrCreateDatabase(databaseFilename, null);
+
+        db.execSQL("CREATE table IF NOT EXISTS "
+                + fri_table_name
+                + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT," +
+                "gender TEXT，signature TEXT，tel TEXT，secToken TEXT，countryCode TEXT，email TEXT，" +
+                "memo TEXT，travelStatus TEXT，residence TEXT，level TEXT，zodiac TEXT，birthday TEXT," +
+                "tracks TEXT,guideCnt INTEGER,Type INTEGER)");
     }
     public static UserDBManager getInstance() {
         if (instance == null) {
@@ -163,7 +170,7 @@ public class UserDBManager  {
             int guideCnt = cursor.getInt(17);
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
-            if (isMyFriend(userId))
+            if (((Type&1)==1)&&((Type&8)==8))
             list.add(new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
                     email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext));
         }
@@ -171,6 +178,15 @@ public class UserDBManager  {
         closeDB();
         return list;
     }
+
+   public boolean isGroup(long userId){
+       mdb=getDB();
+       Cursor cursor= mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
+       int type=cursor.getInt(0);
+       cursor.close();
+       closeDB();
+       return (type&8)==8;
+   }
 
     public void saveContact(User user){
         mdb=getDB();

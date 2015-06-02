@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.lv.Listener.DequeueListener;
 import com.lv.Listener.MsgListener;
 import com.lv.Utils.Config;
@@ -110,12 +111,21 @@ public class HandleImMessage {
 
     public MsgListener listener = new MsgListener() {
         @Override
-        public void OnMessage(Context context, Message message) {
+        public void OnMessage(Context context, String message) {
             c = context;
-            /**
-             * 处理消息重组、丢失
-             */
-            queue.addMsg(message.getConversation(), message);
+            JSONObject object = null;
+            try {
+                object = new JSONObject(message);
+                String m = object.getString("message");
+                Message newmsg = JSON.parseObject(m, Message.class);
+                newmsg.setSendType(1);
+                /**
+                 * 处理消息重组、丢失
+                 */
+                queue.addMsg(newmsg.getConversation(), newmsg);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     };
     /**

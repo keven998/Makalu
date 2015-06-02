@@ -61,6 +61,8 @@ import com.xuejian.client.lxp.common.utils.StretchAnimation;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 import java.util.ArrayList;
@@ -72,7 +74,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private LinearLayout contentLl;
     private ListView listView;
     private RecyclerView toBeAddContactsRv;
-    private List<IMUser> toBeAddContacts;
+    private List<User> toBeAddContacts;
     private List<Long> userList;
     /**
      * 是否为一个新建的群组
@@ -89,7 +91,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      */
     private List<String> exitingMembers;
     // 好友列表
-    private List<IMUser> alluserList;
+    private List<User> alluserList=new ArrayList<User>();
     private int request;
     private String groupId;
     private EMGroup group;
@@ -115,15 +117,15 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         if (exitingMembers == null)
             exitingMembers = new ArrayList<String>();
         // 获取好友列表
-        alluserList = new ArrayList<IMUser>();
-        for (IMUser user : AccountManager.getInstance().getContactList(this).values()) {
-            if (!user.getUsername().equals(Constant.NEW_FRIENDS_USERNAME) & !user.getUsername().equals(Constant.GROUP_USERNAME))
-                alluserList.add(user);
-        }
+        alluserList= UserDBManager.getInstance().getContactListWithoutGroup();
+//        for (IMUser user : AccountManager.getInstance().getContactList(this).values()) {
+//            if (!user.getUsername().equals(Constant.NEW_FRIENDS_USERNAME) & !user.getUsername().equals(Constant.GROUP_USERNAME))
+//                alluserList.add(user);
+//        }
         // 对list进行排序
-        Collections.sort(alluserList, new Comparator<IMUser>() {
+        Collections.sort(alluserList, new Comparator<User>() {
             @Override
-            public int compare(IMUser lhs, IMUser rhs) {
+            public int compare(User lhs, User rhs) {
                 return (lhs.getHeader().compareTo(rhs.getHeader()));
             }
         });
@@ -138,7 +140,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         contentLl = (LinearLayout) findViewById(R.id.ll_content);
         listView = (ListView) findViewById(R.id.list);
         toBeAddContactsRv = (RecyclerView) findViewById(R.id.rv_add_contacts);
-        toBeAddContacts = new ArrayList<IMUser>();
+        toBeAddContacts = new ArrayList<User>();
         //设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -212,12 +214,12 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         final StringBuffer membersStr = new StringBuffer();
         for (int i = 0; i < toBeAddContacts.size(); i++) {
             if (i < 3) {
-                groupName.append(toBeAddContacts.get(i).getNick());
+                groupName.append(toBeAddContacts.get(i).getNickName());
                 if (i != toBeAddContacts.size() - 1 && i != 2) {
                     groupName.append("、");
                 }
             }
-            membersStr.append(toBeAddContacts.get(i).getNick());
+            membersStr.append(toBeAddContacts.get(i).getNickName());
             if (i != toBeAddContacts.size() - 1) {
                 membersStr.append("、");
             }
@@ -235,8 +237,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         // 调用sdk创建群组方法
                         String desc = "";
                         ArrayList<String> members = new ArrayList<String>();
-                        for (IMUser imUser : toBeAddContacts) {
-                            members.add(imUser.getUsername());
+                        for (User imUser : toBeAddContacts) {
+                            members.add(imUser.getNickName());
                         }
                         try {
                             //创建不公开群
@@ -294,7 +296,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 Intent intent = new Intent();
                 // it is group chat
                 intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                intent.putExtra("toId", toBeAddContacts.get(0).getUsername());
+                intent.putExtra("toId", toBeAddContacts.get(0).getNickName());
                 setResult(RESULT_OK, intent);
                 finishWithNoAnim();
             }
@@ -304,8 +306,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
                 public void run() {
                     ArrayList<String> members = new ArrayList<String>();
-                    for (IMUser imUser : toBeAddContacts) {
-                        members.add(imUser.getUsername());
+                    for (User imUser : toBeAddContacts) {
+                        members.add(imUser.getNickName());
                     }
                     try {
                         //创建者调用add方法
@@ -373,7 +375,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      *
      * @return
      */
-    private List<IMUser> getToBeAddMembers() {
+    private List<User> getToBeAddMembers() {
         return toBeAddContacts;
     }
 
@@ -381,10 +383,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             RecyclerView.Adapter<ToBeAddContactsAdapter.ViewHolder> {
 
         private LayoutInflater mInflater;
-        private List<IMUser> mDatas;
+        private List<User> mDatas;
         DisplayImageOptions picOptions;
 
-        public ToBeAddContactsAdapter(Context context, List<IMUser> datas) {
+        public ToBeAddContactsAdapter(Context context, List<User> datas) {
             mInflater = LayoutInflater.from(context);
             mDatas = datas;
 
@@ -466,19 +468,19 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         }
 
-        public void add(IMUser item) {
+        public void add(User item) {
             if(!mDatas.contains(item)){
                 mDatas.add(item);
                 notifyDataSetChanged();
                 notifyItemInserted(mDatas.size()-1);
                 checkToBeAddContacts();
 //            notifyItemRangeChanged(0, mDatas.size());
-                LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
+                LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNickName());
             }
 
         }
 
-        public void remove(IMUser item) {
+        public void remove(User item) {
             if(mDatas.contains(item)){
                 int position = mDatas.indexOf(item);
                 mDatas.remove(item);
@@ -486,7 +488,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 notifyItemRemoved(position);
                 checkToBeAddContacts();
 //            notifyItemRangeChanged(0, mDatas.size());
-                LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNick());
+                LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNickName());
             }
 
         }
@@ -522,7 +524,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     }
                     int p = viewHolder.getPosition();
                     if(p<mDatas.size()){
-                        IMUser user = mDatas.get(p);
+                        User user = mDatas.get(p);
                         int index = alluserList.indexOf(user);
                         contactAdapter.isCheckedArray[index]=false;
                         remove(user);
@@ -541,9 +543,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
 
-            final IMUser user = mDatas.get(i);
+            final User user = mDatas.get(i);
             ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatarSmall(), viewHolder.mImg, picOptions);
-            viewHolder.mTxt.setText(mDatas.get(i).getNick());
+            viewHolder.mTxt.setText(mDatas.get(i).getNickName());
 
 
         }
@@ -564,7 +566,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         private LayoutInflater layoutInflater;
         private DisplayImageOptions picOptions;
         private StretchAnimation stretchanimation;
-        public PickContactAdapter(Context context, int resource, List<IMUser> users) {
+        public PickContactAdapter(Context context, int resource, List<User> users) {
             super(context, resource, users);
             isCheckedArray = new boolean[users.size()];
             res = resource;
@@ -603,8 +605,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
 //            final String username = getItem(position).getUsername();
 //            final IMUser user = AccountManager.getInstance().getContactList(mContext).get(username);
-            final IMUser user = getItem(position);
-            final String username = user.getUsername();
+            final User user = getItem(position);
+            final String username = user.getNickName();
             String header = user.getHeader();
 
             if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
@@ -618,7 +620,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 vh.sectionHeader.setVisibility(View.GONE);
             }
 
-            vh.nickView.setText(user.getNick());
+            vh.nickView.setText(user.getNickName());
             vh.avatarView.setTag(user.getAvatarSmall());
 //            Picasso.with(mContext)
 //                    .load(user.getAvatar())

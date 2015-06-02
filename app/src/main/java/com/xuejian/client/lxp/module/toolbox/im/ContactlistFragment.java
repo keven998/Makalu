@@ -34,6 +34,8 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
@@ -51,7 +53,7 @@ import java.util.Map;
  */
 public class ContactlistFragment extends Fragment {
 	private ContactAdapter adapter;
-	private List<IMUser> contactList;
+	private List<User> contactList;
 	private ListView listView;
     private SideBar indexBar;
     private TextView indexDialogTv;
@@ -78,7 +80,7 @@ public class ContactlistFragment extends Fragment {
         imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);*/
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
-        contactList = new ArrayList<IMUser>();
+        contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
@@ -97,7 +99,7 @@ public class ContactlistFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String username = adapter.getItem(position).getUsername();
+				String username = adapter.getItem(position).getNickName();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面
 					IMUser user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
@@ -225,29 +227,29 @@ public class ContactlistFragment extends Fragment {
             return;
         }
         contactList.clear();
-		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Map.Entry<String, IMUser> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
-                contactList.add(entry.getValue());
-            }
-		}
-
+//		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Map.Entry<String, IMUser> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+//                contactList.add(entry.getValue());
+//            }
+//		}
+        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
 		// 排序
-		Collections.sort(contactList, new Comparator<IMUser>() {
+		Collections.sort(contactList, new Comparator<User>() {
 
 			@Override
-			public int compare(IMUser lhs, IMUser rhs) {
+			public int compare(User lhs, User rhs) {
 				return lhs.getHeader().compareTo(rhs.getHeader());
 			}
 		});
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
-        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
-        if(user!=null){
-            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
-        }
+//        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
+//        if(user!=null){
+//            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+//        }
 
 
 	}
