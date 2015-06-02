@@ -231,7 +231,16 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ChatName.append("...");
         }
         //单聊
-        if (toBeAddContacts.size()==1){
+        if (request == 0){
+            System.out.println("add ");
+            List<Long>list =new ArrayList<>();
+            for (User user:toBeAddContacts){
+                list.add(user.getUserId());
+            }
+            GroupManager.getGroupManager().addMembers(groupId,list,true);
+
+        }
+        else if (toBeAddContacts.size()==1){
             Intent intent=new Intent();
             intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
             intent.putExtra("toId", ChatName.toString());
@@ -239,7 +248,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             setResult(RESULT_OK, intent);
             finishWithNoAnim();
         }
-        if (toBeAddContacts.size()>1){
+        else if (toBeAddContacts.size()>1){
             List<Long> ids=new ArrayList<>();
             for (User user:toBeAddContacts){
                 ids.add(user.getUserId());

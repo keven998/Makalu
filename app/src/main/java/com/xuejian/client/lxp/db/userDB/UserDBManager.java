@@ -97,9 +97,9 @@ public class UserDBManager  {
             data=cursor.getString(0);
         }
         try {
-            JSONArray array=(JSONArray)new JSONObject(data).get("GroupMember");
-            for (int i=0;i<array.length();i++){
-                list.add(getContactByUserId(array.getLong(i)));
+            JSONArray userlist=new JSONArray((new JSONObject(data).get("GroupMember")).toString());
+            for (int i=0;i<userlist.length();i++){
+                list.add(getContactByUserId(userlist.getLong(i)));
             }
             return list;
         } catch (JSONException e) {
@@ -115,6 +115,7 @@ public class UserDBManager  {
     public User getContactByUserId(long _id){
         mdb=getDB();
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
+        cursor.moveToLast();
         long userId=cursor.getLong(0);
         String nickName= cursor.getString(1);
         String avatar= cursor.getString(2);
@@ -218,6 +219,7 @@ public class UserDBManager  {
             values.put("tracks",user.getTracks());
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
+            values.put("ext",user.getExt());
             mdb.insert(fri_table_name,null,values);
         }
         cursor.close();
@@ -249,6 +251,7 @@ public class UserDBManager  {
             values.put("tracks",user.getTracks());
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
+            values.put("ext",user.getExt());
             mdb.insert(fri_table_name,null,values);
         }
         cursor.close();

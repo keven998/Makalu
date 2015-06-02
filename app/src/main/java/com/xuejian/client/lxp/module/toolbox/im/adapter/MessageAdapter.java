@@ -67,12 +67,15 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.task.LoadVideoImageTask;
+import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -136,7 +139,7 @@ public class MessageAdapter extends BaseAdapter {
     private String friendId;
     private LayoutInflater inflater;
     private Activity activity;
-    private HashMap<String, IMUser> groupMembers = new HashMap<String, IMUser>();
+    private HashMap<Long, User> groupMembers = new HashMap<Long, User>();
     private DisplayImageOptions picOptions;
     private Context context;
 private String chatType;
@@ -308,7 +311,7 @@ private String chatType;
 //                if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 //                    int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
 //                    if (extType == 0) {
-                     //   handleGroupMessage(position, convertView, message, holder);
+                        handleGroupMessage(position, convertView, message, holder);
                         handleTextMessage(message, holder, position);
                         handleCommonMessage(position, convertView, message, holder);
 //                    } else if (extType < 100) {
@@ -381,31 +384,30 @@ private String chatType;
         if (message.getSendType()==TYPE_REV) {
             if ("group".equals(chatType)) {
                 // demo用username代替nick
-//                IMUser user = groupMembers.get(message.getSenderId()+"");
-//                if (user == null) {
-//                    user = UserRepository.getContactByUserName(context, message.getSenderId()+"");
-//                    if (user == null) {
-//                        user = IMUtils.getUserInfoFromMessage(context, message);
-//                    }
-//                    groupMembers.put(message.getSenderId()+"", user);
-//
-//                }
-//                if (user != null) {
-                    holder.tv_userId.setText(message.getSenderId()+"");
-              //      ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
-             //   }
-            } else {
-                IMUser user = AccountManager.getInstance().getContactList(activity).get(friendId);
+                User user = groupMembers.get(message.getSenderId());
+                if (user == null) {
+                    user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
+                    if (user == null) {
+                       // user = IMUtils.getUserInfoFromMessage(context, message);
+                    }
+                    groupMembers.put(message.getSenderId(), user);
+
+                }
                 if (user != null) {
-                    holder.tv_userId.setText(user.getNick());
+                    holder.tv_userId.setText(user.getNickName());
                     ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
-
+            } else {
+                User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
+                if (user != null) {
+                    holder.tv_userId.setText(user.getNickName());
+                    ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
+                }
             }
         } else {
-            PeachUser user = AccountManager.getInstance().getLoginAccount(context);
+            User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
             if (user != null) {
-                ImageLoader.getInstance().displayImage(user.avatarSmall, holder.head_iv, picOptions);
+                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
             }
         }
 
