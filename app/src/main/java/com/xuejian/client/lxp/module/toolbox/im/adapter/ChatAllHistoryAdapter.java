@@ -175,7 +175,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            }else{
 //                holder.name.setText("");
 //            }
-              holder.name.setText(conversation.getFriendId());
+              holder.name.setText(String.valueOf(conversation.getFriendId()));
         } else {
 //            if (imUser != null) {
 //                // 本地或者服务器获取用户详情，以用来显示头像和nick

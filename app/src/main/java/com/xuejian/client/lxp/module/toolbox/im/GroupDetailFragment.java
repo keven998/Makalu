@@ -50,6 +50,8 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     private ListView memberGv;
     private String groupId;
+    private String name;
     private EMGroup group;
     private int referenceWidth;
     private int referenceHeight;
@@ -124,7 +127,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             public void onClick(View v) {
                 // 进入选人页面
                 startActivityForResult(
-                        (new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())), REQUEST_CODE_ADD_USER);
+                        (new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("groupId", groupId)), REQUEST_CODE_ADD_USER);
             }
         });
         clearAllHistory = (RelativeLayout) getView().findViewById(R.id.clear_all_history);
@@ -143,8 +146,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         // 获取传过来的groupid
         groupId = getArguments().getString("groupId");
-        group = EMGroupManager.getInstance().getGroup(groupId);
-        options = EMChatManager.getInstance().getChatOptions();
+        name = getArguments().getString("name");
+      //  group = EMGroupManager.getInstance().getGroup(groupId);
+      //  options = EMChatManager.getInstance().getChatOptions();
         bindView();
 
 
@@ -386,70 +390,70 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
 
     private void bindView() {
-        memberAdapter = new MemberAdapter(new ViewHolderCreator<IMUser>() {
+        memberAdapter = new MemberAdapter(new ViewHolderCreator<User>() {
             @Override
-            public ViewHolderBase<IMUser> createViewHolder() {
+            public ViewHolderBase<User> createViewHolder() {
                 return new MemberViewHolder();
             }
         });
 
         // 如果自己是群主，显示解散按钮
-        if (group.getOwner() == null || "".equals(group.getOwner())) {
-//            exitBtn.setVisibility(View.GONE);
-//            deleteBtn.setVisibility(View.GONE);
-        } else {
-            if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                if (memberGv.getFooterViewsCount() == 0) {
-                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
-                    memberGv.addFooterView(view);
-                    Button btn = (Button) view.findViewById(R.id.footer_btn);
-                    btn.setText("解散该群");
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            exitDeleteGroupTips();
-                        }
-                    });
-                }
-
-                delGroupMember.setVisibility(View.VISIBLE);
-                rl_groupName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
-                        intent.putExtra("groupId", groupId);
-                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-                    }
-                });
-            } else {
-                getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
-                if (memberGv.getFooterViewsCount() == 0) {
-                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
-                    memberGv.addFooterView(view);
-                    Button btn = (Button) view.findViewById(R.id.footer_btn);
-                    btn.setText("退出此群");
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            exitGroupTips();
-                        }
-                    });
-                }
-            }
-        }
+//        if (group.getOwner() == null || "".equals(group.getOwner())) {
+////            exitBtn.setVisibility(View.GONE);
+////            deleteBtn.setVisibility(View.GONE);
+//        } else {
+//            if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+//                if (memberGv.getFooterViewsCount() == 0) {
+//                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+//                    memberGv.addFooterView(view);
+//                    Button btn = (Button) view.findViewById(R.id.footer_btn);
+//                    btn.setText("解散该群");
+//                    btn.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            exitDeleteGroupTips();
+//                        }
+//                    });
+//                }
+//
+//                delGroupMember.setVisibility(View.VISIBLE);
+//                rl_groupName.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
+//                        intent.putExtra("groupId", groupId);
+//                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+//                    }
+//                });
+//            } else {
+//                getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
+//                if (memberGv.getFooterViewsCount() == 0) {
+//                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+//                    memberGv.addFooterView(view);
+//                    Button btn = (Button) view.findViewById(R.id.footer_btn);
+//                    btn.setText("退出此群");
+//                    btn.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            exitGroupTips();
+//                        }
+//                    });
+//                }
+//            }
+//        }
 
         memberGv.setAdapter(memberAdapter);
         setUpGroupMemeber();
 
-        groupNameTv.setText(group.getGroupName());
-        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
-            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-            iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-        } else if (notReceiveNotifyGroups.contains(groupId)) {
+        groupNameTv.setText(name);
+//        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
+//        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
+//            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
+//            iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
+//        } else if (notReceiveNotifyGroups.contains(groupId)) {
             iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
             iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-        }
+       // }
     }
 
    /* public class MemberAdapter2 extends BaseAdapter{
@@ -505,19 +509,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     }*/
 
     private void setUpGroupMemeber(){
-        final List<String> members=group.getMembers();
+        final List<User> members=UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         final List<String> unkownMembers= new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        for(String username : members) {
-            IMUser user = IMUserRepository.getContactByUserName(PeachApplication.getContext(), username);
-            if(user == null) {
-                unkownMembers.add(username);
-                user = new IMUser();
-                user.setUsername(username);
-            }
-            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
+        for(User user : members) {
+          //  IMUser user = IMUserRepository.getContactByUserName(PeachApplication.getContext(), username);
+//            if(user == null) {
+//                unkownMembers.add(username);
+//                user = new IMUser();
+//                user.setUsername(username);
+//            }
+//            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
                 memberAdapter.getDataList().add(user);
-            }
+ //           }
 
         }
         memberAdapter.notifyDataSetChanged();
@@ -541,17 +545,17 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         }
                         unkownMembers.clear();
                         memberAdapter.getDataList().clear();
-                        for (String username : members) {
-                            IMUser user = IMUserRepository.getContactByUserName(PeachApplication.getContext(), username);
-                            if (user == null) {
-                                unkownMembers.add(username);
-                                user = new IMUser();
-                                user.setUsername(username);
-                            }
-                            if (!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
-                                memberAdapter.getDataList().add(user);
-                            }
-                        }
+ //                       for (String username : members) {
+//                            IMUser user = IMUserRepository.getContactByUserName(PeachApplication.getContext(), username);
+//                            if (user == null) {
+//                                unkownMembers.add(username);
+//                                user = new IMUser();
+//                                user.setUsername(username);
+//                            }
+//                            if (!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
+//                              //  memberAdapter.getDataList().add(user);
+//                            }
+//                        }
                         memberAdapter.notifyDataSetChanged();
                     }
                 }
@@ -642,7 +646,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     }
 
-    private class MemberAdapter extends ListViewDataAdapter<IMUser> {
+    private class MemberAdapter extends ListViewDataAdapter<User> {
 
         /**
          * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link com.aizou.core.widget.listHelper.ViewHolderBase}
@@ -657,7 +661,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         }
     }
 
-    private class MemberViewHolder extends ViewHolderBase<IMUser> {
+    private class MemberViewHolder extends ViewHolderBase<User> {
         private View contentView;
         private ImageView avatarIv, removeIv;
         private TextView nicknameTv,viewHolderName;
@@ -690,7 +694,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         }
 
         @Override
-        public void showData(int position, final IMUser itemData) {
+        public void showData(int position, final User itemData) {
            /* if(position==memberAdapter.getCount()-1){
                 avatarIv.setImageResource(R.drawable.smiley_minus_btn);
                 nicknameTv.setText("");
@@ -738,69 +742,72 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         }
                     });
                 }
-            }else*/{
+            }else*/
+            {
 //                avatarIv.setImageResource(R.drawable.avatar_placeholder);
-                nicknameTv.setText(itemData.getNick());
+                nicknameTv.setText(itemData.getNickName());
                 ImageLoader.getInstance().displayImage(itemData.getAvatarSmall(), avatarIv, picOptions);
                 if (isInDeleteMode) {
                     removeIv.setVisibility(View.VISIBLE);
-                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                        //viewHolderName.setText("群主");
-                        removeIv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
-                                dialog.setTitle("提示");
-                                dialog.setMessage("确定要移除该用户吗？");
-                                dialog.setPositiveButton("确定", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                        deleteMembersFromGroup(itemData);
-
-                                    }
-                                });
-                                dialog.setNegativeButton("取消", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                dialog.show();
-                            }
-                        });
-                    }
-                }
-            else {
+                    /**
+                     * 群组踢人功能
+                     */
+//                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+//                        //viewHolderName.setText("群主");
+//                        removeIv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+//                                dialog.setTitle("提示");
+//                                dialog.setMessage("确定要移除该用户吗？");
+//                                dialog.setPositiveButton("确定", new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        dialog.dismiss();
+//                                        deleteMembersFromGroup(itemData);
+//
+//                                    }
+//                                });
+//                                dialog.setNegativeButton("取消", new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+//                                dialog.show();
+//                            }
+//                        });
+//                    }
+//                }
+//            else {
                     removeIv.setVisibility(View.GONE);
                     contentView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (IMUserRepository.isMyFriend(getActivity(), itemData.getUsername())) {
-                                Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
-                                intent.putExtra("userId", itemData.getUserId());
-                                intent.putExtra("userNick", itemData.getNick());
-                                startActivity(intent);
-                            } else {
-                                PeachUser user = new PeachUser();
-                                user.nickName = itemData.getNick();
-                                user.userId = itemData.getUserId();
-                                user.easemobUser = itemData.getUsername();
-                                user.avatar = itemData.getAvatar();
-                                user.avatarSmall = itemData.getAvatarSmall();
-                                user.signature = itemData.getSignature();
-                                user.gender = itemData.getGender();
-                                user.memo = itemData.getMemo();
-                                Intent intent = new Intent(getActivity(), SeachContactDetailActivity.class);
-                                intent.putExtra("user", user);
-                                startActivity(intent);
-                            }
+                            //      if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
+                            Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                            intent.putExtra("userId", itemData.getUserId());
+                            intent.putExtra("userNick", itemData.getNickName());
+                            startActivity(intent);
+//                            } else {
+//                                PeachUser user = new PeachUser();
+//                                user.nickName = itemData.getNick();
+//                                user.userId = itemData.getUserId();
+//                                user.easemobUser = itemData.getUsername();
+//                                user.avatar = itemData.getAvatar();
+//                                user.avatarSmall = itemData.getAvatarSmall();
+//                                user.signature = itemData.getSignature();
+//                                user.gender = itemData.getGender();
+//                                user.memo = itemData.getMemo();
+//                                Intent intent = new Intent(getActivity(), SeachContactDetailActivity.class);
+//                                intent.putExtra("user", user);
+//                                startActivity(intent);
+//                            }
                         }
                     });
                 }
+
             }
-
-
         }
         /**
          * 删除群成员

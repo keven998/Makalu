@@ -38,6 +38,13 @@ public class User {
     public User() {
     }
 
+    public User(Long userId, String nickName, String ext, Integer type) {
+        this.userId = userId;
+        this.nickName = nickName;
+        Ext = ext;
+        Type = type;
+    }
+
     public User(Long userId, String nickName, String avatar, String avatarSmall, String gender, String signature, String tel, String secToken, String countryCode, String email, String memo, String travelStatus, String residence, String level, String zodiac, String birthday, String tracks, int guideCnt, Integer Type, String Ext) {
         this.userId = userId;
         this.nickName = nickName;

@@ -45,7 +45,6 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
-        UserDBManager.getInstance().initDB(100006+"");
     }
 
     private void setupDatabase() {
