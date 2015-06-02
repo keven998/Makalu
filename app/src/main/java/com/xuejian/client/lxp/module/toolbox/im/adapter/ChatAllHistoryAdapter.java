@@ -139,7 +139,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                        public void run() {
 //                            for (int i = 0; i < size; i++) {
 //                                String username = group.getMembers().get(i);
-//                                IMUser user = IMUserRepository.getContactByUserName(getContext(), username);
+//                                IMUser user = UserRepository.getContactByUserName(getContext(), username);
 //                                if (user != null) {
 //                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
 //

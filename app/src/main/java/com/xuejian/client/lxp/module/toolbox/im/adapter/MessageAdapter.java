@@ -47,7 +47,6 @@ import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.util.DateUtils;
-import com.easemob.util.LatLng;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
@@ -384,7 +383,7 @@ private String chatType;
                 // demo用username代替nick
 //                IMUser user = groupMembers.get(message.getSenderId()+"");
 //                if (user == null) {
-//                    user = IMUserRepository.getContactByUserName(context, message.getSenderId()+"");
+//                    user = UserRepository.getContactByUserName(context, message.getSenderId()+"");
 //                    if (user == null) {
 //                        user = IMUtils.getUserInfoFromMessage(context, message);
 //                    }
@@ -1341,7 +1340,7 @@ private String chatType;
         double lng=getDoubleAttr(message, "lng");
         String name=getStringAttr(message,"name");
         String desc=getStringAttr(message,"desc");
-        locationView.setText(name);
+        locationView.setText(desc);
         locationView.setOnClickListener(new MapClickListener(lat, lng,desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -1368,8 +1367,34 @@ private String chatType;
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
+                IMClient.getInstance().sendLocationMessage(message,conversation,new SendMsgListener() {
+                    @Override
+                    public void onSuccess() {
+                        message.setStatus(0);
+                       activity.runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               holder.pb.setVisibility(View.GONE);
+                               holder.staus_iv.setVisibility(View.GONE);
+                           }
+                       });
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        message.setStatus(2);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.GONE);
+                                holder.staus_iv.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                },chatType);
                 break;
             default:
+                break;
               //  sendMsgInBackground(message, holder);
         }
     }

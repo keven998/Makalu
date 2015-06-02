@@ -132,7 +132,7 @@ public class UploadUtils {
                                 String msgId = obj.get("msgId").toString();
                                 long timestamp = (Double.valueOf(obj.get("timestamp").toString())).longValue();
                                 IMClient.getInstance().setLastMsg(receive, Integer.parseInt(msgId));
-                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null);
+                                IMClient.getInstance().updateMessage(receive, localId, msgId, conversation, timestamp, Config.STATUS_SUCCESS,null,msgType);
                                 if(Config.isDebug){
                                     Log.i(Config.TAG,"发送成功，消息更新！");
                                 }
@@ -143,7 +143,7 @@ public class UploadUtils {
                                 listener.onSucess(null);
                             }
                         } else {
-                            IMClient.getInstance().updateMessage(receive, localId, null, null, 0, Config.STATUS_FAILED,null);
+                            IMClient.getInstance().updateMessage(receive, localId, null, null, 0, Config.STATUS_FAILED,null,msgType);
                             if (listener != null) {
                                 if (info!=null)
                                 listener.onError(info.statusCode, info.error);

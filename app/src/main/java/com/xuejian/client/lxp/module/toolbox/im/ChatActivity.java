@@ -74,21 +74,14 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.GroupReomveListener;
 import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.LocationMessageBody;
-import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.chat.VideoMessageBody;
-import com.easemob.chat.VoiceMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.lv.Audio.MediaRecordFunc;
-import com.lv.Listener.SendMsgListener;
-import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
-import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -1008,8 +1001,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 * @param locationAddress
 	 */
 	private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-
-
+        MessageBean m =IMClient.getInstance().CreateLocationMessage("haha",conversation,toChatUsername,chatType,latitude,longitude,locationAddress);
+        messageList.add(m);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		listView.setSelection(listView.getCount() - 1);

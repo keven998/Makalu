@@ -20,6 +20,7 @@ public class AccountManager {
     public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
     public static final String LOGIN_USER_PREF = "login_user";
     public static PeachUser user;
+    public  String CurrentUserId;
     private Map<String, IMUser> contactList;
 
     /**
@@ -35,8 +36,12 @@ public class AccountManager {
         return instance;
 
     }
-
-
+    public String getCurrentUserId(){
+        return CurrentUserId;
+    }
+    public void setCurrentUserId(String currentUserId){
+        this.CurrentUserId=currentUserId;
+    }
     public PeachUser getLoginAccount(Context context) {
         String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
         if (TextUtils.isEmpty(userJson)) {

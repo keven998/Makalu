@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,9 +28,6 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.NetUtils;
-import com.lv.Listener.SendMsgListener;
-import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -90,7 +88,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
     String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
