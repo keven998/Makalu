@@ -61,10 +61,11 @@ static {
                              * 分发消息
                              */
                             String routeKey = object.getString("routeKey");
+                            String message=object.getString("message");
                             for (String key : routeMap.keySet()) {
                                if (key.equals(routeKey)){
                                    for (MsgListener listener : routeMap.get(routeKey)) {
-                                       listener.OnMessage(context, data);
+                                       listener.OnMessage(context, message);
                                    }
                                    break;
                                }

@@ -118,7 +118,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
-                UserDBManager.getInstance().initDB(100010+"");
+                UserDBManager.getInstance().initDB(100006+"");
                 initData();
                 runOnUiThread(new Runnable() {
                     @Override

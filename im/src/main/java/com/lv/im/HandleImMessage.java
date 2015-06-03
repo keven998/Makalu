@@ -113,19 +113,12 @@ public class HandleImMessage {
         @Override
         public void OnMessage(Context context, String message) {
             c = context;
-            JSONObject object = null;
-            try {
-                object = new JSONObject(message);
-                String m = object.getString("message");
-                Message newmsg = JSON.parseObject(m, Message.class);
+                Message newmsg = JSON.parseObject(message, Message.class);
                 newmsg.setSendType(1);
                 /**
                  * 处理消息重组、丢失
                  */
                 queue.addMsg(newmsg.getConversation(), newmsg);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
     };
     /**

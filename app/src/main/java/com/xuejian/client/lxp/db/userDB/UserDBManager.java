@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lidroid.xutils.exception.DbException;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
+import com.lv.im.SortList;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 
@@ -18,7 +20,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -115,6 +119,7 @@ public class UserDBManager  {
     public User getContactByUserId(long _id){
         mdb=getDB();
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
+        if (cursor.getCount()==0)return null;
         cursor.moveToLast();
         long userId=cursor.getLong(0);
         String nickName= cursor.getString(1);
@@ -139,7 +144,7 @@ public class UserDBManager  {
         cursor.close();
         closeDB();
         return new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
-                email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext);
+                email,memo,travelStatus,residence,level,zodiac,birthday,guideCnt,Type,ext);
     }
     public boolean isMyFriend(long userId){
         mdb=getDB();
@@ -178,7 +183,7 @@ public class UserDBManager  {
             if (((Type&1)==1)&&((Type&8)!=8)) {
                 System.out.println("好友+1");
                 list.add(new User(userId, nickName, avatar, avatarSmall, gender, signature, tel, secToken, countryCode,
-                        email, memo, travelStatus, residence, level, zodiac, birthday, tracks, guideCnt, Type, ext));
+                        email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext));
             }
         }
         cursor.close();
@@ -216,7 +221,7 @@ public class UserDBManager  {
             values.put("level",user.getLevel());
             values.put("zodiac",user.getZodiac());
             values.put("birthday",user.getBirthday());
-            values.put("tracks",user.getTracks());
+//            values.put("tracks",tracksToString(user.getTracks()));
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
             values.put("ext",user.getExt());
@@ -248,7 +253,7 @@ public class UserDBManager  {
             values.put("level",user.getLevel());
             values.put("zodiac",user.getZodiac());
             values.put("birthday",user.getBirthday());
-            values.put("tracks",user.getTracks());
+         //   values.put("tracks",tracksToString(user.getTracks()));
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
             values.put("ext",user.getExt());
@@ -259,4 +264,18 @@ public class UserDBManager  {
         mdb.endTransaction();
         closeDB();
     }
+//    private String tracksToString(HashMap<String,ArrayList<LocBean>> tracks){
+//        JSONObject object=new JSONObject();
+//        try {
+//        for (Map.Entry<String,ArrayList<LocBean>> entry : tracks.entrySet()) {
+//                object.put(entry.getKey(),entry.getValue().toString());
+//        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return  object.toString();
+//    }
+//    private  HashMap<String,ArrayList<LocBean>> StringToTracks(String data){
+//
+//    }
 }
