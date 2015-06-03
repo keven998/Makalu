@@ -113,7 +113,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
     PeachUser user;
+    PeachUser hisBean;
     private IMUser imUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,16 +141,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-        if(userId!=10000){
-            tv_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showActionDialog();
-                }
-            });
-        }else{
-            tv_del.setVisibility(View.GONE);
-        }
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +269,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         age.setText(getAge(bean.birthday)+"");
         }
 
+        if(userId!=10000&&IMUserRepository.isMyFriend(HisMainPageActivity.this,bean.easemobUser )){
+            tv_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showActionDialog();
+                }
+            });
+        }else{
+            tv_del.setVisibility(View.GONE);
+        }
 
         if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
             add_friend.setText("开始聊天");

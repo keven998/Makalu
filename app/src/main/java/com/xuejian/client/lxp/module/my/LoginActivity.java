@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.easemob.EMCallBack;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
@@ -388,13 +389,13 @@ public class LoginActivity extends PeachBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_REG) {
-            if(resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_REG &&resultCode == RESULT_OK) {
+            LogUtil.d("执行了.....................");
+            ToastUtil.getInstance(LoginActivity.this).showToast("action");
                 PeachUser user = (PeachUser) data.getSerializableExtra("user");
                 loginNameEt.setText(user.tel);
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 imLogin(user);
-            }
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             PeachUser user = (PeachUser) data.getSerializableExtra("user");
