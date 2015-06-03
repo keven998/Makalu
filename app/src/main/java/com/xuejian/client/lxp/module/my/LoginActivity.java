@@ -390,8 +390,6 @@ public class LoginActivity extends PeachBaseActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_REG &&resultCode == RESULT_OK) {
-            LogUtil.d("执行了.....................");
-            ToastUtil.getInstance(LoginActivity.this).showToast("action");
                 PeachUser user = (PeachUser) data.getSerializableExtra("user");
                 loginNameEt.setText(user.tel);
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
