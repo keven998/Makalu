@@ -43,6 +43,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatHistoryAdapter;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class ChatHistoryFragment extends Fragment {
 
 	private InputMethodManager inputMethodManager;
 	private ListView listView;
-	private Map<String, IMUser> contactList;
+	private Map<Long, User> contactList;
 	private ChatHistoryAdapter adapter;
 //	private EditText query;
 //	private ImageButton clearSearch;
@@ -89,7 +90,7 @@ public class ChatHistoryFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				EMContact emContact = adapter.getItem(position);
-				if (adapter.getItem(position).getUsername().equals(AccountManager.getInstance().getLoginAccount(getActivity()).nickName))
+				if (adapter.getItem(position).getUsername().equals(AccountManager.getInstance().getLoginAccount(getActivity()).getNickName()))
 //					Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");
 				else {
@@ -202,7 +203,7 @@ public class ChatHistoryFragment extends Fragment {
 	private List<EMContact> loadUsersWithRecentChat() {
 		List<EMContact> resultList = new ArrayList<EMContact>();
 		//获取有聊天记录的users，不包括陌生人
-		for (IMUser user : contactList.values()) {
+		/*for (IMUser user : contactList.values()) {
 			EMConversation conversation = EMChatManager.getInstance().getConversation(user.getUsername());
 			if (conversation.getMsgCount() > 0) {
 				resultList.add(user);
@@ -217,7 +218,7 @@ public class ChatHistoryFragment extends Fragment {
 		}
 		
 		// 排序
-		sortUserByLastChatTime(resultList);
+		sortUserByLastChatTime(resultList);*/
 		return resultList;
 	}
 

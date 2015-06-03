@@ -103,7 +103,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                 //todo:修改攻略名称
                 final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                 editDialog.setTitle("输入验证信息");
-                editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).nickName));
+                editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).getNickName()));
                 editDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

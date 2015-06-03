@@ -5,7 +5,7 @@ package com.xuejian.client.lxp.db.userDB;
  * Entity mapped to table USER.
  */
 public class User {
-    private Long userId;
+    private long userId;
     private String nickName;
     private String avatar;
     private String avatarSmall;
@@ -52,11 +52,11 @@ public class User {
         this.Ext = Ext;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -210,6 +210,19 @@ public class User {
 
     public void setExt(String Ext) {
         this.Ext = Ext;
+    }
+
+    public String getGenderDesc() {
+        if ("F".equals(gender)) {
+            return "美女";
+        } else if ("M".equals(gender)) {
+            return "帅锅";
+        } else if ("U".equals(gender)) {
+            return "不告诉你";
+        } else if ("S".equals(gender)) {
+            return "保密";
+        }
+        return "";
     }
 
 }

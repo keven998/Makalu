@@ -25,6 +25,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.InputCheckUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -36,7 +37,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
 
-    private PeachUser user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +72,9 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
-                            user.nickName = nickEt.getText().toString().trim();
+                            user.setNickName(nickEt.getText().toString().trim());
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                            boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
+                            boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.getNickName());
                             if (!updatenick) {
                                 EMLog.e("ModifyNicknameActivity", "update current user nick fail");
                             }
@@ -106,7 +107,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
 
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
-        nickEt.setText(user.nickName);
+        nickEt.setText(user.getNickName());
         CharSequence text = nickEt.getText();
         //Debug.asserts(text instanceof Spannable);
         if (text instanceof Spannable) {

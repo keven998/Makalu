@@ -38,6 +38,7 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {
@@ -137,35 +138,35 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 @Override
                 public void doSucess(String result, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
-                    CommonJson4List<PeachUser> seachResult = CommonJson4List.fromJson(result, PeachUser.class);
+                    CommonJson4List<User> seachResult = CommonJson4List.fromJson(result, User.class);
                     if (seachResult.code == 0) {
                         if (seachResult.result.size() > 0) {
-                            PeachUser user = seachResult.result.get(0);
-                            if (AccountManager.getInstance().getLoginAccount(mContext).userId == (seachResult.result.get(0).userId)) {
+                            User user = seachResult.result.get(0);
+                            if (AccountManager.getInstance().getLoginAccount(mContext).getUserId() == (seachResult.result.get(0).getUserId())) {
                                 ToastUtil.getInstance(mContext).showToast("不能添加自己");
                                 return;
                             }
 
-                            if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).easemobUser)) {
+                            if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).getUserId())) {
                                 ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");
-                                IMUser imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
-                                imUser.setNick(user.nickName);
+                               /* User imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
+                                imUser.setNickName(user.nickName);
                                 imUser.setAvatar(user.avatar);
                                 imUser.setSignature(user.signature);
                                 imUser.setMemo(user.memo);
                                 imUser.setGender(user.gender);
                                 IMUtils.setUserHead(imUser);
                                 AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(), imUser);
-                                IMUserRepository.saveContact(mContext, imUser);
+                                IMUserRepository.saveContact(mContext, imUser);*/
                                 Intent intent = new Intent(mContext, HisMainPageActivity.class);
-                                intent.putExtra("userId", (int) user.userId);
+                                intent.putExtra("userId", (int) user.getUserId());
                                 // intent.putExtra("userNick", user.nickName);
                                 startActivity(intent);
                                 return;
                             }
                             Intent intent = new Intent(mContext, HisMainPageActivity.class);
                             //intent.putExtra("isSeach",true);
-                            intent.putExtra("userId", (int) user.userId);
+                            intent.putExtra("userId", (int) user.getUserId());
                             startActivity(intent);
                         } else {
                             ToastUtil.getInstance(mContext).showToast("查无此用户~");
@@ -203,7 +204,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 
             case R.id.tv_weixin_contacts:
                 MobclickAgent.onEvent(mContext,"event_notify_weichat_friends");
-                ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).nickName));
+                ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).getNickName()));
                 break;
         }
     }

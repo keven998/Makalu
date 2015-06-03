@@ -18,10 +18,11 @@ import android.os.Bundle;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
 
 
 public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
-	private IMUser selectUser;
+	private User selectUser;
 	private String forward_msg_id;
 
 	 
@@ -41,7 +42,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
 			Intent intent = new Intent(ForwardMessageActivity.this, IMAlertDialog.class);
 			intent.putExtra("cancel", true);
 			intent.putExtra("titleIsCancel", true);
-			intent.putExtra("msg", getString(R.string.confirm_forward_to, selectUser.getUsername()));
+			intent.putExtra("msg", getString(R.string.confirm_forward_to, selectUser.getUserId()));
 			startActivityForResult(intent, 1);
 		}
 	}
@@ -57,7 +58,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
 			if (selectUser == null)
 				return;
 			// it is single chat
-			intent.putExtra("userId", selectUser.getUsername());
+			intent.putExtra("userId", selectUser.getUserId());
 			intent.putExtra("forward_msg_id", forward_msg_id);
 			startActivity(intent);
 			finish();

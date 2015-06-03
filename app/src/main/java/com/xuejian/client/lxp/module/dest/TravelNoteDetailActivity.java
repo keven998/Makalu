@@ -31,6 +31,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import butterknife.ButterKnife;
@@ -84,8 +85,8 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             txtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PeachUser user = AccountManager.getInstance().getLoginAccount(TravelNoteDetailActivity.this);
-                    if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    User user = AccountManager.getInstance().getLoginAccount(TravelNoteDetailActivity.this);
+                    if (user != null ) { //&& !TextUtils.isEmpty(user.easemobUser)
                         favorite((CheckedTextView) v);
                     } else {
                         ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("请先登录");

@@ -90,7 +90,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
         isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
-        swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().user.userId));
+        swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().getCurrentUserId()));
         initView();
         initData();
     }
@@ -182,7 +182,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void setupViewFromCache() {
       if(!isExpertPlan) {
           AccountManager account = AccountManager.getInstance();
-          String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
+          String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.getCurrentUserId()));
           if (!TextUtils.isEmpty(data)) {
               List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                       new TypeToken<List<StrategyBean>>() {
@@ -224,7 +224,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void cachePage() {
         AccountManager account = AccountManager.getInstance();
-        if (userId != null && !userId.equals(account.user.userId)) {
+        if (userId != null && !userId.equals(account.getCurrentUserId())) {
             return;
         }
         int size = mStrategyListAdapter.getCount();
@@ -232,7 +232,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             size = OtherApi.PAGE_SIZE;
         }
         List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.user.userId), GsonTools.createGsonString(cd));
+        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
 
     @Override

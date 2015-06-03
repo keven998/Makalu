@@ -41,6 +41,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.MainActivity;
 
 import org.json.JSONException;
@@ -96,7 +97,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
     @InjectView(R.id.btn_logout)
     Button btnLogout;
     private File tempImage;
-    private PeachUser user;
+    private User user;
     DisplayImageOptions options;
 
     @Override
@@ -139,11 +140,11 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 //        MobclickAgent.onPageEnd("page_personal_profile");
     }
 
-    private void bindView(PeachUser user) {
-        tvNickname.setText(user.nickName);
+    private void bindView(User user) {
+        tvNickname.setText(user.getNickName());
         tvGender.setText(user.getGenderDesc());
-        tvSign.setText(user.signature);
-        tvPhone.setText(user.tel);
+        tvSign.setText(user.getSignature());
+        tvPhone.setText(user.getTel());
     }
 
     private void initData() {
@@ -219,12 +220,12 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
     }
 
     private void refreshUserInfo() {
-        PeachUser user = AccountManager.getInstance().getLoginAccount(this);
+        User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
-            UserApi.getUserInfo(user.userId + "", new HttpCallBack<String>() {
+            UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                    CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                         bindView(userResult.result);
@@ -357,7 +358,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.gender = gender;
+                    user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tvGender.setText(user.getGenderDesc());
                     ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -449,8 +450,8 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
                                         try {
                                             String imageUrl = response.getString("url");
                                             String urlSmall = response.getString("urlSmall");
-                                            user.avatar = imageUrl;
-                                            user.avatarSmall = urlSmall;
+                                            user.setAvatar(imageUrl);
+                                            user.setAvatarSmall(urlSmall);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
 //                                            ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), avatarIv, options);
                                         } catch (JSONException e) {

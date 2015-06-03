@@ -64,8 +64,8 @@ public class UserDBManager  {
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + fri_table_name
                 + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT," +
-                "gender TEXT，signature TEXT，tel TEXT，secToken TEXT，countryCode TEXT，email TEXT，" +
-                "memo TEXT，travelStatus TEXT，residence TEXT，level TEXT，zodiac TEXT，birthday TEXT," +
+                "gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT," +
+                "memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER)");
         //mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
     }

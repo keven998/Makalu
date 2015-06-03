@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
@@ -129,12 +130,12 @@ public class IMUtils {
     }
     public static void setMessageWithTaoziUserInfo(Context context,EMMessage message){
         //组装个人信息json
-        PeachUser myUser = AccountManager.getInstance().getLoginAccount(context);
+        User myUser = AccountManager.getInstance().getLoginAccount(context);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",myUser.userId);
-            jsonObject.put("avatar",myUser.avatarSmall);
-            jsonObject.put("nickName",myUser.nickName);
+            jsonObject.put("userId",myUser.getUserId());
+            jsonObject.put("avatar",myUser.getAvatarSmall());
+            jsonObject.put("nickName",myUser.getNickName());
             message.setAttribute("fromUser",jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -173,8 +174,8 @@ public class IMUtils {
     }
 
     public static void onClickImShare(Context context){
-        PeachUser user = AccountManager.getInstance().getLoginAccount(context);
-        if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+        User user = AccountManager.getInstance().getLoginAccount(context);
+        if (user != null) {  //&& !TextUtils.isEmpty(user.easemobUser)
             Intent intent = new Intent(context, IMShareActivity.class);
             ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
 

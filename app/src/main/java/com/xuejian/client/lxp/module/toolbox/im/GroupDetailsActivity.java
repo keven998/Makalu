@@ -295,10 +295,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                     EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                     msg.setChatType(EMMessage.ChatType.GroupChat);
-                    msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
                     msg.setReceipt(group.getGroupId());
                     IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
                     String content = myNickname + " 退出了群聊";
                     IMUtils.setMessageWithExtTips(mContext, msg, content);
                     msg.addBody(new TextMessageBody(content));
@@ -572,7 +572,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -589,7 +589,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -772,10 +772,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                                 // 被邀请
                                 EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                                 msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
                                 msg.setReceipt(group.getGroupId());
                                 IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
                                 String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
                                 IMUtils.setMessageWithExtTips(mContext, msg, content);
                                 msg.addBody(new TextMessageBody(content));

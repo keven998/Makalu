@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 
@@ -182,8 +183,8 @@ public class SpotDetail2Activity extends PeachBaseActivity {
         favIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(SpotDetail2Activity.this);
-                if (user == null || TextUtils.isEmpty(user.easemobUser)) {
+                User user = AccountManager.getInstance().getLoginAccount(SpotDetail2Activity.this);
+                if (user == null ) { //|| TextUtils.isEmpty(user.easemobUser)
                     ToastUtil.getInstance(SpotDetail2Activity.this).showToast("请先登录");
                     Intent intent = new Intent(SpotDetail2Activity.this, LoginActivity.class);
                     startActivityForResult(intent, 11);

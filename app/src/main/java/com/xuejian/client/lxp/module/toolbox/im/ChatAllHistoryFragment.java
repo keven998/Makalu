@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ChatAllHistoryFragment extends Fragment {
 
     private InputMethodManager inputMethodManager;
     private ListView listView;
-    private Map<String, IMUser> contactList;
+    private Map<Long, User> contactList;
     private ChatAllHistoryAdapter adapter;
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     //    private EditText query;
@@ -96,10 +97,10 @@ public class ChatAllHistoryFragment extends Fragment {
              //   EMConversation conversation = adapter.getItem(position).emConversation;
               //  String username = conversation.getUserName();
                 String username =null;
-                if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
+               /* if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
-                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");
-                else {
+                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");*/
+                //else {
                     // 进入聊天页面
 //                    Intent intent = new Intent(getActivity(), ChatActivity.class);
 //                    if (conversation.getIsGroup()) {
@@ -112,7 +113,7 @@ public class ChatAllHistoryFragment extends Fragment {
 //                        intent.putExtra("userId", username);
 //                    }
 //                    startActivity(intent);
-                }
+               // }
             }
         });
         // 注册上下文菜单
@@ -271,7 +272,7 @@ public class ChatAllHistoryFragment extends Fragment {
             }
 
         }
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 Iterator<String> it = groupIdList.iterator();
@@ -307,7 +308,7 @@ public class ChatAllHistoryFragment extends Fragment {
 
 
             }
-        }).start();
+        }).start();*/
     }
 
     /**

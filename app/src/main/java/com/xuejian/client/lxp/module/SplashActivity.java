@@ -1,6 +1,8 @@
 package com.xuejian.client.lxp.module;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.easemob.chat.EMChat;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,7 +29,9 @@ import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.RegActivity;
 
@@ -44,6 +49,11 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        //获取用户登录状态的文件,如果不存在则新建一个
+        SharedPreferences file=getSharedPreferences("isLogin", Activity.MODE_PRIVATE);
+        if(file==null){
+            SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
+        }
 		initView();
 		initData();
         IMClient.initIM(this);
@@ -53,7 +63,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 	protected void initData() {
         final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+        final User user = AccountManager.getInstance().getLoginAccount(mContext);
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
@@ -81,8 +91,9 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                         startActivityWithNoAnim(mainIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } else {
-                        if(EMChat.getInstance().isLoggedIn()){
-                            Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                        if(SharedPreferencesUtil.getBooleanValue(SplashActivity.this,"isLogin",false)){
+                            AccountManager.getInstance().setLogin(true);
+                            Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class); //MainActivity
                             startActivityWithNoAnim(mainActivity);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         }else{

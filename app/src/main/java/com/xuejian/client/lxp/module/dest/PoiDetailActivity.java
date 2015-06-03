@@ -56,6 +56,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 
@@ -394,8 +395,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mIvFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(PoiDetailActivity.this);
-                if (user == null || TextUtils.isEmpty(user.easemobUser)) {
+                User user = AccountManager.getInstance().getLoginAccount(PoiDetailActivity.this);
+                if (user == null) { // || TextUtils.isEmpty(user.easemobUser)
                     ToastUtil.getInstance(PoiDetailActivity.this).showToast("请先登录");
                     Intent intent = new Intent(PoiDetailActivity.this, LoginActivity.class);
                     startActivityForResult(intent, 11);

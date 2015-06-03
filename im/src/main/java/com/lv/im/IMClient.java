@@ -13,7 +13,7 @@ import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
-import com.lv.Utils.HandleImageTask;
+//import com.lv.Utils.HandleImageTask;
 import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;

@@ -34,6 +34,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
@@ -51,7 +52,7 @@ import java.util.Map;
  */
 public class ContactlistFragment extends Fragment {
 	private ContactAdapter adapter;
-	private List<IMUser> contactList;
+	private List<User> contactList;
 	private ListView listView;
     private SideBar indexBar;
     private TextView indexDialogTv;
@@ -78,9 +79,9 @@ public class ContactlistFragment extends Fragment {
         imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);*/
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
-        contactList = new ArrayList<IMUser>();
+        contactList = new ArrayList<User>();
 		// 获取设置contactlist
-		getContactList();
+		//getContactList();
 		// 设置adapter
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
@@ -97,18 +98,18 @@ public class ContactlistFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String username = adapter.getItem(position).getUsername();
+				String username = "123";//adapter.getItem(position).getUserName();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面
-					IMUser user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
-					user.setUnreadMsgCount(0);
+					User user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
+					//user.setUnreadMsgCount(0);
 					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
 				} else if (Constant.GROUP_USERNAME.equals(username)) {
 					// 进入群聊列表页面
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
-					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
+					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", (int)adapter.getItem(position).getUserId()));
 				}
 			}
 		});
@@ -210,7 +211,7 @@ public class ContactlistFragment extends Fragment {
 			// 可能会在子线程中调到这方法
 			getActivity().runOnUiThread(new Runnable() {
 				public void run() {
-					getContactList();
+					//getContactList();
 					adapter.notifyDataSetChanged();
 				}
 			});
@@ -220,31 +221,31 @@ public class ContactlistFragment extends Fragment {
 	}
 
 	private void getContactList() {
-		Map<String, IMUser> users = AccountManager.getInstance().getContactList(getActivity());
+		Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
         if(users==null){
             return;
         }
         contactList.clear();
-		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
+		Iterator<Map.Entry<Long, User>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
-			Map.Entry<String, IMUser> entry = iterator.next();
+			Map.Entry<Long, User> entry = iterator.next();
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
                 contactList.add(entry.getValue());
             }
 		}
 
 		// 排序
-		Collections.sort(contactList, new Comparator<IMUser>() {
+		/*Collections.sort(contactList, new Comparator<User>() {
 
 			@Override
-			public int compare(IMUser lhs, IMUser rhs) {
+			public int compare(User lhs, User rhs) {
 				return lhs.getHeader().compareTo(rhs.getHeader());
 			}
-		});
+		});*/
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
-        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
+        User user = users.get(Constant.NEW_FRIENDS_USERNAME);
         if(user!=null){
             contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
         }

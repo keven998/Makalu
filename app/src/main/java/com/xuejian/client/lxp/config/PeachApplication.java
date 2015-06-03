@@ -43,7 +43,7 @@ public class PeachApplication extends BaseApplication {
 //        refreshUserInfo();
 //        BaseApi.testHttps();
         setupDatabase();
-        initIM();
+        //initIM();
     }
 
     private void setupDatabase() {

@@ -46,6 +46,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -112,7 +113,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
-    PeachUser user;
+    User user;
     private IMUser imUser;
 
     @Override
@@ -164,7 +165,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initData(int id){
         getUserInfo(id);
-        if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+        if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
             initScrollView(id);
         }
     }
@@ -287,7 +288,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
-                    if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+                    if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
                         IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long) bean.userId);
                         startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
                         finish();
@@ -318,10 +319,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("user", user);
                     startActivity(intent);
 */
-                    if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    if (user != null) { // && !TextUtils.isEmpty(user.easemobUser)
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("输入验证信息");
-                        editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).nickName));
+                        editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).getNickName()));
                         editDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

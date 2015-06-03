@@ -19,6 +19,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -26,7 +27,7 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 public class ModifyGenderActivity extends PeachBaseActivity {
     @ViewInject(R.id.rg_gender)
     private RadioGroup genderRg;
-    private PeachUser user;
+    private User user;
     private String gender;
 
     @ViewInject(R.id.title_bar)
@@ -68,7 +69,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
-                            user.gender = gender;
+                            user.setGender(gender);
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                         } else {
                             if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
@@ -95,7 +96,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
 
     private void initData(){
         user = AccountManager.getInstance().getLoginAccount(this);
-        gender = user.gender;
+        gender = user.getGenderDesc();
         if(gender.equals(PeachUser.M)){
             genderRg.check(R.id.rb_men);
         }else{

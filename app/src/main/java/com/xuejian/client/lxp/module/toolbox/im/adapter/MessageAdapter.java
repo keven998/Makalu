@@ -73,6 +73,7 @@ import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -395,17 +396,17 @@ private String chatType;
               //      ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
              //   }
             } else {
-                IMUser user = AccountManager.getInstance().getContactList(activity).get(friendId);
+                User user = AccountManager.getInstance().getContactList(activity).get(friendId);
                 if (user != null) {
-                    holder.tv_userId.setText(user.getNick());
+                    holder.tv_userId.setText(user.getNickName());
                     ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
 
             }
         } else {
-            PeachUser user = AccountManager.getInstance().getLoginAccount(context);
+            User user = AccountManager.getInstance().getLoginAccount(context);
             if (user != null) {
-                ImageLoader.getInstance().displayImage(user.avatarSmall, holder.head_iv, picOptions);
+                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
             }
         }
 

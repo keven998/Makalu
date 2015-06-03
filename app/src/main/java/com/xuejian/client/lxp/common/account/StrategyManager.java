@@ -6,6 +6,7 @@ import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.db.userDB.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,8 +101,8 @@ public class StrategyManager {
         try {
             rootJson.put("id", strategy.id);
             rootJson.put("title", strategy.title);
-            PeachUser user = AccountManager.getInstance().getLoginAccount(context);
-            rootJson.put("userId", user.userId);
+            User user = AccountManager.getInstance().getLoginAccount(context);
+            rootJson.put("userId", user.getUserId());
             rootJson.put("itineraryDays", strategy.itineraryDays);
             JSONArray locArray = new JSONArray();
             JSONObject locObject;

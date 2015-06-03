@@ -32,7 +32,6 @@ import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.user.LoginSuccessListener;
-import com.lv.user.User;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -49,6 +48,8 @@ import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
@@ -83,6 +84,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private TextView unreadMsg;
 
+    private Long NEWFRIEND=2l;
+
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
     private NewMessageBroadcastReceiver msgReceiver;
@@ -113,7 +116,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
         initData();
-        User.login("100006", new LoginSuccessListener() {
+        /*User.login("100006", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
@@ -132,7 +135,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void OnFailed(int code) {
                 System.out.println("登陆失败 :" + code);
             }
-        });
+        });*/
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -151,7 +154,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private void initData(){
         //网络更新好友列表
         getContactFromServer();
-        // 注册一个cmd消息的BroadcastReceiver
+       /* // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
         mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
@@ -175,7 +178,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
 
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();
+        EMChat.getInstance().setAppInited();*/
     }
 
     private void getContactFromServer() {
@@ -185,17 +188,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
 
                 if (contactResult.code == 0) {
-                    IMUserRepository.clearMyFriendsContact(mContext);
+                  //  IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
-                    Map<String, IMUser> userlist = new HashMap<String, IMUser>();
+                    Map<Long, User> userlist = new HashMap<Long,User>();
                     // 添加user"申请与通知"
-                    IMUser newFriends = new IMUser();
-                    newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                    newFriends.setNick("好友请求");
-                    newFriends.setHeader("");
-                    newFriends.setIsMyFriends(true);
-                    newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
-                    userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+                    User newFriends = new User();
+                    newFriends.setUserId(NEWFRIEND);
+                    newFriends.setNickName("好友请求");
+                    newFriends.setType(1);
+                   // newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
+                    userlist.put(NEWFRIEND, newFriends);
 
                     /*//添加默认服务号
                     IMUser paiServerUser = new IMUser();
@@ -216,8 +218,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                    groupUser.setUnreadMsgCount(0);
 //                    userlist.put(Constant.GROUP_USERNAME, groupUser);
                     // 存入内存
-                    for (PeachUser peachUser : contactResult.result.contacts) {
-                        IMUser user = new IMUser();
+                    for (User myUser : contactResult.result.contacts) {
+                        /*IMUser user = new IMUser();
                         user.setUserId(peachUser.userId);
                         user.setMemo(peachUser.memo);
                         user.setNick(peachUser.nickName);
@@ -228,12 +230,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         user.setSignature(peachUser.signature);
                         user.setIsMyFriends(true);
                         user.setGender(peachUser.gender);
-                        IMUtils.setUserHead(user);
-                        userlist.put(peachUser.easemobUser, user);
+                        IMUtils.setUserHead(user);*/
+                        userlist.put(myUser.getUserId(), myUser);
                     }
                     // 存入db
-                    List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext, users);
+                    List<User> users = new ArrayList<User>(userlist.values());
+                    UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);
                     //给服务号发送消息
                    /* EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
@@ -327,7 +329,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if (!User.getUser().isLogin()){
+                    if (!AccountManager.getInstance().isLogin()){
                         Toast.makeText(MainActivity.this,"正在登陆",Toast.LENGTH_LONG).show();
                     }
                     /**
@@ -348,7 +350,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             }
         });
-        if (User.getUser().isLogin()) {
+        if (AccountManager.getInstance().isLogin()) {
             mTabHost.setCurrentTab(0);
         } else {
 //        if (EMChat.getInstance().isLoggedIn()) {
@@ -380,10 +382,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if(talkFragment != null){
-                talkFragment.loadConversation();
+               // talkFragment.loadConversation();
             }
             updateUnreadMsgCount();
-            EMChatManager.getInstance().activityResumed();
+           // EMChatManager.getInstance().activityResumed();
         }
 
     }
@@ -693,9 +695,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      *
      * @return
      */
-    public int getUnreadAddressCountTotal() {
+   /* public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
-        unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
+       // unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
         if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
 
             IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
@@ -704,7 +706,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         return unreadAddressCountTotal;
     }
-
+*/
 
 
     @Override
