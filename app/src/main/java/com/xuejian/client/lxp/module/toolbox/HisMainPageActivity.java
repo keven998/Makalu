@@ -263,7 +263,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }else{
         resident.setText(bean.residence);
         }
-        if(getAge(bean.birthday)==0){
+        if(bean.birthday==null){
             age.setText("未设置");
         }else{
         age.setText(getAge(bean.birthday)+"");
@@ -393,11 +393,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public int getAge(String birth){
         int age=0;
-        String birthType=birth.substring(0,4).toString();
-        int birthYear=Integer.parseInt(birthType);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
-        String date=sdf.format(new java.util.Date());
-        age=Integer.parseInt(date)-birthYear;
+            String birthType = birth.substring(0, 4).toString();
+            int birthYear = Integer.parseInt(birthType);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            String date = sdf.format(new java.util.Date());
+            age = Integer.parseInt(date) - birthYear;
         return age;
     }
 
