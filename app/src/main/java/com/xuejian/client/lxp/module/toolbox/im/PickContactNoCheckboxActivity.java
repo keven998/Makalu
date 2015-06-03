@@ -27,6 +27,7 @@ import com.xuejian.client.lxp.common.widget.Sidebar;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 import java.util.ArrayList;
@@ -88,12 +89,21 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
 				contactList.add(entry.getValue());
 		}
+        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+//		Map<String, IMUser> users = AccountManager.getInstance().getContactList(this);
+//		Iterator<Entry<String, IMUser>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Entry<String, IMUser> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
+//				contactList.add(entry.getValue());
+//		}
 		// 排序
 		Collections.sort(contactList, new Comparator<User>() {
 
 			@Override
 			public int compare(User lhs, User rhs) {
-				return String.valueOf(lhs.getUserId()).compareTo(String.valueOf(rhs.getUserId()));
+				//return String.valueOf(lhs.getUserId()).compareTo(String.valueOf(rhs.getUserId()));
+				return lhs.getNickName().compareTo(rhs.getNickName());
 			}
 		});
 	}

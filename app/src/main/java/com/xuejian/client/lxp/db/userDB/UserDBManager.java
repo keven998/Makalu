@@ -9,12 +9,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lidroid.xutils.exception.DbException;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
+import com.lv.im.SortList;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -34,11 +42,16 @@ public class UserDBManager  {
         String path = CryptUtils.getMD5String(User_Id);
         fri_table_name = "FRI_" + path;
         String DATABASE_PATH = Config.DB_PATH + path;
-        databaseFilename = DATABASE_PATH + "/" + "lxp-db";
+        databaseFilename = DATABASE_PATH + "/" + "lxp.db";
         File dir = new File(DATABASE_PATH);
         if (!dir.exists())
             dir.mkdir();
         db = SQLiteDatabase.openOrCreateDatabase(databaseFilename, null);
+
+        db.execSQL("CREATE table IF NOT EXISTS "
+                + fri_table_name
+                + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT,gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT,memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
+                "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT)");
     }
     public static UserDBManager getInstance() {
         if (instance == null) {
@@ -46,6 +59,7 @@ public class UserDBManager  {
         }
         return instance;
     }
+
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
@@ -59,7 +73,7 @@ public class UserDBManager  {
         }
         mdb=null;
     }
-    public void init(){
+    public List<Long> getGroupMemberId(long groupId){
         mdb=getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + fri_table_name
@@ -68,43 +82,52 @@ public class UserDBManager  {
                 "memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER)");
         //mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
+       List<Long> list=new ArrayList<>();
+       Cursor cursor= mdb.rawQuery("select ext from "+fri_table_name+" where userId=?",new String[]{String.valueOf(groupId)});
+       String data=null;
+       while(cursor.moveToNext()){
+           data=cursor.getString(0);
+       }
+        try {
+            JSONArray array=(JSONArray)new JSONObject(data).get("GroupMember");
+            for (int i=0;i<array.length();i++){
+                list.add(array.getLong(i));
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public User getMyFriendByUserId(String UserId){
+    public List<User> getGroupMember(long groupId){
         mdb=getDB();
-        Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{UserId});
-        long userId=cursor.getLong(0);
-        String nickName= cursor.getString(1);
-        String avatar= cursor.getString(2);
-        String avatarSmall= cursor.getString(3);
-        String gender= cursor.getString(4);
-        String signature= cursor.getString(5);
-        String tel= cursor.getString(6);
-        String secToken= cursor.getString(7);
-        String countryCode= cursor.getString(8);
-        String email= cursor.getString(9);
-        String memo= cursor.getString(10);
-        String travelStatus= cursor.getString(11);
-        String residence= cursor.getString(12);
-        String level= cursor.getString(13);
-        String zodiac= cursor.getString(14);
-        String birthday= cursor.getString(15);
-        String tracks= cursor.getString(16);
-        int guideCnt= cursor.getInt(17);
-        int Type= cursor.getInt(18);
-        String ext=cursor.getString(19);
-        cursor.close();
-        closeDB();
-        return new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
-                email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext);
+        List<User> list=new ArrayList<>();
+        Cursor cursor= mdb.rawQuery("select ext from "+fri_table_name+" where userId=?",new String[]{String.valueOf(groupId)});
+        String data=null;
+        while(cursor.moveToNext()){
+            data=cursor.getString(0);
+        }
+        try {
+            JSONArray userlist=new JSONArray((new JSONObject(data).get("GroupMember")).toString());
+            for (int i=0;i<userlist.length();i++){
+                list.add(getContactByUserId(userlist.getLong(i)));
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     public synchronized void deleteContact(long userId){
         mdb=getDB();
         mdb.delete(fri_table_name,"where userId=?",new String[]{String.valueOf(userId)});
         closeDB();
     }
-    public User getContactByUserName(String _nickName){
+    public User getContactByUserId(long _id){
         mdb=getDB();
-        Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{_nickName});
+        Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
+        if (cursor.getCount()==0)return null;
+        cursor.moveToLast();
         long userId=cursor.getLong(0);
         String nickName= cursor.getString(1);
         String avatar= cursor.getString(2);
@@ -128,7 +151,7 @@ public class UserDBManager  {
         cursor.close();
         closeDB();
         return new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
-                email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext);
+                email,memo,travelStatus,residence,level,zodiac,birthday,guideCnt,Type,ext);
     }
     public boolean isMyFriend(long userId){
         mdb=getDB();
@@ -140,7 +163,7 @@ public class UserDBManager  {
     }
     public List<User> getContactListWithoutGroup(){
         mdb=getDB();
-        List<User> list=new ArrayList<>();
+        List<User> list=new ArrayList<User>();
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name ,null);
         while (cursor.moveToNext()) {
             long userId = cursor.getLong(0);
@@ -163,14 +186,26 @@ public class UserDBManager  {
             int guideCnt = cursor.getInt(17);
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
-            if (isMyFriend(userId))
-            list.add(new User(userId,nickName,avatar,avatarSmall,gender,signature,tel,secToken,countryCode,
-                    email,memo,travelStatus,residence,level,zodiac,birthday,tracks,guideCnt,Type,ext));
+
+            if (((Type&1)==1)&&((Type&8)!=8)) {
+                System.out.println("好友+1");
+                list.add(new User(userId, nickName, avatar, avatarSmall, gender, signature, tel, secToken, countryCode,
+                        email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext));
+            }
         }
         cursor.close();
         closeDB();
         return list;
     }
+
+   public boolean isGroup(long userId){
+       mdb=getDB();
+       Cursor cursor= mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
+       int type=cursor.getInt(0);
+       cursor.close();
+       closeDB();
+       return (type&8)==8;
+   }
 
     public void saveContact(User user){
         mdb=getDB();
@@ -193,9 +228,10 @@ public class UserDBManager  {
             values.put("level",user.getLevel());
             values.put("zodiac",user.getZodiac());
             values.put("birthday",user.getBirthday());
-            values.put("tracks",user.getTracks());
+//            values.put("tracks",tracksToString(user.getTracks()));
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
+            values.put("ext",user.getExt());
             mdb.insert(fri_table_name,null,values);
         }
         cursor.close();
@@ -224,9 +260,10 @@ public class UserDBManager  {
             values.put("level",user.getLevel());
             values.put("zodiac",user.getZodiac());
             values.put("birthday",user.getBirthday());
-            values.put("tracks",user.getTracks());
+         //   values.put("tracks",tracksToString(user.getTracks()));
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
+            values.put("ext",user.getExt());
             mdb.insert(fri_table_name,null,values);
         }
         cursor.close();
@@ -234,4 +271,18 @@ public class UserDBManager  {
         mdb.endTransaction();
         closeDB();
     }
+//    private String tracksToString(HashMap<String,ArrayList<LocBean>> tracks){
+//        JSONObject object=new JSONObject();
+//        try {
+//        for (Map.Entry<String,ArrayList<LocBean>> entry : tracks.entrySet()) {
+//                object.put(entry.getKey(),entry.getValue().toString());
+//        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return  object.toString();
+//    }
+//    private  HashMap<String,ArrayList<LocBean>> StringToTracks(String data){
+//
+//    }
 }

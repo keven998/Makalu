@@ -74,6 +74,28 @@ public class IMUtils {
         }
         return user;
     }
+    public static User setUserHead(User user) {
+//        String username=user.getNickName();
+        String headerName = user.getNickName();
+//        if (!TextUtils.isEmpty(user.getNick())) {
+//            headerName = user.getNick();
+//        } else {
+//            headerName = user.getUsername();
+//        }
+//        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+//            user.setHeader("");
+//        } else if (Character.isDigit(headerName.charAt(0))) {
+//            user.setHeader("#");
+//        } else {
+            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                    0, 1).toUpperCase());
+            char header = user.getHeader().toLowerCase().charAt(0);
+            if (header < 'a' || header > 'z') {
+                user.setHeader("#");
+         //   }
+        }
+        return user;
+    }
     static String getStrng(Context context, int resId){
         return context.getResources().getString(resId);
     }

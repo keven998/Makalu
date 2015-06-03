@@ -28,6 +28,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.Utils.HanziToPinyin;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -135,9 +136,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
             }
 
 			final User user = getItem(position);
-			String username = "123";//user.getUsername();
-			String header = "123";//user.getHeader();
-			if (position == 0 || header != null) { // && !header.equals(getItem(position - 1).getHeader()
+			String username = user.getNickName();
+			String header = null;
+			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
                     vh.dividerView.setVisibility(View.GONE);
@@ -164,6 +165,12 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 				}else{
                     vh.unreadMsgView.setVisibility(View.GONE);
 				}*/
+//				if(user.getUnreadMsgCount() > 0){
+//					vh.unreadMsgView.setVisibility(View.VISIBLE);
+//                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
+//				}else{
+                    vh.unreadMsgView.setVisibility(View.GONE);
+			//	}
 //                vh.avatarView.setVisibility(View.GONE);
 			} else if (username.equals(Constant.GROUP_USERNAME)){
 				//群聊item
@@ -238,6 +245,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
         int section=0;
         for (int i = 0; i < count; i++) {
            /* String letter = getItem(i).getHeader();
+=======
+            String letter =getItem(i).getHeader();
+>>>>>>> origin/im_local
             String beforeLetter ="";
             if(i>0){
                 beforeLetter = getItem(i-1).getHeader();

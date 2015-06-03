@@ -117,9 +117,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         msgReceiver = new NewMessageBroadcastReceiver();
         initData();
         /*User.login("100006", new LoginSuccessListener() {
+      //  msgReceiver = new NewMessageBroadcastReceiver();
+        //initData();
+        User.login("100006", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
+                UserDBManager.getInstance().initDB(100006+"");
+                initData();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -148,7 +153,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }*/
-        initData();
+
     }
 
     private void initData(){
@@ -179,6 +184,40 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();*/
+        for (long i=100005;i<=100010;i++){
+            com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+            user.setUserId(i);
+            user.setNickName("user"+i);
+            user.setHeader("a");
+            user.setType(1);
+            UserDBManager.getInstance().saveContact(user);
+        }
+//        getContactFromServer();
+//        // 注册一个cmd消息的BroadcastReceiver
+//        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+//        cmdIntentFilter.setPriority(3);
+//        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
+//
+//        // 注册一个接收消息的BroadcastReceiver
+//        if (msgReceiver == null) {
+//            msgReceiver = new NewMessageBroadcastReceiver();
+//            IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+//            intentFilter.setPriority(3);
+//            registerReceiver(msgReceiver, intentFilter);
+//        }
+//
+//        // 注册一个ack回执消息的BroadcastReceiver
+//        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
+//                .getAckMessageBroadcastAction());
+//        ackMessageIntentFilter.setPriority(3);
+//        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
+//
+//        // 注册群聊相关的listener
+//        groupChangeListener = new MyGroupChangeListener();
+//        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
+//
+//        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
+//        EMChat.getInstance().setAppInited();
     }
 
     private void getContactFromServer() {

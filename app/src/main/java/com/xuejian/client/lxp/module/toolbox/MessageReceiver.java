@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class MessageReceiver extends BroadcastReceiver {
@@ -60,21 +61,14 @@ static {
                              * 分发消息
                              */
                             String routeKey = object.getString("routeKey");
-                            switch (routeKey) {
-                                case "IM":
-                                    if (Config.isDebug) {
-                                        Log.i(Config.TAG, "routeKey :IM");
-                                    }
-                                    String m = object.getString("message");
-                                    Message newmsg = JSON.parseObject(m, Message.class);
-                                    newmsg.setSendType(1);
-                                    System.out.println("size "+routeMap.get(routeKey).size());
-                                    for (MsgListener listener : routeMap.get(routeKey)) {
-                                        listener.OnMessage(context, newmsg);
-                                    }
-                                    break;
-                                default:
-                                    break;
+                            String message=object.getString("message");
+                            for (String key : routeMap.keySet()) {
+                               if (key.equals(routeKey)){
+                                   for (MsgListener listener : routeMap.get(routeKey)) {
+                                       listener.OnMessage(context, message);
+                                   }
+                                   break;
+                               }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

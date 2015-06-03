@@ -7,30 +7,30 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(2, "com.xuejian.client.lxp");
-        Entity user = schema.addEntity("User");
-        user.addLongProperty("userId");
-        user.addStringProperty("username").primaryKey();
-        user.addStringProperty("nickName");
-        user.addStringProperty("avatar");
-        user.addStringProperty("avatarSmall");
-        user.addStringProperty("gender");
-        user.addStringProperty("signature");
-        user.addStringProperty("tel");
-        user.addStringProperty("secToken");
-        user.addStringProperty("countryCode");
-        user.addStringProperty("email");
-        user.addStringProperty("memo");
-        user.addStringProperty("travelStatus");
-        user.addStringProperty("residence");
-        user.addStringProperty("level");
-        user.addStringProperty("zodiac");
-        user.addStringProperty("birthday");
-        user.addStringProperty("tracks");
-        user.addStringProperty("guideCnt");
-        user.addIntProperty("Type");
-        user.addStringProperty("Ext");
-        user.addBooleanProperty("isFriend");
+//        Schema schema = new Schema(2, "com.xuejian.client.lxp");
+//        Entity user = schema.addEntity("User");
+//        user.addLongProperty("userId");
+//        user.addStringProperty("username").primaryKey();
+//        user.addStringProperty("nickName");
+//        user.addStringProperty("avatar");
+//        user.addStringProperty("avatarSmall");
+//        user.addStringProperty("gender");
+//        user.addStringProperty("signature");
+//        user.addStringProperty("tel");
+//        user.addStringProperty("secToken");
+//        user.addStringProperty("countryCode");
+//        user.addStringProperty("email");
+//        user.addStringProperty("memo");
+//        user.addStringProperty("travelStatus");
+//        user.addStringProperty("residence");
+//        user.addStringProperty("level");
+//        user.addStringProperty("zodiac");
+//        user.addStringProperty("birthday");
+//        user.addStringProperty("tracks");
+//        user.addStringProperty("guideCnt");
+//        user.addIntProperty("Type");
+//        user.addStringProperty("Ext");
+//        user.addBooleanProperty("isFriend");
 
 
 
@@ -49,17 +49,17 @@ public class MyDaoGenerator {
 //        user.addStringProperty("header");
 //        user.addBooleanProperty("isMyFriends").notNull();
 
-        Entity msg = schema.addEntity("InviteMessage");
-        msg.addStringProperty("nickname");
-        msg.addLongProperty("userId");
-        msg.addStringProperty("avatar");
-        msg.addStringProperty("gender");
-        msg.addStringProperty("from").primaryKey();
-        msg.addStringProperty("reason");
-        msg.addLongProperty("time");
-        msg.addIntProperty("status");
-        msg.addStringProperty("groupId");
-        msg.addStringProperty("groupName");
-        new DaoGenerator().generateAll(schema, args[0]);
+//        Entity msg = schema.addEntity("InviteMessage");
+//        msg.addStringProperty("nickname");
+//        msg.addLongProperty("userId");
+//        msg.addStringProperty("avatar");
+//        msg.addStringProperty("gender");
+//        msg.addStringProperty("from").primaryKey();
+//        msg.addStringProperty("reason");
+//        msg.addLongProperty("time");
+//        msg.addIntProperty("status");
+//        msg.addStringProperty("groupId");
+//        msg.addStringProperty("groupName");
+//        new DaoGenerator().generateAll(schema, args[0]);
     }
 }

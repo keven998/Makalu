@@ -9,6 +9,7 @@ import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.lv.user.User;
 import com.lv.user.UserDao;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -34,10 +35,11 @@ import java.util.concurrent.Executors;
 public class HttpManager {
     private static SyncHttpClient client = new SyncHttpClient();
     static ExecutorService exec = Executors.newFixedThreadPool(5);
-    public static void createGroup(String name, String groupType, boolean isPublic, String avatar, List<Long> participants, final long row, final CreateSuccessListener listener) {
+    public static void createGroup(final String name, String groupType,final boolean isPublic, String avatar,final List<Long> participants, final long row, final CreateSuccessListener listener) {
         final JSONObject obj = new JSONObject();
+       final JSONArray array = new JSONArray();
         try {
-            JSONArray array = new JSONArray();
+
             for (long member:participants){
                 array.put(member);
             }
@@ -76,8 +78,15 @@ public class HttpManager {
                         JSONObject jsonObject = object.getJSONObject("result");
                         String groupId = jsonObject.getString("groupId");
                         String conversation = jsonObject.getString("conversation");
+                        String groupType = jsonObject.getString("groupType");
+                        long creator=jsonObject.getLong("creator");
                         IMClient.getInstance().addGroup2Conversation(groupId, conversation);
-                        UserDao.getInstance().updateGroup(row, groupId, conversation);
+                        JSONObject o =new JSONObject();
+                        o.put("GroupMember",array);
+                        o.put("groupType",groupType);
+                        o.put("isPublic",isPublic);
+                        o.put("creator",creator);
+                        UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId),name,o.toString(),8));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }
@@ -122,10 +131,11 @@ public class HttpManager {
 
     public static void silenceMembers(String groupId, List<Long> members, boolean isPublic) {
         final JSONObject obj = new JSONObject();
+        JSONArray array = new JSONArray();
         try {
-            JSONArray array = new JSONArray();
-            array.put(100001);
-            //array.put(3);
+            for (long id:members){
+                array.put(id);
+            }
             obj.put("action", "silence");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
@@ -153,10 +163,12 @@ public class HttpManager {
                                  System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
                                  if (httpResponse.getStatusLine().getStatusCode() == 200) {
                                      HttpEntity res = httpResponse.getEntity();
+                                     String result=EntityUtils.toString(res);
                                      if (Config.isDebug) {
-                                         Log.i(Config.TAG, "edit member Result : " + EntityUtils.toString(res));
+                                         Log.i(Config.TAG, "edit member Result : " + result);
                                      }
-
+                                     JSONObject object = new JSONObject(result);
+                                     JSONObject jsonObject = object.getJSONObject("result");
                                  }
                              } catch (Exception e) {
                                  e.printStackTrace();

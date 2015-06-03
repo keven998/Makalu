@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
@@ -98,7 +99,8 @@ public class ContactlistFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String username = "123";//adapter.getItem(position).getUserName();
+				//String username = "123";//adapter.getItem(position).getUserName();
+				String username = adapter.getItem(position).getNickName();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面
 					User user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
@@ -109,7 +111,7 @@ public class ContactlistFragment extends Fragment {
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
-					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", (int)adapter.getItem(position).getUserId()));
+					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
 				}
 			}
 		});
@@ -236,6 +238,18 @@ public class ContactlistFragment extends Fragment {
 
 		// 排序
 		/*Collections.sort(contactList, new Comparator<User>() {
+=======
+//		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Map.Entry<String, IMUser> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+//                contactList.add(entry.getValue());
+//            }
+//		}
+        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+		// 排序
+		Collections.sort(contactList, new Comparator<User>() {
+>>>>>>> origin/im_local
 
 			@Override
 			public int compare(User lhs, User rhs) {
@@ -249,7 +263,9 @@ public class ContactlistFragment extends Fragment {
         if(user!=null){
             contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
         }
-
-
+//        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
+//        if(user!=null){
+//            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+//        }
 	}
 }

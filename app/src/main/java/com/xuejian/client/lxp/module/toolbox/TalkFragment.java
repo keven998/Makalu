@@ -507,19 +507,22 @@ public class TalkFragment extends PeachBaseFragment {
             switch (requestCode) {
                 case NEW_CHAT_REQUEST_CODE:
                     int chatType = data.getIntExtra("chatType", 0);
-                    String toId = data.getStringExtra("toId");
+                    String toName = data.getStringExtra("toName");
+                    long id = data.getLongExtra("Id",0);
                     if (chatType == ChatActivity.CHATTYPE_GROUP) {
                         //进入群聊
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
                         // it is group chat
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("groupId", toId);
+                        intent.putExtra("chatType", "group");
+                        intent.putExtra("friend_id", String.valueOf(id));
+                        intent.putExtra("Name", toName);
                         startActivity(intent);
-                    } else {
+                    } else if (chatType == ChatActivity.CHATTYPE_SINGLE){
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
                         // it is single chat
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                        intent.putExtra("userId", toId);
+                        intent.putExtra("chatType", "single");
+                        intent.putExtra("friend_id", String.valueOf(id));
+                        intent.putExtra("Name", toName);
                         startActivity(intent);
                     }
 

@@ -223,7 +223,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		}
 	};
 	private EMGroup group;
-
+    private String name;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -233,6 +233,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
+        name=intent.getStringExtra("Name");
         //test
        // toChatUsername=100006+"";
        // chatType="single";
@@ -447,6 +448,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId",toChatUsername);
+            args.putString("name",name);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
