@@ -54,7 +54,7 @@ public class User implements Serializable {
         Type = type;
     }
 
-    public User(Long userId, String nickName, String avatar, String avatarSmall, String gender, String signature, String tel, String secToken, String countryCode, String email, String memo, String travelStatus, String residence, String level, String zodiac, String birthday,int guideCnt, Integer Type, String Ext) {
+    public User(Long userId, String nickName, String avatar, String avatarSmall, String gender, String signature, String tel, String secToken, String countryCode, String email, String memo, String travelStatus, String residence, String level, String zodiac, String birthday,int guideCnt, Integer Type, String Ext,String header) {
         this.userId = userId;
         this.nickName = nickName;
         this.avatar = avatar;
@@ -74,6 +74,7 @@ public class User implements Serializable {
         this.guideCnt = guideCnt;
         this.Type = Type;
         this.Ext = Ext;
+        this.header=header;
     }
 
     public Long getUserId() {

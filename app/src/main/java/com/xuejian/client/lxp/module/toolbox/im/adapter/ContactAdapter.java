@@ -134,8 +134,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			} else {
                 vh = (ViewHolder1)convertView.getTag();
             }
-
+            System.out.println("getView");
 			final User user = getItem(position);
+        System.out.println("adapter "+user.getNickName());
 			String username = user.getNickName();
 			String header = null;
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
@@ -192,7 +193,12 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 vh.talkView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getContext().startActivity(new Intent(getContext(), ChatActivity.class).putExtra("userId", user.getUserId()));
+                        Intent intent=new Intent();
+                        intent.putExtra("Name",user.getNickName());
+                        intent.putExtra("chatType","single");
+                        intent.putExtra("friend_id",user.getUserId()+"");
+                        intent.setClass(getContext(),ChatActivity.class);
+                        getContext().startActivity(intent);
                     }
                 });
                 vh.unreadMsgView.setVisibility(View.GONE);

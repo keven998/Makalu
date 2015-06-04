@@ -45,6 +45,8 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         //initIM();
+        initIM();
+       // IMClient.initIM(getApplicationContext());
     }
 
     private void setupDatabase() {
@@ -81,9 +83,9 @@ public class PeachApplication extends BaseApplication {
 
     private void initPeachConfig(){
         if(BuildConfig.DEBUG){
-            SystemConfig.BASE_URL = SystemConfig.RELEASE_BASE_URL;
-        }else{
             SystemConfig.BASE_URL = SystemConfig.DEBUG_BASE_URL;
+        }else{
+            SystemConfig.BASE_URL = SystemConfig.RELEASE_BASE_URL;
         }
 
     }

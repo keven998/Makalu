@@ -448,13 +448,11 @@ error.printStackTrace();
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_REG) {
-            if(resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_REG &&resultCode == RESULT_OK) {
                 User user = (User) data.getSerializableExtra("user");
                 loginNameEt.setText(user.getTel());
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 imLogin(user);
-            }
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             User user = (User) data.getSerializableExtra("user");

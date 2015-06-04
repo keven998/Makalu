@@ -84,8 +84,10 @@ public class ContactlistFragment extends Fragment {
 		// 获取设置contactlist
 		//getContactList();
 		// 设置adapter
+        System.out.println("setAdapter!");
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         indexBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
@@ -105,11 +107,14 @@ public class ContactlistFragment extends Fragment {
 					// 进入申请与通知页面
 					User user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
 					//user.setUnreadMsgCount(0);
+
 					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
 				} else if (Constant.GROUP_USERNAME.equals(username)) {
 					// 进入群聊列表页面
+                    System.out.println("GROUP_USERNAME");
 					startActivity(new Intent(getActivity(), GroupsActivity.class));
 				} else {
+                    System.out.println("other");
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
 					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
 				}
@@ -247,6 +252,10 @@ public class ContactlistFragment extends Fragment {
 //            }
 //		}
         contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+=======
+        contactList.clear();
+        contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+>>>>>>> origin/im_local
 		// 排序
 		Collections.sort(contactList, new Comparator<User>() {
 >>>>>>> origin/im_local

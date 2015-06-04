@@ -50,8 +50,9 @@ public class IMClient {
     private static List<ConversationBean> convercationList;
     //private static HashMap<String,MessageBean> messageMap;
     private int count;
+
     private IMClient() {
-        convercationList=new ArrayList<>();
+        convercationList = new ArrayList<>();
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
         acklist = new JSONArray();
@@ -72,8 +73,8 @@ public class IMClient {
 
     public static void initIM(Context context) {
         PushManager.getInstance().initialize(context.getApplicationContext());
-        if (Config.isDebug){
-            Log.i(Config.TAG,"start initialize");
+        if (Config.isDebug) {
+            Log.i(Config.TAG, "start initialize");
         }
     }
 
@@ -138,30 +139,32 @@ public class IMClient {
      * @return List<ConversationBean>
      */
     public List<ConversationBean> getConversationList() {
-    convercationList = db.getConversationList();
-        count=0;
-        for (ConversationBean c:convercationList){
-            count+=c.getIsRead();
+        convercationList = db.getConversationList();
+        count = 0;
+        for (ConversationBean c : convercationList) {
+            count += c.getIsRead();
         }
         return convercationList;
     }
-public int getUnReadCount(){
-   return count;
-}
+
+    public int getUnReadCount() {
+        return count;
+    }
+
     public void deleteConversation(String friend) {
         db.deleteConversation(friend);
     }
 
     public void add2ConversationList(ConversationBean conversationBean) {
-        boolean flag=true;
-        for (int i=0;i<convercationList.size();i++) {
+        boolean flag = true;
+        for (int i = 0; i < convercationList.size(); i++) {
             if (convercationList.get(i).getFriendId() == conversationBean.getFriendId()) {
-                    convercationList.set(i,conversationBean);
-                    flag=false;
+                convercationList.set(i, conversationBean);
+                flag = false;
                 break;
             }
         }
-        if (flag)convercationList.add(conversationBean);
+        if (flag) convercationList.add(conversationBean);
     }
 
     public void addToConversationList(Conversation conversation) {
@@ -169,11 +172,11 @@ public int getUnReadCount(){
         for (Conversation c : conList) {
             if (c.getFriendId() == conversation.getFriendId()) {
                 flag = true;
-                c=conversation;
+                c = conversation;
                 break;
             }
         }
-        if (!flag)conList.add(conversation);
+        if (!flag) conList.add(conversation);
     }
 
     public void updateReadStatus(String conversation) {
@@ -196,15 +199,16 @@ public int getUnReadCount(){
         IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(message.getSenderId()), Config.TEXT_MSG, message.getMessage());
         SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
     }
-public MessageBean createTextMessage(String text, String friendId ,String chatType){
-    if (TextUtils.isEmpty(text)) return null;
-    IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
-    MessageBean messageBean = imessage2Bean(message);
-    long localId = db.saveMsg(friendId, messageBean, chatType);
-    MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
-    m.setLocalId((int) localId);
-    return m;
-}
+
+    public MessageBean createTextMessage(String text, String friendId, String chatType) {
+        if (TextUtils.isEmpty(text)) return null;
+        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
+        MessageBean messageBean = imessage2Bean(message);
+        long localId = db.saveMsg(friendId, messageBean, chatType);
+        MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        m.setLocalId((int) localId);
+        return m;
+    }
 
     /**
      * 发送语音消息
@@ -217,7 +221,8 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
     public void sendAudioMessage(MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
         UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
     }
-    public MessageBean createAudioMessage(String path, String friendId, String durtime, String chatTpe){
+
+    public MessageBean createAudioMessage(String path, String friendId, String durtime, String chatTpe) {
         JSONObject object = new JSONObject();
         try {
             object.put("isRead", false);
@@ -234,33 +239,37 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
         return m;
     }
 
-    public  MessageBean CreateImageMessage(String path,String friendId,String chatTpe){
+    public MessageBean CreateImageMessage(String path, String friendId, String chatTpe) {
 
-       String sdkPath=PictureUtil.reSizeImage(path);
-       String thumbnailPath=PictureUtil.getThumbImagePath(sdkPath,160,160);
-        JSONObject object=new JSONObject();
+        String sdkPath = PictureUtil.reSizeImage(path);
+        String thumbnailPath = PictureUtil.getThumbImagePath(sdkPath, 160, 160);
+        JSONObject object = new JSONObject();
         try {
-            object.put("localPath",sdkPath);
-            object.put("thumbPath",thumbnailPath);
+            object.put("localPath", sdkPath);
+            object.put("thumbPath", thumbnailPath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.IMAGE_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
-        System.out.println("message "+ messageBean.getMessage());
+        System.out.println("message " + messageBean.getMessage());
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
         return m;
     }
+
     public void sendImageMessage(MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
-        UploadUtils.getInstance().uploadImage( messageBean,User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
+        UploadUtils.getInstance().uploadImage(messageBean, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
     }
-    public void sendImageMessageByUrl(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe){
+
+    public void sendImageMessageByUrl(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe) {
 
     }
+
     /**
      * 发送位置信息
+     *
      * @param message
      * @param conversation
      * @param listen
@@ -272,7 +281,7 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
         SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean CreateLocationMessage(String name, String conversation, String friendId, String chatType, double latitude, double longitude , String locationAddress){
+    public MessageBean CreateLocationMessage(String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress) {
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
@@ -290,8 +299,12 @@ public MessageBean createTextMessage(String text, String friendId ,String chatTy
         m.setLocalId((int) localId);
         return m;
     }
-    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message,int Type) {
-        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status,message,Type);
+    public MessageBean createExtMessage(String friendId,String chatType,String contentJson,int type){
+        MessageBean messageBean= new MessageBean();
+        return null;
+    }
+    public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
+        db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);
     }
 
     private MessageBean imessage2Bean(IMessage message) {

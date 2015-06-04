@@ -58,6 +58,8 @@ import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
 
+import org.apache.http.conn.BasicEofSensorWatcher;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,6 +209,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();*/
+
 
 //        getContactFromServer();
 //        // 注册一个cmd消息的BroadcastReceiver
@@ -557,6 +560,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
+    }
+
+    @Override
+    public void onCMDMessageArrive(MessageBean m) {
+        System.out.println("onCMDMessageArrive");
+            IMUtils.HandleCMDInfoFromMessage(m);
     }
 
 

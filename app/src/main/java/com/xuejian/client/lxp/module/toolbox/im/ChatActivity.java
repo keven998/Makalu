@@ -105,6 +105,7 @@ import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKModel;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.FavListActivity;
@@ -236,6 +237,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
        // toChatUsername=100006+"";
        // chatType="single";
       //  conversation="0";
+        if (UserDBManager.getInstance().isMyFriend(Long.parseLong(toChatUsername))){
+            System.out.println("isFriend");
+        }
 		initView();
 		setUpView();
         initdata();
@@ -1222,6 +1226,53 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         }
     }
 
+    @Override
+    public void onCMDMessageArrive(MessageBean m) {
+
+    }
+
+    /**
+	 * 消息广播接收者
+	 *
+	 */
+	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String username = intent.getStringExtra("from");
+			String msgid = intent.getStringExtra("msgid");
+			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
+			final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+            final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
+            final String finalUsername = username;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(!TextUtils.isEmpty(fromUser)){
+                        IMUser imUser= IMUtils.getUserInfoFromMessage(mContext, message);
+                        IMUserRepository.saveContact(mContext, imUser);
+                    }
+                }
+            }).start();
+			// 如果是群聊消息，获取到group id
+			if (message.getChatType() == ChatType.GroupChat) {
+				username = message.getTo();
+			}
+			if (!username.equals(toChatUsername)) {
+				// 消息不是发给当前会话，return
+				return;
+			}
+			// conversation =
+			// EMChatManager.getInstance().getConversation(toChatUsername);
+			// 通知adapter有新消息，更新ui
+			adapter.refresh();
+            int curSelection = listView.getFirstVisiblePosition();
+            if(curSelection>listView.getCount()/2){
+                listView.setSelection(listView.getCount() - 1);
+            }
+			// 记得把广播给终结掉
+			abortBroadcast();
+		}
+	}
 
 	private PowerManager.WakeLock wakeLock;
 

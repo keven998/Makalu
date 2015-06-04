@@ -116,6 +116,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     DisplayImageOptions options;
     User user;
     private User imUser;
+    /*PeachUser user;
+    PeachUser hisBean;
+    private IMUser imUser;*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,12 +277,22 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }else{
         resident.setText(bean.getResidence());
         }
-        if(getAge(bean.getBirthday())==0){
+        if(bean.getBirthday()==null){
             age.setText("未设置");
         }else{
         age.setText(getAge(bean.getBirthday())+"");
         }
 
+        if(userId!=10000&&UserDBManager.getInstance().isMyFriend(bean.getUserId() )){
+            tv_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showActionDialog();
+                }
+            });
+        }else{
+            tv_del.setVisibility(View.GONE);
+        }
 
         //IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)
         if(UserDBManager.getInstance().isMyFriend(bean.getUserId())){
@@ -394,11 +408,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public int getAge(String birth){
         int age=0;
-        String birthType=birth.substring(0,4).toString();
-        int birthYear=Integer.parseInt(birthType);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
-        String date=sdf.format(new java.util.Date());
-        age=Integer.parseInt(date)-birthYear;
+            String birthType = birth.substring(0, 4).toString();
+            int birthYear = Integer.parseInt(birthType);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            String date = sdf.format(new java.util.Date());
+            age = Integer.parseInt(date) - birthYear;
         return age;
     }
 

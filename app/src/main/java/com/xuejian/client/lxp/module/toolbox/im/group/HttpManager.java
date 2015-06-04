@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.toolbox.im.group;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -9,6 +10,8 @@ import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.lv.user.User;
 import com.lv.user.UserDao;
+import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import org.apache.http.Header;
@@ -25,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -99,7 +103,7 @@ public class HttpManager {
         });
     }
 
-    public static void addMembers(String groupId, List<Long> members, boolean isPublic) {
+    public static void addMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
@@ -111,10 +115,10 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(groupId, obj);
+        editGroupMembers(groupId, obj,callBack);
     }
 
-    public static void removeMembers(String groupId, List<Long> members, boolean isPublic) {
+    public static void removeMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
@@ -126,10 +130,10 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj);
+        editGroupMembers(900078 + "", obj,callBack);
     }
 
-    public static void silenceMembers(String groupId, List<Long> members, boolean isPublic) {
+    public static void silenceMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {
         final JSONObject obj = new JSONObject();
         JSONArray array = new JSONArray();
         try {
@@ -142,10 +146,10 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj);
+        editGroupMembers(900078 + "", obj,callBack);
     }
 
-    public static void editGroupMembers(final String GroupId, final JSONObject obj) {
+    public static void editGroupMembers(final String GroupId, final JSONObject obj,final CallBack callBack) {
 
         exec.execute(new Runnable() {
                          @Override
@@ -168,26 +172,28 @@ public class HttpManager {
                                          Log.i(Config.TAG, "edit member Result : " + result);
                                      }
                                      JSONObject object = new JSONObject(result);
-                                     JSONObject jsonObject = object.getJSONObject("result");
-                                 }
+                                     callBack.onSuccess();
+                                     //JSONObject jsonObject = object.getJSONObject("result");
+                                 }else callBack.onFailed();
                              } catch (Exception e) {
                                  e.printStackTrace();
+                                 callBack.onFailed();
                              }
                          }
         });
     }
 
-    public static void getGroupMembers(String groupId) {
+    public static void getGroupMembers(String groupId ,CallBack callBack) {
         String url = Config.GET_GROUP + groupId + "/users";
-        getInformations(url, "");
+        getInformations(url, "member",groupId,callBack);
     }
 
-    public static void getGroupInformation(String groupId) {
+    public static void getGroupInformation(String groupId,CallBack callBack) {
         final String url = Config.GET_GROUP + groupId;
-        getInformations(url, "");
+        getInformations(url, "info",groupId,callBack);
     }
 
-    private static void getInformations(final String url, String type) {
+    private static void getInformations(final String url,final String type,final String groupId,final CallBack callBack) {
         exec.execute(new Runnable() {
             @Override
             public void run() {
@@ -196,9 +202,49 @@ public class HttpManager {
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     HttpEntity res = httpResponse.getEntity();
-                    if (Config.isDebug) {
-                        Log.i(Config.TAG, "group Info : " + EntityUtils.toString(res));
-                    }
+                    int code= httpResponse.getStatusLine().getStatusCode();
+                    if (code==200) {
+                        String result = EntityUtils.toString(res);
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "group Info : " + result);
+                        }
+                        if ("member".equals(type)) {
+                            try {
+                                JSONObject object = new JSONObject(result);
+                                JSONArray userList = object.getJSONArray("result");
+                                List<com.xuejian.client.lxp.db.userDB.User> list = new ArrayList<com.xuejian.client.lxp.db.userDB.User>();
+                                for (int i = 0; i < userList.length(); i++) {
+                                    String str = userList.get(i).toString();
+                                    com.xuejian.client.lxp.db.userDB.User user = JSON.parseObject(str, com.xuejian.client.lxp.db.userDB.User.class);
+                                    list.add(user);
+                                }
+                                UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
+                                callBack.onSuccess();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                callBack.onFailed();
+                            }
+
+                        }
+                        else if ("info".equals(type)){
+                            JSONObject object = null;
+                            try {
+                                object = new JSONObject(result);
+                                JSONObject o = object.getJSONObject("result");
+                                com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+                                user.setNickName(o.get("name").toString());
+                                o.remove("name");
+                                user.setExt(o.toString());
+                                user.setType(8);
+                                UserDBManager.getInstance().updateGroupInfo(user,groupId);
+                                //"groupType":"common","createTime":1433316405290,"desc":"群主什么也没说","visible":true,"updateTime":1433316405290,"isPublic":true,"
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }else callBack.onFailed();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

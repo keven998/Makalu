@@ -20,6 +20,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.util.HanziToPinyin;
+import com.lv.bean.MessageBean;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ExtFromUser;
@@ -38,6 +39,7 @@ import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
@@ -169,7 +171,25 @@ public class IMUtils {
        message.setAttribute(Constant.MSG_CONTENT,tips);
 
     }
+    public static void HandleCMDInfoFromMessage(MessageBean m){
+        String cmd=m.getMessage();
+        try {
+            JSONObject object=new JSONObject(cmd);
+            String action=object.getString("action");
+            switch (action){
+                case "D_INVITE":
+                    long chatId=object.getLong("groupId");
+                    long inviteId=object.getLong("userId");
+                    String nickName=object.getString("nickName");
+                    String groupName=object.getString("groupName");
+                    User group=new User(chatId,groupName,"",8);
+                    UserDBManager.getInstance().saveContact(group);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+    }
     public static IMUser getUserInfoFromMessage(Context context,EMMessage message){
         String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
         if(!TextUtils.isEmpty(fromUser)){
