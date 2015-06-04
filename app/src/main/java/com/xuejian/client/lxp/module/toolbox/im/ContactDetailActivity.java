@@ -73,7 +73,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         ViewUtils.inject(this);
         initTitleBar();
         userId = getIntent().getLongExtra("userId", 0);
-        imUser = UserDBManager.getInstance().getContactByUserName("123");
+        imUser = UserDBManager.getInstance().getContactByUserId(userId);
         if (imUser != null) {
             bindView();
         }
@@ -296,12 +296,12 @@ public class ContactDetailActivity extends ChatBaseActivity {
     }
 
     public static class ContactDetailMenu extends SupportBlurDialogFragment {
-        private IMUser mImUser;
+        private User mImUser;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mImUser = (IMUser) getArguments().getSerializable("imUser");
+            mImUser = (User) getArguments().getSerializable("imUser");
 
         }
 
@@ -327,7 +327,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
          *
          * @param tobeDeleteUser
          */
-        public void deleteContact(final IMUser tobeDeleteUser) {
+        public void deleteContact(final User tobeDeleteUser) {
             DialogManager.getInstance().showLoadingDialog(getActivity(), "正在删除...");
             UserApi.deleteContact(tobeDeleteUser.getUserId() + "", new HttpCallBack() {
                 @Override
@@ -335,11 +335,12 @@ public class ContactDetailActivity extends ChatBaseActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                     if (deleteResult.code == 0) {
-                        IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
+                        //IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
+                        UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
                         // 删除此会话
-                        EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
-                        AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
-                        InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteUser.getUsername());
+                        //EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                        AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUserId());
+                        //InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteUser.getUsername());
                         dismiss();
                         getActivity().finish();
                     } else if (!TextUtils.isEmpty(deleteResult.err.message)) {

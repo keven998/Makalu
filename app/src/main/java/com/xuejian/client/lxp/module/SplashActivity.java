@@ -64,6 +64,9 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
         final User user = AccountManager.getInstance().getLoginAccount(mContext);
+        if(user!=null) {
+            AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+        }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
@@ -201,7 +204,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sp_log:
-                Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
                 startActivityWithNoAnim(logActivity);
                 overridePendingTransition(R.anim.push_bottom_in, 0);
                 break;

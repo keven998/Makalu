@@ -529,10 +529,10 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result, PeachUser.class);
+                    CommonJson4List<User> userResult = CommonJson4List.fromJson(result, User.class);
                     if (userResult.code == 0) {
-                        for (PeachUser user : userResult.result) {
-                            IMUser imUser = new IMUser();
+                        for (User user : userResult.result) {
+                           /* IMUser imUser = new IMUser();
                             imUser.setUserId(user.userId);
                             imUser.setNick(user.nickName);
                             imUser.setUsername(user.easemobUser);
@@ -540,8 +540,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                             imUser.setGender(user.gender);
                             imUser.setAvatar(user.avatar);
                             imUser.setAvatarSmall(user.avatarSmall);
-                            imUser.setSignature(user.signature);
-                            IMUserRepository.saveContact(PeachApplication.getContext(), imUser);
+                            imUser.setSignature(user.signature);*/
+                            //IMUserRepository.saveContact(PeachApplication.getContext(), imUser);
+                            UserDBManager.getInstance().saveContact(user);
                         }
                         unkownMembers.clear();
                         memberAdapter.getDataList().clear();

@@ -185,9 +185,11 @@ public class LoginActivity extends PeachBaseActivity{
         AccountManager.getInstance().setLogin(true);
 
         UserDBManager.getInstance().initDB(user.getUserId() + "");
-        UserDBManager.getInstance().init();
 
         AccountManager.getInstance().saveLoginAccount(mContext, user);
+        //登录成功后记录下当前的用户ID，便于后面用来判断
+        AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"
         User newFriends = new User();

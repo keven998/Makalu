@@ -4,13 +4,16 @@ package com.xuejian.client.lxp.db.userDB;
 
 import com.xuejian.client.lxp.bean.LocBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Entity mapped to table USER.
  */
-public class User {
+public class User implements Serializable {
+    public static final String M="M";
+    public static final String F="F";
     private long userId;
     private String nickName;
     private String avatar;

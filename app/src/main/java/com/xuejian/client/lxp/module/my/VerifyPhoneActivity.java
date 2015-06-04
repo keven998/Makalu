@@ -110,7 +110,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void doSucess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
 //                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                                     ToastUtil.getInstance(mContext).showToast("注册成功");

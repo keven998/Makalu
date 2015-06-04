@@ -18,6 +18,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -28,7 +29,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
 
     String mToken;
     String mPhone;
-    PeachUser user;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            CommonJson<PeachUser> resetResult = CommonJson.fromJson(result, PeachUser.class);
+                            CommonJson<User> resetResult = CommonJson.fromJson(result, User.class);
                             if (resetResult.code == 0) {
 //                                AccountManager.getInstance().saveLoginAccount(mContext, user);
                                 ToastUtil.getInstance(mContext).showToast("设置成功");

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.aizou.core.log.LogUtil;
+import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.exception.DbException;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
@@ -51,7 +53,7 @@ public class UserDBManager  {
         db.execSQL("CREATE table IF NOT EXISTS "
                 + fri_table_name
                 + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT,gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT,memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
-                "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT)");
+                "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT,header TEXT)");
     }
     public static UserDBManager getInstance() {
         if (instance == null) {
@@ -156,6 +158,8 @@ public class UserDBManager  {
     public boolean isMyFriend(long userId){
         mdb=getDB();
         Cursor cursor= mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
+        if(cursor.getCount()==0)return false;
+        cursor.moveToLast();
         int type=cursor.getInt(0);
         cursor.close();
         closeDB();
@@ -209,6 +213,17 @@ public class UserDBManager  {
 
     public void saveContact(User user){
         mdb=getDB();
+        if(user.getNickName()==null){
+            user.setHeader("#");
+        }else{
+            String headerName = user.getNickName();
+            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                    0, 1).toUpperCase());
+            char header = user.getHeader().toLowerCase().charAt(0);
+            if (header < 'a' || header > 'z') {
+                user.setHeader("#");
+            }
+        }
         Cursor cursor= mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
         if (cursor.getCount()==0){
             ContentValues values=new ContentValues();
@@ -232,6 +247,7 @@ public class UserDBManager  {
             values.put("guideCnt",user.getGuideCnt());
             values.put("Type",user.getType());
             values.put("ext",user.getExt());
+            values.put("header",user.getHeader());
             mdb.insert(fri_table_name,null,values);
         }
         cursor.close();
@@ -268,6 +284,7 @@ public class UserDBManager  {
         }
         cursor.close();
         }
+        mdb.setTransactionSuccessful();
         mdb.endTransaction();
         closeDB();
     }

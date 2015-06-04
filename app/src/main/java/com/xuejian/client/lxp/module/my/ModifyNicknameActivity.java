@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
@@ -74,10 +75,13 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         if (modifyResult.code == 0) {
                             user.setNickName(nickEt.getText().toString().trim());
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                            boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.getNickName());
+                            /*boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.getNickName());
                             if (!updatenick) {
                                 EMLog.e("ModifyNicknameActivity", "update current user nick fail");
-                            }
+                            }*/
+                            Intent intent=new Intent();
+                            intent.putExtra("nickname",nickEt.getText().toString().trim());
+                            setResult(RESULT_OK,intent);
                             ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
                         } else {

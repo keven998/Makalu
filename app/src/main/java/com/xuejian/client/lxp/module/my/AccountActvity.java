@@ -134,6 +134,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     LinearLayout llPics;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private int FOOTPRINT=4;
+    private int SIGNATURE=5;
+    private int NICKNAME=6;
+    private int BINDPHONE=7;
     private boolean birthTimeFlag=false;
     /*private ImageZoomAnimator2 zoomAnimator;
 
@@ -205,16 +208,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
 
-    public void initFlDestion(String tracks){
+    public void initFlDestion(Map<String,ArrayList<LocBean>> tracks){
 
         try {
-            JSONObject jsonObject = new JSONObject(tracks);
+            JSONObject jsonObject = new JSONObject(tracks.toString());
             Iterator iterator=jsonObject.keys();
             while(iterator.hasNext()){
                 String key=(String)iterator.next();
-                CommonJson4List<LocBean> res=CommonJson4List.fromJson(jsonObject.getString(key),LocBean.class);
-                for(int i=0;i<res.result.size();i++){
-                    all_foot_print_list.add(res.result.get(i));
+                for(int i=0;i<tracks.get(key).size();i++){
+                    all_foot_print_list.add(tracks.get(key).get(i));
                 }
             }
         } catch (JSONException e) {
@@ -285,7 +287,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
     private void bindView(User user){
         nickNameTv.setText(user.getNickName());
-        genderTv.setText(user.getGender());
+        genderTv.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -328,13 +330,13 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_nickname:
                 MobclickAgent.onEvent(mContext,"event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
-                startActivity(nickNameIntent);
+                startActivityForResult(nickNameIntent,NICKNAME);
                 break;
 
             case R.id.ll_sign:
                 MobclickAgent.onEvent(mContext,"event_update_memo");
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
-                startActivity(signIntent);
+                startActivityForResult(signIntent,SIGNATURE);
                 break;
 
             case R.id.ll_gender:
@@ -411,7 +413,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_bind_phone:
                 MobclickAgent.onEvent(mContext,"event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
-                startActivity(bindPhoneIntent);
+                startActivityForResult(bindPhoneIntent,BINDPHONE);
                 break;
 
             case R.id.btn_logout:
@@ -912,6 +914,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (requestCode == FOOTPRINT){
             all_foot_print_list=data.getParcelableArrayListExtra("footprint");
             initFootPrint(all_foot_print_list);
+        } else if (requestCode == SIGNATURE){
+            signTv.setText(data.getExtras().getString("signature"));
+        } else if (requestCode == NICKNAME){
+            nickNameTv.setText(data.getExtras().getString("nickname"));
+        } else if (requestCode == BINDPHONE){
+            bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
     }
 

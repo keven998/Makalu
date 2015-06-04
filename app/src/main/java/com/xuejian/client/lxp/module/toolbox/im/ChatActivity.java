@@ -186,7 +186,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	private Drawable[] micImages;
 	//private int chatType;
 	//private EMConversation conversation;
-	private NewMessageBroadcastReceiver receiver;
 	public static ChatActivity activityInstance = null;
 	// 给谁发送消息
 	private String toChatUsername;
@@ -196,7 +195,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	private File cameraFile;
 	static int resendPos;
 
-	private GroupListener groupListener;
 
 	private ImageView iv_emoticons_normal;
 	private ImageView iv_emoticons_checked;
@@ -498,7 +496,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 			}
 		});
         // 注册一个cmd消息的BroadcastReceiver
-        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+       /* IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
         mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
 		// 注册接收消息广播
@@ -519,7 +517,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 		registerReceiver(deliveryAckMessageReceiver, deliveryAckMessageIntentFilter);
 		// 监听当前会话的群聊解散被T事件
 		groupListener = new GroupListener();
-		EMGroupManager.getInstance().addGroupChangeListener(groupListener);
+		EMGroupManager.getInstance().addGroupChangeListener(groupListener);*/
 
 		// show forward message if the message is not null
 		String forward_msg_id = getIntent().getStringExtra("forward_msg_id");
@@ -1224,90 +1222,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         }
     }
 
-    /**
-	 * 消息广播接收者
-	 *
-	 */
-	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String username = intent.getStringExtra("from");
-			String msgid = intent.getStringExtra("msgid");
-			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-			final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
-            final String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
-            final String finalUsername = username;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if(!TextUtils.isEmpty(fromUser)){
-                        IMUser imUser= IMUtils.getUserInfoFromMessage(mContext, message);
-                        IMUserRepository.saveContact(mContext, imUser);
-                    }
-                }
-            }).start();
-			// 如果是群聊消息，获取到group id
-			if (message.getChatType() == ChatType.GroupChat) {
-				username = message.getTo();
-			}
-			if (!username.equals(toChatUsername)) {
-				// 消息不是发给当前会话，return
-				return;
-			}
-			// conversation =
-			// EMChatManager.getInstance().getConversation(toChatUsername);
-			// 通知adapter有新消息，更新ui
-			adapter.refresh();
-            int curSelection = listView.getFirstVisiblePosition();
-            if(curSelection>listView.getCount()/2){
-                listView.setSelection(listView.getCount() - 1);
-            }
-			// 记得把广播给终结掉
-			abortBroadcast();
-		}
-	}
 
-	/**
-	 * 消息回执BroadcastReceiver
-	 */
-	private BroadcastReceiver ackMessageReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String msgid = intent.getStringExtra("msgid");
-			String from = intent.getStringExtra("from");
-			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-			if (conversation != null) {
-				// 把message设为已读
-				EMMessage msg = conversation.getMessage(msgid);
-				if (msg != null) {
-					msg.isAcked = true;
-				}
-			}
-			abortBroadcast();
-			adapter.notifyDataSetChanged();
-		}
-	};
-
-	/**
-	 * 消息送达BroadcastReceiver
-	 */
-	private BroadcastReceiver deliveryAckMessageReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String msgid = intent.getStringExtra("msgid");
-			String from = intent.getStringExtra("from");
-			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-			if (conversation != null) {
-				// 把message设为已读
-				EMMessage msg = conversation.getMessage(msgid);
-				if (msg != null) {
-					msg.isDelivered = true;
-				}
-			}
-			abortBroadcast();
-			adapter.notifyDataSetChanged();
-		}
-	};
 	private PowerManager.WakeLock wakeLock;
 
 	/**
@@ -1474,22 +1389,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         System.out.println("chatActivity destroy");
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
 		activityInstance = null;
-		EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
-		// 注销广播
-		try {
-			unregisterReceiver(receiver);
-			receiver = null;
-		} catch (Exception e) {
-		}
-		try {
-			unregisterReceiver(ackMessageReceiver);
-			ackMessageReceiver = null;
-			unregisterReceiver(deliveryAckMessageReceiver);
-			deliveryAckMessageReceiver = null;
-            unregisterReceiver(cmdMessageReceiver);
-
-		} catch (Exception e) {
-		}
 	}
 
     public void refresh(){
@@ -1602,7 +1501,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 				if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
 					loadmorePB.setVisibility(View.VISIBLE);
 					// sdk初始化加载的聊天记录为20条，到顶时去db里获取更多
-					List<EMMessage> messages=null;
+					//List<EMMessage> messages=null;
 					try {
 						// 获取更多messges，调用此方法的时候从db获取的messages
 						// sdk会自动存入到此conversation中
@@ -1652,89 +1551,5 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 
 	}
 
-    /**
-     * cmd消息BroadcastReceiver
-     */
-    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //获取cmd message对象
-            String msgId = intent.getStringExtra("msgid");
-            EMMessage message = intent.getParcelableExtra("message");
-            //获取消息body
-            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-            String aciton = cmdMsgBody.action;//获取自定义action
-            //获取扩展属性
-            try {
-                int cmdType=message.getIntAttribute("CMDType");
-                String content = message.getStringAttribute("content");
-                //删除好友
-                if (cmdType == 3) {
-                    CmdDeleteBean deleteBean = GsonTools.parseJsonToBean(content,CmdDeleteBean.class);
-                    final IMUser imUser = IMUserRepository.getContactByUserId(mContext, deleteBean.userId);
-                    if(imUser!=null){
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                //如果正在与此用户的聊天页面
-                                if (ChatActivity.activityInstance != null && imUser.getUsername().equals(ChatActivity.activityInstance.getToChatUsername())) {
-//                                    Toast.makeText(ChatActivity.this, toChatUser.getNick() + "已把你从他好友列表里移除", Toast.LENGTH_SHORT).show();
-                                    ToastUtil.getInstance(ChatActivity.this).showToast("聊天已被中断");
-                                    ChatActivity.activityInstance.finish();
-                                }
-                            }
-                        });
-                    }
-
-                }
-
-            } catch (EaseMobException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-
-    /**
-	 * 监测群组解散或者被T事件
-	 *
-	 */
-	class GroupListener extends GroupReomveListener {
-
-		@Override
-		public void onUserRemoved(final String groupId, String groupName) {
-			runOnUiThread(new Runnable() {
-				public void run() {
-					if (toChatUsername.equals(groupId)) {
-//						Toast.makeText(ChatActivity.this, "你被群创建者从此群中移除", Toast.LENGTH_SHORT).show();
-						if (GroupDetailsActivity.instance != null)
-							GroupDetailsActivity.instance.finish();
-						finish();
-					}
-				}
-			});
-		}
-
-		@Override
-		public void onGroupDestroy(final String groupId, String groupName) {
-			// 群组解散正好在此页面，提示群组被解散，并finish此页面
-			runOnUiThread(new Runnable() {
-				public void run() {
-					if (toChatUsername.equals(groupId)) {
-//						Toast.makeText(ChatActivity.this, "当前群聊已被群创建者解散", Toast.LENGTH_SHORT).show();
-                        ToastUtil.getInstance(ChatActivity.this).showToast("该群已被群主解散");
-						if (GroupDetailsActivity.instance != null)
-							GroupDetailsActivity.instance.finish();
-						finish();
-					}
-				}
-			});
-		}
-
-	}
-
-	public String getToChatUsername() {
-		return toChatUsername;
-	}
 
 }

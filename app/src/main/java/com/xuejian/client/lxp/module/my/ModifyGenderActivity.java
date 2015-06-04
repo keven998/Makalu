@@ -43,10 +43,10 @@ public class ModifyGenderActivity extends PeachBaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_men:
-                        gender = PeachUser.M;
+                        gender = User.M;
                         break;
                     case R.id.rb_women:
-                        gender = PeachUser.F;
+                        gender = User.F;
                         break;
                 }
             }
@@ -97,7 +97,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
     private void initData(){
         user = AccountManager.getInstance().getLoginAccount(this);
         gender = user.getGenderDesc();
-        if(gender.equals(PeachUser.M)){
+        if(gender.equals(User.M)){
             genderRg.check(R.id.rb_men);
         }else{
             genderRg.check(R.id.rb_women);

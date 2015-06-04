@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PhoneContactUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -169,7 +170,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                            @Override
                            public void doSucess(String result, String method) {
                                DialogManager.getInstance().dissMissLoadingDialog();
-                               CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                               CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                if (userResult.code == 0) {
                                    Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
                                    intent.putExtra("isSeach", true);

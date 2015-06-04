@@ -47,6 +47,7 @@ import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -114,7 +115,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
     User user;
-    private IMUser imUser;
+    private User imUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId=getIntent().getExtras().getInt("userId");
         user= AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        imUser = IMUserRepository.getContactByUserId(mContext, userId);
+        imUser = UserDBManager.getInstance().getContactByUserId(userId);
         options= new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -140,7 +141,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-        if(userId!=10000){
+        if(userId!=10000&&UserDBManager.getInstance().isMyFriend((long)userId)){
             tv_del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,7 +221,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void deleteContact(final IMUser tobeDeleteUser) {
+    private void deleteContact(final User tobeDeleteUser) {
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
         UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
             @Override
@@ -228,10 +229,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
-                    IMUserRepository.deleteContact(HisMainPageActivity.this, tobeDeleteUser.getUsername());
-                    EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
-                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUsername());
-                    InviteMsgRepository.deleteInviteMsg(HisMainPageActivity.this, tobeDeleteUser.getUsername());
+                    UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
+                   // EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUserId());
+                    //InviteMsgRepository.deleteInviteMsg(HisMainPageActivity.this, tobeDeleteUser.getUsername());
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(HisMainPageActivity.this).showToast(deleteResult.err.message);
@@ -249,37 +250,38 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     }
 
-    public void refreshView(final PeachUser bean){
+    public void refreshView(final User bean){
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
-        title_name.setText(bean.nickName);
-        his_name.setText(bean.nickName);
-        ImageLoader.getInstance().displayImage(bean.avatarSmall, his_avatar, options);
-        his_level.setText("V" + bean.level);
-        if(bean.gender.equals("F")){
+        title_name.setText(bean.getNickName());
+        his_name.setText(bean.getNickName());
+        ImageLoader.getInstance().displayImage(bean.getAvatarSmall(), his_avatar, options);
+        his_level.setText("V" + bean.getLevel());
+        if(bean.getGender().equals("F")){
             his_gender.setImageResource(R.drawable.girl);
-        }else if(bean.gender.equals("F")){
+        }else if(bean.getGender().equals("F")){
             his_gender.setImageResource(R.drawable.boy);
         }
-        xingzuo.setText(bean.zodiac);
-        his_id.setText(String.valueOf(bean.userId));
-        if(!TextUtils.isEmpty(bean.travelStatus)){
-            his_status.setText(bean.travelStatus);
+        xingzuo.setText(bean.getZodiac());
+        his_id.setText(String.valueOf(bean.getUserId()));
+        if(!TextUtils.isEmpty(bean.getTravelStatus())){
+            his_status.setText(bean.getTravelStatus());
         }
-        sign.setText(bean.signature);
-        his_trip_plan.setText("共"+bean.guideCnt+"篇旅行计划");
-        if(bean.residence.equals("")||bean.residence==null){
+        sign.setText(bean.getSignature());
+        his_trip_plan.setText("共"+bean.getGuideCnt()+"篇旅行计划");
+        if(bean.getResidence().equals("")||bean.getResidence()==null){
             resident.setText("未设置");
         }else{
-        resident.setText(bean.residence);
+        resident.setText(bean.getResidence());
         }
-        if(getAge(bean.birthday)==0){
+        if(getAge(bean.getBirthday())==0){
             age.setText("未设置");
         }else{
-        age.setText(getAge(bean.birthday)+"");
+        age.setText(getAge(bean.getBirthday())+"");
         }
 
 
-        if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
+        //IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)
+        if(UserDBManager.getInstance().isMyFriend(bean.getUserId())){
             add_friend.setText("开始聊天");
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -289,8 +291,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
                     if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
-                        IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long) bean.userId);
-                        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
+                        User imUser = UserDBManager.getInstance().getContactByUserId((long) bean.getUserId());
+                        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUserId()));
                         finish();
                     }else{
                         Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
@@ -328,7 +330,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             public void onClick(View v) {
                                 editDialog.dismiss();
                                 DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
-                                UserApi.requestAddContact(bean.userId + "", editDialog.getMessage(), new HttpCallBack() {
+                                UserApi.requestAddContact(bean.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
                                     @Override
                                     public void doSucess(Object result, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -361,13 +363,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         try {
             int countries=0;
             int citys;
-            JSONObject jsonObject = new JSONObject(bean.tracks.toString());
+            JSONObject jsonObject = new JSONObject(bean.getTracks().toString());
             Iterator iterator=jsonObject.keys();
             while(iterator.hasNext()){
                 countries++;
                 String key=(String)iterator.next();
-                for(int i=0;i<bean.tracks.get(key).size();i++){
-                    all_foot_print_list.add(bean.tracks.get(key).get(i));
+                for(int i=0;i<bean.getTracks().get(key).size();i++){
+                    all_foot_print_list.add(bean.getTracks().get(key).get(i));
                 }
             }
             citys=all_foot_print_list.size();
@@ -406,7 +408,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson<PeachUser> expertInfo = CommonJson.fromJson(result, PeachUser.class);
+                CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
                     refreshView(expertInfo.result);
                 }
