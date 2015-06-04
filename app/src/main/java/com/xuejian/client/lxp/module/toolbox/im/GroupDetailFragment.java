@@ -212,7 +212,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_USER:// 添加群成员
-                    setUpGroupMemeber();
+                    setUpGroupMemeber("update");
                     break;
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
                     group = EMGroupManager.getInstance().getGroup(groupId);
@@ -445,7 +445,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
  //       }
 
         memberGv.setAdapter(memberAdapter);
-        setUpGroupMemeber();
+        setUpGroupMemeber("");
 
         groupNameTv.setText(name);
 //        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
@@ -510,12 +510,11 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         }
     }*/
 
-    private void setUpGroupMemeber(){
-        final List<User> members=null;
-                //UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
+    private void setUpGroupMemeber(String type){
+        final List<User> members=UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         final List<String> unkownMembers= new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        if (members==null){
+        if (members==null||"update".equals(type)){
             //fetch info
             System.out.println("fetch info");
             GroupManager.getGroupManager().getGroupMembers(groupId, new CallBack() {
