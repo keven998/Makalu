@@ -57,6 +57,8 @@ import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
 
+import org.apache.http.conn.BasicEofSensorWatcher;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,14 +155,17 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private void initData(){
         //网络更新好友列表
-        for (long i=100005;i<=100010;i++){
+        List<com.xuejian.client.lxp.db.userDB.User>list= new ArrayList<com.xuejian.client.lxp.db.userDB.User>();
+        for (long i=100000;i<=100021;i++){
             com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
             user.setUserId(i);
             user.setNickName("user"+i);
-            user.setHeader("a");
+            user.setHeader("ab");
             user.setType(1);
-            UserDBManager.getInstance().saveContact(user);
+            list.add(user);
         }
+        System.out.println("list size"+list.size());
+        UserDBManager.getInstance().saveContactList(list);
 //        getContactFromServer();
 //        // 注册一个cmd消息的BroadcastReceiver
 //        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
@@ -511,6 +516,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
+    }
+
+    @Override
+    public void onCMDMessageArrive(MessageBean m) {
+        System.out.println("onCMDMessageArrive");
+            IMUtils.HandleCMDInfoFromMessage(m);
     }
 
 

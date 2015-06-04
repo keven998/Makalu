@@ -45,6 +45,7 @@ public class PeachApplication extends BaseApplication {
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
+       // IMClient.initIM(getApplicationContext());
     }
 
     private void setupDatabase() {

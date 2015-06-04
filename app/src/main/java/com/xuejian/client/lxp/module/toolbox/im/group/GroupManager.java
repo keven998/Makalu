@@ -25,8 +25,8 @@ public class GroupManager {
     }
 
 
-    public void addMembers(String groupId, List<Long> members, boolean isPublic) {
-        HttpManager.addMembers(groupId, members, isPublic);
+    public void addMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
+        HttpManager.addMembers(groupId, members, isPublic,callBack);
 
     }
 
@@ -34,24 +34,24 @@ public class GroupManager {
 
     }
 
-    public void removeMembers(String groupId, List<Long> members, boolean isPublic) {
-        HttpManager.removeMembers(groupId, members, isPublic);
+    public void removeMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
+        HttpManager.removeMembers(groupId, members, isPublic,callBack);
     }
 
-    public void silenceMembers(String groupId, List<Long> members, boolean isPublic) {
-        HttpManager.silenceMembers(groupId, members, isPublic);
+    public void silenceMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
+        HttpManager.silenceMembers(groupId, members, isPublic,callBack);
     }
 
     public void quitGroup(String groupId) {
 
     }
 
-    public void getGroupInformation(String groupId) {
-        HttpManager.getGroupInformation(groupId);
+    public void getGroupInformation(String groupId,CallBack callBack) {
+        HttpManager.getGroupInformation(groupId,callBack);
     }
 
-    public void getGroupMembers(String groupId) {
-        HttpManager.getGroupMembers(groupId);
+    public void getGroupMembers(String groupId,CallBack callBack) {
+        HttpManager.getGroupMembers(groupId,callBack);
     }
     public void getUserGroupInfo(String userId){
         HttpManager.getUserGroupInfo(userId);

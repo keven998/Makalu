@@ -134,6 +134,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int POI_MSG = 5;
     private static final int VIDEO_MSG = 6;
     private static final int FILE_MSG = 7;
+    private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
     private String friendId;
@@ -212,6 +213,8 @@ private String chatType;
                 return message.getSendType()==1?MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
             case LOC_MSG:
                 return message.getSendType()==1?MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
+            case TIP_MSG:
+                return MESSAGE_TYPE_TIPS;
         }
         return -1;// invalid
     }
@@ -241,6 +244,8 @@ private String chatType;
             case TEXT_MSG:
                 return message.getSendType() ==1 ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
                         R.layout.row_sent_message, null);
+            case TIP_MSG:
+                return inflater.inflate(R.layout.row_chat_tips, null);
             default:
                 break;
         }
@@ -294,6 +299,9 @@ private String chatType;
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     break;
+                case TIP_MSG:
+                    holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
+                    break;
             }
             convertView.setTag(holder);
         } else {
@@ -340,6 +348,9 @@ private String chatType;
                 handleVoiceMessage(message, holder, position, convertView);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
+            case TIP_MSG:
+                handleTipsMessage(message,holder,position);
+                break;
 //            case VIDEO: // 视频
 //                handleGroupMessage(position, convertView, message, holder);
 //                handleVideoMessage(message, holder, position, convertView);
@@ -372,10 +383,8 @@ private String chatType;
         return convertView;
     }
 
-    private void handleTipsMessage(EMMessage message, ViewHolder holder, final int position) {
-        int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
-        String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
-        holder.tv_tips.setText(conent);
+    private void handleTipsMessage(MessageBean message, ViewHolder holder, final int position) {
+        holder.tv_tips.setText(message.getMessage());
 
     }
 

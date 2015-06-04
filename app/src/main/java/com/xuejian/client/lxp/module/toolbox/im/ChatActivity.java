@@ -105,6 +105,7 @@ import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKModel;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.FavListActivity;
@@ -238,6 +239,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
        // toChatUsername=100006+"";
        // chatType="single";
       //  conversation="0";
+        if (UserDBManager.getInstance().isMyFriend(Long.parseLong(toChatUsername))){
+            System.out.println("isFriend");
+        }
 		initView();
 		setUpView();
         initdata();
@@ -1222,6 +1226,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
                 listView.setSelection(listView.getCount() - 1);
             }
         }
+    }
+
+    @Override
+    public void onCMDMessageArrive(MessageBean m) {
+
     }
 
     /**

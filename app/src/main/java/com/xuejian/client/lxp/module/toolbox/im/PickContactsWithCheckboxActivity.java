@@ -64,6 +64,7 @@ import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.CreateSuccessListener;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
@@ -237,7 +238,22 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             for (User user:toBeAddContacts){
                 list.add(user.getUserId());
             }
-            GroupManager.getGroupManager().addMembers(groupId,list,true);
+            GroupManager.getGroupManager().addMembers(groupId,list,true,new CallBack() {
+                @Override
+                public void onSuccess() {
+                    Intent intent=new Intent();
+                   // intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                    //intent.putExtra("toId", ChatName.toString());
+                    //intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+                    setResult(RESULT_OK, intent);
+                    finishWithNoAnim();
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            });
 
         }
         else if (toBeAddContacts.size()==1){

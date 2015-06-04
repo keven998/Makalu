@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
+import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.MessageBean;
@@ -128,6 +129,12 @@ public class MessageDB {
         String chater = null;
         System.out.println("Friend_Id " + Friend_Id + " conversation " + conversation);
         /**
+         * CMD消息
+         */
+        if ("CMD".equals(chatType)){
+           return handleCMD(entity);
+        }
+        /**
          * 单聊
          */
         if ("single".equals(chatType)) {
@@ -194,6 +201,52 @@ public class MessageDB {
         mdb.insert(table_name, null, values);
         IMClient.getInstance().setLastMsg(conversation, entity.getServerId());
         add2Conversion(Long.parseLong(chater), entity.getCreateTime(), table_name, entity.getServerId(), conversation,chatType);
+        closeDB();
+        return 0;
+    }
+
+    private int handleCMD(MessageBean entity) {
+        mdb = getDB();
+        String table_name =  "cmd_" + CryptUtils.getMD5String(100+ "");;
+        mdb.execSQL("CREATE table IF NOT EXISTS "
+                + table_name
+                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
+                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
+                "SenderId INTEGER)");
+        Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
+        int count = cursor.getCount();
+        if (count > 0) return 1;
+        cursor.close();
+        ContentValues values = new ContentValues();
+        values.put("ServerId", entity.getServerId());
+        values.put("Status", entity.getStatus());
+        values.put("Type", entity.getType());
+        values.put("Message", entity.getMessage());
+        values.put("CreateTime", entity.getCreateTime());
+        values.put("SendType", entity.getSendType());
+        values.put("Metadata", entity.getMetadata());
+        values.put("SenderId", entity.getSenderId());
+        mdb.insert(table_name, null, values);
+        String cmd=entity.getMessage();
+        try {
+            JSONObject object=new JSONObject(cmd);
+            String action=object.getString("action");
+            switch (action){
+                case "D_INVITE":
+                long chatId=object.getLong("groupId");
+                long inviteId=object.getLong("userId");
+                String nickName=object.getString("nickName");
+                String groupName=object.getString("groupName");
+                MessageBean m=new MessageBean();
+                m.setMessage(nickName+"邀请你加入"+groupName+"讨论组");
+                m.setCreateTime(TimeUtils.getTimestamp());
+                m.setType(99);
+                saveMsg(String.valueOf(chatId),m,"group");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         closeDB();
         return 0;
     }

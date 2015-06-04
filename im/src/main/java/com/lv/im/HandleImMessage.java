@@ -50,6 +50,8 @@ public class HandleImMessage {
          * @param m 收到的消息
          */
         public void onMsgArrive(MessageBean m);
+
+        public void onCMDMessageArrive(MessageBean m);
     }
 
     /**
@@ -85,6 +87,12 @@ public class HandleImMessage {
         public void handleMessage(android.os.Message message) {
             System.out.println("new Message");
             switch (message.what) {
+                case Config.CMD_MSG:
+                    Message newCMDMessage = (Message) message.obj;
+                    for (MessagerHandler handler : ehList) {
+                        handler.onCMDMessageArrive(Msg2Bean(newCMDMessage));
+                    }
+                    break;
                 case Config.TEXT_MSG:
                     Message newMessage = (Message) message.obj;
                     System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
@@ -143,6 +151,13 @@ public class HandleImMessage {
                 Log.i(Config.TAG, "result :" + result);
             }
             if (result == 0) {
+                if (messageBean.getMsgType()==100){
+                    android.os.Message cmd_msg = android.os.Message.obtain();
+                    cmd_msg.obj = messageBean;
+                    cmd_msg.what = Config.CMD_MSG;
+                    handler.sendMessage(cmd_msg);
+                    return;
+                }
                 System.out.println("ehList size: "+ehList.size());
               //  for (MessagerHandler handler : ehList) {
                     if (openStateMap.containsKey(ehList.get(0))) {
