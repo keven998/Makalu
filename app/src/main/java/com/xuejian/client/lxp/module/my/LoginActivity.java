@@ -114,7 +114,7 @@ public class LoginActivity extends PeachBaseActivity{
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+       /* findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
@@ -131,7 +131,7 @@ public class LoginActivity extends PeachBaseActivity{
 //                    }
 //                });
             }
-        });
+        });*/
         loginBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -401,13 +401,11 @@ error.printStackTrace();
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_REG) {
-            if(resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_REG &&resultCode == RESULT_OK) {
                 PeachUser user = (PeachUser) data.getSerializableExtra("user");
                 loginNameEt.setText(user.tel);
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
                 imLogin(user);
-            }
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             PeachUser user = (PeachUser) data.getSerializableExtra("user");

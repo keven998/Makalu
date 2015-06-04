@@ -113,7 +113,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
     PeachUser user;
+    PeachUser hisBean;
     private IMUser imUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,16 +141,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-        if(userId!=10000){
-            tv_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showActionDialog();
-                }
-            });
-        }else{
-            tv_del.setVisibility(View.GONE);
-        }
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,15 +263,25 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }else{
         resident.setText(bean.residence);
         }
-        if(getAge(bean.birthday)==0){
+        if(bean.birthday==null){
             age.setText("未设置");
         }else{
         age.setText(getAge(bean.birthday)+"");
         }
 
+        if(userId!=10000&&IMUserRepository.isMyFriend(HisMainPageActivity.this,bean.easemobUser )){
+            tv_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showActionDialog();
+                }
+            });
+        }else{
+            tv_del.setVisibility(View.GONE);
+        }
 
         if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
-            add_friend.setText("咨询达人");
+            add_friend.setText("开始聊天");
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -391,11 +393,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public int getAge(String birth){
         int age=0;
-        String birthType=birth.substring(0,4).toString();
-        int birthYear=Integer.parseInt(birthType);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
-        String date=sdf.format(new java.util.Date());
-        age=Integer.parseInt(date)-birthYear;
+            String birthType = birth.substring(0, 4).toString();
+            int birthYear = Integer.parseInt(birthType);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            String date = sdf.format(new java.util.Date());
+            age = Integer.parseInt(date) - birthYear;
         return age;
     }
 
