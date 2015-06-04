@@ -43,6 +43,7 @@ import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -204,7 +205,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (!User.getUser().isLogin()) {
             return;
         }
-        if (!EMChat.getInstance().isLoggedIn()) {
+        if (!AccountManager.getInstance().isLogin()) {
             return;
         }
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
@@ -212,11 +213,11 @@ public class TalkFragment extends PeachBaseFragment {
         // contact list
 //        contactList = AccountManager.getInstance().getContactList(getActivity());
 //        if(EMGroupManager.getInstance().getAllGroups()==null){
-        EMGroupManager.getInstance().loadAllGroups();
+       // EMGroupManager.getInstance().loadAllGroups();
 //        }
-        loadConversationsWithRecentChat();
+        //loadConversationsWithRecentChat();
         loadConversation();
-        updateGroupsInfo();
+       // updateGroupsInfo();
     }
 
     private void loadConversations() {
@@ -310,7 +311,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        updateUnreadAddressLable();
+       // updateUnreadAddressLable();
 
     }
 
@@ -338,14 +339,14 @@ public class TalkFragment extends PeachBaseFragment {
      * @return
      */
     public int getUnreadAddressCountTotal() {
-        int unreadAddressCountTotal = 0;
+       /* int unreadAddressCountTotal = 0;
         unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(PeachApplication.getContext());
         if (AccountManager.getInstance().getContactList(PeachApplication.getContext()).get(Constant.NEW_FRIENDS_USERNAME) != null) {
-            IMUser imUser = AccountManager.getInstance().getContactList(PeachApplication.getContext()).get(Constant.NEW_FRIENDS_USERNAME);
-            imUser.setUnreadMsgCount(unreadAddressCountTotal);
-            IMUserRepository.saveContact(PeachApplication.getContext(), imUser);
-        }
-        return unreadAddressCountTotal;
+            com.xuejian.client.lxp.db.userDB.User imUser = AccountManager.getInstance().getContactList(PeachApplication.getContext()).get(Constant.NEW_FRIENDS_USERNAME);
+            //imUser.setUnreadMsgCount(unreadAddressCountTotal);
+            UserDBManager.getInstance().saveContact(imUser);
+        }*/
+        return 0;
     }
 
     /**
@@ -401,14 +402,14 @@ public class TalkFragment extends PeachBaseFragment {
             }
 
         }
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 Iterator<String> it = groupIdList.iterator();
                 while (it.hasNext()) {
                     String groupId = it.next();
                     try {
-                        EMGroup emGroup = EMGroupManager.getInstance().getGroupFromServer(groupId);
+                        *//*EMGroup emGroup = EMGroupManager.getInstance().getGroupFromServer(groupId);
                         if (emGroup != null) {
                             if (emGroup.getMembers().contains(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).easemobUser)) {
                                 EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
@@ -422,7 +423,7 @@ public class TalkFragment extends PeachBaseFragment {
                     } catch (EaseMobException e) {
                         LogUtil.d("errcode=" + e.getErrorCode());
                         e.printStackTrace();
-                    }
+                    }*//*
 
                 }
                 if (getActivity() != null) {
@@ -436,7 +437,7 @@ public class TalkFragment extends PeachBaseFragment {
 
 
             }
-        }).start();
+        }).start();*/
     }
 
     /**
@@ -486,7 +487,7 @@ public class TalkFragment extends PeachBaseFragment {
         }
         if (User.getUser().isLogin())
             loadConversation();
-        if (EMChat.getInstance().isLoggedIn()) {
+        if (AccountManager.getInstance().isLogin()) {
             if (listView.getAdapter().getCount() <= 0) {
                 //setEmptyView();
             }

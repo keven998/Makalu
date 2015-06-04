@@ -299,10 +299,10 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
                     EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                     msg.setChatType(EMMessage.ChatType.GroupChat);
-                    msg.setFrom(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).easemobUser);
+                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getUserId()));
                     msg.setReceipt(group.getGroupId());
                     IMUtils.setMessageWithTaoziUserInfo(PeachApplication.getContext(), msg);
-                    String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).nickName;
+                    String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getNickName();
                     String content = myNickname + " 退出了群聊";
                     IMUtils.setMessageWithExtTips(PeachApplication.getContext(), msg, content);
                     msg.addBody(new TextMessageBody(content));
@@ -631,7 +631,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -648,7 +648,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -855,10 +855,10 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                                 // 被邀请
                                 EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                                 msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser);
+                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()));
                                 msg.setReceipt(group.getGroupId());
                                 IMUtils.setMessageWithTaoziUserInfo(getActivity(), msg);
-                                String myNickmae = AccountManager.getInstance().getLoginAccount(getActivity()).nickName;
+                                String myNickmae = String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId());
                                 String content = String.format(getActivity().getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
                                 IMUtils.setMessageWithExtTips(getActivity(), msg, content);
                                 msg.addBody(new TextMessageBody(content));

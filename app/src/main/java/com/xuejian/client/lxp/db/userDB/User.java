@@ -4,14 +4,17 @@ package com.xuejian.client.lxp.db.userDB;
 
 import com.xuejian.client.lxp.bean.LocBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Entity mapped to table USER.
  */
-public class User {
-    private Long userId;
+public class User implements Serializable {
+    public static final String M="M";
+    public static final String F="F";
+    private long userId;
     private String nickName;
     private String avatar;
     private String avatarSmall;
@@ -73,11 +76,12 @@ public class User {
         this.Ext = Ext;
         this.header=header;
     }
+
     public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -231,6 +235,19 @@ public class User {
 
     public void setExt(String Ext) {
         this.Ext = Ext;
+    }
+
+    public String getGenderDesc() {
+        if ("F".equals(gender)) {
+            return "美女";
+        } else if ("M".equals(gender)) {
+            return "帅锅";
+        } else if ("U".equals(gender)) {
+            return "不告诉你";
+        } else if ("S".equals(gender)) {
+            return "保密";
+        }
+        return "";
     }
 
 }

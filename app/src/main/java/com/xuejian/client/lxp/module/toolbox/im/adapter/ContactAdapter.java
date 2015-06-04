@@ -160,6 +160,12 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
                 vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
                 vh.avatarView.setImageResource(R.drawable.ic_frend_request);
+				/*if(user.getUnreadMsgCount() > 0){
+					vh.unreadMsgView.setVisibility(View.VISIBLE);
+                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
+				}else{
+                    vh.unreadMsgView.setVisibility(View.GONE);
+				}*/
 //				if(user.getUnreadMsgCount() > 0){
 //					vh.unreadMsgView.setVisibility(View.VISIBLE);
 //                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
@@ -244,7 +250,10 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 //        sectionOfPosition.put(0, 0);
         int section=0;
         for (int i = 0; i < count; i++) {
+           /* String letter = getItem(i).getHeader();
+=======
             String letter =getItem(i).getHeader();
+>>>>>>> origin/im_local
             String beforeLetter ="";
             if(i>0){
                 beforeLetter = getItem(i-1).getHeader();
@@ -253,7 +262,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 section++;
                 sections.add(letter);
                 positionOfSection.put(section, i);
-            }
+            }*/
             sectionOfPosition.put(i, section);
         }
     }

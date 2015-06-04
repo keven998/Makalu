@@ -82,6 +82,13 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 
 	private void getContactList() {
 		contactList.clear();
+		Map<Long, User> users = AccountManager.getInstance().getContactList(this);
+		Iterator<Entry<Long, User>> iterator = users.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<Long, User> entry = iterator.next();
+			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
+				contactList.add(entry.getValue());
+		}
         contactList= UserDBManager.getInstance().getContactListWithoutGroup();
 //		Map<String, IMUser> users = AccountManager.getInstance().getContactList(this);
 //		Iterator<Entry<String, IMUser>> iterator = users.entrySet().iterator();
@@ -95,6 +102,7 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 
 			@Override
 			public int compare(User lhs, User rhs) {
+				//return String.valueOf(lhs.getUserId()).compareTo(String.valueOf(rhs.getUserId()));
 				return lhs.getNickName().compareTo(rhs.getNickName());
 			}
 		});

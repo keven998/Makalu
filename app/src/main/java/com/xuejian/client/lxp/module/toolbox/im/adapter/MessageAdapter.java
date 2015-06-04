@@ -407,6 +407,7 @@ private String chatType;
                     ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
             } else {
+               // User user = AccountManager.getInstance().getContactList(activity).get(friendId);
                 User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                 if (user != null) {
                     holder.tv_userId.setText(user.getNickName());
@@ -414,6 +415,7 @@ private String chatType;
                 }
             }
         } else {
+           // User user = AccountManager.getInstance().getLoginAccount(context);
             User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
             if (user != null) {
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
@@ -516,15 +518,15 @@ private String chatType;
 
                 @Override
                 public void onClick(View v) {
-                    if (IMUserRepository.isMyFriend(context, message.getSenderId()+"")) {
+                    if (UserDBManager.getInstance().isMyFriend(message.getSenderId())) {
                         Intent intent = new Intent(context, ContactDetailActivity.class);
-                        IMUser user = IMUserRepository.getContactByUserName(context, message.getSenderId()+"");
+                        User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                         intent.putExtra("userId", user.getUserId());
-                        intent.putExtra("userNick", user.getNick());
+                        intent.putExtra("userNick", user.getNickName());
                         context.startActivity(intent);
                     } else {
-                        IMUser itemData = IMUserRepository.getContactByUserName(context, message.getSenderId()+"");
-                        PeachUser user = new PeachUser();
+                        User itemData = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
+                        /*User user = new User();
                         if (itemData != null) {
                             user.nickName = itemData.getNick();
                             user.userId = itemData.getUserId();
@@ -536,9 +538,9 @@ private String chatType;
                             user.memo = itemData.getMemo();
                         } else {
                             user.easemobUser = message.getSenderId()+"";
-                        }
+                        }*/
                         Intent intent = new Intent(context, SeachContactDetailActivity.class);
-                        intent.putExtra("user", user);
+                        intent.putExtra("user", itemData);
                         context.startActivity(intent);
 
 

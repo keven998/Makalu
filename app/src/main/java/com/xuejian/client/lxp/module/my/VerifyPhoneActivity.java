@@ -23,6 +23,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -35,7 +36,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     private CountDownTimer countDownTimer;
     private String tel,pwd,actionCode;
     private int countDown;
-    private PeachUser user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void doSucess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
 //                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                                     ToastUtil.getInstance(mContext).showToast("注册成功");
@@ -144,7 +145,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
                 String uid=null ;
                 if(user!=null){
-                    uid = user.userId+"";
+                    uid = user.getUserId()+"";
                 }
                 UserApi.sendValidation(tel, actionCode, uid, new HttpCallBack<String>() {
                     @Override

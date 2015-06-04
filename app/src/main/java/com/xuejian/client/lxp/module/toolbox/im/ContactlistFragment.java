@@ -82,7 +82,7 @@ public class ContactlistFragment extends Fragment {
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<User>();
 		// 获取设置contactlist
-		getContactList();
+		//getContactList();
 		// 设置adapter
         System.out.println("setAdapter!");
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
@@ -101,12 +101,13 @@ public class ContactlistFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				//String username = "123";//adapter.getItem(position).getUserName();
 				String username = adapter.getItem(position).getNickName();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面
-                    System.out.println("NEW_FRIENDS_USERNAME");
-					IMUser user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
-					user.setUnreadMsgCount(0);
+					User user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
+					//user.setUnreadMsgCount(0);
+
 					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
 				} else if (Constant.GROUP_USERNAME.equals(username)) {
 					// 进入群聊列表页面
@@ -217,7 +218,7 @@ public class ContactlistFragment extends Fragment {
 			// 可能会在子线程中调到这方法
 			getActivity().runOnUiThread(new Runnable() {
 				public void run() {
-					getContactList();
+					//getContactList();
 					adapter.notifyDataSetChanged();
 				}
 			});
@@ -227,24 +228,53 @@ public class ContactlistFragment extends Fragment {
 	}
 
 	private void getContactList() {
+		Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
+        if(users==null){
+            return;
+        }
+        contactList.clear();
+		Iterator<Map.Entry<Long, User>> iterator = users.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<Long, User> entry = iterator.next();
+			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+                contactList.add(entry.getValue());
+            }
+		}
+
+		// 排序
+		/*Collections.sort(contactList, new Comparator<User>() {
+=======
+//		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Map.Entry<String, IMUser> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+//                contactList.add(entry.getValue());
+//            }
+//		}
+        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+=======
         contactList.clear();
         contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+>>>>>>> origin/im_local
 		// 排序
 		Collections.sort(contactList, new Comparator<User>() {
+>>>>>>> origin/im_local
 
 			@Override
 			public int compare(User lhs, User rhs) {
 				return lhs.getHeader().compareTo(rhs.getHeader());
 			}
-		});
+		});*/
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
+        User user = users.get(Constant.NEW_FRIENDS_USERNAME);
+        if(user!=null){
+            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+        }
 //        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
 //        if(user!=null){
 //            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
 //        }
-
-
 	}
 }

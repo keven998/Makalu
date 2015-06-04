@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.config.PeachApplication;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.AddPoiActivity;
 import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
@@ -64,7 +65,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     View addDayFooter;
     StrategyBean strategy;
     public boolean isInEditMode;
-    PeachUser user;
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
 
     }
     private void setAddDayView(){
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
+        final User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
        /* if(addDayFooter!=null){
             if (user.userId != strategy.userId) {
                 addDayFooter.setVisibility(View.GONE);
@@ -655,7 +656,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             if(user==null){
                 holder.doMore.setVisibility(View.GONE);
             }else {
-                if (user.userId != strategy.userId) {
+                if (user.getUserId() != strategy.userId) {
                     holder.doMore.setVisibility(View.GONE);
                 }
             }

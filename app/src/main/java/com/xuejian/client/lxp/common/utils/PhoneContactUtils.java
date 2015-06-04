@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import com.xuejian.client.lxp.bean.AddressBookbean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.db.userDB.User;
 
 import java.util.ArrayList;
 
@@ -38,11 +39,11 @@ public class PhoneContactUtils {
                 String lastContactIdString="";
                 int entryId=0;
                 int sourceId=0;
-                PeachUser user = AccountManager.getInstance().getLoginAccount(context);
+                User user = AccountManager.getInstance().getLoginAccount(context);
                 while (phones.moveToNext()) {
                     bean= new AddressBookbean();
                     phoneString = phones.getString(phoneIndex);
-                    if(phoneString.equals(user.tel)){
+                    if(phoneString.equals(user.getTel())){
                         continue;
                     }
                     displayNameString = phones.getString(displayNameIndex);

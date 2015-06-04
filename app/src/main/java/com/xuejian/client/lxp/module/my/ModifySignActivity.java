@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
@@ -21,6 +22,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -30,7 +32,7 @@ public class ModifySignActivity extends PeachBaseActivity {
     private EditText signEt;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
-    private PeachUser user;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -60,9 +62,12 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                        DialogManager.getInstance().dissMissLoadingDialog();
                                                                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                                                        if (modifyResult.code == 0) {
-                                                                           user.signature = signEt.getText().toString().trim();
+                                                                           user.setSignature(signEt.getText().toString().trim());
                                                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
                                                                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
+                                                                           Intent intent=new Intent();
+                                                                           intent.putExtra("signature",signEt.getText().toString().trim());
+                                                                           setResult(RESULT_OK,intent);
                                                                            finish();
                                                                        } else {
                                                                            if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
@@ -92,7 +97,7 @@ public class ModifySignActivity extends PeachBaseActivity {
 
     private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
-        signEt.setText(user.signature);
+        signEt.setText(user.getSignature());
         CharSequence text = signEt.getText();
         //Debug.asserts(text instanceof Spannable);
         if (text instanceof Spannable) {

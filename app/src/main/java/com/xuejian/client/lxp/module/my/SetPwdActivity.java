@@ -22,6 +22,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -33,7 +34,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
     private Button okBtn;
     String mToken;
     String mPhone;
-    PeachUser user;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +64,13 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                UserApi.bindPhone(mPhone, user.userId + "", pwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
+                UserApi.bindPhone(mPhone, user.getUserId() + "", pwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (bindResult.code == 0) {
-                            user.tel = mPhone;
+                            user.setTel(mPhone);
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                             Intent intent = new Intent(mContext, AccountActvity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

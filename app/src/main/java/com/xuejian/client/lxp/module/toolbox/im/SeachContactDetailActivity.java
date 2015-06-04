@@ -28,6 +28,8 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,42 +51,44 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
     private TextView signTv;
     @ViewInject(R.id.btn_add_contact)
     private Button addContactBtn;
-    private PeachUser user;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach_contact_detail);
         ViewUtils.inject(this);
         boolean isSearch = getIntent().getBooleanExtra("isSeach", false);
-        user = (PeachUser) getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("user");
         initTitleBar();
         if (isSearch) {
             bindView();
         } else {
-            if (!TextUtils.isEmpty(user.nickName)) {
+            if (!TextUtils.isEmpty(user.getNickName())) {
                 bindView();
             }
             List<String> hxList = new ArrayList<String>();
-            hxList.add(user.easemobUser);
+            hxList.add(user.getUserId()+"");
             UserApi.getContactByHx(hxList, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result, PeachUser.class);
+                    CommonJson4List<User> userResult = CommonJson4List.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         if (userResult.result.size() > 0) {
                             user = userResult.result.get(0);
-                            IMUser imUser = IMUserRepository.getContactByUserId(mContext, user.userId);
-                            if (imUser == null) {
-                                imUser = new IMUser();
+                            User cuser = UserDBManager.getInstance().getContactByUserId(user.getUserId());
+                            //IMUser imUser = IMUserRepository.getContactByUserId(mContext, user.userId);
+                            if (cuser == null) {
+                                cuser = new User();
                             }
-                            imUser.setNick(user.nickName);
-                            imUser.setAvatar(user.avatar);
-                            imUser.setAvatarSmall(user.avatarSmall);
-                            imUser.setSignature(user.signature);
-                            imUser.setMemo(user.memo);
-                            imUser.setGender(user.gender);
-                            IMUtils.setUserHead(imUser);
-                            IMUserRepository.saveContact(mContext, imUser);
+                            cuser.setNickName(user.getNickName());
+                            cuser.setAvatar(user.getAvatar());
+                            cuser.setAvatarSmall(user.getAvatarSmall());
+                            cuser.setSignature(user.getSignature());
+                            cuser.setMemo(user.getMemo());
+                            cuser.setGender(user.getGender());
+                            //IMUtils.setUserHead(imUser);
+                            //IMUserRepository.saveContact(mContext, imUser);
+                            UserDBManager.getInstance().saveContact(user);
                             bindView();
                         }
                     }
@@ -103,13 +107,13 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                 //todo:修改攻略名称
                 final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                 editDialog.setTitle("输入验证信息");
-                editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).nickName));
+                editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(SeachContactDetailActivity.this).getNickName()));
                 editDialog.setPositiveButton("确定",new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         editDialog.dismiss();
                         DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
-                        UserApi.requestAddContact(user.userId + "", editDialog.getMessage(), new HttpCallBack() {
+                        UserApi.requestAddContact(user.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
                             @Override
                             public void doSucess(Object result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -191,7 +195,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
 
     private void initTitleBar(){
         TitleHeaderBar thbar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        thbar.getTitleTextView().setText(user.nickName);
+        thbar.getTitleTextView().setText(user.getNickName());
         thbar.enableBackKey(true);
     }
 
@@ -204,17 +208,17 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(32))) // 设置成圆角图片
                 .build();
-        ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
-        if ("M".equalsIgnoreCase(user.gender)) {
+        ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
+        if ("M".equalsIgnoreCase(user.getGender())) {
             genderIv.setImageResource(R.drawable.ic_gender_man);
-        } else if ("F".equalsIgnoreCase(user.gender)) {
+        } else if ("F".equalsIgnoreCase(user.getGender())) {
             genderIv.setImageResource(R.drawable.ic_gender_lady);
         } else {
             genderIv.setImageDrawable(null);
         }
 
-        nickNameTv.setText(user.nickName);
-        signTv.setText(user.signature);
+        nickNameTv.setText(user.getNickName());
+        signTv.setText(user.getSignature());
     }
 
 

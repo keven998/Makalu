@@ -26,6 +26,7 @@ import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
 		listView = (ListView) findViewById(R.id.list);
 	    msgs = InviteMsgRepository.getMessagesList(mContext);
         for (InviteMessage msg : msgs) {
-            if (msg.getStatus() == InviteStatus.BEINVITEED&& IMUserRepository.isMyFriend(mContext, msg.getFrom())) {
+            if (msg.getStatus() == InviteStatus.BEINVITEED&& UserDBManager.getInstance().isMyFriend(msg.getUserId())) {
                 msg.setStatus(InviteStatus.AGREED);
                 InviteMsgRepository.saveMessage(mContext, msg);
             }

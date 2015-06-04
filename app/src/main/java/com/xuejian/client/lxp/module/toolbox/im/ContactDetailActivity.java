@@ -45,6 +45,8 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/29.
@@ -62,7 +64,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
     @ViewInject(R.id.tv_sign)
     private TextView signTv;
     private long userId;
-    private IMUser imUser;
+    private User imUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         ViewUtils.inject(this);
         initTitleBar();
         userId = getIntent().getLongExtra("userId", 0);
-        imUser = IMUserRepository.getContactByUserId(mContext, userId);
+        imUser = UserDBManager.getInstance().getContactByUserId(userId);
         if (imUser != null) {
             bindView();
         }
@@ -79,11 +81,14 @@ public class ContactDetailActivity extends ChatBaseActivity {
         UserApi.getUserInfo(userId + "", new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
-                    PeachUser user = userResult.result;
-                    imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
-                    if (imUser != null) {
+                    User user = userResult.result;
+                    AccountManager.getInstance().getContactList(mContext).put(user.getUserId(), user);
+                    UserDBManager.getInstance().saveContact(user);
+                    bindView();
+                   // imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
+                   /* if (imUser != null) {
                         imUser.setNick(user.nickName);
                         imUser.setAvatar(user.avatar);
                         imUser.setAvatarSmall(user.avatarSmall);
@@ -94,7 +99,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                         AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(), imUser);
                         IMUserRepository.saveContact(mContext, imUser);
                         bindView();
-                    }
+                    }*/
                 }
             }
 
@@ -188,7 +193,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void deleteContact(final IMUser tobeDeleteUser) {
+    private void deleteContact(final User tobeDeleteUser) {
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
         UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
             @Override
@@ -196,10 +201,10 @@ public class ContactDetailActivity extends ChatBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
-                    IMUserRepository.deleteContact(ContactDetailActivity.this, tobeDeleteUser.getUsername());
-                    EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
-                    AccountManager.getInstance().getContactList(ContactDetailActivity.this).remove(tobeDeleteUser.getUsername());
-                    InviteMsgRepository.deleteInviteMsg(ContactDetailActivity.this, tobeDeleteUser.getUsername());
+                    UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
+                    //EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                    AccountManager.getInstance().getContactList(ContactDetailActivity.this).remove(tobeDeleteUser.getUserId());
+                    //UserDBManager.getInstance().deleteInviteMsg(ContactDetailActivity.this, tobeDeleteUser.getUsername());
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(ContactDetailActivity.this).showToast(deleteResult.err.message);
@@ -269,14 +274,14 @@ public class ContactDetailActivity extends ChatBaseActivity {
             genderIv.setImageDrawable(null);
         }
 
-        nickNameTv.setText("昵称：" + imUser.getNick());
+        nickNameTv.setText("昵称：" + imUser.getNickName());
         idTv.setText("ID：" + imUser.getUserId());
         signTv.setText("旅行签名：" + imUser.getSignature());
     }
 
     public void startChat(View view) {
         MobclickAgent.onEvent(mContext,"event_talk_with_it");
-        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
+        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUserId()));
 //        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 //        finish();
     }
@@ -291,12 +296,12 @@ public class ContactDetailActivity extends ChatBaseActivity {
     }
 
     public static class ContactDetailMenu extends SupportBlurDialogFragment {
-        private IMUser mImUser;
+        private User mImUser;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mImUser = (IMUser) getArguments().getSerializable("imUser");
+            mImUser = (User) getArguments().getSerializable("imUser");
 
         }
 
@@ -322,7 +327,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
          *
          * @param tobeDeleteUser
          */
-        public void deleteContact(final IMUser tobeDeleteUser) {
+        public void deleteContact(final User tobeDeleteUser) {
             DialogManager.getInstance().showLoadingDialog(getActivity(), "正在删除...");
             UserApi.deleteContact(tobeDeleteUser.getUserId() + "", new HttpCallBack() {
                 @Override
@@ -330,11 +335,12 @@ public class ContactDetailActivity extends ChatBaseActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                     if (deleteResult.code == 0) {
-                        IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
+                        //IMUserRepository.deleteContact(getActivity(), tobeDeleteUser.getUsername());
+                        UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
                         // 删除此会话
-                        EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
-                        AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUsername());
-                        InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteUser.getUsername());
+                        //EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                        AccountManager.getInstance().getContactList(getActivity()).remove(tobeDeleteUser.getUserId());
+                        //InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteUser.getUsername());
                         dismiss();
                         getActivity().finish();
                     } else if (!TextUtils.isEmpty(deleteResult.err.message)) {

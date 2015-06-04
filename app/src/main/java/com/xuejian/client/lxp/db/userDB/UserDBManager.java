@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.aizou.core.log.LogUtil;
+import com.easemob.util.HanziToPinyin;
 import com.lidroid.xutils.exception.DbException;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
@@ -77,6 +79,7 @@ public class UserDBManager {
         mdb = null;
     }
 
+
     public List<Long> getGroupMemberId(long groupId) {
         mdb = getDB();
         List<Long> list = new ArrayList<>();
@@ -85,6 +88,7 @@ public class UserDBManager {
         while (cursor.moveToNext()) {
             data = cursor.getString(0);
         }
+
         try {
             JSONArray array = (JSONArray) new JSONObject(data).get("GroupMember");
             for (int i = 0; i < array.length(); i++) {
@@ -161,6 +165,7 @@ public class UserDBManager {
                 email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext, header);
     }
 
+
     public boolean isMyFriend(long userId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
@@ -219,6 +224,17 @@ public class UserDBManager {
 
     public void saveContact(User user) {
         mdb = getDB();
+                if(user.getNickName()==null){
+                    user.setHeader("#");
+                }else{
+                    String headerName = user.getNickName();
+                    user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                            0, 1).toUpperCase());
+                    char header = user.getHeader().toLowerCase().charAt(0);
+                    if (header < 'a' || header > 'z') {
+                        user.setHeader("#");
+                    }
+                }
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
         if (cursor.getCount()>0){
             System.out.println("更新 "+user.getUserId());
@@ -334,6 +350,8 @@ public class UserDBManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mdb.setTransactionSuccessful();
+        mdb.endTransaction();
         closeDB();
     }
     public void updateGroupMemberInfo(List<User> list,String groupId){

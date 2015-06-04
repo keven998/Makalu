@@ -27,6 +27,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -137,7 +138,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent(mContext,"event_select_done_go_next");
-                PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+                User user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
                     if(requestCode== StrategyActivity.EDIT_LOC_REQUEST_CODE){
                         DialogManager.getInstance().showLoadingDialog(SelectDestActivity.this);

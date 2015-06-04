@@ -56,6 +56,7 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.fragment.RestaurantFragment;
 import com.xuejian.client.lxp.module.dest.fragment.RouteDayFragment;
 import com.xuejian.client.lxp.module.dest.fragment.ShoppingFragment;
@@ -443,7 +444,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         draw_title.setText(result.title);
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+        final User user = AccountManager.getInstance().getLoginAccount(mContext);
 
         if(user==null){
             mIvEdit.setVisibility(View.GONE);
@@ -451,7 +452,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         }else {
-            if (user.userId != result.userId) {
+            if (user.getUserId() != result.userId) {
                 mIvEdit.setVisibility(View.GONE);
                 mIvMore.setVisibility(View.GONE);
                 iv_location.setVisibility(View.GONE);
@@ -476,7 +477,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                         CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
                                         if (modifyResult.code == 0) {
                                             strategy.id = modifyResult.result.id;
-                                            strategy.userId = user.userId;
+                                            strategy.userId = user.getUserId();
                                             bindView(strategy);
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");

@@ -11,6 +11,8 @@ import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +21,10 @@ import java.util.Map;
 public class AccountManager {
     public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
     public static final String LOGIN_USER_PREF = "login_user";
-    public static PeachUser user;
+    public static User user;
     public  String CurrentUserId;
-    private Map<String, IMUser> contactList;
+    private Map<Long, User> contactList;
+    private boolean isLogin=false;
 
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
@@ -36,20 +39,29 @@ public class AccountManager {
         return instance;
 
     }
+
+    public void setLogin(boolean isLogin){
+        this.isLogin=isLogin;
+    }
+
+    public boolean isLogin(){
+        return isLogin;
+    }
+
     public String getCurrentUserId(){
         return CurrentUserId;
     }
     public void setCurrentUserId(String currentUserId){
         this.CurrentUserId=currentUserId;
     }
-    public PeachUser getLoginAccount(Context context) {
+    public User getLoginAccount(Context context) {
         String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
         if (TextUtils.isEmpty(userJson)) {
             return null;
         }
         if (user == null) {
             user = GsonTools.parseJsonToBean(userJson,
-                    PeachUser.class);
+                    User.class);
         }
         return user;
     }
@@ -100,7 +112,7 @@ public class AccountManager {
 
     }
 
-    public void saveLoginAccount(Context context, PeachUser user) {
+    public void saveLoginAccount(Context context, User user) {
         this.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
@@ -110,12 +122,12 @@ public class AccountManager {
      *
      * @return
      */
-    public Map<String, IMUser> getContactList(Context context) {
+    public Map<Long, User> getContactList(Context context) {
         // 获取本地好友user list到内存,方便以后获取好友list
-        List<IMUser> userList = IMUserRepository.getContactList(context);
-        contactList = new HashMap<String, IMUser>();
-        for (IMUser user : userList) {
-            contactList.put(user.getUsername(), user);
+        List<User> userList = UserDBManager.getInstance().getContactListWithoutGroup();
+        contactList = new HashMap<Long, User>();
+        for (User user : userList) {
+            contactList.put(user.getUserId(), user);
         }
         return contactList;
     }
@@ -125,7 +137,7 @@ public class AccountManager {
      *
      * @param contactList
      */
-    public void setContactList(Map<String, IMUser> contactList) {
+    public void setContactList(Map<Long, User> contactList) {
         this.contactList = contactList;
     }
 

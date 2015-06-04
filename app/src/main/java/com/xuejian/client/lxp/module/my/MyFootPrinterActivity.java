@@ -30,6 +30,7 @@ import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
@@ -78,9 +79,9 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private void updataUserFootPrint(String type,String id){
         String[] ids=new String[1];
         ids[0]=id;
-        PeachUser user= AccountManager.getInstance().getLoginAccount(this);
+        User user= AccountManager.getInstance().getLoginAccount(this);
 
-        UserApi.updateUserFootPrint(user.userId + "", type, ids, new HttpCallBack<String>() {
+        UserApi.updateUserFootPrint(user.getUserId() + "", type, ids, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 /*CommonJson4List<GroupLocBean> addResult= CommonJson4List.fromJson(result, GroupLocBean.class);

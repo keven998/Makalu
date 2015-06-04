@@ -42,6 +42,8 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.toolbox.FavListActivity;
 
@@ -84,7 +86,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
     public void refresh(){
-        PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+        User user = AccountManager.getInstance().getLoginAccount(getActivity());
         if(user == null) {
             View view=getView();
             genderIv.setVisibility(View.GONE);
@@ -97,14 +99,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             genderIv.setVisibility(View.VISIBLE);
             View view=getView();
             view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
-            if (user.gender.equalsIgnoreCase("M")) {
+            if (user.getGender().equalsIgnoreCase("M")) {
                 genderIv.setImageResource(R.drawable.ic_gender_man);
-            } else if (user.gender.equalsIgnoreCase("F")) {
+            } else if (user.getGender().equalsIgnoreCase("F")) {
                 genderIv.setImageResource(R.drawable.ic_gender_lady);
             } else {
                 genderIv.setImageDrawable(null);
             }
-            nickNameTv.setText(user.nickName);
+            nickNameTv.setText(user.getNickName());
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
@@ -114,13 +116,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
                     .build();
-            ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv, options);
-            LogUtil.d(user.avatarSmall+"====================================");
-            idTv.setText("ID: " + user.userId);
-            if (TextUtils.isEmpty(user.signature)) {
+            ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
+           // LogUtil.d(user.avatarSmall+"====================================");
+            idTv.setText("ID: " + user.getUserId());
+            if (TextUtils.isEmpty(user.getSignature())) {
                 statusTv.setText("");
             } else {
-                statusTv.setText(user.travelStatus);
+                statusTv.setText(user.getTravelStatus());
             }
         }
     }
@@ -155,7 +157,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.login_frame:
-                PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+                User user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) {
                     Intent logIntent=new Intent(getActivity(),LoginActivity.class);
                     startActivity(logIntent);
@@ -197,8 +199,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             case R.id.ll_message_center:
 //                Intent msgIntent = new Intent(getActivity(), MessageContents.class);
 //                startActivity(msgIntent);
-                PeachUser user1 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user1 != null && !TextUtils.isEmpty(user1.easemobUser)) {
+                User user1 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user1 != null) { // && !TextUtils.isEmpty(user1.easemobUser)
                     Intent fIntent = new Intent(getActivity(), FavListActivity.class);
                     startActivity(fIntent);
                 } else {
@@ -217,15 +219,56 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
         }
     }
-    private void imLogin(final PeachUser user) {
-        EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
+    private void imLogin(final User user) {
+
+        AccountManager.getInstance().saveLoginAccount(getActivity(), user);
+
+        final Map<Long, User> userlist = new HashMap<Long, User>();
+
+        UserApi.getContact(new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
+                if (contactResult.code == 0) {
+                    for (User myUser : contactResult.result.contacts) {
+                        userlist.put(myUser.getUserId(), user);
+                    }
+                    // 存入内存
+                    AccountManager.getInstance().setContactList(userlist);
+                    // 存入db
+                    List<User> users = new ArrayList<User>(userlist.values());
+                    UserDBManager.getInstance().saveContactList(users);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                if (!getActivity().isFinishing())
+                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+        // 进入主页面
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(getActivity()).showToast("欢迎来到旅行派");
+                refresh();
+
+            }
+        });
+
+
+
+
+        /*EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
 
             @Override
             public void onSuccess() {
 
                 // 登陆成功，保存用户名密码
                 // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
-                AccountManager.getInstance().saveLoginAccount(getActivity(), user);
+               // AccountManager.getInstance().saveLoginAccount(getActivity(), user);
                 boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
                 if (!updatenick) {
                     EMLog.e("LoginActivity", "update current user nick fail");
@@ -280,8 +323,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     public void doSucess(String result, String method) {
                         CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
                         if (contactResult.code == 0) {
-                            for (PeachUser peachUser : contactResult.result.contacts) {
-                                IMUser user = new IMUser();
+                            for (User peachUser : contactResult.result.contacts) {
+                               *//* IMUser user = new IMUser();
                                 user.setUserId(peachUser.userId);
                                 user.setMemo(peachUser.memo);
                                 user.setNick(peachUser.nickName);
@@ -292,7 +335,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                                 user.setSignature(peachUser.signature);
                                 user.setIsMyFriends(true);
                                 user.setGender(peachUser.gender);
-                                IMUtils.setUserHead(user);
+                                IMUtils.setUserHead(user);*//*
                                 userlist.put(peachUser.easemobUser, user);
                             }
                             // 存入内存
@@ -337,17 +380,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     }
                 });
             }
-        });
+        });*/
 
 
     }
 
-    @Override
+
+            @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == LoginActivity.REQUEST_CODE_REG) {
-                PeachUser user = (PeachUser) data.getSerializableExtra("user");
+                User user = (User) data.getSerializableExtra("user");
                 DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
                 imLogin(user);
             } else if (requestCode == CODE_FAVORITE) {

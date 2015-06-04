@@ -150,7 +150,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
 //            }
 //        });
         //网络更新好友列表
-        getContactFromServer();
+        //getContactFromServer();
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
@@ -317,7 +317,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
 
                 if (contactResult.code == 0) {
-                    IMUserRepository.clearMyFriendsContact(mContext);
+                   /* IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
                     Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                     // 添加user"申请与通知"
@@ -356,7 +356,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
                     IMUserRepository.saveContactList(mContext, users);
                     AccountManager.getInstance().setContactList(userlist);
                     refreshContactListFragment();
-                    refreshChatHistoryFragment();
+                    refreshChatHistoryFragment();*/
 
                 }
 
@@ -471,7 +471,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
      * @return
      */
     public int getUnreadAddressCountTotal() {
-        int unreadAddressCountTotal = 0;
+        /*int unreadAddressCountTotal = 0;
         unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
         if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
 
@@ -479,7 +479,8 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
             imUser.setUnreadMsgCount(unreadAddressCountTotal);
             IMUserRepository.saveContact(this, imUser);
         }
-        return unreadAddressCountTotal;
+        return unreadAddressCountTotal;*/
+        return 0;
     }
 
     /**
