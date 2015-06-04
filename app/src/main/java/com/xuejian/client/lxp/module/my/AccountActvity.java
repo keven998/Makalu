@@ -131,6 +131,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     LinearLayout llPics;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private int FOOTPRINT=4;
+    private int SIGNATURE=5;
+    private int NICKNAME=6;
+    private int BINDPHONE=7;
     private boolean birthTimeFlag=false;
     /*private ImageZoomAnimator2 zoomAnimator;
 
@@ -323,13 +326,13 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_nickname:
                 MobclickAgent.onEvent(mContext,"event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
-                startActivity(nickNameIntent);
+                startActivityForResult(nickNameIntent,NICKNAME);
                 break;
 
             case R.id.ll_sign:
                 MobclickAgent.onEvent(mContext,"event_update_memo");
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
-                startActivity(signIntent);
+                startActivityForResult(signIntent,SIGNATURE);
                 break;
 
             case R.id.ll_gender:
@@ -406,7 +409,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_bind_phone:
                 MobclickAgent.onEvent(mContext,"event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
-                startActivity(bindPhoneIntent);
+                startActivityForResult(bindPhoneIntent,BINDPHONE);
                 break;
 
             case R.id.btn_logout:
@@ -907,6 +910,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (requestCode == FOOTPRINT){
             all_foot_print_list=data.getParcelableArrayListExtra("footprint");
             initFootPrint(all_foot_print_list);
+        } else if (requestCode == SIGNATURE){
+            signTv.setText(data.getExtras().getString("signature"));
+        } else if (requestCode == NICKNAME){
+            nickNameTv.setText(data.getExtras().getString("nickname"));
+        } else if (requestCode == BINDPHONE){
+            bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
     }
 

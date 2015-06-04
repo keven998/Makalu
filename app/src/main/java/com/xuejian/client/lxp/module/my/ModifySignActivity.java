@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
@@ -62,6 +63,9 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                        if (modifyResult.code == 0) {
                                                                            user.signature = signEt.getText().toString().trim();
                                                                            AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                                                           Intent intent=new Intent();
+                                                                           intent.putExtra("signature", signEt.getText().toString().trim());
+                                                                           setResult(RESULT_OK,intent);
                                                                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                                                                            finish();
                                                                        } else {

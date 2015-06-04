@@ -151,8 +151,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                         if (bindResult.code == 0) {
                                             user.tel = sendSuccessPhone;
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
+                                            Intent intent=new Intent();
+                                            intent.putExtra("bindphone", sendSuccessPhone);
+                                            setResult(RESULT_OK,intent);
+                                            ToastUtil.getInstance(mContext).showToast("OK~绑定成功");
                                             finish();
-
                                         } else {
                                             ToastUtil.getInstance(mContext).showToast(bindResult.err.message);
                                         }
