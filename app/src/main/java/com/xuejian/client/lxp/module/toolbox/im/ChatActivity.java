@@ -85,6 +85,7 @@ import com.lv.Utils.TimeUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
+import com.lv.user.User;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -237,9 +238,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
        // toChatUsername=100006+"";
        // chatType="single";
       //  conversation="0";
-        if (UserDBManager.getInstance().isMyFriend(Long.parseLong(toChatUsername))){
-            System.out.println("isFriend");
-        }
 		initView();
 		setUpView();
         initdata();
@@ -735,7 +733,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
             Intent intent = new Intent(mContext, StrategyListActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
-			intent.putExtra("userId", String.valueOf(AccountManager.getInstance().user.getUserId()));
+			intent.putExtra("userId", User.getUser().getCurrentUser());
             intent.putExtra("isShare", true);
             intent.setAction("action.chat");
             startActivity(intent);
@@ -1151,8 +1149,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	 */
 	public void emptyHistory(View view) {
 		startActivityForResult(
-				new Intent(this, IMAlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", "是否清空所有聊天记录").putExtra("cancel", true),
-				REQUEST_CODE_EMPTY_HISTORY);
+                new Intent(this, IMAlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", "是否清空所有聊天记录").putExtra("cancel", true),
+                REQUEST_CODE_EMPTY_HISTORY);
 	}
 
 	/**

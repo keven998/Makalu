@@ -605,7 +605,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
             @Override
             public void onFailed() {
-
+                System.out.println("更新失败");
             }
         });
     }

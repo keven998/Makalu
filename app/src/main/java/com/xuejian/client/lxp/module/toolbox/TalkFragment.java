@@ -205,9 +205,14 @@ public class TalkFragment extends PeachBaseFragment {
         if (!User.getUser().isLogin()) {
             return;
         }
-        if (!AccountManager.getInstance().isLogin()) {
-            return;
-        }
+//        if (!AccountManager.getInstance().isLogin()) {
+//            return;
+//        }
+
+
+
+
+
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         // contact list
@@ -311,7 +316,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-       // updateUnreadAddressLable();
+        updateUnreadAddressLable();
 
     }
 

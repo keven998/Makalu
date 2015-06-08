@@ -138,7 +138,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			final User user = getItem(position);
         System.out.println("adapter "+user.getNickName());
 			String username = user.getNickName();
-			String header = null;
+			String header = user.getHeader();
 			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 				if ("".equals(header)) {
                     vh.sectionHeader.setVisibility(View.GONE);
@@ -250,10 +250,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 //        sectionOfPosition.put(0, 0);
         int section=0;
         for (int i = 0; i < count; i++) {
-           /* String letter = getItem(i).getHeader();
-=======
             String letter =getItem(i).getHeader();
->>>>>>> origin/im_local
             String beforeLetter ="";
             if(i>0){
                 beforeLetter = getItem(i-1).getHeader();
@@ -262,7 +259,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 section++;
                 sections.add(letter);
                 positionOfSection.put(section, i);
-            }*/
+            }
             sectionOfPosition.put(i, section);
         }
     }

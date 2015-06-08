@@ -118,35 +118,22 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         List<String> blacklist = null;
         // 注册一个接收消息的BroadcastReceiver
         msgReceiver = new NewMessageBroadcastReceiver();
-        UserDBManager.getInstance().initDB(AccountManager.getInstance().CurrentUserId + "");
-        initData();
 
         //initData();
-        List<User> users=new ArrayList<User>();
-        for (long i=100616;i<=101000;i++){
-            com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-            user.setUserId(i);
-            user.setNickName("user" + i);
-            user.setHeader("a");
-            user.setType(1);
-            users.add(user);
-        }
-        UserDBManager.getInstance().saveContactList(users);
 
         /*User.login("100006", new LoginSuccessListener() {
       //  msgReceiver = new NewMessageBroadcastReceiver();
         //initData();*/
-       /* com.lv.user.User.login("100020", new LoginSuccessListener() {
+        com.lv.user.User.login("100010", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
-                UserDBManager.getInstance().initDB(100020 + "");
+                UserDBManager.getInstance().initDB(100010 + "");
                 initData();
-                for (long i=100005;i<=100010;i++){
+                for (long i=100000;i<=100021;i++){
                     com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
                     user.setUserId(i);
-                    user.setNickName("user"+i);
-                    user.setHeader("a");
+                    user.setNickName("user" + i);
                     user.setType(1);
                     UserDBManager.getInstance().saveContact(user);
                 }
@@ -165,7 +152,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void OnFailed(int code) {
                 System.out.println("登陆失败 :" + code);
             }
-        });*/
+        });
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -184,59 +171,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private void initData(){
         //网络更新好友列表
         getContactFromServer();
-       /* // 注册一个cmd消息的BroadcastReceiver
-        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(3);
-        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-
-        // 注册一个接收消息的BroadcastReceiver
-        if (msgReceiver == null) {
-            msgReceiver = new NewMessageBroadcastReceiver();
-            IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-            intentFilter.setPriority(3);
-            registerReceiver(msgReceiver, intentFilter);
-        }
-
-        // 注册一个ack回执消息的BroadcastReceiver
-        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-                .getAckMessageBroadcastAction());
-        ackMessageIntentFilter.setPriority(3);
-        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-
-        // 注册群聊相关的listener
-        groupChangeListener = new MyGroupChangeListener();
-        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
-
-        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();*/
-
-
-//        getContactFromServer();
-//        // 注册一个cmd消息的BroadcastReceiver
-//        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-//        cmdIntentFilter.setPriority(3);
-//        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-//
-//        // 注册一个接收消息的BroadcastReceiver
-//        if (msgReceiver == null) {
-//            msgReceiver = new NewMessageBroadcastReceiver();
-//            IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-//            intentFilter.setPriority(3);
-//            registerReceiver(msgReceiver, intentFilter);
-//        }
-//
-//        // 注册一个ack回执消息的BroadcastReceiver
-//        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-//                .getAckMessageBroadcastAction());
-//        ackMessageIntentFilter.setPriority(3);
-//        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-//
-//        // 注册群聊相关的listener
-//        groupChangeListener = new MyGroupChangeListener();
-//        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
-//
-//        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-//        EMChat.getInstance().setAppInited();
     }
 
     private void getContactFromServer() {
@@ -408,12 +342,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             }
         });
-        if (AccountManager.getInstance().isLogin()) {
-            mTabHost.setCurrentTab(0);
-        } else {
-//        if (EMChat.getInstance().isLoggedIn()) {
+//        if (AccountManager.getInstance().isLogin()) {
 //            mTabHost.setCurrentTab(0);
 //        } else {
+            if (com.lv.user.User.getUser().isLogin()) {
+                mTabHost.setCurrentTab(0);
+            } else {
             mTabHost.setCurrentTab(1);
         }
     }
@@ -440,7 +374,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if(talkFragment != null){
-               // talkFragment.loadConversation();
+                talkFragment.loadConversation();
             }
             updateUnreadMsgCount();
            // EMChatManager.getInstance().activityResumed();

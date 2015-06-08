@@ -350,8 +350,6 @@ public class UserDBManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mdb.setTransactionSuccessful();
-        mdb.endTransaction();
         closeDB();
     }
     public void updateGroupMemberInfo(List<User> list,String groupId){

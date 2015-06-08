@@ -18,9 +18,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -82,7 +84,7 @@ public class ContactlistFragment extends Fragment {
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<User>();
 		// 获取设置contactlist
-		//getContactList();
+		getContactList();
 		// 设置adapter
         System.out.println("setAdapter!");
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
@@ -122,14 +124,14 @@ public class ContactlistFragment extends Fragment {
 		});
 
 
-//		listView.setOnTouchListener(new OnTouchListener() {
+//		listView.setOnTouchListener(new View.OnTouchListener() {
 //
 //			@Override
 //			public boolean onTouch(View v, MotionEvent event) {
 //				// 隐藏软键盘
 //				if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
 //					if (getActivity().getCurrentFocus() != null)
-//						inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+//						InputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
 //								InputMethodManager.HIDE_NOT_ALWAYS);
 //				}
 //				return false;
@@ -218,7 +220,7 @@ public class ContactlistFragment extends Fragment {
 			// 可能会在子线程中调到这方法
 			getActivity().runOnUiThread(new Runnable() {
 				public void run() {
-					//getContactList();
+					getContactList();
 					adapter.notifyDataSetChanged();
 				}
 			});
@@ -242,8 +244,7 @@ public class ContactlistFragment extends Fragment {
 		}
 
 		// 排序
-		/*Collections.sort(contactList, new Comparator<User>() {
-=======
+//		Collections.sort(contactList, new Comparator<User>() {
 //		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
 //		while (iterator.hasNext()) {
 //			Map.Entry<String, IMUser> entry = iterator.next();
@@ -252,19 +253,16 @@ public class ContactlistFragment extends Fragment {
 //            }
 //		}
         contactList= UserDBManager.getInstance().getContactListWithoutGroup();
-=======
         contactList.clear();
         contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
->>>>>>> origin/im_local
 		// 排序
 		Collections.sort(contactList, new Comparator<User>() {
->>>>>>> origin/im_local
 
 			@Override
 			public int compare(User lhs, User rhs) {
 				return lhs.getHeader().compareTo(rhs.getHeader());
 			}
-		});*/
+		});
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
