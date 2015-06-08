@@ -15,6 +15,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
@@ -94,6 +95,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
     String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -132,6 +134,27 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             users.add(user);
         }
         UserDBManager.getInstance().saveContactList(users);
+
+        com.lv.user.User.login(AccountManager.getInstance().CurrentUserId,new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if (talkFragment != null) {
+                            talkFragment.loadConversation();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void OnFailed(int code) {
+                ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
+            }
+        });
 
         /*User.login("100006", new LoginSuccessListener() {
       //  msgReceiver = new NewMessageBroadcastReceiver();
