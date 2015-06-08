@@ -25,6 +25,8 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -77,7 +79,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     StrategyAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
-    int chatType;
+    String chatType;
     String toId;
 //    private StrategyBean originalStrategy;
     private String userId;
@@ -257,14 +259,14 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void initData() {
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType", 0);
+        chatType = getIntent().getStringExtra("chatType");
 //        getStrategyListData(0);
 //        mMyStrategyLv.doPullRefreshing(true, 100);
         setupViewFromCache();
     }
 
     private void getStrategyListData(final int page , String planned) {
-        TravelApi.getStrategyPlannedList(userId, page, planned, new HttpCallBack<String>() {
+        TravelApi.getStrategyPlannedList(100004+"", page, planned, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
@@ -390,7 +392,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -399,11 +401,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
-
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -413,12 +414,36 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         });
 
                                     }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
                                 });
+//                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+//
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
                             }
 
                             @Override
@@ -615,7 +640,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -624,11 +649,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
-
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -638,12 +662,36 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         });
 
                                     }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
                                 });
+//                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+//
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
                             }
 
                             @Override

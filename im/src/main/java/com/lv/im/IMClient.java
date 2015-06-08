@@ -299,10 +299,39 @@ public class IMClient {
         m.setLocalId((int) localId);
         return m;
     }
-    public MessageBean createExtMessage(String friendId,String chatType,String contentJson,int type){
-        MessageBean messageBean= new MessageBean();
-        return null;
+    public void sendExtMessage(String friendId,String chatType,String contentJson,int type,SendMsgListener listen){
+        if (TextUtils.isEmpty(contentJson)) return ;
+        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, type+9, contentJson);
+        MessageBean messageBean = imessage2Bean(message);
+        long localId = db.saveMsg(friendId, messageBean, chatType);
+        MessageBean m = new MessageBean(0, 1, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(friendId));
+        m.setLocalId((int) localId);
+        //return m;
+        //if ("0".equals(conversation)) conversation = null;
+        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(m.getSenderId()), type+9, m.getMessage());
+        SendMsgAsyncTask.sendMessage(null, String.valueOf(m.getSenderId()), imessage, m.getLocalId(), listen, chatType);
     }
+
+//    private int getExtType(int type) {
+//        switch (type){
+//            case 1:
+//            break;
+//            case 2:
+//                break;
+//            case 3:
+//                break;
+//            case 5:
+//                break;
+//            case 1:
+//                break;
+//            case 1:
+//                break;
+//            case 1:
+//                break;
+//        }
+//        return 0;
+//    }
+
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);
     }

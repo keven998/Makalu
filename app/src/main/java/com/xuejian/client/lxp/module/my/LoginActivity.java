@@ -85,20 +85,20 @@ public class LoginActivity extends PeachBaseActivity{
         /**
          * 注释掉登陆
          */
-       if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
+    //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
            //时刻保持内存记录登录状态
             AccountManager.getInstance().setLogin(true);
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(0,R.anim.push_bottom_out);
             return;
-        }
-        initView();
-        request_code=getIntent().getIntExtra("request_code",0);
-        if(request_code==REQUEST_CODE_REG){
-            Intent intent = new Intent(mContext, RegActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_REG);
-        }
+ //       }
+//        initView();
+//        request_code=getIntent().getIntExtra("request_code",0);
+//        if(request_code==REQUEST_CODE_REG){
+//            Intent intent = new Intent(mContext, RegActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE_REG);
+//        }
     }
     @Override
     protected void onResume() {

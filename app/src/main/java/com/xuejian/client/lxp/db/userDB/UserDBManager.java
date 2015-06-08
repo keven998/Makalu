@@ -237,34 +237,32 @@ public class UserDBManager {
                 }
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
         if (cursor.getCount()>0){
-            System.out.println("更新 "+user.getUserId());
             ContentValues values = new ContentValues();
-            values.put("userId", user.getUserId());
-            values.put("nickName", user.getNickName());
-            values.put("avatar", user.getAvatar());
-            values.put("avatarSmall", user.getAvatarSmall());
-            values.put("gender", user.getGender());
-            values.put("signature", user.getSignature());
-            values.put("tel", user.getTel());
-            values.put("secToken", user.getSecToken());
-            values.put("countryCode", user.getCountryCode());
-            values.put("email", user.getEmail());
-            values.put("memo", user.getMemo());
-            values.put("travelStatus", user.getTravelStatus());
-            values.put("residence", user.getResidence());
-            values.put("level", user.getLevel());
-            values.put("zodiac", user.getZodiac());
-            values.put("birthday", user.getBirthday());
+            if (user.getUserId()!=null)values.put("userId", user.getUserId());
+            if (user.getNickName()!=null)values.put("nickName", user.getNickName());
+            if (user.getAvatar()!=null)values.put("avatar", user.getAvatar());
+            if (user.getAvatarSmall()!=null)values.put("avatarSmall", user.getAvatarSmall());
+            if (user.getGender()!=null)values.put("gender", user.getGender());
+            if (user.getSignature()!=null)values.put("signature", user.getSignature());
+            if (user.getTel()!=null)values.put("tel", user.getTel());
+            if (user.getSecToken()!=null)values.put("secToken", user.getSecToken());
+            if (user.getCountryCode()!=null)values.put("countryCode", user.getCountryCode());
+            if (user.getEmail()!=null)values.put("email", user.getEmail());
+            if (user.getMemo()!=null)values.put("memo", user.getMemo());
+            if (user.getTravelStatus()!=null)values.put("travelStatus", user.getTravelStatus());
+            if (user.getResidence()!=null)values.put("residence", user.getResidence());
+            if (user.getLevel()!=null)values.put("level", user.getLevel());
+            if (user.getZodiac()!=null)values.put("zodiac", user.getZodiac());
+            if (user.getBirthday()!=null)values.put("birthday", user.getBirthday());
 //            values.put("tracks",tracksToString(user.getTracks()));
-            values.put("guideCnt", user.getGuideCnt());
-            values.put("Type", user.getType());
-            values.put("ext", user.getExt());
-            values.put("header", user.getHeader());
+            if (user.getGuideCnt()!=0)values.put("guideCnt", user.getGuideCnt());
+            if (user.getType()!=null)values.put("Type", user.getType());
+            if (user.getExt()!=null)values.put("ext", user.getExt());
+            if (user.getHeader()!=null)values.put("header", user.getHeader());
             mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
             cursor.close();
         }
         else {
-            System.out.println("插入 "+user.getUserId());
             ContentValues values = new ContentValues();
             values.put("userId", user.getUserId());
             values.put("nickName", user.getNickName());
@@ -297,6 +295,17 @@ public class UserDBManager {
         mdb = getDB();
         mdb.beginTransaction();
         for (User user : list) {
+            if(user.getNickName()==null){
+                user.setHeader("#");
+            }else{
+                String headerName = user.getNickName();
+                user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                        0, 1).toUpperCase());
+                char header = user.getHeader().toLowerCase().charAt(0);
+                if (header < 'a' || header > 'z') {
+                    user.setHeader("#");
+                }
+            }
             Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
             if (cursor.getCount() == 0) {
                 ContentValues values = new ContentValues();
@@ -322,6 +331,30 @@ public class UserDBManager {
                 values.put("ext", user.getExt());
                 values.put("header", user.getHeader());
                 mdb.insert(fri_table_name, null, values);
+            } else {
+                ContentValues values = new ContentValues();
+                if (user.getUserId()!=null)values.put("userId", user.getUserId());
+                if (user.getNickName()!=null)values.put("nickName", user.getNickName());
+                if (user.getAvatar()!=null)values.put("avatar", user.getAvatar());
+                if (user.getAvatarSmall()!=null)values.put("avatarSmall", user.getAvatarSmall());
+                if (user.getGender()!=null)values.put("gender", user.getGender());
+                if (user.getSignature()!=null)values.put("signature", user.getSignature());
+                if (user.getTel()!=null)values.put("tel", user.getTel());
+                if (user.getSecToken()!=null)values.put("secToken", user.getSecToken());
+                if (user.getCountryCode()!=null)values.put("countryCode", user.getCountryCode());
+                if (user.getEmail()!=null)values.put("email", user.getEmail());
+                if (user.getMemo()!=null)values.put("memo", user.getMemo());
+                if (user.getTravelStatus()!=null)values.put("travelStatus", user.getTravelStatus());
+                if (user.getResidence()!=null)values.put("residence", user.getResidence());
+                if (user.getLevel()!=null)values.put("level", user.getLevel());
+                if (user.getZodiac()!=null)values.put("zodiac", user.getZodiac());
+                if (user.getBirthday()!=null)values.put("birthday", user.getBirthday());
+//            values.put("tracks",tracksToString(user.getTracks()));
+                if (user.getGuideCnt()!=0)values.put("guideCnt", user.getGuideCnt());
+                if (user.getType()!=null)values.put("Type", user.getType());
+                if (user.getExt()!=null)values.put("ext", user.getExt());
+                if (user.getHeader()!=null)values.put("header", user.getHeader());
+                mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
             }
             cursor.close();
         }
@@ -332,6 +365,7 @@ public class UserDBManager {
     public void updateGroupInfo(User user,String groupId){
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
+        System.out.println("updateGroupInfo");
         if (cursor.getCount()==0)return;
         cursor.moveToLast();
         String ext=cursor.getString(0);
@@ -350,11 +384,10 @@ public class UserDBManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mdb.setTransactionSuccessful();
-        mdb.endTransaction();
         closeDB();
     }
     public void updateGroupMemberInfo(List<User> list,String groupId){
+        System.out.println("updateGroupMemberInfo");
         JSONArray array=new JSONArray();
         for (User user:list){
             //System.out.println(user.getAvatar());
@@ -367,7 +400,7 @@ public class UserDBManager {
         try {
             user.setExt(new JSONObject().put("GroupMember",array.toString()).toString());
             saveContact(user);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
