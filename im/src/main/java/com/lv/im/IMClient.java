@@ -299,12 +299,12 @@ public class IMClient {
         m.setLocalId((int) localId);
         return m;
     }
-    public void createExtMessage(String friendId,String chatType,String contentJson,int type,SendMsgListener listen){
+    public void sendExtMessage(String friendId,String chatType,String contentJson,int type,SendMsgListener listen){
         if (TextUtils.isEmpty(contentJson)) return ;
         IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, type+9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        MessageBean m = new MessageBean(0, 1, 0, contentJson, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, 1, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
         //return m;
         //if ("0".equals(conversation)) conversation = null;

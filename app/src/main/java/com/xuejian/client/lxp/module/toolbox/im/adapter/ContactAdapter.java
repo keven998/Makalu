@@ -134,21 +134,30 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			} else {
                 vh = (ViewHolder1)convertView.getTag();
             }
-            System.out.println("getView");
 			final User user = getItem(position);
-        System.out.println("adapter "+user.getNickName());
 			String username = user.getNickName();
 			String header = user.getHeader();
-			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
-				if ("".equals(header)) {
-                    vh.sectionHeader.setVisibility(View.GONE);
-                    vh.dividerView.setVisibility(View.GONE);
-				} else {
-                    vh.sectionHeader.setVisibility(View.VISIBLE);
-                    vh.sectionHeader.setText(header);
-                    vh.dividerView.setVisibility(View.VISIBLE);
-				}
-			} else {
+//			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+//				if ("".equals(header)) {
+//                    vh.sectionHeader.setVisibility(View.GONE);
+//                    vh.dividerView.setVisibility(View.GONE);
+//				} else {
+//                    vh.sectionHeader.setVisibility(View.VISIBLE);
+//                    vh.sectionHeader.setText(header);
+//                    vh.dividerView.setVisibility(View.VISIBLE);
+//				}
+//			}
+        if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+            if ("".equals(header)||"item_new_friends".equals(username)) {
+                vh.sectionHeader.setVisibility(View.GONE);
+                vh.dividerView.setVisibility(View.GONE);
+            } else {
+                vh.sectionHeader.setVisibility(View.VISIBLE);
+                vh.sectionHeader.setText(header);
+                vh.dividerView.setVisibility(View.VISIBLE);
+            }
+        }
+            else {
                 vh.sectionHeader.setVisibility(View.GONE);
                 vh.dividerView.setVisibility(View.GONE);
 			}

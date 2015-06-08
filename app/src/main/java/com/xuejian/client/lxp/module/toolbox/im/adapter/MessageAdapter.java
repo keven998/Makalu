@@ -60,25 +60,19 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.task.LoadVideoImageTask;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
-import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
@@ -134,6 +128,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int POI_MSG = 5;
     private static final int VIDEO_MSG = 6;
     private static final int FILE_MSG = 7;
+    private static final int PLAN_MSG = 10;
     private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -143,15 +138,15 @@ public class MessageAdapter extends BaseAdapter {
     private HashMap<Long, User> groupMembers = new HashMap<Long, User>();
     private DisplayImageOptions picOptions;
     private Context context;
-private String chatType;
+    private String chatType;
     private String conversation;
     private Map<String, Timer> timers = new Hashtable<String, Timer>();
 
-    public MessageAdapter(Context context, String friendId, String chatType ,String conversation) {
+    public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
-        this.chatType=chatType;
-        this.conversation=conversation;
+        this.chatType = chatType;
+        this.conversation = conversation;
         inflater = LayoutInflater.from(context);
         activity = (Activity) context;
         picOptions = new DisplayImageOptions.Builder()
@@ -182,7 +177,7 @@ private String chatType;
      * 刷新页面
      */
     public void refresh() {
-        ((Activity)context).runOnUiThread(new Runnable() {
+        ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 notifyDataSetChanged();
@@ -204,17 +199,19 @@ private String chatType;
      */
     public int getItemViewType(int position) {
         MessageBean message = ChatActivity.messageList.get(position);
-        switch (message.getType()){
+        switch (message.getType()) {
             case TEXT_MSG:
-                return message.getSendType()==1?MESSAGE_TYPE_RECV_TXT:MESSAGE_TYPE_SENT_TXT;
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_TXT : MESSAGE_TYPE_SENT_TXT;
             case VOICE_MSG:
-                return message.getSendType()==1?MESSAGE_TYPE_RECV_VOICE : MESSAGE_TYPE_SENT_VOICE;
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_VOICE : MESSAGE_TYPE_SENT_VOICE;
             case IMAGE_MSG:
-                return message.getSendType()==1?MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
             case LOC_MSG:
-                return message.getSendType()==1?MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
             case TIP_MSG:
                 return MESSAGE_TYPE_TIPS;
+            case PLAN_MSG:
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
         return -1;// invalid
     }
@@ -226,26 +223,29 @@ private String chatType;
     private View createViewByMessage(MessageBean message, int position) {
         switch (message.getType()) {
             case LOC_MSG:
-                return message.getSendType() ==1  ? inflater.inflate(R.layout.row_received_location, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_location, null) : inflater.inflate(
                         R.layout.row_sent_location, null);
             case IMAGE_MSG:
-                return message.getSendType() ==1 ? inflater.inflate(R.layout.row_received_picture, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_picture, null) : inflater.inflate(
                         R.layout.row_sent_picture, null);
 
             case VOICE_MSG:
-                return message.getSendType() ==1  ? inflater.inflate(R.layout.row_received_voice, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_voice, null) : inflater.inflate(
                         R.layout.row_sent_voice, null);
             case VIDEO_MSG:
-                return message.getSendType() ==1  ? inflater.inflate(R.layout.row_received_video, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_video, null) : inflater.inflate(
                         R.layout.row_sent_video, null);
             case FILE_MSG:
-                return message.getSendType() ==1  ? inflater.inflate(R.layout.row_received_file, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_file, null) : inflater.inflate(
                         R.layout.row_sent_file, null);
             case TEXT_MSG:
-                return message.getSendType() ==1 ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
                         R.layout.row_sent_message, null);
             case TIP_MSG:
                 return inflater.inflate(R.layout.row_chat_tips, null);
+            case PLAN_MSG:
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
+                        R.layout.row_sent_ext, null);
             default:
                 break;
         }
@@ -254,13 +254,13 @@ private String chatType;
 
     @SuppressLint("NewApi")
     public View getView(final int position, View convertView, ViewGroup parent) {
-         MessageBean message = getItem(position);
-         System.out.println("message "+message.getMessage()+"  "+message.getStatus());
-         ViewHolder holder;
+        MessageBean message = getItem(position);
+        System.out.println("message " + message.getMessage() + "  " + message.getStatus());
+        ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = createViewByMessage(message, position);
-            switch (message.getType()){
+            switch (message.getType()) {
                 case TEXT_MSG:
                     holder.rl_content = (RelativeLayout) convertView.findViewById(R.id.rl_chatcontent);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
@@ -269,10 +269,10 @@ private String chatType;
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
-                        holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-                        holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
-                        holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
-                        holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
+                    holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+                    holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                    holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
+                    holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
                     break;
                 case VOICE_MSG:
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
@@ -302,6 +302,19 @@ private String chatType;
                 case TIP_MSG:
                     holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
                     break;
+                case PLAN_MSG:
+                    holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
+                    holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+                    holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                    holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
+                    holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
+                    holder.rl_content = (RelativeLayout) convertView.findViewById(R.id.rl_chatcontent);
+                    holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+                    holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
+                    holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
+                    break;
             }
             convertView.setTag(holder);
         } else {
@@ -319,9 +332,9 @@ private String chatType;
 //                if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 //                    int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
 //                    if (extType == 0) {
-                        handleGroupMessage(position, convertView, message, holder);
-                        handleTextMessage(message, holder, position);
-                        handleCommonMessage(position, convertView, message, holder);
+                handleGroupMessage(position, convertView, message, holder);
+                handleTextMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
 //                    } else if (extType < 100) {
 //                        handleGroupMessage(position, convertView, message, holder);
 //                        handleExtMessage(message, holder, position);
@@ -335,7 +348,7 @@ private String chatType;
 //                    handleGroupMessage(position, convertView, message, holder);
 //                    handleVoiceCallMessage(message, holder, position);
 //                    handleCommonMessage(position, convertView, message, holder);
- //               }
+                //               }
 
                 break;
             case LOC_MSG: // 位置
@@ -349,7 +362,12 @@ private String chatType;
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             case TIP_MSG:
-                handleTipsMessage(message,holder,position);
+                handleTipsMessage(message, holder, position);
+                break;
+            case PLAN_MSG:
+                handleGroupMessage(position, convertView, message, holder);
+                handleExtMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
                 break;
 //            case VIDEO: // 视频
 //                handleGroupMessage(position, convertView, message, holder);
@@ -362,7 +380,8 @@ private String chatType;
 //                handleCommonMessage(position, convertView, message, holder);
 //                break;
             default:
-                // not supported
+                break;
+            // not supported
         }
 
 
@@ -390,14 +409,14 @@ private String chatType;
 
     private void handleGroupMessage(final int position, View convertView, final MessageBean message, ViewHolder holder) {
         // 群聊时，显示接收的消息的发送人的名称
-        if (message.getSendType()==TYPE_REV) {
+        if (message.getSendType() == TYPE_REV) {
             if ("group".equals(chatType)) {
                 // demo用username代替nick
                 User user = groupMembers.get(message.getSenderId());
                 if (user == null) {
                     user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                     if (user == null) {
-                       // user = IMUtils.getUserInfoFromMessage(context, message);
+                        // user = IMUtils.getUserInfoFromMessage(context, message);
                     }
                     groupMembers.put(message.getSenderId(), user);
 
@@ -407,7 +426,7 @@ private String chatType;
                     ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
             } else {
-               // User user = AccountManager.getInstance().getContactList(activity).get(friendId);
+                // User user = AccountManager.getInstance().getContactList(activity).get(friendId);
                 User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                 if (user != null) {
                     holder.tv_userId.setText(user.getNickName());
@@ -415,7 +434,7 @@ private String chatType;
                 }
             }
         } else {
-           // User user = AccountManager.getInstance().getLoginAccount(context);
+            // User user = AccountManager.getInstance().getLoginAccount(context);
             User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
             if (user != null) {
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
@@ -423,7 +442,7 @@ private String chatType;
         }
 
         // 如果是发送的消息并且不是群聊消息，显示已读textview
-        if (message.getSendType()==0 && "single".equals(chatType)) {
+        if (message.getSendType() == 0 && "single".equals(chatType)) {
             holder.tv_ack = (TextView) convertView.findViewById(R.id.tv_ack);
             holder.tv_delivered = (TextView) convertView.findViewById(R.id.tv_delivered);
             if (holder.tv_ack != null) {
@@ -479,7 +498,7 @@ private String chatType;
                     intent.putExtra("title", activity.getString(R.string.resend));
                     intent.putExtra("cancel", true);
                     intent.putExtra("position", position);
-                    switch (message.getType()){
+                    switch (message.getType()) {
                         case TEXT_MSG:
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
                             break;
@@ -559,10 +578,10 @@ private String chatType;
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
         //TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        System.out.println("handleTextMessage "+message.getMessage());
+        System.out.println("handleTextMessage " + message.getMessage());
         Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
-       // holder.tv.setText(span, BufferType.SPANNABLE);
+        // holder.tv.setText(span, BufferType.SPANNABLE);
         holder.tv.setText(SmileUtils.getSmiledText(context, message.getMessage()));
         // 设置长按事件监听
         holder.tv.setOnLongClickListener(new OnLongClickListener() {
@@ -591,7 +610,7 @@ private String chatType;
                     holder.staus_iv.setVisibility(View.VISIBLE);
                     break;
                 default:
-                   break;
+                    break;
 
             }
         }
@@ -604,14 +623,14 @@ private String chatType;
      * @param holder
      * @param position
      */
-    private void handleExtMessage(EMMessage message, final ViewHolder holder, final int position) {
-        final int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
-        final String conent = message.getStringAttribute(Constant.MSG_CONTENT, "");
+    private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
+        final int extType = message.getType();
+        final String conent = message.getMessage();
         ExtMessageBean bean = null;
         bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         final ExtMessageBean finalBean = bean;
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        if (extType == Constant.ExtType.GUIDE) {
+        if (extType == PLAN_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
             holder.tv_name.setText(bean.name);
             holder.tv_desc.setText(bean.desc);
@@ -694,9 +713,9 @@ private String chatType;
                     holder.tv_attr.setText(bean.rating + " ");
                     break;
             }
-            if(message.direct== EMMessage.Direct.RECEIVE){
+            if (message.getSendType() == TYPE_REV) {
                 holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small, 0, 0, 0);
-            }else{
+            } else {
                 holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small_unselect, 0, 0, 0);
             }
 
@@ -734,23 +753,24 @@ private String chatType;
             }
         });
 
-        if (message.direct == EMMessage.Direct.SEND) {
-            switch (message.status) {
-                case SUCCESS: // 发送成功
+        if (message.getSendType() == TYPE_SEND) {
+            switch (message.getStatus()) {
+                case 0: // 发送成功
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.GONE);
                     break;
-                case FAIL: // 发送失败
+                case 2: // 发送失败
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.VISIBLE);
                     break;
-                case INPROGRESS: // 发送中
+                case 1: // 发送中
                     holder.pb.setVisibility(View.VISIBLE);
                     holder.staus_iv.setVisibility(View.GONE);
                     break;
                 default:
-                    // 发送消息
-             //       sendMsgInBackground(message, holder);
+                    break;
+                // 发送消息
+                //       sendMsgInBackground(message, holder);
             }
         }
 
@@ -799,20 +819,18 @@ private String chatType;
                 holder.iv.setImageBitmap(defaultImage);
                 showDownloadImageProgress(message, holder);
                 // downloadImage(message, holder);
-            }
-            else if (message.getStatus() == 2){
+            } else if (message.getStatus() == 2) {
                 return;
-            }
-            else if (message.getStatus() == 0){
+            } else if (message.getStatus() == 0) {
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
                 holder.iv.setImageBitmap(defaultImage);
-                String thumbpath= getStringAttr(message, "thumbPath");
-                String romotePath= getStringAttr(message, "full");
-                String BigImageFilename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(romotePath)+".jpeg";
-    if (thumbpath!=null){
-        showImageView(thumbpath, holder.iv, BigImageFilename,romotePath , message);
-    }
+                String thumbpath = getStringAttr(message, "thumbPath");
+                String romotePath = getStringAttr(message, "full");
+                String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
+                if (thumbpath != null) {
+                    showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message);
+                }
 
 
 //                // "!!!! not back receive, show image directly");
@@ -837,14 +855,14 @@ private String chatType;
             return;
         }
 
-        String localPath= getStringAttr(message, "localPath");
-        String thumbPath=getThumbImagepath(message);
-         if (localPath != null && new File(localPath).exists()) {
-        showImageView(thumbPath, holder.iv, localPath, null, message);
+        String localPath = getStringAttr(message, "localPath");
+        String thumbPath = getThumbImagepath(message);
+        if (localPath != null && new File(localPath).exists()) {
+            showImageView(thumbPath, holder.iv, localPath, null, message);
 
             // showImageView(filePath, holder.iv, filePath, null, message);
         } else {
-         showImageView(thumbPath, holder.iv, localPath, IMAGE_DIR, message);
+            showImageView(thumbPath, holder.iv, localPath, IMAGE_DIR, message);
         }
 
         // 发送的消息
@@ -873,12 +891,12 @@ private String chatType;
                 holder.staus_iv.setVisibility(View.GONE);
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.tv.setVisibility(View.VISIBLE);
-                if (timers.containsKey(message.getLocalId()+""))
+                if (timers.containsKey(message.getLocalId() + ""))
                     return;
                 // set a timer
                 sendPictureMessage(message, holder);
                 final Timer timer = new Timer();
-                timers.put(message.getLocalId()+"", timer);
+                timers.put(message.getLocalId() + "", timer);
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -886,13 +904,13 @@ private String chatType;
                             public void run() {
                                 holder.pb.setVisibility(View.VISIBLE);
                                 holder.tv.setVisibility(View.VISIBLE);
-                               // holder.tv.setText(message.progress + "%");
+                                // holder.tv.setText(message.progress + "%");
                                 if (message.getStatus() == 0) {
                                     holder.pb.setVisibility(View.GONE);
                                     holder.tv.setVisibility(View.GONE);
                                     // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
                                     timer.cancel();
-                                } else if (message.getStatus() ==2) {
+                                } else if (message.getStatus() == 2) {
                                     holder.pb.setVisibility(View.GONE);
                                     holder.tv.setVisibility(View.GONE);
                                     // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
@@ -914,39 +932,43 @@ private String chatType;
                 break;
 
             default:
-             //sendPictureMessage(message, holder);
+                //sendPictureMessage(message, holder);
         }
     }
+
     private double getDoubleAttr(MessageBean message, String name) {
         try {
-            JSONObject object=new JSONObject(message.getMessage());
-            return  object.getDouble(name);
+            JSONObject object = new JSONObject(message.getMessage());
+            return object.getDouble(name);
         } catch (JSONException e) {
             e.printStackTrace();
             return 0;
         }
 
     }
+
     private String getStringAttr(MessageBean message, String name) {
         try {
-            JSONObject object=new JSONObject(message.getMessage());
-            return  object.getString(name);
+            JSONObject object = new JSONObject(message.getMessage());
+            return object.getString(name);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
 
     }
+
     private String getThumbImagepath(MessageBean message) {
         try {
-            JSONObject object=new JSONObject(message.getMessage());
-            return  object.getString("thumbPath");
+            JSONObject object = new JSONObject(message.getMessage());
+            return object.getString("thumbPath");
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
 
     }
+
     /**
      * 视频消息
      *
@@ -1088,11 +1110,11 @@ private String chatType;
      */
     private void handleVoiceMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
 
-            String  filepath=(String)getVoiceFilepath(message,"path");
-            String durtime=getVoiceFilepath(message,"duration")+"";
-            boolean  isRead=(boolean)getVoiceFilepath(message,"isRead");
-        holder.tv.setText(durtime.substring(0,1) + "\"");
-        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, friendId,chatType,isRead,filepath));
+        String filepath = (String) getVoiceFilepath(message, "path");
+        String durtime = getVoiceFilepath(message, "duration") + "";
+        boolean isRead = (boolean) getVoiceFilepath(message, "isRead");
+        holder.tv.setText(durtime.substring(0, 1) + "\"");
+        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1109,7 +1131,7 @@ private String chatType;
             if (message.getSendType() == TYPE_REV) {
                 holder.iv.setImageResource(R.anim.voice_from_icon);
             } else {
-               holder.iv.setImageResource(R.anim.voice_to_icon);
+                holder.iv.setImageResource(R.anim.voice_to_icon);
             }
             voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
             voiceAnimation.start();
@@ -1169,9 +1191,9 @@ private String chatType;
             }
             return;
         }
-      //   String filepath=(String)getVoiceFilepath(message,"path");
-       // String durtime=(int)getVoiceFilepath(message,"duration")+"";
-       //  boolean isRead=(boolean)getVoiceFilepath(message,"isRead");
+        //   String filepath=(String)getVoiceFilepath(message,"path");
+        // String durtime=(int)getVoiceFilepath(message,"duration")+"";
+        //  boolean isRead=(boolean)getVoiceFilepath(message,"isRead");
         // until here, deal with send voice msg
         switch (message.getStatus()) {
             case 0:
@@ -1185,8 +1207,8 @@ private String chatType;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.staus_iv.setVisibility(View.GONE);
-               // sendMsgInBackground(message, holder);
-                IMClient.getInstance().sendAudioMessage(message,filepath,friendId,new UploadListener() {
+                // sendMsgInBackground(message, holder);
+                IMClient.getInstance().sendAudioMessage(message, filepath, friendId, new UploadListener() {
                     @Override
                     public void onSucess(String fileUrl) {
                         message.setStatus(0);
@@ -1217,16 +1239,16 @@ private String chatType;
                     public void onProgress(int progress) {
 
                     }
-                },chatType);
+                }, chatType);
                 break;
             default:
-             break;
+                break;
         }
     }
 
-    private Object getVoiceFilepath(MessageBean message,String name) {
+    private Object getVoiceFilepath(MessageBean message, String name) {
         try {
-            JSONObject object=new JSONObject(message.getMessage());
+            JSONObject object = new JSONObject(message.getMessage());
             return object.get(name);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1349,12 +1371,12 @@ private String chatType;
      */
     private void handleLocationMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
-       double lat= getDoubleAttr(message, "lat");
-        double lng=getDoubleAttr(message, "lng");
-        String name=getStringAttr(message,"name");
-        String desc=getStringAttr(message,"desc");
+        double lat = getDoubleAttr(message, "lat");
+        double lng = getDoubleAttr(message, "lng");
+        String name = getStringAttr(message, "name");
+        String desc = getStringAttr(message, "desc");
         locationView.setText(desc);
-        locationView.setOnClickListener(new MapClickListener(lat, lng,desc));
+        locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1380,17 +1402,17 @@ private String chatType;
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
-                IMClient.getInstance().sendLocationMessage(message,conversation,new SendMsgListener() {
+                IMClient.getInstance().sendLocationMessage(message, conversation, new SendMsgListener() {
                     @Override
                     public void onSuccess() {
                         message.setStatus(0);
-                       activity.runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               holder.pb.setVisibility(View.GONE);
-                               holder.staus_iv.setVisibility(View.GONE);
-                           }
-                       });
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.GONE);
+                                holder.staus_iv.setVisibility(View.GONE);
+                            }
+                        });
                     }
 
                     @Override
@@ -1404,11 +1426,11 @@ private String chatType;
                             }
                         });
                     }
-                },chatType);
+                }, chatType);
                 break;
             default:
                 break;
-              //  sendMsgInBackground(message, holder);
+            //  sendMsgInBackground(message, holder);
         }
     }
 
@@ -1423,7 +1445,7 @@ private String chatType;
         holder.pb.setVisibility(View.VISIBLE);
 
         // 调用sdk发送异步发送方法
-        IMClient.getInstance().sendTextMessage(message,conversation,new SendMsgListener() {
+        IMClient.getInstance().sendTextMessage(message, conversation, new SendMsgListener() {
             @Override
             public void onSuccess() {
                 message.setStatus(0);
@@ -1435,7 +1457,7 @@ private String chatType;
                 message.setStatus(2);
                 updateSendedView(message, holder);
             }
-        },chatType);
+        }, chatType);
 //        EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
 //
 //            @Override
@@ -1464,46 +1486,46 @@ private String chatType;
 //        System.err.println("!!! show download image progress");
         // final ImageMessageBody msgbody = (ImageMessageBody)
         // message.getBody();
-      //  final FileMessageBody msgbody = (FileMessageBody) message.getBody();
+        //  final FileMessageBody msgbody = (FileMessageBody) message.getBody();
         if (holder.pb != null)
             holder.pb.setVisibility(View.VISIBLE);
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
-        String thumburl= getStringAttr(message, "thumb");
-        String filename= Config.DownLoadImage_path+ CryptUtils.getMD5String(message.getSenderId()+"")+"/"+CryptUtils.getMD5String(thumburl)+".jpeg";
-new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener() {
-    @Override
-    public void onSuccess() {
-        activity.runOnUiThread(new Runnable() {
+        String thumburl = getStringAttr(message, "thumb");
+        String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
+        new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
+            @Override
+            public void onSuccess() {
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // message.setBackReceive(false);
-                       // if (message.getType() == Type.IMAGE) {
-                            holder.pb.setVisibility(View.GONE);
-                            holder.tv.setVisibility(View.GONE);
-                      //  }
-                            message.setStatus(0);
+                        // if (message.getType() == Type.IMAGE) {
+                        holder.pb.setVisibility(View.GONE);
+                        holder.tv.setVisibility(View.GONE);
+                        //  }
+                        message.setStatus(0);
                         notifyDataSetChanged();
                     }
                 });
-    }
+            }
 
-    @Override
-    public void onProgress(final int progress) {
-        activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.tv.setText(progress + "%");
+            @Override
+            public void onProgress(final int progress) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.tv.setText(progress + "%");
 
-                        }
-                    });
-    }
+                    }
+                });
+            }
 
-    @Override
-    public void onFail() {
-        message.setStatus(2);
-    }
-});
+            @Override
+            public void onFail() {
+                message.setStatus(2);
+            }
+        });
 //        msgbody.setDownloadCallback(new EMCallBack() {
 //
 //            @Override
@@ -1554,7 +1576,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
             holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
-            IMClient.getInstance().sendImageMessage(message,friendId,new UploadListener() {
+            IMClient.getInstance().sendImageMessage(message, friendId, new UploadListener() {
                 @Override
                 public void onSucess(String fileUrl) {
                     activity.runOnUiThread(new Runnable() {
@@ -1591,7 +1613,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
                         }
                     });
                 }
-            },chatType);
+            }, chatType);
 //
 //            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
 //
@@ -1656,15 +1678,15 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
 //                        holder.staus_iv.setVisibility(View.INVISIBLE);
 //                    } else {
 
-                        holder.pb.setVisibility(View.GONE);
-                        holder.staus_iv.setVisibility(View.GONE);
-                 //   }
+                    holder.pb.setVisibility(View.GONE);
+                    holder.staus_iv.setVisibility(View.GONE);
+                    //   }
 
                 } else if (message.getStatus() == 2) {
 //                    if (message.getType() == EMMessage.Type.FILE) {
 //                        holder.pb.setVisibility(View.INVISIBLE);
 //                    } else {
-                        holder.pb.setVisibility(View.GONE);
+                    holder.pb.setVisibility(View.GONE);
 //                    }
                     holder.staus_iv.setVisibility(View.VISIBLE);
 //                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
@@ -1685,11 +1707,11 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
      * @param iv
      * @return the image exists or not
      */
-    private boolean showImageView(final String thumbernailPath, final ImageView iv,final String localFullSizePath,final String remoteDir,
+    private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, final String remoteDir,
                                   final MessageBean message) {
-         String remote = remoteDir;
+        String remote = remoteDir;
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
-        System.out.println("thumbernailPath"+thumbernailPath);
+        System.out.println("thumbernailPath" + thumbernailPath);
         if (bitmap != null) {
             System.out.println("thumbnail image is already loaded, reuse the drawable");
             iv.setImageBitmap(bitmap);
@@ -1699,7 +1721,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
                 public void onClick(View v) {
 //                    System.err.println("image view on click");
                     Intent intent = new Intent(activity, ShowBigImage.class);
-                    System.out.println("32 localFullSizePath "+localFullSizePath);
+                    System.out.println("32 localFullSizePath " + localFullSizePath);
                     File file = new File(localFullSizePath);
                     if (file.exists()) {
                         Uri uri = Uri.fromFile(file);
@@ -1707,7 +1729,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
                         intent.putExtra("downloadFilePath", localFullSizePath);
                         System.out.println("exist localFullSizePath ");
                     } else {
-                        System.out.println("localFullSizePath "+localFullSizePath);
+                        System.out.println("localFullSizePath " + localFullSizePath);
                         intent.putExtra("downloadFilePath", localFullSizePath);
                         intent.putExtra("remotepath", remoteDir);
 
@@ -1735,7 +1757,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
             return true;
         } else {
             System.out.println("load image");
-           new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message);
             return true;
         }
 
@@ -1827,7 +1849,7 @@ new DownloadImage(thumburl,filename).download(new DownloadImage.DownloadListener
         double longitude;
         String address;
 
-        public MapClickListener(double lat,double lng, String address) {
+        public MapClickListener(double lat, double lng, String address) {
             latitude = lat;
             longitude = lng;
             this.address = address;

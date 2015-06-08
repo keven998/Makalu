@@ -255,6 +255,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void refreshView(final User bean){
+        UserDBManager.getInstance().saveContact(bean);
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         title_name.setText(bean.getNickName());
         his_name.setText(bean.getNickName());

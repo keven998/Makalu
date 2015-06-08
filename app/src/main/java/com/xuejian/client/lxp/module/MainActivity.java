@@ -103,6 +103,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
+        IMClient.initIM(getApplicationContext());
        /*
        if(!EMChat.getInstance().isLoggedIn()){
             finish();
@@ -124,19 +125,19 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         /*User.login("100006", new LoginSuccessListener() {
       //  msgReceiver = new NewMessageBroadcastReceiver();
         //initData();*/
-        com.lv.user.User.login("100010", new LoginSuccessListener() {
+        com.lv.user.User.login("100006", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
-                UserDBManager.getInstance().initDB(100010 + "");
+                UserDBManager.getInstance().initDB(100006 + "");
+//                for (long i=100000;i<=100021;i++){
+//                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+//                    user.setUserId(i);
+//                    user.setNickName("user" + i);
+//                    user.setType(1);
+//                    UserDBManager.getInstance().saveContact(user);
+//                }
                 initData();
-                for (long i=100000;i<=100021;i++){
-                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-                    user.setUserId(i);
-                    user.setNickName("user" + i);
-                    user.setType(1);
-                    UserDBManager.getInstance().saveContact(user);
-                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -186,7 +187,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     // 添加user"申请与通知"
                     User newFriends = new User();
                     newFriends.setUserId(NEWFRIEND);
-                    newFriends.setNickName("好友请求");
+                    newFriends.setNickName("item_new_friends");
                     newFriends.setType(1);
                    // newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
                     userlist.put(NEWFRIEND, newFriends);

@@ -81,7 +81,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         }
 		initView();
 		initData();
-        IMClient.initIM(this);
+      //  IMClient.initIM(this);
 //        MobclickAgent.openActivityDurationTrack(false);
 	}
 
@@ -147,10 +147,12 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         };
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
+        System.out.println("storyImageUrl "+storyImageUrl);
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                System.out.println("getCoverStory "+result);
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {
                     if (!storyResult.result.image.equals(storyImageUrl)) {
@@ -183,7 +185,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                     }
 
                 } else {
-//                    ToastUtil.getInstance(StoryActivity.this).showToast("请求也是失败了");
+                   ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 

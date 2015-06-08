@@ -231,17 +231,18 @@ public class ContactlistFragment extends Fragment {
 
 	private void getContactList() {
 		Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
+
         if(users==null){
             return;
         }
         contactList.clear();
-		Iterator<Map.Entry<Long, User>> iterator = users.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Map.Entry<Long, User> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
-                contactList.add(entry.getValue());
-            }
-		}
+//		Iterator<Map.Entry<Long, User>> iterator = users.entrySet().iterator();
+//		while (iterator.hasNext()) {
+//			Map.Entry<Long, User> entry = iterator.next();
+//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
+//                contactList.add(entry.getValue());
+//            }
+//		}
 
 		// 排序
 //		Collections.sort(contactList, new Comparator<User>() {
@@ -252,9 +253,9 @@ public class ContactlistFragment extends Fragment {
 //                contactList.add(entry.getValue());
 //            }
 //		}
-        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
-        contactList.clear();
-        contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+//        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
+//        contactList.clear();
+          contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
 		// 排序
 		Collections.sort(contactList, new Comparator<User>() {
 
@@ -266,10 +267,14 @@ public class ContactlistFragment extends Fragment {
 //		// 加入"申请与通知"和"群聊"
 //		contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
-        User user = users.get(Constant.NEW_FRIENDS_USERNAME);
-        if(user!=null){
-            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
-        }
+        User newFriends = new User();
+        newFriends.setUserId(2);
+        newFriends.setNickName("item_new_friends");
+        newFriends.setType(1);
+        UserDBManager.getInstance().saveContact(newFriends);
+       // if(newFriends!=null){
+            contactList.add(0, newFriends);
+      //  }
 //        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
 //        if(user!=null){
 //            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
