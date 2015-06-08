@@ -148,7 +148,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         /*User.login("100006", new LoginSuccessListener() {
       //  msgReceiver = new NewMessageBroadcastReceiver();
         //initData();*/
-        com.lv.user.User.login("100006", new LoginSuccessListener() {
+        /*com.lv.user.User.login("100006", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
@@ -176,7 +176,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void OnFailed(int code) {
                 System.out.println("登陆失败 :" + code);
             }
-        });
+        });*/
     }
     @Override
     protected void onNewIntent(Intent intent) {
