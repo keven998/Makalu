@@ -23,7 +23,7 @@ public class SnsAccountsUtils {
 	}
 
     public interface WeiXinConstants {
-        public static final String APP_ID		= "wx26b58c7173483529";
+        public static final String APP_ID		= "wx86048e56adaf7486";      //wx26b58c7173483529
         //		public static final String APP_SECRET 	= "28daa05c021ebebe6d3cf06645b0c5ac";
     }
 	
