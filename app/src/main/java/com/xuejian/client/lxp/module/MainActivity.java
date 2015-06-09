@@ -132,10 +132,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 System.out.println("登陆成功");
                 UserDBManager.getInstance().initDB(100006 + "");
                 com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-                user.setUserId(100022);
-                user.setNickName("~~~~");
-                user.setType(1);
-                UserDBManager.getInstance().saveContact(user);
+              //  user.setUserId(100022);
+               // user.setNickName("~~~~");
+              //  user.setType(1);
+              //  UserDBManager.getInstance().saveContact(user);
 //                for (long i=100000;i<=100021;i++){
 //                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
 //                    user.setUserId(i);
