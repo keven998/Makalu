@@ -85,20 +85,20 @@ public class LoginActivity extends PeachBaseActivity{
         /**
          * 注释掉登陆
          */
-    //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
+   /* //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
            //时刻保持内存记录登录状态
             AccountManager.getInstance().setLogin(true);
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(0,R.anim.push_bottom_out);
             return;
- //       }
-//        initView();
-//        request_code=getIntent().getIntExtra("request_code",0);
-//        if(request_code==REQUEST_CODE_REG){
-//            Intent intent = new Intent(mContext, RegActivity.class);
-//            startActivityForResult(intent, REQUEST_CODE_REG);
-//        }
+ //       }*/
+        initView();
+        request_code=getIntent().getIntExtra("request_code",0);
+        if(request_code==REQUEST_CODE_REG){
+            Intent intent = new Intent(mContext, RegActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_REG);
+        }
     }
     @Override
     protected void onResume() {
@@ -188,60 +188,17 @@ public class LoginActivity extends PeachBaseActivity{
         super.finish();
     }
 
-    public void saveInSp(User user){
-        SharedPreferences sharepreference=getSharedPreferences("user"+user.getUserId(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharepreference.edit();
-        editor.putString("avatar", user.getAvatar());
-        editor.putString("avatarSmall", user.getAvatarSmall());
-        editor.putString("gender", user.getGender());
-        editor.putString("nickName", user.getNickName());
-        editor.putString("signature", user.getSignature());
-        editor.putString("tel", user.getTel());
-        editor.putInt("guideCnt", user.getGuideCnt());
-        editor.putLong("userId", user.getUserId());
-        editor.commit();
-    }
-
     private void imLogin(final User user,int type) {
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
-        //登录成功后在sharedpreferences和AccountManager中标记登录状态，同时登出时
-        SharedPreferencesUtil.saveValue(LoginActivity.this, "isLogin", true);
-        AccountManager.getInstance().setLogin(true);
-
-        if(type==REGISTER){
-            //1、存入sp中
-            saveInSp(user);
-
-            //2、存入数据库中
-            UserDBManager.getInstance().saveContact(user);
-
-            //3、存入密码
-        }else if(type==LOGIN){
-
-        }else if(type==WXLOGIN){
-            SharedPreferences file=getSharedPreferences("user"+user.getUserId(), Activity.MODE_PRIVATE);
-            if(file==null){
-                saveInSp(user);
-            }
-            UserDBManager.getInstance().saveContact(user);
-        }else if(type==FINDPASSWORD){
-            SharedPreferences file=getSharedPreferences("user"+user.getUserId(), Activity.MODE_PRIVATE);
-            if(file==null){
-                saveInSp(user);
-            }
-            UserDBManager.getInstance().saveContact(user);
-            //存入密码
-
+        UserDBManager.getInstance().saveContact(user);
+       if(type==FINDPASSWORD){
+            //存入修改好的密码
         }
         //3、存入内存
+        AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
         AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
-
-
-
-
-
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"
@@ -255,19 +212,6 @@ public class LoginActivity extends PeachBaseActivity{
         List<User> users = new ArrayList<User>(userlist.values());
         UserDBManager.getInstance().saveContactList(users);
 
-        /*String result=UserApi.getAsynContact();
-        CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-        //  CommonJson<ContactListBean> contactResult=JSON.parseObject(result,ContactListBean.class);
-        if (contactResult.code == 0) {
-            for (User resUser : contactResult.result.contacts) {
-                userlist.put(resUser.getUserId(), resUser);
-            }
-            // 存入内存
-            AccountManager.getInstance().setContactList(userlist);
-            // 存入db
-            List<User> netusers = new ArrayList<User>(userlist.values());
-            UserDBManager.getInstance().saveContactList(netusers);
-        }*/
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {
@@ -428,7 +372,7 @@ public class LoginActivity extends PeachBaseActivity{
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-error.printStackTrace();
+                error.printStackTrace();
                 System.out.println(msg+"  "+method);
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
