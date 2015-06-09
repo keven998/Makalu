@@ -389,5 +389,8 @@ public class IMClient {
     public void addGroup2Conversation(String groupId, String conversation) {
         db.add2Conversion(Long.parseLong(groupId), TimeUtils.getTimestamp(), "chat_" + CryptUtils.getMD5String(groupId), -1, conversation, "group");
     }
+    public void cleanMessageHistory(String chatId){
+        db.deleteMessage(chatId);
+    }
 }
 

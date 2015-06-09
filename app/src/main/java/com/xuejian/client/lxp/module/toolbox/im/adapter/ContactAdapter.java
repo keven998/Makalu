@@ -137,18 +137,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			final User user = getItem(position);
 			String username = user.getNickName();
 			String header = user.getHeader();
-//			if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
-//				if ("".equals(header)) {
-//                    vh.sectionHeader.setVisibility(View.GONE);
-//                    vh.dividerView.setVisibility(View.GONE);
-//				} else {
-//                    vh.sectionHeader.setVisibility(View.VISIBLE);
-//                    vh.sectionHeader.setText(header);
-//                    vh.dividerView.setVisibility(View.VISIBLE);
-//				}
-//			}
         if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
-            if ("".equals(header)||"item_new_friends".equals(username)) {
+            if ("".equals(header)) {
                 vh.sectionHeader.setVisibility(View.GONE);
                 vh.dividerView.setVisibility(View.GONE);
             } else {
@@ -156,62 +146,124 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 vh.sectionHeader.setText(header);
                 vh.dividerView.setVisibility(View.VISIBLE);
             }
+        } else {
+            vh.sectionHeader.setVisibility(View.GONE);
+            vh.dividerView.setVisibility(View.GONE);
         }
-            else {
+        if ("item_new_friends".equals(username)) {
                 vh.sectionHeader.setVisibility(View.GONE);
                 vh.dividerView.setVisibility(View.GONE);
-			}
-
-			//显示申请与通知item
-			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-                vh.nickView.setText("好友请求");
+            }
+        //显示申请与通知item
+        if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+            vh.nickView.setText("好友请求");
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
-                vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
-                vh.avatarView.setImageResource(R.drawable.ic_frend_request);
-				/*if(user.getUnreadMsgCount() > 0){
-					vh.unreadMsgView.setVisibility(View.VISIBLE);
-                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
-				}else{
-                    vh.unreadMsgView.setVisibility(View.GONE);
-				}*/
-//				if(user.getUnreadMsgCount() > 0){
-//					vh.unreadMsgView.setVisibility(View.VISIBLE);
-//                    vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
-//				}else{
-                    vh.unreadMsgView.setVisibility(View.GONE);
-			//	}
-//                vh.avatarView.setVisibility(View.GONE);
-			} else if (username.equals(Constant.GROUP_USERNAME)){
-				//群聊item
-                vh.nickView.setText(user.getNickName());
-                vh.avatarView.setImageResource(R.drawable.my_group);
-                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
+            vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
+            vh.avatarView.setImageResource(R.drawable.ic_frend_request);
+//            if(user.getUnreadMsgCount() > 0){
+//                vh.unreadMsgView.setVisibility(View.VISIBLE);
+//                vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
+//            }else{
                 vh.unreadMsgView.setVisibility(View.GONE);
+//            }
+//                vh.avatarView.setVisibility(View.GONE);
+        } else if (username.equals(Constant.GROUP_USERNAME)){
+            //群聊item
+            vh.nickView.setText(user.getNickName());
+            vh.avatarView.setImageResource(R.drawable.my_group);
+            vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
+            vh.unreadMsgView.setVisibility(View.GONE);
 //                vh.avatarView.setVisibility(View.VISIBLE);
-			} else {
+        } else {
 //                vh.avatarView.setVisibility(View.VISIBLE);
-                vh.nickView.setText(user.getNickName());
+            vh.talkView.setImageResource(R.drawable.ic_begin_talk);
+            vh.nickView.setText(user.getNickName());
 //				if(unreadMsgView != null)
 //					unreadMsgView.setVisibility(View.INVISIBLE);
 //                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
-                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
-                vh.talkView.setVisibility(View.VISIBLE);
-                vh.talkView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent();
-                        intent.putExtra("Name",user.getNickName());
-                        intent.putExtra("chatType","single");
-                        intent.putExtra("friend_id",user.getUserId()+"");
-                        intent.setClass(getContext(),ChatActivity.class);
-                        getContext().startActivity(intent);
-                    }
-                });
-                vh.unreadMsgView.setVisibility(View.GONE);
-			}
+            vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
+            vh.talkView.setVisibility(View.VISIBLE);
+            vh.talkView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent();
+                    intent.putExtra("Name",user.getNickName());
+                    intent.putExtra("chatType","single");
+                    intent.putExtra("friend_id",user.getUserId()+"");
+                    intent.setClass(getContext(),ChatActivity.class);
+                    getContext().startActivity(intent);}
+            });
+            vh.unreadMsgView.setVisibility(View.GONE);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//        if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+//            if ("".equals(header)||"item_new_friends".equals(username)) {
+//                vh.sectionHeader.setVisibility(View.GONE);
+//                vh.dividerView.setVisibility(View.GONE);
+//            } else {
+//                vh.sectionHeader.setVisibility(View.VISIBLE);
+//                vh.sectionHeader.setText(header);
+//                vh.dividerView.setVisibility(View.VISIBLE);
+//            }
+//        }
+//            else {
+//                vh.sectionHeader.setVisibility(View.GONE);
+//                vh.dividerView.setVisibility(View.GONE);
+//			}
+//
+//			//显示申请与通知item
+//			if(username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+//                vh.nickView.setText("好友请求");
+//                vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
+//                vh.avatarView.setImageResource(R.drawable.ic_frend_request);
+//                    vh.unreadMsgView.setVisibility(View.GONE);
+//			} else if (username.equals(Constant.GROUP_USERNAME)){
+//				//群聊item
+//                vh.nickView.setText(user.getNickName());
+//                vh.avatarView.setImageResource(R.drawable.my_group);
+//                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                vh.talkView.setImageResource(R.drawable.ic_gray_right_arrow);
+//                vh.unreadMsgView.setVisibility(View.GONE);
+//			} else {
+//                vh.nickView.setText(user.getNickName());
+//                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
+//                vh.talkView.setVisibility(View.VISIBLE);
+//                vh.talkView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent=new Intent();
+//                        intent.putExtra("Name",user.getNickName());
+//                        intent.putExtra("chatType","single");
+//                        intent.putExtra("friend_id",user.getUserId()+"");
+//                        intent.setClass(getContext(),ChatActivity.class);
+//                        getContext().startActivity(intent);
+//                    }
+//                });
+//                vh.unreadMsgView.setVisibility(View.GONE);
+//			}
 
 
 		return convertView;

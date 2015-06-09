@@ -59,7 +59,8 @@ public class HandleImMessage {
      * @param listener listener
      */
     public  void registerMessageListener(MessagerHandler listener) {
-        ehList.add(listener);
+        if (!ehList.contains(listener))ehList.add(listener);
+
     }
 
     /**
@@ -71,7 +72,7 @@ public class HandleImMessage {
     }
 
     public void registerMessageListener(MessagerHandler listener, String conversation) {
-        ehList.add(listener);
+        if (!ehList.contains(listener))ehList.add(listener);
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
 
@@ -111,6 +112,12 @@ public class HandleImMessage {
                     Message newMediaMessage = (Message) message.obj;
                     for (MessagerHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(newMediaMessage));
+                    }
+                    break;
+                default:
+                    Message extMessage = (Message) message.obj;
+                    for (MessagerHandler handler : ehList) {
+                        handler.onMsgArrive(Msg2Bean(extMessage));
                     }
                     break;
             }
@@ -222,6 +229,12 @@ public class HandleImMessage {
                         Intent dlI_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
                         dlI_intent.putExtra("msg", messageBean);
                         c.startService(dlI_intent);
+                        break;
+                    default:
+                        android.os.Message ext_msg = android.os.Message.obtain();
+                        ext_msg.obj = messageBean;
+                        ext_msg.what = 10;
+                        handler.sendMessage(ext_msg);
                         break;
                 }
             }

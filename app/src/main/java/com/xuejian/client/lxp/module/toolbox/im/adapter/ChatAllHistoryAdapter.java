@@ -39,6 +39,7 @@ import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.util.DateUtils;
 import com.lv.bean.ConversationBean;
+import com.lv.user.User;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -52,6 +53,7 @@ import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,11 +117,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
+        com.xuejian.client.lxp.db.userDB.User user= UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId()+""));
     //    IMUser imUser = getItem(position).imUser;
         // 获取用户username或者群组groupid
         String username = String.valueOf(conversation.getFriendId());
-
-        EMContact contact = null;
         boolean isGroup = "group".equals(conversation.getChatType());
         if (isGroup) {
  //           contact = EMGroupManager.getInstance().getGroup(username);
@@ -175,50 +176,54 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            }else{
 //                holder.name.setText("");
 //            }
-              holder.name.setText(String.valueOf(conversation.getFriendId()));
+            if (user!=null){
+                if (user.getNickName()!=null)holder.name.setText(user.getNickName());
+                else holder.name.setText(user.getUserId()+"");
+            }
+            else holder.name.setText(conversation.getFriendId()+"");
         } else {
-//            if (imUser != null) {
-//                // 本地或者服务器获取用户详情，以用来显示头像和nick
-////                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
-//                final ViewHolder finalHolder = holder;
-//                finalHolder.avatar.setTag(imUser.getAvatarSmall());
-//                ImageLoader.getInstance().displayImage(imUser.getAvatarSmall(), finalHolder.avatar,options);
-////                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
-////                    @Override
-////                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-////                        super.onLoadingComplete(imageUri, view, loadedImage);
-////                        if (imageUri == null) {
-////                            return;
-////                        }
-////                        if (imageUri.equals(finalHolder.avatar.getTag())) {
-////                            if (loadedImage == null) {
-////                                loadedImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
-////                            }
-////                            ArrayList<Bitmap> bmps = new ArrayList<Bitmap>();
-////                            bmps.add(loadedImage);
-////                            finalHolder.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
-////                                    LocalDisplay.dp2px(60), bmps));
-////                        }
-////
-////
-////                    }
-////                });
-////                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, options);
-////                if (username.equals(Constant.GROUP_USERNAME)) {
-////                    holder.name.setText("群聊");
-////
-////                } else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-////                    holder.name.setText("申请与通知");
-////                }
-//                if (TextUtils.isEmpty(imUser.getMemo())) {
-//                    holder.name.setText(imUser.getNick());
-//                } else {
-//                    holder.name.setText(imUser.getMemo());
+            if (user != null) {
+                // 本地或者服务器获取用户详情，以用来显示头像和nick
+//                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
+                final ViewHolder finalHolder = holder;
+                finalHolder.avatar.setTag(user.getAvatarSmall());
+                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar,options);
+//                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
+//                    @Override
+//                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                        super.onLoadingComplete(imageUri, view, loadedImage);
+//                        if (imageUri == null) {
+//                            return;
+//                        }
+//                        if (imageUri.equals(finalHolder.avatar.getTag())) {
+//                            if (loadedImage == null) {
+//                                loadedImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder);
+//                            }
+//                            ArrayList<Bitmap> bmps = new ArrayList<Bitmap>();
+//                            bmps.add(loadedImage);
+//                            finalHolder.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
+//                                    LocalDisplay.dp2px(60), bmps));
+//                        }
+//
+//
+//                    }
+//                });
+//                ImageLoader.getInstance().displayImage(imUser.getAvatar(), holder.avatar, options);
+//                if (username.equals(Constant.GROUP_USERNAME)) {
+//                    holder.name.setText("群聊");
+//
+//                } else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+//                    holder.name.setText("申请与通知");
 //                }
-//            }else{
-//                holder.name.setText("");
-//            }
-            holder.name.setText(conversation.getFriendId()+"");
+                if (TextUtils.isEmpty(user.getMemo())) {
+                    holder.name.setText(user.getNickName());
+                } else {
+                    holder.name.setText(user.getNickName()+" "+user.getMemo());
+                }
+            }else{
+                holder.name.setText("");
+            }
+           // holder.name.setText(conversation.getFriendId()+"");
 
         }
 
@@ -284,7 +289,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     // digest = EasyUtils.getAppResourceString(context,
                     // "location_recv");
                     digest = getStrng(context, R.string.location_recv);
-                 //   digest = String.format(digest, message.getFrom());
+                  //  digest = String.format(digest, message.);
                     return digest;
                 } else {
                     // digest = EasyUtils.getAppResourceString(context,
@@ -323,6 +328,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            case FILE: // 普通文件消息
 //                digest = digest + getStrng(context, R.string.file);
 //                break;
+            case 10:
+                digest = digest + "[链接]";
+                break;
             default:
                 System.err.println("error, unknow type");
                 return "";

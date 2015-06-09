@@ -435,7 +435,7 @@ public class MessageAdapter extends BaseAdapter {
             }
         } else {
             // User user = AccountManager.getInstance().getLoginAccount(context);
-            User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
+            User user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(com.lv.user.User.getUser().getCurrentUser()));
             if (user != null) {
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
             }

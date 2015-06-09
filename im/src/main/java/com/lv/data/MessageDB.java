@@ -378,6 +378,12 @@ public class MessageDB {
         mdb.delete(con_table_name,"Friend_Id=?",new String[]{friendId});
         closeDB();
     }
+    public synchronized void deleteMessage(String friendId){
+        mdb=getDB();
+        String table_name = "chat_" + CryptUtils.getMD5String(friendId);
+        mdb.delete(table_name,null,null);
+        closeDB();
+    }
 
     public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message,int Type) {
         mdb = getDB();

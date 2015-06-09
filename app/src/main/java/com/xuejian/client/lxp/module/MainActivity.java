@@ -58,6 +58,7 @@ import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
+import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import org.apache.http.conn.BasicEofSensorWatcher;
 
@@ -115,7 +116,22 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void OnSuccess() {
                 ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
+                System.out.println("登陆成功");
+                UserDBManager.getInstance().initDB(100006 + "");
+                com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+                user.setUserId(100022);
+                user.setNickName("~~~~");
+                user.setType(1);
+                UserDBManager.getInstance().saveContact(user);
+//                for (long i=100000;i<=100021;i++){
+//                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+//                    user.setUserId(i);
+//                    user.setNickName("user" + i);
+//                    user.setType(1);
+//                    UserDBManager.getInstance().saveContact(user);
+//                }
                 initData();
+               // GroupManager.getGroupManager().quitGroup(900275+"");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

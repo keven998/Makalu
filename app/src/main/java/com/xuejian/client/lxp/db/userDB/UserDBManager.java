@@ -203,7 +203,7 @@ public class UserDBManager {
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
             String header = cursor.getString(20);
-            if (((Type & 1) == 1) && ((Type & 8) != 8)) {
+            if (((Type & 1) == 1) && ((Type & 8) != 8)&&userId!=2) {
                 list.add(new User(userId, nickName, avatar, avatarSmall, gender, signature, tel, secToken, countryCode,
                         email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext, header));
             }
@@ -226,7 +226,10 @@ public class UserDBManager {
         mdb = getDB();
                 if(user.getNickName()==null){
                     user.setHeader("#");
-                }else{
+                }else if (" ".equals(user.getNickName().substring(0, 1))){
+                    user.setHeader("#");
+                }
+                else{
                     String headerName = user.getNickName();
                     user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
                             0, 1).toUpperCase());
@@ -365,8 +368,8 @@ public class UserDBManager {
     public void updateGroupInfo(User user,String groupId){
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
-        System.out.println("updateGroupInfo");
         if (cursor.getCount()==0)return;
+        System.out.println("updateGroupInfo");
         cursor.moveToLast();
         String ext=cursor.getString(0);
         cursor.close();
@@ -378,7 +381,9 @@ public class UserDBManager {
                 String key=it.next().toString();
                 o1.put(key,o2.get(key));
             }
+            System.out.println(groupId+" "+o1.toString());
             user.setExt(o1.toString());
+            user.setUserId(Long.parseLong(groupId));
             saveContact(user);
 
         } catch (JSONException e) {

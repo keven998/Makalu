@@ -79,10 +79,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private RecyclerView toBeAddContactsRv;
     private List<User> toBeAddContacts;
     private List<Long> userList;
+    private User _group;
     /**
      * 是否为一个新建的群组
      */
-    protected boolean isCreatingNewGroup;
+   // protected boolean isCreatingNewGroup;
     /**
      * 是否为单选
      */
@@ -110,10 +111,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         // String groupName = getIntent().getStringExtra("groupName");
         request = getIntent().getIntExtra("request", 0);
         groupId = getIntent().getStringExtra("groupId");
-        if (groupId == null) {// 创建群组
-            isCreatingNewGroup = true;
-        } else {
+        if (groupId != null) {// 创建群组
+       //     isCreatingNewGroup = true;
+      //  } else {
             // 获取此群组的成员列表
+            //_group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
             exitingMembers = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         }
         if (exitingMembers == null)
@@ -127,12 +129,12 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         /**
          * 对list进行排序
          */
-//        Collections.sort(alluserList, new Comparator<User>() {
-//            @Override
-//            public int compare(User lhs, User rhs) {
-//                return (lhs.getHeader().compareTo(rhs.getHeader()));
-//            }
-//        });
+        Collections.sort(alluserList, new Comparator<User>() {
+            @Override
+            public int compare(User lhs, User rhs) {
+                return (lhs.getHeader().compareTo(rhs.getHeader()));
+            }
+        });
         handler = new Handler();
         // 以下通过代码创建控件组动画而不使用xml文件
         contentShow = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
@@ -724,7 +726,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
             if (vh.checkBox != null) {
                 // checkBox.setOnCheckedChangeListener(null);
-                if (exitingMembers != null && exitingMembers.contains(userId)) {
+                if (exitingMembers != null && exitingMembers.contains(user)) {
                     vh.checkBox.setButtonDrawable(R.drawable.checkbox_bg_gray_selector);
                 } else {
                     vh.checkBox.setButtonDrawable(R.drawable.checkbox_bg_selector);
@@ -733,7 +735,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         // 群组中原来的成员一直设为选中状态
-                        if (exitingMembers.contains(userId)) {
+                        if (contains(userId)) {
                             isChecked = true;
                             vh.checkBox.setChecked(true);
                         } else {
@@ -758,7 +760,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     }
                 });
                 // 群组中原来的成员一直设为选中状态
-                if (exitingMembers.contains(userId)) {
+                if (contains(userId)) {
                     vh.checkBox.setChecked(true);
                     isCheckedArray[position] = true;
                 } else {
@@ -768,7 +770,13 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             return convertView;
         }
     }
-
+    private boolean contains(long id){
+        for (User user:exitingMembers){
+            if (user.getUserId()==id)
+                return true;
+        }
+        return false;
+    }
     public void back(View view) {
         finish();
     }

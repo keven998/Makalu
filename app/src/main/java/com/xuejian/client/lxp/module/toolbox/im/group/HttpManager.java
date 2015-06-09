@@ -205,11 +205,11 @@ public class HttpManager {
                     int code= httpResponse.getStatusLine().getStatusCode();
                     if (code==200) {
                         String result = EntityUtils.toString(res);
-                        if (Config.isDebug) {
-                            Log.i(Config.TAG, "group Info : " + result);
-                        }
                         if ("member".equals(type)) {
                             try {
+                                if (Config.isDebug) {
+                                    Log.i(Config.TAG, "group member : " + result);
+                                }
                                 JSONObject object = new JSONObject(result);
                                 JSONArray userList = object.getJSONArray("result");
                                 List<com.xuejian.client.lxp.db.userDB.User> list = new ArrayList<com.xuejian.client.lxp.db.userDB.User>();
@@ -229,6 +229,9 @@ public class HttpManager {
                         else if ("info".equals(type)){
                             JSONObject object = null;
                             try {
+                                if (Config.isDebug) {
+                                    Log.i(Config.TAG, "group info : " + result);
+                                }
                                 object = new JSONObject(result);
                                 JSONObject o = object.getJSONObject("result");
                                 com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
@@ -238,7 +241,6 @@ public class HttpManager {
                                 user.setType(8);
                                 UserDBManager.getInstance().updateGroupInfo(user,groupId);
                                 //"groupType":"common","createTime":1433316405290,"desc":"群主什么也没说","visible":true,"updateTime":1433316405290,"isPublic":true,"
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
