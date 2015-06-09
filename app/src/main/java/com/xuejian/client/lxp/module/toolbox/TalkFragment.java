@@ -91,7 +91,6 @@ public class TalkFragment extends PeachBaseFragment {
     private ChatAllHistoryAdapter adapter;
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     private boolean hidden;
-    private List<EMGroup> groups;
     private int del_unread_item = 0;
     private List<ConversationBean> conversations = new ArrayList<>();
 
@@ -177,6 +176,9 @@ public class TalkFragment extends PeachBaseFragment {
                     intent.putExtra("chatType", conversation.getChatType());
                     if (conversation.getConversation() != null) {
                         intent.putExtra("conversation", conversation.getConversation());
+                    }
+                    if (conversation.getHASH() != null) {
+                        intent.putExtra("name", conversation.getHASH());
                     }
                     startActivity(intent);
                 }
@@ -288,7 +290,10 @@ public class TalkFragment extends PeachBaseFragment {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
             MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
-            ConversationBean peachConversation = adapter.getItem(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
+            int pos=((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+            ConversationBean Conversation = adapter.getItem(pos);
+            IMClient.getInstance().deleteConversation(Conversation.getFriendId()+"");
+            conversations.remove(pos);
 //            EMConversation tobeDeleteCons = peachConversation.emConversation;
 //            // 删除此会话
 //            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());

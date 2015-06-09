@@ -33,6 +33,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -72,7 +73,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private ListView memberGv;
     private String groupId;
     private String name;
-    private EMGroup group;
+    //private EMGroup group;
     private int referenceWidth;
     private int referenceHeight;
 
@@ -84,7 +85,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     private boolean isInDeleteMode;
     private MemberAdapter memberAdapter;
-
+    private User group;
     /**
      * 屏蔽群消息imageView
      */
@@ -149,6 +150,9 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         // 获取传过来的groupid
         groupId = getArguments().getString("groupId");
         name = getArguments().getString("name");
+        if (groupId!=null){
+            group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+        }
       //  group = EMGroupManager.getInstance().getGroup(groupId);
       //  options = EMChatManager.getInstance().getChatOptions();
         bindView();
@@ -215,8 +219,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     setUpGroupMemeber("update");
                     break;
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
-                    group = EMGroupManager.getInstance().getGroup(groupId);
-                    groupNameTv.setText(group.getGroupName());
+                   // group = EMGroupManager.getInstance().getGroup(groupId);
+                   // groupNameTv.setText(group.getGroupName());
                     break;
                 default:
                     break;
@@ -280,8 +284,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
      */
     public void clearGroupHistory() {
 
-
-        EMChatManager.getInstance().clearConversation(group.getGroupId());
+        IMClient.getInstance().cleanMessageHistory(groupId);
+       // EMChatManager.getInstance().clearConversation(group.getGroupId());
 		//adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 
 
@@ -300,7 +304,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                     msg.setChatType(EMMessage.ChatType.GroupChat);
                     msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getUserId()));
-                    msg.setReceipt(group.getGroupId());
+                    //msg.setReceipt(group.getGroupId());
                     IMUtils.setMessageWithTaoziUserInfo(PeachApplication.getContext(), msg);
                     String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getNickName();
                     String content = myNickname + " 退出了群聊";
@@ -446,8 +450,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         memberGv.setAdapter(memberAdapter);
         setUpGroupMemeber("");
-
-        groupNameTv.setText(name);
+        if (group.getNickName()!=null)
+        groupNameTv.setText(group.getNickName());
 //        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
 //        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
 //            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
@@ -844,7 +848,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     try {
                         // 删除被选中的成员
 
-                        EMGroupManager.getInstance().removeUserFromGroup(group.getGroupId(), imUser.getUsername());
+                        //EMGroupManager.getInstance().removeUserFromGroup(group.getGroupId(), imUser.getUsername());
                         getActivity().runOnUiThread(new Runnable() {
 
                             @Override
@@ -856,7 +860,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                                 EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                                 msg.setChatType(EMMessage.ChatType.GroupChat);
                                 msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()));
-                                msg.setReceipt(group.getGroupId());
+                               // msg.setReceipt(group.getGroupId());
                                 IMUtils.setMessageWithTaoziUserInfo(getActivity(), msg);
                                 String myNickmae = String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId());
                                 String content = String.format(getActivity().getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
