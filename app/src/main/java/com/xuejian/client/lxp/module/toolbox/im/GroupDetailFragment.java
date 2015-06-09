@@ -50,6 +50,7 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -776,7 +777,13 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     contentView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (IMUserRepository.isMyFriend(getActivity(), itemData.getUsername())) {
+
+                            Intent intent=new Intent();
+                            intent.setClass(getActivity(),HisMainPageActivity.class);
+                            intent.putExtra("userId",itemData.getUserId().intValue());
+                            startActivity(intent);
+
+                            /*if (IMUserRepository.isMyFriend(getActivity(), itemData.getUsername())) {
                                 Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
                                 intent.putExtra("userId", itemData.getUserId());
                                 intent.putExtra("userNick", itemData.getNick());
@@ -794,7 +801,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                                 Intent intent = new Intent(getActivity(), SeachContactDetailActivity.class);
                                 intent.putExtra("user", user);
                                 startActivity(intent);
-                            }
+                            }*/
                         }
                     });
                 }
