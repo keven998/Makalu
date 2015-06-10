@@ -37,8 +37,8 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 
 public class ShareUtils {
     public class PlatfromSetting {
-        public final static String WX_APPID = "wx26b58c7173483529";
-        public final static String WX_APPSECRET = "28daa05c021ebebe6d3cf06645b0c5ac";
+        public final static String WX_APPID = "wx86048e56adaf7486";
+        public final static String WX_APPSECRET = "d5408e689b82c0335a728cc8bd1b3c2e";
 
         public final static String QQ_APPID = "1104433490";
         public final static String QQ_APPKEY = "9OCrfdw4vb31gHOU";

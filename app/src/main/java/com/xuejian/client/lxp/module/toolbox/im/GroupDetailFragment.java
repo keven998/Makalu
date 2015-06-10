@@ -55,6 +55,7 @@ import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -794,7 +795,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         @Override
                         public void onClick(View v) {
                             //      if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
-                            Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                            Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
                             intent.putExtra("userId", itemData.getUserId());
                             intent.putExtra("userNick", itemData.getNickName());
                             startActivity(intent);
@@ -812,6 +813,25 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                                intent.putExtra("user", user);
 //                                startActivity(intent);
 //                            }
+                            /*if (IMUserRepository.isMyFriend(getActivity(), itemData.getUsername())) {
+                                Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                                intent.putExtra("userId", itemData.getUserId());
+                                intent.putExtra("userNick", itemData.getNick());
+                                startActivity(intent);
+                            } else {
+                                PeachUser user = new PeachUser();
+                                user.nickName = itemData.getNick();
+                                user.userId = itemData.getUserId();
+                                user.easemobUser = itemData.getUsername();
+                                user.avatar = itemData.getAvatar();
+                                user.avatarSmall = itemData.getAvatarSmall();
+                                user.signature = itemData.getSignature();
+                                user.gender = itemData.getGender();
+                                user.memo = itemData.getMemo();
+                                Intent intent = new Intent(getActivity(), SeachContactDetailActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                            }*/
                         }
                     });
                 }

@@ -14,11 +14,13 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ValidationBean;
+import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -40,7 +42,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_reg);
         ViewUtils.inject(this);
         regBtn.setOnClickListener(this);
-
+        findViewById(R.id.user_agreement).setOnClickListener(this);
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("注册");
         //titleBar.enableBackKey(true);
@@ -114,6 +116,13 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     }
                 });
 
+                break;
+
+            case R.id.user_agreement:
+                Intent aboutIntent = new Intent(RegActivity.this, PeachWebViewActivity.class);
+                aboutIntent.putExtra("url", H5Url.AGREEMENT);
+                aboutIntent.putExtra("title", "注册协议");
+                startActivity(aboutIntent);
                 break;
         }
     }

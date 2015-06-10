@@ -18,4 +18,6 @@ public class H5Url {
     public static final String GUIDE="http://h5.taozilvxing.com/planshare.php?pid=";
     //关于旅行派
     public static final String ABOUT="http://h5.taozilvxing.com/about.php";
+    //用户协议
+    public static final String AGREEMENT="http://h5.taozilvxing.com/agreement.htm";
 }
