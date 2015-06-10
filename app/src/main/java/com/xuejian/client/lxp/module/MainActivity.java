@@ -106,7 +106,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        IMClient.initIM(getApplicationContext());
+        //IMClient.initIM(getApplicationContext());
         FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
@@ -114,7 +114,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
-        if(FromBounce) {
+        if(!FromBounce) {
         com.lv.user.User.login(AccountManager.getInstance().getCurrentUserId(),new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
