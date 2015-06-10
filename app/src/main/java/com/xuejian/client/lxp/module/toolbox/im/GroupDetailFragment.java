@@ -423,14 +423,14 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                }
 //
 //                delGroupMember.setVisibility(View.VISIBLE);
-//                rl_groupName.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
-//                        intent.putExtra("groupId", groupId);
-//                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-//                    }
-//                });
+                rl_groupName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
+                        intent.putExtra("groupId", groupId);
+                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+                    }
+                });
 //            } else {
                 getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
                 if (memberGv.getFooterViewsCount() == 0) {

@@ -266,7 +266,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void getStrategyListData(final int page , String planned) {
-        TravelApi.getStrategyPlannedList(100004+"", page, planned, new HttpCallBack<String>() {
+        TravelApi.getStrategyPlannedList(userId, page, planned, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
@@ -415,35 +415,6 @@ public class StrategyListActivity extends PeachBaseActivity {
 
                                     }
                                 });
-//                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
-//                                    @Override
-//                                    public void onSuccess() {
-//                                        DialogManager.getInstance().dissMissLoadingDialog();
-//                                        runOnUiThread(new Runnable() {
-//                                            public void run() {
-//                                                ToastUtil.getInstance(mContext).showToast("已发送~");
-//                                            }
-//                                        });
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(int i, String s) {
-//                                        DialogManager.getInstance().dissMissLoadingDialog();
-//                                        runOnUiThread(new Runnable() {
-//                                            public void run() {
-//                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
-//
-//                                            }
-//                                        });
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onProgress(int i, String s) {
-//
-//                                    }
-//                                });
                             }
 
                             @Override

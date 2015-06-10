@@ -17,6 +17,10 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
+import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -27,7 +31,7 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
 
-    private EMGroup group;
+    private User group;
     private String groupId;
 
     @Override
@@ -48,13 +52,26 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
                     ToastUtil.getInstance(mContext).showToast("请输入群名称");
                     return;
                 }
-                try {
-                    EMGroupManager.getInstance().changeGroupName(groupId,groupNameEt.getText().toString().trim());
-                    setResult(RESULT_OK);
-                    finish();
-                } catch (EaseMobException e) {
-                    e.printStackTrace();
-                }
+                GroupManager.getGroupManager().editGroupName(groupId,groupNameEt.getText().toString().trim(), new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+//                try {
+//                    EMGroupManager.getInstance().changeGroupName(groupId,groupNameEt.getText().toString().trim());
+//                    setResult(RESULT_OK);
+//                    finish();
+//                } catch (EaseMobException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         initData();
@@ -63,8 +80,9 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
 
     private void initData() {
         groupId = getIntent().getStringExtra("groupId");
-        group = EMGroupManager.getInstance().getGroup(groupId);
-        groupNameEt.setText(group.getGroupName());
+        System.out.println("groupId "+groupId);
+        group = UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+        groupNameEt.setText(group.getNickName());
         CharSequence text = groupNameEt.getText();
         //Debug.asserts(text instanceof Spannable);
         if (text instanceof Spannable) {

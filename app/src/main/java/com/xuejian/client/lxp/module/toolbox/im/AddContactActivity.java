@@ -142,10 +142,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                     if (seachResult.code == 0) {
                         if (seachResult.result.size() > 0) {
                             User user = seachResult.result.get(0);
-                            if (AccountManager.getInstance().getLoginAccount(mContext).getUserId() == (seachResult.result.get(0).getUserId())) {
-                                ToastUtil.getInstance(mContext).showToast("不能添加自己");
-                                return;
-                            }
+                            /**
+                             * 测试中注销掉
+                             */
+//                            if (AccountManager.getInstance().getLoginAccount(mContext).getUserId() == (seachResult.result.get(0).getUserId())) {
+//                                ToastUtil.getInstance(mContext).showToast("不能添加自己");
+//                                return;
+//                            }
 
                             if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).getUserId())) {
                                 ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");

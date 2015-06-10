@@ -89,7 +89,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private TextView unreadMsg;
 
     private Long NEWFRIEND=2l;
-
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
     private NewMessageBroadcastReceiver msgReceiver;
@@ -126,23 +125,23 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         /*User.login("100006", new LoginSuccessListener() {
       //  msgReceiver = new NewMessageBroadcastReceiver();
         //initData();*/
-        com.lv.user.User.login("100006", new LoginSuccessListener() {
+        com.lv.user.User.login("100004", new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
-                UserDBManager.getInstance().initDB(100006 + "");
-                com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+                UserDBManager.getInstance().initDB(100004 + "");
+             //   com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
               //  user.setUserId(100022);
                // user.setNickName("~~~~");
               //  user.setType(1);
               //  UserDBManager.getInstance().saveContact(user);
-//                for (long i=100000;i<=100021;i++){
-//                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-//                    user.setUserId(i);
-//                    user.setNickName("user" + i);
-//                    user.setType(1);
-//                    UserDBManager.getInstance().saveContact(user);
-//                }
+                for (long i=100000;i<=100021;i++){
+                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+                    user.setUserId(i);
+                    user.setNickName("user" + i);
+                    user.setType(1);
+                    UserDBManager.getInstance().saveContact(user);
+                }
                 initData();
                // GroupManager.getGroupManager().quitGroup(900275+"");
                 runOnUiThread(new Runnable() {
@@ -186,7 +185,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void doSucess(String result, String method) {
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-
                 if (contactResult.code == 0) {
                   //  IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
