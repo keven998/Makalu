@@ -120,24 +120,24 @@ public class LoginActivity extends PeachBaseActivity{
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-       /* findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
-                weixinLogin();
-//                UserApi.authSignUp("123456",new HttpCallBack() {
-//                    @Override
-//                    public void doSucess(Object result, String method) {
-//
-//                    }
-//
-//                    @Override
-//                    public void doFailure(Exception error, String msg, String method) {
-//
-//                    }
-//                });
-            }
-        });*/
+//        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
+//                weixinLogin();
+////                UserApi.authSignUp("123456",new HttpCallBack() {
+////                    @Override
+////                    public void doSucess(Object result, String method) {
+////
+////                    }
+////
+////                    @Override
+////                    public void doFailure(Exception error, String msg, String method) {
+////
+////                    }
+////                });
+//            }
+ //       });
         loginBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,11 +202,11 @@ public class LoginActivity extends PeachBaseActivity{
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"
-        User newFriends = new User();
-        newFriends.setUserId(NEWUSER);
-        newFriends.setNickName("申请与通知");
-        newFriends.setType(1);
-        userlist.put(NEWUSER, newFriends);
+//        User newFriends = new User();
+//        newFriends.setUserId(NEWUSER);
+//        newFriends.setNickName("申请与通知");
+//        newFriends.setType(1);
+//        userlist.put(NEWUSER, newFriends);
         // 存入内存
         AccountManager.getInstance().setContactList(userlist);
         List<User> users = new ArrayList<User>(userlist.values());

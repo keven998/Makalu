@@ -80,6 +80,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         if(file==null){
             SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
         }
+        IMClient.initIM(getApplicationContext());
 		initView();
 		initData();
       //  IMClient.initIM(this);
@@ -87,7 +88,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 	}
 
 	protected void initData() {
-        final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
+ //       final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
         final User user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user!=null) {
@@ -108,17 +109,18 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (isFromTalk && user != null) {
+                if ( user != null) {
+                    imLogin(user);
                     //用户自动登录
-                    /*if(getUserType(user.getUserId())){
-                        //默认电话号码类型
-                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
-                    }else{
-                        signIn(getUserCode(user.getUserId()));
-                    }*/
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    startActivityWithNoAnim(intent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                    if(getUserType(user.getUserId())){
+//                        //默认电话号码类型
+//                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
+//                    }else{
+//                        signIn(getUserCode(user.getUserId()));
+//                    }
+//                    Intent intent = new Intent(mContext, MainActivity.class);
+//                    startActivityWithNoAnim(intent);
+//                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
 //                    hasLoad=false;

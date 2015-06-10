@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.common.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,8 @@ import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/5.
@@ -438,6 +441,10 @@ public class IMUtils {
         void onDialogShareCancle(Dialog dialog, int type, String content);
     }
 
-
+    public static boolean isAppRunningForeground(Context var0) {
+        ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
+        List var2 = var1.getRunningTasks(1);
+        return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
+    }
 
 }

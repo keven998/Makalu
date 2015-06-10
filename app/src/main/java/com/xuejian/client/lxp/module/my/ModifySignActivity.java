@@ -68,9 +68,9 @@ public class ModifySignActivity extends PeachBaseActivity {
                                                                            intent.putExtra("signature", signEt.getText().toString().trim());
                                                                            setResult(RESULT_OK,intent);
                                                                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
-                                                                           Intent intent=new Intent();
-                                                                           intent.putExtra("signature",signEt.getText().toString().trim());
-                                                                           setResult(RESULT_OK,intent);
+//                                                                           Intent intent=new Intent();
+//                                                                           intent.putExtra("signature",signEt.getText().toString().trim());
+//                                                                           setResult(RESULT_OK,intent);
                                                                            finish();
                                                                        } else {
                                                                            if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
