@@ -15,6 +15,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
@@ -91,9 +92,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private Long NEWFRIEND=2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-    private NewMessageBroadcastReceiver msgReceiver;
+    //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
-    String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -104,30 +105,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             return;
         }
         IMClient.initIM(getApplicationContext());
-       /*
-       if(!EMChat.getInstance().isLoggedIn()){
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }
-        */
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
-        List<String> blacklist = null;
-        // 注册一个接收消息的BroadcastReceiver
-        msgReceiver = new NewMessageBroadcastReceiver();
-
-        //initData();
-
-        /*User.login("100006", new LoginSuccessListener() {
-      //  msgReceiver = new NewMessageBroadcastReceiver();
-        //initData();*/
-        com.lv.user.User.login("100004", new LoginSuccessListener() {
+        //List<String> blacklist = null;
+        com.lv.user.User.login(AccountManager.getInstance().CurrentUserId,new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
+                ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
                 System.out.println("登陆成功");
                 UserDBManager.getInstance().initDB(100004 + "");
              //   com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
@@ -157,7 +144,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void OnFailed(int code) {
-                System.out.println("登陆失败 :" + code);
+                ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
             }
         });
     }
@@ -167,12 +154,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (intent.getBooleanExtra("conflict", false) ){
             showConflictDialog(MainActivity.this);
         }
-        /*if(!EMChat.getInstance().isLoggedIn()){
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }*/
-
     }
 
     private void initData(){
@@ -754,7 +735,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onDestroy();
         // 注销广播接收者
         System.out.println("MainActivity destroy");
-        try {
+       /* try {
             unregisterReceiver(msgReceiver);
         } catch (Exception e) {
         }
@@ -771,7 +752,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
         } catch (Exception e) {
 
-        }
+        }*/
 
     }
 

@@ -5,8 +5,11 @@ package com.xuejian.client.lxp.module.my;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -68,6 +71,12 @@ public class LoginActivity extends PeachBaseActivity{
     CustomLoadingDialog dialog;
     private Long NEWUSER=1l;
 
+    //type
+    private int LOGIN=1;
+    public int REGISTER=2;
+    private int WXLOGIN=3;
+    private int FINDPASSWORD=4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,20 +85,20 @@ public class LoginActivity extends PeachBaseActivity{
         /**
          * 注释掉登陆
          */
-    //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
+   /* //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
            //时刻保持内存记录登录状态
             AccountManager.getInstance().setLogin(true);
             autoLogin = true;
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(0,R.anim.push_bottom_out);
             return;
- //       }
-//        initView();
-//        request_code=getIntent().getIntExtra("request_code",0);
-//        if(request_code==REQUEST_CODE_REG){
-//            Intent intent = new Intent(mContext, RegActivity.class);
-//            startActivityForResult(intent, REQUEST_CODE_REG);
-//        }
+ //       }*/
+        initView();
+        request_code=getIntent().getIntExtra("request_code",0);
+        if(request_code==REQUEST_CODE_REG){
+            Intent intent = new Intent(mContext, RegActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_REG);
+        }
     }
     @Override
     protected void onResume() {
@@ -179,15 +188,16 @@ public class LoginActivity extends PeachBaseActivity{
         super.finish();
     }
 
-    private void imLogin(final User user) {
-        //登录成功后在内存和AccountManager中标记登录状态，同时登出时
-        SharedPreferencesUtil.saveValue(LoginActivity.this, "isLogin", true);
-        AccountManager.getInstance().setLogin(true);
-
+    private void imLogin(final User user,int type) {
+        //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
-
+        UserDBManager.getInstance().saveContact(user);
+       if(type==FINDPASSWORD){
+            //存入修改好的密码
+        }
+        //3、存入内存
+        AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
-        //登录成功后记录下当前的用户ID，便于后面用来判断
         AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
@@ -202,19 +212,6 @@ public class LoginActivity extends PeachBaseActivity{
         List<User> users = new ArrayList<User>(userlist.values());
         UserDBManager.getInstance().saveContactList(users);
 
-        /*String result=UserApi.getAsynContact();
-        CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-        //  CommonJson<ContactListBean> contactResult=JSON.parseObject(result,ContactListBean.class);
-        if (contactResult.code == 0) {
-            for (User resUser : contactResult.result.contacts) {
-                userlist.put(resUser.getUserId(), resUser);
-            }
-            // 存入内存
-            AccountManager.getInstance().setContactList(userlist);
-            // 存入db
-            List<User> netusers = new ArrayList<User>(userlist.values());
-            UserDBManager.getInstance().saveContactList(netusers);
-        }*/
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {
@@ -365,7 +362,7 @@ public class LoginActivity extends PeachBaseActivity{
 
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
-                    imLogin(userResult.result);
+                    imLogin(userResult.result,LOGIN);
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
@@ -375,7 +372,7 @@ public class LoginActivity extends PeachBaseActivity{
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-error.printStackTrace();
+                error.printStackTrace();
                 System.out.println(msg+"  "+method);
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
@@ -403,7 +400,7 @@ error.printStackTrace();
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";
 //                            userResult.result.easemobPwd="123456";
-                            imLogin(userResult.result);
+                            imLogin(userResult.result,WXLOGIN);
 //                            imLogin("rjm4413","123456","小明");
                         } else {
                             ToastUtil.getInstance(mContext).showToast(userResult.err.message);
@@ -452,12 +449,12 @@ error.printStackTrace();
                 User user = (User) data.getSerializableExtra("user");
                 loginNameEt.setText(user.getTel());
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
-                imLogin(user);
+                imLogin(user,REGISTER);
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             User user = (User) data.getSerializableExtra("user");
             DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
-            imLogin(user);
+            imLogin(user,FINDPASSWORD);
         }
     }
 }
