@@ -72,6 +72,8 @@ public class AccountManager {
             public void onSuccess() {
                 SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
                 AccountManager.getInstance().setContactList(null);
+                //处理一下用户名密码表，下次登录的时候重新建立用户名密码表，表里同时只能存在一个用户
+                //UserDBManager.getInstance().clearTokenTable();
                 IMUserRepository.clearAllContact(context);
                 InviteMsgRepository.clearAllInviteMsg(context);
                 if (callBack != null) {

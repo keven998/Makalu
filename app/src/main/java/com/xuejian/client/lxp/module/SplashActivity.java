@@ -110,6 +110,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
             public void run() {
                 if (isFromTalk && user != null) {
                     //用户自动登录
+                    //先从用户名密码Token表中取得用户信息然后自动登录
                     /*if(getUserType(user.getUserId())){
                         //默认电话号码类型
                         signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
@@ -249,6 +250,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.sp_bounce:
                 Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                mainActivity.putExtra("FromBounce",true);
                 startActivityWithNoAnim(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;

@@ -95,6 +95,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private String mTagArray[] = {"Talk", "Travel", "My"};
     //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
+    private boolean FromBounce;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,23 +108,24 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             return;
         }
         IMClient.initIM(getApplicationContext());
+        FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
-        //List<String> blacklist = null;
-        com.lv.user.User.login(AccountManager.getInstance().CurrentUserId,new LoginSuccessListener() {
-            @Override
-            public void OnSuccess() {
-                ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
-                System.out.println("登陆成功");
-                UserDBManager.getInstance().initDB(100006 + "");
-                com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-                user.setUserId(100022);
-                user.setNickName("~~~~");
-                user.setType(1);
-                UserDBManager.getInstance().saveContact(user);
+        if(FromBounce) {
+            com.lv.user.User.login(AccountManager.getInstance().CurrentUserId, new LoginSuccessListener() {
+                @Override
+                public void OnSuccess() {
+                    ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
+                    System.out.println("登陆成功");
+                    UserDBManager.getInstance().initDB(100006 + "");
+                    com.xuejian.client.lxp.db.userDB.User user = new com.xuejian.client.lxp.db.userDB.User();
+                    user.setUserId(100022);
+                    user.setNickName("~~~~");
+                    user.setType(1);
+                    UserDBManager.getInstance().saveContact(user);
 //                for (long i=100000;i<=100021;i++){
 //                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
 //                    user.setUserId(i);
@@ -130,24 +133,25 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                    user.setType(1);
 //                    UserDBManager.getInstance().saveContact(user);
 //                }
-                initData();
-               // GroupManager.getGroupManager().quitGroup(900275+"");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                        if (talkFragment != null) {
-                            talkFragment.loadConversation();
+                    initData();
+                    // GroupManager.getGroupManager().quitGroup(900275+"");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                            if (talkFragment != null) {
+                                talkFragment.loadConversation();
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void OnFailed(int code) {
-                ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
-            }
-        });
+                @Override
+                public void OnFailed(int code) {
+                    ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
+                }
+            });
+        }
     }
     @Override
     protected void onNewIntent(Intent intent) {
