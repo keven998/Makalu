@@ -19,6 +19,8 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.easemob.EMCallBack;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -75,7 +77,7 @@ public class FavListActivity extends PeachBaseActivity {
     private String curType="all";
     private CustomAdapter mAdapter;
     boolean isShare;
-    int chatType;
+    String chatType;
     String toId;
 
     @Override
@@ -114,9 +116,9 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
 
-        isShare=getIntent().getBooleanExtra("isShare",false);
+        isShare=getIntent().getBooleanExtra("isShare", false);
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType",0);
+        chatType = getIntent().getStringExtra("chatType");
         mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(favTypeArray));
         mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
         mTypeSpinner.setSelection(0, true);
@@ -304,7 +306,7 @@ public class FavListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId, chatType, content, type, new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -317,19 +319,13 @@ public class FavListActivity extends PeachBaseActivity {
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
                                                 ToastUtil.getInstance(mContext).showToast("好像发送失败了");
                                             }
                                         });
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
                                     }
                                 });
                             }

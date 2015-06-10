@@ -90,7 +90,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private TextView unreadMsg;
 
     private Long NEWFRIEND=2l;
-
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
     //private NewMessageBroadcastReceiver msgReceiver;
@@ -111,40 +110,28 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
+        initData();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
         if(FromBounce) {
-            com.lv.user.User.login(AccountManager.getInstance().CurrentUserId, new LoginSuccessListener() {
-                @Override
-                public void OnSuccess() {
-                    ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
-                    System.out.println("登陆成功");
-                    UserDBManager.getInstance().initDB(100006 + "");
-                    com.xuejian.client.lxp.db.userDB.User user = new com.xuejian.client.lxp.db.userDB.User();
-                    user.setUserId(100022);
-                    user.setNickName("~~~~");
-                    user.setType(1);
-                    UserDBManager.getInstance().saveContact(user);
-//                for (long i=100000;i<=100021;i++){
-//                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-//                    user.setUserId(i);
-//                    user.setNickName("user" + i);
-//                    user.setType(1);
-//                    UserDBManager.getInstance().saveContact(user);
-//                }
-                    initData();
-                    // GroupManager.getGroupManager().quitGroup(900275+"");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                            if (talkFragment != null) {
-                                talkFragment.loadConversation();
-                            }
+        com.lv.user.User.login(AccountManager.getInstance().getCurrentUserId(),new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                // ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
+                System.out.println("登陆成功");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if (talkFragment != null) {
+                            talkFragment.loadConversation();
                         }
-                    });
-                }
+                    }
+                });
+            }
+
 
                 @Override
                 public void OnFailed(int code) {
@@ -152,7 +139,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             });
         }
-    }
+      }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -170,19 +158,19 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                System.out.println(result);
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-
                 if (contactResult.code == 0) {
                   //  IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long,User>();
                     // 添加user"申请与通知"
-                    User newFriends = new User();
-                    newFriends.setUserId(NEWFRIEND);
-                    newFriends.setNickName("item_new_friends");
-                    newFriends.setType(1);
-                   // newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
-                    userlist.put(NEWFRIEND, newFriends);
+//                    User newFriends = new User();
+//                    newFriends.setUserId(NEWFRIEND);
+//                    newFriends.setNickName("item_new_friends");
+//                    newFriends.setType(1);
+//                   // newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
+//                    userlist.put(NEWFRIEND, newFriends);
 
                     /*//添加默认服务号
                     IMUser paiServerUser = new IMUser();
@@ -204,18 +192,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                    userlist.put(Constant.GROUP_USERNAME, groupUser);
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
-                        /*IMUser user = new IMUser();
-                        user.setUserId(peachUser.userId);
-                        user.setMemo(peachUser.memo);
-                        user.setNick(peachUser.nickName);
-                        user.setUsername(peachUser.easemobUser);
-                        user.setUnreadMsgCount(0);
-                        user.setAvatar(peachUser.avatar);
-                        user.setAvatarSmall(peachUser.avatarSmall);
-                        user.setSignature(peachUser.signature);
-                        user.setIsMyFriends(true);
-                        user.setGender(peachUser.gender);
-                        IMUtils.setUserHead(user);*/
+                        myUser.setType(1);
                         userlist.put(myUser.getUserId(), myUser);
                     }
                     // 存入db

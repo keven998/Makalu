@@ -55,6 +55,7 @@ import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -423,14 +424,14 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                }
 //
 //                delGroupMember.setVisibility(View.VISIBLE);
-//                rl_groupName.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
-//                        intent.putExtra("groupId", groupId);
-//                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-//                    }
-//                });
+                rl_groupName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
+                        intent.putExtra("groupId", groupId);
+                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+                    }
+                });
 //            } else {
                 getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
                 if (memberGv.getFooterViewsCount() == 0) {
@@ -614,11 +615,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         });
     }
 
-
-
-
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -626,33 +622,28 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
                     try {
 //				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
-                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-                        if (notReceiveNotifyGroups == null) {
-                            notReceiveNotifyGroups = new ArrayList<String>();
-                        }
-                        notReceiveNotifyGroups.remove(groupId);
-                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
+//                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
+//                        if (notReceiveNotifyGroups == null) {
+//                            notReceiveNotifyGroups = new ArrayList<String>();
+//                        }
+//                        notReceiveNotifyGroups.remove(groupId);
+//                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                      //  PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
                     }
                 } else {
                     try {
-//				    EMGroupManager.getInstance().blockGroupMessage(groupId);
-                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-                        if (notReceiveNotifyGroups == null) {
-                            notReceiveNotifyGroups = new ArrayList<String>();
-                        }
-                        notReceiveNotifyGroups.add(groupId);
-                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
+                        /**
+                         * 屏蔽群消息
+                         */
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-//                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                       // PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -804,7 +795,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         @Override
                         public void onClick(View v) {
                             //      if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
-                            Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                            Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
                             intent.putExtra("userId", itemData.getUserId());
                             intent.putExtra("userNick", itemData.getNickName());
                             startActivity(intent);
@@ -822,6 +813,25 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                                intent.putExtra("user", user);
 //                                startActivity(intent);
 //                            }
+                            /*if (IMUserRepository.isMyFriend(getActivity(), itemData.getUsername())) {
+                                Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                                intent.putExtra("userId", itemData.getUserId());
+                                intent.putExtra("userNick", itemData.getNick());
+                                startActivity(intent);
+                            } else {
+                                PeachUser user = new PeachUser();
+                                user.nickName = itemData.getNick();
+                                user.userId = itemData.getUserId();
+                                user.easemobUser = itemData.getUsername();
+                                user.avatar = itemData.getAvatar();
+                                user.avatarSmall = itemData.getAvatarSmall();
+                                user.signature = itemData.getSignature();
+                                user.gender = itemData.getGender();
+                                user.memo = itemData.getMemo();
+                                Intent intent = new Intent(getActivity(), SeachContactDetailActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                            }*/
                         }
                     });
                 }

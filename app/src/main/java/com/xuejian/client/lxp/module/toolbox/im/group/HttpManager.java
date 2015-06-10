@@ -17,10 +17,14 @@ import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -39,19 +43,20 @@ import java.util.concurrent.Executors;
 public class HttpManager {
     private static SyncHttpClient client = new SyncHttpClient();
     static ExecutorService exec = Executors.newFixedThreadPool(5);
-    public static void createGroup(final String name, String groupType,final boolean isPublic, String avatar,final List<Long> participants, final long row, final CreateSuccessListener listener) {
+
+    public static void createGroup(final String name, String groupType, final boolean isPublic, String avatar, final List<Long> participants, final long row, final CreateSuccessListener listener) {
         final JSONObject obj = new JSONObject();
-       final JSONArray array = new JSONArray();
+        final JSONArray array = new JSONArray();
         try {
 
-            for (long member:participants){
+            for (long member : participants) {
                 array.put(member);
             }
             obj.put("name", name);
             obj.put("groupType", groupType);
             obj.put("isPublic", isPublic);
             obj.put("avatar", avatar);
-            obj.put("participants",array);
+            obj.put("participants", array);
             System.out.println(obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -83,14 +88,14 @@ public class HttpManager {
                         String groupId = jsonObject.getString("groupId");
                         String conversation = jsonObject.getString("conversation");
                         String groupType = jsonObject.getString("groupType");
-                        long creator=jsonObject.getLong("creator");
+                        long creator = jsonObject.getLong("creator");
                         IMClient.getInstance().addGroup2Conversation(groupId, conversation);
-                        JSONObject o =new JSONObject();
-                        o.put("GroupMember",array);
-                        o.put("groupType",groupType);
-                        o.put("isPublic",isPublic);
-                        o.put("creator",creator);
-                        UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId),name,o.toString(),8));
+                        JSONObject o = new JSONObject();
+                        o.put("GroupMember", array);
+                        o.put("groupType", groupType);
+                        o.put("isPublic", isPublic);
+                        o.put("creator", creator);
+                        UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId), name, o.toString(), 8));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }
@@ -103,7 +108,7 @@ public class HttpManager {
         });
     }
 
-    public static void addMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
+    public static void addMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
@@ -115,10 +120,10 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(groupId, obj,callBack);
+        editGroupMembers(groupId, obj, callBack);
     }
 
-    public static void removeMembers(String groupId, List<Long> members, boolean isPublic,CallBack callBack) {
+    public static void removeMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
@@ -130,14 +135,14 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj,callBack);
+        editGroupMembers(groupId, obj, callBack);
     }
 
     public static void silenceMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {
         final JSONObject obj = new JSONObject();
         JSONArray array = new JSONArray();
         try {
-            for (long id:members){
+            for (long id : members) {
                 array.put(id);
             }
             obj.put("action", "silence");
@@ -146,54 +151,89 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj,callBack);
+        editGroupMembers(groupId, obj, callBack);
     }
 
-    public static void editGroupMembers(final String GroupId, final JSONObject obj,final CallBack callBack) {
+    public static void editGroupMembers(final String GroupId, final JSONObject obj, final CallBack callBack) {
 
         exec.execute(new Runnable() {
-                         @Override
-                         public void run() {
-                             HttpPost post = new HttpPost(Config.HOST + "/groups/" + GroupId);
-                             post.addHeader("UserId", 100002 + "");
-                             HttpResponse httpResponse = null;
-                             try {
-                                 System.out.println(obj.toString());
-                                 StringEntity entity = new StringEntity(obj.toString(),
-                                         HTTP.UTF_8);
-                                 entity.setContentType("application/json");
-                                 post.setEntity(entity);
-                                 httpResponse = new DefaultHttpClient().execute(post);
-                                 System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
-                                 if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                                     HttpEntity res = httpResponse.getEntity();
-                                     String result=EntityUtils.toString(res);
-                                     if (Config.isDebug) {
-                                         Log.i(Config.TAG, "edit member Result : " + result);
-                                     }
-                                     JSONObject object = new JSONObject(result);
-                                     callBack.onSuccess();
-                                     //JSONObject jsonObject = object.getJSONObject("result");
-                                 }else callBack.onFailed();
-                             } catch (Exception e) {
-                                 e.printStackTrace();
-                                 callBack.onFailed();
-                             }
-                         }
+            @Override
+            public void run() {
+                HttpPost post = new HttpPost(Config.HOST + "/groups/" + GroupId);
+                post.addHeader("UserId",  User.getUser().getCurrentUser() + "");
+                HttpResponse httpResponse = null;
+                try {
+                    System.out.println(obj.toString());
+                    StringEntity entity = new StringEntity(obj.toString(),
+                            HTTP.UTF_8);
+                    entity.setContentType("application/json");
+                    post.setEntity(entity);
+                    httpResponse = new DefaultHttpClient().execute(post);
+                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
+                    if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                        HttpEntity res = httpResponse.getEntity();
+                        String result = EntityUtils.toString(res);
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "edit member Result : " + result);
+                        }
+                        JSONObject object = new JSONObject(result);
+                        callBack.onSuccess();
+                        //JSONObject jsonObject = object.getJSONObject("result");
+                    } else callBack.onFailed();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callBack.onFailed();
+                }
+            }
         });
     }
 
-    public static void getGroupMembers(String groupId ,CallBack callBack) {
+    public static void editGroup(String groupId,final String groupName ,final CallBack callBack) {
+       final String url = Config.GET_GROUP + groupId;
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
+                HttpPut httpPut= new HttpPut(url);
+                httpPut.addHeader("UserId", User.getUser().getCurrentUser() + "");
+                try {
+                    JSONObject obj = new JSONObject();
+                    obj.put("name", groupName);
+                    StringEntity entity = new StringEntity(obj.toString(),
+                            HTTP.UTF_8);
+//                    List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+//                    pairs.add(new BasicNameValuePair("name", groupName));
+                  //  pairs.add(new BasicNameValuePair("key2", "value2"));
+                    httpPut.setEntity(entity);
+                    HttpResponse httpResponse = new DefaultHttpClient().execute(httpPut);
+                    HttpEntity res = httpResponse.getEntity();
+                    int code = httpResponse.getStatusLine().getStatusCode();
+                    String result = EntityUtils.toString(res);
+                    System.out.println(code+" "+result);
+                    if (code == 200) {
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "edit group : " + result);
+                        }
+                        callBack.onSuccess();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void getGroupMembers(String groupId, CallBack callBack) {
         String url = Config.GET_GROUP + groupId + "/users";
-        getInformations(url, "member",groupId,callBack);
+        getInformations(url, "member", groupId, callBack);
     }
 
-    public static void getGroupInformation(String groupId,CallBack callBack) {
+    public static void getGroupInformation(String groupId, CallBack callBack) {
         final String url = Config.GET_GROUP + groupId;
-        getInformations(url, "info",groupId,callBack);
+        getInformations(url, "info", groupId, callBack);
     }
 
-    private static void getInformations(final String url,final String type,final String groupId,final CallBack callBack) {
+    private static void getInformations(final String url, final String type, final String groupId, final CallBack callBack) {
         exec.execute(new Runnable() {
             @Override
             public void run() {
@@ -202,8 +242,8 @@ public class HttpManager {
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     HttpEntity res = httpResponse.getEntity();
-                    int code= httpResponse.getStatusLine().getStatusCode();
-                    if (code==200) {
+                    int code = httpResponse.getStatusLine().getStatusCode();
+                    if (code == 200) {
                         String result = EntityUtils.toString(res);
                         if ("member".equals(type)) {
                             try {
@@ -225,8 +265,7 @@ public class HttpManager {
                                 callBack.onFailed();
                             }
 
-                        }
-                        else if ("info".equals(type)){
+                        } else if ("info".equals(type)) {
                             JSONObject object = null;
                             try {
                                 if (Config.isDebug) {
@@ -234,19 +273,19 @@ public class HttpManager {
                                 }
                                 object = new JSONObject(result);
                                 JSONObject o = object.getJSONObject("result");
-                                com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
+                                com.xuejian.client.lxp.db.userDB.User user = new com.xuejian.client.lxp.db.userDB.User();
                                 user.setNickName(o.get("name").toString());
                                 o.remove("name");
                                 user.setExt(o.toString());
                                 user.setType(8);
-                                UserDBManager.getInstance().updateGroupInfo(user,groupId);
+                                UserDBManager.getInstance().updateGroupInfo(user, groupId);
                                 //"groupType":"common","createTime":1433316405290,"desc":"群主什么也没说","visible":true,"updateTime":1433316405290,"isPublic":true,"
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                         }
-                    }else callBack.onFailed();
+                    } else callBack.onFailed();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UserDBManager {
     private SQLiteDatabase db;
     private String fri_table_name;
+    private String token_table_name;
     private String databaseFilename;
     private static UserDBManager instance;
     private SQLiteDatabase mdb;
@@ -45,6 +46,7 @@ public class UserDBManager {
     public void initDB(String User_Id) {
         String path = CryptUtils.getMD5String(User_Id);
         fri_table_name = "FRI_" + path;
+        token_table_name="token_"+path;
         String DATABASE_PATH = Config.DB_PATH + path;
         databaseFilename = DATABASE_PATH + "/" + "lxp.db";
         File dir = new File(DATABASE_PATH);
@@ -56,6 +58,9 @@ public class UserDBManager {
                 + fri_table_name
                 + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT,gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT,memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT,header TEXT)");
+        db.execSQL("CREATE table IF NOT EXISTS "
+                + token_table_name
+                + " (userId INTEGER PRIMARY KEY,UserName TEXT,pwd TEXT,code TEXT,type INTEGER)");
     }
 
     public static UserDBManager getInstance() {
@@ -408,22 +413,19 @@ public class UserDBManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+    }
+    public void saveToken(String userId,String userName,String pwd,String code,int type){
+        mdb=getDB();
+        ContentValues values=new ContentValues();
+        if (userId!=null)values.put("nickName", userId);
+        if (userName!=null)values.put("avatar", userName);
+        if (pwd!=null)values.put("avatarSmall", pwd);
+        if (code!=null)values.put("gender", code);
+        values.put("signature", type);
+        mdb.insert(token_table_name,null,values);
+        closeDB();
+    }
+    public void getToken(){
 
     }
-//    private String tracksToString(HashMap<String,ArrayList<LocBean>> tracks){
-//        JSONObject object=new JSONObject();
-//        try {
-//        for (Map.Entry<String,ArrayList<LocBean>> entry : tracks.entrySet()) {
-//                object.put(entry.getKey(),entry.getValue().toString());
-//        }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return  object.toString();
-//    }
-//    private  HashMap<String,ArrayList<LocBean>> StringToTracks(String data){
-//
-//    }
 }

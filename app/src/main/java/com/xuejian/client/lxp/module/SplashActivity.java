@@ -80,6 +80,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         if(file==null){
             SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
         }
+        IMClient.initIM(getApplicationContext());
 		initView();
 		initData();
       //  IMClient.initIM(this);
@@ -87,7 +88,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 	}
 
 	protected void initData() {
-        final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
+ //       final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
         final User user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user!=null) {
@@ -108,7 +109,8 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (isFromTalk && user != null) {
+                if ( user != null) {
+                    imLogin(user);
                     //用户自动登录
                     //先从用户名密码Token表中取得用户信息然后自动登录
                     /*if(getUserType(user.getUserId())){
