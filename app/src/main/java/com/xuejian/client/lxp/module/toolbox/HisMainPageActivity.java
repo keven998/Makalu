@@ -156,9 +156,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initData(int id){
         getUserInfo(id);
-        if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+        //if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
             initScrollView(id);
-        }
+        //}
     }
 
     private void showActionDialog() {
