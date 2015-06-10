@@ -342,7 +342,7 @@ android:background="@color/app_backgroud">
                     android:paddingLeft="11dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="这个电视太好看了"
+                    android:text=""
                     android:textColor="@color/second_font_color"
                     android:textSize="14sp"
                     />
