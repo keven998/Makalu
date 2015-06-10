@@ -3,8 +3,6 @@ package com.xuejian.client.lxp.module;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,14 +15,11 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
@@ -37,7 +32,6 @@ import com.lv.user.LoginSuccessListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -49,7 +43,6 @@ import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
@@ -58,9 +51,6 @@ import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
-import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
-
-import org.apache.http.conn.BasicEofSensorWatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +59,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessagerHandler{
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -115,22 +105,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         com.lv.user.User.login(AccountManager.getInstance().getCurrentUserId(),new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
-               // ToastUtil.getInstance(MainActivity.this).showToast("个推登录成功");
                 System.out.println("登陆成功");
-              //  UserDBManager.getInstance().initDB(100004 + "");
-             //   com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-              //  user.setUserId(100022);
-               // user.setNickName("~~~~");
-              //  user.setType(1);
-              //  UserDBManager.getInstance().saveContact(user);
-//                for (long i=100000;i<=100021;i++){
-//                    com.xuejian.client.lxp.db.userDB.User user=new com.xuejian.client.lxp.db.userDB.User();
-//                    user.setUserId(i);
-//                    user.setNickName("user" + i);
-//                    user.setType(1);
-//                    UserDBManager.getInstance().saveContact(user);
-//                }
-               // GroupManager.getGroupManager().quitGroup(900275+"");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -171,13 +146,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                   //  IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long,User>();
-                    // 添加user"申请与通知"
-//                    User newFriends = new User();
-//                    newFriends.setUserId(NEWFRIEND);
-//                    newFriends.setNickName("item_new_friends");
-//                    newFriends.setType(1);
-//                   // newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
-//                    userlist.put(NEWFRIEND, newFriends);
 
                     /*//添加默认服务号
                     IMUser paiServerUser = new IMUser();
@@ -471,6 +439,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
+      //  notifyNewMessage(m);
     }
 
     @Override
@@ -508,7 +477,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             // 刷新bottom bar消息未读数
             updateUnreadMsgCount();
             refreshChatHistoryFragment();
-            notifyNewMessage(message);
+           // notifyNewMessage(message);
 
             // 注销广播，否则在ChatActivity中会收到这个广播
             abortBroadcast();

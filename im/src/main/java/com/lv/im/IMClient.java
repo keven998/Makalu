@@ -47,12 +47,11 @@ public class IMClient {
     private static IMClient client;
     private MessageDB db;
     private static List<Conversation> conList;
-    private static List<ConversationBean> convercationList;
+    private static List<ConversationBean> convercationList= new ArrayList<>();
     //private static HashMap<String,MessageBean> messageMap;
     private int count;
 
     private IMClient() {
-        convercationList = new ArrayList<>();
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
         acklist = new JSONArray();

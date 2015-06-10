@@ -1,8 +1,13 @@
 package com.lv.im;
 
+import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -18,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class HandleImMessage {
@@ -25,14 +31,9 @@ public class HandleImMessage {
     LazyQueue queue = LazyQueue.getInstance();
     private Context c;
     private long lastTime;
-    private static HashMap<MessagerHandler, String> openStateMap = new HashMap<>();
-//    static {
-//        Looper.prepare();
-//    }
+    private static HashMap<MessageHandler, String> openStateMap = new HashMap<>();
     private HandleImMessage() {
-      //  MessageReceiver.registerListener(listener, "IM");
         queue.setDequeueListener(dequeueListener);
-       // Looper.prepare();
     }
 
     public static HandleImMessage getInstance() {
@@ -42,9 +43,9 @@ public class HandleImMessage {
         return instance;
     }
 
-    private static ArrayList<MessagerHandler> ehList = new ArrayList<>();
+    private static ArrayList<MessageHandler> ehList = new ArrayList<>();
 
-    public static abstract interface MessagerHandler {
+    public static abstract interface MessageHandler {
         /**
          *
          * @param m 收到的消息
@@ -58,7 +59,7 @@ public class HandleImMessage {
      * Activity注册消息listener
      * @param listener listener
      */
-    public  void registerMessageListener(MessagerHandler listener) {
+    public  void registerMessageListener(MessageHandler listener) {
         if (!ehList.contains(listener))ehList.add(listener);
 
     }
@@ -67,18 +68,18 @@ public class HandleImMessage {
      * 解除注册
      * @param listener listener
      */
-    public  void unregisterMessageListener(MessagerHandler listener) {
+    public  void unregisterMessageListener(MessageHandler listener) {
         ehList.remove(listener);
     }
 
-    public void registerMessageListener(MessagerHandler listener, String conversation) {
+    public void registerMessageListener(MessageHandler listener, String conversation) {
         if (!ehList.contains(listener))ehList.add(listener);
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
 
     }
 
-    public  void unregisterMessageListener(MessagerHandler listener, String conversation) {
+    public  void unregisterMessageListener(MessageHandler listener, String conversation) {
         ehList.remove(listener);
         openStateMap.clear();
     }
@@ -90,33 +91,33 @@ public class HandleImMessage {
             switch (message.what) {
                 case Config.CMD_MSG:
                     Message newCMDMessage = (Message) message.obj;
-                    for (MessagerHandler handler : ehList) {
+                    for (MessageHandler handler : ehList) {
                         handler.onCMDMessageArrive(Msg2Bean(newCMDMessage));
                     }
                     break;
                 case Config.TEXT_MSG:
                     Message newMessage = (Message) message.obj;
                     System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
-                    for (MessagerHandler handler : ehList) {
+                    for (MessageHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(newMessage));
                     }
                     break;
                 case Config.LOC_MSG:
                     Message newLocMessage = (Message) message.obj;
-                    for (MessagerHandler handler : ehList) {
+                    for (MessageHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(newLocMessage));
                     }
                     break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
-                    for (MessagerHandler handler : ehList) {
+                    for (MessageHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(newMediaMessage));
                     }
                     break;
                 default:
                     Message extMessage = (Message) message.obj;
-                    for (MessagerHandler handler : ehList) {
+                    for (MessageHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(extMessage));
                     }
                     break;
@@ -166,12 +167,18 @@ public class HandleImMessage {
                     return;
                 }
                 System.out.println("ehList size: "+ehList.size());
-              //  for (MessagerHandler handler : ehList) {
+
+                if (ehList.size()==0){
+                    notifyMsg(c,messageBean);
+                }
+
+              //  for (MessageHandler handler : ehList) {
+                if (ehList.size()>0){
                     if (openStateMap.containsKey(ehList.get(0))) {
                          IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
                     }
                     else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-             //   }
+                 }
                 String content = messageBean.getContents();
                 JSONObject object = null;
                 switch (messageBean.getMsgType()) {
@@ -242,5 +249,33 @@ public class HandleImMessage {
     };
     private static MessageBean Msg2Bean(Message msg) {
         return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
+    }
+   public void notifyMsg(Context c,Message message){
+           NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+           System.out.println("notify");
+           NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c)
+                   .setSmallIcon(c.getApplicationInfo().icon)
+                   .setWhen(System.currentTimeMillis()).setAutoCancel(true);
+
+           // String ticker = IMUtils.getMessageDigest(message, this);
+           // if(message.getType() == EMMessage.Type.TXT)
+           //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+           //设置状态栏提示
+           mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
+
+           //必须设置pendingintent，否则在2.3的机器上会有bug
+           Intent intent = new Intent("android.intent.action.notify");
+           intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           PendingIntent pendingIntent = PendingIntent.getActivity(c, 11, intent, PendingIntent.FLAG_ONE_SHOT);
+           mBuilder.setContentIntent(pendingIntent);
+
+           Notification notification = mBuilder.build();
+           notificationManager.notify(11, notification);
+           notificationManager.cancel(11);
+   }
+    public  boolean isAppRunningForeground(Context var0) {
+        ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
+        List var2 = var1.getRunningTasks(1);
+        return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
     }
 }

@@ -71,6 +71,7 @@ dependencies {
     //compile 'com.android.support:appcompat-v7:22.1.1'
     //compile 'com.android.support:support-v4:22.1.1'
     //compile files('libs/qiniu-android-sdk-7.0.3.jar')
+    compile 'com.android.support:support-v4:22.1.1'
 }
 sourceSets {
     main {

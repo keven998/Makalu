@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.NotificationCompat;
 import com.easemob.util.EasyUtils;
+import com.lv.bean.MessageBean;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.utils.IMUtils;
@@ -93,22 +94,22 @@ public class BaseActivity extends FragmentActivity {
      * 如果不需要，注释掉即可
      * @param message
      */
-    protected void notifyNewMessage(EMMessage message) {
+    protected void notifyNewMessage(MessageBean message) {
         //如果是设置了不提醒只显示数目的群组(这个是app里保存这个数据的，demo里不做判断)
         //以及设置了setShowNotificationInbackgroup:false(设为false后，后台时sdk也发送广播)
-        if(!EasyUtils.isAppRunningForeground(this)){
+        if(IMUtils.isAppRunningForeground(this)){
             return;
         }
-
+System.out.println("notify");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(getApplicationInfo().icon)
                 .setWhen(System.currentTimeMillis()).setAutoCancel(true);
 
-        String ticker = IMUtils.getMessageDigest(message, this);
-        if(message.getType() == EMMessage.Type.TXT)
-            ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+       // String ticker = IMUtils.getMessageDigest(message, this);
+       // if(message.getType() == EMMessage.Type.TXT)
+        //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
         //设置状态栏提示
-        mBuilder.setTicker(message.getFrom()+": " + ticker);
+        mBuilder.setTicker(message.getSenderId()+": 你有一条新消息");
 
         //必须设置pendingintent，否则在2.3的机器上会有bug
         Intent intent = new Intent(this, MainActivity.class);

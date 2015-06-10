@@ -216,6 +216,19 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请至少选择一位好友");
             return;
         }
+        if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
+            Intent intent=new Intent();
+            intent.putExtra("chatType","single");
+            intent.putExtra("toId",toBeAddContacts.get(0).getUserId()+"");
+          //  intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+            setResult(RESULT_OK, intent);
+            finishWithNoAnim();
+
+
+        }
+
+
+
         final StringBuffer ChatName = new StringBuffer();
         final StringBuffer membersStr = new StringBuffer();
         for (int i = 0; i < toBeAddContacts.size(); i++) {
@@ -244,9 +257,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 @Override
                 public void onSuccess() {
                     Intent intent=new Intent();
-                   // intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                    //intent.putExtra("toId", ChatName.toString());
-                    //intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+                    intent.putExtra("chatType", "group");
+                    intent.putExtra("toId", groupId+"");
+                    intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
                     setResult(RESULT_OK, intent);
                     finishWithNoAnim();
                 }
@@ -260,9 +273,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         }
         else if (toBeAddContacts.size()==1){
             Intent intent=new Intent();
-            intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-            intent.putExtra("toId", ChatName.toString());
-            intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+            intent.putExtra("chatType", "group");
+            intent.putExtra("toId",toBeAddContacts.get(0).getUserId()+"");
             setResult(RESULT_OK, intent);
             finishWithNoAnim();
         }

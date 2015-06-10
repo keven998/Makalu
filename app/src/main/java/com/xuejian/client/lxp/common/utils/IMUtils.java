@@ -21,7 +21,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.util.HanziToPinyin;
+import com.lv.Listener.SendMsgListener;
 import com.lv.bean.MessageBean;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ExtFromUser;
@@ -237,41 +239,65 @@ public class IMUtils {
                 Intent intent = new Intent(context, IMShareActivity.class);
                 ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
             }else if(requestCode ==IM_SHARE_REQUEST_CODE){
-                final int chatType = data.getIntExtra("chatType", 0);
+                final String chatType = data.getStringExtra("chatType");
                 final String toId = data.getStringExtra("toId");
                 showImShareDialog(context,iCreateShareDialog,new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
                         DialogManager.getInstance().showLoadingDialog(context);
-                        sendExtMessage(context,type,content,chatType,toId,new EMCallBack() {
+                        IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener(){
+
                             @Override
                             public void onSuccess() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity)context).runOnUiThread(new Runnable() {
+                                ((Activity) context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("已发送~");
 
                                     }
                                 });
-
                             }
 
                             @Override
-                            public void onError(int i, String s) {
+                            public void onFailed(int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity)context).runOnUiThread(new Runnable() {
+                                ((Activity) context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("好像发送失败了");
 
                                     }
                                 });
                             }
-
-                            @Override
-                            public void onProgress(int i, String s) {
-
-                            }
                         });
+//                        sendExtMessage(context, type, content, chatType, toId, new EMCallBack() {
+//                            @Override
+//                            public void onSuccess() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("已发送~");
+//
+//                                    }
+//                                });
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(int i, String s) {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+//
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onProgress(int i, String s) {
+//
+//                            }
+//                        });
                         if(callback!=null){
                             callback.onDialogShareOk(dialog,type,content);
                         }
