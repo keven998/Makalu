@@ -112,15 +112,16 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                 if ( user != null) {
                     imLogin(user);
                     //用户自动登录
-//                    if(getUserType(user.getUserId())){
-//                        //默认电话号码类型
-//                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
-//                    }else{
-//                        signIn(getUserCode(user.getUserId()));
-//                    }
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    startActivityWithNoAnim(intent);
-//                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    //先从用户名密码Token表中取得用户信息然后自动登录
+                    /*if(getUserType(user.getUserId())){
+                        //默认电话号码类型
+                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
+                    }else{
+                        signIn(getUserCode(user.getUserId()));
+                    }*/
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    startActivityWithNoAnim(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
 //                    hasLoad=false;
@@ -251,6 +252,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.sp_bounce:
                 Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                mainActivity.putExtra("FromBounce",true);
                 startActivityWithNoAnim(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;

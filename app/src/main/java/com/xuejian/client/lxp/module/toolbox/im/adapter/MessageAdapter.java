@@ -129,6 +129,13 @@ public class MessageAdapter extends BaseAdapter {
     private static final int VIDEO_MSG = 6;
     private static final int FILE_MSG = 7;
     private static final int PLAN_MSG = 10;
+    private static final int CITY_MSG = 11;
+    private static final int TRAVEL_MSG = 12;
+    private static final int SPOT_MSG = 13;
+    private static final int FOOD_MSG = 14;
+    private static final int SHOP_MSG = 15;
+    private static final int HOTEL_MSG = 16;
+
     private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -211,6 +218,12 @@ public class MessageAdapter extends BaseAdapter {
             case TIP_MSG:
                 return MESSAGE_TYPE_TIPS;
             case PLAN_MSG:
+            case CITY_MSG:
+            case TRAVEL_MSG:
+            case SPOT_MSG:
+            case FOOD_MSG:
+            case SHOP_MSG:
+            case HOTEL_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
         return -1;// invalid
@@ -244,6 +257,12 @@ public class MessageAdapter extends BaseAdapter {
             case TIP_MSG:
                 return inflater.inflate(R.layout.row_chat_tips, null);
             case PLAN_MSG:
+            case CITY_MSG:
+            case TRAVEL_MSG:
+            case SPOT_MSG:
+            case FOOD_MSG:
+            case SHOP_MSG:
+            case HOTEL_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
             default:
@@ -303,6 +322,12 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
                     break;
                 case PLAN_MSG:
+                case CITY_MSG:
+                case TRAVEL_MSG:
+                case SPOT_MSG:
+                case FOOD_MSG:
+                case SHOP_MSG:
+                case HOTEL_MSG:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
                     holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
@@ -365,6 +390,12 @@ public class MessageAdapter extends BaseAdapter {
                 handleTipsMessage(message, holder, position);
                 break;
             case PLAN_MSG:
+            case CITY_MSG:
+            case TRAVEL_MSG:
+            case SPOT_MSG:
+            case FOOD_MSG:
+            case SHOP_MSG:
+            case HOTEL_MSG:
                 handleGroupMessage(position, convertView, message, holder);
                 handleExtMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
@@ -514,6 +545,16 @@ public class MessageAdapter extends BaseAdapter {
                         case VIDEO_MSG:
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
                             break;
+                        //添加扩展类型的跳转
+                        /*case PLAN_MSG:
+                        case CITY_MSG:
+                        case TRAVEL_MSG:
+                        case SPOT_MSG:
+                        case FOOD_MSG:
+                        case SHOP_MSG:
+                        case HOTEL_MSG:
+                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_EXT);
+                            break;*/
                     }
 //                    if (message.getType() == Type.TXT)
 //                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
@@ -645,7 +686,7 @@ public class MessageAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                 }
             });
-        } else if (extType == Constant.ExtType.CITY) {
+        } else if (extType == CITY_MSG) {
             holder.tv_name.setText(bean.name);
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
@@ -659,7 +700,7 @@ public class MessageAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                 }
             });
-        } else if (extType == Constant.ExtType.TRAVELS) {
+        } else if (extType == TRAVEL_MSG) {
             holder.tv_name.setText(bean.name);
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
@@ -674,7 +715,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
 
-        } else if (extType == Constant.ExtType.SPOT) {
+        } else if (extType == SPOT_MSG) {
             if (TextUtils.isEmpty(bean.timeCost)) {
                 holder.tv_attr.setVisibility(View.GONE);
             } else {
@@ -692,22 +733,22 @@ public class MessageAdapter extends BaseAdapter {
                     IntentUtils.intentToDetail(activity, TravelApi.PeachType.SPOT, finalBean.id);
                 }
             });
-        } else if (extType == Constant.ExtType.FOOD || extType == Constant.ExtType.HOTEL || extType == Constant.ExtType.SHOPPING) {
+        } else if (extType == FOOD_MSG || extType == HOTEL_MSG || extType == SHOP_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
             switch (extType) {
-                case Constant.ExtType.FOOD:
+                case FOOD_MSG:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("美食");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
-                case Constant.ExtType.HOTEL:
+                case HOTEL_MSG:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("酒店");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
-                case Constant.ExtType.SHOPPING:
+                case SHOP_MSG:
                     holder.tv_name.setText(bean.name);
                     holder.tv_type.setText("购物");
                     holder.tv_attr.setText(bean.rating + " ");
@@ -725,15 +766,15 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     switch (extType) {
-                        case Constant.ExtType.FOOD:
+                        case FOOD_MSG:
                             IntentUtils.intentToDetail(activity, TravelApi.PeachType.RESTAURANTS, finalBean.id);
                             break;
 
-                        case Constant.ExtType.HOTEL:
+                        case HOTEL_MSG:
                             IntentUtils.intentToDetail(activity, TravelApi.PeachType.HOTEL, finalBean.id);
                             break;
 
-                        case Constant.ExtType.SHOPPING:
+                        case SHOP_MSG:
                             IntentUtils.intentToDetail(activity, TravelApi.PeachType.SHOPPING, finalBean.id);
                             break;
                     }

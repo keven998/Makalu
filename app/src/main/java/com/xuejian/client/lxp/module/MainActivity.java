@@ -84,6 +84,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private String mTagArray[] = {"Talk", "Travel", "My"};
     //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
+    private boolean FromBounce;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +97,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             return;
         }
         //IMClient.initIM(getApplicationContext());
+        FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
         initData();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
-        //List<String> blacklist = null;
+        if(!FromBounce) {
         com.lv.user.User.login(AccountManager.getInstance().getCurrentUserId(),new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
@@ -117,12 +120,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 });
             }
 
-            @Override
-            public void OnFailed(int code) {
-                ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
-            }
-        });
-    }
+
+                @Override
+                public void OnFailed(int code) {
+                    ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
+                }
+            });
+        }
+      }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
