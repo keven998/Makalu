@@ -14,8 +14,6 @@
 package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -27,35 +25,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.aizou.core.log.LogUtil;
-import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.chat.EMContact;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.TextMessageBody;
 import com.easemob.util.DateUtils;
 import com.lv.bean.ConversationBean;
-import com.lv.user.User;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.bean.ExtFromUser;
-import com.xuejian.client.lxp.bean.PeachConversation;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
-import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +55,16 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private static final int FILE_MSG = 7;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
+
+    private static final int GUIDE_MSG = 10;
+    private static final int CITY_MSG = 11;
+    private static final int TRAVEL_MSG = 12;
+    private static final int SPOT_MSG = 13;
+    private static final int FOOD_MSG = 14;
+    private static final int SHOP_MSG = 15;
+    private static final int HOTEL_MSG = 16;
+
+
     private LayoutInflater inflater;
     DisplayImageOptions options;
     private Handler handler;
@@ -328,8 +321,19 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            case FILE: // 普通文件消息
 //                digest = digest + getStrng(context, R.string.file);
 //                break;
-            case 10:
-                digest = digest + "[链接]";
+            case GUIDE_MSG:
+            case CITY_MSG:
+            case TRAVEL_MSG:
+            case SPOT_MSG:
+            case FOOD_MSG:
+            case SHOP_MSG:
+            case HOTEL_MSG:
+                try {
+                    JSONObject jsonObject= new JSONObject(conversationBean.getLastMessage());
+                    digest = digest + "[链接] " +jsonObject.getString("name");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 System.err.println("error, unknow type");
