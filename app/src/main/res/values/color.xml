@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_backgroud">#f2f2f2</color>
+    <color name="app_backgroud">#f7faf7</color>
 
     <color name="app_theme_color">#99cc66</color>
     <color name="app_theme_color_highlight">#b9dc96</color>
@@ -9,6 +9,8 @@
     <color name="color_alert">#ff9600</color>
     <color name="color_enter">#4bd228</color>
     <color name="color_link">#469bff</color>
+    <color name="color_disable">#e2e2e2</color>
+    <color name="color_line">#e2e2e2</color>
 
     <color name="color_text_i">#323232</color>
     <color name="color_text_ii">#646464</color>
