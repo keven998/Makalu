@@ -306,8 +306,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
                     if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
-                        User imUser = UserDBManager.getInstance().getContactByUserId((long) bean.getUserId());
-                        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUserId()));
+                        User imUser = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
+                        Intent intent=new Intent(mContext, ChatActivity.class);
+                        intent.putExtra("friend_id",String.valueOf(imUser.getUserId()));
+                        intent.putExtra("chatType","single");
+                        startActivity(intent);
                         finish();
                     }else{
                         Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);

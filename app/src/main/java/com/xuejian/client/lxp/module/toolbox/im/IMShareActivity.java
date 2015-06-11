@@ -24,6 +24,8 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.bean.ConversationBean;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -35,6 +37,8 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,50 +128,51 @@ public class IMShareActivity extends PeachBaseActivity {
      *
      * @return
      */
-    private List<PeachConversation> loadConversationsWithRecentChat() {
+    private List<ConversationBean> loadConversationsWithRecentChat() {
         // 获取所有会话，包括陌生人
-        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
-        List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
-        //过滤掉messages seize为0的conversation
-        Iterator<EMConversation> conversationIt = conversations.values().iterator();
-        while (conversationIt.hasNext()){
-            final EMConversation conversation = conversationIt.next();
-            if(conversation.getLastMessage()==null)
-                continue;
-            if(conversation.getIsGroup()){
-                PeachConversation peachConversation = new PeachConversation();
-                peachConversation.emConversation = conversation;
-                conversationList.add(peachConversation);
-                EMGroup group=EMGroupManager.getInstance().getGroup(conversation.getUserName());
-                if(group==null){
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
-                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
-                            } catch (EaseMobException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-                }
-
-            }else if(!TextUtils.isEmpty(conversation.getUserName())){
-                IMUser user = IMUserRepository.getMyFriendByUserName(mContext, conversation.getUserName());
-                if(user!=null){
-                    PeachConversation peachConversation = new PeachConversation();
-                    peachConversation.emConversation = conversation;
-                    peachConversation.imUser = user;
-                    conversationList.add(peachConversation);
-                }else{
-                    conversationIt.remove();
-                }
-            }
-        }
+        List<ConversationBean> list=IMClient.getInstance().getConversationList();
+//        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
+//        List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
+//        //过滤掉messages seize为0的conversation
+//        Iterator<EMConversation> conversationIt = conversations.values().iterator();
+//        while (conversationIt.hasNext()){
+//            final EMConversation conversation = conversationIt.next();
+//            if(conversation.getLastMessage()==null)
+//                continue;
+//            if(conversation.getIsGroup()){
+//                PeachConversation peachConversation = new PeachConversation();
+//                peachConversation.emConversation = conversation;
+//                conversationList.add(peachConversation);
+//                EMGroup group=EMGroupManager.getInstance().getGroup(conversation.getUserName());
+//                if(group==null){
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
+//                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
+//                            } catch (EaseMobException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }).start();
+//                }
+//
+//            }else if(!TextUtils.isEmpty(conversation.getUserName())){
+//                IMUser user = IMUserRepository.getMyFriendByUserName(mContext, conversation.getUserName());
+//                if(user!=null){
+//                    PeachConversation peachConversation = new PeachConversation();
+//                    peachConversation.emConversation = conversation;
+//                    peachConversation.imUser = user;
+//                    conversationList.add(peachConversation);
+//                }else{
+//                    conversationIt.remove();
+//                }
+//            }
+//        }
         // 排序
-        sortConversationByLastChatTime(conversationList);
-        return conversationList;
+        sortConversationByLastChatTime(list);
+        return list;
     }
 
     /**
@@ -175,16 +180,14 @@ public class IMShareActivity extends PeachBaseActivity {
      *
      * @param conversationList
      */
-    private void sortConversationByLastChatTime(List<PeachConversation> conversationList) {
-        Collections.sort(conversationList, new Comparator<PeachConversation>() {
+    private void sortConversationByLastChatTime(List<ConversationBean> conversationList) {
+        Collections.sort(conversationList, new Comparator<ConversationBean>() {
             @Override
-            public int compare(final PeachConversation con1, final PeachConversation con2) {
+            public int compare(final ConversationBean con1, final ConversationBean con2) {
 
-                EMMessage con2LastMessage = con2.emConversation.getLastMessage();
-                EMMessage con1LastMessage = con1.emConversation.getLastMessage();
-                if (con2LastMessage.getMsgTime() == con1LastMessage.getMsgTime()) {
+                if (con1.getLastChatTime() == con2.getLastChatTime()) {
                     return 0;
-                } else if (con2LastMessage.getMsgTime() > con1LastMessage.getMsgTime()) {
+                } else if (con2.getLastChatTime() > con1.getLastChatTime()) {
                     return 1;
                 } else {
                     return -1;
@@ -206,7 +209,7 @@ public class IMShareActivity extends PeachBaseActivity {
         }
     }
 
-    public class ShareChatViewHolder extends ViewHolderBase<PeachConversation> {
+    public class ShareChatViewHolder extends ViewHolderBase<ConversationBean> {
 
         @InjectView(R.id.avatar)
         ImageView mAvatar;
@@ -239,63 +242,59 @@ public class IMShareActivity extends PeachBaseActivity {
         }
 
         @Override
-        public void showData(int position, PeachConversation itemData) {
+        public void showData(int position,final ConversationBean itemData) {
             // 获取与此用户/群组的会话
-            final EMConversation conversation = itemData.emConversation;
-            IMUser imUser = itemData.imUser;
+          final   User imUser = UserDBManager.getInstance().getContactByUserId(itemData.getFriendId());
             // 获取用户username或者群组groupid
-            final String username = conversation.getUserName();
-            List<EMGroup> groups = EMGroupManager.getInstance().getAllGroups();
-            EMContact contact = EMGroupManager.getInstance().getGroup(username);
-            if (conversation.getIsGroup()) {
-                final EMGroup group = (EMGroup) contact;
+            final String username = imUser.getNickName();
+            if ("group".equals(itemData.getChatType())) {
                 // 群聊消息，显示群聊头像
                 final List<String> members = new ArrayList<>();
                 final List<Bitmap> membersAvatars = new ArrayList<>();
-                final int size = Math.min(group.getMembers().size(), 4);
+       //         final int size = Math.min(group.getMembers().size(), 4);
                 // 群聊消息，显示群聊头像
-
-                if(size!=0){
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < size; i++) {
-                                String username = group.getMembers().get(i);
-                                IMUser user = IMUserRepository.getContactByUserName(mContext, username);
-                                if (user != null) {
-                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(),avatarSize);
-
-                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
-                                    if(bitmap==null){
-                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
-                                    }
-                                    membersAvatars.add(bitmap);
-                                }else{
-                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
-                                    membersAvatars.add(bitmap);
-                                }
-                            }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAvatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
-                                            LocalDisplay.dp2px(45), membersAvatars));
-                                }
-                            });
-
-
-                        }
-                    }).start();
-                }else{
+//
+//                if(size!=0){
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            for (int i = 0; i < size; i++) {
+//                                String username = group.getMembers().get(i);
+//                                IMUser user = IMUserRepository.getContactByUserName(mContext, username);
+//                                if (user != null) {
+//                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(),avatarSize);
+//
+//                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
+//                                    if(bitmap==null){
+//                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
+//                                    }
+//                                    membersAvatars.add(bitmap);
+//                                }else{
+//                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
+//                                    membersAvatars.add(bitmap);
+//                                }
+//                            }
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mAvatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
+//                                            LocalDisplay.dp2px(45), membersAvatars));
+//                                }
+//                            });
+//
+//
+//                        }
+//                    }).start();
+//                }else{
                     mAvatar.setImageResource(R.drawable.avatar_placeholder_round);
-                }
-                mName.setText(contact.getNick() != null ? contact.getNick() : username);
+ //               }
+                mName.setText(imUser.getNickName() != null ? imUser.getNickName() : " ");
             } else {
                 if(imUser!=null){
                     // 本地或者服务器获取用户详情，以用来显示头像和nick
                     ImageLoader.getInstance().displayImage(imUser.getAvatarSmall(), mAvatar, options);
                     if (TextUtils.isEmpty(imUser.getMemo())) {
-                        mName.setText(imUser.getNick());
+                        mName.setText(imUser.getNickName());
                     } else {
                         mName.setText(imUser.getMemo());
                     }
@@ -305,15 +304,15 @@ public class IMShareActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    if(conversation.getIsGroup()){
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("toId", username);
+                    if ("group".equals(itemData.getChatType())) {
+                        intent.putExtra("chatType", "group");
+                        intent.putExtra("toId", imUser.getUserId()+"");
 
-                    }else{
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                        intent.putExtra("toId", username);
+                    } else {
+                        intent.putExtra("chatType", "single");
+                        intent.putExtra("toId",imUser.getUserId()+"");
                     }
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });
