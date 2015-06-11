@@ -116,6 +116,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     DisplayImageOptions options;
     User user;
     private User imUser;
+    private int EXPERT_INT=2;
     /*PeachUser user;
     PeachUser hisBean;
     private IMUser imUser;*/
@@ -127,7 +128,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId=getIntent().getExtras().getInt("userId");
         user= AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        imUser = UserDBManager.getInstance().getContactByUserId(userId);
+        if(user!=null) {
+            imUser = UserDBManager.getInstance().getContactByUserId(userId);
+        }
         options= new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -145,16 +148,21 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-        if(userId!=10000&&UserDBManager.getInstance().isMyFriend((long)userId)){
-            tv_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showActionDialog();
-                }
-            });
+        if(user!=null) {
+            if (userId != 10000 && UserDBManager.getInstance().isMyFriend((long) userId)) {
+                tv_del.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showActionDialog();
+                    }
+                });
+            } else {
+                tv_del.setVisibility(View.GONE);
+            }
         }else{
             tv_del.setVisibility(View.GONE);
         }
+
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,7 +263,17 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void refreshView(final User bean){
-        UserDBManager.getInstance().saveContact(bean);
+        if(user!=null) {
+            int type;
+            if(UserDBManager.getInstance().getContactByUserId(bean.getUserId())!=null){
+                type=bean.getType();
+                type&=EXPERT_INT;
+                bean.setType(type);
+            }else{
+                bean.setType(EXPERT_INT);
+            }
+            UserDBManager.getInstance().saveContact(bean);
+        }
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
         title_name.setText(bean.getNickName());
         his_name.setText(bean.getNickName());
@@ -284,48 +302,50 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         age.setText(getAge(bean.getBirthday())+"");
         }
 
-        if(userId!=10000&&UserDBManager.getInstance().isMyFriend(bean.getUserId() )){
-            tv_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showActionDialog();
-                }
-            });
-        }else{
-            tv_del.setVisibility(View.GONE);
-        }
+        if(user!=null) {
+            if (userId != 10000 && UserDBManager.getInstance().isMyFriend(bean.getUserId())) {
+                tv_del.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showActionDialog();
+                    }
+                });
+            } else {
+                tv_del.setVisibility(View.GONE);
+            }
 
-        //IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)
-        if(UserDBManager.getInstance().isMyFriend(bean.getUserId())){
-            add_friend.setText("开始聊天");
-            add_friend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+
+            if (UserDBManager.getInstance().isMyFriend(bean.getUserId())) {
+                add_friend.setText("开始聊天");
+                add_friend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                    /* Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
-                    if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
-                        User imUser = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
-                        Intent intent=new Intent(mContext, ChatActivity.class);
-                        intent.putExtra("friend_id",String.valueOf(imUser.getUserId()));
-                        intent.putExtra("chatType","single");
-                        startActivity(intent);
-                        finish();
-                    }else{
-                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
-                        finish();
-                    }
-                }
-            });
 
-        }else{
-            add_friend.setText("加为好友");
-            add_friend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                        if (user != null) { //&&!TextUtils.isEmpty(user.easemobUser)
+                            User imUser = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
+                            Intent intent = new Intent(mContext, ChatActivity.class);
+                            intent.putExtra("friend_id", String.valueOf(imUser.getUserId()));
+                            intent.putExtra("chatType", "single");
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                            finish();
+                        }
+                    }
+                });
+
+            } else {
+                add_friend.setText("加为好友");
+                add_friend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                    /* PeachUser user = new PeachUser();
                     user.nickName = bean.get(0).nickName;
                     user.userId = bean.get(0).userId;
@@ -339,41 +359,54 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("user", user);
                     startActivity(intent);
 */
-                    if (user != null) { // && !TextUtils.isEmpty(user.easemobUser)
-                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                        editDialog.setTitle("输入验证信息");
-                        editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).getNickName()));
-                        editDialog.setPositiveButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                editDialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
-                                UserApi.requestAddContact(bean.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
-                                    @Override
-                                    public void doSucess(Object result, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (user != null) { // && !TextUtils.isEmpty(user.easemobUser)
+                            final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                            editDialog.setTitle("输入验证信息");
+                            editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).getNickName()));
+                            editDialog.setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    editDialog.dismiss();
+                                    DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                                    UserApi.requestAddContact(bean.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
+                                        @Override
+                                        public void doSucess(Object result, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-                                        ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
-                                        finish();
-                                    }
+                                            ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
+                                            finish();
+                                        }
 
-                                    @Override
-                                    public void doFailure(Exception error, String msg, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
-                                        ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                    }
-                                });
-                            }
-                        });
+                                            ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
+                                    });
+                                }
+                            });
 
-                        editDialog.show();
-                    }else{
-                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
-                        finish();
+                            editDialog.show();
+                        } else {
+                            Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                            finish();
+                        }
                     }
+                });
+            }
+        }else{
+            tv_del.setVisibility(View.GONE);
+            add_friend.setText("加为好友");
+            add_friend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_bottom_in, 0);
+                        finish();
                 }
             });
         }

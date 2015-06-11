@@ -178,6 +178,7 @@ public class HandleImMessage {
                     notifyMsg(c,messageBean);
                     IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                 }
+
                 String content = messageBean.getContents();
                 JSONObject object = null;
                 switch (messageBean.getMsgType()) {
@@ -272,7 +273,7 @@ public class HandleImMessage {
            notificationManager.notify(11, notification);
         //   notificationManager.cancel(11);
    }
-    public  boolean isAppRunningForeground(Context var0) {
+    public boolean isAppRunningForeground(Context var0) {
         ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
         List var2 = var1.getRunningTasks(1);
         return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
