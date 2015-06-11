@@ -193,7 +193,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginBottom="10dp"
                             cube_dotview:dot_radius="3dp"
-                            cube_dotview:dot_selected_color="0xff1cc091"
+                            cube_dotview:dot_selected_color="@color/app_theme_color"
                             cube_dotview:dot_span="10dp"
                             cube_dotview:dot_unselected_color="0xffffffff" />
 

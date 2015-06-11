@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="app_backgroud">#f2f2f2</color>
+
+    <color name="app_theme_color">#99cc66</color>
+    <color name="app_theme_color_highlight">#b9dc96</color>
+
+    <color name="color_checked">#fa5064</color>
+    <color name="color_alert">#ff9600</color>
+    <color name="color_enter">#4bd228</color>
+    <color name="color_link">#469bff</color>
+
+    <color name="color_text_i">#323232</color>
+    <color name="color_text_ii">#646464</color>
+    <color name="color_text_iii">#969696</color>
+    <color name="color_text_iv">#c8c8c8</color>
+    <color name="color_text_v">#c8c8c8</color>
+
+
     <color name="title_bar_background">#ffffff</color>
     <color name="base_font_color">#2e2727</color>
     <color name="second_font_color">#626262</color>
     <color name="third_font_color">#cdcdcd</color>
-    <color name="app_theme_color">#1cc091</color>
-    <color name="app_theme_color_highlight">#00a071</color>
     <color name="app_theme_color_secondary">#00a071</color>
     <color name="app_theme_color_secondary_selected">#1cc091</color>
     <color name="app_theme_color_trans">#fd818e</color>
