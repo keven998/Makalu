@@ -154,6 +154,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         if (groupId!=null){
             group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
         }
+//        if (group==null){
+//            GroupManager.getGroupManager().getGroupInformation(groupId, new CallBack() {
+//                @Override
+//                public void onSuccess() {
+//                 //   setUpGroupMemeber();
+//                }
+//
+//                @Override
+//                public void onFailed() {
+//
+//                }
+//            });
+//        }
       //  group = EMGroupManager.getInstance().getGroup(groupId);
       //  options = EMChatManager.getInstance().getChatOptions();
         bindView();
@@ -451,7 +464,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         memberGv.setAdapter(memberAdapter);
         setUpGroupMemeber("");
-        if (group.getNickName()!=null)
+        if (group!=null&&group.getNickName()!=null)
         groupNameTv.setText(group.getNickName());
 //        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
 //        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {

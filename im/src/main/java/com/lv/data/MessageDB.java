@@ -3,6 +3,7 @@ package com.lv.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.NotificationCompatSideChannelService;
 import android.util.Log;
 
 import com.lv.Utils.Config;
@@ -12,6 +13,7 @@ import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
+import com.lv.im.LazyQueue;
 import com.lv.user.User;
 
 import org.json.JSONException;
@@ -137,16 +139,27 @@ public class MessageDB {
         /**
          * 单聊
          */
-        if ("single".equals(chatType)) {
+       else if ("single".equals(chatType)) {
             table_name = "chat_" + CryptUtils.getMD5String(entity.getSenderId() + "");
             chater = entity.getSenderId() + "";
         }
         /**
          * 群聊
          */
-        if ("group".equals(chatType)) {
+        else if ("group".equals(chatType)) {
             table_name = "chat_" + CryptUtils.getMD5String(groupId + "");
             chater = groupId + "";
+        }
+        else{
+            if (Config.isDebug){
+                Log.e(Config.TAG,"chatType is null");
+            }
+            if (IMClient.getInstance().isBLOCK()){
+                IMClient.getInstance().setBLOCK(false);
+                LazyQueue.getInstance().TempDequeue();
+            }
+            closeDB();
+            return 1;
         }
         if (entity.getType()==1) {
 
@@ -187,7 +200,11 @@ public class MessageDB {
 
         Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
         int count = cursor.getCount();
-        if (count > 0) return 1;
+
+        if (count > 0){
+            closeDB();
+            return 1;
+        }
         cursor.close();
         ContentValues values = new ContentValues();
         values.put("ServerId", entity.getServerId());

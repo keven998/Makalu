@@ -287,7 +287,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         User newFriends = new User();
         newFriends.setUserId(NEWUSER);
         newFriends.setNickName("申请与通知");
-        newFriends.setType(1);
+        newFriends.setType(0);
         userlist.put(NEWUSER, newFriends);
         // 存入内存
         AccountManager.getInstance().setContactList(userlist);

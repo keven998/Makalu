@@ -322,15 +322,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onResume();
         System.out.println("MainActivity resume");
         HandleImMessage.getInstance().registerMessageListener(this);
-        if (!isConflict){
+      //  if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if(talkFragment != null){
                 talkFragment.loadConversation();
             }
-            updateUnreadMsgCount();
-           // EMChatManager.getInstance().activityResumed();
-        }
 
+           // EMChatManager.getInstance().activityResumed();
+ //       }
+        updateUnreadMsgCount();
     }
 
     @Override

@@ -216,49 +216,84 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请至少选择一位好友");
             return;
         }
+        System.out.println("request"+request);
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
-            Intent intent=new Intent();
-            intent.putExtra("chatType","single");
-            intent.putExtra("toId",toBeAddContacts.get(0).getUserId()+"");
-          //  intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
-            setResult(RESULT_OK, intent);
-            finishWithNoAnim();
 
-
-        }
-
-
-
-        final StringBuffer ChatName = new StringBuffer();
-        final StringBuffer membersStr = new StringBuffer();
-        for (int i = 0; i < toBeAddContacts.size(); i++) {
-            if (i < 3) {
-                ChatName.append(toBeAddContacts.get(i).getNickName());
-                if (i != toBeAddContacts.size() - 1 && i != 2) {
-                    ChatName.append("、");
+            if (toBeAddContacts.size()==1) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.putExtra("chatType", "single");
+                        intent.putExtra("toId", toBeAddContacts.get(0).getUserId());
+                        setResult(RESULT_OK, intent);
+                        finishWithNoAnim();
+                    }
+                });
+            }
+            final StringBuffer ChatName = new StringBuffer();
+            final StringBuffer membersStr = new StringBuffer();
+            for (int i = 0; i < toBeAddContacts.size(); i++) {
+                if (i < 3) {
+                    ChatName.append(toBeAddContacts.get(i).getNickName());
+                    if (i != toBeAddContacts.size() - 1 && i != 2) {
+                        ChatName.append("、");
+                    }
+                }
+                membersStr.append(toBeAddContacts.get(i).getNickName());
+                if (i != toBeAddContacts.size() - 1) {
+                    membersStr.append("、");
                 }
             }
-            membersStr.append(toBeAddContacts.get(i).getNickName());
-            if (i != toBeAddContacts.size() - 1) {
-                membersStr.append("、");
+            if (toBeAddContacts.size() > 3) {
+                ChatName.append("...");
+            }
+            if (toBeAddContacts.size()>1){
+                List<Long> ids=new ArrayList<>();
+                for (User user:toBeAddContacts){
+                    ids.add(user.getUserId());
+                }
+                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
+                    @Override
+                    public void OnSuccess(final String groupId, String conversation) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent();
+                                intent.putExtra("chatType", "group");
+                                intent.putExtra("toId", Long.parseLong(groupId));
+                                setResult(RESULT_OK, intent);
+                                finishWithNoAnim();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void OnFailed() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+                            }
+                        });
+                    }
+                });
+
             }
         }
-        if (toBeAddContacts.size() > 3) {
-            ChatName.append("...");
-        }
         //单聊
-        if (request == 0){
+        else if (request == 0){
             System.out.println("add ");
             List<Long>list =new ArrayList<>();
             for (User user:toBeAddContacts){
                 list.add(user.getUserId());
             }
-            GroupManager.getGroupManager().addMembers(groupId,list,true,new CallBack() {
+            GroupManager.getGroupManager().addMembers(groupId, list, true, new CallBack() {
                 @Override
                 public void onSuccess() {
-                    Intent intent=new Intent();
+                    Intent intent = new Intent();
                     intent.putExtra("chatType", "group");
-                    intent.putExtra("toId", groupId+"");
+                    intent.putExtra("toId", groupId + "");
                     intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
                     setResult(RESULT_OK, intent);
                     finishWithNoAnim();
@@ -273,12 +308,29 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         }
         else if (toBeAddContacts.size()==1){
             Intent intent=new Intent();
-            intent.putExtra("chatType", "group");
-            intent.putExtra("toId",toBeAddContacts.get(0).getUserId()+"");
+            intent.putExtra("chatType", "single");
+            intent.putExtra("toId",toBeAddContacts.get(0).getUserId());
             setResult(RESULT_OK, intent);
             finishWithNoAnim();
         }
         else if (toBeAddContacts.size()>1){
+            final StringBuffer ChatName = new StringBuffer();
+            final StringBuffer membersStr = new StringBuffer();
+            for (int i = 0; i < toBeAddContacts.size(); i++) {
+                if (i < 3) {
+                    ChatName.append(toBeAddContacts.get(i).getNickName());
+                    if (i != toBeAddContacts.size() - 1 && i != 2) {
+                        ChatName.append("、");
+                    }
+                }
+                membersStr.append(toBeAddContacts.get(i).getNickName());
+                if (i != toBeAddContacts.size() - 1) {
+                    membersStr.append("、");
+                }
+            }
+            if (toBeAddContacts.size() > 3) {
+                ChatName.append("...");
+            }
             List<Long> ids=new ArrayList<>();
             for (User user:toBeAddContacts){
                 ids.add(user.getUserId());
@@ -290,9 +342,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         @Override
                         public void run() {
                             Intent intent=new Intent();
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                            intent.putExtra("toId", ChatName.toString());
-                            intent.putExtra("Id", Long.parseLong(groupId));
+                            intent.putExtra("chatType","group");
+                            intent.putExtra("toId", Long.parseLong(groupId));
                             setResult(RESULT_OK, intent);
                             finishWithNoAnim();
                         }
@@ -311,20 +362,19 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             });
 
         }
-        if (toBeAddContacts.size()==1){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent=new Intent();
-                    intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                    intent.putExtra("toName", ChatName.toString());
-                    intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
-                    setResult(RESULT_OK, intent);
-                    finishWithNoAnim();
-                }
-            });
-
-        }
+//        if (toBeAddContacts.size()==1){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent intent=new Intent();
+//                    intent.putExtra("chatType", "single");
+//                    intent.putExtra("toId", toBeAddContacts.get(0).getUserId());
+//                    setResult(RESULT_OK, intent);
+//                    finishWithNoAnim();
+//                }
+//            });
+//
+//        }
 //        if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
 //            //新建群组
 //            if (toBeAddContacts.size() > 1) {

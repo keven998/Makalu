@@ -168,17 +168,16 @@ public class HandleImMessage {
                 }
                 System.out.println("ehList size: "+ehList.size());
 
-                if (ehList.size()==0){
-                    notifyMsg(c,messageBean);
-                }
-
               //  for (MessageHandler handler : ehList) {
                 if (ehList.size()>0){
                     if (openStateMap.containsKey(ehList.get(0))) {
                          IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
                     }
                     else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                 }
+                 }else {
+                    notifyMsg(c,messageBean);
+                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                }
                 String content = messageBean.getContents();
                 JSONObject object = null;
                 switch (messageBean.getMsgType()) {
@@ -252,7 +251,6 @@ public class HandleImMessage {
     }
    public void notifyMsg(Context c,Message message){
            NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-           System.out.println("notify");
            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c)
                    .setSmallIcon(c.getApplicationInfo().icon)
                    .setWhen(System.currentTimeMillis()).setAutoCancel(true);
@@ -262,7 +260,8 @@ public class HandleImMessage {
            //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
            //设置状态栏提示
            mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
-
+           mBuilder.setContentTitle("new message");
+           mBuilder.setContentText("你有一条新消息！");
            //必须设置pendingintent，否则在2.3的机器上会有bug
            Intent intent = new Intent("android.intent.action.notify");
            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -271,7 +270,7 @@ public class HandleImMessage {
 
            Notification notification = mBuilder.build();
            notificationManager.notify(11, notification);
-           notificationManager.cancel(11);
+        //   notificationManager.cancel(11);
    }
     public  boolean isAppRunningForeground(Context var0) {
         ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);

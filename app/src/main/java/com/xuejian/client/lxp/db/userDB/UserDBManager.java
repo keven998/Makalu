@@ -229,7 +229,7 @@ public class UserDBManager {
 
     public void saveContact(User user) {
         mdb = getDB();
-                if(user.getNickName()==null){
+                if(user.getNickName()==null||"".equals(user.getNickName())){
                     user.setHeader("#");
                 }else if (" ".equals(user.getNickName().substring(0, 1))){
                     user.setHeader("#");
