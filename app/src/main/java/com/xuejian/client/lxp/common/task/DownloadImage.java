@@ -14,7 +14,7 @@ import java.net.URLConnection;
  * Created by yibiao.qin on 2015/5/29.
  */
 public class DownloadImage {
-private String url;
+    private String url;
     private String filename;
    public DownloadImage(String url,String fileName){
        this.url=url;
