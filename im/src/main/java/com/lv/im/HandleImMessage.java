@@ -50,7 +50,7 @@ public class HandleImMessage {
          *
          * @param m 收到的消息
          */
-        public void onMsgArrive(MessageBean m);
+        public void onMsgArrive(MessageBean m,String groupId);
 
         public void onCMDMessageArrive(MessageBean m);
     }
@@ -99,26 +99,26 @@ public class HandleImMessage {
                     Message newMessage = (Message) message.obj;
                     System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMessage));
+                        handler.onMsgArrive(Msg2Bean(newMessage),String.valueOf(newMessage.getGroupId()));
                     }
                     break;
                 case Config.LOC_MSG:
                     Message newLocMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newLocMessage));
+                        handler.onMsgArrive(Msg2Bean(newLocMessage),String.valueOf(newLocMessage.getGroupId()));
                     }
                     break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMediaMessage));
+                        handler.onMsgArrive(Msg2Bean(newMediaMessage),String.valueOf(newMediaMessage.getGroupId()));
                     }
                     break;
                 default:
                     Message extMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(extMessage));
+                        handler.onMsgArrive(Msg2Bean(extMessage),String.valueOf(extMessage.getGroupId()));
                     }
                     break;
             }

@@ -327,7 +327,7 @@ public class MessageDB {
         int SendType = c.getInt(MESSAGE_INDEX_SendType);
         String Metadata = c.getString(MESSAGE_INDEX_Metadata);
         int SenderId = c.getInt(MESSAGE_INDEX_SenderId);
-        return new MessageBean(ServerId, Status, Type, Message, CreateTime, SendType, Metadata, SenderId);
+        return new MessageBean(LocalId,ServerId, Status, Type, Message, CreateTime, SendType, Metadata, SenderId);
     }
 
     public synchronized void add2Conversion(long Friend_Id, long lastTime, String hash, int last_rec_msgId, String conversation,String chatType) {

@@ -240,7 +240,8 @@ public class IMUtils {
                 ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
             }else if(requestCode ==IM_SHARE_REQUEST_CODE){
                 final String chatType = data.getStringExtra("chatType");
-                final String toId = data.getStringExtra("toId");
+                final String toId =""+data.getLongExtra("toId",0);
+                if (toId.equals(0+""))System.out.println("qwer");
                 showImShareDialog(context,iCreateShareDialog,new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {

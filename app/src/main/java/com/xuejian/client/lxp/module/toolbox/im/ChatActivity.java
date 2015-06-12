@@ -224,12 +224,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
       //  conversation="0";
 		initView();
 		setUpView();
-        initdata();
+       // initData();
 	}
 
-    private void initdata() {
-        messageList=IMClient.getInstance().getMessages(toChatUsername,0);
+    private void initData() {
+		messageList.clear();
+        messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
         adapter.refresh();
+		int count = listView.getCount();
+		if (count > 0) {
+			listView.setSelection(count - 1);
+		}
     }
 
 
@@ -357,9 +362,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
         System.out.println("chatActivity resume");
         HandleImMessage.getInstance().registerMessageListener(this,conversation);
 //        MobclickAgent.onPageStart("page_talking");
-        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-        options.setNoticeBySound(false);
-        refresh();
+//        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+//        options.setNoticeBySound(false);
+        initData();
     }
     protected void updateGroup() {
         new Thread(new Runnable() {
@@ -1193,11 +1198,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener,Ha
 	}
 
     @Override
-    public void onMsgArrive(MessageBean m) {
-        if (!toChatUsername.equals(String.valueOf(m.getSenderId()))&&"single".equals(chatType)) {
-            m.setSendType(1);
-            Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
-        } else {
+    public void onMsgArrive(MessageBean m,String groupId) {
+		if ("single".equals(chatType)&&!groupId.equals(String.valueOf(0))){
+			Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+		} else if (("single".equals(chatType)&&!toChatUsername.equals(String.valueOf(m.getSenderId())))){
+			Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+        } else if (("group".equals(chatType)&&!toChatUsername.equals(groupId))){
+			Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+		} else {
             m.setSendType(1);
             messageList.add(m);
             adapter.refresh();

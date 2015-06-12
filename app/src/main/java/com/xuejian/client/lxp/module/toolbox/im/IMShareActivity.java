@@ -246,7 +246,7 @@ public class IMShareActivity extends PeachBaseActivity {
             // 获取与此用户/群组的会话
           final   User imUser = UserDBManager.getInstance().getContactByUserId(itemData.getFriendId());
             // 获取用户username或者群组groupid
-            final String username = imUser.getNickName();
+            //final String username = imUser.getNickName();
             if ("group".equals(itemData.getChatType())) {
                 // 群聊消息，显示群聊头像
                 final List<String> members = new ArrayList<>();
@@ -306,11 +306,11 @@ public class IMShareActivity extends PeachBaseActivity {
                     Intent intent = new Intent();
                     if ("group".equals(itemData.getChatType())) {
                         intent.putExtra("chatType", "group");
-                        intent.putExtra("toId", imUser.getUserId()+"");
+                        intent.putExtra("toId", imUser.getUserId());
 
                     } else {
                         intent.putExtra("chatType", "single");
-                        intent.putExtra("toId",imUser.getUserId()+"");
+                        intent.putExtra("toId",imUser.getUserId());
                     }
                     setResult(RESULT_OK, intent);
                     finish();

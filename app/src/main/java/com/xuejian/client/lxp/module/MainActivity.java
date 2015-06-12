@@ -438,7 +438,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     @Override
-    public void onMsgArrive(MessageBean m) {
+    public void onMsgArrive(MessageBean m,String groupId) {
         System.out.println("message :"+m.getMessage());
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
         if(talkFragment != null){

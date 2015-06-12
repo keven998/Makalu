@@ -255,6 +255,7 @@ public class IMClient {
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
+        System.out.println("localId-----------"+localId);
         return m;
     }
 

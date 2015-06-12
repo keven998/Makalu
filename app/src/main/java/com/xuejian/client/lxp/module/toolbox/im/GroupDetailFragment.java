@@ -770,6 +770,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                avatarIv.setImageResource(R.drawable.avatar_placeholder);
                 nicknameTv.setText(itemData.getNickName());
                 ImageLoader.getInstance().displayImage(itemData.getAvatar(), avatarIv, picOptions);
+
+                contentView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
+                        intent.putExtra("userId", itemData.getUserId().intValue());
+                        intent.putExtra("userNick", itemData.getNickName());
+                        startActivity(intent);
+                    }
+                });
+
+
+
                 if (isInDeleteMode) {
                     removeIv.setVisibility(View.VISIBLE);
                     /**
