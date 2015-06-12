@@ -88,6 +88,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -1539,7 +1540,18 @@ public class MessageAdapter extends BaseAdapter {
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
+        String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
+
+        File file=new File(path);
+        file.mkdirs();
+        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
+        try {
+            cacheFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
             public void onSuccess() {

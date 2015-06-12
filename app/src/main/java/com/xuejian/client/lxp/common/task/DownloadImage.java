@@ -15,7 +15,7 @@ import java.net.URLConnection;
  * Created by yibiao.qin on 2015/5/29.
  */
 public class DownloadImage {
-private String url;
+    private String url;
     private String filename;
    public DownloadImage(String url,String fileName){
        this.url=url;
@@ -42,8 +42,8 @@ private String url;
                    if (fileSize <= 0) throw new RuntimeException("无法获知文件大小 ");
                    if (is == null) throw new RuntimeException("stream is null");
                    System.out.println(filename);
-                   File file=new File(filename);
-                   if (!file.exists())file.createNewFile();
+                 //  File file=new File(filename);
+                  // if (!file.exists())file.createNewFile();
                    FileOutputStream fos = new FileOutputStream(filename);
                    //把数据存入路径+文件名
                    byte buf[] = new byte[1024];
