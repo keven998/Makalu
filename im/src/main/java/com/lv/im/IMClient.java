@@ -3,6 +3,7 @@ package com.lv.im;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiConfiguration;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -391,6 +392,12 @@ public class IMClient {
     }
     public void cleanMessageHistory(String chatId){
         db.deleteMessage(chatId);
+    }
+    public void deleteSingleMessage(String chatId,long MessageId){
+        db.deleteSingleMessage(chatId, MessageId);
+    }
+    public void changeMessageStatus(String chatId,long MessageId,int Status){
+        db.changeMessagestatus(chatId,MessageId,Status);
     }
 }
 

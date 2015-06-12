@@ -547,7 +547,7 @@ public class MessageAdapter extends BaseAdapter {
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
                             break;
                         //添加扩展类型的跳转
-                        /*case PLAN_MSG:
+                        case PLAN_MSG:
                         case CITY_MSG:
                         case TRAVEL_MSG:
                         case SPOT_MSG:
@@ -555,7 +555,7 @@ public class MessageAdapter extends BaseAdapter {
                         case SHOP_MSG:
                         case HOTEL_MSG:
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_EXT);
-                            break;*/
+                            break;
                     }
 //                    if (message.getType() == Type.TXT)
 //                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
@@ -631,7 +631,7 @@ public class MessageAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                Type.TXT.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                                TEXT_MSG), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -1540,17 +1540,17 @@ public class MessageAdapter extends BaseAdapter {
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
-        String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
+  //      String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
 
-        File file=new File(path);
-        file.mkdirs();
-        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
-        try {
-            cacheFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        File file=new File(path);
+//        file.mkdirs();
+//        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
+//        try {
+//            cacheFile.createNewFile();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override

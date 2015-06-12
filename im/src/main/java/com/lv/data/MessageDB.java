@@ -392,7 +392,7 @@ public class MessageDB {
     }
     public synchronized void deleteConversation(String friendId){
         mdb=getDB();
-        mdb.delete(con_table_name,"Friend_Id=?",new String[]{friendId});
+        mdb.delete(con_table_name, "Friend_Id=?", new String[]{friendId});
         closeDB();
     }
     public synchronized void deleteMessage(String friendId){
@@ -428,7 +428,20 @@ public class MessageDB {
         mdb.update(con_table_name, values, "Friend_Id=?", new String[]{fri_ID});
         closeDB();
     }
-
+    public synchronized void deleteSingleMessage(String fri_ID, long msgId) {
+        mdb = getDB();
+        String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
+        mdb.delete(table_name, "LocalId=?", new String[]{String.valueOf(msgId)});
+        closeDB();
+    }
+    public synchronized void changeMessagestatus(String fri_ID, long msgId,int status) {
+        mdb = getDB();
+        String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
+        ContentValues values=new ContentValues();
+        values.put("Status",status);
+        mdb.update(table_name,values ,"LocalId=?", new String[]{String.valueOf(msgId)});
+        closeDB();
+    }
 //    public void saveMsgs(List<MessageBean> list) {
 //        mdb = getDB();
 //        mdb.beginTransaction();

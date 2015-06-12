@@ -44,6 +44,9 @@ public class DownloadImage {
                    System.out.println(filename);
                  //  File file=new File(filename);
                   // if (!file.exists())file.createNewFile();
+                   String path=filename.substring(0, filename.lastIndexOf("/"));
+                   File file=new File(path);
+                   file.mkdirs();
                    FileOutputStream fos = new FileOutputStream(filename);
                    //把数据存入路径+文件名
                    byte buf[] = new byte[1024];
