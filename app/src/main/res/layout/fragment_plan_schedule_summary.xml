@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud">
+
+    <ListView android:id="@+id/listview_plan_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/color_line"
+        android:dividerHeight="1dp"></ListView>
+
+</FrameLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_color_white">
+
+    <TextView android:id="@+id/tv_schedule_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp"
+        android:lineSpacingExtra="5dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
+        android:drawableRight="@drawable/arr_poi_guide"
+        android:drawablePadding="10dp"
+        android:gravity="left|center_vertical"/>
+
+</RelativeLayout>

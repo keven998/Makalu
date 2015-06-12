@@ -148,6 +148,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         }*/
 
     }
+
     private void initData() {
         strategy = getStrategy();
         resizeData(strategy.itinerary);
