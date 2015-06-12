@@ -143,7 +143,7 @@ public class ShowBigImage extends ChatBaseActivity {
 			}
             @Override
 			public void onFail() {
-				File file = new File(localFilePath);
+				File file = new File(filename);  //localFilePath
 				if (file.exists()) {
 					file.delete();
 				}
