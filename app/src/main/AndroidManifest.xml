@@ -107,6 +107,10 @@
             android:theme="@style/Transparent">
         </activity>
         <activity
+            android:name=".module.dest.DayAgendaActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".module.dest.AddPoiActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

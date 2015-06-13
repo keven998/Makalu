@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
 
-    <ListView android:id="@+id/listview_plan_schedule"
+    <ListView android:id="@+id/listview_common"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@color/color_line"
-        android:dividerHeight="0.5dp"></ListView>
+        android:dividerHeight="0.5dp"/>
 
 </FrameLayout>

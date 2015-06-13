@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.config;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 import android.support.v4.BuildConfig;
@@ -26,13 +27,19 @@ public class PeachApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        MultiDex.install(this);
+//        MultiDex.install(this);
         initPeachConfig();
         initImageLoader();
 //        refreshUserInfo();
 //        BaseApi.testHttps();
         setupDatabase();
         initIM();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     private void setupDatabase() {
