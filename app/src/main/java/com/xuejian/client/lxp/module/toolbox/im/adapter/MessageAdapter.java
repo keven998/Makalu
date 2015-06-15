@@ -141,6 +141,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
+    public static boolean isRead;
     private String friendId;
     private LayoutInflater inflater;
     private Activity activity;
@@ -1156,9 +1157,9 @@ public class MessageAdapter extends BaseAdapter {
 
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
-        boolean isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText(durtime.substring(0, 1) + "\"");
-        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
+        isRead = (boolean) getVoiceFilepath(message, "isRead");
+        holder.tv.setText( (int)Math.floor(Double.valueOf(durtime))+"´");
+        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId,message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1901,6 +1902,17 @@ private void updateStatus(MessageBean messageBean,int status){
         }
 
     }
+public static MessageBean updateVoiceReadStatus(MessageBean message){
+    try {
+        JSONObject object=new JSONObject(message.getMessage());
+        object.put("isRead",true);
+        message.setMessage(object.toString());
+        return message;
+    } catch (JSONException e) {
+        e.printStackTrace();
+        return message;
+    }
 
+}
 
 }

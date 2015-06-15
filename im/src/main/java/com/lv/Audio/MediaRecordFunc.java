@@ -1,7 +1,11 @@
 package com.lv.Audio;
 
 import android.media.AudioFormat;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 
 import com.lv.Audio.AudioFileFunc;
 
@@ -14,7 +18,7 @@ public class MediaRecordFunc {
     private boolean isRecord = false;
 public String tempPath;
     private MediaRecorder mMediaRecorder;
-
+Handler handler;
     private MediaRecordFunc() {
     }
 
@@ -24,8 +28,9 @@ public String tempPath;
         return mInstance;
     }
 
-    public int startRecordAndFile() {
-        // 判断是否有外部存储设备sdcard
+    public int startRecordAndFile(Handler _handler) {
+        handler=_handler;
+        // 判断是否有外部存储设备sdcard/
         if (AudioFileFunc.isSdcardExit()) {
             if (isRecord) {
                 return 1002;
@@ -38,6 +43,24 @@ public String tempPath;
                     mMediaRecorder.start();
                     // 让录制状态为true
                     isRecord = true;
+                    new Thread(new Runnable() {
+                        public void run() {
+                            while(true) {
+                                try {
+                                    if(isRecord) {
+                                        Message var1 = Message.obtain();
+                                        var1.what = mMediaRecorder.getMaxAmplitude() * 13 / 32767;
+                                        handler.sendMessage(var1);
+                                        SystemClock.sleep(100L);
+                                        continue;
+                                    }
+                                } catch (Exception var2) {
+                                    var2.printStackTrace();
+                                }
+                                return;
+                            }
+                        }
+                    }).start();
                     return 1000;
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -51,6 +74,7 @@ public String tempPath;
     }
 
     private void createMediaRecord() {
+        System.out.println("createMediaRecord");
         mMediaRecorder = new MediaRecorder();
 
 		/* setAudioSource/setVedioSource */

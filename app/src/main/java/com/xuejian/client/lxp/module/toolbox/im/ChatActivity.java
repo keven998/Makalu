@@ -22,12 +22,15 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -208,7 +211,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     };
     private EMGroup group;
     private String name;
-
+    private boolean isRecord11;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1291,10 +1294,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
-                        MediaRecordFunc.getInstance().startRecordAndFile();
-                        //voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
+                        MediaRecordFunc.getInstance().startRecordAndFile(micImageHandler);
+                        isRecord11 =true;
+                        //handleVoiceDb();
+                     //   voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
                     } catch (Exception e) {
                         e.printStackTrace();
+                        isRecord11 =false;
                         v.setPressed(false);
                         if (wakeLock.isHeld())
                             wakeLock.release();
@@ -1314,6 +1320,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                     }
+                    isRecord11 =false;
                     return true;
                 }
                 case MotionEvent.ACTION_UP:
@@ -1331,11 +1338,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                             long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
                             //int length = voiceRecorder.stopRecoding();
-                            //if (length > 0) {
-                            sendVoice(path, null, Long.toString(time / 1000), false);
-//						} else {
-//                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
-//						}
+                            if (time > 0) {
+                            sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0)+"", false);
+						} else {
+                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
+						}
                         } catch (Exception e) {
                             e.printStackTrace();
 //						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();
@@ -1344,6 +1351,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         }
 
                     }
+                    isRecord11 =false;
                     return true;
                 default:
                     recordingContainer.setVisibility(View.INVISIBLE);
@@ -1594,6 +1602,29 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
 
     }
-
+public void handleVoiceDb(){
+    final MediaRecorder recorder=new MediaRecorder();
+    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    new Thread(new Runnable() {
+        public void run() {
+            while(true) {
+                try {
+                    if(isRecord11) {
+                        System.out.println("kaishi ===========");
+                        Message var1 = new Message();
+                        System.out.println(recorder.getMaxAmplitude() * 13 / 32767);
+                        var1.what = recorder.getMaxAmplitude() * 13 / 32767;
+                        micImageHandler.sendMessage(var1);
+                        SystemClock.sleep(100L);
+                        continue;
+                    }
+                } catch (Exception var2) {
+                    var2.printStackTrace();
+                }
+                return;
+            }
+        }
+    }).start();
+}
 
 }

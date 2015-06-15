@@ -439,7 +439,25 @@ public class MessageDB {
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         ContentValues values=new ContentValues();
         values.put("Status",status);
-        mdb.update(table_name,values ,"LocalId=?", new String[]{String.valueOf(msgId)});
+        mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
+        closeDB();
+    }
+    public synchronized void updateReadStatus(String fri_ID, long msgId,boolean status) {
+        mdb = getDB();
+        String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
+        Cursor cursor=mdb.rawQuery("select Message from " + table_name + " where LocalId=?", new String[]{String.valueOf(msgId)});
+        cursor.moveToLast();
+        String result=cursor.getString(0);
+        try {
+            JSONObject object=new JSONObject(result);
+            object.put("isRead",status);
+        ContentValues values=new ContentValues();
+        values.put("Message", object.toString());
+        mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
+        } catch ( Exception e) {
+            e.printStackTrace();
+        }
+        cursor.close();
         closeDB();
     }
 //    public void saveMsgs(List<MessageBean> list) {

@@ -17,6 +17,7 @@ import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
+import com.lv.service.DownloadService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,7 +212,7 @@ public class HandleImMessage {
                             e.printStackTrace();
                         }
                         messageBean.setUrl(aurl);
-                        Intent dlA_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
+                        Intent dlA_intent = new Intent(c, DownloadService.class);
                         dlA_intent.putExtra("msg", messageBean);
                         c.startService(dlA_intent);
                         break;
@@ -233,7 +234,7 @@ public class HandleImMessage {
                             e.printStackTrace();
                         }
                         messageBean.setUrl(iurl);
-                        Intent dlI_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
+                        Intent dlI_intent =new Intent(c, DownloadService.class);
                         dlI_intent.putExtra("msg", messageBean);
                         c.startService(dlI_intent);
                         break;

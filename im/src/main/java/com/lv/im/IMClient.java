@@ -14,7 +14,6 @@ import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
-//import com.lv.Utils.HandleImageTask;
 import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
@@ -397,7 +396,10 @@ public class IMClient {
         db.deleteSingleMessage(chatId, MessageId);
     }
     public void changeMessageStatus(String chatId,long MessageId,int Status){
-        db.changeMessagestatus(chatId,MessageId,Status);
+        db.changeMessagestatus(chatId, MessageId, Status);
+    }
+    public void updateReadStatus(String chatId,long messageId,boolean isRead){
+        db.updateReadStatus(chatId,messageId,isRead);
     }
 }
 
