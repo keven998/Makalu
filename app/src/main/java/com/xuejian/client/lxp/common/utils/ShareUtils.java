@@ -45,7 +45,7 @@ public class ShareUtils {
 
     }
 
-    public static final String downloadUrl="http://a.app.qq.com/o/simple.jsp?pkgname=com.aizou.peachtravel";
+    public static final String downloadUrl="http://www.lvxingpai.com/download/lxp_v1.0.apk";
 
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();

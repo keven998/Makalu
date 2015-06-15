@@ -1,6 +1,8 @@
 package com.xuejian.client.lxp.bean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +30,7 @@ public class ExpertBean {
 
     public String getRolesDescription() {
         if (roles == null || roles.length == 0) return "";
-        if ("expert".equals(roles[0])) {
+        if (Arrays.asList(roles).contains("expert")) {
             return "达";
         }
         return "";

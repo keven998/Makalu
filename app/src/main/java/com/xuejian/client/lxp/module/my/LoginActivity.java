@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -105,7 +106,7 @@ public class LoginActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-       /* findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
@@ -122,7 +123,7 @@ public class LoginActivity extends PeachBaseActivity {
 //                    }
 //                });
             }
-        });*/
+        });
         loginBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

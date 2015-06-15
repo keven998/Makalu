@@ -597,13 +597,13 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    if (IMUserRepository.isMyFriend(context, message.getFrom())) {
+                    //if (IMUserRepository.isMyFriend(context, message.getFrom())) {
                         Intent intent = new Intent(context, HisMainPageActivity.class);
                         IMUser user = IMUserRepository.getContactByUserName(context, message.getFrom());
                         intent.putExtra("userId", user.getUserId().intValue());
                         //intent.putExtra("userNick", user.getNick());
                         context.startActivity(intent);
-                    } else {
+                   /* } else {
                         IMUser itemData = IMUserRepository.getContactByUserName(context, message.getFrom());
                         PeachUser user = new PeachUser();
                         if (itemData != null) {
@@ -623,7 +623,7 @@ public class MessageAdapter extends BaseAdapter {
                         context.startActivity(intent);
 
 
-                    }
+                    }*/
                 }
             });
         }
