@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -36,6 +37,7 @@ import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
+import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.yweathergetter4a.WeatherInfo;
 import com.xuejian.client.lxp.common.yweathergetter4a.YahooWeather;
 import com.xuejian.client.lxp.common.yweathergetter4a.YahooWeatherInfoListener;
@@ -56,8 +58,11 @@ public class TripFragment extends PeachBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.fragment_trip,null);
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+        View rootView = inflater.inflate(R.layout.fragment_trip, null);
+
+        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar)rootView.findViewById(R.id.ly_header_bar_title_wrap);
+        titleHeaderBar.getTitleTextView().setText("旅行");
+
         rootView.findViewById(R.id.lxp_search_bg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,20 +83,37 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
-                    Intent intent=new Intent(getActivity(), StrategyListActivity.class);
+                PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    Intent intent = new Intent(getActivity(), StrategyListActivity.class);
                     intent.putExtra("userId", String.valueOf(user.userId));
-                    intent.putExtra("isExpertPlan",false);
+                    intent.putExtra("isExpertPlan", false);
                     startActivity(intent);
-                }else{
-                    Intent LoginIntent=new Intent(getActivity(), LoginActivity.class);
-                    startActivity(LoginIntent);
+                } else {
+                    Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(LoginIntent, 1);
                     getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 }
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                    Intent intent = new Intent(getActivity(), StrategyListActivity.class);
+                    intent.putExtra("userId", String.valueOf(user.userId));
+                    intent.putExtra("isExpertPlan", false);
+                    startActivity(intent);
+                }
+            }
+        }
     }
 
 }
