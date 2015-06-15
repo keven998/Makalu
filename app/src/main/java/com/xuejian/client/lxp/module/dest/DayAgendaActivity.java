@@ -2,6 +2,8 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.xuejian.client.lxp.R;
@@ -33,6 +35,12 @@ public class DayAgendaActivity extends FragmentActivity {
 
         mListView = (ListView) findViewById(R.id.listview_common);
         mListView.setAdapter(new POIAdapter(this, routeDayMap.get(currentDay)));
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                
+            }
+        });
     }
 
     @Override
