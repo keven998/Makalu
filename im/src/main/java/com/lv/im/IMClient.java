@@ -67,8 +67,8 @@ public class IMClient {
     }
 
     public void initDB(String userId) {
-        db = MessageDB.getInstance();
         MessageDB.initDB(userId);
+        db = MessageDB.getInstance();
         MessageDB.getInstance().init();
     }
 

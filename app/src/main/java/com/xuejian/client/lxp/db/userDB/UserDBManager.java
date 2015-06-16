@@ -70,7 +70,7 @@ public class UserDBManager {
         return instance;
     }
     public void disconnectDB(){
-        db.close();
+      //  db.close();
         db=null;
         instance=null;
     }
