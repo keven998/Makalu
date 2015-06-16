@@ -521,12 +521,14 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchExpertContact(String key,String field,HttpCallBack callback){
+    public static PTRequestHandler searchExpertContact(String key,String field,int page,int pageSize,HttpCallBack callback){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL+ SEACH_CONTACT);
         request.putUrlParams("keyword",key);
         request.putUrlParams("field",field);
+        request.putUrlParams("page",page+"");
+        request.putUrlParams("pageSize",pageSize+"");
         setDefaultParams(request);
         return HttpManager.request(request,callback);
     }

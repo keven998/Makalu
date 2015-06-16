@@ -15,7 +15,10 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.prv.PullToRefreshBase;
+import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -23,13 +26,20 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ExpertBean;
+import com.xuejian.client.lxp.bean.PoiDetailBean;
+import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.api.BaseApi;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.MapUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
+import com.xuejian.client.lxp.module.dest.adapter.PoiAdapter;
 import com.xuejian.client.lxp.module.toolbox.ExpertFilterActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +47,7 @@ import java.util.List;
  */
 public class ExpertListActivity extends PeachBaseActivity {
 
-    private ListView listView;
+    private PullToRefreshListView listView;
     private ImageView user_pic;
     //private EditText search_expert;
     private TextView user_name;
@@ -50,10 +60,12 @@ public class ExpertListActivity extends PeachBaseActivity {
     private LayoutInflater inflater;
     private TextView places_layout;
     private int layout_width;
-    private DynamicBox box;
     private List<ExpertBean> expertBeans;
     private int EXPERT_DES=1;
     private int GET_LOCATION=2;
+    int mCurrentPage = 0;
+    int PAGE_SIZE=15;
+    ArrayList<ExpertBean> allExpertResult=new ArrayList<ExpertBean>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,57 +91,107 @@ public class ExpertListActivity extends PeachBaseActivity {
     }
 
     private void initList(){
-        listView=(ListView)findViewById(R.id.expert_list);
-        box=new DynamicBox(this,listView);
-        listView.setOnItemClickListener(new DarenClick());
-        getExpertData();
+        listView=(PullToRefreshListView)findViewById(R.id.expert_list);
+        listView.setPullLoadEnabled(false);
+        listView.setPullRefreshEnabled(true);
+        listView.setScrollLoadEnabled(false);
+        listView.setHasMoreData(false);
+
+        adapter = new ExpertAdapter(ExpertListActivity.this);
+        listView.getRefreshableView().setAdapter(adapter);
+
+        listView.getRefreshableView().setOnItemClickListener(new DarenClick());
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                getExpertData(0, PAGE_SIZE);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                getExpertData(mCurrentPage + 1, PAGE_SIZE);
+            }
+        });
+        getExpertData(0,PAGE_SIZE);
     }
 
     public class DarenClick implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ExpertBean xEb=(ExpertBean)adapter.getItem(position);
             Intent intent=new Intent();
             intent.setClass(ExpertListActivity.this,HisMainPageActivity.class);
-            intent.putExtra("userId",expertBeans.get(position).userId);
+            intent.putExtra("userId",xEb.userId);
             startActivity(intent);
             //ToastUtil.getInstance(ExpertListActivity.this).showToast("点击进入达人详情页或聊天页,第"+(position+1)+"个达人");
         }
     }
 
-    public void getExpertData(){
+    public void getExpertData(final int page,final int pageSize){
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.searchExpertContact("expert", "roles", new HttpCallBack<String>() {
+        UserApi.searchExpertContact("expert", "roles",page, pageSize, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                box.hideAll();
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
-                    adapter = new ExpertAdapter(ExpertListActivity.this, expertresult.result);
-                    expertBeans = expertresult.result;
-                    listView.setAdapter(adapter);
+                    mCurrentPage=page;
+                    bindView(expertresult.result);
                 }
+                listView.onPullUpRefreshComplete();
+                listView.onPullDownRefreshComplete();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+                listView.onPullUpRefreshComplete();
+                listView.onPullDownRefreshComplete();
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                box.hideAll();
                 ToastUtil.getInstance(ExpertListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
+    public void bindView(List<ExpertBean> result){
+        if (mCurrentPage == 0) {
+            adapter = new ExpertAdapter(ExpertListActivity.this);
+            //mPoiList.clear();
+            listView.getRefreshableView().setAdapter(adapter);
+        }
+        adapter.getDataList().addAll(result);
+        adapter.notifyDataSetChanged();
+        if (result == null || result.size() < PAGE_SIZE) {
+            listView.setHasMoreData(false);
+            // ptrLv.setScrollLoadEnabled(false);
+        } else {
+            listView.setHasMoreData(true);
+        }
+
+        if (adapter.getCount() >= PAGE_SIZE) {
+            listView.setScrollLoadEnabled(true);
+        }
+
+        if (result.size() == 0) {
+            if (mCurrentPage == 0) {
+                //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
+                //mMyStrategyLv.doPullRefreshing(true, 0);
+            } else {
+                ToastUtil.getInstance(this).showToast("已取完所有内容");
+            }
+            return;
+        }
+    }
+
     public class ExpertAdapter extends BaseAdapter{
+        protected ArrayList<ExpertBean> mItemDataList = new ArrayList<ExpertBean>();
         private Context context;
 //        private String[] status={"空","忙","阻"};
         public List<ExpertBean> expertBean;
         private DisplayImageOptions options;
 
-        public ExpertAdapter(Context context,List<ExpertBean> expert){
+        public ExpertAdapter(Context context){
             this.context=context;
-            this.expertBean=expert;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
@@ -140,13 +202,18 @@ public class ExpertListActivity extends PeachBaseActivity {
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
+        public ArrayList<ExpertBean> getDataList() {
+            return mItemDataList;
+        }
+
         @Override
         public int getCount() {
-            return expertBean.size();}
+            return mItemDataList.size();
+        }
 
         @Override
         public Object getItem(int position) {
-            return position;
+            return mItemDataList.get(position);
         }
 
         @Override
@@ -172,7 +239,8 @@ public class ExpertListActivity extends PeachBaseActivity {
             user_msg=(TextView)convertView.findViewById(R.id.expert_msg);
 
             //获取接口数据进行加载
-            ExpertBean eb = expertBean.get(position);
+            ExpertBean eb = (ExpertBean)getItem(position);
+            LogUtil.d(eb.nickName+"================");
             ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
             user_name.setText(eb.nickName);
             user_msg.setText(eb.signature);
@@ -231,6 +299,7 @@ public class ExpertListActivity extends PeachBaseActivity {
     }
 
     public void refreshView(String locId){
+       // mCurrentPage=0;
         String[] strs=new String[1];
         strs[0]=locId;
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
@@ -242,9 +311,10 @@ public class ExpertListActivity extends PeachBaseActivity {
                 //  listView.removeAllViews();
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
-                    adapter = new ExpertAdapter(ExpertListActivity.this, expertresult.result);
+                    bindView(expertresult.result);
+                   /* adapter = new ExpertAdapter(ExpertListActivity.this, expertresult.result);
                     expertBeans = expertresult.result;
-                    listView.setAdapter(adapter);
+                    listView.getRefreshableView().setAdapter(adapter);*/
                 }
             }
 

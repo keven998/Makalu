@@ -70,10 +70,15 @@
         android:layout_gravity="center_horizontal"
         />-->
 
-    <ListView
+    <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/expert_list"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:background="@color/app_backgroud"
+        android:overScrollMode="never"
+        android:divider="@null"
+        android:fadingEdge="none"
         android:dividerHeight="0.8dp"
         />
 
