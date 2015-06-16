@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
-import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
@@ -59,6 +58,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import de.greenrobot.event.EventBus;
+
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
     public final static int CODE_IM_LOGIN = 101;
@@ -97,7 +98,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        //IMClient.initIM(getApplicationContext());
         FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
@@ -285,8 +285,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
                     if(!FromBounce) {
-                        if (!com.lv.user.User.getUser().isLogin()) {
-                            Toast.makeText(MainActivity.this, "正在登陆", Toast.LENGTH_LONG).show();
+                        if (!AccountManager.getInstance().isLogin()) {
+                            Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                            startActivity(logIntent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
                         }
                     }else {
                         mTabHost.setCurrentTab(1);
@@ -315,7 +317,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //        if (AccountManager.getInstance().isLogin()) {
 //            mTabHost.setCurrentTab(0);
 //        } else {
-            if (com.lv.user.User.getUser().isLogin()) {
+            if (AccountManager.getInstance().isLogin()) {
                 mTabHost.setCurrentTab(0);
             } else {
             mTabHost.setCurrentTab(1);
@@ -343,11 +345,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (AccountManager.getInstance().isLogin()) {
             HandleImMessage.getInstance().registerMessageListener(this);
             //  if (!isConflict){
-            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-            if (talkFragment != null) {
-                talkFragment.loadConversation();
-            }
-            updateUnreadMsgCount();
+                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                if (talkFragment != null) {
+                    talkFragment.loadConversation();
+                }
+                updateUnreadMsgCount();
         }
     }
 

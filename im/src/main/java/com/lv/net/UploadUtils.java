@@ -28,7 +28,6 @@ import java.util.Random;
 
 
 public class UploadUtils {
-    static HashMap<String,ArrayList<Long>> uploadTaskMap=new HashMap<>();
     private UploadUtils() {
     }
     private static UploadUtils UploadUitls = null;
@@ -108,12 +107,12 @@ public class UploadUtils {
 
     public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType) {
         System.out.println("localId "+localId+" filePath:" + filePath);
-        if (uploadTaskMap.containsKey(receive)){
-            if (uploadTaskMap.get(receive).contains(localId))return;
-            else uploadTaskMap.get(receive).add(localId);
+        if ( IMClient.taskMap.containsKey(receive)){
+            if (IMClient.taskMap.get(receive).contains(localId))return;
+            else IMClient.taskMap.get(receive).add(localId);
         }else {
-            uploadTaskMap.put(receive,new ArrayList<Long>());
-            uploadTaskMap.get(receive).add(localId);
+            IMClient.taskMap.put(receive,new ArrayList<Long>());
+            IMClient.taskMap.get(receive).add(localId);
         }
         if (Config.isDebug)Log.i(Config.TAG,"开始上传 ");
         HttpUtils.getToken(new HttpUtils.tokenget() {
@@ -145,11 +144,12 @@ public class UploadUtils {
                                 if(Config.isDebug){
                                     Log.i(Config.TAG,"发送成功，消息更新！");
                                 }
+                                IMClient.taskMap.get(receive).remove(localId);
                               //  uploadTaskMap.get(receive).remove(localId);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 IMClient.getInstance().updateMessage(receive, localId, null, null, 0, Config.STATUS_FAILED, null, msgType);
-                                uploadTaskMap.get(receive).remove(localId);
+                                IMClient.taskMap.get(receive).remove(localId);
                                 if (listener != null) {
                                         listener.onError(0, null);
                                 }
@@ -159,6 +159,7 @@ public class UploadUtils {
                             }
                         } else {
                             IMClient.getInstance().updateMessage(receive, localId, null, null, 0, Config.STATUS_FAILED,null,msgType);
+                            IMClient.taskMap.get(receive).remove(localId);
                           //  uploadTaskMap.get(receive).remove(localId);
                             if (listener != null) {
                                 if (info!=null)

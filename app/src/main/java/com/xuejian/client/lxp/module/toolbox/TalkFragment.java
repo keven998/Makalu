@@ -350,7 +350,6 @@ public class TalkFragment extends PeachBaseFragment {
                 }
             }
         }).start();
-
         sortConversationByLastChatTime(conversations);
         refresh();
     }
@@ -515,12 +514,11 @@ public class TalkFragment extends PeachBaseFragment {
         //返回页面的动画样式
         //getActivity().overridePendingTransition(R.anim.push_bottom_out,R.anim.push_bottom_in);
         MobclickAgent.onPageStart("page_talk_lists");
-        if (!hidden) {
-            refresh();
-        }
-        if (User.getUser().isLogin())
-            loadConversation();
         if (AccountManager.getInstance().isLogin()) {
+            if (!hidden) {
+                refresh();
+            }
+            loadConversation();
             if (listView.getAdapter().getCount() <= 0) {
                 //setEmptyView();
             }

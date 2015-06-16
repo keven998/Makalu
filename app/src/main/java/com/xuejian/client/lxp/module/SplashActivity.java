@@ -83,7 +83,6 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         IMClient.initIM(getApplicationContext());
 		initView();
 		initData();
-      //  IMClient.initIM(this);
 //        MobclickAgent.openActivityDurationTrack(false);
 	}
 
@@ -92,7 +91,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 //        PushManager.getInstance().initialize(this.getApplicationContext());
         final User user = AccountManager.getInstance().getLoginAccount(mContext);
         if(user!=null) {
-            AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+            AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
         }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
@@ -276,11 +275,11 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
-
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
-        AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"

@@ -22,6 +22,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -192,6 +193,7 @@ public class LoginActivity extends PeachBaseActivity{
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
        if(type==FINDPASSWORD){
             //存入修改好的密码
         }
@@ -203,7 +205,7 @@ public class LoginActivity extends PeachBaseActivity{
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
-        AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"
