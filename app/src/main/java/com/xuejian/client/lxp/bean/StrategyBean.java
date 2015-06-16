@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by Rjm on 2014/12/26.
  */
-public class StrategyBean implements ICreateShareDialog, Parcelable{
+public class StrategyBean implements ICreateShareDialog, Parcelable {
     public String id;
     public String title;
     public String summary;

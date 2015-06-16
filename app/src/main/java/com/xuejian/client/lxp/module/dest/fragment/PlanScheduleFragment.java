@@ -1,10 +1,12 @@
 package com.xuejian.client.lxp.module.dest.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.module.dest.DayAgendaActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 
 import java.util.ArrayList;
@@ -38,6 +41,17 @@ public class PlanScheduleFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_plan_schedule_summary, container, false);
         mListView = (ListView) rootView.findViewById(R.id.listview_plan_schedule);
         mListView.setAdapter(new DSAdapter(routeDayMap));
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), DayAgendaActivity.class);
+                intent.putExtra("strategy", strategy);
+                intent.putExtra("current_day", position);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+            }
+        });
         return rootView;
     }
 

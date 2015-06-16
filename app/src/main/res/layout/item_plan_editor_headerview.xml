@@ -2,21 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/base_color_white">
+    android:background="@color/app_backgroud">
 
-    <TextView android:id="@+id/tv_schedule_summary"
+    <TextView android:id="@+id/tv_day_index"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:layout_height="44dp"
         android:textColor="@color/color_text_i"
         android:textSize="15sp"
         android:lineSpacingExtra="5dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/arr_poi_guide"
-        android:drawablePadding="10dp"
         android:gravity="left|center_vertical"/>
 
 </RelativeLayout>

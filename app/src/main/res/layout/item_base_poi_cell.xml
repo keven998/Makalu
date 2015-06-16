@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/base_color_white">
 
-    <TextView android:id="@+id/tv_schedule_summary"
+    <TextView android:id="@+id/tv_poi_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="60dp"
@@ -14,9 +14,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/arr_poi_guide"
-        android:drawablePadding="10dp"
+        android:layout_marginRight="20dp"
         android:gravity="left|center_vertical"/>
 
 </RelativeLayout>

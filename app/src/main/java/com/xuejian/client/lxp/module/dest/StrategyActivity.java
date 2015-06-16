@@ -270,12 +270,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-        try {
-            OnStrategyModeChangeListener listener = (OnStrategyModeChangeListener)fragment;
-            mOnEditModeChangeListeners.add(listener);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            OnStrategyModeChangeListener listener = (OnStrategyModeChangeListener)fragment;
+//            mOnEditModeChangeListeners.add(listener);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         super.onAttachFragment(fragment);
     }
 

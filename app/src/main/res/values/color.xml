@@ -18,8 +18,10 @@
     <color name="color_text_iv">#c8c8c8</color>
     <color name="color_text_v">#c8c8c8</color>
 
+    <color name="color_titlebar">#ffffff</color>
 
-    <color name="title_bar_background">#ffffff</color>
+
+    <color name="title_bar_background">@color/app_theme_color</color>
     <color name="base_font_color">#2e2727</color>
     <color name="second_font_color">#626262</color>
     <color name="third_font_color">#cdcdcd</color>

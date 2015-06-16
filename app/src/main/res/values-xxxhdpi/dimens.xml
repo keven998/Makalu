@@ -30,6 +30,6 @@
     <dimen name="operation_section_height">238dp</dimen>
     <dimen name="spot_detail_picture_height">160dp</dimen>
 
-    <dimen name="tools_search_bar_height">180dp</dimen>
-    <dimen name="tools_tool_card_height">250dp</dimen>
+    <dimen name="tools_search_bar_height">240dp</dimen>
+    <dimen name="tools_tool_card_height">320dp</dimen>
 </resources>
