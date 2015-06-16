@@ -51,11 +51,13 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.MainActivity;
 
 import org.json.JSONArray;
@@ -75,6 +77,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -117,7 +120,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @ViewInject(R.id.tv_phone)
     private TextView phoneTv;
     private File tempImage;
-    private PeachUser user;
+    private User user;
     DisplayImageOptions options;
     private TextView tvGender;
 
@@ -204,6 +207,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         });
     }
 
+
     public void initFlDestion(Map<String,ArrayList<LocBean>> tracks){
 
         try {
@@ -281,8 +285,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.onPause();
 //        MobclickAgent.onPageEnd("page_personal_profile");
     }
-    private void bindView(PeachUser user){
-        nickNameTv.setText(user.nickName);
+    private void bindView(User user){
+        nickNameTv.setText(user.getNickName());
         genderTv.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
@@ -297,13 +301,13 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
        /* ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
                 options);*/
        /* idTv.setText(user.userId + "");*/
-        signTv.setText(user.signature);
-        phoneTv.setText(user.tel);
-        residentTv.setText(user.residence);
-        brithdayTv.setText(user.birthday);
-        status.setText(user.travelStatus);
-        getUserPics(user.userId);
-        initFlDestion(user.tracks);
+        signTv.setText(user.getSignature());
+        phoneTv.setText(user.getTel());
+        residentTv.setText(user.getResidence());
+        brithdayTv.setText(user.getBirthday());
+        status.setText(user.getTravelStatus());
+        getUserPics(user.getUserId());
+        initFlDestion(user.getTracks());
     }
 
     private void initData() {
@@ -421,12 +425,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
     private void refreshUserInfo(){
-        PeachUser user = AccountManager.getInstance().getLoginAccount(this);
+        User user = AccountManager.getInstance().getLoginAccount(this);
         if(user!=null){
-            UserApi.getUserInfo(user.userId + "", new HttpCallBack<String>() {
+            UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson<PeachUser> userResult = CommonJson.fromJson(result, PeachUser.class);
+                    CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                         bindView(userResult.result);
@@ -467,38 +471,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 dialog.dismiss();
                 DialogManager.getInstance().showLoadingDialog(mContext,"正在登出");
-                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent =new Intent(mContext,MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                AccountActvity.this.finish();
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
+                AccountManager.getInstance().logout(mContext);
+                DialogManager.getInstance().dissMissLoadingDialog();
+                Intent intent =new Intent(mContext,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                AccountActvity.this.finish();
             }
         });
         dialog.setNegativeButton("取消",new View.OnClickListener() {
@@ -579,7 +557,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             return;
         }
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        UserApi.delUserAlbumPic(String.valueOf(user.userId), picId, new HttpCallBack<String>() {
+        UserApi.delUserAlbumPic(String.valueOf(user.getUserId()), picId, new HttpCallBack<String>() {
 
 
             @Override
@@ -668,7 +646,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.gender = gender;
+                    user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     genderTv.setText(user.getGenderDesc());
                     ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -804,7 +782,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.avatarSmall = url;
+                    user.setAvatarSmall(url);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
@@ -933,7 +911,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.travelStatus = sstatus;
+                    user.setTravelStatus(sstatus);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     status.setText(sstatus);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -967,7 +945,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.residence = residence;
+                    user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     residentTv.setText(residence);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -1000,7 +978,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.birthday = birth;
+                    user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     brithdayTv.setText(birth);
                     ToastUtil.getInstance(mContext).showToast("修改成功");

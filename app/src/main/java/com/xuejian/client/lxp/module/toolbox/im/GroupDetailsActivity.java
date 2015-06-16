@@ -61,6 +61,8 @@ import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -295,10 +297,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                     EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                     msg.setChatType(EMMessage.ChatType.GroupChat);
-                    msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
                     msg.setReceipt(group.getGroupId());
                     IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
                     String content = myNickname + " 退出了群聊";
                     IMUtils.setMessageWithExtTips(mContext, msg, content);
                     msg.addBody(new TextMessageBody(content));
@@ -389,9 +391,9 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
 
     private void bindView() {
-        memberAdapter = new MemberAdapter(new ViewHolderCreator<IMUser>() {
+        memberAdapter = new MemberAdapter(new ViewHolderCreator<User>() {
             @Override
-            public ViewHolderBase<IMUser> createViewHolder() {
+            public ViewHolderBase<User> createViewHolder() {
                 return new MemberViewHolder();
             }
         });
@@ -462,10 +464,10 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
             UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
-                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result, PeachUser.class);
+                    CommonJson4List<User> userResult = CommonJson4List.fromJson(result, User.class);
                     if (userResult.code == 0) {
-                        for (PeachUser user : userResult.result) {
-                            IMUser imUser = new IMUser();
+                        for (User user : userResult.result) {
+                           /* IMUser imUser = new IMUser();
                             imUser.setUserId(user.userId);
                             imUser.setNick(user.nickName);
                             imUser.setUsername(user.easemobUser);
@@ -474,7 +476,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                             imUser.setAvatar(user.avatar);
                             imUser.setAvatarSmall(user.avatarSmall);
                             imUser.setSignature(user.signature);
-                            IMUserRepository.saveContact(mContext, imUser);
+                            IMUserRepository.saveContact(mContext, imUser);*/
+                            UserDBManager.getInstance().saveContact(user);
                         }
                         unkownMembers.clear();
                         memberAdapter.getDataList().clear();
@@ -572,7 +575,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -589,7 +592,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).userId), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -616,7 +619,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         }
     }
 
-    private class MemberViewHolder extends ViewHolderBase<IMUser> {
+    private class MemberViewHolder extends ViewHolderBase<User> {
         private View contentView;
         private ImageView avatarIv, removeIv;
         private TextView nicknameTv;
@@ -648,7 +651,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         }
 
         @Override
-        public void showData(int position, final IMUser itemData) {
+        public void showData(int position, final User itemData) {
             if(position==memberAdapter.getCount()-1){
                 avatarIv.setImageResource(R.drawable.smiley_minus_btn);
                 nicknameTv.setText("");
@@ -698,7 +701,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                 }
             }else{
 //                avatarIv.setImageResource(R.drawable.avatar_placeholder);
-                nicknameTv.setText(itemData.getNick());
+                nicknameTv.setText(itemData.getNickName());
                 ImageLoader.getInstance().displayImage(itemData.getAvatarSmall(), avatarIv, picOptions);
                 if (isInDeleteMode) {
                     if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
@@ -715,21 +718,21 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     contentView.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (IMUserRepository.isMyFriend(mContext, itemData.getUsername())) {
+                            if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
                                 Intent intent = new Intent(mContext, ContactDetailActivity.class);
                                 intent.putExtra("userId", itemData.getUserId());
-                                intent.putExtra("userNick", itemData.getNick());
+                                intent.putExtra("userNick", itemData.getNickName());
                                 startActivity(intent);
                             } else {
-                                PeachUser user = new PeachUser();
-                                user.nickName = itemData.getNick();
+                                User user = new User();
+                                /*user.nickName = itemData.getNick();
                                 user.userId = itemData.getUserId();
                                 user.easemobUser = itemData.getUsername();
                                 user.avatar = itemData.getAvatar();
                                 user.avatarSmall = itemData.getAvatarSmall();
                                 user.signature = itemData.getSignature();
                                 user.gender = itemData.getGender();
-                                user.memo = itemData.getMemo();
+                                user.memo = itemData.getMemo();*/
                                 Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
                                 intent.putExtra("user", user);
                                 startActivity(intent);
@@ -745,8 +748,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
          * 删除群成员
          * @param imUser
          */
-        protected void deleteMembersFromGroup(final IMUser imUser) {
-            if(imUser.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
+        protected void deleteMembersFromGroup(final User imUser) {
+            if(imUser.getUserId().equals(AccountManager.getInstance().getLoginAccount(mContext).getUserId())){
                 ToastUtil.getInstance(mContext).showToast("不能删除自己");
                 return;
             }
@@ -761,7 +764,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     try {
                         // 删除被选中的成员
 
-                        EMGroupManager.getInstance().removeUserFromGroup(group.getGroupId(), imUser.getUsername());
+                        //EMGroupManager.getInstance().removeUserFromGroup(group.getGroupId(), imUser.getUsername());
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -772,11 +775,11 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                                 // 被邀请
                                 EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
                                 msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
                                 msg.setReceipt(group.getGroupId());
                                 IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
-                                String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
+                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
+                                String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNickName());
                                 IMUtils.setMessageWithExtTips(mContext, msg, content);
                                 msg.addBody(new TextMessageBody(content));
                                 EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {

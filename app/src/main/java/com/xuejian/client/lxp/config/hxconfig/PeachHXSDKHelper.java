@@ -54,6 +54,7 @@ import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.SplashActivity;
 import com.xuejian.client.lxp.module.toolbox.im.VoiceCallReceiver;
@@ -73,9 +74,9 @@ public class PeachHXSDKHelper extends HXSDKHelper {
         super.initHXOptions();
         // you can also get EMChatOptions to set related SDK options
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-        PeachUser user = AccountManager.getInstance().getLoginAccount(appContext);
+        User user = AccountManager.getInstance().getLoginAccount(appContext);
         if(user!=null){
-            String data= PreferenceUtils.getCacheData(appContext, String.format("%s_not_notify", user.userId));
+            String data= PreferenceUtils.getCacheData(appContext, String.format("%s_not_notify", user.getUserId()));
             if(!TextUtils.isEmpty(data)){
                 List<String> notNotifyList = GsonTools.parseJsonToBean(data,new TypeToken<List<String>>(){});
                 options.setReceiveNotNoifyGroup(notNotifyList);
@@ -159,24 +160,24 @@ public class PeachHXSDKHelper extends HXSDKHelper {
     @Override
     protected void initListener(){
         super.initListener();
-        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingVoiceCallBroadcastAction());
+        /*IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingVoiceCallBroadcastAction());
         appContext.registerReceiver(new VoiceCallReceiver(), callFilter);
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(100);
-        appContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
+        appContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);*/
 
-        NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
+        /*NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
         intentFilter.setPriority(100);
-        appContext.registerReceiver(msgReceiver, intentFilter);
+        appContext.registerReceiver(msgReceiver, intentFilter);*/
 
     }
 
     /**
      * cmd消息BroadcastReceiver
      */
-    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
+   /* private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -265,7 +266,7 @@ public class PeachHXSDKHelper extends HXSDKHelper {
             }
         }
     };
-
+*/
     /**
      * 新消息广播接收者
      */

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -77,7 +80,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     StrategyAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
-    int chatType;
+    String chatType;
     String toId;
 //    private StrategyBean originalStrategy;
     private String userId;
@@ -90,13 +93,18 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         userId=getIntent().getExtras().getString("userId");
         isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
-        if(AccountManager.getInstance().user==null){
+        if(AccountManager.getInstance().getLoginAccount(this)==null){
             swipeEnable=false;
         }else {
-            swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().user.userId));
+            swipeEnable = userId.equals(String.valueOf(AccountManager.getCurrentUserId()));
         }
         initView();
         initData();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
     }
 
     @Override
@@ -186,7 +194,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void setupViewFromCache() {
       if(!isExpertPlan) {
           AccountManager account = AccountManager.getInstance();
-          String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.user.userId));
+          String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", account.getCurrentUserId()));
           if (!TextUtils.isEmpty(data)) {
               List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                       new TypeToken<List<StrategyBean>>() {
@@ -228,7 +236,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void cachePage() {
         AccountManager account = AccountManager.getInstance();
-        if (userId != null && !userId.equals(account.user.userId)) {
+        if (userId != null && !userId.equals(account.getCurrentUserId())) {
             return;
         }
         int size = mStrategyListAdapter.getCount();
@@ -236,7 +244,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             size = OtherApi.PAGE_SIZE;
         }
         List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.user.userId), GsonTools.createGsonString(cd));
+        PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
 
     @Override
@@ -261,7 +269,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void initData() {
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType", 0);
+        chatType = getIntent().getStringExtra("chatType");
 //        getStrategyListData(0);
 //        mMyStrategyLv.doPullRefreshing(true, 100);
         setupViewFromCache();
@@ -394,7 +402,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -403,11 +411,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
-
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -415,11 +422,6 @@ public class StrategyListActivity extends PeachBaseActivity {
 
                                             }
                                         });
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
 
                                     }
                                 });
@@ -619,7 +621,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -628,11 +630,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
-
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -642,12 +643,36 @@ public class StrategyListActivity extends PeachBaseActivity {
                                         });
 
                                     }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
                                 });
+//                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        runOnUiThread(new Runnable() {
+//                                            public void run() {
+//                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+//
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
                             }
 
                             @Override

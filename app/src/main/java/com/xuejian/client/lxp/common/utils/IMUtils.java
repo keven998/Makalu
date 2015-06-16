@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.common.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.util.HanziToPinyin;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.MessageBean;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ExtFromUser;
@@ -37,12 +41,16 @@ import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/5.
@@ -70,6 +78,28 @@ public class IMUtils {
             if (header < 'a' || header > 'z') {
                 user.setHeader("#");
             }
+        }
+        return user;
+    }
+    public static User setUserHead(User user) {
+//        String username=user.getNickName();
+        String headerName = user.getNickName();
+//        if (!TextUtils.isEmpty(user.getNick())) {
+//            headerName = user.getNick();
+//        } else {
+//            headerName = user.getUsername();
+//        }
+//        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+//            user.setHeader("");
+//        } else if (Character.isDigit(headerName.charAt(0))) {
+//            user.setHeader("#");
+//        } else {
+            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                    0, 1).toUpperCase());
+            char header = user.getHeader().toLowerCase().charAt(0);
+            if (header < 'a' || header > 'z') {
+                user.setHeader("#");
+         //   }
         }
         return user;
     }
@@ -129,12 +159,12 @@ public class IMUtils {
     }
     public static void setMessageWithTaoziUserInfo(Context context,EMMessage message){
         //组装个人信息json
-        PeachUser myUser = AccountManager.getInstance().getLoginAccount(context);
+        User myUser = AccountManager.getInstance().getLoginAccount(context);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",myUser.userId);
-            jsonObject.put("avatar",myUser.avatarSmall);
-            jsonObject.put("nickName",myUser.nickName);
+            jsonObject.put("userId",myUser.getUserId());
+            jsonObject.put("avatar",myUser.getAvatarSmall());
+            jsonObject.put("nickName",myUser.getNickName());
             message.setAttribute("fromUser",jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,7 +176,25 @@ public class IMUtils {
        message.setAttribute(Constant.MSG_CONTENT,tips);
 
     }
+    public static void HandleCMDInfoFromMessage(MessageBean m){
+        String cmd=m.getMessage();
+        try {
+            JSONObject object=new JSONObject(cmd);
+            String action=object.getString("action");
+            switch (action){
+                case "D_INVITE":
+                    long chatId=object.getLong("groupId");
+                    long inviteId=object.getLong("userId");
+                    String nickName=object.getString("nickName");
+                    String groupName=object.getString("groupName");
+                    User group=new User(chatId,groupName,"",8);
+                    UserDBManager.getInstance().saveContact(group);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+    }
     public static IMUser getUserInfoFromMessage(Context context,EMMessage message){
         String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
         if(!TextUtils.isEmpty(fromUser)){
@@ -173,8 +221,8 @@ public class IMUtils {
     }
 
     public static void onClickImShare(Context context){
-        PeachUser user = AccountManager.getInstance().getLoginAccount(context);
-        if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+        User user = AccountManager.getInstance().getLoginAccount(context);
+        if (user != null) {  //&& !TextUtils.isEmpty(user.easemobUser)
             Intent intent = new Intent(context, IMShareActivity.class);
             ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
 
@@ -191,41 +239,66 @@ public class IMUtils {
                 Intent intent = new Intent(context, IMShareActivity.class);
                 ((Activity)context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
             }else if(requestCode ==IM_SHARE_REQUEST_CODE){
-                final int chatType = data.getIntExtra("chatType", 0);
-                final String toId = data.getStringExtra("toId");
+                final String chatType = data.getStringExtra("chatType");
+                final String toId =""+data.getLongExtra("toId",0);
+                if (toId.equals(0+""))System.out.println("qwer");
                 showImShareDialog(context,iCreateShareDialog,new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
                         DialogManager.getInstance().showLoadingDialog(context);
-                        sendExtMessage(context,type,content,chatType,toId,new EMCallBack() {
+                        IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener(){
+
                             @Override
                             public void onSuccess() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity)context).runOnUiThread(new Runnable() {
+                                ((Activity) context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("已发送~");
 
                                     }
                                 });
-
                             }
 
                             @Override
-                            public void onError(int i, String s) {
+                            public void onFailed(int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity)context).runOnUiThread(new Runnable() {
+                                ((Activity) context).runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(context).showToast("好像发送失败了");
 
                                     }
                                 });
                             }
-
-                            @Override
-                            public void onProgress(int i, String s) {
-
-                            }
                         });
+//                        sendExtMessage(context, type, content, chatType, toId, new EMCallBack() {
+//                            @Override
+//                            public void onSuccess() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("已发送~");
+//
+//                                    }
+//                                });
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(int i, String s) {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+//
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onProgress(int i, String s) {
+//
+//                            }
+//                        });
                         if(callback!=null){
                             callback.onDialogShareOk(dialog,type,content);
                         }
@@ -395,6 +468,10 @@ public class IMUtils {
         void onDialogShareCancle(Dialog dialog, int type, String content);
     }
 
-
+    public static boolean isAppRunningForeground(Context var0) {
+        ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
+        List var2 = var1.getRunningTasks(1);
+        return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
+    }
 
 }

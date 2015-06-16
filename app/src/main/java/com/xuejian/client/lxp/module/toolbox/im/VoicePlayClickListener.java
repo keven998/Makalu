@@ -30,41 +30,47 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.VoiceMessageBody;
+import com.lv.bean.MessageBean;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 
 import java.io.File;
 
 public class VoicePlayClickListener implements View.OnClickListener {
 
-	EMMessage message;
-	VoiceMessageBody voiceBody;
+    MessageBean message;
 	ImageView voiceIconView;
 
 	private AnimationDrawable voiceAnimation = null;
 	MediaPlayer mediaPlayer = null;
 	ImageView iv_read_status;
 	Activity activity;
-	private ChatType chatType;
+	private String chatType;
+    private String path;
+    private boolean isRead;
 	private BaseAdapter adapter;
-
+private String friendId;
 	public static boolean isPlaying = false;
 	public static VoicePlayClickListener currentPlayListener = null;
 
 
-	public VoicePlayClickListener(EMMessage message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
-			String username) {
+	public VoicePlayClickListener(String toChatUserName,MessageBean message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
+			String username,String chatType,boolean isRead,String path) {
 		this.message = message;
-		voiceBody = (VoiceMessageBody) message.getBody();
 		this.iv_read_status = iv_read_status;
 		this.adapter=adapter;
 		voiceIconView = v;
 		this.activity = activity;
-		this.chatType = message.getChatType();
+		this.chatType =chatType ;
+        this.isRead=isRead;
+        this.path=path;
+		this.friendId=toChatUserName;
 	}
 
 	public void stopPlayVoice() {
 		voiceAnimation.stop();
-		if (message.direct == EMMessage.Direct.RECEIVE) {
+		if (message.getSendType() == 1) {
 			voiceIconView.setImageResource(R.drawable.chatfrom_voice_playing);
 		} else {
 			voiceIconView.setImageResource(R.drawable.chatto_voice_playing);
@@ -83,7 +89,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		if (!(new File(filePath).exists())) {
 			return;
 		}
-		((ChatActivity)activity).playMsgId=message.getMsgId();
+		((ChatActivity)activity).playMsgId=String.valueOf(message.getLocalId());
 		AudioManager audioManager = (AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
 
 		mediaPlayer = new MediaPlayer();
@@ -98,6 +104,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			 audioManager.setMode(AudioManager.MODE_IN_CALL);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 		}
+//		mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 		try {
 			mediaPlayer.setDataSource(filePath);
 			mediaPlayer.prepare();
@@ -116,21 +123,24 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			currentPlayListener = this;
 			mediaPlayer.start();
 			showAnimation();
+			IMClient.getInstance().updateReadStatus(friendId, message.getLocalId(), true);
+			MessageAdapter.updateVoiceReadStatus(message);
 			try {
 				//如果是接收的消息
-				if (!message.isAcked && message.direct == EMMessage.Direct.RECEIVE) {
-					message.isAcked = true;
+				if (!MessageAdapter.isRead && message.getSendType() == 1) {
+					isRead = true;
 					if (iv_read_status != null && iv_read_status.getVisibility() == View.VISIBLE) {
 						//隐藏自己未播放这条语音消息的标志
 						iv_read_status.setVisibility(View.INVISIBLE);
-						EMChatDB.getInstance().updateMessageAck(message.getMsgId(), true);
+						//EMChatDB.getInstance().updateMessageAck(message.getMsgId(), true);
 					}
 					//告知对方已读这条消息
-					if(chatType != ChatType.GroupChat)
-						EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+//					if(chatType != ChatType.GroupChat)
+//						EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
 				}
+				MessageAdapter.isRead=true;
 			} catch (Exception e) {
-				message.isAcked = false;
+				isRead = false;
 			}
 		} catch (Exception e) {
 		}
@@ -139,7 +149,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	// show the voice playing animation
 	private void showAnimation() {
 		// play voice, and start animation
-		if (message.direct == EMMessage.Direct.RECEIVE) {
+		if (message.getSendType() ==1) {
 				voiceIconView.setImageResource(R.anim.voice_from_icon);
 		} else {
 				voiceIconView.setImageResource(R.anim.voice_to_icon);
@@ -150,7 +160,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (isPlaying) {
-			if(((ChatActivity)activity).playMsgId !=null&&((ChatActivity)activity).playMsgId .equals(message.getMsgId()))
+			if(((ChatActivity)activity).playMsgId !=null&&((ChatActivity)activity).playMsgId .equals(String.valueOf(message.getLocalId())))
 			{
 				currentPlayListener.stopPlayVoice();
 				return;
@@ -158,31 +168,30 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			currentPlayListener.stopPlayVoice();
 		}
 
-		if (message.direct == EMMessage.Direct.SEND) {
+		if (message.getSendType() == 0) {
 			// for sent msg, we will try to play the voice file directly
-			playVoice(voiceBody.getLocalUrl());
+			playVoice(path);
 		} else {
-            LogUtil.d("voiceFile",message.status.toString());
-			if(message.status==EMMessage.Status.SUCCESS){
-				File file = new File(voiceBody.getLocalUrl());
+			if(message.getStatus()==0){
+				File file = new File(path);
 				if (file.exists() && file.isFile()){
                     LogUtil.d("voiceFile","playVoice");
-                    playVoice(voiceBody.getLocalUrl());
+                    playVoice(path);
                 }else{
                     LogUtil.d("voiceFile","file not exist");
                 }
 
-			}else if(message.status==EMMessage.Status.INPROGRESS)
+			}else if(message.getStatus()==1)
 			{
 				Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
-			}else if(message.status==EMMessage.Status.FAIL||message.status==EMMessage.Status.CREATE)
+			}else if(message.getStatus()==2)
 			{
 				Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
 				new AsyncTask<Void, Void, Void>() {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						EMChatManager.getInstance().asyncFetchMessage(message);
+						//EMChatManager.getInstance().asyncFetchMessage(message);
 						return null;
 					}
 					

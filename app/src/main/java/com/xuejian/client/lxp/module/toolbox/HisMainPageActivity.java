@@ -46,6 +46,8 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -112,9 +114,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private ArrayList<String> all_pics=new ArrayList<String>();
     DisplayImageOptions options;
-    PeachUser user;
+    User user;
+    private User imUser;
+    private int EXPERT_INT=2;
+    /*PeachUser user;
     PeachUser hisBean;
-    private IMUser imUser;
+    private IMUser imUser;*/
 
 
     @Override
@@ -123,7 +128,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId=getIntent().getExtras().getInt("userId");
         user= AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        imUser = IMUserRepository.getContactByUserId(mContext, userId);
+        if(user!=null) {
+            imUser = UserDBManager.getInstance().getContactByUserId(userId);
+        }
         options= new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
@@ -141,6 +148,21 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
+        if(user!=null) {
+            if (userId != 10000 && UserDBManager.getInstance().isMyFriend((long) userId)) {
+                tv_del.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showActionDialog();
+                    }
+                });
+            } else {
+                tv_del.setVisibility(View.GONE);
+            }
+        }else{
+            tv_del.setVisibility(View.GONE);
+        }
+
         ll_his_trip_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,9 +178,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void initData(int id){
         getUserInfo(id);
-        //if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+        if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
             initScrollView(id);
-        //}
+        }
     }
 
     private void showActionDialog() {
@@ -211,7 +233,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void deleteContact(final IMUser tobeDeleteUser) {
+    private void deleteContact(final User tobeDeleteUser) {
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
         UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
             @Override
@@ -219,10 +241,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
-                    IMUserRepository.deleteContact(HisMainPageActivity.this, tobeDeleteUser.getUsername());
-                    EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
-                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUsername());
-                    InviteMsgRepository.deleteInviteMsg(HisMainPageActivity.this, tobeDeleteUser.getUsername());
+                    UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
+                   // EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUserId());
+                    //InviteMsgRepository.deleteInviteMsg(HisMainPageActivity.this, tobeDeleteUser.getUsername());
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(HisMainPageActivity.this).showToast(deleteResult.err.message);
@@ -240,73 +262,90 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     }
 
-    public void refreshView(final PeachUser bean){
+    public void refreshView(final User bean){
+        if(user!=null) {
+            int type;
+            User user=UserDBManager.getInstance().getContactByUserId(bean.getUserId());
+            if(user!=null){
+                type=user.getType();
+                bean.setType(type | EXPERT_INT);
+            }else{
+                bean.setType(EXPERT_INT);
+            }
+            UserDBManager.getInstance().saveContact(bean);
+        }
         DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
-        title_name.setText(bean.nickName);
-        his_name.setText(bean.nickName);
-        ImageLoader.getInstance().displayImage(bean.avatarSmall, his_avatar, options);
-        his_level.setText("V" + bean.level);
-        if(bean.gender.equals("F")){
+        title_name.setText(bean.getNickName());
+        his_name.setText(bean.getNickName());
+        ImageLoader.getInstance().displayImage(bean.getAvatarSmall(), his_avatar, options);
+        his_level.setText("V" + bean.getLevel());
+        if(bean.getGender().equals("F")){
             his_gender.setImageResource(R.drawable.girl);
-        }else if(bean.gender.equals("F")){
+        }else if(bean.getGender().equals("F")){
             his_gender.setImageResource(R.drawable.boy);
         }
-        xingzuo.setText(bean.zodiac);
-        his_id.setText(String.valueOf(bean.userId));
-        if(!TextUtils.isEmpty(bean.travelStatus)){
-            his_status.setText(bean.travelStatus);
+        xingzuo.setText(bean.getZodiac());
+        his_id.setText(String.valueOf(bean.getUserId()));
+        if(!TextUtils.isEmpty(bean.getTravelStatus())){
+            his_status.setText(bean.getTravelStatus());
         }
-        sign.setText(bean.signature);
-        his_trip_plan.setText("共"+bean.guideCnt+"篇旅行计划");
-        if(bean.residence.equals("")||bean.residence==null){
+        sign.setText(bean.getSignature());
+        his_trip_plan.setText("共"+bean.getGuideCnt()+"篇旅行计划");
+        if(bean.getResidence().equals("")||bean.getResidence()==null){
             resident.setText("未设置");
         }else{
-        resident.setText(bean.residence);
+        resident.setText(bean.getResidence());
         }
-        if(bean.birthday==null){
+        if(bean.getBirthday()==null){
             age.setText("未设置");
         }else{
-        age.setText(getAge(bean.birthday)+"");
+        age.setText(getAge(bean.getBirthday())+"");
         }
 
-        if(userId!=10000&&IMUserRepository.isMyFriend(HisMainPageActivity.this,bean.easemobUser )){
-            tv_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showActionDialog();
-                }
-            });
-        }else{
-            tv_del.setVisibility(View.GONE);
-        }
+        if(user!=null) {
+            if (userId != 10000 && UserDBManager.getInstance().isMyFriend(bean.getUserId())) {
+                tv_del.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showActionDialog();
+                    }
+                });
+            } else {
+                tv_del.setVisibility(View.GONE);
+            }
 
-        if(IMUserRepository.isMyFriend(HisMainPageActivity.this, bean.easemobUser)){
-            add_friend.setText("开始聊天");
-            add_friend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+
+            if (UserDBManager.getInstance().isMyFriend(bean.getUserId())) {
+                add_friend.setText("开始聊天");
+                add_friend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                    /* Intent intent = new Intent(HisMainPageActivity.this, ContactDetailActivity.class);
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
-                    if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
-                        IMUser imUser = IMUserRepository.getContactByUserId(mContext, (long) bean.userId);
-                        startActivity(new Intent(mContext, ChatActivity.class).putExtra("userId", imUser.getUsername()));
-                        finish();
-                    }else{
-                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
-                        finish();
-                    }
-                }
-            });
 
-        }else{
-            add_friend.setText("加为好友");
-            add_friend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                        if (user != null) { //&&!TextUtils.isEmpty(user.easemobUser)
+                            User imUser = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
+                            Intent intent = new Intent(mContext, ChatActivity.class);
+                            intent.putExtra("friend_id", String.valueOf(imUser.getUserId()));
+                            intent.putExtra("chatType", "single");
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                            finish();
+                        }
+                    }
+                });
+
+            } else {
+                add_friend.setText("加为好友");
+                add_friend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                    /* PeachUser user = new PeachUser();
                     user.nickName = bean.get(0).nickName;
                     user.userId = bean.get(0).userId;
@@ -320,41 +359,54 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("user", user);
                     startActivity(intent);
 */
-                    if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
-                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                        editDialog.setTitle("输入验证信息");
-                        editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).nickName));
-                        editDialog.setPositiveButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                editDialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
-                                UserApi.requestAddContact(bean.userId + "", editDialog.getMessage(), new HttpCallBack() {
-                                    @Override
-                                    public void doSucess(Object result, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (user != null) { // && !TextUtils.isEmpty(user.easemobUser)
+                            final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                            editDialog.setTitle("输入验证信息");
+                            editDialog.setMessage(String.format("\"Hi, 我是%s\"", AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this).getNickName()));
+                            editDialog.setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    editDialog.dismiss();
+                                    DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                                    UserApi.requestAddContact(bean.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
+                                        @Override
+                                        public void doSucess(Object result, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
-                                        ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
-                                        finish();
-                                    }
+                                            ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
+                                            finish();
+                                        }
 
-                                    @Override
-                                    public void doFailure(Exception error, String msg, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "请求添加桃友失败", Toast.LENGTH_SHORT).show();
-                                        ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                    }
-                                });
-                            }
-                        });
+                                            ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
+                                    });
+                                }
+                            });
 
-                        editDialog.show();
-                    }else{
-                        Intent intent=new Intent(HisMainPageActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.push_bottom_in,0);
-                        finish();
+                            editDialog.show();
+                        } else {
+                            Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                            finish();
+                        }
                     }
+                });
+            }
+        }else{
+            tv_del.setVisibility(View.GONE);
+            add_friend.setText("加为好友");
+            add_friend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                        overridePendingTransition(R.anim.push_bottom_in, 0);
+                    finish();
                 }
             });
         }
@@ -362,13 +414,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         try {
             int countries=0;
             int citys;
-            JSONObject jsonObject = new JSONObject(bean.tracks.toString());
+            JSONObject jsonObject = new JSONObject(bean.getTracks().toString());
             Iterator iterator=jsonObject.keys();
             while(iterator.hasNext()){
                 countries++;
                 String key=(String)iterator.next();
-                for(int i=0;i<bean.tracks.get(key).size();i++){
-                    all_foot_print_list.add(bean.tracks.get(key).get(i));
+                for(int i=0;i<bean.getTracks().get(key).size();i++){
+                    all_foot_print_list.add(bean.getTracks().get(key).get(i));
                 }
             }
             citys=all_foot_print_list.size();
@@ -407,7 +459,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson<PeachUser> expertInfo = CommonJson.fromJson(result, PeachUser.class);
+                CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
                     refreshView(expertInfo.result);
                 }

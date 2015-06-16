@@ -56,8 +56,9 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.fragment.RestaurantFragment;
+import com.xuejian.client.lxp.module.dest.fragment.RouteDayFragment;
 import com.xuejian.client.lxp.module.dest.fragment.ShoppingFragment;
 
 import org.json.JSONObject;
@@ -101,7 +102,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private int curIndex=0;
     private LayoutBar layoutBar;
     private TextView indexTv;
-    PlanScheduleFragment routeDayFragment;
+    RouteDayFragment routeDayFragment;
     RestaurantFragment restFragment;
     ShoppingFragment shoppingFragment;
     private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
@@ -443,7 +444,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         draw_title.setText(result.title);
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+        final User user = AccountManager.getInstance().getLoginAccount(mContext);
 
         if(user==null){
             mIvEdit.setVisibility(View.GONE);
@@ -451,7 +452,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         }else {
-            if (user.userId != result.userId) {
+            if (user.getUserId() != result.userId) {
                 mIvEdit.setVisibility(View.GONE);
                 mIvMore.setVisibility(View.GONE);
                 iv_location.setVisibility(View.GONE);
@@ -476,7 +477,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                         CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
                                         if (modifyResult.code == 0) {
                                             strategy.id = modifyResult.result.id;
-                                            strategy.userId = user.userId;
+                                            strategy.userId = user.getUserId();
                                             bindView(strategy);
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
@@ -731,22 +732,22 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
                 if (routeDayFragment == null) {
-                    routeDayFragment = new PlanScheduleFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
+                    routeDayFragment = new RouteDayFragment();
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return routeDayFragment;
             } else if (position == 1) {
                 if (restFragment == null) {
                     restFragment = new RestaurantFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return restFragment;
             } else {
                 if (shoppingFragment == null) {
                     shoppingFragment = new ShoppingFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
+                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return shoppingFragment;
@@ -785,11 +786,22 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
     }
 
+    private boolean checkIsEditableMode() {
+        if (routeDayFragment != null && (routeDayFragment.isEditableMode()||routeDayFragment.isInEditMode)) {
+            return true;
+        } else if (shoppingFragment != null && (shoppingFragment.isEditableMode()||routeDayFragment.isInEditMode)) {
+            return true;
+        } else if (restFragment != null && (restFragment.isEditableMode()||routeDayFragment.isInEditMode)) {
+            return true;
+        }
+        return false;
+    }
+
     private void saveStrategy(final boolean finish) {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
         if (routeDayFragment != null) {
-//            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
+            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
         }
         if (shoppingFragment != null) {
             StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
@@ -820,7 +832,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         onEditModeChangeListener.onEditModeChange(false);
                     }
                     if (routeDayFragment != null) {
-//                        routeDayFragment.resumeItinerary();
+                        routeDayFragment.resumeItinerary();
                     }
                     if (finish) {
                         finish();
@@ -850,10 +862,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private void warnCancel() {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
-//        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
-//            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
-//        } else
-        if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
+        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
+            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
+        } else if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
             StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
         } else if (restFragment != null && restFragment.isEditableMode()) {
             StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);

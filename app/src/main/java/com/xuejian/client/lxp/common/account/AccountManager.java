@@ -6,11 +6,14 @@ import android.text.TextUtils;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.easemob.EMCallBack;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +22,10 @@ import java.util.Map;
 public class AccountManager {
     public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
     public static final String LOGIN_USER_PREF = "login_user";
-    public static PeachUser user;
-    private Map<String, IMUser> contactList;
+    public static User user;
+    public static String CurrentUserId;
+    private Map<Long, User> contactList;
+    private boolean isLogin;
 
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
@@ -36,30 +41,52 @@ public class AccountManager {
 
     }
 
+    public void setLogin(boolean isLogin){
+        this.isLogin=isLogin;
+    }
 
-    public PeachUser getLoginAccount(Context context) {
+    public boolean isLogin(){
+        return isLogin;
+    }
+
+    public static String getCurrentUserId(){
+        return CurrentUserId;
+    }
+    public static void setCurrentUserId(String currentUserId){
+        CurrentUserId=currentUserId;
+    }
+    public User getLoginAccount(Context context) {
         String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
         if (TextUtils.isEmpty(userJson)) {
             return null;
         }
         if (user == null) {
             user = GsonTools.parseJsonToBean(userJson,
-                    PeachUser.class);
+                    User.class);
         }
         return user;
     }
-
+    public void logout(final Context context){
+        SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
+        AccountManager.getInstance().setContactList(null);
+        this.isLogin=false;
+        IMClient.getInstance().logout();
+        UserDBManager.getInstance().disconnectDB();
+    }
     public void logout(final Context context, final boolean isConflict, final EMCallBack callBack) {
         PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
             @Override
             public void onSuccess() {
                 SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
                 AccountManager.getInstance().setContactList(null);
-                IMUserRepository.clearAllContact(context);
+                //处理一下用户名密码表，下次登录的时候重新建立用户名密码表，表里同时只能存在一个用户
+                UserDBManager.getInstance().disconnectDB();
+                IMClient.getInstance().disconnectDB();
+                /*IMUserRepository.clearAllContact(context);
                 InviteMsgRepository.clearAllInviteMsg(context);
                 if (callBack != null) {
                     callBack.onSuccess();
-                }
+                }*/
                 /*MyFragment my=new MyFragment();
                 my.refresh();*/
                /* Looper.prepare();
@@ -95,7 +122,7 @@ public class AccountManager {
 
     }
 
-    public void saveLoginAccount(Context context, PeachUser user) {
+    public void saveLoginAccount(Context context, User user) {
         this.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
@@ -105,12 +132,12 @@ public class AccountManager {
      *
      * @return
      */
-    public Map<String, IMUser> getContactList(Context context) {
+    public Map<Long, User> getContactList(Context context) {
         // 获取本地好友user list到内存,方便以后获取好友list
-        List<IMUser> userList = IMUserRepository.getContactList(context);
-        contactList = new HashMap<String, IMUser>();
-        for (IMUser user : userList) {
-            contactList.put(user.getUsername(), user);
+        List<User> userList = UserDBManager.getInstance().getContactListWithoutGroup();
+        contactList = new HashMap<Long, User>();
+        for (User user : userList) {
+            contactList.put(user.getUserId(), user);
         }
         return contactList;
     }
@@ -120,7 +147,7 @@ public class AccountManager {
      *
      * @param contactList
      */
-    public void setContactList(Map<String, IMUser> contactList) {
+    public void setContactList(Map<Long, User> contactList) {
         this.contactList = contactList;
     }
 

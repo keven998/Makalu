@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.easemob.EMCallBack;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -52,7 +54,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     @InjectView(R.id.search_all_lv)
     ListView mSearchAllLv;
     String toId;
-    int chatType;
+    String chatType;
 
 
     @Override
@@ -60,7 +62,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_all);
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType", 0);
+        chatType = getIntent().getStringExtra("chatType");
         ButterKnife.inject(this);
         if(!TextUtils.isEmpty(toId)){
             mTitleBar.getTitleTextView().setText("发送地点");
@@ -241,21 +243,19 @@ public class SearchAllActivity extends PeachBaseActivity {
                     @Override
                     public void onDialogShareOk(Dialog dialog, int type, String content) {
                         DialogManager.getInstance().showLoadingDialog(mContext);
-                        IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                        IMClient.getInstance().sendExtMessage(toId, chatType, content, type, new SendMsgListener() {
                             @Override
                             public void onSuccess() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 runOnUiThread(new Runnable() {
                                     public void run() {
                                         ToastUtil.getInstance(mContext).showToast("已发送~");
-
                                     }
                                 });
-
                             }
 
                             @Override
-                            public void onError(int i, String s) {
+                            public void onFailed(int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 runOnUiThread(new Runnable() {
                                     public void run() {
@@ -265,20 +265,17 @@ public class SearchAllActivity extends PeachBaseActivity {
                                 });
 
                             }
-
-                            @Override
-                            public void onProgress(int i, String s) {
-
-                            }
                         });
-                    }
+                }
 
-                    @Override
-                    public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                    }
-                });
+                @Override
+                public void onDialogShareCancle (Dialog dialog,int type, String content){
+                }
             }
-        });
+
+            );
+        }
+    });
         mSearchAllLv.setAdapter(searchAllAdapter);
     }
 

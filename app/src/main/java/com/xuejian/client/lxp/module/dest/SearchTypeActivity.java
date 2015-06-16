@@ -14,6 +14,8 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.easemob.EMCallBack;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -55,7 +57,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
     ArrayList<SearchTypeBean> typeBeans = new ArrayList<SearchTypeBean>();
     SearchTypeBean typeBean;
     String toId;
-    int chatType;
+    String chatType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +118,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         keyWord = getIntent().getStringExtra("keyWord");
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType", 0);
+        chatType = getIntent().getStringExtra("chatType");
         if (type.equals("loc")) {
             cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
@@ -247,21 +249,19 @@ public class SearchTypeActivity extends PeachBaseActivity {
                         @Override
                         public void onDialogShareOk(Dialog dialog, int type, String content) {
                             DialogManager.getInstance().showLoadingDialog(mContext);
-                            IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                            IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                 @Override
                                 public void onSuccess() {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("已发送~");
-
                                         }
                                     });
-
                                 }
 
                                 @Override
-                                public void onError(int i, String s) {
+                                public void onFailed(int code) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
@@ -269,11 +269,6 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                                         }
                                     });
-
-                                }
-
-                                @Override
-                                public void onProgress(int i, String s) {
 
                                 }
                             });

@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
@@ -53,6 +54,10 @@ import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.Listener.SendMsgListener;
+import com.lv.bean.Message;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
@@ -77,7 +82,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class IMMainActivity extends ChatBaseActivity {
+public class IMMainActivity extends ChatBaseActivity  {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
@@ -106,7 +111,8 @@ public class IMMainActivity extends ChatBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_main);
         initView();
-
+        System.out.println("IMMainActivity");
+ToastUtil.getInstance(this).showToast("IMMainActivity");
         //这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
         //显示所有人消息记录的fragment
@@ -144,7 +150,7 @@ public class IMMainActivity extends ChatBaseActivity {
 //            }
 //        });
         //网络更新好友列表
-        getContactFromServer();
+        //getContactFromServer();
         // 注册一个cmd消息的BroadcastReceiver
         IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdIntentFilter.setPriority(3);
@@ -311,7 +317,7 @@ public class IMMainActivity extends ChatBaseActivity {
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
 
                 if (contactResult.code == 0) {
-                    IMUserRepository.clearMyFriendsContact(mContext);
+                   /* IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
                     Map<String, IMUser> userlist = new HashMap<String, IMUser>();
                     // 添加user"申请与通知"
@@ -350,7 +356,7 @@ public class IMMainActivity extends ChatBaseActivity {
                     IMUserRepository.saveContactList(mContext, users);
                     AccountManager.getInstance().setContactList(userlist);
                     refreshContactListFragment();
-                    refreshChatHistoryFragment();
+                    refreshChatHistoryFragment();*/
 
                 }
 
@@ -362,6 +368,8 @@ public class IMMainActivity extends ChatBaseActivity {
             }
         });
     }
+
+
 
     private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
 
@@ -463,7 +471,7 @@ public class IMMainActivity extends ChatBaseActivity {
      * @return
      */
     public int getUnreadAddressCountTotal() {
-        int unreadAddressCountTotal = 0;
+        /*int unreadAddressCountTotal = 0;
         unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
         if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
 
@@ -471,7 +479,8 @@ public class IMMainActivity extends ChatBaseActivity {
             imUser.setUnreadMsgCount(unreadAddressCountTotal);
             IMUserRepository.saveContact(this, imUser);
         }
-        return unreadAddressCountTotal;
+        return unreadAddressCountTotal;*/
+        return 0;
     }
 
     /**

@@ -4,9 +4,11 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
+import com.aizou.core.log.LogUtil;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.PeachApplication;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/16.
@@ -33,9 +35,9 @@ public class BaseApi {
     }
 
     public static void setDefaultParams(PTRequest request){
-        PeachUser user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
+        User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
         if(user!=null){
-            request.setHeader("UserId", user.userId+"");
+            request.setHeader("UserId", user.getUserId()+"");
         }
         request.setHeader("Platform", "Android "+android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);

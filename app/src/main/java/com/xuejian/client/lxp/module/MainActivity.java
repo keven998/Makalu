@@ -3,8 +3,8 @@ package com.xuejian.client.lxp.module;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,24 +12,26 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
-import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.lv.bean.MessageBean;
+import com.lv.im.HandleImMessage;
+import com.lv.im.IMClient;
+import com.lv.user.LoginSuccessListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -41,7 +43,8 @@ import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
@@ -56,7 +59,8 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MainActivity extends PeachBaseActivity {
+
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -67,7 +71,7 @@ public class MainActivity extends PeachBaseActivity {
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class,};
+    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class};
 
    // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
@@ -76,11 +80,13 @@ public class MainActivity extends PeachBaseActivity {
 
     private TextView unreadMsg;
 
+    private Long NEWFRIEND=2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-    private NewMessageBroadcastReceiver msgReceiver;
+    //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
-    String serverName="gcounhhq0ckfjwotgp02c39vq40ewhxt";
+    private boolean FromBounce;
+    private Vibrator vibrator;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,85 +97,72 @@ public class MainActivity extends PeachBaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-       /* if(!EMChat.getInstance().isLoggedIn()){
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }*/
+        FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
-        List<String> blacklist = null;
-        // 注册一个接收消息的BroadcastReceiver
-        msgReceiver = new NewMessageBroadcastReceiver();
-        initData();
+        vibrator= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if(!FromBounce) {
+        com.lv.user.User.login(AccountManager.getCurrentUserId(),new LoginSuccessListener() {
+            @Override
+            public void OnSuccess() {
+                System.out.println("登陆成功");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if (talkFragment != null) {
+                            talkFragment.loadConversation();
+                        }
+                    }
+                });
+            }
 
-    }
+
+                @Override
+                public void OnFailed(int code) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.getInstance(MainActivity.this).showToast("登录失败");
+                        }
+                    });
+                }
+            });
+
+            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+            if (talkFragment != null) {
+                talkFragment.loadConversation();
+            }
+            initData();
+        }
+      }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra("conflict", false) ){
             showConflictDialog(MainActivity.this);
         }
-        /*if(!EMChat.getInstance().isLoggedIn()){
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }*/
-        initData();
     }
 
     private void initData(){
         //网络更新好友列表
         getContactFromServer();
-        // 注册一个cmd消息的BroadcastReceiver
-        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(3);
-        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-
-        // 注册一个接收消息的BroadcastReceiver
-        if (msgReceiver == null) {
-            msgReceiver = new NewMessageBroadcastReceiver();
-            IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-            intentFilter.setPriority(3);
-            registerReceiver(msgReceiver, intentFilter);
-        }
-
-        // 注册一个ack回执消息的BroadcastReceiver
-        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-                .getAckMessageBroadcastAction());
-        ackMessageIntentFilter.setPriority(3);
-        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-
-        // 注册群聊相关的listener
-        groupChangeListener = new MyGroupChangeListener();
-        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
-
-        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();
     }
 
     private void getContactFromServer() {
-
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                System.out.println(result);
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-
                 if (contactResult.code == 0) {
-                    IMUserRepository.clearMyFriendsContact(mContext);
+                  //  IMUserRepository.clearMyFriendsContact(mContext);
                     AccountManager.getInstance().setContactList(null);
-                    Map<String, IMUser> userlist = new HashMap<String, IMUser>();
-                    // 添加user"申请与通知"
-                    IMUser newFriends = new IMUser();
-                    newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                    newFriends.setNick("好友请求");
-                    newFriends.setHeader("");
-                    newFriends.setIsMyFriends(true);
-                    newFriends.setUnreadMsgCount((int) InviteMsgRepository.getUnAcceptMsgCount(mContext));
-                    userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+                    Map<Long, User> userlist = new HashMap<Long,User>();
 
                     /*//添加默认服务号
                     IMUser paiServerUser = new IMUser();
@@ -190,24 +183,13 @@ public class MainActivity extends PeachBaseActivity {
 //                    groupUser.setUnreadMsgCount(0);
 //                    userlist.put(Constant.GROUP_USERNAME, groupUser);
                     // 存入内存
-                    for (PeachUser peachUser : contactResult.result.contacts) {
-                        IMUser user = new IMUser();
-                        user.setUserId(peachUser.userId);
-                        user.setMemo(peachUser.memo);
-                        user.setNick(peachUser.nickName);
-                        user.setUsername(peachUser.easemobUser);
-                        user.setUnreadMsgCount(0);
-                        user.setAvatar(peachUser.avatar);
-                        user.setAvatarSmall(peachUser.avatarSmall);
-                        user.setSignature(peachUser.signature);
-                        user.setIsMyFriends(true);
-                        user.setGender(peachUser.gender);
-                        IMUtils.setUserHead(user);
-                        userlist.put(peachUser.easemobUser, user);
+                    for (User myUser : contactResult.result.contacts) {
+                        myUser.setType(1);
+                        userlist.put(myUser.getUserId(), myUser);
                     }
                     // 存入db
-                    List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext, users);
+                    List<User> users = new ArrayList<User>(userlist.values());
+                    UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);
                     //给服务号发送消息
                    /* EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
@@ -301,12 +283,35 @@ public class MainActivity extends PeachBaseActivity {
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if (!EMChat.getInstance().isLoggedIn()) {
+                    if(!AccountManager.getInstance().isLogin()) {
+                       /* if (!com.lv.user.User.getUser().isLogin()) {
+                            Toast.makeText(MainActivity.this, "正在登陆", Toast.LENGTH_LONG).show();
+                        }*/
+                    //}else {
+/*
+                    if(!FromBounce) {
+                        if (!AccountManager.getInstance().isLogin()) {
+                            Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                            startActivity(logIntent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                        }
+                    }else {
+*/
                         mTabHost.setCurrentTab(1);
-                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(logIntent);
-                        overridePendingTransition(R.anim.push_bottom_in, 0);
+                        overridePendingTransition(R.anim.push_bottom_in,0);
                     }
+                    /**
+                     * 注释掉登陆
+                     */
+//                    if(!EMChat.getInstance().isLoggedIn()){
+//                        mTabHost.setCurrentTab(1);
+//                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+//                        startActivity(logIntent);
+//                        overridePendingTransition(R.anim.push_bottom_in,0);
+//                    }
+
                 } else if (s.equals(mTagArray[1])) {
                   /*  RecDestFragment fg = (RecDestFragment)getSupportFragmentManager().findFragmentByTag(s);
                     if (fg != null) {
@@ -315,10 +320,12 @@ public class MainActivity extends PeachBaseActivity {
                 }
             }
         });
-
-        if (EMChat.getInstance().isLoggedIn()) {
-            mTabHost.setCurrentTab(0);
-        } else {
+//        if (AccountManager.getInstance().isLogin()) {
+//            mTabHost.setCurrentTab(0);
+//        } else {
+            if (AccountManager.getInstance().isLogin()) {
+                mTabHost.setCurrentTab(0);
+            } else {
             mTabHost.setCurrentTab(1);
         }
     }
@@ -340,16 +347,16 @@ public class MainActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!isConflict){
-            updateUnreadMsgCount();
-            EMChatManager.getInstance().activityResumed();
+        System.out.println("MainActivity resume");
+        if (AccountManager.getInstance().isLogin()) {
+            HandleImMessage.getInstance().registerMessageListener(this);
+            //  if (!isConflict){
+                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                if (talkFragment != null) {
+                    talkFragment.loadConversation();
+                }
+                updateUnreadMsgCount();
         }
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -363,26 +370,12 @@ public class MainActivity extends PeachBaseActivity {
      * 显示帐号在别处登录dialog
      */
     public void showConflictDialog(Context context) {
-        AccountManager.getInstance().logout(context,isConflict,new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                int i=mTabHost.getCurrentTab();
-                if(i==2){
-                    MyFragment my=(MyFragment)getSupportFragmentManager().findFragmentByTag("My");
-                    my.onResume();
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-
-            }
-        });
+        AccountManager.getInstance().logout(context);
+        int i=mTabHost.getCurrentTab();
+        if(i==2){
+            MyFragment my=(MyFragment)getSupportFragmentManager().findFragmentByTag("My");
+            my.onResume();
+        }
         if(isFinishing())
             return;
         try {
@@ -438,7 +431,7 @@ public class MainActivity extends PeachBaseActivity {
                 }
                 //对方同意了加好友请求(好友添加)
                 else if (cmdType == 2) {
-                    updateUnreadMsgCount();
+                   // updateUnreadMsgCount();
                     refreshChatHistoryFragment();
 
 
@@ -454,6 +447,26 @@ public class MainActivity extends PeachBaseActivity {
             }
         }
     };
+
+
+    @Override
+    public void onMsgArrive(MessageBean m,String groupId) {
+        System.out.println("message :"+m.getMessage());
+        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+        if(talkFragment != null){
+            talkFragment.loadConversation();
+        }
+        updateUnreadMsgCount();
+        vibrator.vibrate(700);
+      //  notifyNewMessage(m);
+    }
+
+    @Override
+    public void onCMDMessageArrive(MessageBean m) {
+        System.out.println("onCMDMessageArrive");
+            IMUtils.HandleCMDInfoFromMessage(m);
+    }
+
 
     /**
      * 新消息广播接收者
@@ -483,7 +496,7 @@ public class MainActivity extends PeachBaseActivity {
             // 刷新bottom bar消息未读数
             updateUnreadMsgCount();
             refreshChatHistoryFragment();
-            notifyNewMessage(message);
+           // notifyNewMessage(message);
 
             // 注销广播，否则在ChatActivity中会收到这个广播
             abortBroadcast();
@@ -630,7 +643,8 @@ public class MainActivity extends PeachBaseActivity {
 
     public void updateUnreadMsgCount(){
         int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount()+getUnreadAddressCountTotal();
+       // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+getUnreadAddressCountTotal();
+        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
             unreadMsg.setText(unreadMsgCountTotal+"");
@@ -644,9 +658,9 @@ public class MainActivity extends PeachBaseActivity {
      *
      * @return
      */
-    public int getUnreadAddressCountTotal() {
+   /* public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal = 0;
-        unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
+       // unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(this);
         if (AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME) != null) {
 
             IMUser imUser = AccountManager.getInstance().getContactList(this).get(Constant.NEW_FRIENDS_USERNAME);
@@ -655,7 +669,7 @@ public class MainActivity extends PeachBaseActivity {
         }
         return unreadAddressCountTotal;
     }
-
+*/
 
 
     @Override
@@ -680,11 +694,26 @@ public class MainActivity extends PeachBaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("MainActivity pause");
+        HandleImMessage.getInstance().unregisterMessageListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("MainActivity stop");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // 注销广播接收者
-        try {
+        System.out.println("MainActivity destroy");
+       /* try {
             unregisterReceiver(msgReceiver);
         } catch (Exception e) {
         }
@@ -701,7 +730,7 @@ public class MainActivity extends PeachBaseActivity {
             EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
         } catch (Exception e) {
 
-        }
+        }*/
 
     }
 

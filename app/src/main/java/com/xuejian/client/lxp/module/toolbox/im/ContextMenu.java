@@ -31,13 +31,13 @@ public class ContextMenu extends ChatBaseActivity {
 		super.onCreate(savedInstanceState);
 		int txtValue = EMMessage.Type.TXT.ordinal();
 		int type = getIntent().getIntExtra("type", -1);
-		if (type == EMMessage.Type.TXT.ordinal()) {
+		if (type ==0) {
 		    setContentView(R.layout.context_menu_for_text);
-		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
+		} else if (type == 4) {
 		    setContentView(R.layout.context_menu_for_location);
-		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
+		} else if (type == 2) {
 		    setContentView(R.layout.context_menu_for_image);
-		} else if (type == EMMessage.Type.VOICE.ordinal()) {
+		} else if (type == 1) {
 		    setContentView(R.layout.context_menu_for_voice);
 		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
 			setContentView(R.layout.context_menu_for_video);

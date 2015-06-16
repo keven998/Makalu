@@ -19,6 +19,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -32,7 +33,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
     private EditText rePwdEt;
    /* @ViewInject(R.id.btn_ok)
     private Button okBtn;*/
-    private PeachUser user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         return;
                     }
                     DialogManager.getInstance().showLoadingDialog(ModifyPwdActivity.this);
-                    UserApi.modifyPwd(oldPwdEt.getText().toString().trim(), newPwdEt.getText().toString().trim(), user.userId + "", new HttpCallBack<String>() {
+                    UserApi.modifyPwd(oldPwdEt.getText().toString().trim(), newPwdEt.getText().toString().trim(), user.getUserId() + "", new HttpCallBack<String>() {
                         @Override
                         public void doSucess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();

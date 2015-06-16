@@ -61,7 +61,12 @@ import com.xuejian.client.lxp.common.utils.StretchAnimation;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
+import com.xuejian.client.lxp.module.toolbox.im.group.CreateSuccessListener;
+import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,11 +77,13 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private LinearLayout contentLl;
     private ListView listView;
     private RecyclerView toBeAddContactsRv;
-    private List<IMUser> toBeAddContacts;
+    private List<User> toBeAddContacts;
+    private List<Long> userList;
+    private User _group;
     /**
      * 是否为一个新建的群组
      */
-    protected boolean isCreatingNewGroup;
+   // protected boolean isCreatingNewGroup;
     /**
      * 是否为单选
      */
@@ -86,9 +93,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     /**
      * group中一开始就有的成员
      */
-    private List<String> exitingMembers;
+    private List<User> exitingMembers;
     // 好友列表
-    private List<IMUser> alluserList;
+    private List<User> alluserList=new ArrayList<User>();
     private int request;
     private String groupId;
     private EMGroup group;
@@ -104,25 +111,27 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         // String groupName = getIntent().getStringExtra("groupName");
         request = getIntent().getIntExtra("request", 0);
         groupId = getIntent().getStringExtra("groupId");
-        if (groupId == null) {// 创建群组
-            isCreatingNewGroup = true;
-        } else {
+        if (groupId != null) {// 创建群组
+       //     isCreatingNewGroup = true;
+      //  } else {
             // 获取此群组的成员列表
-            group = EMGroupManager.getInstance().getGroup(groupId);
-            exitingMembers = group.getMembers();
+            //_group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+            exitingMembers = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         }
         if (exitingMembers == null)
-            exitingMembers = new ArrayList<String>();
+            exitingMembers = new ArrayList<User>();
         // 获取好友列表
-        alluserList = new ArrayList<IMUser>();
-        for (IMUser user : AccountManager.getInstance().getContactList(this).values()) {
-            if (!user.getUsername().equals(Constant.NEW_FRIENDS_USERNAME) & !user.getUsername().equals(Constant.GROUP_USERNAME))
-                alluserList.add(user);
-        }
-        // 对list进行排序
-        Collections.sort(alluserList, new Comparator<IMUser>() {
+        alluserList= UserDBManager.getInstance().getContactListWithoutGroup();
+//        for (IMUser user : AccountManager.getInstance().getContactList(this).values()) {
+//            if (!user.getUsername().equals(Constant.NEW_FRIENDS_USERNAME) & !user.getUsername().equals(Constant.GROUP_USERNAME))
+//                alluserList.add(user);
+//        }
+        /**
+         * 对list进行排序
+         */
+        Collections.sort(alluserList, new Comparator<User>() {
             @Override
-            public int compare(IMUser lhs, IMUser rhs) {
+            public int compare(User lhs, User rhs) {
                 return (lhs.getHeader().compareTo(rhs.getHeader()));
             }
         });
@@ -137,7 +146,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         contentLl = (LinearLayout) findViewById(R.id.ll_content);
         listView = (ListView) findViewById(R.id.list);
         toBeAddContactsRv = (RecyclerView) findViewById(R.id.rv_add_contacts);
-        toBeAddContacts = new ArrayList<IMUser>();
+        toBeAddContacts = new ArrayList<User>();
         //设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -207,163 +216,305 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请至少选择一位好友");
             return;
         }
-        final StringBuffer groupName = new StringBuffer();
-        final StringBuffer membersStr = new StringBuffer();
-        for (int i = 0; i < toBeAddContacts.size(); i++) {
-            if (i < 3) {
-                groupName.append(toBeAddContacts.get(i).getNick());
-                if (i != toBeAddContacts.size() - 1 && i != 2) {
-                    groupName.append("、");
-                }
-            }
-            membersStr.append(toBeAddContacts.get(i).getNick());
-            if (i != toBeAddContacts.size() - 1) {
-                membersStr.append("、");
-            }
-        }
-        if (toBeAddContacts.size() > 3) {
-            groupName.append("...");
-        }
+        System.out.println("request"+request);
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
-            //新建群组
-            if (toBeAddContacts.size() > 1) {
-                DialogManager.getInstance().showLoadingDialog(mContext, "正在新建群组");
-                new Thread(new Runnable() {
+
+            if (toBeAddContacts.size()==1) {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // 调用sdk创建群组方法
-                        String desc = "";
-                        ArrayList<String> members = new ArrayList<String>();
-                        for (IMUser imUser : toBeAddContacts) {
-                            members.add(imUser.getUsername());
+                        Intent intent = new Intent();
+                        intent.putExtra("chatType", "single");
+                        intent.putExtra("toId", toBeAddContacts.get(0).getUserId());
+                        setResult(RESULT_OK, intent);
+                        finishWithNoAnim();
+                    }
+                });
+            }
+            final StringBuffer ChatName = new StringBuffer();
+            final StringBuffer membersStr = new StringBuffer();
+            for (int i = 0; i < toBeAddContacts.size(); i++) {
+                if (i < 3) {
+                    ChatName.append(toBeAddContacts.get(i).getNickName());
+                    if (i != toBeAddContacts.size() - 1 && i != 2) {
+                        ChatName.append("、");
+                    }
+                }
+                membersStr.append(toBeAddContacts.get(i).getNickName());
+                if (i != toBeAddContacts.size() - 1) {
+                    membersStr.append("、");
+                }
+            }
+            if (toBeAddContacts.size() > 3) {
+                ChatName.append("...");
+            }
+            if (toBeAddContacts.size()>1){
+                List<Long> ids=new ArrayList<>();
+                for (User user:toBeAddContacts){
+                    ids.add(user.getUserId());
+                }
+                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
+                    @Override
+                    public void OnSuccess(final String groupId, String conversation) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent();
+                                intent.putExtra("chatType", "group");
+                                intent.putExtra("toId", Long.parseLong(groupId));
+                                setResult(RESULT_OK, intent);
+                                finishWithNoAnim();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void OnFailed() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+                            }
+                        });
+                    }
+                });
+
+            }
+        }
+        //单聊
+        else if (request == 0){
+            System.out.println("add ");
+            List<Long>list =new ArrayList<>();
+            for (User user:toBeAddContacts){
+                list.add(user.getUserId());
+            }
+            GroupManager.getGroupManager().addMembers(groupId, list, true, new CallBack() {
+                @Override
+                public void onSuccess() {
+                    Intent intent = new Intent();
+                    intent.putExtra("chatType", "group");
+                    intent.putExtra("toId", groupId + "");
+                    intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+                    setResult(RESULT_OK, intent);
+                    finishWithNoAnim();
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            });
+
+        }
+        else if (toBeAddContacts.size()==1){
+            Intent intent=new Intent();
+            intent.putExtra("chatType", "single");
+            intent.putExtra("toId",toBeAddContacts.get(0).getUserId());
+            setResult(RESULT_OK, intent);
+            finishWithNoAnim();
+        }
+        else if (toBeAddContacts.size()>1){
+            final StringBuffer ChatName = new StringBuffer();
+            final StringBuffer membersStr = new StringBuffer();
+            for (int i = 0; i < toBeAddContacts.size(); i++) {
+                if (i < 3) {
+                    ChatName.append(toBeAddContacts.get(i).getNickName());
+                    if (i != toBeAddContacts.size() - 1 && i != 2) {
+                        ChatName.append("、");
+                    }
+                }
+                membersStr.append(toBeAddContacts.get(i).getNickName());
+                if (i != toBeAddContacts.size() - 1) {
+                    membersStr.append("、");
+                }
+            }
+            if (toBeAddContacts.size() > 3) {
+                ChatName.append("...");
+            }
+            List<Long> ids=new ArrayList<>();
+            for (User user:toBeAddContacts){
+                ids.add(user.getUserId());
+            }
+            GroupManager.getGroupManager().createGroup(ChatName.toString(),null,true,ids,new CreateSuccessListener() {
+                @Override
+                public void OnSuccess(final String groupId, String conversation) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent=new Intent();
+                            intent.putExtra("chatType","group");
+                            intent.putExtra("toId", Long.parseLong(groupId));
+                            setResult(RESULT_OK, intent);
+                            finishWithNoAnim();
                         }
-                        try {
-                            //创建不公开群
-                            final EMGroup group = EMGroupManager.getInstance().createPrivateGroup(groupName.toString(), desc, members.toArray(new String[0]), true, 50);
-                            EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                            msg.setChatType(EMMessage.ChatType.GroupChat);
-                            msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
-                            msg.setReceipt(group.getGroupId());
-                            IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                            String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
-                            String content = String.format(mContext.getResources().getString(R.string.invate_to_group), myNickmae, membersStr.toString());
-                            IMUtils.setMessageWithExtTips(mContext, msg, content);
-                            msg.addBody(new TextMessageBody(content));
-                            EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                                @Override
-                                public void onSuccess() {
+                    });
+                }
 
-                                }
-
-                                @Override
-                                public void onError(int i, String s) {
-
-                                }
-
-                                @Override
-                                public void onProgress(int i, String s) {
-
-                                }
-                            });
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    // 被邀请
-                                    Intent intent = new Intent();
-                                    // it is group chat
-                                    intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                                    intent.putExtra("toId", group.getGroupId());
-                                    setResult(RESULT_OK, intent);
-                                    finishWithNoAnim();
-                                }
-                            });
-                        } catch (final Exception e) {
-                            if (!isFinishing())
-                            runOnUiThread(new Runnable() {
+                @Override
+                public void OnFailed() {
+                    runOnUiThread(new Runnable() {
                                 public void run() {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
                                 }
                             });
-                        }
-
-                    }
-                }).start();
-            } else if (toBeAddContacts.size() == 1) {
-                Intent intent = new Intent();
-                // it is group chat
-                intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-                intent.putExtra("toId", toBeAddContacts.get(0).getUsername());
-                setResult(RESULT_OK, intent);
-                finishWithNoAnim();
-            }
-        } else if (groupId != null) {
-            DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
-            new Thread(new Runnable() {
-
-                public void run() {
-                    ArrayList<String> members = new ArrayList<String>();
-                    for (IMUser imUser : toBeAddContacts) {
-                        members.add(imUser.getUsername());
-                    }
-                    try {
-                        //创建者调用add方法
-                        if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                            EMGroupManager.getInstance().addUsersToGroup(groupId, members.toArray(new String[0]));
-                        } else {
-                            //一般成员调用invite方法
-                            EMGroupManager.getInstance().inviteUser(groupId, members.toArray(new String[0]), null);
-                        }
-//                        group = EMGroupManager.getInstance().getGroupFromServer(groupId);
-//                        EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                // 被邀请
-                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                                msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
-                                msg.setReceipt(group.getGroupId());
-                                IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                                String myNickname = AccountManager.getInstance().getLoginAccount(mContext).nickName;
-                                String content = String.format(mContext.getResources().getString(R.string.invate_to_group), myNickname, membersStr.toString());
-                                IMUtils.setMessageWithExtTips(mContext, msg, content);
-                                msg.addBody(new TextMessageBody(content));
-                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onError(int i, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
-                                });
-                                setResult(RESULT_OK);
-                                finishWithNoAnim();
-                            }
-                        });
-
-                    } catch (final Exception e) {
-                        if (!isFinishing())
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-//                                Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
-                            }
-                        });
-                    }
                 }
-            }).start();
+            });
+
         }
+//        if (toBeAddContacts.size()==1){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent intent=new Intent();
+//                    intent.putExtra("chatType", "single");
+//                    intent.putExtra("toId", toBeAddContacts.get(0).getUserId());
+//                    setResult(RESULT_OK, intent);
+//                    finishWithNoAnim();
+//                }
+//            });
+//
+//        }
+//        if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
+//            //新建群组
+//            if (toBeAddContacts.size() > 1) {
+//                DialogManager.getInstance().showLoadingDialog(mContext, "正在新建群组");
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // 调用sdk创建群组方法
+//                        String desc = "";
+//                        ArrayList<String> members = new ArrayList<String>();
+//                        for (User imUser : toBeAddContacts) {
+//                            members.add(imUser.getNickName());
+//                        }
+//                        try {
+//                            //创建不公开群
+//                            final EMGroup group = EMGroupManager.getInstance().createPrivateGroup(groupName.toString(), desc, members.toArray(new String[0]), true, 50);
+//                            EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                            msg.setChatType(EMMessage.ChatType.GroupChat);
+//                            msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+//                            msg.setReceipt(group.getGroupId());
+//                            IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+//                            String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+//                            String content = String.format(mContext.getResources().getString(R.string.invate_to_group), myNickmae, membersStr.toString());
+//                            IMUtils.setMessageWithExtTips(mContext, msg, content);
+//                            msg.addBody(new TextMessageBody(content));
+//                            EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+//                                @Override
+//                                public void onSuccess() {
+//
+//                                }
+//
+//                                @Override
+//                                public void onError(int i, String s) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onProgress(int i, String s) {
+//
+//                                }
+//                            });
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    // 被邀请
+//                                    Intent intent = new Intent();
+//                                    // it is group chat
+//                                    intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+//                                    intent.putExtra("toId", group.getGroupId());
+//                                    setResult(RESULT_OK, intent);
+//                                    finishWithNoAnim();
+//                                }
+//                            });
+//                        } catch (final Exception e) {
+//                            if (!isFinishing())
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+//                                }
+//                            });
+//                        }
+//
+//                    }
+//                }).start();
+//            } else if (toBeAddContacts.size() == 1) {
+//                Intent intent = new Intent();
+//                // it is group chat
+//                intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+//                intent.putExtra("toId", toBeAddContacts.get(0).getNickName());
+//                setResult(RESULT_OK, intent);
+//                finishWithNoAnim();
+//            }
+//        } else if (groupId != null) {
+//            DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
+//            new Thread(new Runnable() {
+//
+//                public void run() {
+//                    ArrayList<String> members = new ArrayList<String>();
+//                    for (User imUser : toBeAddContacts) {
+//                        members.add(imUser.getNickName());
+//                    }
+//                    try {
+//                        //创建者调用add方法
+//                        if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+//                            EMGroupManager.getInstance().addUsersToGroup(groupId, members.toArray(new String[0]));
+//                        } else {
+//                            //一般成员调用invite方法
+//                            EMGroupManager.getInstance().inviteUser(groupId, members.toArray(new String[0]), null);
+//                        }
+////                        group = EMGroupManager.getInstance().getGroupFromServer(groupId);
+////                        EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                // 被邀请
+//                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                                msg.setChatType(EMMessage.ChatType.GroupChat);
+//                                msg.setFrom(AccountManager.getInstance().getLoginAccount(mContext).easemobUser);
+//                                msg.setReceipt(group.getGroupId());
+//                                IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+//                                String myNickname = AccountManager.getInstance().getLoginAccount(mContext).nickName;
+//                                String content = String.format(mContext.getResources().getString(R.string.invate_to_group), myNickname, membersStr.toString());
+//                                IMUtils.setMessageWithExtTips(mContext, msg, content);
+//                                msg.addBody(new TextMessageBody(content));
+//                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
+//                                setResult(RESULT_OK);
+//                                finishWithNoAnim();
+//                            }
+//                        });
+//
+//                    } catch (final Exception e) {
+//                        if (!isFinishing())
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+////                                Toast.makeText(getApplicationContext(), "添加群成员失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
+//                            }
+//                        });
+//                    }
+//                }
+//            }).start();
+//        }
 
     }
 
@@ -372,7 +523,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      *
      * @return
      */
-    private List<IMUser> getToBeAddMembers() {
+    private List<User> getToBeAddMembers() {
         return toBeAddContacts;
     }
 
@@ -380,10 +531,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             RecyclerView.Adapter<ToBeAddContactsAdapter.ViewHolder> {
 
         private LayoutInflater mInflater;
-        private List<IMUser> mDatas;
+        private List<User> mDatas;
         DisplayImageOptions picOptions;
 
-        public ToBeAddContactsAdapter(Context context, List<IMUser> datas) {
+        public ToBeAddContactsAdapter(Context context, List<User> datas) {
             mInflater = LayoutInflater.from(context);
             mDatas = datas;
 
@@ -465,19 +616,19 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         }
 
-        public void add(IMUser item) {
+        public void add(User item) {
             if(!mDatas.contains(item)){
                 mDatas.add(item);
                 notifyDataSetChanged();
                 notifyItemInserted(mDatas.size()-1);
                 checkToBeAddContacts();
 //            notifyItemRangeChanged(0, mDatas.size());
-                LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNick());
+                LogUtil.d("onItemClick"+" add--"+(mDatas.size()-1)+"--"+item.getNickName());
             }
 
         }
 
-        public void remove(IMUser item) {
+        public void remove(User item) {
             if(mDatas.contains(item)){
                 int position = mDatas.indexOf(item);
                 mDatas.remove(item);
@@ -485,7 +636,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 notifyItemRemoved(position);
                 checkToBeAddContacts();
 //            notifyItemRangeChanged(0, mDatas.size());
-                LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNick());
+                LogUtil.d("onItemClick"+" remove--"+position+"--"+item.getNickName());
             }
 
         }
@@ -521,7 +672,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     }
                     int p = viewHolder.getPosition();
                     if(p<mDatas.size()){
-                        IMUser user = mDatas.get(p);
+                        User user = mDatas.get(p);
                         int index = alluserList.indexOf(user);
                         contactAdapter.isCheckedArray[index]=false;
                         remove(user);
@@ -540,9 +691,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
 
-            final IMUser user = mDatas.get(i);
+            final User user = mDatas.get(i);
             ImageLoader.getInstance().displayImage(mDatas.get(i).getAvatarSmall(), viewHolder.mImg, picOptions);
-            viewHolder.mTxt.setText(mDatas.get(i).getNick());
+            viewHolder.mTxt.setText(mDatas.get(i).getNickName());
 
 
         }
@@ -563,8 +714,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         private LayoutInflater layoutInflater;
         private DisplayImageOptions picOptions;
         private StretchAnimation stretchanimation;
-
-        public PickContactAdapter(Context context, int resource, List<IMUser> users) {
+        public PickContactAdapter(Context context, int resource, List<User> users) {
             super(context, resource, users);
             isCheckedArray = new boolean[users.size()];
             res = resource;
@@ -603,8 +753,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
 //            final String username = getItem(position).getUsername();
 //            final IMUser user = AccountManager.getInstance().getContactList(mContext).get(username);
-            final IMUser user = getItem(position);
-            final String username = user.getUsername();
+            final User user = getItem(position);
+            final long userId = user.getUserId();
             String header = user.getHeader();
 
             if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
@@ -618,7 +768,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 vh.sectionHeader.setVisibility(View.GONE);
             }
 
-            vh.nickView.setText(user.getNick());
+            vh.nickView.setText(user.getNickName());
             vh.avatarView.setTag(user.getAvatarSmall());
 //            Picasso.with(mContext)
 //                    .load(user.getAvatar())
@@ -638,7 +788,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
             if (vh.checkBox != null) {
                 // checkBox.setOnCheckedChangeListener(null);
-                if (exitingMembers != null && exitingMembers.contains(username)) {
+                if (exitingMembers != null && exitingMembers.contains(user)) {
                     vh.checkBox.setButtonDrawable(R.drawable.checkbox_bg_gray_selector);
                 } else {
                     vh.checkBox.setButtonDrawable(R.drawable.checkbox_bg_selector);
@@ -647,7 +797,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         // 群组中原来的成员一直设为选中状态
-                        if (exitingMembers.contains(username)) {
+                        if (contains(userId)) {
                             isChecked = true;
                             vh.checkBox.setChecked(true);
                         } else {
@@ -672,7 +822,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     }
                 });
                 // 群组中原来的成员一直设为选中状态
-                if (exitingMembers.contains(username)) {
+                if (contains(userId)) {
                     vh.checkBox.setChecked(true);
                     isCheckedArray[position] = true;
                 } else {
@@ -682,7 +832,13 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             return convertView;
         }
     }
-
+    private boolean contains(long id){
+        for (User user:exitingMembers){
+            if (user.getUserId()==id)
+                return true;
+        }
+        return false;
+    }
     public void back(View view) {
         finish();
     }

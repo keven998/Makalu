@@ -9,9 +9,11 @@ import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
+import com.lidroid.xutils.exception.HttpException;
 import com.xuejian.client.lxp.bean.AddressBookbean;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.config.SystemConfig;
+import com.xuejian.client.lxp.db.userDB.User;
 
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
@@ -316,40 +318,40 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler editUserAvatar(PeachUser user, String avatar, HttpCallBack callBack) {
+    public static PTRequestHandler editUserAvatar(User user, String avatar, HttpCallBack callBack) {
         return editUserInfo(user, avatar, null, null, null,null,null,null, callBack);
     }
 
-    public static PTRequestHandler editUserNickName(PeachUser user, String nickname, HttpCallBack callBack) {
+    public static PTRequestHandler editUserNickName(User user, String nickname, HttpCallBack callBack) {
         return editUserInfo(user, null, nickname, null, null,null,null,null, callBack);
     }
 
-    public static PTRequestHandler editUserSignature(PeachUser user, String signature, HttpCallBack callBack) {
+    public static PTRequestHandler editUserSignature(User user, String signature, HttpCallBack callBack) {
         return editUserInfo(user, null, null, signature, null,null,null,null, callBack);
     }
 
-    public static PTRequestHandler editUserGender(PeachUser user, String gender, HttpCallBack callBack) {
+    public static PTRequestHandler editUserGender(User user, String gender, HttpCallBack callBack) {
         return editUserInfo(user, null, null, null, gender, null,null,null,callBack);
     }
 
-    public static PTRequestHandler editUserResidence(PeachUser user, String residence, HttpCallBack callBack) {
+    public static PTRequestHandler editUserResidence(User user, String residence, HttpCallBack callBack) {
         return editUserInfo(user, null, null, null, null, residence,null,null,callBack);
     }
 
-    public static PTRequestHandler editUserBirthday(PeachUser user, String birthday, HttpCallBack callBack) {
+    public static PTRequestHandler editUserBirthday(User user, String birthday, HttpCallBack callBack) {
         return editUserInfo(user, null, null, null, null, null,birthday,null,callBack);
     }
 
-    public static PTRequestHandler editUserStatus(PeachUser user, String status, HttpCallBack callBack) {
+    public static PTRequestHandler editUserStatus(User user, String status, HttpCallBack callBack) {
         return editUserInfo(user, null, null, null, null, null,null,status,callBack);
     }
 
 
-    public static PTRequestHandler editUserInfo(PeachUser user, String avatar, String nickName, String signature, String gender, String residence,
+    public static PTRequestHandler editUserInfo(User user, String avatar, String nickName, String signature, String gender, String residence,
                                                 String birthday, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + user.userId);
+        request.setUrl(SystemConfig.BASE_URL + USERINFO + user.getUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 //        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
         setDefaultParams(request);
@@ -411,14 +413,14 @@ public class UserApi extends BaseApi {
      * @param
      * @return
      */
-    public static String getAsynContact() {
+    /*public static String getAsynContact() {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + CONTACTS);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.aysnRequest(request);
-    }
+    }*/
     /**
      * 请求添加好友
      * @param uid

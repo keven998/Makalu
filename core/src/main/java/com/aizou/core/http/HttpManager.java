@@ -192,7 +192,7 @@ public class HttpManager {
     }
 
 
-    public static   String aysnRequest(final PTRequest request ) {
+    public static   String aysnRequest(final PTRequest request ) throws HttpException {
         try {
             final String url = request.getRequest().readUrl();
             HttpUtils httpUtils = new HttpUtils();

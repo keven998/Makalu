@@ -104,6 +104,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
 		} else {
 			double longtitude = intent.getDoubleExtra("longitude", 0);
 			String address = intent.getStringExtra("address");
+            System.out.println("address "+address);
 			showMap(latitude, longtitude, address);
 		}
 	}

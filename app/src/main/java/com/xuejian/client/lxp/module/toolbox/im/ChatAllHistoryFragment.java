@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ChatAllHistoryFragment extends Fragment {
 
     private InputMethodManager inputMethodManager;
     private ListView listView;
-    private Map<String, IMUser> contactList;
+    private Map<Long, User> contactList;
     private ChatAllHistoryAdapter adapter;
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     //    private EditText query;
@@ -86,32 +87,33 @@ public class ChatAllHistoryFragment extends Fragment {
         loadConversationsWithRecentChat();
         updateGroupsInfo();
         listView = (ListView) getView().findViewById(R.id.list);
-        adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+      //  adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
         // 设置adapter
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EMConversation conversation = adapter.getItem(position).emConversation;
-                String username = conversation.getUserName();
-                if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
+             //   EMConversation conversation = adapter.getItem(position).emConversation;
+              //  String username = conversation.getUserName();
+                String username =null;
+               /* if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
-                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");
-                else {
+                    ToastUtil.getInstance(getActivity()).showToast("我们还不支持跟自己聊啦");*/
+                //else {
                     // 进入聊天页面
-                    Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    if (conversation.getIsGroup()) {
-//                        EMGroup group = EMGroupManager.getInstance().getGroup(username);
-                        // it is group chat
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-                        intent.putExtra("groupId", username);
-                    } else {
-                        // it is single chat
-                        intent.putExtra("userId", username);
-                    }
-                    startActivity(intent);
-                }
+//                    Intent intent = new Intent(getActivity(), ChatActivity.class);
+//                    if (conversation.getIsGroup()) {
+////                        EMGroup group = EMGroupManager.getInstance().getGroup(username);
+//                        // it is group chat
+//                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+//                        intent.putExtra("groupId", username);
+//                    } else {
+//                        // it is single chat
+//                        intent.putExtra("userId", username);
+//                    }
+//                    startActivity(intent);
+               // }
             }
         });
         // 注册上下文菜单
@@ -187,11 +189,11 @@ public class ChatAllHistoryFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
             MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
-            PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-            EMConversation tobeDeleteCons = peachConversation.emConversation;
+          //  PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+          //  EMConversation tobeDeleteCons = peachConversation.emConversation;
             // 删除此会话
-            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
-            InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
+         //   EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
+         //   InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
             refresh();
 
             // 更新消息未读数
@@ -270,7 +272,7 @@ public class ChatAllHistoryFragment extends Fragment {
             }
 
         }
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 Iterator<String> it = groupIdList.iterator();
@@ -306,7 +308,7 @@ public class ChatAllHistoryFragment extends Fragment {
 
 
             }
-        }).start();
+        }).start();*/
     }
 
     /**

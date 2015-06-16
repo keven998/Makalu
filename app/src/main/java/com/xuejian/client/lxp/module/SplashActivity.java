@@ -2,9 +2,11 @@ package com.xuejian.client.lxp.module;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,9 +17,12 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SharePrefUtil;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.easemob.EMCallBack;
 import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChat;
+
+import com.lv.im.IMClient;
+
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
@@ -37,11 +42,15 @@ import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.utils.UpdateUtil;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.RegActivity;
 
@@ -61,19 +70,29 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     private TextView sp_bounce;
     Handler handler;
     int REGESTER_REQUEST=5;
+    private Long NEWUSER=1l;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        //获取用户登录状态的文件,如果不存在则新建一个
+        SharedPreferences file=getSharedPreferences("isLogin", Activity.MODE_PRIVATE);
+        if(file==null){
+            SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
+        }
+        IMClient.initIM(getApplicationContext());
 		initView();
 		initData();
 //        MobclickAgent.openActivityDurationTrack(false);
 	}
 
 	protected void initData() {
-        final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
+ //       final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
 //        PushManager.getInstance().initialize(this.getApplicationContext());
-        final PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+        final User user = AccountManager.getInstance().getLoginAccount(mContext);
+        if(user!=null) {
+            AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
+        }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
@@ -89,7 +108,16 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (isFromTalk && user != null) {
+                if ( user != null) {
+                    imLogin(user);
+                    //用户自动登录
+                    //先从用户名密码Token表中取得用户信息然后自动登录
+                    /*if(getUserType(user.getUserId())){
+                        //默认电话号码类型
+                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
+                    }else{
+                        signIn(getUserCode(user.getUserId()));
+                    }*/
                     Intent intent = new Intent(mContext, MainActivity.class);
                     startActivityWithNoAnim(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -101,11 +129,12 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                         startActivityWithNoAnim(mainIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } else {
-                        if(EMChat.getInstance().isLoggedIn()){
-                            Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                        /*if(SharedPreferencesUtil.getBooleanValue(SplashActivity.this, "isLogin", false)){
+                            AccountManager.getInstance().setLogin(true);
+                            Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class); //MainActivity
                             startActivityWithNoAnim(mainActivity);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        }else{
+                        }else{*/
                             findViewById(R.id.bar_lyt).setVisibility(View.VISIBLE);
                             sp_log.setVisibility(View.VISIBLE);
                             sp_reg.setVisibility(View.VISIBLE);
@@ -113,10 +142,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                             sp_log.setOnClickListener(SplashActivity.this);
                             sp_reg.setOnClickListener(SplashActivity.this);
                             sp_bounce.setOnClickListener(SplashActivity.this);
-                           /* Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class);
-                            startActivityWithNoAnim(mainActivity);
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);*/
-                        }
+                       // }
 
 
 //                        Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
@@ -128,10 +154,12 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         };
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
+        System.out.println("storyImageUrl "+storyImageUrl);
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
+                System.out.println("getCoverStory "+result);
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {
                     if (!storyResult.result.image.equals(storyImageUrl)) {
@@ -164,7 +192,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                     }
 
                 } else {
-//                    ToastUtil.getInstance(StoryActivity.this).showToast("请求也是失败了");
+                   ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 
@@ -210,7 +238,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sp_log:
-                Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
                 startActivityWithNoAnim(logActivity);
                 overridePendingTransition(R.anim.push_bottom_in, 0);
                 break;
@@ -223,6 +251,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.sp_bounce:
                 Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
+                mainActivity.putExtra("FromBounce",true);
                 startActivityWithNoAnim(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
@@ -236,130 +265,74 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REGESTER_REQUEST &&resultCode == RESULT_OK) {
-            PeachUser user = (PeachUser) data.getSerializableExtra("user");
+            User user = (User) data.getSerializableExtra("user");
             DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
             imLogin(user);
         }
     }
 
-    private void imLogin(final PeachUser user) {
-        EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
+    private void imLogin(final User user) {
+        //初始化数据库，方便后面操作
+        UserDBManager.getInstance().initDB(user.getUserId() + "");
+        UserDBManager.getInstance().saveContact(user);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
+        //3、存入内存
+        AccountManager.getInstance().setLogin(true);
+        AccountManager.getInstance().saveLoginAccount(mContext, user);
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
-            @Override
-            public void onSuccess() {
+        final Map<Long, User> userlist = new HashMap<Long, User>();
+        // 添加user"申请与通知"
+        User newFriends = new User();
+        newFriends.setUserId(NEWUSER);
+        newFriends.setNickName("申请与通知");
+        newFriends.setType(0);
+        userlist.put(NEWUSER, newFriends);
+        // 存入内存
+        AccountManager.getInstance().setContactList(userlist);
+        List<User> users = new ArrayList<User>(userlist.values());
+        UserDBManager.getInstance().saveContactList(users);
 
-                // 登陆成功，保存用户名密码
-                // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
-                AccountManager.getInstance().saveLoginAccount(mContext, user);
-                boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                if (!updatenick) {
-                    EMLog.e("LoginActivity", "update current user nick fail");
-                }
-
-                // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
-//                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
-                final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
-                // 添加user"申请与通知"
-                IMUser newFriends = new IMUser();
-                newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                newFriends.setNick("申请与通知");
-                newFriends.setHeader("");
-                newFriends.setIsMyFriends(true);
-                userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-
-
-//                    // 添加"群聊"
-//                    IMUser groupUser = new IMUser();
-//                    groupUser.setUsername(Constant.GROUP_USERNAME);
-//                    groupUser.setNick("群聊");
-//                    groupUser.setHeader("");
-//                    groupUser.setUnreadMsgCount(0);
-//                    userlist.put(Constant.GROUP_USERNAME, groupUser);
-                // 存入内存
-                AccountManager.getInstance().setContactList(userlist);
-                List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                IMUserRepository.saveContactList(mContext, users);
-
-
-                // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                final long startTime = System.currentTimeMillis();
-//                LogUtil.d("getGroupFromServer", startTime + "");
-                EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
-                    @Override
-                    public void onSuccess(List<EMGroup> emGroups) {
-//                        long endTime = System.currentTimeMillis();
-//                        LogUtil.d("getGroupFromServer", endTime - startTime + "--groudSize=" + emGroups.size());
-
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-
-                    }
-                });
-
-                // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
-                // ** manually load all local groups and
-                // conversations in case we are auto login
-                EMGroupManager.getInstance().loadAllGroups();
-                EMChatManager.getInstance().loadAllConversations();
-                String result= UserApi.getAsynContact();
-                CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                if (contactResult.code == 0) {
-                    for (PeachUser peachUser : contactResult.result.contacts) {
-                        IMUser user = new IMUser();
-                        user.setUserId(peachUser.userId);
-                        user.setMemo(peachUser.memo);
-                        user.setNick(peachUser.nickName);
-                        user.setUsername(peachUser.easemobUser);
-                        user.setUnreadMsgCount(0);
-                        user.setAvatar(peachUser.avatar);
-                        user.setAvatarSmall(peachUser.avatarSmall);
-                        user.setSignature(peachUser.signature);
-                        user.setIsMyFriends(true);
-                        user.setGender(peachUser.gender);
-                        IMUtils.setUserHead(user);
-                        userlist.put(peachUser.easemobUser, user);
-                    }
-                    // 存入内存
-                    AccountManager.getInstance().setContactList(userlist);
-                    // 存入db
-                    List<IMUser> netusers = new ArrayList<IMUser>(userlist.values());
-                    IMUserRepository.saveContactList(mContext, netusers);
-                }
-                // 进入主页面
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(SplashActivity.this).showToast("欢迎回到旅行派");
-                        setResult(RESULT_OK);
-                        finish();
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                        overridePendingTransition(0,R.anim.push_bottom_out);
-
-                    }
-                });
-
-
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, final String message) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(getApplicationContext()).showToast("登录失败 " + message);
-                    }
-                });
+        // 进入主页面
+        runOnUiThread(new Runnable() {
+            public void run() {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(SplashActivity.this).showToast("欢迎回到旅行派");
+                setResult(RESULT_OK);
+                finish();
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                overridePendingTransition(0,R.anim.push_bottom_out);
             }
         });
+    }
 
+    private void signIn(String userName,String pwd) {
+        DialogManager.getInstance().showLoadingDialog(this);
+        UserApi.signIn(userName, pwd, new HttpCallBack<String>() {
 
+            @Override
+            public void doSucess(String result, String method) {
+
+                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
+                if (userResult.code == 0) {
+                    imLogin(userResult.result);
+                } else {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    ToastUtil.getInstance(mContext).showToast(userResult.err.message);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                error.printStackTrace();
+                System.out.println(msg+"  "+method);
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(SplashActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+
+            }
+        });
     }
 
 }

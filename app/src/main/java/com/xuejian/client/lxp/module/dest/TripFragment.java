@@ -39,6 +39,7 @@ import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.yweathergetter4a.WeatherInfo;
 import com.xuejian.client.lxp.common.yweathergetter4a.YahooWeather;
 import com.xuejian.client.lxp.common.yweathergetter4a.YahooWeatherInfoListener;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -242,7 +243,7 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
+        User user = AccountManager.getInstance().getLoginAccount(getActivity());
         switch (v.getId()) {
             case R.id.lx_guide_favour:
                 Intent ExpertIntent=new Intent(getActivity(), ExpertListActivity.class);
@@ -250,9 +251,9 @@ public class TripFragment extends PeachBaseFragment implements View.OnClickListe
                 break;
 
             case R.id.lx_trip_plan:
-                if(user!=null&&!TextUtils.isEmpty(user.easemobUser)){
+                if(user!=null){ //&&!TextUtils.isEmpty(user.easemobUser)
                     Intent intent=new Intent(getActivity(), StrategyListActivity.class);
-                    intent.putExtra("userId", String.valueOf(user.userId));
+                    intent.putExtra("userId", String.valueOf(user.getUserId()));
                     intent.putExtra("isExpertPlan",false);
                     startActivity(intent);
                 }else{

@@ -41,6 +41,7 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.DrawableCenterTextView;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -275,7 +276,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mFavCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(mContext);
+                User user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user == null) {
                     ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);

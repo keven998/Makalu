@@ -25,6 +25,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.userDB.User;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -40,7 +41,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
     private Button downTimeBtn;
     private CountDownTimer countDownTimer;
     private int countDown;
-    private PeachUser user;
+    private User user;
     private String sendSuccessPhone;
 
     @Override
@@ -93,7 +94,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                 String uid=null ;
                 if(user!=null){
-                    uid = user.userId+"";
+                    uid = user.getUserId()+"";
                 }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE, uid, new HttpCallBack<String>() {
                     @Override
@@ -130,12 +131,12 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     return;
                 }
                 DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
-                UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.BIND_PHONE, user.userId + "", new HttpCallBack<String>() {
+                UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.BIND_PHONE, user.getUserId() + "", new HttpCallBack<String>() {
                     @Override
                     public void doSucess(String result, String method) {
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
                         if (chechResult.code == 0) {
-                            if (TextUtils.isEmpty(user.tel)) {
+                            if (TextUtils.isEmpty(user.getTel())) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 Intent intent = new Intent(mContext, SetPwdActivity.class);
                                 intent.putExtra("token", chechResult.result.token);
@@ -143,13 +144,13 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                 startActivity(intent);
 
                             } else {
-                                UserApi.bindPhone(phoneEt.getText().toString().trim(), user.userId + "", null, chechResult.result.token, new HttpCallBack<String>() {
+                                UserApi.bindPhone(phoneEt.getText().toString().trim(), user.getUserId() + "", null, chechResult.result.token, new HttpCallBack<String>() {
                                     @Override
                                     public void doSucess(String result, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (bindResult.code == 0) {
-                                            user.tel = sendSuccessPhone;
+                                            user.setTel(sendSuccessPhone);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                                             Intent intent=new Intent();
                                             intent.putExtra("bindphone", sendSuccessPhone);

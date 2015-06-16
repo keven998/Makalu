@@ -21,6 +21,8 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.easemob.EMCallBack;
+import com.lv.Listener.SendMsgListener;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
@@ -53,7 +55,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
     int mPage=0;
     String mKeyWord="";
     String toId;
-    int chatType;
+    String chatType;
 
 
     @Override
@@ -62,7 +64,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_search_travelnote);
         ButterKnife.inject(this);
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getIntExtra("chatType",0);
+        chatType = getIntent().getStringExtra("chatType");
         mTitleBar.getTitleTextView().setText("发送游记");
         mTitleBar.enableBackKey(true);
         mSearchTravelNoteLv.setPullLoadEnabled(false);
@@ -80,21 +82,19 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
+                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
-
                                             }
                                         });
-
                                     }
 
                                     @Override
-                                    public void onError(int i, String s) {
+                                    public void onFailed(int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -102,11 +102,6 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
 
                                             }
                                         });
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
 
                                     }
                                 });
