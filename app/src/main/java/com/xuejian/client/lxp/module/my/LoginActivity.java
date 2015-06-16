@@ -22,6 +22,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -190,6 +191,7 @@ public class LoginActivity extends PeachBaseActivity{
 
     private void imLogin(final User user,int type) {
         //初始化数据库，方便后面操作
+        IMClient.getInstance().initDB();
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
        if(type==FINDPASSWORD){

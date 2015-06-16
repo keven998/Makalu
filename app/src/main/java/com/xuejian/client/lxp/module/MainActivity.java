@@ -284,11 +284,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if(!FromBounce) {
-                        if (!com.lv.user.User.getUser().isLogin()) {
+                    if(!AccountManager.getInstance().isLogin()) {
+                       /* if (!com.lv.user.User.getUser().isLogin()) {
                             Toast.makeText(MainActivity.this, "正在登陆", Toast.LENGTH_LONG).show();
-                        }
-                    }else {
+                        }*/
+                    //}else {
                         mTabHost.setCurrentTab(1);
                         Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(logIntent);
@@ -315,7 +315,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //        if (AccountManager.getInstance().isLogin()) {
 //            mTabHost.setCurrentTab(0);
 //        } else {
-            if (com.lv.user.User.getUser().isLogin()) {
+            if (AccountManager.getInstance().isLogin()) {
                 mTabHost.setCurrentTab(0);
             } else {
             mTabHost.setCurrentTab(1);

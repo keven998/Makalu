@@ -88,10 +88,6 @@ public class UserDBManager {
         mdb = null;
     }
 
-    public void disconnectDB(){
-        db=null;
-    }
-
 
     public List<Long> getGroupMemberId(long groupId) {
         mdb = getDB();

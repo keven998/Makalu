@@ -518,7 +518,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (!hidden) {
             refresh();
         }
-        if (User.getUser().isLogin())
+        if (AccountManager.getInstance().isLogin())
             loadConversation();
         if (AccountManager.getInstance().isLogin()) {
             if (listView.getAdapter().getCount() <= 0) {

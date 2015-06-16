@@ -274,6 +274,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 
     private void imLogin(final User user) {
         //初始化数据库，方便后面操作
+        IMClient.getInstance().initDB();
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
 
