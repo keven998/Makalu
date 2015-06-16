@@ -36,6 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
@@ -117,8 +118,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
-        com.xuejian.client.lxp.db.userDB.User user= UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId()+""));
-    //    IMUser imUser = getItem(position).imUser;
+        User user=null;
+        if (AccountManager.getInstance().isLogin()) {
+            user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId() + ""));
+        }
         // 获取用户username或者群组groupid
         String username = String.valueOf(conversation.getFriendId());
         boolean isGroup = "group".equals(conversation.getChatType());

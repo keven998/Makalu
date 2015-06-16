@@ -67,7 +67,7 @@ public class HttpManager {
                         User.getUser().setCurrentUser(username);
                         User.getUser().setLogin(true);
                        // UserDao.getInstance();
-                        IMClient.getInstance().initDB();
+                       // IMClient.getInstance().initDB();
                         listen.OnSuccess();
                     } else {
                         listen.OnFailed(code);

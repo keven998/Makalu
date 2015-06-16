@@ -194,6 +194,7 @@ public class LoginActivity extends PeachBaseActivity{
         IMClient.getInstance().initDB();
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
        if(type==FINDPASSWORD){
             //存入修改好的密码
         }
@@ -205,7 +206,7 @@ public class LoginActivity extends PeachBaseActivity{
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
-        AccountManager.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
         // 添加user"申请与通知"

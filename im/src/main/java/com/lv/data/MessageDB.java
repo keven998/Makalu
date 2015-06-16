@@ -55,7 +55,7 @@ public class MessageDB {
 
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private SQLiteDatabase mdb;
-
+    private static String userId;
     ExecutorService dbThread = Executors.newFixedThreadPool(1);
 
     private MessageDB(String User_Id) {
@@ -72,9 +72,12 @@ public class MessageDB {
 
     public static MessageDB getInstance() {
         if (instance == null) {
-            instance = new MessageDB(User.getUser().getCurrentUser());
+            instance = new MessageDB(userId);
         }
         return instance;
+    }
+    public static void initDB(String _userId){
+        userId=_userId;
     }
     public static void disconnectDB(){
         instance=null;

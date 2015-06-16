@@ -22,7 +22,6 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -30,7 +29,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -106,6 +104,7 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -173,12 +172,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private InputMethodManager manager;
     private List<String> reslist;
     private Drawable[] micImages;
-    //private int chatType;
-    //private EMConversation conversation;
     public static ChatActivity activityInstance = null;
-    // 给谁发送消息
     private String toChatUsername;
-    private IMUser toChatUser;
     private VoiceRecorder voiceRecorder;
     private MessageAdapter adapter;
     private File cameraFile;
@@ -194,24 +189,39 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private boolean haveMoreData = true;
     private ImageView btnMore;
     public String playMsgId;
-    private String myUserInfoJson;
     private DotView dots;
-    private ImageView[] imageViews;
-    private ImageView imageView;
-    private String CurrentFriend;
     private String conversation;
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
-    private Handler micImageHandler = new Handler() {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            // 切换msg切换图片
-            micImage.setImageDrawable(micImages[msg.what]);
+//    private Handler micImageHandler = new Handler() {
+//        @Override
+//        public void handleMessage(android.os.Message msg) {
+//            // 切换msg切换图片
+//            micImage.setImageDrawable(micImages[msg.what]);
+//        }
+//    };
+
+    private static class MyHandler extends Handler {
+
+        private final WeakReference<ChatActivity> mActivity;
+
+        public MyHandler(ChatActivity activity) {
+            mActivity = new WeakReference<ChatActivity>(activity);
         }
-    };
-    private EMGroup group;
+
+        @Override
+        public void handleMessage(Message msg) {
+            ChatActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.micImage.setImageDrawable( activity.micImages[msg.what]);
+            }
+        }
+    }
+
+    private final MyHandler handler = new MyHandler(this);
+
     private String name;
-    private boolean isRecord11;
+    private boolean isRecord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,13 +232,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
         name = intent.getStringExtra("Name");
-        //test
-        // toChatUsername=100006+"";
-        // chatType="single";
-        //  conversation="0";
         initView();
         setUpView();
-        // initData();
     }
 
     private void initData() {
@@ -309,7 +314,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
         });
         edittext_layout.requestFocus();
-        voiceRecorder = new VoiceRecorder(micImageHandler);
+        voiceRecorder = new VoiceRecorder(handler);
         buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
 //		mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener() {
 //
@@ -367,34 +372,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         System.out.println("chatActivity resume");
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
 //        MobclickAgent.onPageStart("page_talking");
-//        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-//        options.setNoticeBySound(false);
         initData();
     }
-
-    protected void updateGroup() {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    group = EMGroupManager.getInstance().getGroupFromServer(group.getGroupId());
-                    //更新本地数据
-                    EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                        }
-                    });
-
-                } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-
 
     private void setUpView() {
         activityInstance = this;
@@ -427,14 +406,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            }
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
 
-            // conversation =
-            // EMChatManager.getInstance().getConversation(toChatUsername,false);
         } else {
             // 群聊
-            // toChatUsername = getIntent().getStringExtra("groupId");
             titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
-            // group = EMGroupManager.getInstance().getGroup(toChatUsername);
-
             //if(group!=null){
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
             //}
@@ -462,10 +436,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 }
             });
 
-            // conversation =
-            // EMChatManager.getInstance().getConversation(toChatUsername,true);
         }
-        //conversation = EMChatManager.getInstance().getConversation(toChatUsername);
         // 把此会话的未读数置为0
         //conversation.resetUnsetMsgCount();
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
@@ -490,30 +461,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 return false;
             }
         });
-        // 注册一个cmd消息的BroadcastReceiver
-       /* IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(3);
-        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-		// 注册接收消息广播
-		receiver = new NewMessageBroadcastReceiver();
-		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-		// 设置广播的优先级别大于Mainacitivity,这样如果消息来的时候正好在chat页面，直接显示消息，而不是提示消息未读
-		intentFilter.setPriority(5);
-		registerReceiver(receiver, intentFilter);
-
-		// 注册一个ack回执消息的BroadcastReceiver
-		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
-		ackMessageIntentFilter.setPriority(5);
-		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-
-		// 注册一个消息送达的BroadcastReceiver
-		IntentFilter deliveryAckMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getDeliveryAckMessageBroadcastAction());
-		deliveryAckMessageIntentFilter.setPriority(5);
-		registerReceiver(deliveryAckMessageReceiver, deliveryAckMessageIntentFilter);
-		// 监听当前会话的群聊解散被T事件
-		groupListener = new GroupListener();
-		EMGroupManager.getInstance().addGroupChangeListener(groupListener);*/
-
         // show forward message if the message is not null
         String forward_msg_id = getIntent().getStringExtra("forward_msg_id");
         if (forward_msg_id != null) {
@@ -525,8 +472,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     /**
      * 转发消息
-     *
-     * @param forward_msg_id
      */
     protected void forwardMessage(String forward_msg_id) {
         EMMessage forward_msg = EMChatManager.getInstance().getMessage(forward_msg_id);
@@ -583,7 +528,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 case RESULT_CODE_DELETE: // 删除消息
                     // MessageBean deleteMsg=adapter.getItem(data.getIntExtra("position", -1));
                     int pos=data.getIntExtra("position", -1);
-                    System.out.println("delete msg ===================" + pos);
                     IMClient.getInstance().deleteSingleMessage(toChatUsername,messageList.get(pos).getLocalId());
                     messageList.remove(pos);
                     adapter.refresh();
@@ -717,8 +661,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         /**
          * 消息图标点击事件
-         *
-         * @param view
          */
         @Override
         public void onClick (View view){
@@ -997,11 +939,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     /**
      * 发送位置信息
-     *
-     * @param latitude
-     * @param longitude
-     * @param imagePath
-     * @param locationAddress
      */
     private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
         MessageBean m = IMClient.getInstance().CreateLocationMessage("haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
@@ -1108,8 +1045,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     /**
      * 显示键盘图标
-     *
-     * @param view
      */
     public void setModeKeyboard(View view) {
         // mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener()
@@ -1193,8 +1128,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     /**
      * 点击文字输入框
-     *
-     * @param v
      */
     public void editClick(View v) {
         listView.setSelection(listView.getCount() - 1);
@@ -1294,13 +1227,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
-                        MediaRecordFunc.getInstance().startRecordAndFile(micImageHandler);
-                        isRecord11 =true;
-                        //handleVoiceDb();
+                        MediaRecordFunc.getInstance().startRecordAndFile(handler);
+                        isRecord =true;
                      //   voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        isRecord11 =false;
+                        isRecord =false;
                         v.setPressed(false);
                         if (wakeLock.isHeld())
                             wakeLock.release();
@@ -1320,7 +1252,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                     }
-                    isRecord11 =false;
+                    isRecord =false;
                     return true;
                 }
                 case MotionEvent.ACTION_UP:
@@ -1331,7 +1263,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (event.getY() < 0) {
                         // discard the recorded audio.
                         voiceRecorder.discardRecording();
-
+                        MediaRecordFunc.getInstance().cancleRecord();
                     } else {
                         // stop recording and send voice file
                         try {
@@ -1345,28 +1277,25 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 						}
                         } catch (Exception e) {
                             e.printStackTrace();
-//						Toast.makeText(ChatActivity.this, "发送失败，请检测服务器是否连接", Toast.LENGTH_SHORT).show();
                             if (!isFinishing())
                                 ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
                         }
 
                     }
-                    isRecord11 =false;
+                    isRecord =false;
                     return true;
                 default:
                     recordingContainer.setVisibility(View.INVISIBLE);
                     if (voiceRecorder != null)
                         voiceRecorder.discardRecording();
+                    MediaRecordFunc.getInstance().cancleRecord();
                     return false;
             }
         }
     }
 
     /**
-     * 获取表情的gridview的子view
-     *
-     * @param i
-     * @return
+     * 获取表情的gridView的子view
      */
     private View getGridChildView(int i) {
         View view = View.inflate(this, R.layout.expression_gridview, null);
@@ -1427,12 +1356,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     }
 
     public List<String> getExpressionRes(int getSum) {
-        List<String> reslist = new ArrayList<String>();
+        List<String> resList = new ArrayList<String>();
         for (int x = 1; x <= getSum; x++) {
             String filename = "ee_" + x;
-            reslist.add(filename);
+            resList.add(filename);
         }
-        return reslist;
+        return resList;
 
     }
 
@@ -1470,7 +1399,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 voiceRecorder.discardRecording();
                 recordingContainer.setVisibility(View.INVISIBLE);
             }
+           if (isRecord)MediaRecordFunc.getInstance().cancleRecord();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1492,7 +1423,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 加入到黑名单
      *
-     * @param username
+     * @param username username
      */
     private void addUserToBlacklist(String username) {
         try {
@@ -1508,11 +1439,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
     }
 
-    /**
-     * 返回
-     *
-     * @param view
-     */
     public void back(View view) {
         finish();
     }
@@ -1565,6 +1491,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                         if (messageList.size() != 0) {
                             // 刷新ui
@@ -1602,29 +1529,4 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
 
     }
-public void handleVoiceDb(){
-    final MediaRecorder recorder=new MediaRecorder();
-    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-    new Thread(new Runnable() {
-        public void run() {
-            while(true) {
-                try {
-                    if(isRecord11) {
-                        System.out.println("kaishi ===========");
-                        Message var1 = new Message();
-                        System.out.println(recorder.getMaxAmplitude() * 13 / 32767);
-                        var1.what = recorder.getMaxAmplitude() * 13 / 32767;
-                        micImageHandler.sendMessage(var1);
-                        SystemClock.sleep(100L);
-                        continue;
-                    }
-                } catch (Exception var2) {
-                    var2.printStackTrace();
-                }
-                return;
-            }
-        }
-    }).start();
-}
-
 }

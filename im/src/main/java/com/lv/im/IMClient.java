@@ -47,10 +47,11 @@ public class IMClient {
     private static IMClient client;
     private MessageDB db;
     private static List<Conversation> conList;
-    private static List<ConversationBean> convercationList= new ArrayList<>();
-    //private static HashMap<String,MessageBean> messageMap;
+    private static List<ConversationBean> convercationList = new ArrayList<>();
     private int count;
-    private static List<String> invokeStatus=new ArrayList<>();
+    public static HashMap<String, ArrayList<Long>> taskMap = new HashMap<>();
+    private static List<String> invokeStatus = new ArrayList<>();
+
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
@@ -65,8 +66,9 @@ public class IMClient {
         return client;
     }
 
-    public void initDB() {
+    public void initDB(String userId) {
         db = MessageDB.getInstance();
+        MessageDB.initDB(userId);
         MessageDB.getInstance().init();
     }
 
@@ -193,28 +195,30 @@ public class IMClient {
     }
 
     public List<MessageBean> getMessages(String friendId, int page) {
-        List<MessageBean> list=db.getAllMsg(friendId, page);
+        List<MessageBean> list = db.getAllMsg(friendId, page);
 //        if (!invokeStatus.contains(friendId)){
 //            for (MessageBean m:list){
 //                if (m.getStatus()==1)m.setStatus(2);
 //            }
 //            return list;
 //        }
-        if (SendMsgAsyncTask.taskMap!=null&&SendMsgAsyncTask.taskMap.containsKey(friendId)){
-            List<Long>taskIds=SendMsgAsyncTask.taskMap.get(friendId);
-            for (MessageBean m:list){
-                if (m.getStatus()==1&&!taskIds.contains(m.getLocalId()))
+        if (taskMap != null && taskMap.containsKey(friendId)) {
+            List<Long> taskIds = taskMap.get(friendId);
+            for (MessageBean m : list) {
+                if (m.getStatus() == 1 && !taskIds.contains(m.getLocalId())) {
                     m.setStatus(2);
+                    System.out.println("setFailed " + m.getLocalId());
+                }
             }
             return list;
-        }else {
-            for (MessageBean m:list){
-                if (m.getStatus()==1)
+        } else {
+            for (MessageBean m : list) {
+                if (m.getStatus() == 1)
                     m.setStatus(2);
             }
             return list;
         }
-     //   return list;
+        //   return list;
     }
 
 
@@ -280,7 +284,7 @@ public class IMClient {
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
-        System.out.println("localId-----------"+localId);
+        System.out.println("localId-----------" + localId);
         return m;
     }
 
@@ -324,16 +328,17 @@ public class IMClient {
         m.setLocalId((int) localId);
         return m;
     }
-    public void sendExtMessage(String friendId,String chatType,String contentJson,int type,SendMsgListener listen){
-        if (TextUtils.isEmpty(contentJson)) return ;
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, type+9, contentJson);
+
+    public void sendExtMessage(String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
+        if (TextUtils.isEmpty(contentJson)) return;
+        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, type + 9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
         MessageBean m = new MessageBean(0, 1, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
         //return m;
         //if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(m.getSenderId()), type+9, m.getMessage());
+        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(m.getSenderId()), type + 9, m.getMessage());
         SendMsgAsyncTask.sendMessage(null, String.valueOf(m.getSenderId()), imessage, m.getLocalId(), listen, chatType);
     }
 
@@ -414,21 +419,26 @@ public class IMClient {
     public void addGroup2Conversation(String groupId, String conversation) {
         db.add2Conversion(Long.parseLong(groupId), TimeUtils.getTimestamp(), "chat_" + CryptUtils.getMD5String(groupId), -1, conversation, "group");
     }
-    public void cleanMessageHistory(String chatId){
+
+    public void cleanMessageHistory(String chatId) {
         db.deleteMessage(chatId);
     }
-    public void deleteSingleMessage(String chatId,long MessageId){
+
+    public void deleteSingleMessage(String chatId, long MessageId) {
         db.deleteSingleMessage(chatId, MessageId);
     }
-    public void changeMessageStatus(String chatId,long MessageId,int Status){
+
+    public void changeMessageStatus(String chatId, long MessageId, int Status) {
         db.changeMessagestatus(chatId, MessageId, Status);
     }
-    public void updateReadStatus(String chatId,long messageId,boolean isRead){
+
+    public void updateReadStatus(String chatId, long messageId, boolean isRead) {
         db.updateReadStatus(chatId, messageId, isRead);
     }
-    public  void logout(){
+
+    public void logout() {
         db.disconnectDB();
-        client=null;
+        client = null;
 
     }
 }

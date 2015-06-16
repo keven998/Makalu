@@ -31,18 +31,17 @@ public class SendMsgAsyncTask {
 
     Context c;
     sendTask task;
-    public static HashMap<String,ArrayList<Long>> taskMap=new HashMap<>();
     public SendMsgAsyncTask(Context c) {
         this.c = c;
     }
 
     public static void sendMessage(final String conversation, final String currentFri, final IMessage msg, final long localId, final SendMsgListener listen,final String chatType) {
-        if (taskMap.containsKey(currentFri)){
-            if (taskMap.get(currentFri).contains(localId))return;
-            else taskMap.get(currentFri).add(localId);
+        if (IMClient.taskMap.containsKey(currentFri)){
+            if (IMClient.taskMap.get(currentFri).contains(localId))return;
+            else IMClient.taskMap.get(currentFri).add(localId);
         }else {
-            taskMap.put(currentFri,new ArrayList<Long>());
-            taskMap.get(currentFri).add(localId);
+            IMClient.taskMap.put(currentFri,new ArrayList<Long>());
+            IMClient.taskMap.get(currentFri).add(localId);
         }
         JSONObject object = new JSONObject();
         try {
@@ -78,7 +77,7 @@ public class SendMsgAsyncTask {
                         Log.i(Config.TAG, "send status code:" + code);
                     }
                     if (code == 200) {
-                        taskMap.get(currentFri).remove(localId);
+                        IMClient.taskMap.get(currentFri).remove(localId);
                         HttpEntity res = httpResponse.getEntity();
                         String result = EntityUtils.toString(res);
                         if (Config.isDebug) {
@@ -96,7 +95,7 @@ public class SendMsgAsyncTask {
                         }
                         listen.onSuccess();
                     } else {
-                        taskMap.get(currentFri).remove(localId);
+                        IMClient.taskMap.get(currentFri).remove(localId);
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "发送失败：code " + code);
                         }
@@ -105,7 +104,7 @@ public class SendMsgAsyncTask {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    taskMap.get(currentFri).remove(localId);
+                    IMClient.taskMap.get(currentFri).remove(localId);
                     IMClient.getInstance().updateMessage(currentFri, localId, null, null, 0, Config.STATUS_FAILED, null, msg.getMsgType());
                     listen.onFailed(-1);
                 }

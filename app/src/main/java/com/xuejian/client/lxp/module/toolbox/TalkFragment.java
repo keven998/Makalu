@@ -350,7 +350,6 @@ public class TalkFragment extends PeachBaseFragment {
                 }
             }
         }).start();
-
         sortConversationByLastChatTime(conversations);
         refresh();
     }
@@ -521,6 +520,10 @@ public class TalkFragment extends PeachBaseFragment {
         if (AccountManager.getInstance().isLogin())
             loadConversation();
         if (AccountManager.getInstance().isLogin()) {
+            if (!hidden) {
+                refresh();
+            }
+            loadConversation();
             if (listView.getAdapter().getCount() <= 0) {
                 //setEmptyView();
             }

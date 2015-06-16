@@ -105,14 +105,17 @@ Handler handler;
         close();
         return  tempPath;
     }
-
+    public boolean cancleRecord(){
+        close();
+        File file=new File(tempPath);
+        return !file.exists()||file.delete();
+    }
     public long getRecordFileSize() {
         return AudioFileFunc.getFileSize(AudioFileFunc.getAMRFilePath());
     }
 
     private void close() {
         if (mMediaRecorder != null) {
-            System.out.println("stopRecord");
             isRecord = false;
             mMediaRecorder.stop();
             mMediaRecorder.release();

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
-import com.easemob.EMCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
@@ -60,6 +59,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
+
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
     public final static int CODE_IM_LOGIN = 101;
     public static final int NEW_CHAT_REQUEST_CODE = 102;
@@ -97,7 +97,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        //IMClient.initIM(getApplicationContext());
         FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
@@ -289,6 +288,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                             Toast.makeText(MainActivity.this, "正在登陆", Toast.LENGTH_LONG).show();
                         }*/
                     //}else {
+/*
+                    if(!FromBounce) {
+                        if (!AccountManager.getInstance().isLogin()) {
+                            Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                            startActivity(logIntent);
+                            overridePendingTransition(R.anim.push_bottom_in, 0);
+                        }
+                    }else {
+*/
                         mTabHost.setCurrentTab(1);
                         Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(logIntent);
@@ -343,11 +351,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (AccountManager.getInstance().isLogin()) {
             HandleImMessage.getInstance().registerMessageListener(this);
             //  if (!isConflict){
-            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-            if (talkFragment != null) {
-                talkFragment.loadConversation();
-            }
-            updateUnreadMsgCount();
+                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                if (talkFragment != null) {
+                    talkFragment.loadConversation();
+                }
+                updateUnreadMsgCount();
         }
     }
 
