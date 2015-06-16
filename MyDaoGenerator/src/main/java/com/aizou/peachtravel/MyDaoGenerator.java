@@ -9,7 +9,7 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
          
-
+System.out.println(1|2);
 //        Schema schema = new Schema(2, "com.xuejian.client.lxp");
 //        Entity user = schema.addEntity("User");
 //        user.addLongProperty("userId");

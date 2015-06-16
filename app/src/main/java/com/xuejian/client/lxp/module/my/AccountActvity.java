@@ -471,38 +471,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 dialog.dismiss();
                 DialogManager.getInstance().showLoadingDialog(mContext,"正在登出");
-                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent =new Intent(mContext,MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                AccountActvity.this.finish();
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.getInstance(AccountActvity.this).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
+                AccountManager.getInstance().logout(mContext);
+                DialogManager.getInstance().dissMissLoadingDialog();
+                Intent intent =new Intent(mContext,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                AccountActvity.this.finish();
             }
         });
         dialog.setNegativeButton("取消",new View.OnClickListener() {

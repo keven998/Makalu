@@ -69,7 +69,11 @@ public class UserDBManager {
         }
         return instance;
     }
-
+    public void disconnectDB(){
+        db.close();
+        db=null;
+        instance=null;
+    }
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
@@ -231,9 +235,9 @@ public class UserDBManager {
         return (type & 8) == 8;
     }
 
-    public void saveContact(User user) {
+    public synchronized void saveContact(User user) {
         mdb = getDB();
-                if(user.getNickName()==null){
+                if(user.getNickName()==null||"".equals(user.getNickName())){
                     user.setHeader("#");
                 }else if (" ".equals(user.getNickName().substring(0, 1))){
                     user.setHeader("#");
@@ -303,7 +307,7 @@ public class UserDBManager {
         closeDB();
     }
 
-    public void saveContactList(List<User> list) {
+    public synchronized void saveContactList(List<User> list) {
         mdb = getDB();
         mdb.beginTransaction();
         for (User user : list) {
@@ -374,7 +378,7 @@ public class UserDBManager {
         mdb.endTransaction();
         closeDB();
     }
-    public void updateGroupInfo(User user,String groupId){
+    public synchronized void updateGroupInfo(User user,String groupId){
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
         if (cursor.getCount()==0)return;
@@ -400,7 +404,7 @@ public class UserDBManager {
         }
         closeDB();
     }
-    public void updateGroupMemberInfo(List<User> list,String groupId){
+    public synchronized void updateGroupMemberInfo(List<User> list,String groupId){
         System.out.println("updateGroupMemberInfo");
         JSONArray array=new JSONArray();
         for (User user:list){

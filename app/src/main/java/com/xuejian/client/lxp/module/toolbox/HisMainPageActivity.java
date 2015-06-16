@@ -265,10 +265,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void refreshView(final User bean){
         if(user!=null) {
             int type;
-            if(UserDBManager.getInstance().getContactByUserId(bean.getUserId())!=null){
-                type=bean.getType();
-                type&=EXPERT_INT;
-                bean.setType(type);
+            User user=UserDBManager.getInstance().getContactByUserId(bean.getUserId());
+            if(user!=null){
+                type=user.getType();
+                bean.setType(type | EXPERT_INT);
             }else{
                 bean.setType(EXPERT_INT);
             }
@@ -324,6 +324,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     intent.putExtra("userId", (long)bean.get(0).userId);
                     intent.putExtra("userNick", bean.get(0).nickName);
                     startActivity(intent);*/
+
                         if (user != null) { //&&!TextUtils.isEmpty(user.easemobUser)
                             User imUser = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
                             Intent intent = new Intent(mContext, ChatActivity.class);
@@ -403,9 +404,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 @Override
                 public void onClick(View v) {
                         Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                    startActivity(intent);
                         overridePendingTransition(R.anim.push_bottom_in, 0);
-                        finish();
+                    finish();
                 }
             });
         }

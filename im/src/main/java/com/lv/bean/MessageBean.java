@@ -8,7 +8,7 @@ import com.lv.user.User;
  */
 public class MessageBean {
 
-    private int LocalId;  //本地消息的 ID，pk，自增
+    private long LocalId;  //本地消息的 ID，pk，自增
     private int ServerId;//服务器消息 id
     private int Status;//消息的发送状态 ：   0：发送成功，   1：发送中，   2：发送失败
     private int Type;//消息类型： 0：普通文本消息， 1：语音消息， 2：图片消息，  3：动画表情消息，  4:位置消息，  5：poi-城市，  6：poi-景点， 7：poi-美食，  8：poi-酒店， 9：poi-游记
@@ -32,8 +32,20 @@ public class MessageBean {
         SenderId = senderId;
 
     }
+    public MessageBean(long localId,int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
+        LocalId=localId;
+        ServerId = serverId;
+        Status = status;
+        Type = type;
+        Message = message;
+        CreateTime = createTime;
+        SendType = sendType;
+        Metadata = metadata;
+        SenderId = senderId;
 
-    public int getLocalId() {
+    }
+
+    public long getLocalId() {
         return LocalId;
     }
 

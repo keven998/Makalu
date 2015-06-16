@@ -10,6 +10,7 @@ import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.lv.user.User;
 import com.lv.user.UserDao;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
@@ -127,8 +128,9 @@ public class HttpManager {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
-            array.put(100001);
-            //array.put(3);
+            for (long id : members) {
+                array.put(id);
+            }
             obj.put("action", "delMembers");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
@@ -193,7 +195,7 @@ public class HttpManager {
         exec.execute(new Runnable() {
             @Override
             public void run() {
-                HttpPut httpPut= new HttpPut(url);
+                HttpPut httpPut = new HttpPut(url);
                 httpPut.addHeader("UserId", User.getUser().getCurrentUser() + "");
                 try {
                     JSONObject obj = new JSONObject();
@@ -202,13 +204,13 @@ public class HttpManager {
                             HTTP.UTF_8);
 //                    List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 //                    pairs.add(new BasicNameValuePair("name", groupName));
-                  //  pairs.add(new BasicNameValuePair("key2", "value2"));
+                    //  pairs.add(new BasicNameValuePair("key2", "value2"));
                     httpPut.setEntity(entity);
                     HttpResponse httpResponse = new DefaultHttpClient().execute(httpPut);
                     HttpEntity res = httpResponse.getEntity();
                     int code = httpResponse.getStatusLine().getStatusCode();
                     String result = EntityUtils.toString(res);
-                    System.out.println(code+" "+result);
+                    System.out.println(code + " " + result);
                     if (code == 200) {
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "edit group : " + result);
@@ -238,13 +240,14 @@ public class HttpManager {
             @Override
             public void run() {
                 HttpGet get = new HttpGet(url);
+                System.out.println(User.getUser().getCurrentUser()+url);
                 get.addHeader("UserId", User.getUser().getCurrentUser() + "");
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     HttpEntity res = httpResponse.getEntity();
                     int code = httpResponse.getStatusLine().getStatusCode();
+                    String result = EntityUtils.toString(res);
                     if (code == 200) {
-                        String result = EntityUtils.toString(res);
                         if ("member".equals(type)) {
                             try {
                                 if (Config.isDebug) {
@@ -274,7 +277,7 @@ public class HttpManager {
                                 object = new JSONObject(result);
                                 JSONObject o = object.getJSONObject("result");
                                 com.xuejian.client.lxp.db.userDB.User user = new com.xuejian.client.lxp.db.userDB.User();
-                                user.setNickName(o.get("name").toString());
+                                user.setNickName(o.get("name").toString()==null?" ":o.get("name").toString());
                                 o.remove("name");
                                 user.setExt(o.toString());
                                 user.setType(8);
@@ -285,7 +288,12 @@ public class HttpManager {
                             }
 
                         }
-                    } else callBack.onFailed();
+                    } else {
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "group info error code: " + code+" "+result);
+                        }
+                        callBack.onFailed();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -294,12 +302,12 @@ public class HttpManager {
     }
 
     public static void getUserGroupInfo(String userId) {
-        final String url = Config.HOST + "/users/100001/groups";
+        final String url = Config.HOST + "/users/"+ AccountManager.getCurrentUserId()+"/groups";
         exec.execute(new Runnable() {
             @Override
             public void run() {
                 HttpGet get = new HttpGet(url);
-                get.addHeader("UserId", 100001 + "");
+                get.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     System.out.println("code " + httpResponse.getStatusLine().getStatusCode());
@@ -323,7 +331,7 @@ public class HttpManager {
                 RequestParams params = new RequestParams();
                 params.put(tag, value);
                 // params.add("UserId",100001+"");
-                client.addHeader("UserId", 100001l + "");
+                client.addHeader("UserId",  AccountManager.getCurrentUserId());
                 client.get(url, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int i, Header[] headers, String s, Throwable throwable) {

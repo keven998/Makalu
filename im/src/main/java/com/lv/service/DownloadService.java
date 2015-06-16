@@ -37,7 +37,7 @@ public class DownloadService extends Service {
     private HashMap<String, Message> downlaodMap=new HashMap<>();
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Config.ACTION_START.equals(intent.getAction())) {
+      //  if (Config.ACTION_START.equals(intent.getAction())) {
             Message message = (Message)intent.getSerializableExtra("msg");
         //    if (!downlaodMap.containsKey(message.getUrl())) {
                 new DownloadTask1().execute(message);
@@ -51,7 +51,7 @@ public class DownloadService extends Service {
 //                if (Config.isDebug){
 //                    Log.i(Config.TAG,"已下载 ");
 //                }
-            }
+ //           }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -123,7 +123,7 @@ public class DownloadService extends Service {
                     input = conn.getInputStream();
                     if (msgType==1){
                         output = new FileOutputStream(newfile);
-                        byte buffer[] = new byte[4 * 1024];
+                        byte buffer[] = new byte[1024];
                         while(input.read(buffer) != -1){
                             output.write(buffer);
                         }

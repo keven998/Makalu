@@ -87,6 +87,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -140,6 +141,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
+    public static boolean isRead;
     private String friendId;
     private LayoutInflater inflater;
     private Activity activity;
@@ -148,8 +150,8 @@ public class MessageAdapter extends BaseAdapter {
     private Context context;
     private String chatType;
     private String conversation;
-    private Map<String, Timer> timers = new Hashtable<String, Timer>();
-
+    private static Map<String, Timer> timers = new Hashtable<String, Timer>();
+    static Map<String,ArrayList<HashMap<Integer ,Integer>>> tasks=new Hashtable<>();
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -275,7 +277,6 @@ public class MessageAdapter extends BaseAdapter {
     @SuppressLint("NewApi")
     public View getView(final int position, View convertView, ViewGroup parent) {
         MessageBean message = getItem(position);
-        System.out.println("message " + message.getMessage() + "  " + message.getStatus());
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -547,7 +548,7 @@ public class MessageAdapter extends BaseAdapter {
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
                             break;
                         //添加扩展类型的跳转
-                        /*case PLAN_MSG:
+                        case PLAN_MSG:
                         case CITY_MSG:
                         case TRAVEL_MSG:
                         case SPOT_MSG:
@@ -555,7 +556,7 @@ public class MessageAdapter extends BaseAdapter {
                         case SHOP_MSG:
                         case HOTEL_MSG:
                             activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_EXT);
-                            break;*/
+                            break;
                     }
 //                    if (message.getType() == Type.TXT)
 //                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
@@ -631,7 +632,7 @@ public class MessageAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                Type.TXT.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                                TEXT_MSG), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -933,48 +934,50 @@ public class MessageAdapter extends BaseAdapter {
                 holder.staus_iv.setVisibility(View.GONE);
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.tv.setVisibility(View.VISIBLE);
-                if (timers.containsKey(message.getLocalId() + ""))
-                    return;
+//                if (timers.containsKey(message.getLocalId() + "")){
+//                    System.out.println(message.getLocalId() + " return ========");
+//                    return;
+//                }
+
                 // set a timer
+            //    if (message.getStatus()==1) sendPictureMessage(message, holder);
                 sendPictureMessage(message, holder);
-                final Timer timer = new Timer();
-                timers.put(message.getLocalId() + "", timer);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                holder.pb.setVisibility(View.VISIBLE);
-                                holder.tv.setVisibility(View.VISIBLE);
-                                // holder.tv.setText(message.progress + "%");
-                                if (message.getStatus() == 0) {
-                                    holder.pb.setVisibility(View.GONE);
-                                    holder.tv.setVisibility(View.GONE);
-                                    // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
-                                    timer.cancel();
-                                } else if (message.getStatus() == 2) {
-                                    holder.pb.setVisibility(View.GONE);
-                                    holder.tv.setVisibility(View.GONE);
-                                    // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-                                    // message.setProgress(0);
-                                    holder.staus_iv.setVisibility(View.VISIBLE);
-//                                    Toast.makeText(activity,
-//                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-//                                            .show();
-                                    if (activity != null && !activity.isFinishing())
-                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
-                                    timer.cancel();
-                                }
-
-                            }
-                        });
-
-                    }
-                }, 0, 500);
+//                final Timer timer = new Timer();
+//                timers.put(message.getLocalId() + "", timer);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        activity.runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                holder.pb.setVisibility(View.VISIBLE);
+//                                holder.tv.setVisibility(View.VISIBLE);
+//                                // holder.tv.setText(message.progress + "%");
+//                                if (message.getStatus() == 0) {
+//                                    holder.pb.setVisibility(View.GONE);
+//                                    holder.tv.setVisibility(View.GONE);
+//                                    // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
+//                                    timer.cancel();
+//                                } else if (message.getStatus() == 2) {
+//                                    holder.pb.setVisibility(View.GONE);
+//                                    holder.tv.setVisibility(View.GONE);
+//                                    // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
+//                                    // message.setProgress(0);
+//                                    holder.staus_iv.setVisibility(View.VISIBLE);
+////                                    Toast.makeText(activity,
+////                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+////                                            .show();
+//                                    if (activity != null && !activity.isFinishing())
+//                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
+//                                    timer.cancel();
+//                                }
+//
+//                            }
+//                        });
+//
+//                    }
+//                }, 0, 500);
                 break;
-
             default:
-                //sendPictureMessage(message, holder);
         }
     }
 
@@ -1154,9 +1157,9 @@ public class MessageAdapter extends BaseAdapter {
 
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
-        boolean isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText(durtime.substring(0, 1) + "\"");
-        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
+        isRead = (boolean) getVoiceFilepath(message, "isRead");
+        holder.tv.setText( (int)Math.floor(Double.valueOf(durtime))+"´");
+        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId,message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1259,6 +1262,7 @@ public class MessageAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 holder.pb.setVisibility(View.INVISIBLE);
+                                updateStatus(message, 0);
                                 notifyDataSetChanged();
                             }
                         });
@@ -1273,6 +1277,7 @@ public class MessageAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 holder.pb.setVisibility(View.INVISIBLE);
+                                updateStatus(message, 2);
                             }
                         });
                     }
@@ -1453,6 +1458,7 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
                                 holder.staus_iv.setVisibility(View.GONE);
+                                updateStatus(message,0);
                             }
                         });
                     }
@@ -1465,6 +1471,7 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
                                 holder.staus_iv.setVisibility(View.VISIBLE);
+                                updateStatus(message,2);
                             }
                         });
                     }
@@ -1534,17 +1541,17 @@ public class MessageAdapter extends BaseAdapter {
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
-        String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
+  //      String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
 
-        File file=new File(path);
-        file.mkdirs();
-        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
-        try {
-            cacheFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        File file=new File(path);
+//        file.mkdirs();
+//        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
+//        try {
+//            cacheFile.createNewFile();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
@@ -1622,6 +1629,7 @@ public class MessageAdapter extends BaseAdapter {
      * send message with new sdk
      */
     private void sendPictureMessage(final MessageBean message, final ViewHolder holder) {
+        System.out.println("==============发送");
         try {
             // before send, update ui
             holder.staus_iv.setVisibility(View.GONE);
@@ -1636,6 +1644,7 @@ public class MessageAdapter extends BaseAdapter {
                         public void run() {
                             // send success
                             message.setStatus(0);
+                            updateStatus(message,0);
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
                         }
@@ -1647,6 +1656,7 @@ public class MessageAdapter extends BaseAdapter {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             message.setStatus(2);
+                            updateStatus(message, 2);
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
                             // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
@@ -1662,55 +1672,27 @@ public class MessageAdapter extends BaseAdapter {
                 public void onProgress(final int progress) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            holder.tv.setText(progress + "%");
+                            if (progress==100){
+                                message.setStatus(0);
+                                holder.pb.setVisibility(View.GONE);
+                                holder.tv.setVisibility(View.GONE);
+                            }
+                            else holder.tv.setText(progress + "%");
                         }
                     });
                 }
             }, chatType);
-//
-//            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-//
-//                @Override
-//                public void onSuccess() {
-//                    activity.runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            // send success
-//                            holder.pb.setVisibility(View.GONE);
-//                            holder.tv.setVisibility(View.GONE);
-//                        }
-//                    });
-//                }
-//
-//                @Override
-//                public void onError(int code, String error) {
-//                    activity.runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            holder.pb.setVisibility(View.GONE);
-//                            holder.tv.setVisibility(View.GONE);
-//                            // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-//                            holder.staus_iv.setVisibility(View.VISIBLE);
-////                            Toast.makeText(activity,
-////                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
-//                            ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
-//                        }
-//                    });
-//                }
-//
-//                @Override
-//                public void onProgress(final int progress, String status) {
-//                    activity.runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            holder.tv.setText(progress + "%");
-//                        }
-//                    });
-//                }
-//
-//            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+private void updateStatus(MessageBean messageBean,int status){
+    for (MessageBean m :ChatActivity.messageList){
+        if (m.getLocalId()==messageBean.getLocalId())m.setStatus(status);
+        notifyDataSetChanged();
+        break;
+    }
+}
     /**
      * 更新ui上消息发送状态
      *
@@ -1920,6 +1902,17 @@ public class MessageAdapter extends BaseAdapter {
         }
 
     }
+public static MessageBean updateVoiceReadStatus(MessageBean message){
+    try {
+        JSONObject object=new JSONObject(message.getMessage());
+        object.put("isRead",true);
+        message.setMessage(object.toString());
+        return message;
+    } catch (JSONException e) {
+        e.printStackTrace();
+        return message;
+    }
 
+}
 
 }

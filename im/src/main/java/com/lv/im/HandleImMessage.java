@@ -17,6 +17,7 @@ import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
+import com.lv.service.DownloadService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +51,7 @@ public class HandleImMessage {
          *
          * @param m 收到的消息
          */
-        public void onMsgArrive(MessageBean m);
+        public void onMsgArrive(MessageBean m,String groupId);
 
         public void onCMDMessageArrive(MessageBean m);
     }
@@ -99,26 +100,26 @@ public class HandleImMessage {
                     Message newMessage = (Message) message.obj;
                     System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMessage));
+                        handler.onMsgArrive(Msg2Bean(newMessage),String.valueOf(newMessage.getGroupId()));
                     }
                     break;
                 case Config.LOC_MSG:
                     Message newLocMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newLocMessage));
+                        handler.onMsgArrive(Msg2Bean(newLocMessage),String.valueOf(newLocMessage.getGroupId()));
                     }
                     break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMediaMessage));
+                        handler.onMsgArrive(Msg2Bean(newMediaMessage),String.valueOf(newMediaMessage.getGroupId()));
                     }
                     break;
                 default:
                     Message extMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(extMessage));
+                        handler.onMsgArrive(Msg2Bean(extMessage),String.valueOf(extMessage.getGroupId()));
                     }
                     break;
             }
@@ -168,17 +169,17 @@ public class HandleImMessage {
                 }
                 System.out.println("ehList size: "+ehList.size());
 
-                if (ehList.size()==0){
-                    notifyMsg(c,messageBean);
-                }
-
               //  for (MessageHandler handler : ehList) {
                 if (ehList.size()>0){
                     if (openStateMap.containsKey(ehList.get(0))) {
                          IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
                     }
                     else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                 }
+                 }else {
+                    notifyMsg(c,messageBean);
+                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                }
+
                 String content = messageBean.getContents();
                 JSONObject object = null;
                 switch (messageBean.getMsgType()) {
@@ -211,7 +212,7 @@ public class HandleImMessage {
                             e.printStackTrace();
                         }
                         messageBean.setUrl(aurl);
-                        Intent dlA_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
+                        Intent dlA_intent = new Intent(c, DownloadService.class);
                         dlA_intent.putExtra("msg", messageBean);
                         c.startService(dlA_intent);
                         break;
@@ -233,7 +234,7 @@ public class HandleImMessage {
                             e.printStackTrace();
                         }
                         messageBean.setUrl(iurl);
-                        Intent dlI_intent = new Intent("ACTION.IMSDK.STARTDOWNLOAD");
+                        Intent dlI_intent =new Intent(c, DownloadService.class);
                         dlI_intent.putExtra("msg", messageBean);
                         c.startService(dlI_intent);
                         break;
@@ -252,7 +253,6 @@ public class HandleImMessage {
     }
    public void notifyMsg(Context c,Message message){
            NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-           System.out.println("notify");
            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c)
                    .setSmallIcon(c.getApplicationInfo().icon)
                    .setWhen(System.currentTimeMillis()).setAutoCancel(true);
@@ -262,7 +262,8 @@ public class HandleImMessage {
            //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
            //设置状态栏提示
            mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
-
+           mBuilder.setContentTitle("new message");
+           mBuilder.setContentText("你有一条新消息！");
            //必须设置pendingintent，否则在2.3的机器上会有bug
            Intent intent = new Intent("android.intent.action.notify");
            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -271,9 +272,9 @@ public class HandleImMessage {
 
            Notification notification = mBuilder.build();
            notificationManager.notify(11, notification);
-           notificationManager.cancel(11);
+        //   notificationManager.cancel(11);
    }
-    public  boolean isAppRunningForeground(Context var0) {
+    public boolean isAppRunningForeground(Context var0) {
         ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
         List var2 = var1.getRunningTasks(1);
         return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());

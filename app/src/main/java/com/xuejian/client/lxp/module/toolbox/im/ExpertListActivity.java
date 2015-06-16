@@ -180,7 +180,11 @@ public class ExpertListActivity extends PeachBaseActivity {
             user_loc.setText(eb.residence);
 
             //控制达人的状态
-            user_status_01.setText(eb.getRolesDescription());
+            if(!eb.getRolesDescription().equals("")) {
+                user_status_01.setText(eb.getRolesDescription());
+            }else{
+                user_status_01.setPadding(0,0,0,0);
+            }
 //            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
 //                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
 //            }else/* if(status[position]=="忙"){

@@ -246,48 +246,48 @@ public class IMShareActivity extends PeachBaseActivity {
             // 获取与此用户/群组的会话
           final   User imUser = UserDBManager.getInstance().getContactByUserId(itemData.getFriendId());
             // 获取用户username或者群组groupid
-            final String username = imUser.getNickName();
+            //final String username = imUser.getNickName();
             if ("group".equals(itemData.getChatType())) {
                 // 群聊消息，显示群聊头像
-                final List<String> members = new ArrayList<>();
+                final List<User> members = UserDBManager.getInstance().getGroupMember(itemData.getFriendId());
                 final List<Bitmap> membersAvatars = new ArrayList<>();
-       //         final int size = Math.min(group.getMembers().size(), 4);
-                // 群聊消息，显示群聊头像
-//
-//                if(size!=0){
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            for (int i = 0; i < size; i++) {
-//                                String username = group.getMembers().get(i);
-//                                IMUser user = IMUserRepository.getContactByUserName(mContext, username);
-//                                if (user != null) {
-//                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(),avatarSize);
-//
-//                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
-//                                    if(bitmap==null){
-//                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
-//                                    }
-//                                    membersAvatars.add(bitmap);
-//                                }else{
-//                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
-//                                    membersAvatars.add(bitmap);
-//                                }
-//                            }
-//                            handler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mAvatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
-//                                            LocalDisplay.dp2px(45), membersAvatars));
-//                                }
-//                            });
-//
-//
-//                        }
-//                    }).start();
-//                }else{
+
+                final int size = Math.min(members.size(), 4);
+              //   群聊消息，显示群聊头像
+
+                if(size!=0){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < size; i++) {
+                                User user = members.get(i);
+                                if (user != null) {
+                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(),avatarSize);
+
+                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
+                                    if(bitmap==null){
+                                        bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
+                                    }
+                                    membersAvatars.add(bitmap);
+                                }else{
+                                    Bitmap bitmap=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
+                                    membersAvatars.add(bitmap);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAvatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(45),
+                                            LocalDisplay.dp2px(45), membersAvatars));
+                                }
+                            });
+
+
+                        }
+                    }).start();
+                }else {
                     mAvatar.setImageResource(R.drawable.avatar_placeholder_round);
- //               }
+                }
                 mName.setText(imUser.getNickName() != null ? imUser.getNickName() : " ");
             } else {
                 if(imUser!=null){
@@ -306,11 +306,11 @@ public class IMShareActivity extends PeachBaseActivity {
                     Intent intent = new Intent();
                     if ("group".equals(itemData.getChatType())) {
                         intent.putExtra("chatType", "group");
-                        intent.putExtra("toId", imUser.getUserId()+"");
+                        intent.putExtra("toId", imUser.getUserId());
 
                     } else {
                         intent.putExtra("chatType", "single");
-                        intent.putExtra("toId",imUser.getUserId()+"");
+                        intent.putExtra("toId",imUser.getUserId());
                     }
                     setResult(RESULT_OK, intent);
                     finish();

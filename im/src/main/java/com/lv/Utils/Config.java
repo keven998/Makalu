@@ -21,6 +21,7 @@ public class Config {
     public static final int STATUS_SUCCESS= 0;
     public static final int STATUS_SENDING= 1;
     public static final int STATUS_FAILED= 2;
+    public static final int STATUS_DEFAULT= 3;
     public static final int TEXT_MSG= 0;
     public static final int AUDIO_MSG= 1;
     public static final int IMAGE_MSG= 2;

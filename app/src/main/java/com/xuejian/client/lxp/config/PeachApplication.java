@@ -76,8 +76,6 @@ public class PeachApplication extends BaseApplication {
                 .diskCacheSize(40 * 1024 * 1024)
                 .tasksProcessingOrder(QueueProcessingType.FIFO)
                 .build();
-
-
         ImageLoader.getInstance().init(config);
     }
 

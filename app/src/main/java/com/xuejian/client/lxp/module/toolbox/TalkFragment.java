@@ -50,6 +50,8 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
+import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -328,6 +330,27 @@ public class TalkFragment extends PeachBaseFragment {
     public void loadConversation() {
         conversations.clear();
         conversations.addAll(IMClient.getInstance().getConversationList());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (ConversationBean c:conversations){
+                    if (UserDBManager.getInstance().getContactByUserId(c.getFriendId())==null){
+                        GroupManager.getGroupManager().getGroupInformation(String.valueOf(c.getFriendId()), new CallBack() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onFailed() {
+
+                            }
+                        });
+                    }
+                }
+            }
+        }).start();
+
         sortConversationByLastChatTime(conversations);
         refresh();
     }
@@ -516,27 +539,17 @@ public class TalkFragment extends PeachBaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case NEW_CHAT_REQUEST_CODE:
-                    int chatType = data.getIntExtra("chatType", 0);
+                    String chatType = data.getStringExtra("chatType");
                     String toName = data.getStringExtra("toName");
-                    long id = data.getLongExtra("Id",0);
-                    if (chatType == ChatActivity.CHATTYPE_GROUP) {
-                        //进入群聊
+                    long id = data.getLongExtra("toId",0);
+                    if (chatType!=null){
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
                         // it is group chat
-                        intent.putExtra("chatType", "group");
-                        intent.putExtra("friend_id", String.valueOf(id));
-                        intent.putExtra("Name", toName);
-                        startActivity(intent);
-                    } else if (chatType == ChatActivity.CHATTYPE_SINGLE){
-                        Intent intent = new Intent(getActivity(), ChatActivity.class);
-                        // it is single chat
-                        intent.putExtra("chatType", "single");
+                        intent.putExtra("chatType", chatType);
                         intent.putExtra("friend_id", String.valueOf(id));
                         intent.putExtra("Name", toName);
                         startActivity(intent);
                     }
-
-
             }
         }
 

@@ -3,6 +3,7 @@ package com.lv.im;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiConfiguration;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,7 +14,6 @@ import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
-//import com.lv.Utils.HandleImageTask;
 import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
@@ -50,7 +50,7 @@ public class IMClient {
     private static List<ConversationBean> convercationList= new ArrayList<>();
     //private static HashMap<String,MessageBean> messageMap;
     private int count;
-
+    private static List<String> invokeStatus=new ArrayList<>();
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
@@ -193,7 +193,28 @@ public class IMClient {
     }
 
     public List<MessageBean> getMessages(String friendId, int page) {
-        return db.getAllMsg(friendId, page);
+        List<MessageBean> list=db.getAllMsg(friendId, page);
+//        if (!invokeStatus.contains(friendId)){
+//            for (MessageBean m:list){
+//                if (m.getStatus()==1)m.setStatus(2);
+//            }
+//            return list;
+//        }
+        if (SendMsgAsyncTask.taskMap!=null&&SendMsgAsyncTask.taskMap.containsKey(friendId)){
+            List<Long>taskIds=SendMsgAsyncTask.taskMap.get(friendId);
+            for (MessageBean m:list){
+                if (m.getStatus()==1&&!taskIds.contains(m.getLocalId()))
+                    m.setStatus(2);
+            }
+            return list;
+        }else {
+            for (MessageBean m:list){
+                if (m.getStatus()==1)
+                    m.setStatus(2);
+            }
+            return list;
+        }
+     //   return list;
     }
 
 
@@ -259,6 +280,7 @@ public class IMClient {
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         m.setLocalId((int) localId);
+        System.out.println("localId-----------"+localId);
         return m;
     }
 
@@ -394,6 +416,20 @@ public class IMClient {
     }
     public void cleanMessageHistory(String chatId){
         db.deleteMessage(chatId);
+    }
+    public void deleteSingleMessage(String chatId,long MessageId){
+        db.deleteSingleMessage(chatId, MessageId);
+    }
+    public void changeMessageStatus(String chatId,long MessageId,int Status){
+        db.changeMessagestatus(chatId, MessageId, Status);
+    }
+    public void updateReadStatus(String chatId,long messageId,boolean isRead){
+        db.updateReadStatus(chatId, messageId, isRead);
+    }
+    public  void logout(){
+        db.disconnectDB();
+        client=null;
+
     }
 }
 

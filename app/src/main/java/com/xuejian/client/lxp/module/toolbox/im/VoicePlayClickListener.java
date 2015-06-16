@@ -31,7 +31,9 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.VoiceMessageBody;
 import com.lv.bean.MessageBean;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 
 import java.io.File;
 
@@ -48,12 +50,12 @@ public class VoicePlayClickListener implements View.OnClickListener {
     private String path;
     private boolean isRead;
 	private BaseAdapter adapter;
-
+private String friendId;
 	public static boolean isPlaying = false;
 	public static VoicePlayClickListener currentPlayListener = null;
 
 
-	public VoicePlayClickListener(MessageBean message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
+	public VoicePlayClickListener(String toChatUserName,MessageBean message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
 			String username,String chatType,boolean isRead,String path) {
 		this.message = message;
 		this.iv_read_status = iv_read_status;
@@ -63,6 +65,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		this.chatType =chatType ;
         this.isRead=isRead;
         this.path=path;
+		this.friendId=toChatUserName;
 	}
 
 	public void stopPlayVoice() {
@@ -101,6 +104,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			 audioManager.setMode(AudioManager.MODE_IN_CALL);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 		}
+//		mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 		try {
 			mediaPlayer.setDataSource(filePath);
 			mediaPlayer.prepare();
@@ -119,9 +123,11 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			currentPlayListener = this;
 			mediaPlayer.start();
 			showAnimation();
+			IMClient.getInstance().updateReadStatus(friendId, message.getLocalId(), true);
+			MessageAdapter.updateVoiceReadStatus(message);
 			try {
 				//如果是接收的消息
-				if (!isRead && message.getSendType() == 1) {
+				if (!MessageAdapter.isRead && message.getSendType() == 1) {
 					isRead = true;
 					if (iv_read_status != null && iv_read_status.getVisibility() == View.VISIBLE) {
 						//隐藏自己未播放这条语音消息的标志
@@ -132,6 +138,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 //					if(chatType != ChatType.GroupChat)
 //						EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
 				}
+				MessageAdapter.isRead=true;
 			} catch (Exception e) {
 				isRead = false;
 			}
