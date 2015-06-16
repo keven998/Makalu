@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class,};
+    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class};
 
    // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
@@ -85,7 +86,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
     private boolean FromBounce;
-
+    private Vibrator vibrator;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,12 +101,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         FromBounce=getIntent().getBooleanExtra("FromBounce",false);
         setContentView(R.layout.activity_main);
         initView();
-        initData();
         if (getIntent().getBooleanExtra("conflict", false)){
             showConflictDialog(MainActivity.this);
         }
+        vibrator= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if(!FromBounce) {
-        com.lv.user.User.login(AccountManager.getInstance().getCurrentUserId(),new LoginSuccessListener() {
+        com.lv.user.User.login(AccountManager.getCurrentUserId(),new LoginSuccessListener() {
             @Override
             public void OnSuccess() {
                 System.out.println("登陆成功");
@@ -123,9 +124,20 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
                 @Override
                 public void OnFailed(int code) {
-                    ToastUtil.getInstance(MainActivity.this).showToast("个推登录失败");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.getInstance(MainActivity.this).showToast("登录失败");
+                        }
+                    });
                 }
             });
+
+            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+            if (talkFragment != null) {
+                talkFragment.loadConversation();
+            }
+            initData();
         }
       }
 
@@ -272,8 +284,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if (!com.lv.user.User.getUser().isLogin()){
-                        Toast.makeText(MainActivity.this,"正在登陆",Toast.LENGTH_LONG).show();
+                    if(!FromBounce) {
+                        if (!com.lv.user.User.getUser().isLogin()) {
+                            Toast.makeText(MainActivity.this, "正在登陆", Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+                        mTabHost.setCurrentTab(1);
+                        Intent logIntent=new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(logIntent);
+                        overridePendingTransition(R.anim.push_bottom_in,0);
                     }
                     /**
                      * 注释掉登陆
@@ -321,16 +340,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     protected void onResume() {
         super.onResume();
         System.out.println("MainActivity resume");
-        HandleImMessage.getInstance().registerMessageListener(this);
-      //  if (!isConflict){
+        if (AccountManager.getInstance().isLogin()) {
+            HandleImMessage.getInstance().registerMessageListener(this);
+            //  if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-            if(talkFragment != null){
+            if (talkFragment != null) {
                 talkFragment.loadConversation();
             }
-
-           // EMChatManager.getInstance().activityResumed();
- //       }
-        updateUnreadMsgCount();
+            updateUnreadMsgCount();
+        }
     }
 
     @Override
@@ -344,26 +362,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      * 显示帐号在别处登录dialog
      */
     public void showConflictDialog(Context context) {
-        AccountManager.getInstance().logout(context,isConflict,new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                int i=mTabHost.getCurrentTab();
-                if(i==2){
-                    MyFragment my=(MyFragment)getSupportFragmentManager().findFragmentByTag("My");
-                    my.onResume();
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-
-            }
-        });
+        AccountManager.getInstance().logout(context);
+        int i=mTabHost.getCurrentTab();
+        if(i==2){
+            MyFragment my=(MyFragment)getSupportFragmentManager().findFragmentByTag("My");
+            my.onResume();
+        }
         if(isFinishing())
             return;
         try {
@@ -445,6 +449,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
+        vibrator.vibrate(700);
       //  notifyNewMessage(m);
     }
 

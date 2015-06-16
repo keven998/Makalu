@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.easemob.EMCallBack;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.IMUser;
@@ -22,9 +23,9 @@ public class AccountManager {
     public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
     public static final String LOGIN_USER_PREF = "login_user";
     public static User user;
-    public  String CurrentUserId;
+    public static String CurrentUserId;
     private Map<Long, User> contactList;
-    private boolean isLogin=false;
+    private boolean isLogin;
 
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
@@ -48,11 +49,11 @@ public class AccountManager {
         return isLogin;
     }
 
-    public String getCurrentUserId(){
+    public static String getCurrentUserId(){
         return CurrentUserId;
     }
-    public void setCurrentUserId(String currentUserId){
-        this.CurrentUserId=currentUserId;
+    public static void setCurrentUserId(String currentUserId){
+        CurrentUserId=currentUserId;
     }
     public User getLoginAccount(Context context) {
         String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
@@ -65,7 +66,13 @@ public class AccountManager {
         }
         return user;
     }
-
+    public void logout(final Context context){
+        SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
+        AccountManager.getInstance().setContactList(null);
+        isLogin=false;
+        IMClient.getInstance().logout();
+        UserDBManager.getInstance().disconnectDB();
+    }
     public void logout(final Context context, final boolean isConflict, final EMCallBack callBack) {
         PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
             @Override

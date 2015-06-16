@@ -31,7 +31,7 @@ public class SendMsgAsyncTask {
 
     Context c;
     sendTask task;
-    static HashMap<String,ArrayList<Long>> taskMap=new HashMap<>();
+    public static HashMap<String,ArrayList<Long>> taskMap=new HashMap<>();
     public SendMsgAsyncTask(Context c) {
         this.c = c;
     }

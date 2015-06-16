@@ -50,6 +50,8 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
+import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -328,6 +330,27 @@ public class TalkFragment extends PeachBaseFragment {
     public void loadConversation() {
         conversations.clear();
         conversations.addAll(IMClient.getInstance().getConversationList());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (ConversationBean c:conversations){
+                    if (UserDBManager.getInstance().getContactByUserId(c.getFriendId())==null){
+                        GroupManager.getGroupManager().getGroupInformation(String.valueOf(c.getFriendId()), new CallBack() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onFailed() {
+
+                            }
+                        });
+                    }
+                }
+            }
+        }).start();
+
         sortConversationByLastChatTime(conversations);
         refresh();
     }

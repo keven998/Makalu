@@ -251,38 +251,12 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
             public void onClick(View v) {
                 dialog.dismiss();
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
-                AccountManager.getInstance().logout(mContext, false, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                Intent intent = new Intent(mContext, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                AccountActvity2.this.finish();
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.getInstance(AccountActvity2.this).showToast("呃～网络好像找不到了");
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int i, String s) {
-
-                    }
-                });
+                AccountManager.getInstance().logout(mContext);
+                DialogManager.getInstance().dissMissLoadingDialog();
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                AccountActvity2.this.finish();
             }
         });
         dialog.setNegativeButton("取消", new View.OnClickListener() {

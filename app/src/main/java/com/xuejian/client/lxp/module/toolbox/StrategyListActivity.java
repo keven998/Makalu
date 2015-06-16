@@ -96,7 +96,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         if(AccountManager.getInstance().getLoginAccount(this)==null){
             swipeEnable=false;
         }else {
-            swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().getCurrentUserId()));
+            swipeEnable = userId.equals(String.valueOf(AccountManager.getCurrentUserId()));
         }
         initView();
         initData();

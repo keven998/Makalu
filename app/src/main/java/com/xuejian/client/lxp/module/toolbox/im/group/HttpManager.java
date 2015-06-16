@@ -10,6 +10,7 @@ import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.lv.user.User;
 import com.lv.user.UserDao;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
@@ -127,8 +128,9 @@ public class HttpManager {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
-            array.put(100001);
-            //array.put(3);
+            for (long id : members) {
+                array.put(id);
+            }
             obj.put("action", "delMembers");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
@@ -300,12 +302,12 @@ public class HttpManager {
     }
 
     public static void getUserGroupInfo(String userId) {
-        final String url = Config.HOST + "/users/100001/groups";
+        final String url = Config.HOST + "/users/"+ AccountManager.getCurrentUserId()+"/groups";
         exec.execute(new Runnable() {
             @Override
             public void run() {
                 HttpGet get = new HttpGet(url);
-                get.addHeader("UserId", 100001 + "");
+                get.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     System.out.println("code " + httpResponse.getStatusLine().getStatusCode());
@@ -329,7 +331,7 @@ public class HttpManager {
                 RequestParams params = new RequestParams();
                 params.put(tag, value);
                 // params.add("UserId",100001+"");
-                client.addHeader("UserId", 100001l + "");
+                client.addHeader("UserId",  AccountManager.getCurrentUserId());
                 client.get(url, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int i, Header[] headers, String s, Throwable throwable) {

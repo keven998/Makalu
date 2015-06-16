@@ -50,7 +50,7 @@ public class IMClient {
     private static List<ConversationBean> convercationList= new ArrayList<>();
     //private static HashMap<String,MessageBean> messageMap;
     private int count;
-
+    private static List<String> invokeStatus=new ArrayList<>();
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
@@ -189,7 +189,28 @@ public class IMClient {
     }
 
     public List<MessageBean> getMessages(String friendId, int page) {
-        return db.getAllMsg(friendId, page);
+        List<MessageBean> list=db.getAllMsg(friendId, page);
+//        if (!invokeStatus.contains(friendId)){
+//            for (MessageBean m:list){
+//                if (m.getStatus()==1)m.setStatus(2);
+//            }
+//            return list;
+//        }
+        if (SendMsgAsyncTask.taskMap!=null&&SendMsgAsyncTask.taskMap.containsKey(friendId)){
+            List<Long>taskIds=SendMsgAsyncTask.taskMap.get(friendId);
+            for (MessageBean m:list){
+                if (m.getStatus()==1&&!taskIds.contains(m.getLocalId()))
+                    m.setStatus(2);
+            }
+            return list;
+        }else {
+            for (MessageBean m:list){
+                if (m.getStatus()==1)
+                    m.setStatus(2);
+            }
+            return list;
+        }
+     //   return list;
     }
 
 
@@ -399,7 +420,12 @@ public class IMClient {
         db.changeMessagestatus(chatId, MessageId, Status);
     }
     public void updateReadStatus(String chatId,long messageId,boolean isRead){
-        db.updateReadStatus(chatId,messageId,isRead);
+        db.updateReadStatus(chatId, messageId, isRead);
+    }
+    public  void logout(){
+        db.disconnectDB();
+        client=null;
+
     }
 }
 

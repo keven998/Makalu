@@ -14,6 +14,8 @@
 package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.easemob.util.DateUtils;
 import com.lv.bean.ConversationBean;
@@ -33,12 +36,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
+import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -124,46 +131,48 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                    members = new ArrayList<>();
 //                }
 //                final List<Bitmap> membersAvatars = new ArrayList<>();
-//                final int size = Math.min(members.size(), 4);
+            final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(username));
+            final List<Bitmap> membersAvatars = new ArrayList<>();
+
+                final int size = Math.min(members.size(), 4);
 //                // 群聊消息，显示群聊头像
-//                final ViewHolder finalHolder1 = holder;
-//                if (size != 0) {
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            for (int i = 0; i < size; i++) {
-//                                String username = group.getMembers().get(i);
-//                                IMUser user = UserRepository.getContactByUserName(getContext(), username);
-//                                if (user != null) {
-//                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
-//
-//                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
-//                                    if (bitmap == null) {
-//                                        bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
-//                                    }
-//                                    membersAvatars.add(bitmap);
-//                                } else {
-//                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
-//                                    membersAvatars.add(bitmap);
-//                                }
-//                            }
-//                            handler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
-//                                            LocalDisplay.dp2px(60), membersAvatars));
-//                                }
-//                            });
-//
-//
-//                        }
-//                    }).start();
+                final ViewHolder finalHolder1 = holder;
+                if (size != 0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < size; i++) {
+                                User user = members.get(i);
+                                if (user != null) {
+                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
+
+                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
+                                    if (bitmap == null) {
+                                        bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
+                                    }
+                                    membersAvatars.add(bitmap);
+                                } else {
+                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
+                                    membersAvatars.add(bitmap);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
+                                            LocalDisplay.dp2px(60), membersAvatars));
+                                }
+                            });
+
+
+                        }
+                    }).start();
 //                } else {
 //                    holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
 //                }
-//            } else {
+            } else {
                 holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
-//            }
+            }
 //            if (contact != null) {
 //                holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
 //            }else{

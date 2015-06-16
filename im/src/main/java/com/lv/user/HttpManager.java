@@ -83,8 +83,9 @@ public class HttpManager {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
-            array.put(members.get(0));
-            //array.put(3);
+            for (long id:members){
+                array.put(id);
+            }
             obj.put("action", "addMembers");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
@@ -98,30 +99,32 @@ public class HttpManager {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
-            array.put(100001);
-            //array.put(3);
+            for (long id:members){
+                array.put(id);
+            }
             obj.put("action", "delMembers");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj);
+        editGroupMembers(groupId, obj);
     }
 
     public static void silenceMembers(String groupId, List<Long> members, boolean isPublic) {
         final JSONObject obj = new JSONObject();
         try {
             JSONArray array = new JSONArray();
-            array.put(100001);
-            //array.put(3);
+            for (long id:members){
+                array.put(id);
+            }
             obj.put("action", "silence");
             obj.put("isPublic", isPublic);
             obj.put("participants", array);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroupMembers(900078 + "", obj);
+        editGroupMembers(groupId, obj);
     }
 
     public static void editGroupMembers(final String GroupId, final JSONObject obj) {
