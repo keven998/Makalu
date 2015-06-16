@@ -191,6 +191,7 @@ public class LoginActivity extends PeachBaseActivity{
 
     private void imLogin(final User user,int type) {
         //初始化数据库，方便后面操作
+        IMClient.getInstance().initDB();
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));

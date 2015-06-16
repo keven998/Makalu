@@ -72,6 +72,10 @@ public class IMClient {
         MessageDB.getInstance().init();
     }
 
+    public void disconnectDB(){
+        db = null;
+    }
+
     public static void initIM(Context context) {
         PushManager.getInstance().initialize(context.getApplicationContext());
         if (Config.isDebug) {
