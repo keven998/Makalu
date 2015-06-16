@@ -64,7 +64,7 @@ public class ExpertListActivity extends PeachBaseActivity {
     private int EXPERT_DES=1;
     private int GET_LOCATION=2;
     int mCurrentPage = 0;
-    int PAGE_SIZE=15;
+    int PAGE_SIZE=200;
     ArrayList<ExpertBean> allExpertResult=new ArrayList<ExpertBean>();
 
     @Override
@@ -331,15 +331,12 @@ public class ExpertListActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==EXPERT_DES){
+        if(requestCode==EXPERT_DES&&resultCode==RESULT_OK){
             //刷新本页
             if(data!=null){
                 String id=data.getExtras().getString("locId");
                 refreshView(id);
             }
-        }
-        if(requestCode==RESULT_OK){
-
         }
     }
 }
