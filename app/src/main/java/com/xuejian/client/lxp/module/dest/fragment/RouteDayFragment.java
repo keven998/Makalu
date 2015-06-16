@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.config.PeachApplication;
+import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.AddPoiActivity;
 import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
@@ -64,7 +65,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     View addDayFooter;
     StrategyBean strategy;
     public boolean isInEditMode;
-    PeachUser user;
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -515,10 +516,10 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             holder.citysTv = (TextView) convertView.findViewById(R.id.tv_loc_list);
             holder.doMore = (ImageView) convertView.findViewById(R.id.day_location);
 
-            if(user==null){
+            if (user == null) {
                 holder.doMore.setVisibility(View.GONE);
-            }else {
-                if (user.userId != strategy.userId) {
+            } else {
+                if (user.getUserId() != strategy.userId) {
                     holder.doMore.setVisibility(View.GONE);
                 }
             }

@@ -84,10 +84,10 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                final User user = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user != null) {
                     Intent intent = new Intent(getActivity(), StrategyListActivity.class);
-                    intent.putExtra("userId", String.valueOf(user.userId));
+                    intent.putExtra("userId", String.valueOf(user.getUserId()));
                     intent.putExtra("isExpertPlan", false);
                     startActivity(intent);
                 } else {
@@ -106,10 +106,10 @@ public class TripFragment extends PeachBaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
-                PeachUser user = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user != null && !TextUtils.isEmpty(user.easemobUser)) {
+                final User user = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user != null) {
                     Intent intent = new Intent(getActivity(), StrategyListActivity.class);
-                    intent.putExtra("userId", String.valueOf(user.userId));
+                    intent.putExtra("userId", String.valueOf(user.getUserId()));
                     intent.putExtra("isExpertPlan", false);
                     startActivity(intent);
                 }
