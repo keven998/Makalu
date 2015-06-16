@@ -83,7 +83,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private Long NEWFRIEND=2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-    //private NewMessageBroadcastReceiver msgReceiver;
     private MyGroupChangeListener groupChangeListener;
     private boolean FromBounce;
     private Vibrator vibrator;

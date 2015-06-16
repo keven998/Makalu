@@ -13,12 +13,12 @@ android {
     }
     signingConfigs {
     }
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion '21.1.1'
     defaultConfig {
         applicationId "com.xuejian.client.lxp"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
