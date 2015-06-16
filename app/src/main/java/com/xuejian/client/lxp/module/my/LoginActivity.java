@@ -121,24 +121,24 @@ public class LoginActivity extends PeachBaseActivity{
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-//        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
-//                weixinLogin();
-////                UserApi.authSignUp("123456",new HttpCallBack() {
-////                    @Override
-////                    public void doSucess(Object result, String method) {
-////
-////                    }
-////
-////                    @Override
-////                    public void doFailure(Exception error, String msg, String method) {
-////
-////                    }
-////                });
-//            }
- //       });
+       findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            //    MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
+                weixinLogin();
+//                UserApi.authSignUp("123456",new HttpCallBack() {
+//                    @Override
+//                    public void doSucess(Object result, String method) {
+//
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method) {
+//
+//                    }
+//                });
+            }
+        });
         loginBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
