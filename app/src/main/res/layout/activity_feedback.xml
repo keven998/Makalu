@@ -28,7 +28,7 @@
         android:padding="8dp"
         android:lines="4"
         android:minLines="4"
-        android:hint="意见和需求"
+        android:hint="你的意见和建议"
         android:textColorHint="#aaaaaa"
         android:gravity="left|top"
         android:textSize="15sp"

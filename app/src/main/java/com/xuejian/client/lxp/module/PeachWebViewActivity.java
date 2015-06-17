@@ -8,7 +8,6 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -21,10 +20,8 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/12/13.
  */
-public class PeachWebViewActivity extends BaseWebViewActivity implements View.OnClickListener{
+public class PeachWebViewActivity extends BaseWebViewActivity implements View.OnClickListener {
 
-//    @InjectView(R.id.ly_header_bar_title_wrap)
-//    TitleHeaderBar titleHeaderBar;
     @InjectView(R.id.web_view_go_back)
     ImageView go_back;
     @InjectView(R.id.web_view_go_forward)
@@ -48,9 +45,9 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mWebView.canGoBack()){
+                if (mWebView.canGoBack()) {
                     mWebView.goBack();
-                }else{
+                } else {
                     finish();
                 }
 
@@ -61,14 +58,14 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         initWebView();
         mCurrentUrl = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-        if(!TextUtils.isEmpty(title)) {
-            ((TextView)findViewById(R.id.tv_title_bar_title)).setText(title);
+        if (!TextUtils.isEmpty(title)) {
+            ((TextView) findViewById(R.id.tv_title_bar_title)).setText(title);
         } else {
-            title="分享";
+            title = "分享";
         }
-        strategy=new StrategyBean();
-        strategy.detailUrl=mCurrentUrl;
-        strategy.title=title;
+        strategy = new StrategyBean();
+        strategy.detailUrl = mCurrentUrl;
+        strategy.title = title;
         go_back.setOnClickListener(this);
         go_forward.setOnClickListener(this);
         refresh.setOnClickListener(this);
@@ -79,21 +76,29 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.web_view_go_back:
-                if(mWebView.canGoBack()){mWebView.goBack();}break;
+                if (mWebView.canGoBack()) {
+                    mWebView.goBack();
+                }
+                break;
 
             case R.id.web_view_go_forward:
-                if(mWebView.canGoForward()){mWebView.goForward();}break;
+                if (mWebView.canGoForward()) {
+                    mWebView.goForward();
+                }
+                break;
 
             case R.id.web_view_refresh:
-                mWebView.reload();break;
+                mWebView.reload();
+                break;
 
             case R.id.web_view_share:
                 ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy);
                 break;
 
-            default:break;
+            default:
+                break;
         }
     }
 

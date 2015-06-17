@@ -6,85 +6,19 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <FrameLayout android:id="@+id/ly_header_bar_title_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white" >
-
-        <ImageView
-            android:id="@+id/ly_title_bar_left"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/title_bar_height"
-            android:layout_gravity="left"
-            android:src="@drawable/selector_ic_nav_back"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="30dp"/>
-
-        <TextView
-            android:id="@+id/tv_title_bar_title"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textSize="17sp"
-            android:ellipsize="end"
-            android:textColor="@color/base_text_color_title"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:orientation="horizontal">
-            <CheckedTextView
-                android:id="@+id/tv_title_bar_right_1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:paddingLeft="30dp"
-                android:paddingRight="10dp"/>
-            <ImageView
-                android:id="@+id/tv_title_bar_right"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/title_bar_height"
-                android:scaleType="center"
-                android:paddingLeft="10dp"
-                android:visibility="gone"
-                android:paddingRight="20dp"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/app_theme_color"
-            android:layout_gravity="bottom"
-            />
-
-    </FrameLayout>
-
-    <com.xuejian.client.lxp.common.widget.NumberProgressBar
-        android:id="@+id/numberbar1"
-        android:layout_width="match_parent"
-        android:layout_alignBottom="@id/ly_header_bar_title_wrap"
-        custom:progress="0"
-        custom:progress_text_visibility="invisible"
-        style="@style/NumberProgressBar_Default" />
-
     <RelativeLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:background="@color/base_color_white"
         android:layout_alignParentBottom="true"
+        android:background="@color/base_color_white"
         android:visibility="gone">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
-            android:background="@color/gray_normal"
             android:layout_alignParentTop="true"
-            />
+            android:background="@color/gray_normal" />
 
 
         <LinearLayout
@@ -96,35 +30,32 @@
                 android:id="@+id/web_view_go_back"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/webview_back_checker"
                 android:layout_gravity="center_vertical"
-                android:paddingTop="14dp"
+                android:layout_weight="1"
                 android:paddingBottom="14dp"
-                />
+                android:paddingTop="14dp"
+                android:src="@drawable/webview_back_checker" />
 
 
             <ImageView
                 android:id="@+id/web_view_go_forward"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/webview_next_checker"
                 android:layout_gravity="center_vertical"
-                android:paddingTop="14dp"
+                android:layout_weight="1"
                 android:paddingBottom="14dp"
-                />
+                android:paddingTop="14dp"
+                android:src="@drawable/webview_next_checker" />
 
             <ImageView
                 android:id="@+id/web_view_refresh"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/webview_refresh_checker"
-                android:paddingTop="16dp"
+                android:layout_weight="1"
                 android:paddingBottom="16dp"
-                />
+                android:paddingTop="16dp"
+                android:src="@drawable/webview_refresh_checker" />
 
             <ImageView
                 android:id="@+id/web_view_share"
@@ -133,20 +64,79 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </LinearLayout>
 
     </RelativeLayout>
 
-    <WebView android:id="@+id/web_view"
+    <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ly_header_bar_title_wrap"
-        android:layout_above="@id/bottom_bar">
-    </WebView>
+        android:layout_above="@id/bottom_bar"
+        android:layout_marginTop="@dimen/content_top_margin"/>
 
+    <FrameLayout
+        android:id="@+id/ly_header_bar_title_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
+
+        <ImageView
+            android:id="@+id/ly_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_gravity="left"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:src="@drawable/selector_ic_nav_back" />
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <CheckedTextView
+                android:id="@+id/tv_title_bar_right_1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="30dp"
+                android:paddingRight="10dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/tv_title_bar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/title_bar_height"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:scaleType="center"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <com.xuejian.client.lxp.common.widget.NumberProgressBar
+        android:id="@+id/numberbar1"
+        style="@style/NumberProgressBar_Default"
+        android:layout_width="match_parent"
+        android:layout_alignBottom="@id/ly_header_bar_title_wrap"
+        custom:progress="0"
+        custom:progress_text_visibility="invisible" />
 
 
 </RelativeLayout>

@@ -54,7 +54,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 	private void initTitlebar() {
 //		mTitlebar = findViewById(R.id.title_bar);
         TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("意见和需求");
+        titleBar.getTitleTextView().setText("意见反馈");
         titleBar.enableBackKey(true);
 	}
 	
@@ -64,7 +64,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 	}
 
 	private void feedback() {
-        DialogManager.getInstance().showLoadingDialog(mContext,"正在提交");
+        DialogManager.getInstance().showLoadingDialog(mContext,"正在发送");
         OtherApi.feedback(contentEt.getText().toString().trim(), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {

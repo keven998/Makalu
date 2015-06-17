@@ -186,7 +186,7 @@
                     android:background="@drawable/option_cell_selector"
                     android:drawableLeft="@drawable/ic_home_shareapp2friend"
                     android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/arr_poi_guide"
+                    android:drawableRight="@drawable/right_arrow_icon"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
