@@ -67,16 +67,20 @@ public class IMUtils {
         } else {
             headerName = user.getUsername();
         }
-        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+       if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
             user.setHeader("");
         } else if (Character.isDigit(headerName.charAt(0))) {
             user.setHeader("#");
         } else {
-            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
-                    0, 1).toUpperCase());
-            char header = user.getHeader().toLowerCase().charAt(0);
-            if (header < 'a' || header > 'z') {
+            if(headerName.substring(0,1).equals(" ")){
                 user.setHeader("#");
+            }else {
+                user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                        0, 1).toUpperCase());
+                char header = user.getHeader().toLowerCase().charAt(0);
+                if (header < 'a' || header > 'z' ) {
+                    user.setHeader("#");
+                }
             }
         }
         return user;
