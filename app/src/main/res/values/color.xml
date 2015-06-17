@@ -18,7 +18,7 @@
     <color name="color_text_iv">#c8c8c8</color>
     <color name="color_text_v">#c8c8c8</color>
 
-    <color name="color_titlebar">#ffffff</color>
+    <color name="color_text_titlebar">#ffffff</color>
 
 
     <color name="title_bar_background">@color/app_theme_color</color>

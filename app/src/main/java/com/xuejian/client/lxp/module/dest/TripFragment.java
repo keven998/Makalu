@@ -56,13 +56,9 @@ import java.util.List;
  */
 public class TripFragment extends PeachBaseFragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trip, null);
-
-        final TitleHeaderBar titleHeaderBar = (TitleHeaderBar)rootView.findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("旅行");
 
         rootView.findViewById(R.id.lxp_search_bg).setOnClickListener(new View.OnClickListener() {
             @Override
