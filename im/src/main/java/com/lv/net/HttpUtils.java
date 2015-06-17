@@ -83,7 +83,7 @@ public class HttpUtils {
             obj.put("msgList", array);
             IMClient.getInstance().clearackList();
             if (Config.isDebug) {
-                Log.i(Config.TAG, url+" ack : " + obj.toString());
+                Log.i(Config.TAG, url + " ack : " + obj.toString());
             }
             IMClient.getInstance().clearackList();
         } catch (JSONException e) {
@@ -105,24 +105,23 @@ public class HttpUtils {
                     HttpEntity res = httpResponse.getEntity();
                     String s = EntityUtils.toString(res);
 
-                        JSONObject object = new JSONObject(s);
-                        JSONArray resultArray = object.getJSONArray("result");
-                        List<Message> list = new ArrayList<>();
+                    JSONObject object = new JSONObject(s);
+                    JSONArray resultArray = object.getJSONArray("result");
+                    List<Message> list = new ArrayList<>();
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "ack Result : " + s);
+                    }
+                    for (int j = 0; j < resultArray.length(); j++) {
+                        Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);
+                        list.add(msg);
+                    }
+                    if (list.size() > 0) {
                         if (Config.isDebug) {
-                            Log.i(Config.TAG, "ack Result : " + s);
+                            Log.i(Config.TAG, "msg list : " + list.toString());
                         }
-                        for (int j = 0; j < resultArray.length(); j++) {
-                            Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);
-                            list.add(msg);
-                        }
-                        if (list.size() > 0) {
-                            if (Config.isDebug) {
-                                Log.i(Config.TAG, "msg list : " + list.toString());
-                            }
-                            listener.OnMsgArrive(list);
-                        }
-                }
-                else {
+                        listener.OnMsgArrive(list);
+                    }
+                } else {
                     IMClient.getInstance().setBLOCK(false);
                     LazyQueue.getInstance().TempDequeue();
                 }
@@ -143,7 +142,7 @@ public class HttpUtils {
         final String[] fastest = {""};
         final long[] temp = {9999};
         for (String url : urlList) {
-        exec.execute(() -> {
+            exec.execute(() -> {
 
                 long start = 0;
                 long end = 0;

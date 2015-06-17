@@ -12,13 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class LazyQueue {
     long max_time = 2000;
     private static LazyQueue instance;
-    static HashMap<String, SortList> LazyMap = new HashMap<>();
-    static HashMap<String, SortList> TempMap = new HashMap<>();
+    static Map<String, SortList> LazyMap = new ConcurrentHashMap<>();
+    static Map<String, SortList> TempMap = new ConcurrentHashMap<>();
     boolean isRunning;
     DequeueListener listener;
     Timer timer;

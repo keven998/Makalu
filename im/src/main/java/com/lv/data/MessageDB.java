@@ -420,17 +420,20 @@ public class MessageDB {
         if (timestamp!=0)values.put("CreateTime", timestamp);
         values.put("Status", status);
         values.put("Type",Type);
-        int num = mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});
-        updateConversation(fri_ID, conversation, Integer.parseInt(msgId));
+        mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});
+        int id;
+        if (msgId==null)id=-1;
+        else id=Integer.parseInt(msgId);
+        updateConversation(fri_ID, conversation,id);
         closeDB();
     }
 
     public synchronized void updateConversation(String fri_ID, String conversation, int last_msgId) {
         mdb = getDB();
         ContentValues values = new ContentValues();
-        values.put("conversation", conversation);
-        values.put("last_rec_msgId", last_msgId);
-        mdb.update(con_table_name, values, "Friend_Id=?", new String[]{fri_ID});
+        if (conversation!=null)values.put("conversation", conversation);
+        if (last_msgId!=-1)values.put("last_rec_msgId", last_msgId);
+        if (values.size()!=0)mdb.update(con_table_name, values, "Friend_Id=?", new String[]{fri_ID});
         closeDB();
     }
     public synchronized void deleteSingleMessage(String fri_ID, long msgId) {
