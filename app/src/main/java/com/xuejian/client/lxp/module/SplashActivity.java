@@ -80,6 +80,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         if(file==null){
             SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
         }
+
         IMClient.initIM(getApplicationContext());
 		initView();
 		initData();

@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by q on 2015/4/17.
@@ -34,7 +36,6 @@ public class SendMsgAsyncTask {
     public SendMsgAsyncTask(Context c) {
         this.c = c;
     }
-
     public static void sendMessage(final String conversation, final String currentFri, final IMessage msg, final long localId, final SendMsgListener listen,final String chatType) {
         if (IMClient.taskMap.containsKey(currentFri)){
             if (IMClient.taskMap.get(currentFri).contains(localId))return;
