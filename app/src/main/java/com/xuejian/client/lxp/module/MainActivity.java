@@ -530,7 +530,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     public void onDrivingLogout() {
         MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
         if (myFragment != null) {
-            myFragment.refresh();
+            myFragment.refreshLoginStatus();
         }
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.EMCallBack;
-import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.util.EMLog;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -31,21 +23,17 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.toolbox.FavListActivity;
+import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
+import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,110 +44,157 @@ import java.util.Map;
  * Created by Rjm on 2014/10/9.
  */
 public class MyFragment extends PeachBaseFragment implements View.OnClickListener {
-    public final static int CODE_FAVORITE = 102;
+    public final static int CODE_PLANS = 102;
+    public final static int CODE_FOOTPRINT = 103;
 
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
-    @ViewInject(R.id.iv_gender)
+    @ViewInject(R.id.iv_my_gender2)
     private ImageView genderIv;
+    @ViewInject(R.id.iv_more_header_frame_gender1)
+    private ImageView genderFrame;
+    @ViewInject(R.id.tv_level)
+    private TextView tvLevel;
 
-    @ViewInject(R.id.tv_nickname)
+    @ViewInject(R.id.tv_title)
     private TextView nickNameTv;
-    @ViewInject(R.id.tv_id)
+    @ViewInject(R.id.tv_subtitle)
     private TextView idTv;
-    @ViewInject(R.id.tv_status)
-    private TextView statusTv;
-    private View rootView,unRootView;
+
+    @ViewInject(R.id.tv_friends_count)
+    private TextView tvFriendsCount;
+    @ViewInject(R.id.tv_plans_count)
+    private TextView tvPlansCount;
+    @ViewInject(R.id.tv_tracks_count)
+    private TextView tvTracksCount;
+
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ViewUtils.inject(this, rootView);
-        rootView.findViewById(R.id.ll_share_account).setOnClickListener(this);
-        rootView.findViewById(R.id.ll_about).setOnClickListener(this);
-        rootView.findViewById(R.id.ll_setting).setOnClickListener(this);
-        rootView.findViewById(R.id.ll_message_center).setOnClickListener(this);
-        rootView.findViewById(R.id.ll_push_friends).setOnClickListener(this);
-        rootView.findViewById(R.id.login_frame).setOnClickListener(this);
-       // rootView.findViewById(R.id.guide_favour).setOnClickListener(this);  //新添的指路达人
+        rootView.findViewById(R.id.tv_share_appwith_friend).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_aboutus).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_app_setting).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_feedback).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_edit_profile).setOnClickListener(this);
+        rootView.findViewById(R.id.iv_more_header_frame_gender1).setOnClickListener(this);
+        rootView.findViewById(R.id.fl_friends_entry).setOnClickListener(this);
+        rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
+        rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         return rootView;
     }
 
-    public void refresh(){
+    public void refreshLoginStatus() {
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
-        if(user == null) {
-            View view=getView();
-            genderIv.setVisibility(View.GONE);
-            view.findViewById(R.id.indicator).setVisibility(View.GONE);
-            avatarIv.setImageResource(R.drawable.avatar_placeholder_round);
-            nickNameTv.setText("未登录");
-            idTv.setText("点击登录旅行派，享受更多旅行服务");
-            statusTv.setText("");
+        if (user == null) {
+            avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
+            nickNameTv.setText("旅行派");
+            idTv.setText("未登录");
+            tvFriendsCount.setText("木");
+            tvPlansCount.setText("木");
+            tvTracksCount.setText("木");
+            tvLevel.setText("");
+            genderIv.setImageResource(R.drawable.ic_home_gender_unknown);
+            genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
+            avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
         } else {
-            genderIv.setVisibility(View.VISIBLE);
-            View view=getView();
-            view.findViewById(R.id.indicator).setVisibility(View.VISIBLE);
             if (user.getGender().equalsIgnoreCase("M")) {
-                genderIv.setImageResource(R.drawable.ic_gender_man);
+                genderIv.setImageResource(R.drawable.ic_home_user_gender_boy);
+                genderFrame.setImageResource(R.drawable.ic_home_header_boy);
+                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
+                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             } else if (user.getGender().equalsIgnoreCase("F")) {
-                genderIv.setImageResource(R.drawable.ic_gender_lady);
+                genderIv.setImageResource(R.drawable.ic_home_user_gender_boy);
+                genderFrame.setImageResource(R.drawable.ic_home_header_girl);
+                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             } else {
-                genderIv.setImageDrawable(null);
+                genderIv.setImageResource(R.drawable.ic_home_gender_unknown);
+                genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
+                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             }
+            tvTracksCount.setText("99国99城市");
+            tvPlansCount.setText("99条");
+            tvFriendsCount.setText("99人");
             nickNameTv.setText(user.getNickName());
+            idTv.setText("ID：" + user.getUserId());
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
-                    .showImageOnFail(R.drawable.avatar_placeholder_round)
+                    .showImageForEmptyUri(0)
+                    .showImageOnFail(0)
                     .resetViewBeforeLoading(true)
-                    .cacheOnDisc(true)
-                            // 设置下载的图片是否缓存在SD卡中
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(62))) // 设置成圆角图片
+                    .cacheOnDisk(true)
+                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .build();
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
-           // LogUtil.d(user.avatarSmall+"====================================");
-            idTv.setText("ID: " + user.getUserId());
-            if (TextUtils.isEmpty(user.getSignature())) {
-                statusTv.setText("");
-            } else {
-                statusTv.setText(user.getTravelStatus());
-            }
         }
     }
 
-    Handler handler=new Handler();
-    Runnable  runnableUi=new  Runnable(){
+    Handler handler = new Handler();
+    Runnable runnableUi = new Runnable() {
         @Override
         public void run() {
             //更新界面
-            refresh();
+            refreshLoginStatus();
         }
     };
 
     @Override
     public void onResume() {
         super.onResume();
-        new Thread(){
-            public void run(){
+        new Thread() {
+            public void run() {
                 handler.post(runnableUi);
             }
         }.start();
-
-//        MobclickAgent.onPageStart("page_home_me");
     }
+
     @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_home_me");
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.login_frame:
+        switch (view.getId()) {
+            case R.id.iv_more_header_frame_gender1:
+                User user1 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user1 == null) {
+                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(logIntent);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
+                }
+                break;
+
+            case R.id.tv_aboutus:
+                Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
+                aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
+                aboutIntent.putExtra("title", "关于旅行派");
+                startActivity(aboutIntent);
+                break;
+
+            case R.id.tv_app_setting:
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(settingIntent);
+                break;
+
+            case R.id.tv_feedback:
+                MobclickAgent.onEvent(getActivity(), "event_feedback");
+                Intent feedback = new Intent(getActivity(), FeedbackActivity.class);
+                startActivity(feedback);
+                break;
+
+            case R.id.tv_share_appwith_friend:
+                ShareUtils.shareAppToWx(getActivity(), null);
+                break;
+
+            case R.id.tv_edit_profile:
                 User user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) {
-                    Intent logIntent=new Intent(getActivity(),LoginActivity.class);
+                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                     getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 } else {
@@ -168,57 +203,36 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 }
                 break;
 
-            case R.id.ll_share_account:
-                MobclickAgent.onEvent(getActivity(),"event_share_app_by_weichat");
-                Intent intent = new Intent(getActivity(), ShareAccountActivity.class);
+            case R.id.fl_friends_entry:
+                Intent intent = new Intent(getActivity(), ContactActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.ll_about:
-                Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
-                aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
-                aboutIntent.putExtra("title", "关于旅行派");
-                startActivity(aboutIntent);
-                break;
-
-            case R.id.ll_setting:
-                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
-                startActivity(settingIntent);
-                break;
-
-           /* case R.id.btn_login:
-                Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(loginintent);
-                break;
-
-            case R.id.btn_reg:
-                Intent regintent = new Intent(getActivity(), RegActivity.class);
-                startActivityForResult(regintent, LoginActivity.REQUEST_CODE_REG);
-                break;*/
-
-            case R.id.ll_message_center:
-//                Intent msgIntent = new Intent(getActivity(), MessageContents.class);
-//                startActivity(msgIntent);
-                User user1 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user1 != null) { // && !TextUtils.isEmpty(user1.easemobUser)
-                    Intent fIntent = new Intent(getActivity(), FavListActivity.class);
-                    startActivity(fIntent);
+            case R.id.fl_plans_entry:
+                final User user2 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user2 != null) {
+                    Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
+                    intent2.putExtra("userId", String.valueOf(user2.getUserId()));
+                    intent2.putExtra("isExpertPlan", false);
+                    startActivity(intent2);
                 } else {
-                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(loginIntent, CODE_FAVORITE);
-                    ToastUtil.getInstance(getActivity()).showToast("请先登录");
+                    Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(LoginIntent, CODE_PLANS);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 }
                 break;
 
-            case R.id.ll_push_friends:
-                ShareUtils.shareAppToWx(getActivity(), null);
-
+            case R.id.fl_tracks_entry:
+                Intent intent1 = new Intent(getActivity(), MyFootPrinterActivity.class);
+//                intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
+                startActivityForResult(intent1, CODE_FOOTPRINT);
                 break;
 
             default:
                 break;
         }
     }
+
     private void imLogin(final User user) {
 
         AccountManager.getInstance().saveLoginAccount(getActivity(), user);
@@ -252,141 +266,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                ToastUtil.getInstance(getActivity()).showToast("欢迎来到旅行派");
-                refresh();
-
+                refreshLoginStatus();
             }
         });
-
-
-
-
-        /*EMChatManager.getInstance().login(user.easemobUser, user.easemobPwd, new EMCallBack() {
-
-            @Override
-            public void onSuccess() {
-
-                // 登陆成功，保存用户名密码
-                // demo中简单的处理成每次登陆都去获取好友username，开发者自己根据情况而定
-               // AccountManager.getInstance().saveLoginAccount(getActivity(), user);
-                boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.nickName);
-                if (!updatenick) {
-                    EMLog.e("LoginActivity", "update current user nick fail");
-                }
-
-                // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
-
-//                    List<String> usernames = EMContactManager.getInstance().getContactUserNames();
-                final Map<String, IMUser> userlist = new HashMap<String, IMUser>();
-                // 添加user"申请与通知"
-                IMUser newFriends = new IMUser();
-                newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                newFriends.setNick("申请与通知");
-                newFriends.setHeader("");
-                newFriends.setIsMyFriends(true);
-                userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-//                    // 添加"群聊"
-//                    IMUser groupUser = new IMUser();
-//                    groupUser.setUsername(Constant.GROUP_USERNAME);
-//                    groupUser.setNick("群聊");
-//                    groupUser.setHeader("");
-//                    groupUser.setUnreadMsgCount(0);
-//                    userlist.put(Constant.GROUP_USERNAME, groupUser);
-                // 存入内存
-                AccountManager.getInstance().setContactList(userlist);
-                List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                IMUserRepository.saveContactList(getActivity(), users);
-                // 获取群聊列表(群聊里只有groupid和groupname的简单信息),sdk会把群组存入到内存和db中
-                final long startTime = System.currentTimeMillis();
-                LogUtil.d("getGroupFromServer", startTime + "");
-                EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
-                    @Override
-                    public void onSuccess(List<EMGroup> emGroups) {
-                        long endTime = System.currentTimeMillis();
-                        LogUtil.d("getGroupFromServer", endTime - startTime + "--groudSize=" + emGroups.size());
-
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-
-                    }
-                });
-
-                // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
-                // ** manually load all local groups and
-                // conversations in case we are auto login
-                EMGroupManager.getInstance().loadAllGroups();
-                EMChatManager.getInstance().loadAllConversations();
-                UserApi.getContact(new HttpCallBack<String>() {
-                    @Override
-                    public void doSucess(String result, String method) {
-                        CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                        if (contactResult.code == 0) {
-                            for (User peachUser : contactResult.result.contacts) {
-                               *//* IMUser user = new IMUser();
-                                user.setUserId(peachUser.userId);
-                                user.setMemo(peachUser.memo);
-                                user.setNick(peachUser.nickName);
-                                user.setUsername(peachUser.easemobUser);
-                                user.setUnreadMsgCount(0);
-                                user.setAvatar(peachUser.avatar);
-                                user.setAvatarSmall(peachUser.avatarSmall);
-                                user.setSignature(peachUser.signature);
-                                user.setIsMyFriends(true);
-                                user.setGender(peachUser.gender);
-                                IMUtils.setUserHead(user);*//*
-                                userlist.put(peachUser.easemobUser, user);
-                            }
-                            // 存入内存
-                            AccountManager.getInstance().setContactList(userlist);
-                            // 存入db
-                            List<IMUser> users = new ArrayList<IMUser>(userlist.values());
-                            IMUserRepository.saveContactList(getActivity(), users);
-                        }
-
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        if (!getActivity().isFinishing())
-                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                });
-                // 进入主页面
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(getActivity()).showToast("欢迎来到旅行派");
-                        refresh();
-
-                    }
-                });
-
-
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, final String message) {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(getActivity()).showToast("登录失败 " + message);
-                    }
-                });
-            }
-        });*/
-
 
     }
 
 
-            @Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -394,8 +281,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 User user = (User) data.getSerializableExtra("user");
                 DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
                 imLogin(user);
-            } else if (requestCode == CODE_FAVORITE) {
-                startActivity(new Intent(getActivity(), FavListActivity.class));
+            } else if (requestCode == CODE_PLANS) {
+                final User user2 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user2 != null) {
+                    Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
+                    intent2.putExtra("userId", String.valueOf(user2.getUserId()));
+                    intent2.putExtra("isExpertPlan", false);
+                    startActivity(intent2);
+                }
             }
         }
     }

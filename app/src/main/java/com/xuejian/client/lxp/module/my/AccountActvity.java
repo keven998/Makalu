@@ -5,9 +5,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -25,7 +22,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.EMCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -41,7 +37,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
@@ -51,7 +46,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
@@ -65,19 +59,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -124,20 +111,20 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     DisplayImageOptions options;
     private TextView tvGender;
 
-    private int RESIDENT=1;
-    private int STATUS=2;
-    private int SEX=3;
+    private int RESIDENT = 1;
+    private int STATUS = 2;
+    private int SEX = 3;
     private ImageView my_pics_cell;
-    private ArrayList<String> pics=new ArrayList<String>();
-    private ArrayList<String> pic_ids=new ArrayList<String>();
-    private ArrayList<JSONObject> objects=new ArrayList<JSONObject>();
+    private ArrayList<String> pics = new ArrayList<String>();
+    private ArrayList<String> pic_ids = new ArrayList<String>();
+    private ArrayList<JSONObject> objects = new ArrayList<JSONObject>();
     LinearLayout llPics;
-    ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
-    private int FOOTPRINT=4;
-    private int SIGNATURE=5;
-    private int NICKNAME=6;
-    private int BINDPHONE=7;
-    private boolean birthTimeFlag=false;
+    ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
+    private int FOOTPRINT = 4;
+    private int SIGNATURE = 5;
+    private int NICKNAME = 6;
+    private int BINDPHONE = 7;
+    private boolean birthTimeFlag = false;
     /*private ImageZoomAnimator2 zoomAnimator;
 
     @ViewInject(R.id.ac_zoom_container)
@@ -178,7 +165,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         titleBar.enableBackKey(true);
     }
 
-    public void getUserPics(Long userId){
+    public void getUserPics(Long userId) {
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -208,14 +195,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
 
-    public void initFlDestion(Map<String,ArrayList<LocBean>> tracks){
+    public void initFlDestion(Map<String, ArrayList<LocBean>> tracks) {
 
         try {
             JSONObject jsonObject = new JSONObject(tracks.toString());
-            Iterator iterator=jsonObject.keys();
-            while(iterator.hasNext()){
-                String key=(String)iterator.next();
-                for(int i=0;i<tracks.get(key).size();i++){
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                for (int i = 0; i < tracks.get(key).size(); i++) {
                     all_foot_print_list.add(tracks.get(key).get(i));
                 }
             }
@@ -225,9 +212,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         initFootPrint(all_foot_print_list);
     }
 
-    private void initFootPrint(final ArrayList<LocBean> prints){
+    private void initFootPrint(final ArrayList<LocBean> prints) {
         my_destination.removeAllViews();
-        for(int j=0;j<prints.size();j++){
+        for (int j = 0; j < prints.size(); j++) {
             View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
             cityNameTv.setText(prints.get(j).zhName);
@@ -235,15 +222,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
     }
 
-    public void initScrollView(final ArrayList<String> picList,final ArrayList<String> ids){
+    public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
         all_pics.removeAllViews();
-        llPics=new LinearLayout(this);
+        llPics = new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llPics.removeAllViews();
-        for(int i=0;i<=picList.size();i++){
-            View view=View.inflate(AccountActvity.this,R.layout.my_all_pics_cell,null);
-            my_pics_cell=(ImageView)view.findViewById(R.id.my_pics_cell);
-            if(i==picList.size()){
+        for (int i = 0; i <= picList.size(); i++) {
+            View view = View.inflate(AccountActvity.this, R.layout.my_all_pics_cell, null);
+            my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
+            if (i == picList.size()) {
                 my_pics_cell.setImageResource(R.drawable.ic_add_selected);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,16 +238,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         showSelectPicDialog();
                     }
                 });
-            }
-            else{
-                final String uri=picList.get(i);
-                final String id=ids.get(i);
-                final int index=i;
+            } else {
+                final String uri = picList.get(i);
+                final String id = ids.get(i);
+                final int index = i;
                 ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, options);
                 my_pics_cell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            showChangePicDialog(picList,id,index);
+                        showChangePicDialog(picList, id, index);
                     }
                 });
 
@@ -275,7 +261,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         user = AccountManager.getInstance().getLoginAccount(this);
-       // initData();
+        // initData();
 //        MobclickAgent.onPageStart("page_personal_profile");
     }
 
@@ -285,7 +271,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.onPause();
 //        MobclickAgent.onPageEnd("page_personal_profile");
     }
-    private void bindView(User user){
+
+    private void bindView(User user) {
         nickNameTv.setText(user.getNickName());
         genderTv.setText(user.getGenderDesc());
         options = new DisplayImageOptions.Builder()
@@ -328,29 +315,29 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_nickname:
-                MobclickAgent.onEvent(mContext,"event_update_nick");
+                MobclickAgent.onEvent(mContext, "event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
-                startActivityForResult(nickNameIntent,NICKNAME);
+                startActivityForResult(nickNameIntent, NICKNAME);
                 break;
 
             case R.id.ll_sign:
-                MobclickAgent.onEvent(mContext,"event_update_memo");
+                MobclickAgent.onEvent(mContext, "event_update_memo");
                 Intent signIntent = new Intent(mContext, ModifySignActivity.class);
-                startActivityForResult(signIntent,SIGNATURE);
+                startActivityForResult(signIntent, SIGNATURE);
                 break;
 
             case R.id.ll_gender:
-                MobclickAgent.onEvent(mContext,"event_update_gender");
+                MobclickAgent.onEvent(mContext, "event_update_gender");
                 //showSelectGenderDialog();
                 Intent sexIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
-                sexIntent.putExtra("type","sex");
+                sexIntent.putExtra("type", "sex");
                 startActivityForResult(sexIntent, SEX);
                 break;
 
 
             case R.id.ll_status:
                 Intent statusIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
-                statusIntent.putExtra("type","status");
+                statusIntent.putExtra("type", "status");
                 startActivityForResult(statusIntent, STATUS);
                 break;
 
@@ -360,14 +347,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;*/
 
             case R.id.ll_foot_print:
-                Intent intent=new Intent(AccountActvity.this,MyFootPrinterActivity.class);
-                intent.putParcelableArrayListExtra("myfootprint",all_foot_print_list);
-                startActivityForResult(intent,FOOTPRINT);
-               // startActivity(intent);
+                Intent intent = new Intent(AccountActvity.this, MyFootPrinterActivity.class);
+                intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
+                startActivityForResult(intent, FOOTPRINT);
+                // startActivity(intent);
                 break;
 
             case R.id.ll_birthday:
-                DatePickerDialog dialog = new DatePickerDialog(mContext,new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -385,12 +372,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-                            birthTimeFlag=true;
-                        }else{
-                            birthTimeFlag=false;
+                            birthTimeFlag = true;
+                        } else {
+                            birthTimeFlag = false;
                         }
                     }
-                },1990,0,0);
+                }, 1990, 0, 0);
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.setCancelable(true);
                 dialog.show();
@@ -399,34 +386,34 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.ll_resident:
                 Intent residentIntent = new Intent(mContext, SelectResidentActivity.class);
-                startActivityForResult(residentIntent,RESIDENT);
-                overridePendingTransition(R.anim.fade_in,0);
+                startActivityForResult(residentIntent, RESIDENT);
+                overridePendingTransition(R.anim.fade_in, 0);
                 break;
 
 
             case R.id.ll_modify_pwd:
-                MobclickAgent.onEvent(mContext,"event_update_password");
+                MobclickAgent.onEvent(mContext, "event_update_password");
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
                 startActivity(modifyPwdIntent);
                 break;
 
             case R.id.ll_bind_phone:
-                MobclickAgent.onEvent(mContext,"event_update_phone");
+                MobclickAgent.onEvent(mContext, "event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
-                startActivityForResult(bindPhoneIntent,BINDPHONE);
+                startActivityForResult(bindPhoneIntent, BINDPHONE);
                 break;
 
             case R.id.btn_logout:
-                MobclickAgent.onEvent(mContext,"event_logout");
+                MobclickAgent.onEvent(mContext, "event_logout");
                 warnLogout();
                 break;
         }
     }
 
 
-    private void refreshUserInfo(){
+    private void refreshUserInfo() {
         User user = AccountManager.getInstance().getLoginAccount(this);
-        if(user!=null){
+        if (user != null) {
             UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
                 public void doSucess(String result, String method) {
@@ -464,22 +451,22 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void warnLogout() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
-       // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定退出已登陆账号吗？");
-        dialog.setPositiveButton("确定",new View.OnClickListener() {
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext,"正在登出");
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
                 AccountManager.getInstance().logout(mContext);
                 DialogManager.getInstance().dissMissLoadingDialog();
-                Intent intent =new Intent(mContext,MainActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 AccountActvity.this.finish();
             }
         });
-        dialog.setNegativeButton("取消",new View.OnClickListener() {
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -489,7 +476,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     }
 
-    private void showChangePicDialog(final ArrayList<String> urls,final String id,final int index) {
+    private void showChangePicDialog(final ArrayList<String> urls, final String id, final int index) {
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
         View contentView = View.inflate(this,
                 R.layout.dialog_change_user_pic, null);
@@ -523,7 +510,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 //删除接口
                 //tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
-                delThisPic(id,index);
+                delThisPic(id, index);
                 dialog.dismiss();
 
             }
@@ -551,8 +538,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
 
-    public void delThisPic(String picId, final int pic_index){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    public void delThisPic(String picId, final int pic_index) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -605,7 +592,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
+                tempImage = SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
                 dialog.dismiss();
 
             }
@@ -632,8 +619,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void modifyGender(final String gender){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void modifyGender(final String gender) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -667,9 +654,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void showSelectGenderDialog() {
-        String[] names={"美女","帅锅","不告诉你"};
-        final MoreDialog dialog=new MoreDialog(AccountActvity.this);
-        dialog.setMoreStyle(false,3,names);
+        String[] names = {"美女", "帅锅", "不告诉你"};
+        final MoreDialog dialog = new MoreDialog(AccountActvity.this);
+        dialog.setMoreStyle(false, 3, names);
 
         /*final AlertDialog dialog = new AlertDialog.Builder(this).create();
         View contentView = View.inflate(this, R.layout.dialog_select_gender, null);
@@ -706,8 +693,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     }
 
-    private void uploadAvatar(final File file){
-        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
+    private void uploadAvatar(final File file) {
+        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
         OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -768,8 +755,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
 
-    private void changeUserAvatar(final String url){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void changeUserAvatar(final String url) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -857,7 +844,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode!=RESULT_OK){
+        if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == SelectPicUtils.REQUEST_CODE_CAMERA) { // 发送照片
@@ -866,39 +853,44 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
-            if(tempImage!=null){
+            if (tempImage != null) {
                 uploadAvatar(tempImage);
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
-            if(tempImage!=null){
-               uploadAvatar(tempImage);
+            if (tempImage != null) {
+                uploadAvatar(tempImage);
 
             }
-        } else if (requestCode == RESIDENT){
+        } else if (requestCode == RESIDENT) {
             editResidenceToInterface(data.getExtras().getString("result"));
             //接口
-        } else if (requestCode == SEX){
-            String sex=data.getExtras().getString("result");
-            if(sex.equals("美女")){modifyGender("F");}
-            else if(sex.equals("帅锅")){modifyGender("M");}
-            else if(sex.equals("一言难尽")){modifyGender("U");}
-            else if(sex.equals("保密")){modifyGender("S");}
-        } else if (requestCode == STATUS){
+        } else if (requestCode == SEX) {
+            String sex = data.getExtras().getString("result");
+            if (sex.equals("美女")) {
+                modifyGender("F");
+            } else if (sex.equals("帅锅")) {
+                modifyGender("M");
+            } else if (sex.equals("一言难尽")) {
+                modifyGender("U");
+            } else if (sex.equals("保密")) {
+                modifyGender("S");
+            }
+        } else if (requestCode == STATUS) {
             editStatusToInterface(data.getExtras().getString("result"));
-        } else if (requestCode == FOOTPRINT){
-            all_foot_print_list=data.getParcelableArrayListExtra("footprint");
+        } else if (requestCode == FOOTPRINT) {
+            all_foot_print_list = data.getParcelableArrayListExtra("footprint");
             initFootPrint(all_foot_print_list);
-        } else if (requestCode == SIGNATURE){
+        } else if (requestCode == SIGNATURE) {
             signTv.setText(data.getExtras().getString("signature"));
-        } else if (requestCode == NICKNAME){
+        } else if (requestCode == NICKNAME) {
             nickNameTv.setText(data.getExtras().getString("nickname"));
-        } else if (requestCode == BINDPHONE){
+        } else if (requestCode == BINDPHONE) {
             bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
     }
 
-    private void editStatusToInterface(final String sstatus){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void editStatusToInterface(final String sstatus) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -931,8 +923,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         });
     }
 
-    private void editResidenceToInterface(final String residence){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void editResidenceToInterface(final String residence) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
@@ -966,8 +958,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
 
-    private void editBirthdayToInterface(final String birth){
-        if(!CommonUtils.isNetWorkConnected(mContext)){
+    private void editBirthdayToInterface(final String birth) {
+        if (!CommonUtils.isNetWorkConnected(mContext)) {
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }

@@ -20,6 +20,10 @@
 
     <color name="color_text_titlebar">#ffffff</color>
 
+    <drawable name="list_cell_item">#ffffff</drawable>
+    <drawable name="list_cell_item_clicked">@color/color_disable</drawable>
+
+
 
     <color name="title_bar_background">@color/app_theme_color</color>
     <color name="base_font_color">#2e2727</color>
@@ -82,9 +86,6 @@
     <color name="red_text_color">#FF2D2D</color>
     <color name="tips_text_gray_color">#909090</color>
     <color name="fragment_bg">#e4e4e4</color>
-
-    <drawable name="list_cell_item">#ffffff</drawable>
-    <drawable name="list_cell_item_clicked">#eeeeee</drawable>
 
     <drawable name="sub_list_cell_item">#f8f9f9</drawable>
     <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>

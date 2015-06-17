@@ -18,17 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.log.LogUtil;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.exceptions.EaseMobException;
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
 import com.lv.user.User;
@@ -38,11 +33,8 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PeachConversation;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
@@ -59,7 +51,6 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -126,11 +117,10 @@ public class TalkFragment extends PeachBaseFragment {
                 ConversationBean conversation = adapter.getItem(position);
                 String username = conversation.getFriendId() + "";
                 if (String.valueOf(conversation.getFriendId()).equals(User.getUser().getCurrentUser()))
-                    ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
+                    ToastUtil.getInstance(getActivity()).showToast("还不能自己聊");
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    System.out.println("talk" + conversation.getConversation() + conversation.getFriendId() + conversation.getChatType());
                     intent.putExtra("friend_id", conversation.getFriendId() + "");
                     intent.putExtra("chatType", conversation.getChatType());
                     if (conversation.getConversation() != null) {
@@ -212,9 +202,9 @@ public class TalkFragment extends PeachBaseFragment {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
             MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
-            int pos=((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+            int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
             ConversationBean Conversation = adapter.getItem(pos);
-            IMClient.getInstance().deleteConversation(Conversation.getFriendId()+"");
+            IMClient.getInstance().deleteConversation(Conversation.getFriendId() + "");
             conversations.remove(pos);
             refresh();
 
@@ -248,8 +238,8 @@ public class TalkFragment extends PeachBaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (ConversationBean c:conversations){
-                    if (UserDBManager.getInstance().getContactByUserId(c.getFriendId())==null){
+                for (ConversationBean c : conversations) {
+                    if (UserDBManager.getInstance().getContactByUserId(c.getFriendId()) == null) {
                         GroupManager.getGroupManager().getGroupInformation(String.valueOf(c.getFriendId()), new CallBack() {
                             @Override
                             public void onSuccess() {
@@ -270,8 +260,8 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     public void updateUnreadAddressLable() {
-      int count = getUnreadAddressCountTotal();
-      //  int count=IMClient.getInstance().getUnReadCount();
+        int count = getUnreadAddressCountTotal();
+        //  int count=IMClient.getInstance().getUnReadCount();
         if (count > 0) {
             unreadAddressNumber.setText(String.valueOf(count));
             unreadAddressNumber.setVisibility(View.VISIBLE);
@@ -335,7 +325,7 @@ public class TalkFragment extends PeachBaseFragment {
         }
 
         // 排序
-      //  sortConversationByLastChatTime(conversationList);
+        //  sortConversationByLastChatTime(conversationList);
         return conversationList;
     }
 
@@ -349,14 +339,14 @@ public class TalkFragment extends PeachBaseFragment {
             @Override
             public int compare(final ConversationBean con1, final ConversationBean con2) {
 
-               long LastTime2 = con2.getLastChatTime();
+                long LastTime2 = con2.getLastChatTime();
                 long LastTime1 = con1.getLastChatTime();
                 if (LastTime1 == 0 || LastTime2 == 0) {
                     return -1;
                 }
                 if (LastTime2 == LastTime1) {
                     return 0;
-                } else if (LastTime2> LastTime1) {
+                } else if (LastTime2 > LastTime1) {
                     return 1;
                 } else {
                     return -1;
@@ -411,8 +401,8 @@ public class TalkFragment extends PeachBaseFragment {
                 case NEW_CHAT_REQUEST_CODE:
                     String chatType = data.getStringExtra("chatType");
                     String toName = data.getStringExtra("toName");
-                    long id = data.getLongExtra("toId",0);
-                    if (chatType!=null){
+                    long id = data.getLongExtra("toId", 0);
+                    if (chatType != null) {
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
                         // it is group chat
                         intent.putExtra("chatType", chatType);
