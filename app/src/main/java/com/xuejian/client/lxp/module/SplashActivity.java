@@ -80,6 +80,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         if(file==null){
             SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
         }
+
         IMClient.initIM(getApplicationContext());
 		initView();
 		initData();
@@ -297,7 +298,6 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                ToastUtil.getInstance(SplashActivity.this).showToast("欢迎回到旅行派");
                 setResult(RESULT_OK);
                 finish();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));

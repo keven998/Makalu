@@ -42,8 +42,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_titlebar"/>
+            android:textColor="@color/color_text_titlebar"/>
     </RelativeLayout>
 
     <RelativeLayout

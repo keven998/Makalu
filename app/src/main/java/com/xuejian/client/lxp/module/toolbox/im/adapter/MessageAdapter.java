@@ -1629,7 +1629,6 @@ public class MessageAdapter extends BaseAdapter {
      * send message with new sdk
      */
     private void sendPictureMessage(final MessageBean message, final ViewHolder holder) {
-        System.out.println("==============发送");
         try {
             // before send, update ui
             holder.staus_iv.setVisibility(View.GONE);

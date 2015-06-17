@@ -107,13 +107,6 @@ public class UploadUtils {
 
     public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType) {
         System.out.println("localId "+localId+" filePath:" + filePath);
-        if ( IMClient.taskMap.containsKey(receive)){
-            if (IMClient.taskMap.get(receive).contains(localId))return;
-            else IMClient.taskMap.get(receive).add(localId);
-        }else {
-            IMClient.taskMap.put(receive,new ArrayList<Long>());
-            IMClient.taskMap.get(receive).add(localId);
-        }
         if (Config.isDebug)Log.i(Config.TAG,"开始上传 ");
         HttpUtils.getToken(new HttpUtils.tokenget() {
             @Override

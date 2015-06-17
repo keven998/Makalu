@@ -223,7 +223,7 @@ public class LoginActivity extends PeachBaseActivity{
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到旅行派");
+//                ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到旅行派");
                 setResult(RESULT_OK);
                 finish();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));

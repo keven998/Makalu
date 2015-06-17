@@ -196,29 +196,34 @@ public class IMClient {
 
     public List<MessageBean> getMessages(String friendId, int page) {
         List<MessageBean> list = db.getAllMsg(friendId, page);
-//        if (!invokeStatus.contains(friendId)){
-//            for (MessageBean m:list){
-//                if (m.getStatus()==1)m.setStatus(2);
+        if (!invokeStatus.contains(friendId)){
+            for (MessageBean m:list){
+                if (m.getStatus()==1)m.setStatus(2);
+            }
+            invokeStatus.add(friendId);
+            return list;
+        }
+//        System.out.println("invoke !");
+//        if (taskMap != null && taskMap.containsKey(friendId)) {
+//            List<Long> taskIds = taskMap.get(friendId);
+//            for (MessageBean m : list) {
+//                if (m.getStatus() == 1 && !taskIds.contains(m.getLocalId())) {
+//                    m.setStatus(2);
+//                    System.out.println("setFailed " + m.getLocalId());
+//                }
+//            }
+//            return list;
+//        } else {
+//            for (MessageBean m : list) {
+//                if (m.getStatus() == 1){
+//                    m.setStatus(2);
+//                    System.out.println("setFailed111 " + m.getLocalId());
+//                }
+//
 //            }
 //            return list;
 //        }
-        if (taskMap != null && taskMap.containsKey(friendId)) {
-            List<Long> taskIds = taskMap.get(friendId);
-            for (MessageBean m : list) {
-                if (m.getStatus() == 1 && !taskIds.contains(m.getLocalId())) {
-                    m.setStatus(2);
-                    System.out.println("setFailed " + m.getLocalId());
-                }
-            }
-            return list;
-        } else {
-            for (MessageBean m : list) {
-                if (m.getStatus() == 1)
-                    m.setStatus(2);
-            }
-            return list;
-        }
-        //   return list;
+          return list;
     }
 
 
@@ -247,6 +252,13 @@ public class IMClient {
      * @param chatTpe  聊天类型
      */
     public void sendAudioMessage(MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
+        if ( taskMap.containsKey(friendId)){
+            if (taskMap.get(friendId).contains(message.getLocalId()))return;
+            else taskMap.get(friendId).add(message.getLocalId());
+        }else {
+            taskMap.put(friendId,new ArrayList<Long>());
+            taskMap.get(friendId).add(message.getLocalId());
+        }
         UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
     }
 
@@ -289,6 +301,13 @@ public class IMClient {
     }
 
     public void sendImageMessage(MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
+        if (taskMap.containsKey(friendId)){
+            if (taskMap.get(friendId).contains(messageBean.getLocalId()))return;
+            else taskMap.get(friendId).add(messageBean.getLocalId());
+        }else {
+            taskMap.put(friendId,new ArrayList<Long>());
+            taskMap.get(friendId).add(messageBean.getLocalId());
+        }
         UploadUtils.getInstance().uploadImage(messageBean, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
     }
 

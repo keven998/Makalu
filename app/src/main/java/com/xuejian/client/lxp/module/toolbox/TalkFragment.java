@@ -71,29 +71,16 @@ public class TalkFragment extends PeachBaseFragment {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
     @InjectView(R.id.tv_title_add)
     TextView tvTitleAdd;
-    //    @InjectView(R.id.tv_title_bar_title)
-//    TextView tvTitleBarTitle;
-//    @InjectView(R.id.btn_address_list)
-//    ImageView btnAddressList;
     @InjectView(R.id.unread_address_number)
     TextView unreadAddressNumber;
     @InjectView(R.id.btn_container_address_list)
     RelativeLayout btnContainerAddressList;
-//    @InjectView(R.id.list)
-//    ListView list;
-//    @InjectView(R.id.start_chat)
-//    ImageView startChat;
-//    @InjectView(R.id.empty_view)
-//    LinearLayout emptyView;
-
 
     private InputMethodManager inputMethodManager;
     private ListView listView;
-    //    private Map<String, IMUser> contactList;
     private ChatAllHistoryAdapter adapter;
     private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     private boolean hidden;
-    private int del_unread_item = 0;
     private List<ConversationBean> conversations = new ArrayList<>();
 
     @Override
@@ -124,34 +111,6 @@ public class TalkFragment extends PeachBaseFragment {
                 showActionDialog();
             }
         });
-//        // 搜索框
-//        query = (EditText) getView().findViewById(R.id.query);
-//        // 搜索框中清除button
-//        clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);
-//        query.addTextChangedListener(new TextWatcher() {
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                adapter.getFilter().filter(s);
-//                if (s.length() > 0) {
-//                    clearSearch.setVisibility(View.VISIBLE);
-//                } else {
-//                    clearSearch.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
-//        clearSearch.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                query.getText().clear();
-//
-//            }
-//        });
         btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,8 +126,6 @@ public class TalkFragment extends PeachBaseFragment {
                 ConversationBean conversation = adapter.getItem(position);
                 String username = conversation.getFriendId() + "";
                 if (String.valueOf(conversation.getFriendId()).equals(User.getUser().getCurrentUser()))
-              //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
-//                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
                     // 进入聊天页面
@@ -209,29 +166,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (!User.getUser().isLogin()) {
             return;
         }
-//        if (!AccountManager.getInstance().isLogin()) {
-//            return;
-//        }
-
-
-
-
-
-//        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
-//        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
-        // contact list
-//        contactList = AccountManager.getInstance().getContactList(getActivity());
-//        if(EMGroupManager.getInstance().getAllGroups()==null){
-       // EMGroupManager.getInstance().loadAllGroups();
-//        }
-        //loadConversationsWithRecentChat();
         loadConversation();
-       // updateGroupsInfo();
-    }
-
-    private void loadConversations() {
-        conversations = IMClient.getInstance().getConversationList();
-        refresh();
     }
 
     private void showActionDialog() {
@@ -265,21 +200,6 @@ public class TalkFragment extends PeachBaseFragment {
         dialog.show();
     }
 
-
-    public void setEmptyView() {
-//        listView.setEmptyView();
-        if (listView.getEmptyView() == null) {
-            View emptyView = getActivity().findViewById(R.id.empty_view);
-            listView.setEmptyView(emptyView);
-            getActivity().findViewById(R.id.start_chat).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getActivity().startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
-                }
-            });
-        }
-    }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -296,11 +216,6 @@ public class TalkFragment extends PeachBaseFragment {
             ConversationBean Conversation = adapter.getItem(pos);
             IMClient.getInstance().deleteConversation(Conversation.getFriendId()+"");
             conversations.remove(pos);
-//            EMConversation tobeDeleteCons = peachConversation.emConversation;
-//            // 删除此会话
-//            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
-//            InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
-
             refresh();
 
             // 更新消息未读数
@@ -422,54 +337,6 @@ public class TalkFragment extends PeachBaseFragment {
         // 排序
       //  sortConversationByLastChatTime(conversationList);
         return conversationList;
-    }
-
-    public void updateGroupsInfo() {
-        final ArrayList<String> groupIdList = new ArrayList<String>();
-        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
-        for (Map.Entry<String, EMConversation> entry : conversations.entrySet()) {
-            EMConversation conversation = entry.getValue();
-            if (conversation.getIsGroup()) {
-                groupIdList.add(conversation.getUserName());
-            }
-
-        }
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Iterator<String> it = groupIdList.iterator();
-                while (it.hasNext()) {
-                    String groupId = it.next();
-                    try {
-                        *//*EMGroup emGroup = EMGroupManager.getInstance().getGroupFromServer(groupId);
-                        if (emGroup != null) {
-                            if (emGroup.getMembers().contains(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).easemobUser)) {
-                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
-
-                            } else {
-                                EMChatManager.getInstance().deleteConversation(groupId, true);
-                            }
-                        } else {
-                            EMChatManager.getInstance().deleteConversation(groupId, true);
-                        }
-                    } catch (EaseMobException e) {
-                        LogUtil.d("errcode=" + e.getErrorCode());
-                        e.printStackTrace();
-                    }*//*
-
-                }
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh();
-                        }
-                    });
-                }
-
-
-            }
-        }).start();*/
     }
 
     /**
