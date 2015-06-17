@@ -9,17 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:textColor="@color/color_text_titlebar"
+        android:background="@drawable/bg_navigation_bar"
         android:textSize="@dimen/title_text_size"
         android:text="旅行"
         android:gravity="center"/>
 
-    <ImageView android:id="@+id/lxp_search_bg"
+    <FrameLayout android:id="@+id/lxp_search_bg"
         android:layout_width="match_parent"
-        android:layout_below="@id/title_view"
         android:layout_height="@dimen/tools_search_bar_height"
-        android:background="@color/base_color_white"
         android:layout_margin="10dp"
-        android:scaleType="centerCrop"/>
+        android:background="@color/base_color_white"
+        android:layout_below="@id/title_view">
+
+        <ImageView 
+            android:layout_width="match_parent"
+            android:layout_below="@id/title_view"
+            android:layout_height="@dimen/tools_search_bar_height"
+            android:background="@color/base_color_white"
+            android:layout_margin="10dp"
+            android:scaleType="centerCrop"/>
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
