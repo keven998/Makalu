@@ -113,17 +113,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             }
-            int countryCount=user.getTracks().keySet().size();
-            int cityCount=0;
-            for (String key:user.getTracks().keySet()){
-                cityCount+=user.getTracks().get(key).size();
+            int countryCount = user.getTracks().keySet().size();
+            int cityCount = 0;
+            for (String key : user.getTracks().keySet()) {
+                cityCount += user.getTracks().get(key).size();
             }
-            tvTracksCount.setText(countryCount+"国"+cityCount+"城市");
-            tvPlansCount.setText(user.getGuideCnt()+"条");
-            tvFriendsCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size()+"人");
+            tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
+            tvPlansCount.setText(user.getGuideCnt() + "条");
+            tvFriendsCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "人");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
-            tvLevel.setText("LV"+user.getLevel());
+            tvLevel.setText("LV" + user.getLevel());
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
