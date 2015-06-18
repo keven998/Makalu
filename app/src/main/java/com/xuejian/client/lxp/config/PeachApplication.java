@@ -6,9 +6,6 @@ import android.support.multidex.MultiDex;
 import android.support.v4.BuildConfig;
 
 import com.aizou.core.base.BaseApplication;
-import com.lv.im.IMClient;
-import com.lv.user.LoginSuccessListener;
-import com.lv.user.User;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,7 +15,6 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.DaoMaster;
 import com.xuejian.client.lxp.db.DaoSession;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.io.File;
 

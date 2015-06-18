@@ -1,68 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/base_color_white"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
-    <RelativeLayout android:id="@+id/bar_lyt"
+    <RelativeLayout
+        android:id="@+id/bar_lyt"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:layout_gravity="bottom"
         android:background="@drawable/bar_denglu_dicengse"
-        android:visibility="gone"
-        android:layout_gravity="bottom">
+        android:visibility="gone">
 
         <Button
             android:id="@+id/sp_reg"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/selector_ic_splash_login"
-            android:layout_marginLeft="44dp"
-            android:textSize="14sp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="44dp"
+            android:background="@drawable/selector_ic_splash_login"
             android:paddingLeft="9dp"
             android:paddingRight="9dp"
-            android:textColor="@color/base_color_white"
             android:text="注册"
-            android:visibility="gone"
-            />
+            android:textColor="@color/base_color_white"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/sp_log"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/selector_ic_splash_login"
-            android:layout_toRightOf="@id/sp_reg"
-            android:layout_marginLeft="30dp"
             android:layout_centerVertical="true"
-            android:textSize="14sp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/sp_reg"
+            android:background="@drawable/selector_ic_splash_login"
             android:paddingLeft="9dp"
             android:paddingRight="9dp"
-            android:textColor="@color/base_color_white"
             android:text="登录"
-            android:visibility="gone"
-            />
+            android:textColor="@color/base_color_white"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/sp_bounce"
-            android:layout_height="32dp"
             android:layout_width="wrap_content"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:gravity="center"
+            android:layout_marginRight="24dp"
             android:drawableRight="@drawable/selector_ic_pass_login"
-            android:textColor="@color/base_color_purple"
-            android:textSize="15sp"
+            android:gravity="center"
             android:paddingLeft="24dp"
             android:paddingRight="20dp"
-            android:layout_marginRight="24dp"
-            android:visibility="gone"
-            />
+            android:textColor="@color/base_color_purple"
+            android:textSize="15sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

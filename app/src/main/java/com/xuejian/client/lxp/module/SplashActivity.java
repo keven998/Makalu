@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,41 +14,22 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.utils.SharedPreferencesUtil;
-import com.easemob.EMCallBack;
-import com.easemob.EMValueCallBack;
-
 import com.lv.im.IMClient;
-
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.util.EMLog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.bean.CoverStoryBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
-import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.utils.UpdateUtil;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.RegActivity;
@@ -62,36 +42,33 @@ import java.util.Map;
 /**
  * 欢迎页，等待2秒，进入主界面
  */
-public class SplashActivity extends PeachBaseActivity implements View.OnClickListener{
-	private final int SPLASH_DISPLAY_LENGHT = 1500; // 延迟启动
-	private boolean showSplash = false;
+public class SplashActivity extends Activity implements View.OnClickListener {
+    private final int SPLASH_DISPLAY_LENGHT = 1500; // 延迟启动
+    private boolean showSplash = false;
     private ImageView splashIv;
-    private Button sp_log,sp_reg;
+    private Button sp_log, sp_reg;
     private TextView sp_bounce;
     Handler handler;
-    int REGESTER_REQUEST=5;
-    private Long NEWUSER=1l;
+    int REGESTER_REQUEST = 5;
+    private Long NEWUSER = 1l;
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //获取用户登录状态的文件,如果不存在则新建一个
-        SharedPreferences file=getSharedPreferences("isLogin", Activity.MODE_PRIVATE);
-        if(file==null){
-            SharedPreferencesUtil.saveValue(SplashActivity.this,"isLogin",false);
+        SharedPreferences file = getSharedPreferences("isLogin", Activity.MODE_PRIVATE);
+        if (file == null) {
+            SharedPreferencesUtil.saveValue(SplashActivity.this, "isLogin", false);
         }
 
         IMClient.initIM(getApplicationContext());
-		initView();
-		initData();
-//        MobclickAgent.openActivityDurationTrack(false);
-	}
+        initView();
+        initData();
+    }
 
-	protected void initData() {
- //       final boolean isFromTalk = getIntent().getBooleanExtra("isFromTalk",false);
-//        PushManager.getInstance().initialize(this.getApplicationContext());
-        final User user = AccountManager.getInstance().getLoginAccount(mContext);
-        if(user!=null) {
+    protected void initData() {
+        final User user = AccountManager.getInstance().getLoginAccount(this);
+        if (user != null) {
             AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
         }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
@@ -100,54 +77,34 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                 .showImageOnFail(R.drawable.bg_splash)
                 .showImageForEmptyUri(R.drawable.bg_splash)
                 .showImageOnLoading(R.drawable.bg_splash)
-//				.decodingOptions(D)
-//                .displayer(new FadeInBitmapDisplayer(180, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
-		// 延长2秒后进入主界面
+        // 延长2秒后进入主界面
 
         handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if ( user != null) {
+                if (user != null) {
                     imLogin(user);
                     //用户自动登录
                     //先从用户名密码Token表中取得用户信息然后自动登录
-                    /*if(getUserType(user.getUserId())){
-                        //默认电话号码类型
-                        signIn(getUserTel(user.getUserId()),getUserPwd(user.getUserId()));
-                    }else{
-                        signIn(getUserCode(user.getUserId()));
-                    }*/
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    startActivityWithNoAnim(intent);
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
-//                    hasLoad=false;
                     if (showSplash && !hasLoad) {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
-                        startActivityWithNoAnim(mainIntent);
+                        startActivity(mainIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } else {
-                        /*if(SharedPreferencesUtil.getBooleanValue(SplashActivity.this, "isLogin", false)){
-                            AccountManager.getInstance().setLogin(true);
-                            Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class); //MainActivity
-                            startActivityWithNoAnim(mainActivity);
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        }else{*/
-                            findViewById(R.id.bar_lyt).setVisibility(View.VISIBLE);
-                            sp_log.setVisibility(View.VISIBLE);
-                            sp_reg.setVisibility(View.VISIBLE);
-                            sp_bounce.setVisibility(View.VISIBLE);
-                            sp_log.setOnClickListener(SplashActivity.this);
-                            sp_reg.setOnClickListener(SplashActivity.this);
-                            sp_bounce.setOnClickListener(SplashActivity.this);
-                       // }
-
-
-//                        Intent storyIntent = new Intent(SplashActivity.this, StoryActivity.class);
-//                        startActivityWithNoAnim(storyIntent);
+                        findViewById(R.id.bar_lyt).setVisibility(View.VISIBLE);
+                        sp_log.setVisibility(View.VISIBLE);
+                        sp_reg.setVisibility(View.VISIBLE);
+                        sp_bounce.setVisibility(View.VISIBLE);
+                        sp_log.setOnClickListener(SplashActivity.this);
+                        sp_reg.setOnClickListener(SplashActivity.this);
+                        sp_bounce.setOnClickListener(SplashActivity.this);
                     }
                 }
             }
@@ -155,12 +112,12 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         };
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
-        System.out.println("storyImageUrl "+storyImageUrl);
+        System.out.println("storyImageUrl " + storyImageUrl);
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
-                System.out.println("getCoverStory "+result);
+                System.out.println("getCoverStory " + result);
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {
                     if (!storyResult.result.image.equals(storyImageUrl)) {
@@ -193,7 +150,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                     }
 
                 } else {
-                   ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
+                    ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 
@@ -202,7 +159,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
             }
         });
         handler.postDelayed(runnable, SPLASH_DISPLAY_LENGHT);
-	}
+    }
 
     @Override
     protected void onDestroy() {
@@ -221,26 +178,22 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     }
 
     protected void initView() {
-		// 全屏设置
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_splash);
+        // 全屏设置
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_splash);
         splashIv = (ImageView) findViewById(R.id.iv_splash);
         sp_log = (Button) findViewById(R.id.sp_log);
         sp_reg = (Button) findViewById(R.id.sp_reg);
         sp_bounce = (TextView) findViewById(R.id.sp_bounce);
-	}
-
-    private void getStroy(){
-
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
-                startActivityWithNoAnim(logActivity);
+                startActivity(logActivity);
                 overridePendingTransition(R.anim.push_bottom_in, 0);
                 break;
 
@@ -252,12 +205,13 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.sp_bounce:
                 Intent mainActivity = new Intent(SplashActivity.this, MainActivity.class);
-                mainActivity.putExtra("FromBounce",true);
-                startActivityWithNoAnim(mainActivity);
+                mainActivity.putExtra("FromBounce", true);
+                startActivity(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
-            default:break;
+            default:
+                break;
         }
     }
 
@@ -265,9 +219,9 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REGESTER_REQUEST &&resultCode == RESULT_OK) {
+        if (requestCode == REGESTER_REQUEST && resultCode == RESULT_OK) {
             User user = (User) data.getSerializableExtra("user");
-            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             imLogin(user);
         }
     }
@@ -279,7 +233,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
-        AccountManager.getInstance().saveLoginAccount(mContext, user);
+        AccountManager.getInstance().saveLoginAccount(this, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
         final Map<Long, User> userlist = new HashMap<Long, User>();
@@ -301,36 +255,7 @@ public class SplashActivity extends PeachBaseActivity implements View.OnClickLis
                 setResult(RESULT_OK);
                 finish();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                overridePendingTransition(0,R.anim.push_bottom_out);
-            }
-        });
-    }
-
-    private void signIn(String userName,String pwd) {
-        DialogManager.getInstance().showLoadingDialog(this);
-        UserApi.signIn(userName, pwd, new HttpCallBack<String>() {
-
-            @Override
-            public void doSucess(String result, String method) {
-
-                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
-                if (userResult.code == 0) {
-                    imLogin(userResult.result);
-                } else {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                    ToastUtil.getInstance(mContext).showToast(userResult.err.message);
-                }
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                error.printStackTrace();
-                System.out.println(msg+"  "+method);
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!isFinishing())
-                    ToastUtil.getInstance(SplashActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
     }
