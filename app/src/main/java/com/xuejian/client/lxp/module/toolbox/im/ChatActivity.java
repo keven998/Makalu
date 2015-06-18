@@ -680,7 +680,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 Intent intent = new Intent(mContext, StrategyListActivity.class);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
-                intent.putExtra("userId", User.getUser().getCurrentUser());
+                intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
                 intent.setAction("action.chat");
                 startActivity(intent);

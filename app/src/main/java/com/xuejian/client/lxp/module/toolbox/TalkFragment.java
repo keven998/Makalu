@@ -166,7 +166,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversationBean conversation = adapter.getItem(position);
                 String username = conversation.getFriendId() + "";
-                if (String.valueOf(conversation.getFriendId()).equals(User.getUser().getCurrentUser()))
+                if (String.valueOf(conversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
               //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
