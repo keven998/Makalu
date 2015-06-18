@@ -86,7 +86,6 @@ public class ContactlistFragment extends Fragment {
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
-        System.out.println("setAdapter!");
 		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -103,7 +102,6 @@ public class ContactlistFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//String username = "123";//adapter.getItem(position).getUserName();
 				String username = adapter.getItem(position).getNickName();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面

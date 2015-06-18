@@ -68,7 +68,7 @@ public class HttpManager {
             public void run() {
 
                 HttpPost post = new HttpPost(Config.HOST + "/groups");
-                post.addHeader("UserId", User.getUser().getCurrentUser() + "");
+                post.addHeader("UserId",AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
                 try {
                     System.out.println(obj.toString());
@@ -162,7 +162,7 @@ public class HttpManager {
             @Override
             public void run() {
                 HttpPost post = new HttpPost(Config.HOST + "/groups/" + GroupId);
-                post.addHeader("UserId",  User.getUser().getCurrentUser() + "");
+                post.addHeader("UserId",  AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
                 try {
                     System.out.println(obj.toString());
@@ -196,7 +196,7 @@ public class HttpManager {
             @Override
             public void run() {
                 HttpPut httpPut = new HttpPut(url);
-                httpPut.addHeader("UserId", User.getUser().getCurrentUser() + "");
+                httpPut.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     JSONObject obj = new JSONObject();
                     obj.put("name", groupName);
@@ -240,8 +240,7 @@ public class HttpManager {
             @Override
             public void run() {
                 HttpGet get = new HttpGet(url);
-                System.out.println(User.getUser().getCurrentUser()+url);
-                get.addHeader("UserId", User.getUser().getCurrentUser() + "");
+                get.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
                     HttpEntity res = httpResponse.getEntity();

@@ -264,18 +264,20 @@ public class IMClient {
     }
 
 
-    public void sendTextMessage(MessageBean message, String conversation, SendMsgListener listen, String chatType) {
+    public void sendTextMessage(MessageBean message,String friendId, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(message.getSenderId()), Config.TEXT_MSG, message.getMessage());
-        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
+        IMessage imessage = new IMessage((int)message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
+       System.out.println("message.getSenderId()  ===="+message.getSenderId());
+        SendMsgAsyncTask.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean createTextMessage(String text, String friendId, String chatType) {
+    public MessageBean createTextMessage(String UserId,String text, String friendId, String chatType) {
         if (TextUtils.isEmpty(text)) return null;
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, text);
+        IMessage message = new IMessage(Integer.parseInt(UserId), friendId, Config.TEXT_MSG, text);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+     //   MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, text, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
         m.setLocalId((int) localId);
         return m;
     }
@@ -288,7 +290,7 @@ public class IMClient {
      * @param listener listener
      * @param chatTpe  聊天类型
      */
-    public void sendAudioMessage(MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
+    public void sendAudioMessage(String userId,MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
         if (taskMap.containsKey(friendId)) {
             if (taskMap.get(friendId).contains(message.getLocalId())) return;
             else taskMap.get(friendId).add(message.getLocalId());
@@ -296,10 +298,10 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
-        UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
+        UploadUtils.getInstance().upload(path,userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
     }
 
-    public MessageBean createAudioMessage(String path, String friendId, String durtime, String chatTpe) {
+    public MessageBean createAudioMessage(String userId,String path, String friendId, String durtime, String chatTpe) {
         JSONObject object = new JSONObject();
         try {
             object.put("isRead", false);
@@ -308,15 +310,15 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.AUDIO_MSG, object.toString());
+        IMessage message = new IMessage(Integer.parseInt(userId), friendId, Config.AUDIO_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.AUDIO_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.AUDIO_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
         m.setLocalId((int) localId);
         return m;
     }
 
-    public MessageBean CreateImageMessage(String path, String friendId, String chatTpe) {
+    public MessageBean CreateImageMessage(String userId,String path, String friendId, String chatTpe) {
 
         String sdkPath = PictureUtil.reSizeImage(path);
         String thumbnailPath = PictureUtil.getThumbImagePath(sdkPath, 160, 160);
@@ -327,17 +329,16 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.IMAGE_MSG, object.toString());
+        IMessage message = new IMessage(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         System.out.println("message " + messageBean.getMessage());
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
         m.setLocalId((int) localId);
-        System.out.println("localId-----------" + localId);
         return m;
     }
 
-    public void sendImageMessage(MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
+    public void sendImageMessage(String userId,MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
         if (taskMap.containsKey(friendId)) {
             if (taskMap.get(friendId).contains(messageBean.getLocalId())) return;
             else taskMap.get(friendId).add(messageBean.getLocalId());
@@ -345,7 +346,7 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(messageBean.getLocalId());
         }
-        UploadUtils.getInstance().uploadImage(messageBean, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
+        UploadUtils.getInstance().uploadImage(messageBean, userId, friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
     }
 
     public void sendImageMessageByUrl(String path, Bitmap bitmap, String friendId, UploadListener listener, String chatTpe) {
@@ -360,13 +361,13 @@ public class IMClient {
      * @param listen
      * @param chatType
      */
-    public void sendLocationMessage(MessageBean message, String conversation, SendMsgListener listen, String chatType) {
+    public void sendLocationMessage(String userId,String friendId,MessageBean message, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(message.getSenderId()), Config.LOC_MSG, message.getMessage());
-        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(message.getSenderId()), imessage, message.getLocalId(), listen, chatType);
+        IMessage imessage = new IMessage(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
+        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean CreateLocationMessage(String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress) {
+    public MessageBean CreateLocationMessage(String userID,String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress) {
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
@@ -377,25 +378,25 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, Config.TEXT_MSG, object.toString());
+        IMessage message = new IMessage(Integer.parseInt(userID), friendId, Config.TEXT_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.LOC_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.LOC_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(userID));
         m.setLocalId((int) localId);
         return m;
     }
 
-    public void sendExtMessage(String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
+    public void sendExtMessage(String UserId,String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
         if (TextUtils.isEmpty(contentJson)) return;
-        IMessage message = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), friendId, type + 9, contentJson);
+        IMessage message = new IMessage(Integer.parseInt(UserId), friendId, type + 9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        MessageBean m = new MessageBean(0, 1, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(friendId));
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
         m.setLocalId((int) localId);
         //return m;
         //if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(User.getUser().getCurrentUser()), String.valueOf(m.getSenderId()), type + 9, m.getMessage());
-        SendMsgAsyncTask.sendMessage(null, String.valueOf(m.getSenderId()), imessage, m.getLocalId(), listen, chatType);
+        IMessage imessage = new IMessage(Integer.parseInt(UserId),friendId, type + 9, m.getMessage());
+        SendMsgAsyncTask.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
 
