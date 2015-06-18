@@ -207,7 +207,6 @@ public class TalkFragment extends PeachBaseFragment {
             IMClient.getInstance().deleteConversation(Conversation.getFriendId() + "");
             conversations.remove(pos);
             refresh();
-
             // 更新消息未读数
             ((MainActivity) getActivity()).updateUnreadMsgCount();
 
@@ -235,26 +234,6 @@ public class TalkFragment extends PeachBaseFragment {
     public void loadConversation() {
         conversations.clear();
         conversations.addAll(IMClient.getInstance().getConversationList());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (ConversationBean c : conversations) {
-                    if (UserDBManager.getInstance().getContactByUserId(c.getFriendId()) == null) {
-                        GroupManager.getGroupManager().getGroupInformation(String.valueOf(c.getFriendId()), new CallBack() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onFailed() {
-
-                            }
-                        });
-                    }
-                }
-            }
-        }).start();
         sortConversationByLastChatTime(conversations);
         refresh();
     }

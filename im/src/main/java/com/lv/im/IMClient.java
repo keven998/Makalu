@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by q on 2015/4/21.
@@ -51,12 +53,15 @@ public class IMClient {
     private int count;
     public static HashMap<String, ArrayList<Long>> taskMap = new HashMap<>();
     private static List<String> invokeStatus = new ArrayList<>();
-
+    private Timer timer;
+    private boolean isRunning;
+    private CountFrequency countFrequency;
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new HashMap<>();
         acklist = new JSONArray();
         conList = new ArrayList<>();
+        countFrequency=new CountFrequency();
     }
 
     public static IMClient getInstance() {
@@ -72,7 +77,7 @@ public class IMClient {
         MessageDB.getInstance().init();
     }
 
-    public void disconnectDB(){
+    public void disconnectDB() {
         db = null;
     }
 
@@ -94,16 +99,45 @@ public class IMClient {
     public void add2ackList(String id) {
         acklist.put(id);
         System.out.println("ack list size:" + acklist.length());
-        if (acklist.length() > 10) {
+        if (!isRunning){
+            ack(countFrequency.getFrequency()*5);
+        }
+//        if (acklist.length() > 10) {
 //            HttpUtils.FetchNewMsg(User.getUser().getCurrentUser(), (list) -> {
 //                for (Message msg : list) {
 //                    LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
 //                }
 //                LazyQueue.getInstance().TempDequeue();
 //            });
-        }
-    }
+//        }
 
+    }
+    public void ack(long frequency){
+        if (Config.isDebug){
+            Log.i(Config.TAG,"ACK  频率"+frequency);
+        }
+        if (frequency==0)frequency=30*1000;
+        isRunning=true;
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ackAndFetch(new FetchListener() {
+                    @Override
+                    public void OnMsgArrive(List<Message> list) {
+//                        if (Config.isDebug){
+//                            Log.i(Config.TAG,"ACK  result");
+//                        }
+//                        for (Message msg : list) {
+//                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+//                        }
+//                        LazyQueue.getInstance().TempDequeue();
+                        isRunning = false;
+                    }
+                });
+            }
+        }, frequency);
+    }
     public void clearackList() {
         acklist = new JSONArray();
     }
@@ -196,9 +230,12 @@ public class IMClient {
 
     public List<MessageBean> getMessages(String friendId, int page) {
         List<MessageBean> list = db.getAllMsg(friendId, page);
-        if (!invokeStatus.contains(friendId)){
-            for (MessageBean m:list){
-                if (m.getStatus()==1)m.setStatus(2);
+        if (!invokeStatus.contains(friendId)) {
+            for (MessageBean m : list) {
+                if (m.getStatus() == 1) {
+                    m.setStatus(2);
+                    updateMessage(friendId, m.getLocalId(), null, null, 0, Config.STATUS_FAILED, null, m.getType());
+                }
             }
             invokeStatus.add(friendId);
             return list;
@@ -223,7 +260,7 @@ public class IMClient {
 //            }
 //            return list;
 //        }
-          return list;
+        return list;
     }
 
 
@@ -252,11 +289,11 @@ public class IMClient {
      * @param chatTpe  聊天类型
      */
     public void sendAudioMessage(MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
-        if ( taskMap.containsKey(friendId)){
-            if (taskMap.get(friendId).contains(message.getLocalId()))return;
+        if (taskMap.containsKey(friendId)) {
+            if (taskMap.get(friendId).contains(message.getLocalId())) return;
             else taskMap.get(friendId).add(message.getLocalId());
-        }else {
-            taskMap.put(friendId,new ArrayList<Long>());
+        } else {
+            taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
         UploadUtils.getInstance().upload(path, User.getUser().getCurrentUser(), friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
@@ -301,11 +338,11 @@ public class IMClient {
     }
 
     public void sendImageMessage(MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
-        if (taskMap.containsKey(friendId)){
-            if (taskMap.get(friendId).contains(messageBean.getLocalId()))return;
+        if (taskMap.containsKey(friendId)) {
+            if (taskMap.get(friendId).contains(messageBean.getLocalId())) return;
             else taskMap.get(friendId).add(messageBean.getLocalId());
-        }else {
-            taskMap.put(friendId,new ArrayList<Long>());
+        } else {
+            taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(messageBean.getLocalId());
         }
         UploadUtils.getInstance().uploadImage(messageBean, User.getUser().getCurrentUser(), friendId, Config.IMAGE_MSG, messageBean.getLocalId(), listener, chatTpe);
@@ -361,25 +398,6 @@ public class IMClient {
         SendMsgAsyncTask.sendMessage(null, String.valueOf(m.getSenderId()), imessage, m.getLocalId(), listen, chatType);
     }
 
-//    private int getExtType(int type) {
-//        switch (type){
-//            case 1:
-//            break;
-//            case 2:
-//                break;
-//            case 3:
-//                break;
-//            case 5:
-//                break;
-//            case 1:
-//                break;
-//            case 1:
-//                break;
-//            case 1:
-//                break;
-//        }
-//        return 0;
-//    }
 
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);
@@ -418,6 +436,7 @@ public class IMClient {
     }
 
     public int saveReceiveMsg(Message message) {
+        countFrequency.addMessage();
         int result = db.saveReceiveMsg(message.getSenderId() + "", Msg2Bean(message), message.getConversation(), message.getGroupId(), message.getChatType());
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());

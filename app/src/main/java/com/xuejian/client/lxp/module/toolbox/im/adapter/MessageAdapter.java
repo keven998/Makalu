@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.task.DownloadImage;
 
 import com.easemob.chat.EMChatManager;
@@ -468,7 +469,7 @@ public class MessageAdapter extends BaseAdapter {
             }
         } else {
             // User user = AccountManager.getInstance().getLoginAccount(context);
-            User user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(com.lv.user.User.getUser().getCurrentUser()));
+            User user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(AccountManager.getCurrentUserId()));
             if (user != null) {
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
             }
@@ -621,7 +622,6 @@ public class MessageAdapter extends BaseAdapter {
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
         //TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        System.out.println("handleTextMessage " + message.getMessage());
         Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
         // holder.tv.setText(span, BufferType.SPANNABLE);
