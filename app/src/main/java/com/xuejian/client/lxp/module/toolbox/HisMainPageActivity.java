@@ -168,6 +168,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
+                intent.putExtra("user_name", user.getNickName());
                 startActivity(intent);
             }
         });

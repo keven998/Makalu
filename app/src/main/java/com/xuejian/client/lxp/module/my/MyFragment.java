@@ -212,6 +212,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user2 != null) {
                     Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
                     intent2.putExtra("userId", String.valueOf(user2.getUserId()));
+                    intent2.putExtra("user_name", user2.getNickName());
                     startActivity(intent2);
                 } else {
                     Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
@@ -284,6 +285,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user2 != null) {
                     Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
                     intent2.putExtra("userId", String.valueOf(user2.getUserId()));
+                    intent2.putExtra("user_name", user2.getNickName());
                     startActivity(intent2);
                 }
             }

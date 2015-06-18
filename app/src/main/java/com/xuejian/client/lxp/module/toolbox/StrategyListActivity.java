@@ -3,8 +3,6 @@ package com.xuejian.client.lxp.module.toolbox;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +36,6 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
@@ -49,7 +45,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout;
 import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
@@ -94,7 +89,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        userId = getIntent().getExtras().getString("userId");
+        userId = getIntent().getStringExtra("userId");
         if (AccountManager.getInstance().getLoginAccount(this) == null) {
             isOwner = false;
         } else {
@@ -192,6 +187,10 @@ public class StrategyListActivity extends PeachBaseActivity {
 
             }
         });
+
+        TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
+        textView.setText(String.format("%s的计划", getIntent().getStringExtra("user_name")));
+
     }
 
     private void setupViewFromCache() {

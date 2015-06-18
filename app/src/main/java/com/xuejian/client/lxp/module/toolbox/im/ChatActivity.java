@@ -704,6 +704,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             } else if (id == R.id.btn_my_guide) {
                 MobclickAgent.onEvent(mContext, "event_share_plan_extra");
                 Intent intent = new Intent(mContext, StrategyListActivity.class);
+                intent.putExtra("user_name", user.getNickName());
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
