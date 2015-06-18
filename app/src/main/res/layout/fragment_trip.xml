@@ -22,25 +22,34 @@
         android:layout_below="@id/title_view"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/lxp_search_bg_normal">
+        android:background="@drawable/selector_home_tools_entry_card">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
             android:scaleType="centerInside"
+            android:src="@drawable/lxp_search_bg_normal" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="2dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_lxp_search_home" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="16dp"
             android:text="~旅行·搜搜~"
             android:textColor="@color/color_text_ii"
-            android:textSize="13sp" />
+            android:textSize="16sp" />
 
     </FrameLayout>
 
@@ -66,8 +75,8 @@
                 android:drawableTop="@drawable/lxp_expert_helper"
                 android:gravity="center"
                 android:text="旅行达人"
-                android:textColor="@color/color_text_ii"
-                android:textSize="14sp" />
+                android:textColor="@color/color_text_iii"
+                android:textSize="16sp" />
 
         </FrameLayout>
 
@@ -86,8 +95,8 @@
                 android:drawableTop="@drawable/lxp_plan_helper"
                 android:gravity="center"
                 android:text="我的计划"
-                android:textColor="@color/color_text_ii"
-                android:textSize="14sp" />
+                android:textColor="@color/color_text_iii"
+                android:textSize="16sp" />
 
         </FrameLayout>
 
