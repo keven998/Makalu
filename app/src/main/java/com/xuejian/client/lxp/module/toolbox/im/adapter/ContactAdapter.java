@@ -198,24 +198,6 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
             });
             vh.unreadMsgView.setVisibility(View.GONE);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //
 //        if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {

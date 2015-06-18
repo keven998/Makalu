@@ -83,6 +83,7 @@ import com.lv.user.User;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ImageUtils;
@@ -679,7 +680,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 Intent intent = new Intent(mContext, StrategyListActivity.class);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
-                intent.putExtra("userId", User.getUser().getCurrentUser());
+                intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
                 intent.setAction("action.chat");
                 startActivity(intent);
@@ -834,7 +835,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (TextUtils.isEmpty(content)) {
             return;
         }
-        MessageBean messageBean = IMClient.getInstance().createTextMessage(content, toChatUsername, chatType);
+        MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(),content, toChatUsername, chatType);
         messageList.add(messageBean);
         // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
         adapter.refresh();
@@ -856,7 +857,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             return;
         }
         try {
-            MessageBean m = IMClient.getInstance().createAudioMessage(filePath, toChatUsername, length, chatType);
+            MessageBean m = IMClient.getInstance().createAudioMessage(AccountManager.getCurrentUserId(),filePath, toChatUsername, length, chatType);
             messageList.add(m);
             adapter.refresh();
             listView.setSelection(listView.getCount() - 1);
@@ -874,7 +875,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param filePath
      */
     private void sendPicture(final String filePath) {
-        MessageBean m = IMClient.getInstance().CreateImageMessage(filePath, toChatUsername, chatType);
+        MessageBean m = IMClient.getInstance().CreateImageMessage(AccountManager.getCurrentUserId(),filePath, toChatUsername, chatType);
         if (m != null) {
             messageList.add(m);
             adapter.refresh();
@@ -945,7 +946,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * 发送位置信息
      */
     private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage("haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(),"haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

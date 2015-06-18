@@ -388,7 +388,7 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMClient.getInstance().sendExtMessage(toId,chatType,content,type,new SendMsgListener() {
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId,chatType,content,type,new SendMsgListener() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
