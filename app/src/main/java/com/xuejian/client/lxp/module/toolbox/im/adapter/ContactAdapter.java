@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.lv.Utils.HanziToPinyin;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -57,6 +58,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	private SparseIntArray sectionOfPosition;
 	private int res;
     private DisplayImageOptions picOptions;
+    private ArrayList<Integer> subItemNum=new ArrayList<>();
 
 	public ContactAdapter(Context context, int resource, List<User> objects) {
 		super(context, resource, objects);
@@ -273,7 +275,15 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
         for (int i = 0; i < sections.size(); i++) {
             String sortStr = sections.get(i);
             if (indexStr.equals(sortStr)) {
-                return i;
+                int all=0;
+                for(int j=0;j<i;j++){
+                    if(j<subItemNum.size()) {
+                        all += subItemNum.get(j);
+                    }else{
+                        all=-1;break;
+                    }
+                }
+                return all;
             }
         }
         return -1;
@@ -285,6 +295,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	}
 
     public void initSections(){
+        subItemNum.clear();
         int count = getCount();
         positionOfSection = new SparseIntArray();
         sectionOfPosition = new SparseIntArray();
@@ -292,6 +303,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 //        positionOfSection.put(0, 0);
 //        sectionOfPosition.put(0, 0);
         int section=0;
+        int num=0;
         for (int i = 0; i < count; i++) {
             String letter =getItem(i).getHeader();
             String beforeLetter ="";
@@ -302,9 +314,14 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 section++;
                 sections.add(letter);
                 positionOfSection.put(section, i);
+                if(num!=0){subItemNum.add(num);}
+                num=1;
+            } else {
+                num++;
             }
             sectionOfPosition.put(i, section);
         }
+        subItemNum.add(num);
     }
 
     @Override

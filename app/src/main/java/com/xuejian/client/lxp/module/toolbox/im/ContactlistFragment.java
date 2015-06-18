@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.SideBar;
 import com.easemob.chat.EMContactManager;
 import com.easemob.exceptions.EaseMobException;
@@ -94,7 +95,7 @@ public class ContactlistFragment extends Fragment {
             public void onTouchingLetterChanged(String s) {
                 int position = adapter.getPositionForIndex(s);
                 if (position != -1) {
-                    listView.setSelection(position+1);
+                    listView.setSelection(position);
                 }
             }
         });
