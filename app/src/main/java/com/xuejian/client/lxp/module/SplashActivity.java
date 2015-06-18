@@ -179,8 +179,8 @@ public class SplashActivity extends Activity implements View.OnClickListener {
 
     protected void initView() {
         // 全屏设置
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         splashIv = (ImageView) findViewById(R.id.iv_splash);
         sp_log = (Button) findViewById(R.id.sp_log);

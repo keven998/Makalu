@@ -167,8 +167,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
-                intent.putExtra("userId", userId + "");
-                intent.putExtra("isExpertPlan", true);
+                intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
             }
         });

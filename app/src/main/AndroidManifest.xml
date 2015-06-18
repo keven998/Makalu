@@ -476,10 +476,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"></activity>
         <!--去过页面-->
-        <activity
-            android:name=".module.toolbox.StrategyVisitedListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"></activity>
         <!--攻略地图-->
         <activity
             android:name=".module.dest.StrategyMapActivity"

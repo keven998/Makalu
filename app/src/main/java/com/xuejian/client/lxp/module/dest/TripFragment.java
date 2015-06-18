@@ -49,7 +49,6 @@ public class TripFragment extends PeachBaseFragment {
                 if (user != null) {
                     Intent intent = new Intent(getActivity(), StrategyListActivity.class);
                     intent.putExtra("userId", String.valueOf(user.getUserId()));
-                    intent.putExtra("isExpertPlan", false);
                     startActivity(intent);
                 } else {
                     Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
@@ -71,7 +70,6 @@ public class TripFragment extends PeachBaseFragment {
                 if (user != null) {
                     Intent intent = new Intent(getActivity(), StrategyListActivity.class);
                     intent.putExtra("userId", String.valueOf(user.getUserId()));
-                    intent.putExtra("isExpertPlan", false);
                     startActivity(intent);
                 }
             }
