@@ -277,7 +277,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
     }
 
-
     /**
      * initView
      */

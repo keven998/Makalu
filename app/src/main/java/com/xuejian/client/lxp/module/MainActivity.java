@@ -3,8 +3,12 @@ package com.xuejian.client.lxp.module;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v4.util.LongSparseArray;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,10 +43,8 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
@@ -101,6 +103,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (getIntent().getBooleanExtra("conflict", false)) {
             showConflictDialog(MainActivity.this);
         }
+        //断网提示
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(connectionReceiver, intentFilter);
+
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (!FromBounce) {
             com.lv.user.User.login(AccountManager.getCurrentUserId(), new LoginSuccessListener() {
@@ -159,11 +166,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long, User>();
-
+                    LongSparseArray<User> userList=new LongSparseArray<User>();
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
                         myUser.setType(1);
                         userlist.put(myUser.getUserId(), myUser);
+                        userList.put(myUser.getUserId(), myUser);
                     }
                     // 存入db
                     List<User> users = new ArrayList<User>(userlist.values());
@@ -171,7 +179,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     AccountManager.getInstance().setContactList(userlist);
                     refreshChatHistoryFragment();
                 }
-
             }
 
             @Override
@@ -405,6 +412,30 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         updateUnreadAddressLable();
     }
 
+    /**
+     * 网络状态广播
+     */
+    private BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+            if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                if (talkFragment != null) {
+                    talkFragment.netStateChange("(未连接)");
+                }
+            }else {
+                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                if (talkFragment != null) {
+                    talkFragment.netStateChange("");
+                }
+            }
+        }
+    };
 
     /**
      * MyGroupChangeListener
@@ -560,6 +591,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (connectionReceiver != null) {
+            unregisterReceiver(connectionReceiver);
+        }
     }
 
 }
