@@ -58,6 +58,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
@@ -84,6 +85,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ImageUtils;
@@ -198,6 +202,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String conversation;
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
+    private com.xuejian.client.lxp.db.userDB.User user;
 //    private Handler micImageHandler = new Handler() {
 //        @Override
 //        public void handleMessage(android.os.Message msg) {
@@ -239,8 +244,29 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         name = intent.getStringExtra("Name");
         initView();
         setUpView();
+        user=UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
+        if (user==null){
+            getUserInfo(Integer.parseInt(toChatUsername));
+        }
     }
+    public void getUserInfo(int userid){
+        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
+            @Override
+            public void doSucess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                CommonJson<com.xuejian.client.lxp.db.userDB.User> userInfo = CommonJson.fromJson(result, com.xuejian.client.lxp.db.userDB.User.class);
+                UserDBManager.getInstance().saveContact(userInfo.result);
+            }
 
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+               // ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
+            }
+        });
+    }
     private void initData() {
         messageList.clear();
         messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));

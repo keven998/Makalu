@@ -112,6 +112,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
                             if (talkFragment != null) {
                                 talkFragment.loadConversation();
+                                IMClient.getInstance().initAckAndFetch();
                             }
                         }
                     });
@@ -175,7 +176,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-//                ToastUtil.getInstance(IMMainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+               ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
