@@ -230,6 +230,14 @@ public class UserDBManager {
         closeDB();
         return (type & 8) == 8;
     }
+    public boolean isMaster(long userId) {
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
+        int type = cursor.getInt(0);
+        cursor.close();
+        closeDB();
+        return (type & 2) == 2;
+    }
 
     public synchronized void saveContact(User user) {
         mdb = getDB();
@@ -304,6 +312,7 @@ public class UserDBManager {
     }
 
     public synchronized void saveContactList(List<User> list) {
+        if (list.size()==0)return;
         mdb = getDB();
         mdb.beginTransaction();
         for (User user : list) {

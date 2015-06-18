@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by q on 2015/4/21.
@@ -44,7 +45,7 @@ import java.util.TimerTask;
 public class IMClient {
     private boolean isBLOCK;
     private JSONArray acklist;
-    private HashMap<String, Integer> lastMsgMap;
+    private ConcurrentHashMap<String, Integer> lastMsgMap;
     private volatile HashMap<String, String> cidMap;
     private static IMClient client;
     private MessageDB db;
@@ -58,7 +59,7 @@ public class IMClient {
     private CountFrequency countFrequency;
     private IMClient() {
         cidMap = new HashMap<>();
-        lastMsgMap = new HashMap<>();
+        lastMsgMap = new ConcurrentHashMap<>();
         acklist = new JSONArray();
         conList = new ArrayList<>();
         countFrequency=new CountFrequency();
