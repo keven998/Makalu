@@ -206,32 +206,14 @@ public class TalkFragment extends PeachBaseFragment {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
-        if (!User.getUser().isLogin()) {
+        if (!AccountManager.getInstance().isLogin()) {
             return;
         }
-//        if (!AccountManager.getInstance().isLogin()) {
-//            return;
-//        }
-
-
-
-
-
 //        errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
 //        errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
-        // contact list
-//        contactList = AccountManager.getInstance().getContactList(getActivity());
-//        if(EMGroupManager.getInstance().getAllGroups()==null){
-       // EMGroupManager.getInstance().loadAllGroups();
-//        }
         //loadConversationsWithRecentChat();
         loadConversation();
        // updateGroupsInfo();
-    }
-
-    private void loadConversations() {
-        conversations = IMClient.getInstance().getConversationList();
-        refresh();
     }
 
     private void showActionDialog() {

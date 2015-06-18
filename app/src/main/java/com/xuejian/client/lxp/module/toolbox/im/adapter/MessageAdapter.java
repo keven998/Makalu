@@ -1253,7 +1253,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.staus_iv.setVisibility(View.GONE);
                 // sendMsgInBackground(message, holder);
-                IMClient.getInstance().sendAudioMessage(message, filepath, friendId, new UploadListener() {
+                IMClient.getInstance().sendAudioMessage(AccountManager.getCurrentUserId(),message, filepath, friendId, new UploadListener() {
                     @Override
                     public void onSucess(String fileUrl) {
                         message.setStatus(0);
@@ -1449,7 +1449,7 @@ public class MessageAdapter extends BaseAdapter {
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
-                IMClient.getInstance().sendLocationMessage(message, conversation, new SendMsgListener() {
+                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(),friendId,message, conversation, new SendMsgListener() {
                     @Override
                     public void onSuccess() {
                         message.setStatus(0);
@@ -1494,7 +1494,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.pb.setVisibility(View.VISIBLE);
 
         // 调用sdk发送异步发送方法
-        IMClient.getInstance().sendTextMessage(message, conversation, new SendMsgListener() {
+        IMClient.getInstance().sendTextMessage(message,friendId,conversation, new SendMsgListener() {
             @Override
             public void onSuccess() {
                 message.setStatus(0);
@@ -1636,7 +1636,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
-            IMClient.getInstance().sendImageMessage(message, friendId, new UploadListener() {
+            IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(),message, friendId, new UploadListener() {
                 @Override
                 public void onSucess(String fileUrl) {
                     activity.runOnUiThread(new Runnable() {
