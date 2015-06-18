@@ -33,6 +33,7 @@ public class SendMsgAsyncTask {
 
     Context c;
     sendTask task;
+    static ExecutorService exec =Executors.newCachedThreadPool();
     public SendMsgAsyncTask(Context c) {
         this.c = c;
     }
@@ -61,7 +62,7 @@ public class SendMsgAsyncTask {
         if (Config.isDebug) {
             Log.i(Config.TAG, "send_message:" + str);
         }
-        new Thread(()->{
+        exec.execute(()->{
                 HttpPost post = new HttpPost(Config.SEND_URL);
                 HttpResponse httpResponse = null;
                 try {
@@ -109,7 +110,7 @@ public class SendMsgAsyncTask {
                     IMClient.getInstance().updateMessage(currentFri, localId, null, null, 0, Config.STATUS_FAILED, null, msg.getMsgType());
                     listen.onFailed(-1);
                 }
-        }).start();
+        });
     }
 
     public void sendMsg(String correntUser, String currentFri, IMessage msg, long localId, SendMsgListener listen) {

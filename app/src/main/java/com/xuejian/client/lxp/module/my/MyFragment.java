@@ -113,7 +113,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             }
-            tvTracksCount.setText("99国99城市");
+            int countryCount=user.getTracks().keySet().size();
+            int cityCount=0;
+            for (String key:user.getTracks().keySet()){
+                cityCount+=user.getTracks().get(key).size();
+            }
+            tvTracksCount.setText(countryCount+"国"+cityCount+"城市");
             tvPlansCount.setText(user.getGuideCnt()+"条");
             tvFriendsCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size()+"人");
             nickNameTv.setText(user.getNickName());

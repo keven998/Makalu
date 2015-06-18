@@ -66,7 +66,8 @@ public class TalkFragment extends PeachBaseFragment {
     TextView unreadAddressNumber;
     @InjectView(R.id.btn_container_address_list)
     RelativeLayout btnContainerAddressList;
-
+    @InjectView(R.id.tv_title_bar_title)
+    TextView title_bar_title;
     private InputMethodManager inputMethodManager;
     private ListView listView;
     private ChatAllHistoryAdapter adapter;
@@ -191,7 +192,9 @@ public class TalkFragment extends PeachBaseFragment {
         });
         dialog.show();
     }
-
+    public void netStateChange(String state){
+        title_bar_title.setText("消息"+state);
+    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
