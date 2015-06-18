@@ -32,13 +32,13 @@
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:padding="10dp"
+                    android:padding="7dp"
                     android:scaleType="centerCrop" />
                 
                 <RelativeLayout android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginTop="-24dp"
+                    android:layout_marginTop="-30dp"
                     android:gravity="center_vertical"
                     android:layout_below="@id/iv_avatar">
                     
@@ -49,14 +49,15 @@
                         <TextView android:id="@+id/tv_level"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
+                            android:paddingBottom="2dp"
                             android:textColor="@color/base_color_white"
                             android:gravity="center"
                             android:layout_marginLeft="24dp"
                             android:singleLine="true"/>
                     </RelativeLayout>
 
-                    <ImageView android:id="@+id/iv_my_gender2"
+                    <ImageView android:id="@+id/iv_constellation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@id/rly_level"
@@ -130,8 +131,9 @@
                             android:textColor="@color/color_text_iii"/>
 
                         <View android:layout_width="0.75dp"
-                            android:layout_height="44dp"
+                            android:layout_height="35dp"
                             android:background="@color/color_line"
+                            android:layout_centerVertical="true"
                             android:layout_alignParentLeft="true"/>
                     </RelativeLayout>
 
@@ -164,7 +166,8 @@
                             android:textColor="@color/color_text_iii"/>
 
                         <View android:layout_width="0.75dp"
-                            android:layout_height="44dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
                             android:background="@color/color_line"
                             android:layout_alignParentLeft="true"/>
                     </RelativeLayout>

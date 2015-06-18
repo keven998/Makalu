@@ -49,8 +49,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
-    @ViewInject(R.id.iv_my_gender2)
-    private ImageView genderIv;
+    @ViewInject(R.id.iv_constellation)
+    private ImageView constellationIv;
     @ViewInject(R.id.iv_more_header_frame_gender1)
     private ImageView genderFrame;
     @ViewInject(R.id.tv_level)
@@ -96,22 +96,19 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             tvPlansCount.setText("木");
             tvTracksCount.setText("木");
             tvLevel.setText("");
-            genderIv.setImageResource(R.drawable.ic_home_gender_unknown);
             genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
             avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
         } else {
             if (user.getGender().equalsIgnoreCase("M")) {
-                genderIv.setImageResource(R.drawable.ic_home_user_gender_boy);
                 genderFrame.setImageResource(R.drawable.ic_home_header_boy);
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             } else if (user.getGender().equalsIgnoreCase("F")) {
-                genderIv.setImageResource(R.drawable.ic_home_user_gender_boy);
                 genderFrame.setImageResource(R.drawable.ic_home_header_girl);
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             } else {
-                genderIv.setImageResource(R.drawable.ic_home_gender_unknown);
                 genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
@@ -121,10 +118,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             tvFriendsCount.setText("99人");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
+            tvLevel.setText("LV12");
+            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(0)
-                    .showImageOnFail(0)
+                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片

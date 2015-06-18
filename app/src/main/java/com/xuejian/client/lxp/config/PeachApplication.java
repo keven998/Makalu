@@ -38,15 +38,10 @@ public class PeachApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //MultiDex.install(this);
         initPeachConfig();
         initImageLoader();
-//        refreshUserInfo();
-//        BaseApi.testHttps();
         setupDatabase();
-        //initIM();
         initIM();
-       // IMClient.initIM(getApplicationContext());
     }
 
     private void setupDatabase() {
@@ -60,7 +55,7 @@ public class PeachApplication extends BaseApplication {
         return daoSession;
     }
 
-    private void initIM(){
+    private void initIM() {
         hxSDKHelper.onInit(this);
     }
 
@@ -79,10 +74,10 @@ public class PeachApplication extends BaseApplication {
         ImageLoader.getInstance().init(config);
     }
 
-    private void initPeachConfig(){
-        if(BuildConfig.DEBUG){
+    private void initPeachConfig() {
+        if (BuildConfig.DEBUG) {
             SystemConfig.BASE_URL = SystemConfig.DEBUG_BASE_URL;
-        }else{
+        } else {
             SystemConfig.BASE_URL = SystemConfig.RELEASE_BASE_URL;
         }
 
