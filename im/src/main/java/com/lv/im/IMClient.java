@@ -100,7 +100,7 @@ public class IMClient {
         acklist.put(id);
         System.out.println("ack list size:" + acklist.length());
         if (!isRunning){
-            ack(countFrequency.getFrequency()*10);
+            ack(countFrequency.getFrequency()*5);
         }
 //        if (acklist.length() > 10) {
 //            HttpUtils.FetchNewMsg(User.getUser().getCurrentUser(), (list) -> {
@@ -113,6 +113,9 @@ public class IMClient {
 
     }
     public void ack(long frequency){
+        if (Config.isDebug){
+            Log.i(Config.TAG,"ACK  频率"+frequency);
+        }
         if (frequency==0)frequency=30*1000;
         isRunning=true;
         timer = new Timer();
@@ -122,11 +125,14 @@ public class IMClient {
                 ackAndFetch(new FetchListener() {
                     @Override
                     public void OnMsgArrive(List<Message> list) {
-                        for (Message msg : list) {
-                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
-                        }
-                        LazyQueue.getInstance().TempDequeue();
-                        isRunning=false;
+//                        if (Config.isDebug){
+//                            Log.i(Config.TAG,"ACK  result");
+//                        }
+//                        for (Message msg : list) {
+//                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+//                        }
+//                        LazyQueue.getInstance().TempDequeue();
+                        isRunning = false;
                     }
                 });
             }
@@ -392,25 +398,6 @@ public class IMClient {
         SendMsgAsyncTask.sendMessage(null, String.valueOf(m.getSenderId()), imessage, m.getLocalId(), listen, chatType);
     }
 
-//    private int getExtType(int type) {
-//        switch (type){
-//            case 1:
-//            break;
-//            case 2:
-//                break;
-//            case 3:
-//                break;
-//            case 5:
-//                break;
-//            case 1:
-//                break;
-//            case 1:
-//                break;
-//            case 1:
-//                break;
-//        }
-//        return 0;
-//    }
 
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);

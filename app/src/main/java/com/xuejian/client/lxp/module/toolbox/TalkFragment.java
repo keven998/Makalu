@@ -296,13 +296,7 @@ public class TalkFragment extends PeachBaseFragment {
             ConversationBean Conversation = adapter.getItem(pos);
             IMClient.getInstance().deleteConversation(Conversation.getFriendId()+"");
             conversations.remove(pos);
-//            EMConversation tobeDeleteCons = peachConversation.emConversation;
-//            // 删除此会话
-//            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup());
-//            InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
-
             refresh();
-
             // 更新消息未读数
             ((MainActivity) getActivity()).updateUnreadMsgCount();
 

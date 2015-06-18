@@ -622,7 +622,6 @@ public class MessageAdapter extends BaseAdapter {
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
         //TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        System.out.println("handleTextMessage " + message.getMessage());
         Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
         // holder.tv.setText(span, BufferType.SPANNABLE);

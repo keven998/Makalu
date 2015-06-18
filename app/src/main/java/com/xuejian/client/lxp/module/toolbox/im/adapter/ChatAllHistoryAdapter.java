@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -118,7 +118,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
-        User user=null;
+        User user = null;
         if (AccountManager.getInstance().isLogin()) {
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId() + ""));
         }
@@ -126,7 +126,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         String username = String.valueOf(conversation.getFriendId());
         boolean isGroup = "group".equals(conversation.getChatType());
         if (isGroup) {
- //           contact = EMGroupManager.getInstance().getGroup(username);
+            //           contact = EMGroupManager.getInstance().getGroup(username);
 //            if (contact != null) {
 //                final EMGroup group = (EMGroup) contact;
 //                List<String> members = group.getMembers();
@@ -136,40 +136,44 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                final List<Bitmap> membersAvatars = new ArrayList<>();
             final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(username));
             final List<Bitmap> membersAvatars = new ArrayList<>();
-
-                final int size = Math.min(members.size(), 4);
+            int membersize;
+            if (members!=null){
+                membersize=members.size();
+            }
+            else membersize=0;
+            final int size = Math.min(membersize, 4);
 //                // 群聊消息，显示群聊头像
-                final ViewHolder finalHolder1 = holder;
-                if (size != 0) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < size; i++) {
-                                User user = members.get(i);
-                                if (user != null) {
-                                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
+            final ViewHolder finalHolder1 = holder;
+            if (size != 0) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < size; i++) {
+                            User user = members.get(i);
+                            if (user != null) {
+                                Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
 
-                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
-                                    if (bitmap == null) {
-                                        bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
-                                    }
-                                    membersAvatars.add(bitmap);
-                                } else {
-                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
-                                    membersAvatars.add(bitmap);
+                                LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
+                                if (bitmap == null) {
+                                    bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
                                 }
+                                membersAvatars.add(bitmap);
+                            } else {
+                                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
+                                membersAvatars.add(bitmap);
                             }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
-                                            LocalDisplay.dp2px(60), membersAvatars));
-                                }
-                            });
-
-
                         }
-                    }).start();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
+                                        LocalDisplay.dp2px(60), membersAvatars));
+                            }
+                        });
+
+
+                    }
+                }).start();
 //                } else {
 //                    holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
 //                }
@@ -181,18 +185,17 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            }else{
 //                holder.name.setText("");
 //            }
-            if (user!=null){
-                if (user.getNickName()!=null)holder.name.setText(user.getNickName());
-                else holder.name.setText(user.getUserId()+"");
-            }
-            else holder.name.setText(conversation.getFriendId()+"");
+            if (user != null) {
+                if (user.getNickName() != null) holder.name.setText(user.getNickName());
+                else holder.name.setText(user.getUserId() + "");
+            } else holder.name.setText(conversation.getFriendId() + "");
         } else {
             if (user != null) {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
                 finalHolder.avatar.setTag(user.getAvatarSmall());
-                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar,options);
+                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
 //                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
 //                    @Override
 //                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -223,16 +226,16 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 if (TextUtils.isEmpty(user.getMemo())) {
                     holder.name.setText(user.getNickName());
                 } else {
-                    holder.name.setText(user.getNickName()+" "+user.getMemo());
+                    holder.name.setText(user.getNickName() + " " + user.getMemo());
                 }
-            }else{
+            } else {
                 holder.name.setText("");
             }
-           // holder.name.setText(conversation.getFriendId()+"");
+            // holder.name.setText(conversation.getFriendId()+"");
 
         }
 
-        if (conversation.getIsRead()!=0) {
+        if (conversation.getIsRead() != 0) {
             // 显示与此用户的消息未读数
             holder.unreadLabel.setText(String.valueOf(conversation.getIsRead()));
             holder.unreadLabel.setVisibility(View.VISIBLE);
@@ -240,7 +243,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             holder.unreadLabel.setVisibility(View.GONE);
         }
 
-        if (conversation.getLastMessage()!=null) {
+        if (conversation.getLastMessage() != null) {
             // 把最后一条消息的内容作为item的message内容
             String lastMessage = conversation.getLastMessage();
             holder.time.setText(DateUtils.getTimestampString(new Date(conversation.getLastChatTime())));
@@ -249,17 +252,17 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_send_fail);
                 drawable.setBounds(1, 1, LocalDisplay.dp2px(15), LocalDisplay.dp2px(15));
                 holder.message.setCompoundDrawables(drawable, null, null, null);
-            } else if(conversation.getSendType() == TYPE_SEND &&  conversation.getStatus() == 1){
+            } else if (conversation.getSendType() == TYPE_SEND && conversation.getStatus() == 1) {
                 Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_inprogress);
                 drawable.setBounds(1, 1, LocalDisplay.dp2px(15), LocalDisplay.dp2px(15));
                 holder.message.setCompoundDrawables(drawable, null, null, null);
-            }  else {
+            } else {
 //                holder.msgState.setVisibility(View.GONE);
                 holder.message.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(conversation, (this.getContext()), isGroup)),
                     BufferType.SPANNABLE);
-        }else{
+        } else {
             holder.message.setText("");
             holder.time.setText("");
         }
@@ -276,7 +279,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
      */
     private String getMessageDigest(ConversationBean conversationBean, Context context, boolean isGroup) {
         String digest = "";
- //       int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
+        //       int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
         if (isGroup) {
 //            if (extType != Constant.ExtType.TIPS) {
 //                String fromUserJson = message.getStringAttribute("fromUser", "");
@@ -294,7 +297,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     // digest = EasyUtils.getAppResourceString(context,
                     // "location_recv");
                     digest = getStrng(context, R.string.location_recv);
-                  //  digest = String.format(digest, message.);
+                    //  digest = String.format(digest, message.);
                     return digest;
                 } else {
                     // digest = EasyUtils.getAppResourceString(context,
@@ -304,7 +307,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 break;
             case IMAGE_MSG: // 图片消息
                 //ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
-                digest = digest + getStrng(context, R.string.picture) ;
+                digest = digest + getStrng(context, R.string.picture);
                 break;
             case VOICE_MSG:// 语音消息
                 digest = digest + getStrng(context, R.string.voice);
@@ -313,9 +316,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 digest = digest + getStrng(context, R.string.video);
                 break;
             case TEXT_MSG: // 文本消息
-       //         if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+                //         if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 
-                    digest = digest + conversationBean.getLastMessage();
+                digest = digest + conversationBean.getLastMessage();
 //                    if (extType == 0) {
 //                        TextMessageBody txtBody = (TextMessageBody) message.getBody();
 //                        digest = digest + txtBody.getMessage();
@@ -341,8 +344,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             case SHOP_MSG:
             case HOTEL_MSG:
                 try {
-                    JSONObject jsonObject= new JSONObject(conversationBean.getLastMessage());
-                    digest = digest + "[链接] " +jsonObject.getString("name");
+                    JSONObject jsonObject = new JSONObject(conversationBean.getLastMessage());
+                    digest = digest + "[链接] " + jsonObject.getString("name");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
