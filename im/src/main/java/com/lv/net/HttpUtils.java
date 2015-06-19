@@ -3,24 +3,21 @@ package com.lv.net;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.SyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.lv.Listener.FetchListener;
+import com.lv.Listener.SendMsgListener;
 import com.lv.Utils.Config;
+import com.lv.bean.IMessage;
 import com.lv.bean.Message;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
 import com.lv.user.User;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,52 +26,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by q on 2015/4/27.
  */
 public class HttpUtils {
-    private static SyncHttpClient client = new SyncHttpClient();
-    static ExecutorService exec = Executors.newFixedThreadPool(5);
+    static ExecutorService exec = Executors.newCachedThreadPool();
+    public static final OkHttpClient client = new OkHttpClient();
 
-//    public static void FetchNewMsg(String user, final FetchListener listener) {
-//        final String path = Config.FETCH_URL + user;
-//        final RequestParams params = new RequestParams();
-//        params.put("userId", user);
-//        exec.execute(() -> {
-//            client.get(path, params, new TextHttpResponseHandler() {
-//                @Override
-//                public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
-//                    if (Config.isDebug) {
-//                        Log.i(Config.TAG, "fetch error code:" + i + "   " + s);
-//                        throwable.printStackTrace();
-//                    }
-//                }
-//
-//                @Override
-//                public void onSuccess(int i, Header[] headers, String s) {
-//                    try {
-//                        System.out.println(Thread.currentThread());
-//                        if (Config.isDebug) {
-//                            Log.i(Config.TAG, "fetch:" + s);
-//                        }
-//                        JSONObject object = new JSONObject(s);
-//                        JSONArray array = object.getJSONArray("result");
-//                        List<Message> list = new ArrayList<>();
-//                        for (int j = 0; j < array.length(); j++) {
-//                            Message msg = JSON.parseObject(array.getJSONObject(j).toString(), Message.class);
-//                            list.add(msg);
-//                        }
-//                        if (list.size() > 0) {
-//                            listener.OnMsgArrive(list);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//        });
-//    }
+    static {
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+    }
+
+    public static final MediaType json
+            = MediaType.parse("application/json; charset=utf-8");
+
+    public static Response HttpRequest(String url, String postBody) throws Exception {
+        RequestBody body = RequestBody.create(json, postBody);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        return client.newCall(request).execute();
+
+    }
 
     public static void postack(final JSONArray array, FetchListener listener) {
         final String url = Config.ACK_URL + User.getUser().getCurrentUser() + "/ack";
@@ -90,21 +66,10 @@ public class HttpUtils {
             e.printStackTrace();
         }
         exec.execute(() -> {
-            HttpPost post = new HttpPost(url);
-            HttpResponse httpResponse = null;
             try {
-                StringEntity entity = new StringEntity(obj.toString(),
-                        HTTP.UTF_8);
-                System.out.println(obj.toString());
-                entity.setContentType("application/json");
-                post.setEntity(entity);
-                httpResponse = new DefaultHttpClient().execute(post);
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                System.out.println("ack status code:" + statusCode);
-                if (statusCode == 200) {
-                    HttpEntity res = httpResponse.getEntity();
-                    String s = EntityUtils.toString(res);
-
+                Response response = HttpRequest(url, obj.toString());
+                if (response.isSuccessful()) {
+                    String s = response.body().string();
                     JSONObject object = new JSONObject(s);
                     JSONArray resultArray = object.getJSONArray("result");
                     List<Message> list = new ArrayList<>();
@@ -127,6 +92,70 @@ public class HttpUtils {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+
+    }
+
+    public static void sendMessage(final String conversation, final String currentFri, final IMessage msg, final long localId, final SendMsgListener listen, final String chatType) {
+        if (IMClient.taskMap.containsKey(currentFri)) {
+            if (IMClient.taskMap.get(currentFri).contains(localId)) return;
+            else IMClient.taskMap.get(currentFri).add(localId);
+        } else {
+            IMClient.taskMap.put(currentFri, new ArrayList<Long>());
+            IMClient.taskMap.get(currentFri).add(localId);
+        }
+        JSONObject object = new JSONObject();
+        try {
+            object.put("chatType", chatType);
+            object.put("sender", msg.getSender());
+            if (conversation != null && !"".equals(conversation)) {
+                object.put("conversation", conversation);
+            }
+            object.put("receiver", Long.parseLong(currentFri));
+            object.put("msgType", msg.getMsgType());
+            object.put("contents", msg.getContents());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final String str = object.toString();
+        if (Config.isDebug) {
+            Log.i(Config.TAG, "send_message:" + str);
+        }
+        exec.execute(() -> {
+            try {
+                Response response = HttpRequest(Config.SEND_URL, str);
+                if (response.isSuccessful()) {
+                    String result = response.body().string();
+                    IMClient.taskMap.get(currentFri).remove(localId);
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, result);
+                    }
+                    JSONObject object1 = new JSONObject(result);
+                    JSONObject obj = object1.getJSONObject("result");
+                    String conversation1 = obj.get("conversation").toString();
+                    String msgId = obj.get("msgId").toString();
+                    Long timestamp = Long.parseLong(obj.get("timestamp").toString());
+                    IMClient.getInstance().setLastMsg(conversation1, Integer.parseInt(msgId));
+                    IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS, null, msg.getMsgType());
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "发送成功，消息更新！");
+                    }
+                    listen.onSuccess();
+                } else {
+                    int code = response.code();
+                    IMClient.taskMap.get(currentFri).remove(localId);
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "发送失败：code " + code);
+                    }
+                    IMClient.getInstance().updateMessage(currentFri, localId, null, null, 0, Config.STATUS_FAILED, null, msg.getMsgType());
+                    listen.onFailed(code);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                IMClient.taskMap.get(currentFri).remove(localId);
+                IMClient.getInstance().updateMessage(currentFri, localId, null, null, 0, Config.STATUS_FAILED, null, msg.getMsgType());
+                listen.onFailed(-1);
             }
         });
 
@@ -177,32 +206,27 @@ public class HttpUtils {
 
     }
 
-    public interface tokenget {
+    public interface tokenGet {
         public void OnSuccess(String key, String token);
     }
 
-    public static void getToken(final tokenget listener) {
+    public static void getToken(final tokenGet listener) {
         exec.execute(() -> {
             JSONObject object = new JSONObject();
             try {
                 object.put("action", 1);
 
                 HttpPost post = new HttpPost("http://hedy.zephyre.me/upload/token-generator");
-                HttpResponse httpResponse = null;
-                StringEntity entity = new StringEntity(object.toString(),
-                        HTTP.UTF_8);
-                entity.setContentType("application/json");
-                post.setEntity(entity);
-                httpResponse = new DefaultHttpClient().execute(post);
-                if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                    String result = EntityUtils.toString(httpResponse.getEntity());
+                Response response = HttpRequest("http://hedy.zephyre.me/upload/token-generator", object.toString());
+                if (response.isSuccessful()) {
+                    String result = response.body().string();
                     JSONObject res = new JSONObject(result);
                     JSONObject obj = res.getJSONObject("result");
                     String key = obj.getString("key");
                     String token = obj.getString("token");
                     listener.OnSuccess(key, token);
                 } else if (Config.isDebug) {
-                    Log.i(Config.TAG, "TokenGet Error :" + httpResponse.getStatusLine().getStatusCode());
+                    Log.i(Config.TAG, "TokenGet Error :" + response.code());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
