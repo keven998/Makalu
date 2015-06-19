@@ -44,10 +44,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             android:text="~旅行·搜搜~"
             android:textColor="@color/color_text_ii"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
     </FrameLayout>
 
