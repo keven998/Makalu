@@ -269,7 +269,7 @@ public class IMClient {
         if ("0".equals(conversation)) conversation = null;
         IMessage imessage = new IMessage((int)message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
        System.out.println("message.getSenderId()  ===="+message.getSenderId());
-        SendMsgAsyncTask.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
+        HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
     public MessageBean createTextMessage(String UserId,String text, String friendId, String chatType) {
@@ -365,7 +365,7 @@ public class IMClient {
     public void sendLocationMessage(String userId,String friendId,MessageBean message, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         IMessage imessage = new IMessage(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
-        SendMsgAsyncTask.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
+        HttpUtils.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
     }
 
     public MessageBean CreateLocationMessage(String userID,String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress) {
@@ -397,7 +397,7 @@ public class IMClient {
         //return m;
         //if ("0".equals(conversation)) conversation = null;
         IMessage imessage = new IMessage(Integer.parseInt(UserId),friendId, type + 9, m.getMessage());
-        SendMsgAsyncTask.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
+        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
 

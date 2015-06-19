@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -108,7 +107,7 @@ public class UploadUtils {
     public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType) {
         System.out.println("localId "+localId+" filePath:" + filePath);
         if (Config.isDebug)Log.i(Config.TAG,"开始上传 ");
-        HttpUtils.getToken(new HttpUtils.tokenget() {
+        HttpUtils.getToken(new HttpUtils.tokenGet() {
             @Override
             public void OnSuccess(String key, String token) {
                 if (token == null) {
