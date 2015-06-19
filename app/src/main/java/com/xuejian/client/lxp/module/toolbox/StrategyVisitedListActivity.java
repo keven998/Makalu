@@ -290,11 +290,11 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
         } else {
             mMyStrategyLv.setHasMoreData(true);
         }
-//        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
-//            mMyStrategyLv.setScrollLoadEnabled(true);
-//        }else{
-//            mMyStrategyLv.setScrollLoadEnabled(false);
-//        }
+        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
+            mMyStrategyLv.setScrollLoadEnabled(true);
+        }else{
+            mMyStrategyLv.setScrollLoadEnabled(false);
+        }
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
                 //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
