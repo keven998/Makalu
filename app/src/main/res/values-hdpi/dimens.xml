@@ -17,19 +17,10 @@
 
 <resources>
 
-    <dimen name="image_thumbnail_size">148dp</dimen>
-    <dimen name="image_thumbnail_spacing">2dp</dimen>
+    <dimen name="page_more_header_frame_height">80dp</dimen>
+    <dimen name="page_more_avatar_frame_size">84dp</dimen>
+    <dimen name="tools_search_bar_height">140dp</dimen>
+    <dimen name="tools_tool_card_height">140dp</dimen>
+    <dimen name="option_cell_height">44dp</dimen>
 
-    <dimen name="my_plan_img_height">132dp</dimen>
-    <dimen name="my_plan_title_width">248dp</dimen>
-
-    <dimen name="city_picture_collection_height">212dp</dimen>
-
-    <dimen name="note_picture_size">80dp</dimen>
-
-    <dimen name="operation_section_height">238dp</dimen>
-    <dimen name="spot_detail_picture_height">160dp</dimen>
-
-    <dimen name="tools_search_bar_height">240dp</dimen>
-    <dimen name="tools_tool_card_height">320dp</dimen>
 </resources>
