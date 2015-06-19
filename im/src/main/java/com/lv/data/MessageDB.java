@@ -3,13 +3,11 @@ package com.lv.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.NotificationCompatSideChannelService;
 import android.util.Log;
 
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
 import com.lv.Utils.TimeUtils;
-import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
@@ -425,7 +423,7 @@ public class MessageDB {
         int id;
         if (msgId==null)id=-1;
         else id=Integer.parseInt(msgId);
-        updateConversation(fri_ID, conversation,id);
+        updateConversation(fri_ID, conversation, id);
         closeDB();
     }
 
@@ -469,14 +467,13 @@ public class MessageDB {
         cursor.close();
         closeDB();
     }
-//    public void saveMsgs(List<MessageBean> list) {
-//        mdb = getDB();
-//        mdb.beginTransaction();
-//        for (MessageBean msg : list) {
-//            saveMsg(msg.getSenderId() + "", msg);
-//        }
-//        mdb.endTransaction();
-//        closeDB();
-//    }
-
+    public int getUnReadCount(){
+        if (con_table_name==null)return 0;
+        mdb=getDB();
+        Cursor cursor=mdb.rawQuery("select sum(isRead) from " + con_table_name, null);
+        cursor.moveToLast();
+        int count=cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
 }

@@ -4,7 +4,7 @@ package com.lv.bean;
  * Created by q on 2015/4/18.
  */
 
-public class IMessage {
+public class SendMessageBean {
     private int sender;
     private String receiver;
     private int msgType;
@@ -62,7 +62,7 @@ public class IMessage {
         this.contents = contents;
     }
 
-    public IMessage(int sender, String receiver, int msgType, String contents) {
+    public SendMessageBean(int sender, String receiver, int msgType, String contents) {
         this.sender = sender;
         this.receiver = receiver;
         this.msgType = msgType;

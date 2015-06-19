@@ -39,17 +39,13 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
 
 import java.util.List;
 import java.util.UUID;

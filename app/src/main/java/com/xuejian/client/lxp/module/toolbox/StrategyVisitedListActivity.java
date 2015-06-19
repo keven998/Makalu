@@ -113,8 +113,8 @@ public class StrategyVisitedListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-        TextView tv_null = (TextView) findViewById(R.id.desc_tv);
-        tv_null.setText("您还没有去过的行程~");
+      //  TextView tv_null = (TextView) findViewById(R.id.desc_tv);
+     //   tv_null.setText("您还没有去过的行程~");
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);

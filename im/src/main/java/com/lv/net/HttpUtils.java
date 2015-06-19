@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Utils.Config;
-import com.lv.bean.IMessage;
+import com.lv.bean.SendMessageBean;
 import com.lv.bean.Message;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
@@ -17,7 +17,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.client.methods.HttpPost;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +51,7 @@ public class HttpUtils {
 
     }
 
-    public static void postack(final JSONArray array, FetchListener listener) {
+    public static void postAck(final JSONArray array, FetchListener listener) {
         final String url = Config.ACK_URL + User.getUser().getCurrentUser() + "/ack";
         final JSONObject obj = new JSONObject();
         try {
@@ -97,7 +96,7 @@ public class HttpUtils {
 
     }
 
-    public static void sendMessage(final String conversation, final String currentFri, final IMessage msg, final long localId, final SendMsgListener listen, final String chatType) {
+    public static void sendMessage(final String conversation, final String currentFri, final SendMessageBean msg, final long localId, final SendMsgListener listen, final String chatType) {
         if (IMClient.taskMap.containsKey(currentFri)) {
             if (IMClient.taskMap.get(currentFri).contains(localId)) return;
             else IMClient.taskMap.get(currentFri).add(localId);
@@ -139,14 +138,14 @@ public class HttpUtils {
                     IMClient.getInstance().setLastMsg(conversation1, Integer.parseInt(msgId));
                     IMClient.getInstance().updateMessage(currentFri, localId, msgId, conversation1, timestamp, Config.STATUS_SUCCESS, null, msg.getMsgType());
                     if (Config.isDebug) {
-                        Log.i(Config.TAG, "∑¢ÀÕ≥…π¶£¨œ˚œ¢∏¸–¬£°");
+                        Log.i(Config.TAG, "ÂèëÈÄÅÊàêÂäüÔºåÊ∂àÊÅØÊõ¥Êñ∞ÔºÅ");
                     }
                     listen.onSuccess();
                 } else {
                     int code = response.code();
                     IMClient.taskMap.get(currentFri).remove(localId);
                     if (Config.isDebug) {
-                        Log.i(Config.TAG, "∑¢ÀÕ ß∞‹£∫code " + code);
+                        Log.i(Config.TAG, "ÂèëÈÄÅÂ§±Ë¥•Ôºöcode " + code);
                     }
                     IMClient.getInstance().updateMessage(currentFri, localId, null, null, 0, Config.STATUS_FAILED, null, msg.getMsgType());
                     listen.onFailed(code);
@@ -215,8 +214,6 @@ public class HttpUtils {
             JSONObject object = new JSONObject();
             try {
                 object.put("action", 1);
-
-                HttpPost post = new HttpPost("http://hedy.zephyre.me/upload/token-generator");
                 Response response = HttpRequest("http://hedy.zephyre.me/upload/token-generator", object.toString());
                 if (response.isSuccessful()) {
                     String result = response.body().string();

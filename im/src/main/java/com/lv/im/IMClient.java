@@ -2,9 +2,6 @@ package com.lv.im;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.wifi.WifiConfiguration;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,7 +15,7 @@ import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
-import com.lv.bean.IMessage;
+import com.lv.bean.SendMessageBean;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.data.MessageDB;
@@ -32,9 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -267,14 +262,14 @@ public class IMClient {
 
     public void sendTextMessage(MessageBean message,String friendId, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage((int)message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
+        SendMessageBean imessage = new SendMessageBean((int)message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
        System.out.println("message.getSenderId()  ===="+message.getSenderId());
         HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
     public MessageBean createTextMessage(String UserId,String text, String friendId, String chatType) {
         if (TextUtils.isEmpty(text)) return null;
-        IMessage message = new IMessage(Integer.parseInt(UserId), friendId, Config.TEXT_MSG, text);
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, Config.TEXT_MSG, text);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
      //   MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
@@ -311,7 +306,7 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(userId), friendId, Config.AUDIO_MSG, object.toString());
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(userId), friendId, Config.AUDIO_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.AUDIO_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
@@ -330,7 +325,7 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         System.out.println("message " + messageBean.getMessage());
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
@@ -364,7 +359,7 @@ public class IMClient {
      */
     public void sendLocationMessage(String userId,String friendId,MessageBean message, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
+        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
         HttpUtils.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
     }
 
@@ -379,7 +374,7 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IMessage message = new IMessage(Integer.parseInt(userID), friendId, Config.TEXT_MSG, object.toString());
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(userID), friendId, Config.TEXT_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.LOC_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(userID));
@@ -389,14 +384,14 @@ public class IMClient {
 
     public void sendExtMessage(String UserId,String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
         if (TextUtils.isEmpty(contentJson)) return;
-        IMessage message = new IMessage(Integer.parseInt(UserId), friendId, type + 9, contentJson);
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type + 9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
         m.setLocalId((int) localId);
         //return m;
         //if ("0".equals(conversation)) conversation = null;
-        IMessage imessage = new IMessage(Integer.parseInt(UserId),friendId, type + 9, m.getMessage());
+        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId),friendId, type + 9, m.getMessage());
         HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
@@ -405,7 +400,7 @@ public class IMClient {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);
     }
 
-    private MessageBean imessage2Bean(IMessage message) {
+    private MessageBean imessage2Bean(SendMessageBean message) {
 
         return new MessageBean(0, Config.STATUS_SENDING, message.getMsgType(), message.getContents(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(User.getUser().getCurrentUser()));
     }
@@ -422,14 +417,14 @@ public class IMClient {
     }
 
     public void ackAndFetch(FetchListener listener) {
-        HttpUtils.postack(acklist, listener);
+        HttpUtils.postAck(acklist, listener);
     }
 
     /**
      * 初始化Fetch
      */
     public void initAckAndFetch() {
-        HttpUtils.postack(acklist, (list) -> {
+        HttpUtils.postAck(acklist, (list) -> {
             for (Message msg : list) {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
@@ -475,7 +470,9 @@ public class IMClient {
     public void updateReadStatus(String chatId, long messageId, boolean isRead) {
         db.updateReadStatus(chatId, messageId, isRead);
     }
-
+    public int getUnReadMsgCount(){
+        return db.getUnReadCount();
+    }
     public void logout() {
         db.disconnectDB();
         client = null;

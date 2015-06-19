@@ -9,14 +9,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.util.LongSparseArray;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -42,7 +40,6 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.userDB.User;
@@ -406,7 +403,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      *
      * @param msg
      */
-    private void notifyNewIviteMessage(InviteMessage msg) {
+    private void notifyNewInviteMessage(InviteMessage msg) {
 
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();
@@ -505,7 +502,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             msg.setGroupName(groupName);
             msg.setReason(reason);
             msg.setStatus(InviteStatus.BEAPPLYED);
-            notifyNewIviteMessage(msg);
+            notifyNewInviteMessage(msg);
         }
 
         @Override

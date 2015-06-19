@@ -8,24 +8,17 @@ import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.lv.Utils.Config;
 import com.lv.im.IMClient;
-import com.lv.user.User;
-import com.lv.user.UserDao;
 import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -62,11 +55,44 @@ public class HttpManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         exec.execute(new Runnable() {
             @Override
             public void run() {
-
+//                GroupApi.createGroup(obj.toString(), new HttpCallBack() {
+//                    @Override
+//                    public void doSucess(Object result, String method) {
+//                        try {
+//                            String r = result.toString();
+//                            if (Config.isDebug) {
+//                                Log.i(Config.TAG, "create group Result : " + result);
+//                            }
+//                            JSONObject object = new JSONObject(r);
+//                            JSONObject jsonObject = object.getJSONObject("result");
+//                            String groupId = jsonObject.getString("groupId");
+//                            String conversation = jsonObject.getString("conversation");
+//                            String groupType = jsonObject.getString("groupType");
+//                            long creator = jsonObject.getLong("creator");
+//                            IMClient.getInstance().addGroup2Conversation(groupId, conversation);
+//                            JSONObject o = new JSONObject();
+//                            o.put("GroupMember", array);
+//                            o.put("groupType", groupType);
+//                            o.put("isPublic", isPublic);
+//                            o.put("creator", creator);
+//                            UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId), name, o.toString(), 8));
+//                            if (Config.isDebug) {
+//                                Log.i(Config.TAG, "群组更新成功");
+//                            }
+//                            listener.OnSuccess(groupId, conversation);
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method) {
+//                            Log.i("GroupApi", "create group Error : " + msg);
+//                    }
+//                });
                 HttpPost post = new HttpPost(Config.HOST + "/groups");
                 post.addHeader("UserId",AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
@@ -106,7 +132,7 @@ public class HttpManager {
                     e.printStackTrace();
                 }
             }
-        });
+         });
     }
 
     public static void addMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {

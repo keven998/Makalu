@@ -63,8 +63,6 @@ import com.aizou.core.widget.DotView;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.ImageMessageBody;
@@ -76,11 +74,9 @@ import com.easemob.util.VoiceRecorder;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
-import com.lv.bean.ConversationBean;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
-import com.lv.user.User;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
@@ -107,8 +103,6 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
-import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
-import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -203,13 +197,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private com.xuejian.client.lxp.db.userDB.User user;
-//    private Handler micImageHandler = new Handler() {
-//        @Override
-//        public void handleMessage(android.os.Message msg) {
-//            // 切换msg切换图片
-//            micImage.setImageDrawable(micImages[msg.what]);
-//        }
-//    };
 
     private static class MyHandler extends Handler {
 
@@ -245,13 +232,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         initView();
         setUpView();
         user=UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
-        if (user==null){
+        if ("single".equals(chatType)&&user==null){
             getUserInfo(Integer.parseInt(toChatUsername));
         }
     }
-    public void getUserInfo(int userid){
+    public void getUserInfo(int userId){
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
+        UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -1462,7 +1449,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
             if (!isFinishing())
                 ToastUtil.getInstance(this).showToast("成功删除她");
-        } catch (EaseMobException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 //			Toast.makeText(getApplicationContext(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
             if (!isFinishing())
