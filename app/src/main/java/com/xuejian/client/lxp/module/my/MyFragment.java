@@ -113,13 +113,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             }
-           // int countryCount = user.getTracks().keySet().size();
-          //  int cityCount = 0;
-         //   for (String key : user.getTracks().keySet()) {
-         //       cityCount += user.getTracks().get(key).size();
-         //   }
-            tvTracksCount.setText(0 + "国" + 0 + "城市");
-            tvPlansCount.setText(user.getGuideCnt() + "条");
+            int countryCount = 0;
+            int cityCount = 0;
+            int guideCount = user.getGuideCnt();
+            if (AccountManager.getInstance().getLoginAccountInfo() != null) {
+                for (String key : AccountManager.getInstance().getLoginAccountInfo().getTracks().keySet()) {
+                    cityCount += AccountManager.getInstance().getLoginAccountInfo().getTracks().get(key).size();
+                }
+                countryCount = AccountManager.getInstance().getLoginAccountInfo().getTracks().keySet().size();
+                guideCount = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+            }
+            tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
+            tvPlansCount.setText(guideCount + "条");
             tvFriendsCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "人");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());

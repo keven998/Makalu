@@ -7,11 +7,7 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.easemob.EMCallBack;
 import com.lv.im.IMClient;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
@@ -26,7 +22,7 @@ public class AccountManager {
     public static String CurrentUserId;
     private Map<Long, User> contactList;
     private boolean isLogin;
-
+    private User userInfo;
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
      */
@@ -126,7 +122,12 @@ public class AccountManager {
         this.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
-
+    public User getLoginAccountInfo(){
+        return userInfo;
+    }
+    public void setLoginAccountInfo(User user){
+        this.userInfo=user;
+    }
     /**
      * 获取内存中好友user list
      *

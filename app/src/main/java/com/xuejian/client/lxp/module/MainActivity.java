@@ -110,19 +110,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             com.lv.user.User.login(AccountManager.getCurrentUserId(), new LoginSuccessListener() {
                 @Override
                 public void OnSuccess() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                            if (talkFragment != null) {
-                                talkFragment.loadConversation();
-                                IMClient.getInstance().initAckAndFetch();
-                            }
-                        }
-                    });
                 }
-
-
                 @Override
                 public void OnFailed(int code) {
                     runOnUiThread(new Runnable() {
@@ -139,6 +127,24 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 talkFragment.loadConversation();
             }
             initData();
+            UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
+                @Override
+                public void doSucess(Object result, String method) {
+                    CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
+                    if (Info.code == 0) {
+                        AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                        MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                        if (myFragment != null) {
+                            myFragment.refreshLoginStatus();
+                        }
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+            });
         }
     }
 
