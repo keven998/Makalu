@@ -3,7 +3,8 @@ package com.xuejian.client.lxp.module.toolbox;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -22,9 +21,8 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
+import com.easemob.EMCallBack;
 import com.google.gson.reflect.TypeToken;
-import com.lv.Listener.SendMsgListener;
-import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
@@ -36,6 +34,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
@@ -45,15 +44,14 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout;
 import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
-import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -63,64 +61,60 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/12/1.
  */
-public class StrategyListActivity extends PeachBaseActivity {
+public class StrategyVisitedListActivity extends PeachBaseActivity {
 
     public static final int RESULT_PLAN_DETAIL = 1;
     public static final int REQUEST_CODE_NEW_PLAN = 2;
 
-    private final static String[] CONTENT_TYPE = {"全部", "只看计划", "只看去过"};
-
+    @InjectView(R.id.title_bar)
+    TitleHeaderBar mTitleBar;
     @InjectView(R.id.my_strategy_lv)
     PullToRefreshListView mMyStrategyLv;
     @InjectView(R.id.edit_btn)
     ImageButton mEditBtn;
-
     StrategyAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
-    String chatType;
+    int chatType;
     String toId;
+    private StrategyBean originalStrategy;
     private String userId;
-    private boolean isOwner;
+    private boolean isExpertPlan;
 
-    private int mContentType = 0; // 0 = ALL, 1 = plans, 2 = pass
+    private boolean swipeEnable = false; //侧滑补丁
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        userId = getIntent().getStringExtra("userId");
-        if (AccountManager.getInstance().getLoginAccount(this) == null) {
-            isOwner = false;
-        } else {
-            isOwner = userId.equals(String.valueOf(AccountManager.getCurrentUserId()));
+        userId=getIntent().getExtras().getString("userId");
+        isExpertPlan=getIntent().getExtras().getBoolean("isExpertPlan");
+        if(AccountManager.getInstance().user==null){
+            swipeEnable=false;
+        }else {
+            swipeEnable = userId.equals(String.valueOf(AccountManager.getInstance().user.getUserId()));
         }
         initView();
         initData();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
-//        MobclickAgent.onPageStart("page_plan_lists");
+//        MobclickAgent.onPageStart("page_my_trip_plans");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_plan_lists");
+//        MobclickAgent.onPageEnd("page_my_trip_plans");
     }
 
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         ButterKnife.inject(this);
-
+        TextView tv_null = (TextView) findViewById(R.id.desc_tv);
+        tv_null.setText("您还没有去过的行程~");
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
@@ -128,75 +122,59 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         mStrategyListAdapter = new StrategyAdapter(isShare);
-        if (!isOwner) {
+        if (isShare || isExpertPlan) {
             mEditBtn.setVisibility(View.GONE);
         }
 
-        listView.getRefreshableView().setAdapter(mStrategyListAdapter);
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(0, mContentType);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getStrategyListData(mCurrentPage + 1, mContentType);
-            }
-        });
-
-        listView.getRefreshableView().setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
-                        Intent intent = new Intent(mContext, StrategyActivity.class);
-                        intent.putExtra("id", bean.id);
-                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
-                    }
+            listView.getRefreshableView().setAdapter(mStrategyListAdapter);
+            listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+                @Override
+                public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                    getStrategyListData(0, "traveled");
                 }
 
-        );
-
-        mEditBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
-                        Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
-                    }
+                @Override
+                public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                    getStrategyListData(mCurrentPage + 1, "traveled");
                 }
-        );
+            });
 
-        Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
-        spinner.setAdapter(new StringSpinnerAdapter(this, Arrays.asList(CONTENT_TYPE)));
-        spinner.setSelection(0, true);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                MobclickAgent.onEvent(StrategyListActivity.this, "event_do_filter");
-                mContentType = position;
-                mMyStrategyLv.onPullDownRefreshComplete();
-                mMyStrategyLv.onPullUpRefreshComplete();
-                mMyStrategyLv.doPullRefreshing(true, 0);
-            }
+            listView.getRefreshableView().setOnItemClickListener(
+                    new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                            Intent intent = new Intent(mContext, StrategyActivity.class);
+                            intent.putExtra("id", bean.id);
+                            startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                        }
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            );
 
-            }
-        });
+            mEditBtn.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
+                            Intent intent = new Intent(StrategyVisitedListActivity.this, SelectDestActivity.class);
+                            startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
+                        }
+                    }
 
-        TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
-        textView.setText(String.format("%s的计划", getIntent().getStringExtra("user_name")));
+            );
 
-    }
+//        mTitleBar.enableBackKey(true);
+//        String action = getIntent().getAction();
+            TitleHeaderBar tbar = mTitleBar;
+            tbar.enableBackKey(true);
+            tbar.getTitleTextView().setText("已去过的旅程");
+        }
 
     private void setupViewFromCache() {
-        if (isOwner) {
+        if(!isExpertPlan) {
             AccountManager account = AccountManager.getInstance();
-            String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", userId));
+            String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.getUserId()));
             if (!TextUtils.isEmpty(data)) {
                 List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
                         new TypeToken<List<StrategyBean>>() {
@@ -207,28 +185,41 @@ public class StrategyListActivity extends PeachBaseActivity {
                     mMyStrategyLv.setHasMoreData(true);
                     mMyStrategyLv.setScrollLoadEnabled(true);
                 }
-                getStrategyListData(0, mContentType);
+                getStrategyListData(0, "traveled");
             } else {
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
-        } else {
-            getStrategyListData(0, mContentType);
+        }else{
+            getStrategyListData(0,"traveled");
         }
+
+       // mMyStrategyLv.doPullRefreshing(true, 0);
+//        AccountManager account = AccountManager.getInstance();
+//        String data = PreferenceUtils.getCacheData(this, String.format("%s_traveled", account.user.userId));
+//        if (!TextUtils.isEmpty(data)) {
+//            List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
+//                    new TypeToken<List<StrategyBean>>() {
+//                    });
+//            mStrategyListAdapter.getDataList().addAll(lists);
+//            mStrategyListAdapter.notifyDataSetChanged();
+//            if (mStrategyListAdapter.getCount() >= OtherApi.PAGE_SIZE) {
+//                mMyStrategyLv.setHasMoreData(true);
+//                mMyStrategyLv.setScrollLoadEnabled(true);
+//            }
+//            getStrategyListData(0,"traveled");
+//        } else {
+//            mMyStrategyLv.doPullRefreshing(true, 0);
+//        }
     }
 
     private void cachePage() {
-        if (isOwner && (mContentType == 0)) {
-            AccountManager account = AccountManager.getInstance();
-            if (userId != null && !userId.equals(account.getCurrentUserId())) {
-                return;
-            }
-            int size = mStrategyListAdapter.getCount();
-            if (size > OtherApi.PAGE_SIZE) {
-                size = OtherApi.PAGE_SIZE;
-            }
-            List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-            PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.getCurrentUserId()), GsonTools.createGsonString(cd));
+        AccountManager account = AccountManager.getInstance();
+        int size = mStrategyListAdapter.getCount();
+        if (size > OtherApi.PAGE_SIZE) {
+            size = OtherApi.PAGE_SIZE;
         }
+        List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
+        PreferenceUtils.cacheData(StrategyVisitedListActivity.this, String.format("%s_traveled", account.user.getUserId()), GsonTools.createGsonString(cd));
     }
 
     @Override
@@ -253,28 +244,24 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void initData() {
         toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getStringExtra("chatType");
+        chatType = getIntent().getIntExtra("chatType", 0);
+//        getStrategyListData(0);
+//        mMyStrategyLv.doPullRefreshing(true, 100);
         setupViewFromCache();
     }
 
-    private void getStrategyListData(final int page, int type) {
-        String content = null;
-        if (type == 1) {
-            content = "planned";
-        } else if (type == 2) {
-            content = "traveled";
-        }
+    private void getStrategyListData(final int page , String traveled) {
 
-        TravelApi.getStrategyPlannedList(userId, page, content, new HttpCallBack<String>() {
+        TravelApi.getStrategyPlannedList(userId, page, traveled, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                 if (strategyListResult.code == 0) {
                     mCurrentPage = page;
                     bindView(strategyListResult.result);
-                    if (page == 0 || mStrategyListAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
-                        cachePage();
-                    }
+//                    if (page == 0 || mStrategyListAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
+//                        cachePage();
+//                    }
                 }
                 mMyStrategyLv.onPullDownRefreshComplete();
                 mMyStrategyLv.onPullUpRefreshComplete();
@@ -285,7 +272,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.onPullDownRefreshComplete();
                 mMyStrategyLv.onPullUpRefreshComplete();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
 
@@ -303,15 +290,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         } else {
             mMyStrategyLv.setHasMoreData(true);
         }
-
-//        if (result.size() == 0) {
-//            if (mCurrentPage == 0) {
-//            } else {
-//                ToastUtil.getInstance(this).showToast("已取完所有内容");
-//            }
-//            return;
-//        }
-
         if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setScrollLoadEnabled(true);
         }else{
@@ -320,7 +298,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (result.size() == 0) {
             if (mCurrentPage == 0) {
                 //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                //mMyStrategyLv.doPullRefreshing(true, 0);
             } else {
                 ToastUtil.getInstance(this).showToast("已取完所有内容");
             }
@@ -332,12 +309,13 @@ public class StrategyListActivity extends PeachBaseActivity {
         protected ArrayList<StrategyBean> mItemDataList = new ArrayList<StrategyBean>();
         DisplayImageOptions poptions;
         boolean isSend;
-        private LinearLayout swipe_ll;
 
         public StrategyAdapter(boolean isSend) {
             poptions = UILUtils.getDefaultOption();
             this.isSend = isSend;
         }
+
+
 
 
         @Override
@@ -352,7 +330,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         @Override
         public View generateView(int position, ViewGroup parent) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.row_my_strategy, null);
-            swipe_ll = (LinearLayout) v.findViewById(R.id.swipe_bg_ll);
             return v;
         }
 
@@ -365,8 +342,9 @@ public class StrategyListActivity extends PeachBaseActivity {
             TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
             ImageButton mMore = (ImageButton) convertView.findViewById(R.id.edit_more);
             ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
+
             SwipeLayout slyt = (SwipeLayout) convertView.findViewById(R.id.swipe);
-            slyt.setSwipeEnabled(isOwner);
+            slyt.setSwipeEnabled(swipeEnable);
 
             final StrategyBean itemData = (StrategyBean) getItem(position);
             TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
@@ -380,8 +358,27 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isSend) {  //isSend
+            if (isSend) {
                 mRlSend.setVisibility(View.VISIBLE);
+                mBtnSend.setVisibility(View.GONE);
+                mRlSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                        Intent intent = new Intent(mContext, StrategyActivity.class);
+                        intent.putExtra("id", bean.id);
+                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+                    }
+                });
+//                mRlSend.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+//                        Intent intent = new Intent(mContext, StrategyActivity.class);
+//                        intent.putExtra("id", bean.id);
+//                        startActivityForResult(intent, RESULT_PLAN_DETAIL);
+//                    }
+//                });
                 mBtnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -389,7 +386,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new SendMsgListener() {
+                                IMUtils.sendExtMessage(mContext, type, content, chatType, toId, new EMCallBack() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -398,10 +395,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                                                 ToastUtil.getInstance(mContext).showToast("已发送~");
                                             }
                                         });
+
                                     }
 
                                     @Override
-                                    public void onFailed(int code) {
+                                    public void onError(int i, String s) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -409,6 +407,11 @@ public class StrategyListActivity extends PeachBaseActivity {
 
                                             }
                                         });
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(int i, String s) {
 
                                     }
                                 });
@@ -424,24 +427,26 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mRlSend.setVisibility(View.GONE);
             }
 
-            mMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMoreDialog(itemData);
-                }
-            });
-            mDeleteItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteItem(itemData);
-                }
-            });
+
+                mMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showMoreDialog(itemData);
+                    }
+                });
+
+                mDeleteItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteItem(itemData);
+                    }
+                });
         }
 
-        public void showMoreDialog(final StrategyBean strBean) {
-            String[] names = {"修改计划名", "签到"};
-            final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
-            dialog.setMoreStyle(true, 2, names);
+        public void showMoreDialog(final StrategyBean strBean){
+            String[] names={"修改标题","重置为计划"};
+            final MoreDialog dialog=new MoreDialog(StrategyVisitedListActivity.this);
+            dialog.setMoreStyle(true,2,names);
             dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
             dialog.setTitle("更多");
             dialog.setMessage(strBean.title);
@@ -450,7 +455,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                    editDialog.setTitle("修改计划名");
+                    editDialog.setTitle("修改标题");
                     editDialog.setMessage(strBean.title);
                     editDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
@@ -465,20 +470,18 @@ public class StrategyListActivity extends PeachBaseActivity {
                                     if (modifyResult.code == 0) {
                                         strBean.title = editDialog.getMessage();
                                         mStrategyListAdapter.notifyDataSetChanged();
-                                        cachePage();
+//                                        cachePage();
                                     } else {
-                                        if (!isFinishing()) {
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                        }
+                                        if (!isFinishing())
+                                            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                     }
                                 }
 
                                 @Override
                                 public void doFailure(Exception error, String msg, String method) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
-                                    if (!isFinishing()) {
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                    }
+                                    if (!isFinishing())
+                                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                 }
                             });
                         }
@@ -486,45 +489,34 @@ public class StrategyListActivity extends PeachBaseActivity {
                     editDialog.show();
                 }
             });
-
-
-            //置顶操作
-//            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                    backToTop(strBean);
-//                }
-//            });
-
-            //去过操作
+            //修改为计划操作
             dialog.getTv4().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                     haveBeenVisited(strBean);
-//                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
-//                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-//                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-//                    cdialog.setTitle("提示");
-//                    cdialog.setMessage(strBean.title + "已保存为去过，成为了您的历史足迹");
-//                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            cdialog.dismiss();
-//                        }
-//                    });
-//                    final Handler handler = new Handler() {
-//                        public void handleMessage(Message msg) {
-//                            switch (msg.what) {
-//                                case 1:
-//                                    cdialog.show();
-//                            }
-//                            super.handleMessage(msg);
-//                        }
-//                    };
-//                    Message message = handler.obtainMessage(1);
-//                    handler.sendMessageDelayed(message, 300);
+                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyVisitedListActivity.this);
+                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                    cdialog.setTitle("提示");
+                    cdialog.setMessage(strBean.title + "已保存为去过，成为旅行足迹");
+                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cdialog.dismiss();
+                        }
+                    });
+                    final Handler handler=new Handler(){
+                        public void handleMessage(Message msg) {
+                            switch (msg.what){
+                                case 1:
+                                    cdialog.show();
+                            }
+                            super.handleMessage(msg);
+                        }
+                    };
+                    Message message=handler.obtainMessage(1);
+                    handler.sendMessageDelayed(message,300);
                 }
             });
             dialog.show();
@@ -545,6 +537,8 @@ public class StrategyListActivity extends PeachBaseActivity {
             return position;
         }
     }
+
+
 
     private void deleteItem(final StrategyBean itemData) {
         MobclickAgent.onEvent(mContext, "event_delete_trip_plan");
@@ -567,7 +561,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         } else {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())
-                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                                ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                         }
                     }
 
@@ -575,7 +569,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
-                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
             }
@@ -590,7 +584,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     }
 
-    private void deleteThisItem(StrategyBean data) {
+    private void deleteThisItem(StrategyBean data){
         int index = mStrategyListAdapter.getDataList().indexOf(data);
         mStrategyListAdapter.closeItem(index);
         mStrategyListAdapter.getDataList().remove(index);
@@ -598,13 +592,13 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (mStrategyListAdapter.getCount() == 0) {
             mMyStrategyLv.doPullRefreshing(true, 0);
         } else if (index <= OtherApi.PAGE_SIZE) {
-            cachePage();
+//            cachePage();
         }
     }
 
-    private void backToTop(final StrategyBean itemData1) {
+    /*private void backToTop(final StrategyBean itemData1){
         DialogManager.getInstance().showLoadingDialog(mContext);
-        Long time = System.currentTimeMillis();
+        Long time=System.currentTimeMillis();
         TravelApi.modifyGuideTop(itemData1.id, time, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -620,7 +614,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
-                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -628,19 +622,19 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
 
-    private void addToTop(final StrategyBean topBean) {
+    private void addToTop(final StrategyBean topBean){
         mStrategyListAdapter.getDataList().add(0, topBean);
         mStrategyListAdapter.notifyDataSetChanged();
-    }
+    }*/
 
-    private void haveBeenVisited(final StrategyBean beenBean) {
+    private void haveBeenVisited(final StrategyBean beenBean){
         DialogManager.getInstance().showLoadingDialog(mContext);
-        String visited = "traveled";
+        String visited="planned";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
             @Override
             public void doSucess(String result, String method) {
@@ -651,7 +645,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
-                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                        ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 
@@ -659,7 +653,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
-                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    ToastUtil.getInstance(StrategyVisitedListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
