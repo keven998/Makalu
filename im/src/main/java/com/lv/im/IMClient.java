@@ -15,13 +15,12 @@ import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
-import com.lv.bean.SendMessageBean;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
+import com.lv.bean.SendMessageBean;
 import com.lv.data.MessageDB;
 import com.lv.net.HttpUtils;
 import com.lv.net.UploadUtils;
-import com.lv.user.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -485,6 +484,7 @@ public class IMClient {
     }
     public void logout() {
         db.disconnectDB();
+        currentUserId=null;
         client = null;
 
     }

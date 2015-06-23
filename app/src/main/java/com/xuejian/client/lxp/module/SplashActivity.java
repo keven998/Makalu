@@ -236,16 +236,16 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         AccountManager.getInstance().saveLoginAccount(this, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
 
-        final Map<Long, User> userlist = new HashMap<Long, User>();
+        final Map<Long, User> userList = new HashMap<Long, User>();
         // 添加user"申请与通知"
         User newFriends = new User();
         newFriends.setUserId(NEWUSER);
         newFriends.setNickName("申请与通知");
         newFriends.setType(0);
-        userlist.put(NEWUSER, newFriends);
+        userList.put(NEWUSER, newFriends);
         // 存入内存
-        AccountManager.getInstance().setContactList(userlist);
-        List<User> users = new ArrayList<User>(userlist.values());
+        AccountManager.getInstance().setContactList(userList);
+        List<User> users = new ArrayList<User>(userList.values());
         UserDBManager.getInstance().saveContactList(users);
 
         // 进入主页面

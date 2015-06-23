@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.easemob.EMCallBack;
 import com.lv.Listener.SendMsgListener;
 import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;

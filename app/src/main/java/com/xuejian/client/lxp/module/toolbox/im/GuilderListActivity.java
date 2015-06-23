@@ -141,6 +141,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     }
 
     public void bindView(List<ExpertBean> result) {
+        System.out.println("====="+result.toString());
         if (mCurrentPage == 0) {
             adapter = new ExpertAdapter(GuilderListActivity.this);
             //mPoiList.clear();

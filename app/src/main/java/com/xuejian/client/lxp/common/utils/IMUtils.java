@@ -28,7 +28,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ExtFromUser;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SpotDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -50,6 +49,7 @@ import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -477,5 +477,20 @@ public class IMUtils {
         List var2 = var1.getRunningTasks(1);
         return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
     }
+    public static String toTime(int var0) {
+        var0 /= 1000;
+        int var1 = var0 / 60;
+        boolean var2 = false;
+        if(var1 >= 60) {
+            int var4 = var1 / 60;
+            var1 %= 60;
+        }
 
+        int var3 = var0 % 60;
+        return String.format("%02d:%02d", new Object[]{Integer.valueOf(var1), Integer.valueOf(var3)});
+    }
+    public static String getDataSize(long var0) {
+        DecimalFormat var2 = new DecimalFormat("###.00");
+        return var0 < 1024L?var0 + "bytes":(var0 < 1048576L?var2.format((double)((float)var0 / 1024.0F)) + "KB":(var0 < 1073741824L?var2.format((double)((float)var0 / 1024.0F / 1024.0F)) + "MB":(var0 < 0L?var2.format((double)((float)var0 / 1024.0F / 1024.0F / 1024.0F)) + "GB":"error")));
+    }
 }

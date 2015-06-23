@@ -27,9 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 
@@ -103,8 +102,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 */
 	private Button logoutBtn;
 
-	private EMChatOptions chatOptions;
- 
+
 	/**
 	 * 诊断
 	 */
@@ -131,8 +129,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		iv_switch_open_speaker = (ImageView) getView().findViewById(R.id.iv_switch_open_speaker);
 		iv_switch_close_speaker = (ImageView) getView().findViewById(R.id.iv_switch_close_speaker);
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
-		if(!TextUtils.isEmpty(EMChatManager.getInstance().getCurrentUser())){
-			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMChatManager.getInstance().getCurrentUser() + ")");
+		if(!TextUtils.isEmpty(AccountManager.getCurrentUserId())){
+			logoutBtn.setText(getString(R.string.button_logout)
+				//	+ "(" + EMChatManager.getInstance().getCurrentUser() + ")"
+			);
 		}
 
 		textview1 = (TextView) getView().findViewById(R.id.textview1);
@@ -147,36 +147,36 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_speaker.setOnClickListener(this);
 		logoutBtn.setOnClickListener(this);
 		llDiagnose.setOnClickListener(this);
-		chatOptions = EMChatManager.getInstance().getChatOptions();
-		if (chatOptions.getNotificationEnable()) {
-			iv_switch_open_notification.setVisibility(View.VISIBLE);
-			iv_switch_close_notification.setVisibility(View.INVISIBLE);
-		} else {
-			iv_switch_open_notification.setVisibility(View.INVISIBLE);
-			iv_switch_close_notification.setVisibility(View.VISIBLE);
-		}
-		if (chatOptions.getNoticedBySound()) {
-			iv_switch_open_sound.setVisibility(View.VISIBLE);
-			iv_switch_close_sound.setVisibility(View.INVISIBLE);
-		} else {
-			iv_switch_open_sound.setVisibility(View.INVISIBLE);
-			iv_switch_close_sound.setVisibility(View.VISIBLE);
-		}
-		if (chatOptions.getNoticedByVibrate()) {
-			iv_switch_open_vibrate.setVisibility(View.VISIBLE);
-			iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
-		} else {
-			iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
-			iv_switch_close_vibrate.setVisibility(View.VISIBLE);
-		}
-
-		if (chatOptions.getUseSpeaker()) {
-			iv_switch_open_speaker.setVisibility(View.VISIBLE);
-			iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-		} else {
-			iv_switch_open_speaker.setVisibility(View.INVISIBLE);
-			iv_switch_close_speaker.setVisibility(View.VISIBLE);
-		}
+//		chatOptions = EMChatManager.getInstance().getChatOptions();
+//		if (chatOptions.getNotificationEnable()) {
+//			iv_switch_open_notification.setVisibility(View.VISIBLE);
+//			iv_switch_close_notification.setVisibility(View.INVISIBLE);
+//		} else {
+//			iv_switch_open_notification.setVisibility(View.INVISIBLE);
+//			iv_switch_close_notification.setVisibility(View.VISIBLE);
+//		}
+//		if (chatOptions.getNoticedBySound()) {
+//			iv_switch_open_sound.setVisibility(View.VISIBLE);
+//			iv_switch_close_sound.setVisibility(View.INVISIBLE);
+//		} else {
+//			iv_switch_open_sound.setVisibility(View.INVISIBLE);
+//			iv_switch_close_sound.setVisibility(View.VISIBLE);
+//		}
+//		if (chatOptions.getNoticedByVibrate()) {
+//			iv_switch_open_vibrate.setVisibility(View.VISIBLE);
+//			iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
+//		} else {
+//			iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
+//			iv_switch_close_vibrate.setVisibility(View.VISIBLE);
+//		}
+//
+//		if (chatOptions.getUseSpeaker()) {
+//			iv_switch_open_speaker.setVisibility(View.VISIBLE);
+//			iv_switch_close_speaker.setVisibility(View.INVISIBLE);
+//		} else {
+//			iv_switch_open_speaker.setVisibility(View.INVISIBLE);
+//			iv_switch_close_speaker.setVisibility(View.VISIBLE);
+//		}
 
 	}
 
@@ -191,8 +191,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				rl_switch_vibrate.setVisibility(View.GONE);
 				textview1.setVisibility(View.GONE);
 				textview2.setVisibility(View.GONE);
-				chatOptions.setNotificationEnable(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNotificationEnable(false);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgNotification(false);
 			} else {
@@ -202,8 +202,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				rl_switch_vibrate.setVisibility(View.VISIBLE);
 				textview1.setVisibility(View.VISIBLE);
 				textview2.setVisibility(View.VISIBLE);
-				chatOptions.setNotificationEnable(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNotificationEnable(true);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgNotification(true);
 			}
 			break;
@@ -211,14 +211,14 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_sound.getVisibility() == View.VISIBLE) {
 				iv_switch_open_sound.setVisibility(View.INVISIBLE);
 				iv_switch_close_sound.setVisibility(View.VISIBLE);
-				chatOptions.setNoticeBySound(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNoticeBySound(false);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgSound(false);
 			} else {
 				iv_switch_open_sound.setVisibility(View.VISIBLE);
 				iv_switch_close_sound.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticeBySound(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNoticeBySound(true);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgSound(true);
 			}
 			break;
@@ -226,14 +226,14 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_vibrate.getVisibility() == View.VISIBLE) {
 				iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
 				iv_switch_close_vibrate.setVisibility(View.VISIBLE);
-				chatOptions.setNoticedByVibrate(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNoticedByVibrate(false);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgVibrate(false);
 			} else {
 				iv_switch_open_vibrate.setVisibility(View.VISIBLE);
 				iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticedByVibrate(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setNoticedByVibrate(true);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgVibrate(true);
 			}
 			break;
@@ -241,14 +241,14 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_speaker.getVisibility() == View.VISIBLE) {
 				iv_switch_open_speaker.setVisibility(View.INVISIBLE);
 				iv_switch_close_speaker.setVisibility(View.VISIBLE);
-				chatOptions.setUseSpeaker(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setUseSpeaker(false);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgSpeaker(false);
 			} else {
 				iv_switch_open_speaker.setVisibility(View.VISIBLE);
 				iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-				chatOptions.setUseSpeaker(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			//	chatOptions.setUseSpeaker(true);
+			//	EMChatManager.getInstance().setChatOptions(chatOptions);
 				PreferenceUtils.getInstance(getActivity()).setSettingMsgVibrate(true);
 			}
 			break;

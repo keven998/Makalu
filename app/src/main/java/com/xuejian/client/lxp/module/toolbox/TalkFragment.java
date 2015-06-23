@@ -41,9 +41,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by rjm on 2015/3/16.
- */
+
 public class TalkFragment extends PeachBaseFragment {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
     @InjectView(R.id.tv_title_add)

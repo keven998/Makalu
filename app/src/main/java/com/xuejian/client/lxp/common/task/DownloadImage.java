@@ -1,15 +1,12 @@
 package com.xuejian.client.lxp.common.task;
 
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Created by yibiao.qin on 2015/5/29.

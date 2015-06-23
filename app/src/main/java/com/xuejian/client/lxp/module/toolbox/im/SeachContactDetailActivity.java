@@ -30,9 +30,6 @@ import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Rjm on 2014/10/29.
- */
 public class SeachContactDetailActivity extends ChatBaseActivity {
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
