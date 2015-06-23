@@ -27,6 +27,7 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PeachConversation;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -344,6 +345,7 @@ public class TalkFragment extends PeachBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        CommonUtils.fixInputMethodManagerLeak(getActivity());
     }
 
 

@@ -30,6 +30,7 @@ import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
@@ -206,5 +207,11 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
         } else {
             mSearchTravelNoteLv.setHasMoreData(true);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CommonUtils.fixInputMethodManagerLeak(this);
     }
 }

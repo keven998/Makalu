@@ -1685,12 +1685,17 @@ public class MessageAdapter extends BaseAdapter {
             e.printStackTrace();
         }
     }
-private void updateStatus(MessageBean messageBean,int status){
-    for (MessageBean m :ChatActivity.messageList){
-        if (m.getLocalId()==messageBean.getLocalId())m.setStatus(status);
-        notifyDataSetChanged();
-        break;
-    }
+private void updateStatus(final MessageBean messageBean,final int status){
+    activity.runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+            for (MessageBean m :ChatActivity.messageList){
+                if (m.getLocalId()==messageBean.getLocalId())m.setStatus(status);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    });
 }
     /**
      * 更新ui上消息发送状态

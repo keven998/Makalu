@@ -31,6 +31,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
@@ -279,5 +280,9 @@ public class SearchAllActivity extends PeachBaseActivity {
         mSearchAllLv.setAdapter(searchAllAdapter);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CommonUtils.fixInputMethodManagerLeak(this);
+    }
 }

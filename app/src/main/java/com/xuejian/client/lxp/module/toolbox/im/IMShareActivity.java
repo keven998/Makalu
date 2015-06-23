@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -251,8 +250,6 @@ public class IMShareActivity extends PeachBaseActivity {
                                 User user = members.get(i);
                                 if (user != null) {
                                     Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(),avatarSize);
-
-                                    LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                     if(bitmap==null){
                                         bitmap= BitmapFactory.decodeResource(mContext.getResources(), R.drawable.avatar_placeholder_round);
                                     }

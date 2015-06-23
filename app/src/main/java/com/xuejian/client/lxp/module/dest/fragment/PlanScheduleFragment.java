@@ -33,7 +33,7 @@ public class PlanScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strategy = getStrategy();
-        resizeData(strategy.itinerary);
+        if (strategy!=null)resizeData(strategy.itinerary);
     }
 
     @Override

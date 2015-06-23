@@ -29,6 +29,7 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.GroupAdapter;
 
 import java.util.List;
@@ -108,6 +109,7 @@ public class GroupsActivity extends ChatBaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		CommonUtils.fixInputMethodManagerLeak(this);
 		instance = null;
 	}
 	

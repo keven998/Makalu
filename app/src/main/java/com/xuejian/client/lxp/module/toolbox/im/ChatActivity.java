@@ -1349,6 +1349,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         System.out.println("chatActivity destroy");
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
         activityInstance = null;
+        CommonUtils.fixInputMethodManagerLeak(this);
     }
 
     public void refresh() {
@@ -1497,8 +1498,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onNewIntent(Intent intent) {
         // 点击notification bar进入聊天页面，保证只有一个聊天页面
-        String username = intent.getStringExtra("userId");
-        if (toChatUsername.equals(username))
+        long username = intent.getLongExtra("userId",0);
+        if (toChatUsername.equals(String.valueOf(username)))
             super.onNewIntent(intent);
         else {
             startActivity(intent);

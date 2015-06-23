@@ -30,6 +30,7 @@ import com.xuejian.client.lxp.bean.SearchAllBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
 import java.util.List;
@@ -233,5 +234,11 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CommonUtils.fixInputMethodManagerLeak(this);
     }
 }

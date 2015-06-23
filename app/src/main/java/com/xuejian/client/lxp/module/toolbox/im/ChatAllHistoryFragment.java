@@ -24,6 +24,7 @@ import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
 
@@ -247,5 +248,11 @@ public class ChatAllHistoryFragment extends Fragment {
     public void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_talk_lists");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CommonUtils.fixInputMethodManagerLeak(getActivity());
     }
 }
