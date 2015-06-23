@@ -10,8 +10,7 @@
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/content"
@@ -36,30 +35,29 @@
                     android:id="@+id/rl_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
                     android:background="@color/base_color_white"
                     android:gravity="bottom"
+                    android:minHeight="48dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/btn_set_mode_voice"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/chat_bar_voice"
-                        android:paddingLeft="10dp"
-                        android:scaleType="center"
-                        android:paddingRight="10dp"
                         android:onClick="setModeVoice"
-                        />
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:scaleType="center"
+                        android:src="@drawable/chat_bar_voice" />
 
                     <ImageView
                         android:id="@+id/btn_set_mode_keyboard"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
+                        android:onClick="setModeKeyboard"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
-                        android:onClick="setModeKeyboard"
                         android:src="@drawable/ic_keyboard"
                         android:visibility="gone" />
 
@@ -68,10 +66,10 @@
                         android:id="@+id/edittext_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="6dp"
                         android:layout_weight="1"
                         android:background="@drawable/editor_with_border"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginBottom="6dp"
                         android:gravity="bottom">
 
                         <LinearLayout
@@ -99,40 +97,40 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="32dp"
                             android:background="@null"
+                            android:hint="请输入..."
                             android:lineSpacingExtra="1dp"
-                            android:paddingTop="4dp"
-                            android:paddingBottom="4dp"
                             android:maxLines="3"
                             android:minHeight="36dp"
                             android:onClick="editClick"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
+                            android:paddingTop="4dp"
                             android:textColor="@color/base_text_color_title"
-                            android:textSize="14sp"
-                            android:hint="请输入..."/>
+                            android:textSize="14sp" />
 
 
                         <ImageView
                             android:id="@+id/iv_emoticons_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
+                            android:layout_alignBottom="@+id/et_sendmessage"
+                            android:layout_alignParentRight="true"
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
                             android:src="@drawable/chat_bar_face"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignBottom="@+id/et_sendmessage"
                             android:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/iv_emoticons_checked"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
+                            android:layout_alignBottom="@+id/et_sendmessage"
+                            android:layout_alignParentRight="true"
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
                             android:src="@drawable/ic_keyboard"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignBottom="@+id/et_sendmessage"
                             android:visibility="gone" />
 
                     </RelativeLayout>
@@ -150,9 +148,9 @@
                         android:layout_width="40dp"
                         android:layout_height="28dp"
                         android:layout_gravity="bottom"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:background="@drawable/chat_send_btn_selector"
                         android:onClick="onClick"
                         android:text="@string/button_send"
@@ -188,25 +186,25 @@
                             android:id="@+id/face_dot_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|bottom"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
+                            android:layout_gravity="center_horizontal|bottom"
                             android:layout_marginBottom="10dp"
                             cube_dotview:dot_radius="3dp"
                             cube_dotview:dot_selected_color="@color/app_theme_color"
                             cube_dotview:dot_span="10dp"
                             cube_dotview:dot_unselected_color="0xffffffff" />
 
-                       <!-- <LinearLayout
-                        android:id="@+id/viewGroup"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal" >-->
-                    <!--</LinearLayout>-->
+                        <!-- <LinearLayout
+                         android:id="@+id/viewGroup"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentBottom="true"
+                         android:layout_centerHorizontal="true"
+                         android:layout_marginBottom="10dp"
+                         android:gravity="center_horizontal"
+                         android:orientation="horizontal" >-->
+                        <!--</LinearLayout>-->
 
                     </RelativeLayout>
 
@@ -216,10 +214,10 @@
                         android:id="@+id/ll_btn_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="32dp"
                         android:orientation="vertical"
-                        android:layout_gravity="center_vertical"
                         android:visibility="gone">
 
                         <LinearLayout
@@ -239,7 +237,7 @@
                                 android:drawableTop="@drawable/chat_trip_plan_select"
                                 android:gravity="center_horizontal"
                                 android:onClick="onClick"
-                                android:text="旅行计划"
+                                android:text="我的计划"
                                 android:textColor="@color/base_text_color_subtitle"
                                 android:textSize="12sp" />
 
@@ -282,20 +280,6 @@
                             android:weightSum="3">
 
                             <TextView
-                                android:id="@+id/btn_fav"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:clickable="true"
-                                android:drawablePadding="3dp"
-                                android:drawableTop="@drawable/chat_save_select"
-                                android:gravity="center_horizontal"
-                                android:onClick="onClick"
-                                android:text="收藏夹"
-                                android:textColor="@color/base_text_color_subtitle"
-                                android:textSize="12sp" />
-
-                            <TextView
                                 android:id="@+id/btn_picture"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -328,16 +312,12 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-                android:id="@+id/title_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/title_bar_height" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/bar_bottom"
-                android:layout_below="@id/title_bar">
+                android:layout_marginTop="@dimen/content_top_margin">
 
                 <ProgressBar
                     android:id="@+id/pb_load_more"
@@ -347,13 +327,13 @@
                     android:visibility="gone" />
 
                 <ListView
-                    android:id="@+id/list"
+                    android:id="@+id/content_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/pb_load_more"
                     android:cacheColorHint="#00000000"
                     android:divider="@null"
-                    android:dividerHeight="5dp"
+                    android:dividerHeight="0dp"
                     android:listSelector="#00000000"
                     android:scrollbarStyle="outsideOverlay"
                     android:transcriptMode="normal" />
@@ -389,12 +369,19 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+                android:id="@+id/title_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_bar_height" />
+
         </RelativeLayout>
+
         <FrameLayout
             android:id="@+id/menu_frame"
-            android:layout_width="280dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="end"/>
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="end" />
     </android.support.v4.widget.DrawerLayout>
 
 

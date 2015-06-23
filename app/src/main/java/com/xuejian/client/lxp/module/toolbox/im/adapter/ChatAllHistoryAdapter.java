@@ -88,9 +88,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 .showImageOnFail(R.drawable.avatar_placeholder_round)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(28))) // 设置成圆角图片
                 .build();
-        avatarSize = new ImageSize(LocalDisplay.dp2px(60), LocalDisplay.dp2px(60));
+        avatarSize = new ImageSize(LocalDisplay.dp2px(56), LocalDisplay.dp2px(56));
     }
 
     @Override
@@ -110,11 +110,6 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //            holder.list_item_layout = (RelativeLayout) convertView.findViewById(R.id.list_item_layout);
             convertView.setTag(holder);
         }
-//        if (position % 2 == 0) {
-//            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
-//        } else {
-//            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem_grey);
-//        }
 
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
@@ -137,10 +132,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(username));
             final List<Bitmap> membersAvatars = new ArrayList<>();
             int membersize;
-            if (members!=null){
-                membersize=members.size();
-            }
-            else membersize=0;
+            if (members != null) {
+                membersize = members.size();
+            } else membersize = 0;
             final int size = Math.min(membersize, 4);
 //                // 群聊消息，显示群聊头像
             final ViewHolder finalHolder1 = holder;
@@ -152,8 +146,6 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                             User user = members.get(i);
                             if (user != null) {
                                 Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
-
-                                LogUtil.d("load_bitmap", user.getAvatar() + "=" + bitmap);
                                 if (bitmap == null) {
                                     bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
                                 }
@@ -166,8 +158,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
-                                        LocalDisplay.dp2px(60), membersAvatars));
+                                finalHolder1.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(56),
+                                        LocalDisplay.dp2px(56), membersAvatars));
                             }
                         });
 
@@ -209,8 +201,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                            }
 //                            ArrayList<Bitmap> bmps = new ArrayList<Bitmap>();
 //                            bmps.add(loadedImage);
-//                            finalHolder.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(60),
-//                                    LocalDisplay.dp2px(60), bmps));
+//                            finalHolder.avatar.setImageBitmap(JoinBitmaps.createBitmap(LocalDisplay.dp2px(56),
+//                                    LocalDisplay.dp2px(56), bmps));
 //                        }
 //
 //
