@@ -14,7 +14,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ExpertListActivity;
+import com.xuejian.client.lxp.module.toolbox.im.LXPGuiderDistributeListAcitivity;
 
 /**
  * Created by lxp_dqm07 on 2015/4/11.
@@ -37,7 +37,7 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_helper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent ExpertIntent = new Intent(getActivity(), ExpertListActivity.class);
+                Intent ExpertIntent = new Intent(getActivity(), LXPGuiderDistributeListAcitivity.class);
                 startActivity(ExpertIntent);
             }
         });

@@ -67,13 +67,12 @@ dependencies {
     compile files('libs/rxandroid-0.24.0.jar')
     compile files('libs/rxjava-android-0.20.7.jar')
     compile files('libs/rxjava-1.0.10.jar')
-    compile fileTree(dir: 'D:/taozi/Makalu/app/libs', include: 'qiniu-android-sdk-7.0.1.jar')
+    compile fileTree(dir: '/Users/luoyong/Makalu/app/libs', include: 'qiniu-android-sdk-7.0.1.jar')
     //compile 'com.android.support:appcompat-v7:22.1.1'
     //compile 'com.android.support:support-v4:22.1.1'
     //compile files('libs/qiniu-android-sdk-7.0.3.jar')
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-
 }
 sourceSets {
     main {
