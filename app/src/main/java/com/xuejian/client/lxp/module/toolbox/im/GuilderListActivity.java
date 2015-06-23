@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
@@ -225,12 +226,8 @@ public class GuilderListActivity extends PeachBaseActivity {
             user_msg = (TextView) convertView.findViewById(R.id.expert_msg);
 
             //获取接口数据进行加载
-<<<<<<< HEAD:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/ExpertListActivity.java
-            ExpertBean eb = (ExpertBean)getItem(position);
-=======
             ExpertBean eb = (ExpertBean) getItem(position);
             LogUtil.d(eb.nickName + "================");
->>>>>>> 216a982026c3425b6050d93c812e7b5cdaaff904:app/src/main/java/com/xuejian/client/lxp/module/toolbox/im/GuilderListActivity.java
             ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
             user_name.setText(eb.nickName);
             user_msg.setText(eb.signature);
