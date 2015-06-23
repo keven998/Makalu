@@ -23,6 +23,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ContactListBean;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.UserApi;
@@ -67,7 +68,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView tvPlansCount;
     @ViewInject(R.id.tv_tracks_count)
     private TextView tvTracksCount;
-
+    ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private View rootView;
 
     @Override
@@ -120,8 +121,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
                 User info= AccountManager.getInstance().getLoginAccountInfo();
                 for (String key :info.getTracks().keySet()) {
-                    cityCount += info.getTracks().get(key).size();
+                    all_foot_print_list.addAll(info.getTracks().get(key));
                 }
+                cityCount=all_foot_print_list.size();
                 countryCount = info.getTracks().keySet().size();
                 guideCount = info.getGuideCnt();
                 level=info.getLevel();
@@ -235,9 +237,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.fl_tracks_entry:
-                Intent intent1 = new Intent(getActivity(), MyFootPrinterActivity.class);
-//                intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
-                startActivityForResult(intent1, CODE_FOOTPRINT);
+                Intent tracks_intent = new Intent(getActivity(), MyFootPrinterActivity.class);
+                tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
+                startActivityForResult(tracks_intent, CODE_FOOTPRINT);
                 break;
 
             default:
