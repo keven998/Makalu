@@ -6,11 +6,10 @@ import com.alibaba.fastjson.JSON;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Utils.Config;
-import com.lv.bean.SendMessageBean;
 import com.lv.bean.Message;
+import com.lv.bean.SendMessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
-import com.lv.user.User;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -52,7 +51,7 @@ public class HttpUtils {
     }
 
     public static void postAck(final JSONArray array, FetchListener listener) {
-        final String url = Config.ACK_URL + User.getUser().getCurrentUser() + "/ack";
+        final String url = Config.ACK_URL + IMClient.getInstance().getCurrentUserId() + "/ack";
         final JSONObject obj = new JSONObject();
         try {
             obj.put("msgList", array);

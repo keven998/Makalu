@@ -52,6 +52,16 @@ public class IMClient {
     private Timer timer;
     private boolean isRunning;
     private CountFrequency countFrequency;
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    private String currentUserId;
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new ConcurrentHashMap<>();
@@ -402,7 +412,7 @@ public class IMClient {
 
     private MessageBean imessage2Bean(SendMessageBean message) {
 
-        return new MessageBean(0, Config.STATUS_SENDING, message.getMsgType(), message.getContents(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(User.getUser().getCurrentUser()));
+        return new MessageBean(0, Config.STATUS_SENDING, message.getMsgType(), message.getContents(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(IMClient.getInstance().getCurrentUserId()));
     }
 
     public void saveMessage(Message message, String chatTpe) {

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
@@ -233,7 +232,6 @@ public class ExpertListActivity extends PeachBaseActivity {
 
             //获取接口数据进行加载
             ExpertBean eb = (ExpertBean)getItem(position);
-            LogUtil.d(eb.nickName+"================");
             ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
             user_name.setText(eb.nickName);
             user_msg.setText(eb.signature);

@@ -1,7 +1,7 @@
 package com.lv.bean;
 
 import com.lv.Utils.TimeUtils;
-import com.lv.user.User;
+import com.lv.im.IMClient;
 
 /**
  * Created by q on 2015/4/21.
@@ -19,7 +19,7 @@ public class MessageBean {
     private long SenderId;//如果是群聊显示发送者的 id，单聊不显示
     public MessageBean(){}
     public MessageBean(String content){
-        this(0,0,1,content, TimeUtils.getTimestamp(),0,null,Long.parseLong(User.getUser().getCurrentUser()));
+        this(0,0,1,content, TimeUtils.getTimestamp(),0,null,Long.parseLong(IMClient.getInstance().getCurrentUserId()));
     }
     public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
         ServerId = serverId;

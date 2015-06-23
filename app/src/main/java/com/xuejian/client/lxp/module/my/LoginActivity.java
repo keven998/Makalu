@@ -28,8 +28,6 @@ import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -176,6 +174,7 @@ public class LoginActivity extends PeachBaseActivity {
     }
 
     private void imLogin(final User user, int type) {
+        IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
@@ -391,10 +390,7 @@ public class LoginActivity extends PeachBaseActivity {
                     public void doSucess(String result, String method) {
                         CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                         if (userResult.code == 0) {
-//                            userResult.result.easemobUser="rjm4413";
-//                            userResult.result.easemobPwd="123456";
                             imLogin(userResult.result, WXLOGIN);
-//                            imLogin("rjm4413","123456","小明");
                         } else {
                             ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                         }

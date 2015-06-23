@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,6 +69,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
+            IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

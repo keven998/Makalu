@@ -13,19 +13,15 @@ import com.lv.Utils.CryptUtils;
 import com.lv.bean.Message;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
-import com.lv.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -91,7 +87,7 @@ public class DownloadService extends Service {
                     File path = null;
                     File file= null;
                     StringBuffer sb = new StringBuffer();
-                    String user=CryptUtils.getMD5String(User.getUser().getCurrentUser());
+                    String user=CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId());
                     String name=CryptUtils.getMD5String(msg.getUrl());
                     switch (msgType) {
                         case 1:
@@ -183,7 +179,7 @@ public class DownloadService extends Service {
             try {
                 JSONObject o=new JSONObject(msg.getContents());
                 String full=o.getString("full");
-                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
+                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
                 o.put("localPath",localPath);
                 o.put("thumbPath",path);
                 msg.setContents(o.toString());

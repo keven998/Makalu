@@ -12,7 +12,6 @@ import com.lv.bean.ConversationBean;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
-import com.lv.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -169,7 +168,7 @@ public class MessageDB {
             try {
                 JSONObject object=new JSONObject(entity.getMessage());
                 String url=object.getString("url");
-                String path= Config.DownLoadAudio_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(url) + ".amr";
+                String path= Config.DownLoadAudio_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(url) + ".amr";
                 object.put("path",path);
                 object.put("isRead",false);
                 entity.setMessage(object.toString());
@@ -181,9 +180,9 @@ public class MessageDB {
             try {
                 JSONObject object=new JSONObject(entity.getMessage());
                 String url=object.getString("thumb");
-                String path= Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(url) + ".jpeg";
+                String path= Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(url) + ".jpeg";
                 String full=object.getString("full");
-                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(User.getUser().getCurrentUser()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
+                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
                 object.put("localPath",localPath);
                 object.put("thumbPath",path);
                 entity.setMessage(object.toString());

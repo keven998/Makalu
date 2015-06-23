@@ -28,11 +28,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +82,7 @@ public class HttpManager {
                 httpUtils.configSSLSocketFactory(SSLSocketFactory.getSocketFactory());
             }
             RequestParams requestParams = new RequestParams();
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(url);
             int i=0;
             for(NameValuePair nv:request.getUrlParams()){
