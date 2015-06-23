@@ -8,9 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.exceptions.EaseMobException;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;

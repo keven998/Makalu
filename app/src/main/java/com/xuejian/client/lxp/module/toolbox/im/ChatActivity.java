@@ -17,12 +17,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,17 +60,6 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chat.EMContactManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.EMLog;
-import com.easemob.util.PathUtil;
-import com.easemob.util.VoiceRecorder;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.Utils.Config;
 import com.lv.Utils.TimeUtils;
@@ -85,16 +74,10 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKModel;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
@@ -105,8 +88,6 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -116,7 +97,7 @@ import java.util.List;
 /**
  * 聊天页面
  */
-public class ChatActivity extends ChatBaseActivity implements OnClickListener, HandleImMessage.MessageHandler {
+public class ChatActivity extends ChatBaseActivity implements OnClickListener, HandleImMessage.MessageHandler,SensorEventListener {
 
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
     public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -177,7 +158,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private Drawable[] micImages;
     public static ChatActivity activityInstance = null;
     private String toChatUsername;
-    private VoiceRecorder voiceRecorder;
     private MessageAdapter adapter;
     private File cameraFile;
     static int resendPos;
@@ -197,6 +177,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private com.xuejian.client.lxp.db.userDB.User user;
+    private SensorManager sensorManager;
+    private boolean userSpeaker;
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 
     private static class MyHandler extends Handler {
 
@@ -331,7 +322,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
         });
         edittext_layout.requestFocus();
-        voiceRecorder = new VoiceRecorder(handler);
         buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
 //		mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener() {
 //
@@ -491,30 +481,30 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * 转发消息
      */
     protected void forwardMessage(String forward_msg_id) {
-        EMMessage forward_msg = EMChatManager.getInstance().getMessage(forward_msg_id);
-        EMMessage.Type type = forward_msg.getType();
-        switch (type) {
-            case TXT:
-                // 获取消息内容，发送消息
-                String content = ((TextMessageBody) forward_msg.getBody()).getMessage();
-                int extType = forward_msg.getIntAttribute(Constant.EXT_TYPE, 0);
-                sendText(content, extType);
-                break;
-            case IMAGE:
-                // 发送图片
-                String filePath = ((ImageMessageBody) forward_msg.getBody()).getLocalUrl();
-                if (filePath != null) {
-                    File file = new File(filePath);
-                    if (!file.exists()) {
-                        // 不存在大图发送缩略图
-                        filePath = ImageUtils.getThumbnailImagePath(filePath);
-                    }
-                    sendPicture(filePath);
-                }
-                break;
-            default:
-                break;
-        }
+//        EMMessage forward_msg = EMChatManager.getInstance().getMessage(forward_msg_id);
+//        EMMessage.Type type = forward_msg.getType();
+//        switch (type) {
+//            case TXT:
+//                // 获取消息内容，发送消息
+//                String content = ((TextMessageBody) forward_msg.getBody()).getMessage();
+//                int extType = forward_msg.getIntAttribute(Constant.EXT_TYPE, 0);
+//                sendText(content, extType);
+//                break;
+//            case IMAGE:
+//                // 发送图片
+//                String filePath = ((ImageMessageBody) forward_msg.getBody()).getLocalUrl();
+//                if (filePath != null) {
+//                    File file = new File(filePath);
+//                    if (!file.exists()) {
+//                        // 不存在大图发送缩略图
+//                   //     filePath = ImageUtils.getThumbnailImagePath(filePath);
+//                    }
+//                    sendPicture(filePath);
+//                }
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     /**
@@ -567,7 +557,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             switch (requestCode) {
                 case REQUEST_CODE_EMPTY_HISTORY:
                     // 清空会话
-                    EMChatManager.getInstance().clearConversation(toChatUsername);
+                  //  EMChatManager.getInstance().clearConversation(toChatUsername);
                     adapter.refresh();
                     break;
                 case REQUEST_CODE_CAMERA: // 发送照片
@@ -575,43 +565,43 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         sendPicture(cameraFile.getAbsolutePath());
                     break;
                 case REQUEST_CODE_SELECT_VIDEO: // 发送本地选择的视频
-
-                    int duration = data.getIntExtra("dur", 0);
-                    String videoPath = data.getStringExtra("path");
-                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
-                    Bitmap bitmap = null;
-                    FileOutputStream fos = null;
-                    try {
-                        if (!file.getParentFile().exists()) {
-                            file.getParentFile().mkdirs();
-                        }
-                        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
-                        if (bitmap == null) {
-                            EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
-                            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
-                        }
-                        fos = new FileOutputStream(file);
-
-                        bitmap.compress(CompressFormat.JPEG, 100, fos);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (fos != null) {
-                            try {
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            fos = null;
-                        }
-                        if (bitmap != null) {
-                            bitmap.recycle();
-                            bitmap = null;
-                        }
-
-                    }
-                    sendVideo(videoPath, file.getAbsolutePath(), duration / 1000);
+//
+//                    int duration = data.getIntExtra("dur", 0);
+//                    String videoPath = data.getStringExtra("path");
+//                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+//                    Bitmap bitmap = null;
+//                    FileOutputStream fos = null;
+//                    try {
+//                        if (!file.getParentFile().exists()) {
+//                            file.getParentFile().mkdirs();
+//                        }
+//                        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+//                        if (bitmap == null) {
+//                            Log.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
+//                            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
+//                        }
+//                        fos = new FileOutputStream(file);
+//
+//                        bitmap.compress(CompressFormat.JPEG, 100, fos);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    } finally {
+//                        if (fos != null) {
+//                            try {
+//                                fos.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            fos = null;
+//                        }
+//                        if (bitmap != null) {
+//                            bitmap.recycle();
+//                            bitmap = null;
+//                        }
+//
+//                    }
+//                    sendVideo(videoPath, file.getAbsolutePath(), duration / 1000);
                     break;
                 case REQUEST_CODE_LOCAL: // 发送本地图片
                     if (data != null) {
@@ -1187,30 +1177,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private class NewMessageBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String username = intent.getStringExtra("from");
-            String msgid = intent.getStringExtra("msgid");
-            // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-            final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
-            final String fromUser = message.getStringAttribute(Constant.FROM_USER, "");
-            final String finalUsername = username;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!TextUtils.isEmpty(fromUser)) {
-                        IMUser imUser = IMUtils.getUserInfoFromMessage(mContext, message);
-                        IMUserRepository.saveContact(mContext, imUser);
-                    }
-                }
-            }).start();
-            // 如果是群聊消息，获取到group id
-            if (message.getChatType() == ChatType.GroupChat) {
-                username = message.getTo();
-            }
-            if (!username.equals(toChatUsername)) {
-                // 消息不是发给当前会话，return
-                return;
-            }
-            // conversation =
             // EMChatManager.getInstance().getConversation(toChatUsername);
             // 通知adapter有新消息，更新ui
             adapter.refresh();
@@ -1247,15 +1213,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         MediaRecordFunc.getInstance().startRecordAndFile(handler);
                         isRecord =true;
-                     //   voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
                     } catch (Exception e) {
                         e.printStackTrace();
                         isRecord =false;
                         v.setPressed(false);
                         if (wakeLock.isHeld())
                             wakeLock.release();
-                        if (voiceRecorder != null)
-                            voiceRecorder.discardRecording();
+                        MediaRecordFunc.getInstance().cancleRecord();
                         recordingContainer.setVisibility(View.INVISIBLE);
                         Toast.makeText(ChatActivity.this, R.string.recoding_fail, Toast.LENGTH_SHORT).show();
                         return false;
@@ -1280,14 +1244,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         wakeLock.release();
                     if (event.getY() < 0) {
                         // discard the recorded audio.
-                        voiceRecorder.discardRecording();
                         MediaRecordFunc.getInstance().cancleRecord();
                     } else {
                         // stop recording and send voice file
                         try {
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                             long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
-                            //int length = voiceRecorder.stopRecoding();
                             if (time > 0) {
                             sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0)+"", false);
 						} else {
@@ -1304,8 +1266,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     return true;
                 default:
                     recordingContainer.setVisibility(View.INVISIBLE);
-                    if (voiceRecorder != null)
-                        voiceRecorder.discardRecording();
                     MediaRecordFunc.getInstance().cancleRecord();
                     return false;
             }
@@ -1402,8 +1362,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onPause();
 //        MobclickAgent.onPageEnd("page_talking");
         System.out.println("chatActivity pause");
-        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
+//        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+//        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
         if (wakeLock.isHeld())
             wakeLock.release();
         if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {
@@ -1413,11 +1373,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         try {
             // 停止录音
-            if (voiceRecorder.isRecording()) {
-                voiceRecorder.discardRecording();
-                recordingContainer.setVisibility(View.INVISIBLE);
-            }
-           if (isRecord)MediaRecordFunc.getInstance().cancleRecord();
+           if (isRecord){
+               MediaRecordFunc.getInstance().cancleRecord();
+               recordingContainer.setVisibility(View.INVISIBLE);
+           }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1445,7 +1404,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     private void addUserToBlacklist(String username) {
         try {
-            EMContactManager.getInstance().addUserToBlackList(username, true);
+         //   EMContactManager.getInstance().addUserToBlackList(username, true);
 //			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
             if (!isFinishing())
                 ToastUtil.getInstance(this).showToast("成功删除她");

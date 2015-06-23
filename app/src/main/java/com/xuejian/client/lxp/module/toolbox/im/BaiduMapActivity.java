@@ -44,7 +44,6 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.mapapi.utils.CoordinateConvert;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-import com.easemob.util.EMLog;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
@@ -276,9 +275,9 @@ public class BaiduMapActivity extends ChatBaseActivity {
 			lastLocation = location;
 
 			GeoPoint gcj02Point = new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6));
-			EMLog.d(TAG, "GCJ-02 loc:" + gcj02Point);
+			Log.d(TAG, "GCJ-02 loc:" + gcj02Point);
 			GeoPoint point = CoordinateConvert.fromGcjToBaidu(gcj02Point);
-			EMLog.d(TAG, "converted BD-09 loc:" + point);
+			Log.d(TAG, "converted BD-09 loc:" + point);
 
 			// GeoPoint p1 = gcjToBaidu(location.getLatitude(),
 			// location.getLongitude());

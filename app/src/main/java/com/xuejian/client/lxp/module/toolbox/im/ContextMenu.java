@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.easemob.chat.EMMessage;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
@@ -29,7 +28,6 @@ public class ContextMenu extends ChatBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		int txtValue = EMMessage.Type.TXT.ordinal();
 		int type = getIntent().getIntExtra("type", -1);
 		if (type ==0) {
 		    setContentView(R.layout.context_menu_for_text);
@@ -39,8 +37,8 @@ public class ContextMenu extends ChatBaseActivity {
 		    setContentView(R.layout.context_menu_for_image);
 		} else if (type == 1) {
 		    setContentView(R.layout.context_menu_for_voice);
-		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
-			setContentView(R.layout.context_menu_for_video);
+//		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
+//			setContentView(R.layout.context_menu_for_video);
 		}else{
             setContentView(R.layout.context_menu_for_ext);
         }

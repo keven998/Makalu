@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -42,8 +43,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.easemob.util.EMLog;
-import com.easemob.util.PathUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.utils.video.Utils;
@@ -222,7 +221,7 @@ public class RecorderVideoActivity extends ChatBaseActivity implements OnClickLi
 			}
 			mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
 			// 设置视频文件输出的路径
-			localPath = PathUtil.getInstance().getVideoPath() + "/" + System.currentTimeMillis() + ".mp4";
+		//	localPath = PathUtil.getInstance().getVideoPath() + "/" + System.currentTimeMillis() + ".mp4";
 			mediarecorder.setOutputFile(localPath);
 			mediarecorder.setOnErrorListener(this);
 			mediarecorder.setOnInfoListener(this);
@@ -340,7 +339,7 @@ public class RecorderVideoActivity extends ChatBaseActivity implements OnClickLi
 			setCameraDisplayOrientation(this, CameraInfo.CAMERA_FACING_BACK, mCamera);
 			mCamera.startPreview();
 		} catch (Exception e) {
-			EMLog.e("###", e.getMessage());
+			Log.e("###", e.getMessage());
 			throw new Exception(e.getMessage());
 		}
 
@@ -381,7 +380,7 @@ public class RecorderVideoActivity extends ChatBaseActivity implements OnClickLi
 
 	public void sendVideo(View view) {
 		if (TextUtils.isEmpty(localPath)) {
-			EMLog.e("Recorder", "recorder fail please try again!");
+			Log.e("Recorder", "recorder fail please try again!");
 			return;
 		}
 

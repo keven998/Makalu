@@ -16,6 +16,7 @@ package com.xuejian.client.lxp.module.toolbox.im;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -25,11 +26,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aizou.core.log.LogUtil;
-import com.easemob.chat.EMChatDB;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.VoiceMessageBody;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
@@ -50,11 +46,12 @@ public class VoicePlayClickListener implements View.OnClickListener {
     private String path;
     private boolean isRead;
 	private BaseAdapter adapter;
-private String friendId;
+	private String friendId;
 	public static boolean isPlaying = false;
 	public static VoicePlayClickListener currentPlayListener = null;
-
-
+	AudioManager audioManager;
+	SensorManager manager;
+	float f_proximiny;
 	public VoicePlayClickListener(String toChatUserName,MessageBean message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
 			String username,String chatType,boolean isRead,String path) {
 		this.message = message;
@@ -91,20 +88,16 @@ private String friendId;
 		}
 		((ChatActivity)activity).playMsgId=String.valueOf(message.getLocalId());
 		AudioManager audioManager = (AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
-
 		mediaPlayer = new MediaPlayer();
-		if (EMChatManager.getInstance().getChatOptions().getUseSpeaker()){
 			audioManager.setMode(AudioManager.MODE_NORMAL);
 			audioManager.setSpeakerphoneOn(true);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-		}
-		else{
-			audioManager.setSpeakerphoneOn(false);//关闭扬声器
-			//把声音设定成Earpiece（听筒）出来，设定为正在通话中
-			 audioManager.setMode(AudioManager.MODE_IN_CALL);
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-		}
-//		mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+//		else{
+//			audioManager.setSpeakerphoneOn(false);//关闭扬声器
+//			//把声音设定成Earpiece（听筒）出来，设定为正在通话中
+//			 audioManager.setMode(AudioManager.MODE_IN_CALL);
+//			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+//		}
 		try {
 			mediaPlayer.setDataSource(filePath);
 			mediaPlayer.prepare();
@@ -208,4 +201,5 @@ private String friendId;
  
 		}
 	}
+
 }

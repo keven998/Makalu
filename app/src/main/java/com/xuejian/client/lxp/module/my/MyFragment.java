@@ -89,6 +89,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     public void refreshLoginStatus() {
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
+        all_foot_print_list.clear();
         if (user == null) {
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
             nickNameTv.setText("旅行派");

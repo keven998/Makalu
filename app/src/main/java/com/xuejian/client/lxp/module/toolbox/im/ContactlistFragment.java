@@ -18,25 +18,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.SideBar;
-import com.easemob.chat.EMContactManager;
-import com.easemob.exceptions.EaseMobException;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -45,7 +39,6 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -187,7 +180,7 @@ public class ContactlistFragment extends Fragment {
 			public void run() {
 				try {
 					//加入到黑名单
-					EMContactManager.getInstance().addUserToBlackList(username,true);
+					//EMContactManager.getInstance().addUserToBlackList(username,true);
                     if (isAdded())
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
@@ -196,7 +189,7 @@ public class ContactlistFragment extends Fragment {
                             ToastUtil.getInstance(getActivity()).showToast("成功移除她");
 						}
 					});
-				} catch (EaseMobException e) {
+				} catch ( Exception e) {
 					e.printStackTrace();
                     if (isAdded())
 					getActivity().runOnUiThread(new Runnable() {

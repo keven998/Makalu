@@ -14,8 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.chat.EMContactManager;
-import com.easemob.exceptions.EaseMobException;
 import com.xuejian.client.lxp.R;
 
 import java.util.Collections;
@@ -39,7 +37,7 @@ public class BlacklistActivity extends Activity {
 		List<String> blacklist = null;
 		try {
 			// 获取黑名单
-			blacklist = EMContactManager.getInstance().getBlackListUsernames();
+		//	blacklist = EMContactManager.getInstance().getBlackListUsernames();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,9 +79,9 @@ public class BlacklistActivity extends Activity {
 	void removeOutBlacklist(final String tobeRemoveUser) {
 		try {
 			// 移出黑民单
-			EMContactManager.getInstance().deleteUserFromBlackList(tobeRemoveUser);
+		//	EMContactManager.getInstance().deleteUserFromBlackList(tobeRemoveUser);
 			adapter.remove(tobeRemoveUser);
-		} catch (EaseMobException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			runOnUiThread(new Runnable() {
 				public void run() {
