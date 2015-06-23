@@ -93,7 +93,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (AccountManager.getInstance().getLoginAccount(this) == null) {
             isOwner = false;
         } else {
-            isOwner = userId.equals(String.valueOf(AccountManager.getCurrentUserId()));
+            isOwner = userId.equals(AccountManager.getCurrentUserId());
         }
         initView();
         initData();
