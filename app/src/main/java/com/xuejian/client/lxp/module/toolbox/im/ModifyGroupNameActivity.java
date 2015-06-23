@@ -19,9 +19,6 @@ import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
-/**
- * Created by Rjm on 2014/10/11.
- */
 public class ModifyGroupNameActivity extends PeachBaseActivity implements View.OnClickListener {
     @ViewInject(R.id.et_groupname)
     private EditText groupNameEt;

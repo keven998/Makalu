@@ -51,9 +51,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by Rjm on 2014/12/1.
- */
 public class FavListActivity extends PeachBaseActivity {
     public final static int CONST_TYPE_SPOT = 1;
     public final static int CONST_TYPE_FOOD = 2;

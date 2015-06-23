@@ -16,9 +16,6 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.dest.fragment.ExpertFragment;
 
-/**
- * Created by lxp_dqm07 on 2015/5/18.
- */
 public class ExpertFilterActivity extends PeachBaseActivity {
 
     private FixedIndicatorView inOutIndicator;

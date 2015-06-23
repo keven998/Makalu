@@ -20,7 +20,6 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.easemob.EMCallBack;
 import com.lv.Listener.SendMsgListener;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;

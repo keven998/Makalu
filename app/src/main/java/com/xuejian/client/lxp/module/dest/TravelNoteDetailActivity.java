@@ -21,7 +21,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;

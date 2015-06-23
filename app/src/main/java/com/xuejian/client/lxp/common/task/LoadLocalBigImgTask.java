@@ -20,9 +20,9 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.easemob.util.ImageUtils;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.utils.ImageCache;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.widget.photoview.PhotoView;
 
 public class LoadLocalBigImgTask extends AsyncTask<Void, Void, Bitmap> {

@@ -21,14 +21,10 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.util.ImageUtils;
 import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.base.BaseActivity;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 
 import java.io.File;

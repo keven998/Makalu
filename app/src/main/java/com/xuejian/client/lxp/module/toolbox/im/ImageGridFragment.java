@@ -28,9 +28,8 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.xuejian.client.lxp.BuildConfig;
-import com.easemob.util.DateUtils;
-import com.easemob.util.TextFormater;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.video.ImageCache;
 import com.xuejian.client.lxp.common.utils.video.ImageResizer;
 import com.xuejian.client.lxp.common.utils.video.Utils;
@@ -254,8 +253,8 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				VideoEntity entty=mList.get(position-1);
 				holder.tvDur.setVisibility(View.VISIBLE);
 				
-				holder.tvDur.setText(DateUtils.toTime(entty.duration));
-				holder.tvSize.setText(TextFormater.getDataSize(entty.size));
+				holder.tvDur.setText(IMUtils.toTime(entty.duration));
+				holder.tvSize.setText(IMUtils.getDataSize(entty.size));
 				holder.imageView.setImageResource(R.drawable.empty_photo);
 				mImageResizer.loadImage(entty.filePath, holder.imageView);
 			}

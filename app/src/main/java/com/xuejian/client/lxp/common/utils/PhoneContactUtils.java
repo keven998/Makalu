@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.xuejian.client.lxp.bean.AddressBookbean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.db.userDB.User;
 

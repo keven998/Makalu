@@ -4,8 +4,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
-import com.aizou.core.log.LogUtil;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.userDB.User;

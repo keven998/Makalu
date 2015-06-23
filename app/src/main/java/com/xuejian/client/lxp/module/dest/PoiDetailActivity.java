@@ -43,7 +43,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.RecommendBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
