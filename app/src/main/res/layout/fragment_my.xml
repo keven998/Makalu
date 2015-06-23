@@ -32,8 +32,8 @@
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:padding="7dp"
-                    android:scaleType="centerCrop" />
+                    android:padding="5dp"
+                    android:scaleType="fitXY" />
                 
                 <RelativeLayout android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"

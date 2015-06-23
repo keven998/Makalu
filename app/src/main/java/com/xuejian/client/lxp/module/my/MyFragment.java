@@ -93,26 +93,27 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
             nickNameTv.setText("旅行派");
             idTv.setText("未登录");
-            tvFriendsCount.setText("木");
-            tvPlansCount.setText("木");
-            tvTracksCount.setText("木");
-            tvLevel.setText("");
+            tvFriendsCount.setText("0");
+            tvPlansCount.setText("0");
+            tvTracksCount.setText("0");
+            tvLevel.setText("Lv0");
+            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-            avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+            avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
         } else {
             if (user.getGender().equalsIgnoreCase("M")) {
                 genderFrame.setImageResource(R.drawable.ic_home_header_boy);
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
-                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             } else if (user.getGender().equalsIgnoreCase("F")) {
                 genderFrame.setImageResource(R.drawable.ic_home_header_girl);
                 avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             } else {
                 genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
-                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
+                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
+                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             }
             int countryCount = 0;
             int cityCount = 0;

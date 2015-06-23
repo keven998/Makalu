@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_bar_height"
-    android:background="@drawable/bg_navigation_bar" >
+    android:background="@drawable/bg_navigation_bar">
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_left"
@@ -16,14 +16,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:duplicateParentState="true"
+            android:gravity="center_vertical"
             android:minWidth="60dp"
             android:paddingLeft="12dp"
             android:paddingRight="20dp"
-            android:gravity="center_vertical"
-            android:duplicateParentState="true"
-            android:textColor="@color/base_color_white"
-            android:textSize="15sp"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -32,7 +32,7 @@
         android:layout_width="180dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:gravity="center" >
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -41,31 +41,31 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="18sp"
-            android:textColor="@color/color_text_titlebar"/>
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/ly_title_bar_center"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/ly_title_bar_center">
 
         <TextView
             android:id="@+id/tv_title_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:textColor="@color/theme_color"
-            android:layout_marginRight="3dp"
-            android:singleLine="true"
-            android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="6dp"
             android:duplicateParentState="true"
-            android:paddingRight="8dp"
-            android:paddingLeft="12dp"
             android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
             android:textSize="15sp" />
 
     </RelativeLayout>

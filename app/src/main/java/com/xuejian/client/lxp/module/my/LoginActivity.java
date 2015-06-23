@@ -1,15 +1,7 @@
 package com.xuejian.client.lxp.module.my;
 
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,27 +11,19 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.CustomLoadingDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -51,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends PeachBaseActivity{
+public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
@@ -64,19 +48,17 @@ public class LoginActivity extends PeachBaseActivity{
     private Button loginBtn;
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleBar;
-    public JSONObject uploadJson;
     private int request_code;
     private boolean autoLogin = false;
-    private boolean isBackWeixinLoginPage=true;
-    private boolean isWeixinClickLogin=false;
+    private boolean isBackWeixinLoginPage = true;
+    private boolean isWeixinClickLogin = false;
     CustomLoadingDialog dialog;
-    private Long NEWUSER=1l;
 
     //type
-    private int LOGIN=1;
-    public int REGISTER=2;
-    private int WXLOGIN=3;
-    private int FINDPASSWORD=4;
+    private int LOGIN = 1;
+    public int REGISTER = 2;
+    private int WXLOGIN = 3;
+    private int FINDPASSWORD = 4;
 
 
     @Override
@@ -95,20 +77,23 @@ public class LoginActivity extends PeachBaseActivity{
             return;
  //       }*/
         initView();
-        request_code=getIntent().getIntExtra("request_code",0);
-        if(request_code==REQUEST_CODE_REG){
+        request_code = getIntent().getIntExtra("request_code", 0);
+        if (request_code == REQUEST_CODE_REG) {
             Intent intent = new Intent(mContext, RegActivity.class);
             startActivityForResult(intent, REQUEST_CODE_REG);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
 //        MobclickAgent.onPageStart("page_login");
-            if (autoLogin) {
-                return;
+        if (autoLogin) {
+            return;
         }
-        if(isBackWeixinLoginPage&&isWeixinClickLogin){dialog.dismiss();}
+        if (isBackWeixinLoginPage && isWeixinClickLogin) {
+            dialog.dismiss();
+        }
 
     }
 
@@ -117,14 +102,15 @@ public class LoginActivity extends PeachBaseActivity{
         super.onPause();
 //        MobclickAgent.onPageEnd("page_login");
     }
+
     private void initView() {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-       findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            //    MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
+                //    MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
                 weixinLogin();
 //                UserApi.authSignUp("123456",new HttpCallBack() {
 //                    @Override
@@ -157,7 +143,7 @@ public class LoginActivity extends PeachBaseActivity{
     }
 
     private void initTitlebar() {
-        titleBar.getRightTextView().setText("注册");
+        titleBar.getRightTextView().setText("新用户");
         titleBar.setRightOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,7 +157,7 @@ public class LoginActivity extends PeachBaseActivity{
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0,R.anim.push_bottom_out);
+                overridePendingTransition(0, R.anim.push_bottom_out);
             }
         });
     }
@@ -180,7 +166,7 @@ public class LoginActivity extends PeachBaseActivity{
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        overridePendingTransition(0,R.anim.push_bottom_out);
+        overridePendingTransition(0, R.anim.push_bottom_out);
     }
 
     @Override
@@ -189,12 +175,12 @@ public class LoginActivity extends PeachBaseActivity{
         super.finish();
     }
 
-    private void imLogin(final User user,int type) {
+    private void imLogin(final User user, int type) {
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
-       if(type==FINDPASSWORD){
+        if (type == FINDPASSWORD) {
             //存入修改好的密码
         }
 
@@ -227,7 +213,7 @@ public class LoginActivity extends PeachBaseActivity{
                 setResult(RESULT_OK);
                 finish();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                overridePendingTransition(0,R.anim.push_bottom_out);
+                overridePendingTransition(0, R.anim.push_bottom_out);
 
             }
         });
@@ -369,7 +355,7 @@ public class LoginActivity extends PeachBaseActivity{
 
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
-                    imLogin(userResult.result,LOGIN);
+                    imLogin(userResult.result, LOGIN);
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
@@ -380,7 +366,7 @@ public class LoginActivity extends PeachBaseActivity{
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 error.printStackTrace();
-                System.out.println(msg+"  "+method);
+                System.out.println(msg + "  " + method);
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -391,13 +377,13 @@ public class LoginActivity extends PeachBaseActivity{
 
 
     public void weixinLogin() {
-        isWeixinClickLogin=true;
+        isWeixinClickLogin = true;
         ShareUtils.configPlatforms(this);
         dialog = DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
         WeixinApi.getInstance().auth(this, new WeixinApi.WeixinAuthListener() {
             @Override
             public void onComplete(String code) {
-                isBackWeixinLoginPage=false;
+                isBackWeixinLoginPage = false;
                 ToastUtil.getInstance(mContext).showToast("授权成功");
                 dialog.setContent("正在登录");
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
@@ -407,7 +393,7 @@ public class LoginActivity extends PeachBaseActivity{
                         if (userResult.code == 0) {
 //                            userResult.result.easemobUser="rjm4413";
 //                            userResult.result.easemobPwd="123456";
-                            imLogin(userResult.result,WXLOGIN);
+                            imLogin(userResult.result, WXLOGIN);
 //                            imLogin("rjm4413","123456","小明");
                         } else {
                             ToastUtil.getInstance(mContext).showToast(userResult.err.message);
@@ -424,14 +410,14 @@ public class LoginActivity extends PeachBaseActivity{
 
             @Override
             public void onError(int errCode) {
-                isBackWeixinLoginPage=false;
+                isBackWeixinLoginPage = false;
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权失败");
             }
 
             @Override
             public void onCancel() {
-                isBackWeixinLoginPage=false;
+                isBackWeixinLoginPage = false;
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(mContext).showToast("授权取消");
             }
@@ -452,16 +438,16 @@ public class LoginActivity extends PeachBaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_REG &&resultCode == RESULT_OK) {
-                User user = (User) data.getSerializableExtra("user");
-                loginNameEt.setText(user.getTel());
-                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
-                imLogin(user,REGISTER);
+        if (requestCode == REQUEST_CODE_REG && resultCode == RESULT_OK) {
+            User user = (User) data.getSerializableExtra("user");
+            loginNameEt.setText(user.getTel());
+            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            imLogin(user, REGISTER);
 
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             User user = (User) data.getSerializableExtra("user");
             DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
-            imLogin(user,FINDPASSWORD);
+            imLogin(user, FINDPASSWORD);
         }
     }
 }

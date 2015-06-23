@@ -33,7 +33,7 @@
             android:inputType="text"
             android:textSize="14sp"
             android:textColorHint="@color/base_text_color_text_hint"
-            android:hint="城市、景点、美食、酒店"
+            android:hint="城市/景点/美食/购物"
             android:textColor="@color/base_text_color_title"
             android:imeOptions="actionSearch"
             android:singleLine="true"
@@ -75,6 +75,6 @@
             android:layout_marginTop="36dp"
             android:lineSpacingExtra="8dp"
             android:visibility="gone"
-            android:text="旅行搜搜\n搜索旅行中的城市、景点、美食、酒店"/>
+            android:text="旅行搜搜\n搜索旅行的城市/景点/美食/购物/酒店等"/>
     </FrameLayout>
 </LinearLayout>
