@@ -22,7 +22,6 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -81,7 +80,6 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
-import com.xuejian.client.lxp.module.toolbox.FavListActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -97,7 +95,7 @@ import java.util.List;
 /**
  * 聊天页面
  */
-public class ChatActivity extends ChatBaseActivity implements OnClickListener, HandleImMessage.MessageHandler,SensorEventListener {
+public class ChatActivity extends ChatBaseActivity implements OnClickListener, HandleImMessage.MessageHandler, SensorEventListener {
 
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
     public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -177,8 +175,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private com.xuejian.client.lxp.db.userDB.User user;
-    private SensorManager sensorManager;
-    private boolean userSpeaker;
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -201,7 +198,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         public void handleMessage(Message msg) {
             ChatActivity activity = mActivity.get();
             if (activity != null) {
-                activity.micImage.setImageDrawable( activity.micImages[msg.what]);
+                activity.micImage.setImageDrawable(activity.micImages[msg.what]);
             }
         }
     }
@@ -210,6 +207,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private String name;
     private boolean isRecord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,12 +220,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         name = intent.getStringExtra("Name");
         initView();
         setUpView();
-        user=UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
-        if ("single".equals(chatType)&&user==null){
+        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
+        if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
     }
-    public void getUserInfo(int userId){
+
+    public void getUserInfo(int userId) {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
@@ -241,10 +240,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-               // ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
+                // ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
             }
         });
     }
+
     private void initData() {
         messageList.clear();
         messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
@@ -264,7 +264,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         recordingContainer = findViewById(R.id.recording_container);
         micImage = (ImageView) findViewById(R.id.mic_image);
         recordingHint = (TextView) findViewById(R.id.recording_hint);
-        listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.content_list);
         mEditTextContent = (PasteEditText) findViewById(R.id.et_sendmessage);
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
         edittext_layout = (RelativeLayout) findViewById(R.id.edittext_layout);
@@ -275,7 +275,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         dots = (DotView) findViewById(R.id.face_dot_view);
         expressionContainer = (RelativeLayout) findViewById(R.id.ll_face_container);
         btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
-//		locationImgview = (ImageView) findViewById(R.id.btn_location);
         iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
         iv_emoticons_checked = (ImageView) findViewById(R.id.iv_emoticons_checked);
         loadmorePB = (ProgressBar) findViewById(R.id.pb_load_more);
@@ -283,7 +282,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         iv_emoticons_checked.setVisibility(View.GONE);
         more = findViewById(R.id.more);
-//		edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
 
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{getResources().getDrawable(R.drawable.record_animate_00), getResources().getDrawable(R.drawable.record_animate_01),
@@ -339,7 +337,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void onClick(View v) {
-//				edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
                 more.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
@@ -520,22 +517,22 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
                 case RESULT_CODE_COPY: // 复制消息
-				MessageBean copyMsg = ((MessageBean) adapter.getItem(data.getIntExtra("position", -1)));
+                    MessageBean copyMsg = ((MessageBean) adapter.getItem(data.getIntExtra("position", -1)));
 
-				if (copyMsg.getType() == Config.IMAGE_MSG) {
+                    if (copyMsg.getType() == Config.IMAGE_MSG) {
 //					ImageMessageBody imageBody = (ImageMessageBody) copyMsg.getBody();
 //					// 加上一个特定前缀，粘贴时知道这是要粘贴一个图片
 //					clipboard.setText(COPY_IMAGE + imageBody.getLocalUrl());
-				} else {
-					// clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
-					// ((TextMessageBody) copyMsg.getBody()).getMessage()));
-					clipboard.setText(copyMsg.getMessage());
-				}
+                    } else {
+                        // clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
+                        // ((TextMessageBody) copyMsg.getBody()).getMessage()));
+                        clipboard.setText(copyMsg.getMessage());
+                    }
                     break;
                 case RESULT_CODE_DELETE: // 删除消息
                     // MessageBean deleteMsg=adapter.getItem(data.getIntExtra("position", -1));
-                    int pos=data.getIntExtra("position", -1);
-                    IMClient.getInstance().deleteSingleMessage(toChatUsername,messageList.get(pos).getLocalId());
+                    int pos = data.getIntExtra("position", -1);
+                    IMClient.getInstance().deleteSingleMessage(toChatUsername, messageList.get(pos).getLocalId());
                     messageList.remove(pos);
                     adapter.refresh();
                     listView.setSelection(data.getIntExtra("position", adapter.getCount()) - 1);
@@ -557,7 +554,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             switch (requestCode) {
                 case REQUEST_CODE_EMPTY_HISTORY:
                     // 清空会话
-                  //  EMChatManager.getInstance().clearConversation(toChatUsername);
+                    //  EMChatManager.getInstance().clearConversation(toChatUsername);
                     adapter.refresh();
                     break;
                 case REQUEST_CODE_CAMERA: // 发送照片
@@ -662,49 +659,40 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     break;
 //                }else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
 //                    adapter.refresh();
-               }
             }
         }
+    }
 
-        /**
-         * 消息图标点击事件
-         */
-        @Override
-        public void onClick (View view){
+    /**
+     * 消息图标点击事件
+     */
+    @Override
+    public void onClick(View view) {
 
-            int id = view.getId();
-            if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
-                String s = mEditTextContent.getText().toString();
-                sendText(s, 0);
-                //IMClient.getInstance().sendTextMessage(s)
-            } else if (id == R.id.btn_my_guide) {
-                MobclickAgent.onEvent(mContext, "event_share_plan_extra");
-                Intent intent = new Intent(mContext, StrategyListActivity.class);
-                intent.putExtra("user_name", user.getNickName());
-                intent.putExtra("chatType", chatType);
-                intent.putExtra("toId", toChatUsername);
-                intent.putExtra("userId", AccountManager.getCurrentUserId());
-                intent.putExtra("isShare", true);
-                intent.setAction("action.chat");
-                startActivity(intent);
-            } else if (id == R.id.btn_fav) {
-                // 点击我的收藏图标
-                MobclickAgent.onEvent(mContext, "event_share_favorite_extra");
-                Intent intent = new Intent(mContext, FavListActivity.class);
-                intent.putExtra("chatType", chatType);
-                intent.putExtra("toId", toChatUsername);
-                intent.putExtra("isShare", true);
-                intent.setAction("action.chat");
-                startActivity(intent);
-            } else if (id == R.id.btn_dest) {
-                MobclickAgent.onEvent(mContext, "event_share_search_extra");
-                Intent intent = new Intent(mContext, SearchAllActivity.class);
-                intent.putExtra("chatType", chatType);
-                intent.putExtra("toId", toChatUsername);
-                intent.setAction("action.chat");
-                startActivityWithNoAnim(intent);
-                overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
-                // 点击我的目的地图标
+        int id = view.getId();
+        if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
+            String s = mEditTextContent.getText().toString();
+            sendText(s, 0);
+            //IMClient.getInstance().sendTextMessage(s)
+        } else if (id == R.id.btn_my_guide) {
+            MobclickAgent.onEvent(mContext, "event_share_plan_extra");
+            Intent intent = new Intent(mContext, StrategyListActivity.class);
+            intent.putExtra("user_name", user.getNickName());
+            intent.putExtra("chatType", chatType);
+            intent.putExtra("toId", toChatUsername);
+            intent.putExtra("userId", AccountManager.getCurrentUserId());
+            intent.putExtra("isShare", true);
+            intent.setAction("action.chat");
+            startActivity(intent);
+        } else if (id == R.id.btn_dest) {
+            MobclickAgent.onEvent(mContext, "event_share_search_extra");
+            Intent intent = new Intent(mContext, SearchAllActivity.class);
+            intent.putExtra("chatType", chatType);
+            intent.putExtra("toId", toChatUsername);
+            intent.setAction("action.chat");
+            startActivityWithNoAnim(intent);
+            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
+            // 点击我的目的地图标
 //            JSONObject contentJson = new JSONObject();
 //            try {
 //                contentJson.put("id","1");
@@ -716,7 +704,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            } catch (JSONException e) {
 //                e.printStackTrace();
 //            }
-            } /*else if (id == R.id.btn_location) {
+        } /*else if (id == R.id.btn_location) {
             ToastUtil.getInstance(this).showToast("发送位置");*/
            /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
@@ -735,33 +723,33 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            } catch (JSONException e) {
 //                e.printStackTrace();
 //            }
-            //}
-            else if (id == R.id.btn_take_picture) {
-                selectPicFromCamera();// 点击照相图标
-            } else if (id == R.id.btn_picture) {
-                selectPicFromLocal(); // 点击图片图标
-            } else if (id == R.id.btn_location) { // 位置
-                startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
-            } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
-                hideKeyboard();
+        //}
+        else if (id == R.id.btn_take_picture) {
+            selectPicFromCamera();// 点击照相图标
+        } else if (id == R.id.btn_picture) {
+            selectPicFromLocal(); // 点击图片图标
+        } else if (id == R.id.btn_location) { // 位置
+            startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
+        } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
+            hideKeyboard();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        more.setVisibility(View.VISIBLE);
-                        iv_emoticons_normal.setVisibility(View.GONE);
-                        iv_emoticons_checked.setVisibility(View.VISIBLE);
-                        btnContainer.setVisibility(View.GONE);
-                        expressionContainer.setVisibility(View.VISIBLE);
-                    }
-                }, 150);
-            } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
-                iv_emoticons_normal.setVisibility(View.VISIBLE);
-                iv_emoticons_checked.setVisibility(View.GONE);
-                btnContainer.setVisibility(View.VISIBLE);
-                expressionContainer.setVisibility(View.GONE);
-                more.setVisibility(View.GONE);
-                showKeyboadrd(mEditTextContent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    more.setVisibility(View.VISIBLE);
+                    iv_emoticons_normal.setVisibility(View.GONE);
+                    iv_emoticons_checked.setVisibility(View.VISIBLE);
+                    btnContainer.setVisibility(View.GONE);
+                    expressionContainer.setVisibility(View.VISIBLE);
+                }
+            }, 150);
+        } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
+            iv_emoticons_normal.setVisibility(View.VISIBLE);
+            iv_emoticons_checked.setVisibility(View.GONE);
+            btnContainer.setVisibility(View.VISIBLE);
+            expressionContainer.setVisibility(View.GONE);
+            more.setVisibility(View.GONE);
+            showKeyboadrd(mEditTextContent);
 //		} else if (id == R.id.btn_video) {
 //			// 点击摄像图标
 //			Intent intent = new Intent(ChatActivity.this, ImageGridActivity.class);
@@ -775,12 +763,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //				startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class).
 //						putExtra("username", toChatUsername).
 //						putExtra("isComingCall", false));
-            }
         }
+    }
 
-        /**
-         * 照相获取图片
-         */
+    /**
+     * 照相获取图片
+     */
 
     public void selectPicFromCamera() {
         if (!CommonUtils.isExitsSdcard()) {
@@ -838,7 +826,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (TextUtils.isEmpty(content)) {
             return;
         }
-        MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(),content, toChatUsername, chatType);
+        MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), content, toChatUsername, chatType);
         messageList.add(messageBean);
         // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
         adapter.refresh();
@@ -860,7 +848,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             return;
         }
         try {
-            MessageBean m = IMClient.getInstance().createAudioMessage(AccountManager.getCurrentUserId(),filePath, toChatUsername, length, chatType);
+            MessageBean m = IMClient.getInstance().createAudioMessage(AccountManager.getCurrentUserId(), filePath, toChatUsername, length, chatType);
             messageList.add(m);
             adapter.refresh();
             listView.setSelection(listView.getCount() - 1);
@@ -878,7 +866,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param filePath
      */
     private void sendPicture(final String filePath) {
-        MessageBean m = IMClient.getInstance().CreateImageMessage(AccountManager.getCurrentUserId(),filePath, toChatUsername, chatType);
+        MessageBean m = IMClient.getInstance().CreateImageMessage(AccountManager.getCurrentUserId(), filePath, toChatUsername, chatType);
         if (m != null) {
             messageList.add(m);
             adapter.refresh();
@@ -949,7 +937,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * 发送位置信息
      */
     private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(),"haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -1017,7 +1005,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * 重发消息
      */
     private void resendMessage() {
-        IMClient.getInstance().changeMessageStatus(toChatUsername,messageList.get(resendPos).getLocalId(),1);
+        IMClient.getInstance().changeMessageStatus(toChatUsername, messageList.get(resendPos).getLocalId(), 1);
         messageList.get(resendPos).setStatus(1);
         adapter.refresh();
         listView.setSelection(resendPos);
@@ -1212,10 +1200,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         MediaRecordFunc.getInstance().startRecordAndFile(handler);
-                        isRecord =true;
+                        isRecord = true;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        isRecord =false;
+                        isRecord = false;
                         v.setPressed(false);
                         if (wakeLock.isHeld())
                             wakeLock.release();
@@ -1234,7 +1222,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                     }
-                    isRecord =false;
+                    isRecord = false;
                     return true;
                 }
                 case MotionEvent.ACTION_UP:
@@ -1251,10 +1239,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                             long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
                             if (time > 0) {
-                            sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0)+"", false);
-						} else {
-                            ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
-						}
+                                sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
+                            } else {
+                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                             if (!isFinishing())
@@ -1262,7 +1250,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         }
 
                     }
-                    isRecord =false;
+                    isRecord = false;
                     return true;
                 default:
                     recordingContainer.setVisibility(View.INVISIBLE);
@@ -1374,10 +1362,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         try {
             // 停止录音
-           if (isRecord){
-               MediaRecordFunc.getInstance().cancleRecord();
-               recordingContainer.setVisibility(View.INVISIBLE);
-           }
+            if (isRecord) {
+                MediaRecordFunc.getInstance().cancleRecord();
+                recordingContainer.setVisibility(View.INVISIBLE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1405,7 +1393,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     private void addUserToBlacklist(String username) {
         try {
-         //   EMContactManager.getInstance().addUserToBlackList(username, true);
+            //   EMContactManager.getInstance().addUserToBlackList(username, true);
 //			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
             if (!isFinishing())
                 ToastUtil.getInstance(this).showToast("成功删除她");

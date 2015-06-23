@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -152,7 +152,8 @@ public class MessageAdapter extends BaseAdapter {
     private String chatType;
     private String conversation;
     private static Map<String, Timer> timers = new Hashtable<String, Timer>();
-    static Map<String,ArrayList<HashMap<Integer ,Integer>>> tasks=new Hashtable<>();
+    static Map<String, ArrayList<HashMap<Integer, Integer>>> tasks = new Hashtable<>();
+
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -172,10 +173,6 @@ public class MessageAdapter extends BaseAdapter {
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
-
-    // public void setUser(String user) {
-    // this.user = user;
-    // }
 
     /**
      * 获取item数
@@ -420,7 +417,6 @@ public class MessageAdapter extends BaseAdapter {
 
 
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
-
         if (position == 0) {
             timestamp.setText(DateUtils.getTimestampString(new Date(message.getCreateTime())));
             timestamp.setVisibility(View.VISIBLE);
@@ -940,7 +936,7 @@ public class MessageAdapter extends BaseAdapter {
 //                }
 
                 // set a timer
-            //    if (message.getStatus()==1) sendPictureMessage(message, holder);
+                //    if (message.getStatus()==1) sendPictureMessage(message, holder);
                 sendPictureMessage(message, holder);
 //                final Timer timer = new Timer();
 //                timers.put(message.getLocalId() + "", timer);
@@ -1158,8 +1154,8 @@ public class MessageAdapter extends BaseAdapter {
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText( (int)Math.floor(Double.valueOf(durtime))+"´");
-        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId,message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
+        holder.tv.setText((int) Math.floor(Double.valueOf(durtime)) + "´");
+        holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId, message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1253,7 +1249,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.staus_iv.setVisibility(View.GONE);
                 // sendMsgInBackground(message, holder);
-                IMClient.getInstance().sendAudioMessage(AccountManager.getCurrentUserId(),message, filepath, friendId, new UploadListener() {
+                IMClient.getInstance().sendAudioMessage(AccountManager.getCurrentUserId(), message, filepath, friendId, new UploadListener() {
                     @Override
                     public void onSucess(String fileUrl) {
                         message.setStatus(0);
@@ -1449,7 +1445,7 @@ public class MessageAdapter extends BaseAdapter {
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
-                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(),friendId,message, conversation, new SendMsgListener() {
+                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(), friendId, message, conversation, new SendMsgListener() {
                     @Override
                     public void onSuccess() {
                         message.setStatus(0);
@@ -1458,7 +1454,7 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
                                 holder.staus_iv.setVisibility(View.GONE);
-                                updateStatus(message,0);
+                                updateStatus(message, 0);
                             }
                         });
                     }
@@ -1471,7 +1467,7 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
                                 holder.staus_iv.setVisibility(View.VISIBLE);
-                                updateStatus(message,2);
+                                updateStatus(message, 2);
                             }
                         });
                     }
@@ -1494,7 +1490,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.pb.setVisibility(View.VISIBLE);
 
         // 调用sdk发送异步发送方法
-        IMClient.getInstance().sendTextMessage(message,friendId,conversation, new SendMsgListener() {
+        IMClient.getInstance().sendTextMessage(message, friendId, conversation, new SendMsgListener() {
             @Override
             public void onSuccess() {
                 message.setStatus(0);
@@ -1541,7 +1537,7 @@ public class MessageAdapter extends BaseAdapter {
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
-  //      String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
+        //      String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
 
 //        File file=new File(path);
@@ -1636,14 +1632,14 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
-            IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(),message, friendId, new UploadListener() {
+            IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(), message, friendId, new UploadListener() {
                 @Override
                 public void onSucess(String fileUrl) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             // send success
                             message.setStatus(0);
-                            updateStatus(message,0);
+                            updateStatus(message, 0);
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
                         }
@@ -1671,12 +1667,11 @@ public class MessageAdapter extends BaseAdapter {
                 public void onProgress(final int progress) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            if (progress==100){
+                            if (progress == 100) {
                                 message.setStatus(0);
                                 holder.pb.setVisibility(View.GONE);
                                 holder.tv.setVisibility(View.GONE);
-                            }
-                            else holder.tv.setText(progress + "%");
+                            } else holder.tv.setText(progress + "%");
                         }
                     });
                 }
@@ -1906,17 +1901,18 @@ private void updateStatus(final MessageBean messageBean,final int status){
         }
 
     }
-public static MessageBean updateVoiceReadStatus(MessageBean message){
-    try {
-        JSONObject object=new JSONObject(message.getMessage());
-        object.put("isRead",true);
-        message.setMessage(object.toString());
-        return message;
-    } catch (JSONException e) {
-        e.printStackTrace();
-        return message;
-    }
 
-}
+    public static MessageBean updateVoiceReadStatus(MessageBean message) {
+        try {
+            JSONObject object = new JSONObject(message.getMessage());
+            object.put("isRead", true);
+            message.setMessage(object.toString());
+            return message;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return message;
+        }
+
+    }
 
 }

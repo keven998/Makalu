@@ -24,7 +24,6 @@ import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
-import com.xuejian.client.lxp.bean.PeachConversation;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -43,6 +42,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+
 public class TalkFragment extends PeachBaseFragment {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
     @InjectView(R.id.tv_title_add)
@@ -56,7 +56,6 @@ public class TalkFragment extends PeachBaseFragment {
     private InputMethodManager inputMethodManager;
     private ListView listView;
     private ChatAllHistoryAdapter adapter;
-    private List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
     private boolean hidden;
     private List<ConversationBean> conversations = new ArrayList<>();
 
@@ -93,7 +92,7 @@ public class TalkFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ContactActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
+                getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,9 +100,9 @@ public class TalkFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversationBean conversation = adapter.getItem(position);
-                String username = conversation.getFriendId() + "";
+//                String username = conversation.getFriendId() + "";
                 if (String.valueOf(conversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
-              //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
+                    //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
@@ -177,9 +176,11 @@ public class TalkFragment extends PeachBaseFragment {
         });
         dialog.show();
     }
-    public void netStateChange(String state){
-        title_bar_title.setText("消息"+state);
+
+    public void netStateChange(String state) {
+        title_bar_title.setText("消息" + state);
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);

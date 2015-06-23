@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/timestamp"
@@ -15,83 +14,80 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginBottom="@dimen/margin_chat_activity"
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
         <ImageView
             android:id="@+id/iv_userhead"
             android:layout_width="39dp"
             android:layout_height="39dp"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder_round"  />
+            android:src="@drawable/avatar_placeholder_round" />
 
         <TextView
             android:id="@+id/tv_chatcontent"
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:autoLink="web"
+            android:background="@drawable/chat_send"
             android:gravity="left|center"
             android:paddingLeft="10dp"
-            android:autoLink="web"
-            android:textColor="@color/base_color_white"
-            android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chat_send" />
-        
-     <!--    <TextView
-            android:id="@+id/tv_userid"
-            style="@style/chat_text_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toRightOf="@id/tv_chatcontent"
-            android:layout_below="@id/iv_userhead"/> -->
+            android:textColor="@color/base_color_white" />
+
+        <!--    <TextView
+               android:id="@+id/tv_userid"
+               style="@style/chat_text_name_style"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_toRightOf="@id/tv_chatcontent"
+               android:layout_below="@id/iv_userhead"/> -->
 
         <ImageView
             android:id="@+id/msg_status"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginRight="5dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/tv_chatcontent"
             android:clickable="true"
             android:src="@drawable/msg_state_failed_resend"
             android:visibility="gone" />
-        
+
         <TextView
             android:id="@+id/tv_ack"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:visibility="invisible"
-            />
-        
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/tv_delivered"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:visibility="invisible"
-            />
-        
-        <ProgressBar 
-            android:visibility="visible"
+            android:visibility="invisible" />
+
+        <ProgressBar
             android:id="@+id/pb_sending"
             android:layout_width="20dp"
             android:layout_height="20dp"
-              android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            
-            />
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_chatcontent" />
+
     </RelativeLayout>
 
 </LinearLayout>
