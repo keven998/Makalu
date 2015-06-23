@@ -27,7 +27,6 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.db.userDB.User;
@@ -67,6 +66,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         if(isEdit) {
             updataUserFootPrint("add", locBean.id);
         }
+        System.out.println(locBean.toString());
     }
 
     @Override

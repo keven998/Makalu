@@ -41,26 +41,16 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.utils.AnimationSimple;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.StretchAnimation;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
@@ -98,7 +88,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private List<User> alluserList=new ArrayList<User>();
     private int request;
     private String groupId;
-    private EMGroup group;
     private Handler handler;
 
     @Override

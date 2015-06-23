@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,40 +19,33 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
-import com.lv.user.User;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PeachConversation;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.PickContactsWithCheckboxActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatAllHistoryAdapter;
-import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
-import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+//import com.easemob.chat.EMChatManager;
+//import com.easemob.chat.EMConversation;
+//import com.easemob.chat.EMGroup;
+//import com.easemob.chat.EMGroupManager;
 
 /**
  * Created by rjm on 2015/3/16.
@@ -268,49 +260,6 @@ public class TalkFragment extends PeachBaseFragment {
             UserDBManager.getInstance().saveContact(imUser);
         }*/
         return 0;
-    }
-
-    /**
-     * 获取所有会话
-     *
-     * @return
-     */
-    private List<PeachConversation> loadConversationsWithRecentChat() {
-        // 获取所有会话，包括陌生人
-        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
-        conversationList.clear();
-        //过滤掉messages seize为0的conversation
-        final Iterator<EMConversation> conversationIt = conversations.values().iterator();
-
-        while (conversationIt.hasNext()) {
-            final EMConversation conversation = conversationIt.next();
-            if (conversation.getIsGroup()) {
-
-                EMGroup group = EMGroupManager.getInstance().getGroup(conversation.getUserName());
-                if (group == null) {
-
-                } else {
-                    PeachConversation peachConversation = new PeachConversation();
-                    peachConversation.emConversation = conversation;
-                    conversationList.add(peachConversation);
-                }
-
-
-            } else if (!TextUtils.isEmpty(conversation.getUserName())) {
-                IMUser user = IMUserRepository.getMyFriendByUserName(getActivity(), conversation.getUserName());
-                if (user != null) {
-                    PeachConversation peachConversation = new PeachConversation();
-                    peachConversation.emConversation = conversation;
-                    peachConversation.imUser = user;
-                    conversationList.add(peachConversation);
-                } else {
-                }
-            }
-        }
-
-        // 排序
-        //  sortConversationByLastChatTime(conversationList);
-        return conversationList;
     }
 
     /**

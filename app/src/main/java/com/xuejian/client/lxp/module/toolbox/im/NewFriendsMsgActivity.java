@@ -24,7 +24,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;

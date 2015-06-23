@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 
 

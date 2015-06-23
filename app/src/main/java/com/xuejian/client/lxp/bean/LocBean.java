@@ -120,4 +120,9 @@ public class LocBean implements Parcelable,ICreateShareDialog {
             return new LocBean[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return this.isAdded+" isAdded "+header+" header "+zhName+" zhName "+desc+" desc "+pinyin+" pinyin ";
+    }
 }

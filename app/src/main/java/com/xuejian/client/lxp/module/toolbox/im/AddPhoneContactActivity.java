@@ -16,7 +16,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.AddressBookbean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;

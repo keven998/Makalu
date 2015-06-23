@@ -19,20 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,29 +30,18 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
-import com.xuejian.client.lxp.bean.PeachUser;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.config.PeachApplication;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
-import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by rjm on 2015/3/30.
- */
 public class GroupDetailFragment extends PeachBaseFragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE_ADD_USER = 0;
@@ -99,7 +78,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     //清空所有聊天记录
     private RelativeLayout clearAllHistory;
-    private EMChatOptions options;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_group_details,container,false);
@@ -315,51 +293,51 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             public void run() {
                 try {
 
-                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                    msg.setChatType(EMMessage.ChatType.GroupChat);
-                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getUserId()));
-                    //msg.setReceipt(group.getGroupId());
-                    IMUtils.setMessageWithTaoziUserInfo(PeachApplication.getContext(), msg);
-                    String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getNickName();
-                    String content = myNickname + " 退出了群聊";
-                    IMUtils.setMessageWithExtTips(PeachApplication.getContext(), msg, content);
-                    msg.addBody(new TextMessageBody(content));
-                    EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            try {
-                                EMGroupManager.getInstance().exitFromGroup(groupId);
-                            } catch (EaseMobException e) {
-                                e.printStackTrace();
-                            }
-                            if (getActivity()!=null&&!getActivity().isFinishing())
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        getActivity().setResult(Activity.RESULT_OK);
-                                        getActivity().finish();
-//                                        ChatActivity.activityInstance.finish();
-                                    }
-                                });
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-                            if (getActivity()!=null&&!getActivity().isFinishing())
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        ToastUtil.getInstance(PeachApplication.getContext()).showToast("退出群聊失败");
-                                    }
-                                });
-                        }
-
-                        @Override
-                        public void onProgress(int i, String s) {
-
-                        }
-                    });
+//                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                    msg.setChatType(EMMessage.ChatType.GroupChat);
+//                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getUserId()));
+//                    //msg.setReceipt(group.getGroupId());
+//                    IMUtils.setMessageWithTaoziUserInfo(PeachApplication.getContext(), msg);
+//                    String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getNickName();
+//                    String content = myNickname + " 退出了群聊";
+//                    IMUtils.setMessageWithExtTips(PeachApplication.getContext(), msg, content);
+//                    msg.addBody(new TextMessageBody(content));
+//                    EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+//                        @Override
+//                        public void onSuccess() {
+//                            try {
+//                                EMGroupManager.getInstance().exitFromGroup(groupId);
+//                            } catch (EaseMobException e) {
+//                                e.printStackTrace();
+//                            }
+//                            if (getActivity()!=null&&!getActivity().isFinishing())
+//                                getActivity().runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        getActivity().setResult(Activity.RESULT_OK);
+//                                        getActivity().finish();
+////                                        ChatActivity.activityInstance.finish();
+//                                    }
+//                                });
+//                        }
+//
+//                        @Override
+//                        public void onError(int i, String s) {
+//                            if (getActivity()!=null&&!getActivity().isFinishing())
+//                                getActivity().runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        DialogManager.getInstance().dissMissLoadingDialog();
+//                                        ToastUtil.getInstance(PeachApplication.getContext()).showToast("退出群聊失败");
+//                                    }
+//                                });
+//                        }
+//
+//                        @Override
+//                        public void onProgress(int i, String s) {
+//
+//                        }
+//                    });
 
                 } catch (final Exception e) {
                     if (getActivity()!=null&&!getActivity().isFinishing())
@@ -382,27 +360,27 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         DialogManager.getInstance().showLoadingDialog(getActivity());
         new Thread(new Runnable() {
             public void run() {
-                try {
-                    EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
-                    if (getActivity()!=null&&!getActivity().isFinishing())
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                getActivity().setResult(Activity.RESULT_OK);
-                                ChatActivity.activityInstance.finish();
-                            }
-                        });
-                } catch (final Exception e) {
-                    if (getActivity()!=null&&!getActivity().isFinishing())
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-//							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(PeachApplication.getContext()).showToast("呃~网络有些问题");
-                            }
-                        });
-                }
+//                try {
+//                    EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
+//                    if (getActivity()!=null&&!getActivity().isFinishing())
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            public void run() {
+//
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                getActivity().setResult(Activity.RESULT_OK);
+//                                ChatActivity.activityInstance.finish();
+//                            }
+//                        });
+//                } catch (final Exception e) {
+//                    if (getActivity()!=null&&!getActivity().isFinishing())
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+////							Toast.makeText(getApplicationContext(), "解散群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                ToastUtil.getInstance(PeachApplication.getContext()).showToast("呃~网络有些问题");
+//                            }
+//                        });
+//                }
             }
         }).start();
     }
@@ -868,11 +846,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
          * 删除群成员
          * @param imUser
          */
-        protected void deleteMembersFromGroup(final IMUser imUser) {
-            if(imUser.getUsername().equals(EMChatManager.getInstance().getCurrentUser())){
-                ToastUtil.getInstance(getActivity()).showToast("不能删除自己");
-                return;
-            }
+        protected void deleteMembersFromGroup(final User imUser) {
             final ProgressDialog deleteDialog = new ProgressDialog(getActivity());
             deleteDialog.setMessage("正在移除...");
             deleteDialog.setCanceledOnTouchOutside(false);
@@ -889,36 +863,36 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
                             @Override
                             public void run() {
-                                deleteDialog.dismiss();
-                                memberAdapter.getDataList().remove(imUser);
-                                memberAdapter.notifyDataSetChanged();
-                                // 被邀请
-                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                                msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()));
-                               // msg.setReceipt(group.getGroupId());
-                                IMUtils.setMessageWithTaoziUserInfo(getActivity(), msg);
-                                String myNickmae = String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId());
-                                String content = String.format(getActivity().getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
-                                IMUtils.setMessageWithExtTips(getActivity(), msg, content);
-                                msg.addBody(new TextMessageBody(content));
-                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                                    @Override
-                                    public void onSuccess() {
-
-
-                                    }
-
-                                    @Override
-                                    public void onError(int i, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
-                                });
+//                                deleteDialog.dismiss();
+//                                memberAdapter.getDataList().remove(imUser);
+//                                memberAdapter.notifyDataSetChanged();
+//                                // 被邀请
+//                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                                msg.setChatType(EMMessage.ChatType.GroupChat);
+//                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()));
+//                               // msg.setReceipt(group.getGroupId());
+//                                IMUtils.setMessageWithTaoziUserInfo(getActivity(), msg);
+//                                String myNickmae = String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId());
+//                                String content = String.format(getActivity().getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNick());
+//                                IMUtils.setMessageWithExtTips(getActivity(), msg, content);
+//                                msg.addBody(new TextMessageBody(content));
+//                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
                             }
                         });
                     } catch (final Exception e) {

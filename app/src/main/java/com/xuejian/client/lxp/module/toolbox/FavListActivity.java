@@ -18,7 +18,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.easemob.EMCallBack;
 import com.lv.Listener.SendMsgListener;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

@@ -26,16 +26,9 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ExpertBean;
-import com.xuejian.client.lxp.bean.PoiDetailBean;
-import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.common.api.BaseApi;
-import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.MapUtils;
-import com.xuejian.client.lxp.common.widget.DynamicBox;
-import com.xuejian.client.lxp.module.dest.adapter.PoiAdapter;
 import com.xuejian.client.lxp.module.toolbox.ExpertFilterActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 

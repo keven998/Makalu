@@ -19,14 +19,11 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
-import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMNotifier;
 import com.easemob.chat.GroupChangeListener;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -331,38 +328,38 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //获取cmd message对象
-            String msgId = intent.getStringExtra("msgid");
-            EMMessage message = intent.getParcelableExtra("message");
-            //获取消息body
-            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-            String aciton = cmdMsgBody.action;//获取自定义action
-            //获取扩展属性
-            try {
-                int cmdType = message.getIntAttribute("CMDType");
-                String content = message.getStringAttribute("content");
-                //接受到好友请求
-                if (cmdType == 1) {
-                    // 刷新bottom bar消息未读数
-                    updateUnreadAddressLable();
-
-                }
-                //对方同意了加好友请求(好友添加)
-                else if (cmdType == 2) {
-                    // updateUnreadMsgCount();
-                    refreshChatHistoryFragment();
-
-
-                }
-                //删除好友
-                else if (cmdType == 3) {
-                    // 刷新ui
-                    refreshChatHistoryFragment();
-                }
-
-            } catch (EaseMobException e) {
-                e.printStackTrace();
-            }
+//            //获取cmd message对象
+//            String msgId = intent.getStringExtra("msgid");
+//            EMMessage message = intent.getParcelableExtra("message");
+//            //获取消息body
+//            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+//            String aciton = cmdMsgBody.action;//获取自定义action
+//            //获取扩展属性
+//            try {
+//                int cmdType = message.getIntAttribute("CMDType");
+//                String content = message.getStringAttribute("content");
+//                //接受到好友请求
+//                if (cmdType == 1) {
+//                    // 刷新bottom bar消息未读数
+//                    updateUnreadAddressLable();
+//
+//                }
+//                //对方同意了加好友请求(好友添加)
+//                else if (cmdType == 2) {
+//                    // updateUnreadMsgCount();
+//                    refreshChatHistoryFragment();
+//
+//
+//                }
+//                //删除好友
+//                else if (cmdType == 3) {
+//                    // 刷新ui
+//                    refreshChatHistoryFragment();
+//                }
+//
+//            } catch (EaseMobException e) {
+//                e.printStackTrace();
+//            }
         }
     };
 
@@ -374,7 +371,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        vibrator.vibrate(700);
+        vibrator.vibrate(500);
         //  notifyNewMessage(m);
     }
 
@@ -382,27 +379,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     public void onCMDMessageArrive(MessageBean m) {
         IMUtils.HandleCMDInfoFromMessage(m);
     }
-
-    /**
-     * 消息回执BroadcastReceiver
-     */
-    private BroadcastReceiver ackMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String msgid = intent.getStringExtra("msgid");
-            String from = intent.getStringExtra("from");
-            EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-            if (conversation != null) {
-                // 把message设为已读
-                EMMessage msg = conversation.getMessage(msgid);
-                if (msg != null) {
-                    msg.isAcked = true;
-                }
-            }
-            abortBroadcast();
-        }
-    };
 
     /**
      * 保存提示新消息
