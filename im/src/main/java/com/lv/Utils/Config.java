@@ -7,15 +7,15 @@ import android.os.Environment;
  */
 public class Config {
     public static final String HOST = "http://hedy.zephyre.me";
-    public static final String GET_GROUP = "http://hedy.zephyre.me/groups/";
-    public static final String SEND_URL = "http://hedy.zephyre.me/chats";
-    public static final String ACK_URL = "http://hedy.zephyre.me/chats/";
+    public static final String GET_GROUP = HOST+"/groups/";
+    public static final String SEND_URL = HOST+"/chats";
+    public static final String ACK_URL = HOST+"/chats/";
     public static final String MSG_DBNAME = "IM_SDK.db";
     public static final String USER_DBNAME = "USER.db";
     public static final String DB_PATH = "/data/data/com.xuejian.client.lxp/";
     public final static String AUDIO_AMR_FILENAME = "Audio.amr";
-    public static final String LOGIN_URL="http://hedy.zephyre.me/users/login";
-    public static final String FETCH_URL="http://hedy.zephyre.me/chats/";
+    public static final String LOGIN_URL=HOST+"/users/login";
+    public static final String FETCH_URL=HOST+"/chats/";
     public static final int DOWNLOAD_SUCCESS= 1000;
     public static final int DOWNLOAD_FILED= 1001;
     public static final int STATUS_SUCCESS= 0;

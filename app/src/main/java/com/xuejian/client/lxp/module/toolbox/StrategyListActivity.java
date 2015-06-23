@@ -47,6 +47,8 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout;
 import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
+import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
@@ -82,7 +84,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     String toId;
     private String userId;
     private boolean isOwner;
-
+    private User user;
     private int mContentType = 0; // 0 = ALL, 1 = plans, 2 = pass
 
     @Override
@@ -90,11 +92,8 @@ public class StrategyListActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId = getIntent().getStringExtra("userId");
-        if (AccountManager.getInstance().getLoginAccount(this) == null) {
-            isOwner = false;
-        } else {
-            isOwner = userId.equals(AccountManager.getCurrentUserId());
-        }
+        isOwner = AccountManager.getInstance().getLoginAccount(this) != null && userId.equals(AccountManager.getCurrentUserId());
+        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
         initView();
         initData();
     }
@@ -189,7 +188,12 @@ public class StrategyListActivity extends PeachBaseActivity {
         });
 
         TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
-        textView.setText(String.format("%s的计划", getIntent().getStringExtra("user_name")));
+
+        if (isOwner)
+            textView.setText(String.format("%s的计划", AccountManager.getInstance().getLoginAccountInfo().getNickName()));
+        else if (user != null)
+            textView.setText(String.format("%s的计划", user.getNickName()));
+        else textView.setText(String.format("%s的计划", userId));
 
     }
 
@@ -218,8 +222,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void cachePage() {
         if (isOwner && (mContentType == 0)) {
-            AccountManager account = AccountManager.getInstance();
-            if (userId != null && !userId.equals(account.getCurrentUserId())) {
+            if (userId != null && !userId.equals(AccountManager.getCurrentUserId())) {
                 return;
             }
             int size = mStrategyListAdapter.getCount();
@@ -227,7 +230,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 size = OtherApi.PAGE_SIZE;
             }
             List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-            PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", account.getCurrentUserId()), GsonTools.createGsonString(cd));
+            PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
         }
     }
 
@@ -314,10 +317,10 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setScrollLoadEnabled(true);
-        }else{
+        } else {
             mMyStrategyLv.setScrollLoadEnabled(false);
         }
-        if (result.size() == 0) {
+        if (result!=null&&result.size() == 0) {
             if (mCurrentPage == 0) {
                 //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                 //mMyStrategyLv.doPullRefreshing(true, 0);
