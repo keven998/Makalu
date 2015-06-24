@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
@@ -49,12 +50,15 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
                 GroupManager.getGroupManager().editGroupName(groupId,groupNameEt.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess() {
-                        setResult(RESULT_OK);
+                        Intent result=new Intent();
+                        result.putExtra("groupName",groupNameEt.getText().toString().trim());
+                        setResult(RESULT_OK,result);
                         finish();
                     }
 
                     @Override
                     public void onFailed() {
+                        ToastUtil.getInstance(mContext).showToast("额～修改失败了");
                         setResult(RESULT_OK);
                         finish();
                     }

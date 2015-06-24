@@ -25,18 +25,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.GroupAdapter;
 
-import java.util.List;
-
 public class GroupsActivity extends ChatBaseActivity {
 	private ListView groupListView;
-	protected List<EMGroup> grouplist;
+	//protected List<EMGroup> grouplist;
 	private GroupAdapter groupAdapter;
 	private InputMethodManager inputMethodManager;
 	public static GroupsActivity instance;
@@ -48,9 +44,9 @@ public class GroupsActivity extends ChatBaseActivity {
 		
 		instance = this;
 		inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		grouplist =	EMGroupManager.getInstance().getAllGroups();
+		//grouplist =	EMGroupManager.getInstance().getAllGroups();
 		groupListView = (ListView)findViewById(R.id.list);
-		groupAdapter = new GroupAdapter(this, 1, grouplist);
+		//groupAdapter = new GroupAdapter(this, 1, grouplist);
 		groupListView.setAdapter(groupAdapter);
 		groupListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -100,8 +96,8 @@ public class GroupsActivity extends ChatBaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		grouplist = EMGroupManager.getInstance().getAllGroups();
-		groupAdapter = new GroupAdapter(this, 1, grouplist);
+		//grouplist = EMGroupManager.getInstance().getAllGroups();
+		//groupAdapter = new GroupAdapter(this, 1, grouplist);
 		groupListView.setAdapter(groupAdapter);
 		groupAdapter.notifyDataSetChanged();
 	}

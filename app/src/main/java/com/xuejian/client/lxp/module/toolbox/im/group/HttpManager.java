@@ -97,7 +97,6 @@ public class HttpManager {
                 post.addHeader("UserId",AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
                 try {
-                    System.out.println(obj.toString());
                     StringEntity entity = new StringEntity(obj.toString(),
                             HTTP.UTF_8);
                     entity.setContentType("application/json");
@@ -216,7 +215,7 @@ public class HttpManager {
         });
     }
 
-    public static void editGroup(String groupId,final String groupName ,final CallBack callBack) {
+    public static void editGroup(final String groupId,final String groupName ,final CallBack callBack) {
        final String url = Config.GET_GROUP + groupId;
         exec.execute(new Runnable() {
             @Override
@@ -225,12 +224,11 @@ public class HttpManager {
                 httpPut.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     JSONObject obj = new JSONObject();
+                    obj.put("groupId", Long.parseLong(groupId));
                     obj.put("name", groupName);
                     StringEntity entity = new StringEntity(obj.toString(),
                             HTTP.UTF_8);
-//                    List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-//                    pairs.add(new BasicNameValuePair("name", groupName));
-                    //  pairs.add(new BasicNameValuePair("key2", "value2"));
+                    entity.setContentType("application/json");
                     httpPut.setEntity(entity);
                     HttpResponse httpResponse = new DefaultHttpClient().execute(httpPut);
                     HttpEntity res = httpResponse.getEntity();
@@ -243,9 +241,10 @@ public class HttpManager {
                         }
                         callBack.onSuccess();
                     }
-
+                    else callBack.onFailed();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callBack.onFailed();
                 }
             }
         });
