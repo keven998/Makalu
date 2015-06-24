@@ -1486,7 +1486,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onNewIntent(Intent intent) {
         // 点击notification bar进入聊天页面，保证只有一个聊天页面
-        long username = intent.getLongExtra("userId",0);
+        long username = intent.getLongExtra("userId", 0);
         if (toChatUsername.equals(String.valueOf(username)))
             super.onNewIntent(intent);
         else {

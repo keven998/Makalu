@@ -22,14 +22,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="vertical"
-                android:paddingBottom="2dip"
-                android:paddingTop="2dip">
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2px"
-                    android:background="@color/app_theme_color" />
+                    android:layout_height="1dp"
+                    android:background="@color/color_line" />
 
                 <LinearLayout
                     android:id="@+id/rl_bottom"
@@ -48,7 +46,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
-                        android:src="@drawable/chat_bar_voice" />
+                        android:src="@drawable/messages_icon_talk_default" />
 
                     <ImageView
                         android:id="@+id/btn_set_mode_keyboard"
@@ -58,7 +56,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
-                        android:src="@drawable/ic_keyboard"
+                        android:src="@drawable/messages_icon_keyboard_default"
                         android:visibility="gone" />
 
 
@@ -86,7 +84,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="@string/button_pushtotalk"
-                                android:textColor="@color/base_text_color_title"
+                                android:textColor="@color/color_text_i"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -97,7 +95,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="32dp"
                             android:background="@null"
-                            android:hint="请输入..."
                             android:lineSpacingExtra="1dp"
                             android:maxLines="3"
                             android:minHeight="36dp"
@@ -105,7 +102,7 @@
                             android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
                             android:paddingTop="4dp"
-                            android:textColor="@color/base_text_color_title"
+                            android:textColor="@color/color_text_i"
                             android:textSize="14sp" />
 
 
@@ -118,8 +115,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
-                            android:src="@drawable/chat_bar_face"
-                            android:visibility="visible" />
+                            android:src="@drawable/messages_icon_smile_default"/>
 
                         <ImageView
                             android:id="@+id/iv_emoticons_checked"
@@ -130,7 +126,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
-                            android:src="@drawable/ic_keyboard"
+                            android:src="@drawable/messages_icon_keyboard_default"
                             android:visibility="gone" />
 
                     </RelativeLayout>
@@ -141,7 +137,7 @@
                         android:layout_height="48dp"
                         android:onClick="more"
                         android:scaleType="center"
-                        android:src="@drawable/chat_bar_more" />
+                        android:src="@drawable/messages_icon_plus_default" />
 
                     <Button
                         android:id="@+id/btn_send"
@@ -380,8 +376,8 @@
             android:id="@+id/menu_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="end" />
+            android:layout_gravity="end"
+            android:layout_marginLeft="60dp" />
     </android.support.v4.widget.DrawerLayout>
 
 

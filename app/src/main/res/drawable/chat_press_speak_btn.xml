@@ -6,9 +6,9 @@
 
             <padding android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp" />
 
-            <solid android:color="#d3d3d3" />
+            <solid android:color="@color/color_line" />
 
-            <stroke android:width="0.5dp" android:color="#999999" />
+            <stroke android:width="0.5dp" android:color="@color/color_line" />
         </shape></item>
     <item><shape>
             <corners android:radius="3dp" />
@@ -17,7 +17,7 @@
 
             <solid android:color="#00000000" />
 
-            <stroke android:width="0.5dp" android:color="@color/base_divider_color" />
+            <stroke android:width="0.5dp" android:color="@color/color_line" />
         </shape></item>
 
 </selector>

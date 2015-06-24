@@ -153,12 +153,10 @@ public class MessageAdapter extends BaseAdapter {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.avatar_placeholder_round)
-                .showImageOnLoading(R.drawable.avatar_placeholder_round)
-                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
-//				.decodingOptions(D)
-//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8)))
+                .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(38)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -1671,18 +1669,20 @@ public class MessageAdapter extends BaseAdapter {
             e.printStackTrace();
         }
     }
-private void updateStatus(final MessageBean messageBean,final int status){
-    activity.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-            for (MessageBean m :ChatActivity.messageList){
-                if (m.getLocalId()==messageBean.getLocalId())m.setStatus(status);
-                notifyDataSetChanged();
-                break;
+
+    private void updateStatus(final MessageBean messageBean, final int status) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (MessageBean m : ChatActivity.messageList) {
+                    if (m.getLocalId() == messageBean.getLocalId()) m.setStatus(status);
+                    notifyDataSetChanged();
+                    break;
+                }
             }
-        }
-    });
-}
+        });
+    }
+
     /**
      * 更新ui上消息发送状态
      *
