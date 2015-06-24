@@ -11,9 +11,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.easemob.util.DensityUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.task.AsyncImageLoader;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.module.toolbox.im.domain.VideoEntity;
 
 import java.util.List;
@@ -65,8 +65,8 @@ public class ChooseVideoAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.choose_griditem, null);
-			convertView.setLayoutParams(new GridView.LayoutParams(DensityUtil
-					.dip2px(mContext, 100), DensityUtil.dip2px(mContext, 100)));
+			convertView.setLayoutParams(new GridView.LayoutParams(ImageUtils
+					.dip2px(mContext, 100), ImageUtils.dip2px(mContext, 100)));
 			holder.tv_duration = (TextView) convertView
 					.findViewById(R.id.chatting_length_iv);
 			holder.tv_size = (TextView) convertView

@@ -16,17 +16,11 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.util.HanziToPinyin;
 import com.lv.Listener.SendMsgListener;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.bean.ExtFromUser;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SpotDetailBean;
@@ -38,12 +32,9 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 
 import org.json.JSONException;
@@ -59,32 +50,6 @@ public class IMUtils {
     public final static int IM_SHARE_REQUEST_CODE=200;
     public final static int IM_LOGIN_REQUEST_CODE=300;
 
-    public static IMUser setUserHead(IMUser user) {
-        String username=user.getUsername();
-        String headerName = null;
-        if (!TextUtils.isEmpty(user.getNick())) {
-            headerName = user.getNick();
-        } else {
-            headerName = user.getUsername();
-        }
-       if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            user.setHeader("");
-        } else if (Character.isDigit(headerName.charAt(0))) {
-            user.setHeader("#");
-        } else {
-            if(headerName.substring(0,1).equals(" ")){
-                user.setHeader("#");
-            }else {
-                user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
-                        0, 1).toUpperCase());
-                char header = user.getHeader().toLowerCase().charAt(0);
-                if (header < 'a' || header > 'z' ) {
-                    user.setHeader("#");
-                }
-            }
-        }
-        return user;
-    }
     public static User setUserHead(User user) {
 //        String username=user.getNickName();
         String headerName = user.getNickName();
@@ -98,7 +63,7 @@ public class IMUtils {
 //        } else if (Character.isDigit(headerName.charAt(0))) {
 //            user.setHeader("#");
 //        } else {
-            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+            user.setHeader(com.xuejian.client.lxp.common.utils.HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
                     0, 1).toUpperCase());
             char header = user.getHeader().toLowerCase().charAt(0);
             if (header < 'a' || header > 'z') {
@@ -109,76 +74,6 @@ public class IMUtils {
     }
     static String getStrng(Context context, int resId){
         return context.getResources().getString(resId);
-    }
-    /**
-     * 根据消息内容和消息类型获取消息内容提示
-     *
-     * @param message
-     * @param context
-     * @return
-     */
-
-    public static String getMessageDigest(EMMessage message, Context context) {
-        String digest = "";
-        switch (message.getType()) {
-            case LOCATION: // 位置消息
-                if (message.direct == EMMessage.Direct.RECEIVE) {
-                    //从sdk中提到了ui中，使用更简单不犯错的获取string方法
-//              digest = EasyUtils.getAppResourceString(context, "location_recv");
-                    digest = getStrng(context, R.string.location_recv);
-                    digest = String.format(digest, message.getFrom());
-                    return digest;
-                } else {
-//              digest = EasyUtils.getAppResourceString(context, "location_prefix");
-                    digest = getStrng(context, R.string.location_prefix);
-                }
-                break;
-            case IMAGE: // 图片消息
-                digest = getStrng(context, R.string.picture);
-                break;
-            case VOICE:// 语音消息
-                digest = getStrng(context, R.string.voice);
-                break;
-            case VIDEO: // 视频消息
-                digest = getStrng(context, R.string.video);
-                break;
-            case TXT: // 文本消息
-                if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
-                    TextMessageBody txtBody = (TextMessageBody) message.getBody();
-                    digest = txtBody.getMessage();
-                }else {
-                    TextMessageBody txtBody = (TextMessageBody) message.getBody();
-                    digest = getStrng(context, R.string.voice_call) + txtBody.getMessage();
-                }
-                break;
-            case FILE: //普通文件消息
-                digest = getStrng(context, R.string.file);
-                break;
-            default:
-                System.err.println("error, unknow type");
-                return "";
-        }
-
-        return digest;
-    }
-    public static void setMessageWithTaoziUserInfo(Context context,EMMessage message){
-        //组装个人信息json
-        User myUser = AccountManager.getInstance().getLoginAccount(context);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("userId",myUser.getUserId());
-            jsonObject.put("avatar",myUser.getAvatarSmall());
-            jsonObject.put("nickName",myUser.getNickName());
-            message.setAttribute("fromUser",jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-    public static void setMessageWithExtTips(Context context,EMMessage message,String tips){
-       message.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
-       message.setAttribute(Constant.MSG_CONTENT,tips);
-
     }
     public static void HandleCMDInfoFromMessage(MessageBean m){
         String cmd=m.getMessage();
@@ -199,30 +94,30 @@ public class IMUtils {
         }
 
     }
-    public static IMUser getUserInfoFromMessage(Context context,EMMessage message){
-        String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
-        if(!TextUtils.isEmpty(fromUser)){
-            ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
-            IMUser imUser = IMUserRepository.getContactByUserName(context, message.getFrom());
-            if(imUser!=null){
-                imUser.setNick(user.nickName);
-                imUser.setAvatar(user.avatar);
-                imUser.setUserId(user.userId);
-                imUser.setAvatarSmall(user.avatar);
-            }else{
-                imUser = new IMUser();
-                imUser.setUsername(message.getFrom());
-                imUser.setNick(user.nickName);
-                imUser.setUserId(user.userId);
-                imUser.setAvatar(user.avatar);
-                imUser.setAvatarSmall(user.avatar);
-
-            }
-            IMUserRepository.saveContact(context, imUser);
-            return imUser;
-        }
-        return null;
-    }
+//    public static IMUser getUserInfoFromMessage(Context context,EMMessage message){
+//        String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
+//        if(!TextUtils.isEmpty(fromUser)){
+//            ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
+//            IMUser imUser = IMUserRepository.getContactByUserName(context, message.getFrom());
+//            if(imUser!=null){
+//                imUser.setNick(user.nickName);
+//                imUser.setAvatar(user.avatar);
+//                imUser.setUserId(user.userId);
+//                imUser.setAvatarSmall(user.avatar);
+//            }else{
+//                imUser = new IMUser();
+//                imUser.setUsername(message.getFrom());
+//                imUser.setNick(user.nickName);
+//                imUser.setUserId(user.userId);
+//                imUser.setAvatar(user.avatar);
+//                imUser.setAvatarSmall(user.avatar);
+//
+//            }
+//            IMUserRepository.saveContact(context, imUser);
+//            return imUser;
+//        }
+//        return null;
+//    }
 
     public static void onClickImShare(Context context){
         User user = AccountManager.getInstance().getLoginAccount(context);
@@ -448,22 +343,6 @@ public class IMUtils {
             e.printStackTrace();
         }
         return contentJson.toString();
-    }
-
-    public static void sendExtMessage(Context context,int type,String contentJson,int chatType,String to,EMCallBack callBack){
-        EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
-        if(chatType== ChatActivity.CHATTYPE_GROUP){
-            msg.setChatType(EMMessage.ChatType.GroupChat);
-        }else{
-            msg.setChatType(EMMessage.ChatType.Chat);
-        }
-        msg.setReceipt(to);
-        IMUtils.setMessageWithTaoziUserInfo(context, msg);
-        msg.setAttribute("tzType",type);
-        msg.setAttribute("content", contentJson);
-        msg.addBody(new TextMessageBody("[链接]"));
-        IMUtils.setMessageWithTaoziUserInfo(context, msg);
-        EMChatManager.getInstance().sendMessage(msg,callBack);
     }
 
 

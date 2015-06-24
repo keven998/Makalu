@@ -15,15 +15,10 @@ package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -42,45 +37,13 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.core.widget.popupmenu.PopupMenuCompat;
-import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.EMNotifier;
-import com.easemob.chat.GroupChangeListener;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
-import com.lv.Listener.SendMsgListener;
-import com.lv.bean.Message;
-import com.lv.im.HandleImMessage;
-import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.PeachUser;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.InviteMessage;
-import com.xuejian.client.lxp.db.InviteStatus;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
 import com.xuejian.client.lxp.module.MainActivity;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class IMMainActivity extends ChatBaseActivity  {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
@@ -100,8 +63,6 @@ public class IMMainActivity extends ChatBaseActivity  {
     private Fragment[] fragments;
     // 当前fragment的index
     private int currentTabIndex;
-    private NewMessageBroadcastReceiver msgReceiver;
-    private MyGroupChangeListener groupChangeListener;
     // 账号在别处登录
     private boolean isConflict = false;
 
@@ -151,28 +112,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
 //        });
         //网络更新好友列表
         //getContactFromServer();
-        // 注册一个cmd消息的BroadcastReceiver
-        IntentFilter cmdIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-        cmdIntentFilter.setPriority(3);
-        mContext.registerReceiver(cmdMessageReceiver, cmdIntentFilter);
-
-        // 注册一个接收消息的BroadcastReceiver
-        msgReceiver = new NewMessageBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-        intentFilter.setPriority(3);
-        registerReceiver(msgReceiver, intentFilter);
-
-        // 注册一个ack回执消息的BroadcastReceiver
-        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-                .getAckMessageBroadcastAction());
-        ackMessageIntentFilter.setPriority(3);
-        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-
-        // 注册群聊相关的listener
-        groupChangeListener = new MyGroupChangeListener();
-        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
-        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();
     }
 
     @Override
@@ -412,26 +351,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 注销广播接收者
-        try {
-            unregisterReceiver(msgReceiver);
-        } catch (Exception e) {
-        }
-        try {
-            unregisterReceiver(ackMessageReceiver);
-        } catch (Exception e) {
-        }
-        try {
-            unregisterReceiver(cmdMessageReceiver);
-        } catch (Exception e) {
-        }
-        try {
-            // 注册群聊相关的listener
-            EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
-        } catch (Exception e) {
-
-        }
-
     }
 
     /**
@@ -490,126 +409,11 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
      */
     public int getUnreadMsgCountTotal() {
         int unreadMsgCountTotal = 0;
-        unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
         return unreadMsgCountTotal;
     }
 
-    /**
-     * cmd消息BroadcastReceiver
-     */
-    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //获取cmd message对象
-            String msgId = intent.getStringExtra("msgid");
-            EMMessage message = intent.getParcelableExtra("message");
-            //获取消息body
-            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-            String aciton = cmdMsgBody.action;//获取自定义action
-            //获取扩展属性
-            try {
-                int cmdType = message.getIntAttribute("CMDType");
-                String content = message.getStringAttribute("content");
-                //接受到好友请求
-                if (cmdType == 1) {
-                    // 刷新bottom bar消息未读数
-                    updateUnreadAddressLable();
-                    // 刷新好友页面ui
-                    if (currentTabIndex == 1)
-                        contactListFragment.refresh();
-
-                }
-                //对方同意了加好友请求(好友添加)
-                else if (cmdType == 2) {
-                    updateUnreadLabel();
-                    if (chatHistoryFragment != null)
-                        chatHistoryFragment.refresh();
-                    if (contactListFragment != null)
-                        contactListFragment.refresh();
 
 
-                }
-                //删除好友
-                else if (cmdType == 3) {
-                    // 刷新ui
-                    if (chatHistoryFragment != null)
-                        chatHistoryFragment.refresh();
-                    if (contactListFragment != null)
-                        contactListFragment.refresh();
-
-                }
-
-            } catch (EaseMobException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    /**
-     * 新消息广播接收者
-     */
-    private class NewMessageBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看
-
-            // 消息id
-            String username = intent.getStringExtra("from");
-            String msgid = intent.getStringExtra("msgid");
-            // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-            final EMMessage message = EMChatManager.getInstance().getMessage(msgid);
-            final String fromUser = message.getStringAttribute(Constant.FROM_USER, "");
-            final String finalUsername = username;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!TextUtils.isEmpty(fromUser)) {
-                       IMUser imUser = IMUtils.getUserInfoFromMessage(mContext, message);
-                        IMUserRepository.saveContact(mContext, imUser);
-                    }
-                }
-            }).start();
-
-            // 刷新bottom bar消息未读数
-            updateUnreadLabel();
-            if (currentTabIndex == 0) {
-                // 当前页面如果为聊天历史页面，刷新此页面
-                if (chatHistoryFragment != null) {
-                    chatHistoryFragment.refresh();
-                }
-            }
-            // 注销广播，否则在ChatActivity中会收到这个广播
-            abortBroadcast();
-        }
-    }
-
-    /**
-     * 消息回执BroadcastReceiver
-     */
-    private BroadcastReceiver ackMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String msgid = intent.getStringExtra("msgid");
-            String from = intent.getStringExtra("from");
-            EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-            if (conversation != null) {
-                // 把message设为已读
-                EMMessage msg = conversation.getMessage(msgid);
-                if (msg != null) {
-                    msg.isAcked = true;
-                }
-            }
-            abortBroadcast();
-        }
-    };
-
-    /**
-     * 离线消息BroadcastReceiver
-     * sdk 登录后，服务器会推送离线消息到client，这个receiver，是通知UI 有哪些人发来了离线消息
-     * UI 可以做相应的操作，比如下载用户信息
-     */
 //	private BroadcastReceiver offlineMessageReceiver = new BroadcastReceiver() {
 //
 //		@Override
@@ -634,9 +438,8 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     /**
      * 保存提示新消息
      *
-     * @param msg
      */
-    private void notifyNewIviteMessage(InviteMessage msg) {
+    private void notifyNewIviteMessage( ) {
 
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();
@@ -646,116 +449,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     }
 
 
-    /**
-     * MyGroupChangeListener
-     */
-    private class MyGroupChangeListener implements GroupChangeListener {
-
-        @Override
-        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            if (chatHistoryFragment != null) {
-                chatHistoryFragment.refresh();
-            }
-
-        }
-
-        @Override
-        public void onInvitationAccpted(String groupId, String inviter, String reason) {
-            if (chatHistoryFragment != null) {
-                chatHistoryFragment.refresh();
-            }
-        }
-
-        @Override
-        public void onInvitationDeclined(String groupId, String invitee, String reason) {
-
-        }
-
-        @Override
-        public void onUserRemoved(String groupId, String groupName) {
-            // 提示用户被T了，demo省略此步骤
-            // 刷新ui
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    try {
-                        updateUnreadLabel();
-                        if (currentTabIndex == 0)
-                            chatHistoryFragment.refresh();
-                        if (CommonUtils.getTopActivity(IMMainActivity.this).equals(GroupsActivity.class.getName())) {
-                            GroupsActivity.instance.onResume();
-                        }
-                    } catch (Exception e) {
-                        Log.e("###", "refresh exception " + e.getMessage());
-                    }
-
-                }
-            });
-        }
-
-        @Override
-        public void onGroupDestroy(String groupId, String groupName) {
-            // 群被解散
-            // 提示用户群被解散,demo省略
-            // 刷新ui
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    updateUnreadLabel();
-                    if (currentTabIndex == 0)
-                        chatHistoryFragment.refresh();
-                    if (CommonUtils.getTopActivity(IMMainActivity.this).equals(GroupsActivity.class.getName())) {
-                        GroupsActivity.instance.onResume();
-                    }
-                }
-            });
-
-        }
-
-        @Override
-        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
-            // 用户申请加入群聊
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(applyer);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(groupName);
-            msg.setReason(reason);
-            msg.setStatus(InviteStatus.BEAPPLYED);
-            notifyNewIviteMessage(msg);
-        }
-
-        @Override
-        public void onApplicationAccept(String groupId, String groupName, String accepter) {
-            //加群申请被同意
-            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-            msg.setChatType(ChatType.GroupChat);
-            msg.setFrom(accepter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new TextMessageBody(accepter + "同意了你的群聊申请"));
-            // 保存同意消息
-            EMChatManager.getInstance().saveMessage(msg);
-            // 提醒新消息
-            EMNotifier.getInstance(getApplicationContext()).notifyOnNewMsg();
-
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    updateUnreadLabel();
-                    // 刷新ui
-                    if (currentTabIndex == 0)
-                        chatHistoryFragment.refresh();
-                    if (CommonUtils.getTopActivity(IMMainActivity.this).equals(GroupsActivity.class.getName())) {
-                        GroupsActivity.instance.onResume();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
-            //加群申请被拒绝，demo未实现
-        }
-
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -769,7 +462,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         if (!isConflict) {
             updateUnreadLabel();
             updateUnreadAddressLable();
-            EMChatManager.getInstance().activityResumed();
         }
 
     }

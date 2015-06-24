@@ -9,9 +9,7 @@ import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
-import com.lidroid.xutils.exception.HttpException;
 import com.xuejian.client.lxp.bean.AddressBookbean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.userDB.User;
 

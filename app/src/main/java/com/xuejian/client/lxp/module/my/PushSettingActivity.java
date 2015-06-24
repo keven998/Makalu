@@ -6,13 +6,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.common.hxsdk.controller.HXSDKHelper;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.SettingConfig;
 
@@ -29,7 +26,6 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
     @ViewInject(R.id.content_nofity_status)
     private CheckBox contentStatusIv;
     private boolean lxqStatus,contentStatus;
-    private EMChatOptions chatOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +38,9 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
         lxqStatusIv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                chatOptions.setNotifyBySoundAndVibrate(b);
-                EMChatManager.getInstance().setChatOptions(chatOptions);
+              //  chatOptions.setNotifyBySoundAndVibrate(b);
+              //  EMChatManager.getInstance().setChatOptions(chatOptions);
                 SettingConfig.getInstance().setLxqPushSetting(PushSettingActivity.this, b);
-                HXSDKHelper.getInstance().getModel().setSettingMsgNotification(b);
             }
         });
 
@@ -64,8 +59,8 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
     }
 
     private void initData() {
-        chatOptions = EMChatManager.getInstance().getChatOptions();
-        lxqStatus = chatOptions.getNotifyBySoundAndVibrate();
+     //   chatOptions = EMChatManager.getInstance().getChatOptions();
+      //  lxqStatus = chatOptions.getNotifyBySoundAndVibrate();
         contentStatus = SettingConfig.getInstance().getAdPushSetting(this);
 
     }
@@ -92,9 +87,9 @@ public class PushSettingActivity extends PeachBaseActivity implements View.OnCli
             case R.id.ll_lxq:
                 lxqStatus = !lxqStatus;
                 SettingConfig.getInstance().setLxqPushSetting(this,lxqStatus);
-                chatOptions.setNotifyBySoundAndVibrate(lxqStatus);
-                EMChatManager.getInstance().setChatOptions(chatOptions);
-                HXSDKHelper.getInstance().getModel().setSettingMsgNotification(lxqStatus);
+             //   chatOptions.setNotifyBySoundAndVibrate(lxqStatus);
+            //    EMChatManager.getInstance().setChatOptions(chatOptions);
+           //     HXSDKHelper.getInstance().getModel().setSettingMsgNotification(lxqStatus);
                 bindView();
                 break;
 

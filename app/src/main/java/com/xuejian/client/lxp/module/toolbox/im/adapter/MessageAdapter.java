@@ -37,13 +37,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chat.VideoMessageBody;
-import com.easemob.util.DateUtils;
 import com.lv.Listener.SendMsgListener;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
@@ -63,7 +56,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.task.DownloadImage;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
-import com.xuejian.client.lxp.common.task.LoadVideoImageTask;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
@@ -78,7 +71,6 @@ import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
 import com.xuejian.client.lxp.module.toolbox.im.IMAlertDialog;
 import com.xuejian.client.lxp.module.toolbox.im.SeachContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
-import com.xuejian.client.lxp.module.toolbox.im.ShowVideoActivity;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
 
 import org.json.JSONException;
@@ -411,14 +403,14 @@ public class MessageAdapter extends BaseAdapter {
 
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         if (position == 0) {
-            timestamp.setText(DateUtils.getTimestampString(new Date(message.getCreateTime())));
+            timestamp.setText(CommonUtils.getTimestampString(new Date(message.getCreateTime())));
             timestamp.setVisibility(View.VISIBLE);
         } else {
             // 两条消息时间离得如果稍长，显示时间
-            if (DateUtils.isCloseEnough(message.getCreateTime(), ChatActivity.messageList.get(position - 1).getCreateTime())) {
+            if (CommonUtils.isCloseEnough(message.getCreateTime(), ChatActivity.messageList.get(position - 1).getCreateTime())) {
                 timestamp.setVisibility(View.GONE);
             } else {
-                timestamp.setText(DateUtils.getTimestampString(new Date(message.getCreateTime())));
+                timestamp.setText(CommonUtils.getTimestampString(new Date(message.getCreateTime())));
                 timestamp.setVisibility(View.VISIBLE);
             }
         }
@@ -816,9 +808,9 @@ public class MessageAdapter extends BaseAdapter {
      * @param holder
      * @param position
      */
-    private void handleVoiceCallMessage(EMMessage message, ViewHolder holder, final int position) {
-        TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        holder.tv.setText(txtBody.getMessage());
+    private void handleVoiceCallMessage(MessageBean message, ViewHolder holder, final int position) {
+//        TextMessageBody txtBody = (TextMessageBody) message.getBody();
+//        holder.tv.setText(txtBody.getMessage());
 
     }
 
@@ -836,8 +828,9 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
-                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                Type.IMAGE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position)
+                             //   .putExtra("type", EMMessage.Type.IMAGE.ordinal())
+                        , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -1011,7 +1004,7 @@ public class MessageAdapter extends BaseAdapter {
      * @param position
      * @param convertView
      */
-    private void handleVideoMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
+    private void handleVideoMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
 //
 //        VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
 //        // final File image=new File(PathUtil.getInstance().getVideoPath(),
@@ -1153,8 +1146,9 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
-                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                Type.VOICE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position)
+                             //   .putExtra("type", Type.VOICE.ordinal())
+                        , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -1417,8 +1411,9 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
-                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                Type.LOCATION.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position)
+                               // .putExtra("type", Type.LOCATION.ordinal())
+                        , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return false;
             }
         });
@@ -1800,40 +1795,40 @@ public class MessageAdapter extends BaseAdapter {
      * @param thumbnailUrl 远程缩略图路径
      * @param message
      */
-    private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final EMMessage message) {
+    private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final MessageBean message) {
         // first check if the thumbnail image already loaded into cache
-        Bitmap bitmap = ImageCache.getInstance().get(localThumb);
-        if (bitmap != null) {
-            // thumbnail image is already loaded, reuse the drawable
-            iv.setImageBitmap(bitmap);
-            iv.setClickable(true);
-            iv.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
-//                    System.err.println("video view is on click");
-                    Intent intent = new Intent(activity, ShowVideoActivity.class);
-                    intent.putExtra("localpath", videoBody.getLocalUrl());
-                    intent.putExtra("secret", videoBody.getSecret());
-                    intent.putExtra("remotepath", videoBody.getRemoteUrl());
-                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
-                            && message.getChatType() != ChatType.GroupChat) {
-                        message.isAcked = true;
-                        try {
-                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    activity.startActivity(intent);
-
-                }
-            });
-
-        } else {
-            new LoadVideoImageTask().execute(localThumb, thumbnailUrl, iv, activity, message, this);
-        }
+//        Bitmap bitmap = ImageCache.getInstance().get(localThumb);
+//        if (bitmap != null) {
+//            // thumbnail image is already loaded, reuse the drawable
+//            iv.setImageBitmap(bitmap);
+//            iv.setClickable(true);
+//            iv.setOnClickListener(new OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
+////                    System.err.println("video view is on click");
+//                    Intent intent = new Intent(activity, ShowVideoActivity.class);
+//                    intent.putExtra("localpath", videoBody.getLocalUrl());
+//                    intent.putExtra("secret", videoBody.getSecret());
+//                    intent.putExtra("remotepath", videoBody.getRemoteUrl());
+//                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
+//                            && message.getChatType() != ChatType.GroupChat) {
+//                        message.isAcked = true;
+//                        try {
+//                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    activity.startActivity(intent);
+//
+//                }
+//            });
+//
+//        } else {
+//            new LoadVideoImageTask().execute(localThumb, thumbnailUrl, iv, activity, message, this);
+//        }
 
     }
 

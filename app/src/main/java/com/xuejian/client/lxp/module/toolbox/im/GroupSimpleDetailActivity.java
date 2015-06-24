@@ -22,11 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupInfo;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.exceptions.EaseMobException;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
@@ -35,7 +30,6 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 	private TextView tv_admin;
 	private TextView tv_name;
 	private TextView tv_introduction;
-	private EMGroup group;
 	private String groupid;
 	private ProgressBar progressBar;
 
@@ -49,11 +43,11 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 		tv_introduction = (TextView) findViewById(R.id.tv_introduction);
 		progressBar = (ProgressBar) findViewById(R.id.loading);
 
-		EMGroupInfo groupInfo = (EMGroupInfo) getIntent().getSerializableExtra("groupinfo");
-		String groupname = groupInfo.getGroupName();
-		groupid = groupInfo.getGroupId();
+	//	EMGroupInfo groupInfo = (EMGroupInfo) getIntent().getSerializableExtra("groupinfo");
+	//	String groupname = groupInfo.getGroupName();
+	//	groupid = groupInfo.getGroupId();
 		
-		tv_name.setText(groupname);
+	//	tv_name.setText(groupname);
 		
 		
 		new Thread(new Runnable() {
@@ -61,19 +55,19 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 			public void run() {
 				//从服务器获取详情
 				try {
-					group = EMGroupManager.getInstance().getGroupFromServer(groupid);
+				//	group = EMGroupManager.getInstance().getGroupFromServer(groupid);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressBar.setVisibility(View.INVISIBLE);
 							//获取详情成功，并且自己不在群中，才让加入群聊按钮可点击
-							if(!group.getMembers().contains(EMChatManager.getInstance().getCurrentUser()))
-								btn_add_group.setEnabled(true);
-							tv_name.setText(group.getGroupName());
-							tv_admin.setText(group.getOwner());
-							tv_introduction.setText(group.getDescription());
+//							if(!group.getMembers().contains(EMChatManager.getInstance().getCurrentUser()))
+//								btn_add_group.setEnabled(true);
+						//	tv_name.setText(group.getGroupName());
+						//	tv_admin.setText(group.getOwner());
+						//	tv_introduction.setText(group.getDescription());
 						}
 					});
-				} catch (final EaseMobException e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
                     if (!isFinishing())
 					runOnUiThread(new Runnable() {
@@ -98,37 +92,37 @@ public class GroupSimpleDetailActivity extends ChatBaseActivity {
 		pd.show();
 		new Thread(new Runnable() {
 			public void run() {
-				try {
-					//如果是membersOnly的群，需要申请加入，不能直接join
-					if(group.isMembersOnly()){
-						EMGroupManager.getInstance().applyJoinToGroup(groupid, "求加入");
-					}else{
-						EMGroupManager.getInstance().joinGroup(groupid);
-					}
-					runOnUiThread(new Runnable() {
-						public void run() {
-							pd.dismiss();
-							if(group.isMembersOnly()) {
-//                                Toast.makeText(GroupSimpleDetailActivity.this, "发送请求成功，等待群主同意", Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等候群主通过");
-                            } else {
-//                                Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊成功", Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(getApplicationContext()).showToast("成功加入");
-                            }
-							btn_add_group.setEnabled(false);
-						}
-					});
-				} catch (final EaseMobException e) {
-					e.printStackTrace();
-					runOnUiThread(new Runnable() {
-						public void run() {
-							pd.dismiss();
-//							Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊失败："+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            if (!isFinishing())
-                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
-						}
-					});
-				}
+//				try {
+//					//如果是membersOnly的群，需要申请加入，不能直接join
+//					if(group.isMembersOnly()){
+//					//	EMGroupManager.getInstance().applyJoinToGroup(groupid, "求加入");
+//					}else{
+//						EMGroupManager.getInstance().joinGroup(groupid);
+//					}
+//					runOnUiThread(new Runnable() {
+//						public void run() {
+//							pd.dismiss();
+//							if(group.isMembersOnly()) {
+////                                Toast.makeText(GroupSimpleDetailActivity.this, "发送请求成功，等待群主同意", Toast.LENGTH_SHORT).show();
+//                                ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等候群主通过");
+//                            } else {
+////                                Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊成功", Toast.LENGTH_SHORT).show();
+//                                ToastUtil.getInstance(getApplicationContext()).showToast("成功加入");
+//                            }
+//							btn_add_group.setEnabled(false);
+//						}
+//					});
+//				} catch (final EaseMobException e) {
+//					e.printStackTrace();
+//					runOnUiThread(new Runnable() {
+//						public void run() {
+//							pd.dismiss();
+////							Toast.makeText(GroupSimpleDetailActivity.this, "加入群聊失败："+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            if (!isFinishing())
+//                            ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
+//						}
+//					});
+//				}
 			}
 		}).start();
 	}

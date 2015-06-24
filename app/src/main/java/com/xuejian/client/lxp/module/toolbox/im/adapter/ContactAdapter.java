@@ -27,16 +27,13 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.lv.Utils.HanziToPinyin;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 

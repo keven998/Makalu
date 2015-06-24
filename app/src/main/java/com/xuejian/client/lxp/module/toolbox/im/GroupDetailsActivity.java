@@ -30,37 +30,23 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.IMUser;
-import com.xuejian.client.lxp.db.respository.IMUserRepository;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
@@ -79,7 +65,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     private String groupId;
     private Button exitBtn;
     private Button deleteBtn;
-    private EMGroup group;
     private TitleHeaderBar titleHeaderBar;
     //	private GridAdapter adapter;
     private int referenceWidth;
@@ -105,7 +90,6 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
     //清空所有聊天记录
     private RelativeLayout clearAllHistory;
-    private EMChatOptions options;
 
 
     @Override
@@ -134,8 +118,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
         // 获取传过来的groupid
         groupId = getIntent().getStringExtra("groupId");
-        group = EMGroupManager.getInstance().getGroup(groupId);
-        options = EMChatManager.getInstance().getChatOptions();
+       // group = EMGroupManager.getInstance().getGroup(groupId);
+       // options = EMChatManager.getInstance().getChatOptions();
         bindView();
 
 
@@ -213,8 +197,8 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                     setUpGroupMemeber();
                     break;
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
-                    group = EMGroupManager.getInstance().getGroup(groupId);
-                    groupNameTv.setText(group.getGroupName());
+                   // group = EMGroupManager.getInstance().getGroup(groupId);
+                   // groupNameTv.setText(group.getGroupName());
                     break;
                 default:
                     break;
@@ -279,7 +263,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
     public void clearGroupHistory() {
 
 
-        EMChatManager.getInstance().clearConversation(group.getGroupId());
+      //  EMChatManager.getInstance().clearConversation(group.getGroupId());
 //		adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 
 
@@ -291,68 +275,68 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
      */
     public void exitGroup() {
         DialogManager.getInstance().showLoadingDialog(mContext);
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-
-                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                    msg.setChatType(EMMessage.ChatType.GroupChat);
-                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
-                    msg.setReceipt(group.getGroupId());
-                    IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
-                    String content = myNickname + " 退出了群聊";
-                    IMUtils.setMessageWithExtTips(mContext, msg, content);
-                    msg.addBody(new TextMessageBody(content));
-                    EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            try {
-                                EMGroupManager.getInstance().exitFromGroup(groupId);
-                            } catch (EaseMobException e) {
-                                e.printStackTrace();
-                            }
-                            if (!isFinishing())
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    setResult(RESULT_OK);
-                                    finish();
-                                    ChatActivity.activityInstance.finish();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-                            if (!isFinishing())
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    ToastUtil.getInstance(getApplicationContext()).showToast("退出群聊失败");
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onProgress(int i, String s) {
-
-                        }
-                    });
-
-                } catch (final Exception e) {
-                    if (!isFinishing())
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-//							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
-                            }
-                        });
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            public void run() {
+//                try {
+//
+//                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                    msg.setChatType(EMMessage.ChatType.GroupChat);
+//                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
+//                  //  msg.setReceipt(group.getGroupId());
+//                    IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+//                    String myNickname = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
+//                    String content = myNickname + " 退出了群聊";
+//                    IMUtils.setMessageWithExtTips(mContext, msg, content);
+//                    msg.addBody(new TextMessageBody(content));
+////                    EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+////                        @Override
+////                        public void onSuccess() {
+////                            try {
+////                                EMGroupManager.getInstance().exitFromGroup(groupId);
+////                            } catch (EaseMobException e) {
+////                                e.printStackTrace();
+////                            }
+////                            if (!isFinishing())
+////                            runOnUiThread(new Runnable() {
+////                                public void run() {
+////                                    DialogManager.getInstance().dissMissLoadingDialog();
+////                                    setResult(RESULT_OK);
+////                                    finish();
+////                                    ChatActivity.activityInstance.finish();
+////                                }
+////                            });
+////                        }
+////
+////                        @Override
+////                        public void onError(int i, String s) {
+////                            if (!isFinishing())
+////                            runOnUiThread(new Runnable() {
+////                                @Override
+////                                public void run() {
+////                                    DialogManager.getInstance().dissMissLoadingDialog();
+////                                    ToastUtil.getInstance(getApplicationContext()).showToast("退出群聊失败");
+////                                }
+////                            });
+////                        }
+////
+////                        @Override
+////                        public void onProgress(int i, String s) {
+////
+////                        }
+////                    });
+//
+//                } catch (final Exception e) {
+//                    if (!isFinishing())
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+////							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                ToastUtil.getInstance(getApplicationContext()).showToast("呃~网络有些问题");
+//                            }
+//                        });
+//                }
+//            }
+//        }).start();
     }
 
     /**
@@ -363,7 +347,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
+                 //   EMGroupManager.getInstance().exitAndDeleteGroup(groupId);
                     if (!isFinishing())
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -412,53 +396,53 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         });
         setUpGroupMemeber();
     // 如果自己是群主，显示解散按钮
-        if (group.getOwner() == null || "".equals(group.getOwner())) {
-            exitBtn.setVisibility(View.GONE);
-            deleteBtn.setVisibility(View.GONE);
-        }
-        if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-            exitBtn.setVisibility(View.GONE);
-            deleteBtn.setVisibility(View.VISIBLE);
-            rl_groupName.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ModifyGroupNameActivity.class);
-                    intent.putExtra("groupId", groupId);
-                    startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-                }
-            });
-        } else {
-            findViewById(R.id.iv_arr).setVisibility(View.GONE);
-        }
+//        if (group.getOwner() == null || "".equals(group.getOwner())) {
+//            exitBtn.setVisibility(View.GONE);
+//            deleteBtn.setVisibility(View.GONE);
+//        }
+//        if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+//            exitBtn.setVisibility(View.GONE);
+//            deleteBtn.setVisibility(View.VISIBLE);
+//            rl_groupName.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, ModifyGroupNameActivity.class);
+//                    intent.putExtra("groupId", groupId);
+//                    startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+//                }
+//            });
+//        } else {
+//            findViewById(R.id.iv_arr).setVisibility(View.GONE);
+//        }
         titleHeaderBar.getTitleTextView().setText("群聊设置");
         titleHeaderBar.enableBackKey(true);
-        groupNameTv.setText(group.getGroupName());
-        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
-            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-            iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-        } else if (notReceiveNotifyGroups.contains(groupId)) {
-            iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-            iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-        }
+       // groupNameTv.setText(group.getGroupName());
+     //   List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
+//        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
+//            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
+//            iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
+//        } else if (notReceiveNotifyGroups.contains(groupId)) {
+//            iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
+//            iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
+//        }
     }
     private void setUpGroupMemeber(){
-        final List<String> members=group.getMembers();
+       // final List<String> members=group.getMembers();
         final List<String> unkownMembers= new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        for(String username : members) {
-            IMUser user = IMUserRepository.getContactByUserName(mContext, username);
-            if(user == null) {
-                unkownMembers.add(username);
-                user = new IMUser();
-                user.setUsername(username);
-            }
-            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
-                memberAdapter.getDataList().add(user);
-            }
-
-        }
-        titleHeaderBar.getTitleTextView().setText(group.getGroupName());
+//        for(String username : members) {
+//            IMUser user = IMUserRepository.getContactByUserName(mContext, username);
+//            if(user == null) {
+//                unkownMembers.add(username);
+//                user = new IMUser();
+//                user.setUsername(username);
+//            }
+////            if(!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
+////                memberAdapter.getDataList().add(user);
+////            }
+//
+//        }
+        //titleHeaderBar.getTitleTextView().setText(group.getGroupName());
         memberAdapter.notifyDataSetChanged();
         if(unkownMembers.size() > 0) {
             UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
@@ -481,17 +465,17 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                         }
                         unkownMembers.clear();
                         memberAdapter.getDataList().clear();
-                        for (String username : members) {
-                            IMUser user = IMUserRepository.getContactByUserName(mContext, username);
-                            if (user == null) {
-                                unkownMembers.add(username);
-                                user = new IMUser();
-                                user.setUsername(username);
-                            }
-                            if (!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
-                                memberAdapter.getDataList().add(user);
-                            }
-                        }
+//                        for (String username : members) {
+//                            IMUser user = IMUserRepository.getContactByUserName(mContext, username);
+//                            if (user == null) {
+//                                unkownMembers.add(username);
+//                                user = new IMUser();
+//                                user.setUsername(username);
+//                            }
+////                            if (!user.getUsername().equals(EMChatManager.getInstance().getCurrentUser())) {
+////                                memberAdapter.getDataList().add(user);
+////                            }
+//                        }
                         memberAdapter.notifyDataSetChanged();
                     }
                 }
@@ -514,9 +498,9 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    group = EMGroupManager.getInstance().getGroupFromServer(groupId);
+                   // group = EMGroupManager.getInstance().getGroupFromServer(groupId);
                     //更新本地数据
-                    EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
+                   // EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
 
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -566,16 +550,16 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 //                    System.out.println("change to unblock group msg");
                     try {
 //				    EMGroupManager.getInstance().unblockGroupMessage(groupId);
-                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-                        if (notReceiveNotifyGroups == null) {
-                            notReceiveNotifyGroups = new ArrayList<String>();
-                        }
-                        notReceiveNotifyGroups.remove(groupId);
-                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
+                     //   List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
+                    //    if (notReceiveNotifyGroups == null) {
+                    //        notReceiveNotifyGroups = new ArrayList<String>();
+                   //     }
+                   //     notReceiveNotifyGroups.remove(groupId);
+                      //  options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                     //   PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -583,16 +567,16 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                 } else {
                     try {
 //				    EMGroupManager.getInstance().blockGroupMessage(groupId);
-                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
-                        if (notReceiveNotifyGroups == null) {
-                            notReceiveNotifyGroups = new ArrayList<String>();
-                        }
-                        notReceiveNotifyGroups.add(groupId);
-                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
+//                        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
+//                        if (notReceiveNotifyGroups == null) {
+//                            notReceiveNotifyGroups = new ArrayList<String>();
+//                        }
+//                        notReceiveNotifyGroups.add(groupId);
+//                        options.setReceiveNotNoifyGroup(notReceiveNotifyGroups);
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                        PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                     //   PreferenceUtils.cacheData(mContext, String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(mContext).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -604,7 +588,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
     }
 
-    private class MemberAdapter extends ListViewDataAdapter<IMUser>{
+    private class MemberAdapter extends ListViewDataAdapter<User>{
 
         /**
          * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link com.aizou.core.widget.listHelper.ViewHolderBase}
@@ -656,63 +640,63 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
                 avatarIv.setImageResource(R.drawable.smiley_minus_btn);
                 nicknameTv.setText("");
                 removeIv.setVisibility(View.INVISIBLE);
-                if (!group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
-                    // if current user is not group admin, hide add/remove btn
-                    contentView.setVisibility(View.INVISIBLE);
-                }else{
-                    if (isInDeleteMode) {
-                        // 正处于删除模式下，隐藏删除按钮
-                        contentView.setVisibility(View.INVISIBLE);
-                    } else {
-                        // 正常模式
-                        contentView.setVisibility(View.VISIBLE);
-                        contentView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                isInDeleteMode = true;
-                                memberAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }
+//                if (!group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+//                    // if current user is not group admin, hide add/remove btn
+//                    contentView.setVisibility(View.INVISIBLE);
+//                }else{
+//                    if (isInDeleteMode) {
+//                        // 正处于删除模式下，隐藏删除按钮
+//                        contentView.setVisibility(View.INVISIBLE);
+//                    } else {
+//                        // 正常模式
+//                        contentView.setVisibility(View.VISIBLE);
+//                        contentView.setOnClickListener(new OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                isInDeleteMode = true;
+//                                memberAdapter.notifyDataSetChanged();
+//                            }
+//                        });
+//                    }
+//                }
             }else if(position==memberAdapter.getCount()-2){
                 avatarIv.setImageResource(R.drawable.smiley_add_btn);
                 nicknameTv.setText("");
                 removeIv.setVisibility(View.INVISIBLE);
                 // 如果不是创建者或者没有相应权限
-                if (!group.isAllowInvites() && !group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
-                    // if current user is not group admin, hide add/remove btn
-                    contentView.setVisibility(View.INVISIBLE);
-                } else {
-                    // 正处于删除模式下,隐藏添加按钮
-                    if (isInDeleteMode) {
-                        contentView.setVisibility(View.INVISIBLE);
-                    } else {
-                        contentView.setVisibility(View.VISIBLE);
-                    }
-                    contentView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // 进入选人页面
-                            startActivityForResult(
-                                    (new Intent(mContext, PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())), REQUEST_CODE_ADD_USER);
-                        }
-                    });
-                }
+//                if (!group.isAllowInvites() && !group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+//                    // if current user is not group admin, hide add/remove btn
+//                    contentView.setVisibility(View.INVISIBLE);
+//                } else {
+//                    // 正处于删除模式下,隐藏添加按钮
+//                    if (isInDeleteMode) {
+//                        contentView.setVisibility(View.INVISIBLE);
+//                    } else {
+//                        contentView.setVisibility(View.VISIBLE);
+//                    }
+//                    contentView.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            // 进入选人页面
+//                            startActivityForResult(
+//                                    (new Intent(mContext, PickContactsWithCheckboxActivity.class).putExtra("groupId", group.getGroupId())), REQUEST_CODE_ADD_USER);
+//                        }
+//                    });
+//                }
             }else{
 //                avatarIv.setImageResource(R.drawable.avatar_placeholder);
                 nicknameTv.setText(itemData.getNickName());
                 ImageLoader.getInstance().displayImage(itemData.getAvatarSmall(), avatarIv, picOptions);
                 if (isInDeleteMode) {
-                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
-                        removeIv.setVisibility(View.VISIBLE);
-                        contentView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                deleteMembersFromGroup(itemData);
-                            }
-                        });
-                    }
+//                    if (EMChatManager.getInstance().getCurrentUser().equals(group.getOwner())) {
+//                        removeIv.setVisibility(View.VISIBLE);
+//                        contentView.setOnClickListener(new OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                deleteMembersFromGroup(itemData);
+//                            }
+//                        });
+//                    }
                 } else {
                     removeIv.setVisibility(View.INVISIBLE);
                     contentView.setOnClickListener(new OnClickListener() {
@@ -769,41 +753,41 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
                             @Override
                             public void run() {
-                                deleteDialog.dismiss();
-                                memberAdapter.getDataList().remove(imUser);
-                                memberAdapter.notifyDataSetChanged();
-                                // 被邀请
-                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                                msg.setChatType(EMMessage.ChatType.GroupChat);
-                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
-                                msg.setReceipt(group.getGroupId());
-                                IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
-                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
-                                String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNickName());
-                                IMUtils.setMessageWithExtTips(mContext, msg, content);
-                                msg.addBody(new TextMessageBody(content));
-                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onError(int i, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onProgress(int i, String s) {
-
-                                    }
-                                });
+//                                deleteDialog.dismiss();
+//                                memberAdapter.getDataList().remove(imUser);
+//                                memberAdapter.notifyDataSetChanged();
+//                                // 被邀请
+//                                EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//                                msg.setChatType(EMMessage.ChatType.GroupChat);
+//                                msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(mContext).getUserId()));
+//                              //  msg.setReceipt(group.getGroupId());
+//                                IMUtils.setMessageWithTaoziUserInfo(mContext, msg);
+//                                String myNickmae = AccountManager.getInstance().getLoginAccount(mContext).getNickName();
+//                                String content = String.format(mContext.getResources().getString(R.string.remove_user_from_group),myNickmae,imUser.getNickName());
+//                                IMUtils.setMessageWithExtTips(mContext, msg, content);
+//                                msg.addBody(new TextMessageBody(content));
+//                                EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                            }
+//                                        });
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(int i, String s) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onProgress(int i, String s) {
+//
+//                                    }
+//                                });
                             }
                         });
                     } catch (final Exception e) {

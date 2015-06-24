@@ -10,10 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChat;
-import com.easemob.util.EMLog;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
@@ -96,50 +92,50 @@ public class DiagnoseActivity extends ChatBaseActivity implements OnClickListene
 		progressDialog.setCancelable(false);
 		progressDialog.show();
 
-		EMChat.getInstance().uploadLog(new EMCallBack() {
-
-			@Override
-			public void onSuccess() {
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-//						Toast.makeText(DiagnoseActivity.this, "日志上传成功", Toast.LENGTH_SHORT).show();
-                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("上传成功");
-					}
-				});
-			}
-
-			@Override
-			public void onProgress(final int progress, String status) {
-				// getActivity().runOnUiThread(new Runnable() {
-				//
-				// @Override
-				// public void run() {
-				// progressDialog.setMessage("上传中 "+progress+"%");
-				//
-				// }
-				// });
-
-			}
-
-			@Override
-			public void onError(int code, String message) {
-				EMLog.e("###", message);
-                if (!isFinishing())
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-//						Toast.makeText(DiagnoseActivity.this, "log上传失败", Toast.LENGTH_SHORT).show();
-                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("log上传失败");
-					}
-				});
-
-			}
-		});
+//		EMChat.getInstance().uploadLog(new EMCallBack() {
+//
+//			@Override
+//			public void onSuccess() {
+//				runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						progressDialog.dismiss();
+////						Toast.makeText(DiagnoseActivity.this, "日志上传成功", Toast.LENGTH_SHORT).show();
+//                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("上传成功");
+//					}
+//				});
+//			}
+//
+//			@Override
+//			public void onProgress(final int progress, String status) {
+//				// getActivity().runOnUiThread(new Runnable() {
+//				//
+//				// @Override
+//				// public void run() {
+//				// progressDialog.setMessage("上传中 "+progress+"%");
+//				//
+//				// }
+//				// });
+//
+//			}
+//
+//			@Override
+//			public void onError(int code, String message) {
+//				EMLog.e("###", message);
+//                if (!isFinishing())
+//				runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						progressDialog.dismiss();
+////						Toast.makeText(DiagnoseActivity.this, "log上传失败", Toast.LENGTH_SHORT).show();
+//                        ToastUtil.getInstance(DiagnoseActivity.this).showToast("log上传失败");
+//					}
+//				});
+//
+//			}
+//		});
 
 	}
 

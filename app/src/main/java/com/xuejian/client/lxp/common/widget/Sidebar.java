@@ -25,8 +25,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.easemob.util.DensityUtil;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 public class Sidebar extends View{
@@ -53,7 +53,7 @@ public class Sidebar extends View{
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setColor(Color.DKGRAY);
 		paint.setTextAlign(Align.CENTER);
-		paint.setTextSize(DensityUtil.sp2px(context, 10));
+		paint.setTextSize(ImageUtils.sp2px(context, 10));
 	}
 	
 	
