@@ -182,68 +182,72 @@ public class HandleImMessage {
 
                 String content = messageBean.getContents();
                 JSONObject object = null;
-                switch (messageBean.getMsgType()) {
-                    case Config.TEXT_MSG:
-                        android.os.Message handlermsg = android.os.Message.obtain();
-                        handlermsg.obj = messageBean;
-                        handlermsg.what = Config.TEXT_MSG;
-                        handler.sendMessage(handlermsg);
-                        break;
-                    case Config.LOC_MSG:
-                        android.os.Message loc_msg = android.os.Message.obtain();
-                        loc_msg.obj = messageBean;
-                        loc_msg.what = Config.LOC_MSG;
-                        handler.sendMessage(loc_msg);
-                        break;
+                try {
+                    switch (messageBean.getMsgType()) {
+                        case Config.TEXT_MSG:
+                            android.os.Message handlermsg = android.os.Message.obtain();
+                            handlermsg.obj = messageBean;
+                            handlermsg.what = Config.TEXT_MSG;
+                            handler.sendMessage(handlermsg);
+                            break;
+                        case Config.LOC_MSG:
+                            android.os.Message loc_msg = android.os.Message.obtain();
+                            loc_msg.obj = messageBean;
+                            loc_msg.what = Config.LOC_MSG;
+                            handler.sendMessage(loc_msg);
+                            break;
 
-                    case Config.AUDIO_MSG:
-                        try {
-                            object = new JSONObject(content);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String aurl = null;
-                        try {
-                             aurl = object.getString("url");
-                            if (Config.isDebug){
-                                Log.i(Config.TAG,"url " + aurl);
+                        case Config.AUDIO_MSG:
+                            try {
+                                object = new JSONObject(content);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        messageBean.setUrl(aurl);
-                        Intent dlA_intent = new Intent(c, DownloadService.class);
-                        dlA_intent.putExtra("msg", messageBean);
-                        c.startService(dlA_intent);
-                        break;
-                    case Config.IMAGE_MSG:
-                        try {
-                            object = new JSONObject(content);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String iurl = null;
-                        try {
-                            if (object != null) {
-                                iurl = object.getString("thumb");
+                            String aurl = null;
+                            try {
+                                aurl = object.getString("url");
+                                if (Config.isDebug) {
+                                    Log.i(Config.TAG, "url " + aurl);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            if (Config.isDebug) {
-                                Log.i(Config.TAG, "url " + iurl);
+                            messageBean.setUrl(aurl);
+                            Intent dlA_intent = new Intent(c, DownloadService.class);
+                            dlA_intent.putExtra("msg", messageBean);
+                            c.startService(dlA_intent);
+                            break;
+                        case Config.IMAGE_MSG:
+                            try {
+                                object = new JSONObject(content);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        messageBean.setUrl(iurl);
-                        Intent dlI_intent =new Intent(c, DownloadService.class);
-                        dlI_intent.putExtra("msg", messageBean);
-                        c.startService(dlI_intent);
-                        break;
-                    default:
-                        android.os.Message ext_msg = android.os.Message.obtain();
-                        ext_msg.obj = messageBean;
-                        ext_msg.what = 10;
-                        handler.sendMessage(ext_msg);
-                        break;
+                            String iurl = null;
+                            try {
+                                if (object != null) {
+                                    iurl = object.getString("thumb");
+                                }
+                                if (Config.isDebug) {
+                                    Log.i(Config.TAG, "url " + iurl);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            messageBean.setUrl(iurl);
+                            Intent dlI_intent = new Intent(c, DownloadService.class);
+                            dlI_intent.putExtra("msg", messageBean);
+                            c.startService(dlI_intent);
+                            break;
+                        default:
+                            android.os.Message ext_msg = android.os.Message.obtain();
+                            ext_msg.obj = messageBean;
+                            ext_msg.what = 10;
+                            handler.sendMessage(ext_msg);
+                            break;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }
