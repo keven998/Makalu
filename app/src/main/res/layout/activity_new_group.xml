@@ -23,7 +23,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/common_icon_navigationback" />
+                android:src="@drawable/selector_ic_nav_back" />
         </LinearLayout>
 
         <TextView

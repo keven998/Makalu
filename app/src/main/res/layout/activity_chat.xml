@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -20,8 +20,8 @@
             <LinearLayout
                 android:id="@+id/bar_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_height="49dp"
+                android:layout_gravity="bottom"
                 android:orientation="vertical">
 
                 <View
@@ -29,44 +29,47 @@
                     android:layout_height="1dp"
                     android:background="@color/color_line" />
 
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/rl_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/base_color_white"
                     android:gravity="bottom"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal">
+                    android:minHeight="48dp">
 
                     <ImageView
                         android:id="@+id/btn_set_mode_voice"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
+                        android:layout_gravity="left"
                         android:onClick="setModeVoice"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
-                        android:src="@drawable/messages_icon_talk_default" />
+                        android:src="@drawable/selector_ic_chat_voice" />
 
                     <ImageView
                         android:id="@+id/btn_set_mode_keyboard"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
+                        android:layout_gravity="left"
                         android:onClick="setModeKeyboard"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:scaleType="center"
-                        android:src="@drawable/messages_icon_keyboard_default"
+                        android:src="@drawable/selector_ic_chat_keyboard"
                         android:visibility="gone" />
 
 
                     <RelativeLayout
                         android:id="@+id/edittext_layout"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginBottom="6dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
                         android:layout_marginTop="6dp"
-                        android:layout_weight="1"
                         android:background="@drawable/editor_with_border"
                         android:gravity="bottom">
 
@@ -84,7 +87,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="@string/button_pushtotalk"
-                                android:textColor="@color/color_text_ii"
+                                android:textColor="@color/color_text_i"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -115,7 +118,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
-                            android:src="@drawable/messages_icon_smile_default"/>
+                            android:src="@drawable/selector_ic_chat_expression" />
 
                         <ImageView
                             android:id="@+id/iv_emoticons_checked"
@@ -126,18 +129,20 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="10dp"
                             android:scaleType="center"
-                            android:src="@drawable/messages_icon_keyboard_default"
+                            android:src="@drawable/selector_ic_chat_keyboard"
                             android:visibility="gone" />
 
                     </RelativeLayout>
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/btn_more"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
+                        android:layout_gravity="right"
                         android:onClick="more"
+                        android:background="@null"
                         android:scaleType="center"
-                        android:src="@drawable/messages_icon_plus_default" />
+                        android:src="@drawable/selector_ic_chat_extra" />
 
                     <Button
                         android:id="@+id/btn_send"
@@ -153,7 +158,7 @@
                         android:textColor="@color/base_color_white"
                         android:textSize="12sp"
                         android:visibility="gone" />
-                </LinearLayout>
+                </FrameLayout>
 
                 <LinearLayout
                     android:id="@+id/more"
@@ -312,7 +317,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/bar_bottom"
+                android:layout_marginBottom="49dp"
                 android:layout_marginTop="@dimen/content_top_margin">
 
                 <ProgressBar
@@ -368,9 +373,10 @@
             <com.xuejian.client.lxp.common.widget.TitleHeaderBar
                 android:id="@+id/title_bar"
                 android:layout_width="match_parent"
+                android:layout_gravity="top"
                 android:layout_height="@dimen/title_bar_height" />
 
-        </RelativeLayout>
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/menu_frame"

@@ -198,9 +198,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
                     UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
-                    //EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
                     AccountManager.getInstance().getContactList(ContactDetailActivity.this).remove(tobeDeleteUser.getUserId());
-                    //UserDBManager.getInstance().deleteInviteMsg(ContactDetailActivity.this, tobeDeleteUser.getUsername());
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(ContactDetailActivity.this).showToast(deleteResult.err.message);
@@ -272,7 +270,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
         nickNameTv.setText("昵称：" + imUser.getNickName());
         idTv.setText("ID：" + imUser.getUserId());
-        signTv.setText("旅行签名：" + imUser.getSignature());
+        signTv.setText("签名：" + imUser.getSignature());
     }
 
     public void startChat(View view) {
@@ -283,8 +281,8 @@ public class ContactDetailActivity extends ChatBaseActivity {
     }
 
     private void blur(Bitmap bkg, ImageView iv) {
-        long startMs = System.currentTimeMillis();
-        float scaleFactor = 1;
+//        long startMs = System.currentTimeMillis();
+//        float scaleFactor = 1;
         float radius = 20;
 
         Bitmap overlay = FastBlurHelper.doBlur(bkg, (int) radius, true);

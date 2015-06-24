@@ -591,8 +591,6 @@ public class MessageAdapter extends BaseAdapter {
                         Intent intent = new Intent(context, SeachContactDetailActivity.class);
                         intent.putExtra("user", itemData);
                         context.startActivity(intent);
-
-
                     }
                 }
             });

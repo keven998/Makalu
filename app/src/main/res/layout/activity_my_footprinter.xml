@@ -40,7 +40,7 @@
         android:id="@+id/my_footprinter_back"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/title_bar_height"
-        android:drawableLeft="@drawable/common_icon_navigationback"
+        android:drawableLeft="@drawable/selector_ic_nav_back"
         android:paddingLeft="10dp"
         android:paddingRight="30dp" />
 
