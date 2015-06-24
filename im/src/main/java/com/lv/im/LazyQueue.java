@@ -8,7 +8,6 @@ import com.lv.Utils.Config;
 import com.lv.bean.Message;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +19,8 @@ public class LazyQueue {
     private static LazyQueue instance;
     static Map<String, SortList> LazyMap = new ConcurrentHashMap<>();
     static Map<String, SortList> TempMap = new ConcurrentHashMap<>();
+//  static Map<String, SortList> LazyMap = new  HashMap<>();
+//  static Map<String, SortList> TempMap = new  HashMap<>();
     boolean isRunning;
     DequeueListener listener;
     Timer timer;

@@ -97,6 +97,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             com.lv.user.User.login(AccountManager.getCurrentUserId(), new LoginSuccessListener() {
                 @Override
                 public void OnSuccess() {
+                    IMClient.getInstance().initAckAndFetch();
                 }
                 @Override
                 public void OnFailed(int code) {
