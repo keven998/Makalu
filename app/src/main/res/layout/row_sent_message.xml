@@ -19,13 +19,13 @@
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="39dp"
-            android:layout_height="39dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder_round" />
+            android:src="@drawable/messages_bg_useravatar" />
 
         <TextView
             android:id="@+id/tv_chatcontent"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
             android:autoLink="web"
-            android:background="@drawable/chat_send"
+            android:background="@drawable/messages_bg_send"
             android:gravity="left|center"
             android:paddingLeft="10dp"
             android:textColor="@color/base_color_white" />
@@ -68,7 +68,7 @@
             android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_delivered"
@@ -79,7 +79,7 @@
             android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/pb_sending"

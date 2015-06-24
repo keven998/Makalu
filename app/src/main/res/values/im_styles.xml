@@ -17,7 +17,7 @@
     </style>
 
     <style name="chat_text_name_style">
-        <item name="android:textColor">@color/base_text_color_text_hint</item>
+        <item name="android:textColor">@color/color_text_iii</item>
         <item name="android:textSize">11sp</item>
     </style>
 
@@ -30,6 +30,7 @@
         <item name="android:textColor">@color/base_color_white</item>
         <item name="android:background">@color/color_disable</item>
         <item name="android:textSize">11sp</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="AnimFade" parent="@android:style/Animation.Activity">

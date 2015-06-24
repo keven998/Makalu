@@ -46,7 +46,7 @@
             android:autoLink="web"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chat_recieve"/>
+            android:background="@drawable/messages_bg_receive"/>
 
     </RelativeLayout>
 
