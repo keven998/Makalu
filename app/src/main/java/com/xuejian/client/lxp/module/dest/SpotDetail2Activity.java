@@ -108,7 +108,7 @@ public class SpotDetail2Activity extends PeachBaseActivity {
     private void getSpotDetailData() {
         TravelApi.getSpotDetail(mSpotId, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<SpotDetailBean> detailResult = CommonJson.fromJson(result, SpotDetailBean.class);
                 if (detailResult.code == 0) {
@@ -252,7 +252,7 @@ public class SpotDetail2Activity extends PeachBaseActivity {
         if (isFavorite) {
             OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0) {
                         spotDetailBean.isFavorite = false;
@@ -269,7 +269,7 @@ public class SpotDetail2Activity extends PeachBaseActivity {
         } else {
             OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                         spotDetailBean.isFavorite = true;

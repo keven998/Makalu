@@ -17,7 +17,7 @@ public abstract class HttpCallBack<T> {
 	 * @param method 请求标示
 	 * @return
 	 */
-	public abstract void doSucess(T result, String method);
+	public abstract void doSuccess(T result, String method);
 
 
     /**
@@ -26,7 +26,7 @@ public abstract class HttpCallBack<T> {
      * @param method 请求标示
      * @return
      */
-    public void doSucess(T result, String method,Header[] headers){};
+    public void doSuccess(T result, String method, Header[] headers){};
 	
 	/**
 	 * 描述：通信异常的回调

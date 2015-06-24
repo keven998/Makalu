@@ -187,7 +187,7 @@ public class FavListActivity extends PeachBaseActivity {
     private void initData(final String type, final int page) {
         OtherApi.getFavist(type, page, new HttpCallBack() {
             @Override
-            public void doSucess(Object result, String method) {
+            public void doSuccess(Object result, String method) {
                 if (!curType.equals(type)) {
                     return;
                 }
@@ -414,7 +414,7 @@ public class FavListActivity extends PeachBaseActivity {
                     DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
                     OtherApi.deleteFav(item.itemId, new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {

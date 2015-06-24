@@ -136,7 +136,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         DialogManager.getInstance().showLoadingDialog(SettingActivity.this, "正在检查更新");
         OtherApi.checkUpdate(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<UpdateBean> updateResult = CommonJson.fromJson(result, UpdateBean.class);
                 if (updateResult.code == 0) {

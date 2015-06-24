@@ -119,8 +119,8 @@ public class HttpManager {
                         if (callBack != null) {
                             if (!callBack.httpCallBackPreFilter(result,
                                     url)) {// 拦截过滤
-                                callBack.doSucess(result,url);
-                                callBack.doSucess(result,url,responseInfo.getAllHeaders());
+                                callBack.doSuccess(result, url);
+                                callBack.doSuccess(result, url, responseInfo.getAllHeaders());
 
                             }
                         }
@@ -286,7 +286,7 @@ public class HttpManager {
                         @Override
                         public void onSuccess(ResponseInfo<File> responseInfo) {
                             if (callBack != null)
-                                callBack.doSucess(responseInfo.result,url);
+                                callBack.doSuccess(responseInfo.result, url);
                         }
 
                         @Override

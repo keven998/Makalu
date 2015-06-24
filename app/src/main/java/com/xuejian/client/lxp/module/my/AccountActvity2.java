@@ -222,7 +222,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         if (user != null) {
             UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
@@ -326,7 +326,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
@@ -406,7 +406,7 @@ public class AccountActvity2 extends PeachBaseActivity implements View.OnClickLi
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
                 if (tokenResult.code == 0) {
                     String token = tokenResult.result.uploadToken;

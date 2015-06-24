@@ -463,7 +463,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
         if(unkownMembers.size() > 0) {
             UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson4List<User> userResult = CommonJson4List.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         for (User user : userResult.result) {

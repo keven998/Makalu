@@ -76,7 +76,7 @@ public class StoryActivity extends SwipeBackActivity {
         ImageLoader.getInstance().displayImage(storyImageUrl, storyIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {
                     if (!storyResult.result.image.equals(storyImageUrl)) {

@@ -258,7 +258,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private void getPoiGuide(final String type, String cityId) {
         TravelApi.getDestPoiGuide(cityId, type, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
                 if (poiGuideResult.code == 0) {
                     bindGuideView(poiGuideResult.result,value);
@@ -311,7 +311,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private void getPoiListData(final String type, final String cityId, final int page) {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 if (!curLoc.id.equals(cityId)) {
                     return;
                 }

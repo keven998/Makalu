@@ -97,11 +97,11 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         String lastModify= PreferenceUtils.getCacheData(getActivity(), "outcountry_last_modify");
         TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
             }
 
             @Override
-            public void doSucess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Header[] headers) {
                 box.hideAll();
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {

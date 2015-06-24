@@ -119,7 +119,7 @@ public class GuilderListActivity extends PeachBaseActivity {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.searchExpertContact("expert", "roles", page, pageSize, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
@@ -293,7 +293,7 @@ public class GuilderListActivity extends PeachBaseActivity {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getExpertById(strs, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 //
                 //  listView.removeAllViews();

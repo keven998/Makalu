@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -36,7 +35,6 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
-import com.aizou.core.widget.pagerIndicator.indicator.slidebar.LayoutBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -348,7 +346,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     public void getStrategyDataById(String itemId) {
         TravelApi.getGuideDetail(itemId, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
@@ -372,7 +370,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
         TravelApi.createGuide(cityIds, recommend, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
@@ -439,7 +437,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                 DialogManager.getInstance().showLoadingDialog(mContext);
                                 TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
                                     @Override
-                                    public void doSucess(String resultStr, String method) {
+                                    public void doSuccess(String resultStr, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
                                         if (modifyResult.code == 0) {
@@ -482,7 +480,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 //                            DialogManager.getInstance().showLoadingDialog(mContext);
 //                            TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
 //                                @Override
-//                                public void doSucess(String result, String method) {
+//                                public void doSuccess(String result, String method) {
 //                                    DialogManager.getInstance().dissMissLoadingDialog();
 //                                }
 //
@@ -753,7 +751,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         //DialogManager.getInstance().showLoadingDialog(mContext);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 //DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (saveResult.code == 0) {

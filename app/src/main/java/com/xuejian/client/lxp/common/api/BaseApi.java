@@ -21,7 +21,7 @@ public class BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE,"application/json");
         HttpManager.request(request, new HttpCallBack() {
             @Override
-            public void doSucess(Object result, String method) {
+            public void doSuccess(Object result, String method) {
 
             }
 

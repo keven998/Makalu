@@ -230,7 +230,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<com.xuejian.client.lxp.db.userDB.User> userInfo = CommonJson.fromJson(result, com.xuejian.client.lxp.db.userDB.User.class);
                 UserDBManager.getInstance().saveContact(userInfo.result);
@@ -823,7 +823,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param content message content
      */
     private void sendText(String content, int extType) {
-        if (TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(content)||content.trim().isEmpty()) {
             return;
         }
         MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), content, toChatUsername, chatType);

@@ -112,7 +112,7 @@ public class LoginActivity extends PeachBaseActivity {
                 weixinLogin();
 //                UserApi.authSignUp("123456",new HttpCallBack() {
 //                    @Override
-//                    public void doSucess(Object result, String method) {
+//                    public void doSuccess(Object result, String method) {
 //
 //                    }
 //
@@ -350,7 +350,7 @@ public class LoginActivity extends PeachBaseActivity {
         UserApi.signIn(loginNameEt.getText().toString().trim(), pwdEt.getText().toString().trim(), new HttpCallBack<String>() {
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
 
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
@@ -387,7 +387,7 @@ public class LoginActivity extends PeachBaseActivity {
                 dialog.setContent("正在登录");
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                         if (userResult.code == 0) {
                             imLogin(userResult.result, WXLOGIN);

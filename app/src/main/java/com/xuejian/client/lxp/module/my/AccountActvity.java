@@ -168,7 +168,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     public void getUserPics(Long userId) {
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(result);
@@ -416,7 +416,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         if (user != null) {
             UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
@@ -548,7 +548,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 pic_ids.remove(pic_index);
                 pics.remove(pic_index);
@@ -629,7 +629,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
@@ -697,7 +697,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
         OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
                 if (tokenResult.code == 0) {
                     String token = tokenResult.result.uploadToken;
@@ -765,7 +765,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
@@ -793,7 +793,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext,"0%");
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
                 if (tokenResult.code == 0) {
                     String token = tokenResult.result.uploadToken;
@@ -899,7 +899,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
@@ -933,7 +933,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
@@ -966,7 +966,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
         UserApi.editUserBirthday(user, birth, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {

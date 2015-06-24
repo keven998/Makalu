@@ -63,7 +63,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
             hxList.add(user.getUserId()+"");
             UserApi.getContactByHx(hxList, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson4List<User> userResult = CommonJson4List.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         if (userResult.result.size() > 0) {
@@ -108,7 +108,7 @@ public class SeachContactDetailActivity extends ChatBaseActivity {
                         DialogManager.getInstance().showLoadingDialog(SeachContactDetailActivity.this);
                         UserApi.requestAddContact(user.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
                             @Override
-                            public void doSucess(Object result, String method) {
+                            public void doSuccess(Object result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");

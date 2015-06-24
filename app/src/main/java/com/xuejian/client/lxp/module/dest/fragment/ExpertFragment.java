@@ -103,12 +103,12 @@ public class ExpertFragment extends PeachBaseFragment {
         DialogManager.getInstance().showModelessLoadingDialog(getActivity());
             UserApi.searchExpertFootPrint(flag, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
 
                 }
 
                 @Override
-                public void doSucess(String result, String method, Header[] headers) {
+                public void doSuccess(String result, String method, Header[] headers) {
                     DialogManager.getInstance().dissMissModelessLoadingDialog();
                     JSONObject jsonObject = null;
                     try {

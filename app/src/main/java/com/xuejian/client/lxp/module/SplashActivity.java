@@ -116,7 +116,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 System.out.println("getCoverStory " + result);
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {

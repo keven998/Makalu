@@ -107,7 +107,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
                         UserApi.signUp(tel, pwd, smsEt.getText().toString().trim(), new HttpCallBack<String>() {
                             @Override
-                            public void doSucess(String result, String method) {
+                            public void doSuccess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
@@ -148,7 +148,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                 }
                 UserApi.sendValidation(tel, actionCode, uid, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {

@@ -143,7 +143,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                         DialogManager.getInstance().showLoadingDialog(SelectDestActivity.this);
                         TravelApi.modifyGuideLoc(guideId, allAddCityList, new HttpCallBack<String>() {
                             @Override
-                            public void doSucess(String result, String method) {
+                            public void doSuccess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<ModifyResult> modfiyResult = CommonJson.fromJson(result, ModifyResult.class);
                                 if (modfiyResult.code == 0) {

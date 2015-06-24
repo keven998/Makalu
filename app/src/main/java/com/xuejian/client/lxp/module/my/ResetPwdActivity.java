@@ -53,7 +53,7 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                     DialogManager.getInstance().showLoadingDialog(this);
                     UserApi.resetPwd(mPhone, newPwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<User> resetResult = CommonJson.fromJson(result, User.class);
                             if (resetResult.code == 0) {

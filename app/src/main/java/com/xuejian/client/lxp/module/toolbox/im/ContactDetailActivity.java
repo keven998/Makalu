@@ -74,7 +74,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
         UserApi.getUserInfo(userId + "", new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
                     User user = userResult.result;
@@ -191,7 +191,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
         UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
             @Override
-            public void doSucess(Object result, String method) {
+            public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
@@ -325,7 +325,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
             DialogManager.getInstance().showLoadingDialog(getActivity(), "正在删除...");
             UserApi.deleteContact(tobeDeleteUser.getUserId() + "", new HttpCallBack() {
                 @Override
-                public void doSucess(Object result, String method) {
+                public void doSuccess(Object result, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                     if (deleteResult.code == 0) {

@@ -126,7 +126,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             initData();
             UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
                 @Override
-                public void doSucess(Object result, String method) {
+                public void doSuccess(Object result, String method) {
                     CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                     if (Info.code == 0) {
                         AccountManager.getInstance().setLoginAccountInfo(Info.result);
@@ -161,7 +161,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private void getContactFromServer() {
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);

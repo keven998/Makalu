@@ -144,7 +144,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
     private void getPoiListByLoc(final int page, double lat, double lng) {
         TravelApi.getNearbyPoi(lat, lng, page, type, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<SearchAllBean> allResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (allResult.code == 0) {
                     mPage = page;

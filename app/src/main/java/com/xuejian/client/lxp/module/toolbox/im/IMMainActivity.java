@@ -313,7 +313,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
 
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
 
                 if (contactResult.code == 0) {

@@ -111,7 +111,7 @@ public class RecDestFragment extends PeachBaseFragment {
     private void getRecDestData(){
         TravelApi.getRecDest(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 box.hideAll();
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);
                 if (destResult.code == 0) {

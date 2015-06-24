@@ -72,7 +72,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                     DialogManager.getInstance().showLoadingDialog(ModifyPwdActivity.this);
                     UserApi.modifyPwd(oldPwdEt.getText().toString().trim(), newPwdEt.getText().toString().trim(), user.getUserId() + "", new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (modifyResult.code == 0) {

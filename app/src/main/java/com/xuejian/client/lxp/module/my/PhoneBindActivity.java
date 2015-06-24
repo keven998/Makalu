@@ -97,7 +97,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE, uid, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {
@@ -132,7 +132,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
                 UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.BIND_PHONE, user.getUserId() + "", new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
                         if (chechResult.code == 0) {
                             if (TextUtils.isEmpty(user.getTel())) {
@@ -145,7 +145,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                             } else {
                                 UserApi.bindPhone(phoneEt.getText().toString().trim(), user.getUserId() + "", null, chechResult.result.token, new HttpCallBack<String>() {
                                     @Override
-                                    public void doSucess(String result, String method) {
+                                    public void doSuccess(String result, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (bindResult.code == 0) {
