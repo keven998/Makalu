@@ -30,6 +30,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.config.PeachApplication;
@@ -211,8 +212,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                     setUpGroupMemeber("update");
                     break;
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
-                   // group = EMGroupManager.getInstance().getGroup(groupId);
-                   // groupNameTv.setText(group.getGroupName());
+                    groupNameTv.setText(data.getStringExtra("groupName"));
                     break;
                 default:
                     break;
@@ -752,10 +752,12 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 contentView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
-                        intent.putExtra("userId", itemData.getUserId().intValue());
-                        intent.putExtra("userNick", itemData.getNickName());
-                        startActivity(intent);
+                        if (!AccountManager.getCurrentUserId().equals(String.valueOf(itemData.getUserId()))) {
+                            Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
+                            intent.putExtra("userId", itemData.getUserId().intValue());
+                            intent.putExtra("userNick", itemData.getNickName());
+                            startActivity(intent);
+                        }
                     }
                 });
 
