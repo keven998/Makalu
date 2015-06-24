@@ -57,7 +57,6 @@ import java.util.UUID;
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
     public final static int CODE_IM_LOGIN = 101;
-    public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
     public boolean isConflict = false;
     //定义FragmentTabHost对象
@@ -71,14 +70,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
     };
-    private String[] tabTitle = {"Talk", "旅游", "我"};
 
     private TextView unreadMsg;
 
-    private Long NEWFRIEND = 2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-//    private MyGroupChangeListener groupChangeListener;
     private boolean FromBounce;
     private Vibrator vibrator;
 
@@ -108,6 +104,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 @Override
                 public void OnSuccess() {
                 }
+
                 @Override
                 public void OnFailed(int code) {
                     runOnUiThread(new Runnable() {
@@ -166,7 +163,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long, User>();
-                    LongSparseArray<User> userList=new LongSparseArray<User>();
+                    LongSparseArray<User> userList = new LongSparseArray<User>();
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
                         myUser.setType(1);
@@ -183,7 +180,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-               ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -254,7 +251,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
         imageView.setCompoundDrawablesWithIntrinsicBounds(mImageViewArray[index], 0, 0, 0);
-        //imageView.setText(tabTitle[index]);
         return view;
     }
 
@@ -263,7 +259,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onResume();
         if (AccountManager.getInstance().isLogin()) {
             HandleImMessage.getInstance().registerMessageListener(this);
-            //  if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if (talkFragment != null) {
                 talkFragment.loadConversation();
@@ -285,18 +280,17 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     public void showConflictDialog(Context context) {
         AccountManager.getInstance().logout(context);
-        int i = mTabHost.getCurrentTab();
-        if (i == 2) {
+        if (mTabHost.getCurrentTab() == 2) {
             MyFragment my = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
             my.onResume();
         }
-        if (isFinishing())
+        if (isFinishing()) {
             return;
+        }
         try {
             if (conflictDialog == null) {
                 conflictDialog = new PeachMessageDialog(context);
                 conflictDialog.setTitle("下线通知");
-                //conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
                 conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
                 conflictDialog.setPositiveButton("确定", new View.OnClickListener() {
                     @Override
@@ -321,49 +315,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     }
 
-    /**
-     * cmd消息BroadcastReceiver
-     */
-    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            //获取cmd message对象
-//            String msgId = intent.getStringExtra("msgid");
-//            EMMessage message = intent.getParcelableExtra("message");
-//            //获取消息body
-//            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-//            String aciton = cmdMsgBody.action;//获取自定义action
-//            //获取扩展属性
-//            try {
-//                int cmdType = message.getIntAttribute("CMDType");
-//                String content = message.getStringAttribute("content");
-//                //接受到好友请求
-//                if (cmdType == 1) {
-//                    // 刷新bottom bar消息未读数
-//                    updateUnreadAddressLable();
-//
-//                }
-//                //对方同意了加好友请求(好友添加)
-//                else if (cmdType == 2) {
-//                    // updateUnreadMsgCount();
-//                    refreshChatHistoryFragment();
-//
-//
-//                }
-//                //删除好友
-//                else if (cmdType == 3) {
-//                    // 刷新ui
-//                    refreshChatHistoryFragment();
-//                }
-//
-//            } catch (EaseMobException e) {
-//                e.printStackTrace();
-//            }
-        }
-    };
-
-
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
@@ -372,7 +323,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         updateUnreadMsgCount();
         vibrator.vibrate(500);
-        //  notifyNewMessage(m);
     }
 
     @Override
@@ -386,7 +336,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      * @param msg
      */
     private void notifyNewInviteMessage(InviteMessage msg) {
-
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();
     }
@@ -407,7 +356,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (talkFragment != null) {
                     talkFragment.netStateChange("(未连接)");
                 }
-            }else {
+            } else {
                 TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
                 if (talkFragment != null) {
                     talkFragment.netStateChange("");
@@ -452,7 +401,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     } catch (Exception e) {
                         Log.e("###", "refresh exception " + e.getMessage());
                     }
-
                 }
             });
         }
@@ -523,7 +471,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     public void updateUnreadMsgCount() {
         int unreadMsgCountTotal = 0;
-        // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+getUnreadAddressCountTotal();
         unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
@@ -563,15 +510,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (connectionReceiver != null) {
             unregisterReceiver(connectionReceiver);
+            connectionReceiver = null;
         }
     }
 

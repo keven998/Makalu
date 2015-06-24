@@ -184,8 +184,8 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.avatar_placeholder_round)
-                    .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
+                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(4)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }

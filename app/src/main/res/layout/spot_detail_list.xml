@@ -7,46 +7,43 @@
         android:id="@+id/spot_detail_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="20dp"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:overScrollMode="never"
         android:fadingEdge="none"
-        android:listSelector="@null" />
+        android:listSelector="@null"
+        android:overScrollMode="never"
+        android:paddingBottom="20dp" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white"
-        >
+        android:background="@drawable/bg_navigation_bar">
 
         <TextView
             android:id="@+id/poi_det_back"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_title_back"
-            android:padding="12dp"
-            />
+            android:drawableLeft="@drawable/common_icon_navigationback"
+            android:paddingLeft="10dp" />
 
         <TextView
             android:id="@+id/poi_det_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/base_font_color"
-            android:textSize="18sp"
             android:layout_centerInParent="true"
             android:text="景点详情"
-            />
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/iv_fav"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_chat"
             android:paddingLeft="20dp"
             android:paddingRight="13dp"
-            android:layout_toLeftOf="@+id/iv_chat"
             android:scaleType="fitCenter"
             android:src="@drawable/checker_title_ic_favorite" />
 
@@ -54,9 +51,9 @@
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:paddingLeft="13dp"
             android:paddingRight="12dp"
-            android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_title_chat" />
 
@@ -64,13 +61,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/app_theme_color"
             android:layout_alignParentBottom="true"
-            />
+            android:background="@color/app_theme_color" />
 
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>

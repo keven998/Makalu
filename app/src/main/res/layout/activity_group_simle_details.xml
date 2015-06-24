@@ -46,7 +46,7 @@
             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
             android:padding="5dp"
-            android:src="@drawable/avatar_placeholder_round" />
+            android:src="@drawable/messages_bg_useravatar" />
 
         <TextView
             android:id="@+id/name"

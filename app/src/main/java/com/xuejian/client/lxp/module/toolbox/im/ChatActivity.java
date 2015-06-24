@@ -240,7 +240,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                // ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
             }
         });
     }

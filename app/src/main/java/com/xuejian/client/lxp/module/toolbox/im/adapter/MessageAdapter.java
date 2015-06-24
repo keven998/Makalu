@@ -37,10 +37,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.utils.LocalDisplay;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.task.DownloadImage;
-
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -62,14 +58,15 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.task.DownloadImage;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.task.LoadVideoImageTask;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
-import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
@@ -88,14 +85,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -151,8 +142,6 @@ public class MessageAdapter extends BaseAdapter {
     private Context context;
     private String chatType;
     private String conversation;
-    private static Map<String, Timer> timers = new Hashtable<String, Timer>();
-    static Map<String, ArrayList<HashMap<Integer, Integer>>> tasks = new Hashtable<>();
 
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
@@ -168,7 +157,7 @@ public class MessageAdapter extends BaseAdapter {
                 .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                 .showImageOnLoading(R.drawable.messages_bg_useravatar)
                 .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(38)))
+                .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.size_avatar)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -237,6 +226,7 @@ public class MessageAdapter extends BaseAdapter {
             case LOC_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_location, null) : inflater.inflate(
                         R.layout.row_sent_location, null);
+
             case IMAGE_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_picture, null) : inflater.inflate(
                         R.layout.row_sent_picture, null);
@@ -244,17 +234,22 @@ public class MessageAdapter extends BaseAdapter {
             case VOICE_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_voice, null) : inflater.inflate(
                         R.layout.row_sent_voice, null);
+
             case VIDEO_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_video, null) : inflater.inflate(
                         R.layout.row_sent_video, null);
+
             case FILE_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_file, null) : inflater.inflate(
                         R.layout.row_sent_file, null);
+
             case TEXT_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
                         R.layout.row_sent_message, null);
+
             case TIP_MSG:
                 return inflater.inflate(R.layout.row_chat_tips, null);
+
             case PLAN_MSG:
             case CITY_MSG:
             case TRAVEL_MSG:

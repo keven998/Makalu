@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/timestamp"
@@ -15,25 +14,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="39dp"
-            android:layout_height="39dp"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
-            android:scaleType="fitCenter"
             android:layout_marginTop="5dp"
-            android:src="@drawable/avatar_placeholder_round"  />
+            android:scaleType="fitCenter"
+            android:src="@drawable/messages_bg_useravatar" />
+
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/iv_userhead"
-            />
+            android:layout_toRightOf="@id/iv_userhead" />
 
         <RelativeLayout
             android:id="@+id/rl_voice_content"
@@ -42,14 +41,14 @@
             android:layout_below="@id/tv_userid"
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg_normal"
-           >
+            android:background="@drawable/chatfrom_bg_normal">
+
             <ImageView
                 android:id="@+id/iv_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/chatfrom_voice_playing" />
 
             <TextView
@@ -57,13 +56,13 @@
                 style="@style/chat_text_name_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/iv_voice"
-                android:textColor="@color/base_text_color_subtitle"
+                android:gravity="center"
                 android:text="15''"
-                android:gravity="center" />
+                android:textColor="@color/base_text_color_subtitle"
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -71,19 +70,19 @@
             android:id="@+id/iv_unread_voice"
             android:layout_width="6dp"
             android:layout_height="6dp"
+            android:layout_below="@id/tv_userid"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/rl_voice_content"
-            android:layout_below="@id/tv_userid"
             android:background="@drawable/ic_unread_voice" />
 
         <ProgressBar
             android:id="@+id/pb_sending"
-            android:layout_toRightOf="@id/iv_unread_voice"
             style="?android:attr/progressBarStyleSmall"
-            android:layout_below="@id/tv_userid"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_below="@id/tv_userid"
             android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/iv_unread_voice"
             android:visibility="invisible" />
 
     </RelativeLayout>
