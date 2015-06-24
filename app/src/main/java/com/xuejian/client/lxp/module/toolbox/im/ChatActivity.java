@@ -394,7 +394,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         iv_emoticons_normal.setOnClickListener(this);
         iv_emoticons_checked.setOnClickListener(this);
-        // position = getIntent().getIntExtra("position", -1);
         clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -408,10 +407,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //                finish();
 //            }
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
-
         } else {
             // 群聊
-            titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
+            titleHeaderBar.setRightViewImageRes(R.drawable.common_icon_navigation_menu);
             //if(group!=null){
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
             //}

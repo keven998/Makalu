@@ -99,8 +99,9 @@ public class ContactDetailActivity extends ChatBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (!isFinishing())
+                if (!isFinishing()) {
                     ToastUtil.getInstance(ContactDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
             }
         });
     }
@@ -115,9 +116,10 @@ public class ContactDetailActivity extends ChatBaseActivity {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_friend_information");
     }
+
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.setRightViewImageRes(R.drawable.ic_more);
+        titleHeaderBar.setRightViewImageRes(R.drawable.common_icon_navigation_menu);
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
