@@ -83,7 +83,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
 
         UserApi.updateUserFootPrint(user.getUserId() + "", type, ids, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 /*CommonJson4List<GroupLocBean> addResult= CommonJson4List.fromJson(result, GroupLocBean.class);
                 if(addResult.code==0){*/
                 ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("修改成功");

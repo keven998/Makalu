@@ -162,7 +162,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         DialogManager.getInstance().showLoadingDialog(this);
         TravelApi.searchAll(keyword, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {

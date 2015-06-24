@@ -154,7 +154,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     private void suggestSearchLocData(String keyWord){
         TravelApi.suggestLoc(keyWord, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
                     bindView(searchAllResult.result.locality);
@@ -176,7 +176,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     private void searchSearchLocData(String keyWord, final int page){
         TravelApi.searchLoc(keyWord, page, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {

@@ -203,7 +203,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS / 1.5), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
@@ -225,7 +225,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void getTravelNotes(String locId){
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
@@ -287,7 +287,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (!b) {
                     OtherApi.deleteFav(detailBean.id, new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
 
@@ -305,7 +305,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     MobclickAgent.onEvent(mContext,"event_city_favorite");
                     OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                                 ToastUtil.getInstance(CityDetailActivity.this).showToast("已收藏");

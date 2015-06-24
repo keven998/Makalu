@@ -76,7 +76,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 //        }
         TravelApi.getCityGalley(id, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result, LocAlbum.class);
                 if (imageReuslt.code == 0) {
                     picAdapter = new PicAdapter(imageReuslt.result.album);

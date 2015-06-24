@@ -436,7 +436,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 if (!(mType.equals(type) && curLoc.id.equals(cityId))) {
                     return;
                 }

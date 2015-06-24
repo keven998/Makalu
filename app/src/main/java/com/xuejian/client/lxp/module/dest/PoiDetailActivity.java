@@ -210,7 +210,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         TravelApi.getPoiDetail(type, id, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
                 if (detailBean.code == 0) {
@@ -447,7 +447,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         if (poiDetailBean.isFavorite) {
             OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0) {
                         poiDetailBean.isFavorite = false;
@@ -470,7 +470,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
             OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                         poiDetailBean.isFavorite = true;

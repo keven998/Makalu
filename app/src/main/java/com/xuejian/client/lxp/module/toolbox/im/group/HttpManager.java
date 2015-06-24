@@ -60,7 +60,7 @@ public class HttpManager {
             public void run() {
 //                GroupApi.createGroup(obj.toString(), new HttpCallBack() {
 //                    @Override
-//                    public void doSucess(Object result, String method) {
+//                    public void doSuccess(Object result, String method) {
 //                        try {
 //                            String r = result.toString();
 //                            if (Config.isDebug) {

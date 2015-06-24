@@ -118,7 +118,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         if (!isFav) {
             OtherApi.addFav(id, "travelNote", new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
                         ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("已收藏");
@@ -140,7 +140,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         } else {
             OtherApi.deleteFav(id, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (deleteResult.code == 0) {
 //                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("收藏取消");
@@ -226,7 +226,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                     DialogManager.getInstance().showLoadingDialog(getActivity());
                     OtherApi.addFav(id, "travelNote", new HttpCallBack<String>() {
                         @Override
-                        public void doSucess(String result, String method) {
+                        public void doSuccess(String result, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {

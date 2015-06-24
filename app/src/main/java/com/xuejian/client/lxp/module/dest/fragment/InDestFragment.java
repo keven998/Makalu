@@ -128,12 +128,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         String lastModify = PreferenceUtils.getCacheData(getActivity(), "indest_group_last_modify");
         TravelApi.getInDestListByGroup(lastModify, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
 
             }
 
             @Override
-            public void doSucess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Header[] headers) {
                 CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
                 box.hideAll();
                 if (locListResult.code == 0) {

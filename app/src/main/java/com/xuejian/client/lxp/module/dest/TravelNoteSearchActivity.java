@@ -165,7 +165,7 @@ public class TravelNoteSearchActivity extends PeachBaseActivity {
     private void searchTravelNote(String keyWord, final int page) {
         OtherApi.getTravelNoteByKeyword(keyWord, page, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {

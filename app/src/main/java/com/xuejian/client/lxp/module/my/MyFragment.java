@@ -257,7 +257,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
                 if (contactResult.code == 0) {
                     for (User myUser : contactResult.result.contacts) {

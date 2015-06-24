@@ -58,7 +58,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         contactListInMobile= PhoneContactUtils.getPhoneContact(mContext);
         UserApi.searchByAddressBook(contactListInMobile, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<AddressBookbean> contactResult = CommonJson4List.fromJson(result, AddressBookbean.class);
                 if (contactResult.code == 0) {
@@ -167,7 +167,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
                        UserApi.getUserInfo(itemData.userId + "", new HttpCallBack<String>() {
                            @Override
-                           public void doSucess(String result, String method) {
+                           public void doSuccess(String result, String method) {
                                DialogManager.getInstance().dissMissLoadingDialog();
                                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                if (userResult.code == 0) {

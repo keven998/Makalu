@@ -132,7 +132,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             DialogManager.getInstance().showLoadingDialog(this);
             UserApi.seachContact(toAddUsername, new HttpCallBack<String>() {
                 @Override
-                public void doSucess(String result, String method) {
+                public void doSuccess(String result, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson4List<User> seachResult = CommonJson4List.fromJson(result, User.class);
                     if (seachResult.code == 0) {

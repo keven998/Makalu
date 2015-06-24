@@ -92,7 +92,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                 DialogManager.getInstance().showLoadingDialog(RegActivity.this);
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE, null, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ValidationBean> validationResult = CommonJson.fromJson(result, ValidationBean.class);
                         if (validationResult.code == 0) {

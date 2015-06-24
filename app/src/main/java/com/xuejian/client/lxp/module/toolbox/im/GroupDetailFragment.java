@@ -545,7 +545,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         if(unkownMembers.size() > 0) {
 //            UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
 //                @Override
-//                public void doSucess(String result, String method) {
+//                public void doSuccess(String result, String method) {
 //                    CommonJson4List<PeachUser> userResult = CommonJson4List.fromJson(result, PeachUser.class);
 //                    if (userResult.code == 0) {
 //                        for (PeachUser user : userResult.result) {

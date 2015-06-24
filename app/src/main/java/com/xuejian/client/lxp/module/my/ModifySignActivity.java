@@ -57,7 +57,7 @@ public class ModifySignActivity extends PeachBaseActivity {
 
 
                                                                    @Override
-                                                                   public void doSucess(String result, String method) {
+                                                                   public void doSuccess(String result, String method) {
                                                                        DialogManager.getInstance().dissMissLoadingDialog();
                                                                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                                                        if (modifyResult.code == 0) {

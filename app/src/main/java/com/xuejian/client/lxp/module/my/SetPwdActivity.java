@@ -65,7 +65,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                 }
                 UserApi.bindPhone(mPhone, user.getUserId() + "", pwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (bindResult.code == 0) {

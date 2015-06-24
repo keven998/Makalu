@@ -229,7 +229,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
         UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
             @Override
-            public void doSucess(Object result, String method) {
+            public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
@@ -362,7 +362,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                                     DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
                                     UserApi.requestAddContact(bean.getUserId() + "", editDialog.getMessage(), new HttpCallBack() {
                                         @Override
-                                        public void doSucess(Object result, String method) {
+                                        public void doSuccess(Object result, String method) {
                                             DialogManager.getInstance().dissMissLoadingDialog();
 //                                    Toast.makeText(getApplicationContext(), "发送请求成功,等待对方验证", Toast.LENGTH_SHORT).show();
                                             ToastUtil.getInstance(getApplicationContext()).showToast("请求已发送，等待对方验证");
@@ -449,7 +449,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
@@ -489,7 +489,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void initScrollView(int userId){
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(result);

@@ -152,7 +152,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
         DialogManager.getInstance().showLoadingDialog((Activity) context);
         UserApi.addContact(String.valueOf(msg.getUserId()), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 button.setText("已添加");
                 button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));

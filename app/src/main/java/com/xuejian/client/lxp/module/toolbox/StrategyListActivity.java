@@ -270,7 +270,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         TravelApi.getStrategyPlannedList(userId, page, content, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                 if (strategyListResult.code == 0) {
                     mCurrentPage = page;
@@ -462,7 +462,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             TravelApi.modifyGuideTitle(strBean.id, editDialog.getMessage(), new HttpCallBack<String>() {
                                 @Override
-                                public void doSucess(String result, String method) {
+                                public void doSuccess(String result, String method) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                     if (modifyResult.code == 0) {
@@ -562,7 +562,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 DialogManager.getInstance().showLoadingDialog(mContext);
                 TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (deleteResult.code == 0) {
@@ -610,7 +610,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         Long time = System.currentTimeMillis();
         TravelApi.modifyGuideTop(itemData1.id, time, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> topResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (topResult.code == 0) {
@@ -646,7 +646,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         String visited = "traveled";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (visitedResult.code == 0) {

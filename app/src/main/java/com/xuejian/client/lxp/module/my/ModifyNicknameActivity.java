@@ -66,7 +66,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                 DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
                 UserApi.editUserNickName(user, nickEt.getText().toString().trim(), new HttpCallBack<String>() {
                     @Override
-                    public void doSucess(String result, String method) {
+                    public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {

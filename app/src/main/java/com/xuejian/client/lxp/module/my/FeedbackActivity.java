@@ -67,7 +67,7 @@ public class FeedbackActivity extends PeachBaseActivity {
         DialogManager.getInstance().showLoadingDialog(mContext,"正在发送");
         OtherApi.feedback(contentEt.getText().toString().trim(), new HttpCallBack<String>() {
             @Override
-            public void doSucess(String result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> feedbackResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (feedbackResult.code == 0) {
