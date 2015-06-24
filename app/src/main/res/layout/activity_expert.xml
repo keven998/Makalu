@@ -18,7 +18,7 @@
             android:id="@+id/expert_back"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:drawableLeft="@drawable/nav_back_normal"
+            android:drawableLeft="@drawable/common_icon_navigationback"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
             android:layout_gravity="left|center_vertical"

@@ -23,19 +23,19 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white">
+        android:background="@drawable/bg_navigation_bar">
 
         <TextView
             android:id="@+id/des_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:drawableLeft="@drawable/ic_title_back"
+            android:drawableLeft="@drawable/common_icon_navigationback"
             android:gravity="center_vertical"
             android:textSize="18sp"
             android:textColor="@color/back_blue_color"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingRight="30dp"
             android:drawablePadding="3dp"
             />
 

@@ -17,8 +17,8 @@
             android:id="@+id/poi_det_back"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_title_back"
-            android:padding="12dp"
+            android:drawableLeft="@drawable/common_icon_navigationback"
+            android:paddingLeft="10dp"
             />
 
         <TextView

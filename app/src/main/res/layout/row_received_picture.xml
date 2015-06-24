@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/timestamp"
@@ -16,42 +15,42 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginTop="@dimen/margin_chat_activity"
+        android:layout_marginBottom="@dimen/margin_chat_activity">
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="39dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder_round" />
+            android:src="@drawable/messages_bg_useravatar" />
+
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_userhead"
-            />
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_userhead" />
 
         <RelativeLayout
             android:id="@+id/row_recv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:layout_below="@id/tv_userid"
-            android:layout_toRightOf="@id/iv_userhead"
-             >
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@id/iv_userhead">
 
             <com.xuejian.client.lxp.common.widget.MaskImage
                 android:id="@+id/iv_sendPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scaleType="fitStart"
                 mask:mask="@drawable/chatfrom_image_mask"
-                mask:minWidth="120dp"
-                android:scaleType="fitStart" />
+                mask:minWidth="120dp" />
 
             <LinearLayout
                 android:id="@+id/ll_loading"
@@ -59,11 +58,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ProgressBar
-                    style="@style/Base.Widget.AppCompat.ProgressBar"
                     android:id="@+id/progressBar"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:visibility="visible" />

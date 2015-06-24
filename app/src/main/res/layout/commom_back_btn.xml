@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="11dp"
+        android:paddingLeft="10dp"
         android:scaleType="centerInside"
-        android:src="@drawable/mm_title_back" />
+        android:src="@drawable/common_icon_navigationback" />
 
 </LinearLayout>

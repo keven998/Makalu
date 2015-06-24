@@ -157,7 +157,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long, User>();
-                    LongSparseArray<User> userList=new LongSparseArray<User>();
+                    LongSparseArray<User> userList = new LongSparseArray<User>();
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
                         myUser.setType(1);
@@ -174,7 +174,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-               ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -458,6 +458,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onDestroy();
         if (connectionReceiver != null) {
             unregisterReceiver(connectionReceiver);
+            connectionReceiver = null;
         }
     }
 

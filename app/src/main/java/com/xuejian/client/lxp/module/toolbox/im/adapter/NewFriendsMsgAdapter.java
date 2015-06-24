@@ -40,8 +40,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
         this.context = context;
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
-                .showImageOnFail(R.drawable.avatar_placeholder_round)
+                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheOnDisk(true)
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8))) // 设置成圆角图片

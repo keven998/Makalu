@@ -25,7 +25,7 @@
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/avatar_placeholder_round"  />
+            android:src="@drawable/messages_bg_useravatar"  />
 
         <RelativeLayout
             android:id="@+id/rl_chatcontent"

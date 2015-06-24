@@ -34,11 +34,10 @@ import java.util.ArrayList;
 
 public class ImageViewPagerActivity extends PeachBaseActivity {
 
-	
-	private HackyViewPager mViewPager;
-	private ArrayList<ImageBean> imageUrls;
 
-    private Animator mCurrentAnimator;
+    private HackyViewPager mViewPager;
+    private ArrayList<ImageBean> imageUrls;
+
     ColorDrawable mBackground;
     private int mShortAnimationDuration = 300;
     float startScale;
@@ -49,18 +48,18 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
 
 
     @Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         contentView = View.inflate(this, R.layout.activity_view_pager, null);
         setContentView(contentView);
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-		imageUrls = getIntent().getParcelableArrayListExtra("imageUrlList");
-		int pos = getIntent().getIntExtra("pos",0);
-		mViewPager.setAdapter(new ImagePagerAdapter());
-		mViewPager.setCurrentItem(pos);
+        imageUrls = getIntent().getParcelableArrayListExtra("imageUrlList");
+        int pos = getIntent().getIntExtra("pos", 0);
+        mViewPager.setAdapter(new ImagePagerAdapter());
+        mViewPager.setCurrentItem(pos);
 
         if (savedInstanceState != null) {
-		}
+        }
         mBackground = new ColorDrawable(Color.BLACK);
         contentView.setBackgroundDrawable(mBackground);
         fromBounds = getIntent().getParcelableExtra("rect");
@@ -74,7 +73,8 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
                 // Settings | File Templates.
             }
         });
-	}
+    }
+
     private void zoomEnterAnimation() {
         startBounds = fromBounds;
         final Rect finalBounds = new Rect();
@@ -130,22 +130,20 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         set.addListener(new AnimatorListenerAdapter() {
 
             public void onAnimationEnd(Animator animation) {
-                mCurrentAnimator = null;
 
             }
 
             public void onAnimationCancel(Animator animation) {
-                mCurrentAnimator = null;
             }
         });
         set.start();
-        mCurrentAnimator = set;
 
         // Upon clicking the zoomed-in image, it should zoom back down to the
         // original bounds
         // and show the thumbnail instead of the expanded image.
         startScaleFinal = startScale;
     }
+
     public boolean getScaleFinalBounds() {
         startBounds = fromBounds;
         final Rect finalBounds = new Rect();
@@ -174,6 +172,7 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         startScaleFinal = startScale;
         return true;
     }
+
     private void zoomExitAnimation(final Runnable listener) {
         mBackground.setAlpha(0);
         AnimatorSet as = new AnimatorSet();
@@ -181,12 +180,12 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
         boolean scaleResult = getScaleFinalBounds();
         if (scaleResult) {
             ObjectAnimator animatorX = ObjectAnimator.ofFloat(mViewPager, "x", startBounds.left);
-            ObjectAnimator animatorY = ObjectAnimator.ofFloat(mViewPager, "y",  startBounds.top);
+            ObjectAnimator animatorY = ObjectAnimator.ofFloat(mViewPager, "y", startBounds.top);
             ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(mViewPager, "scaleX", startScaleFinal);
             ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(mViewPager, "scaleY", startScaleFinal);
 
             as.play(containAlphaAnimator).with(animatorX).with(animatorY).with(animatorScaleX).with(animatorScaleY);
-        }else {
+        } else {
             //the selected photoview is beyond the mobile screen display
             //so it just fade out
             ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mViewPager, "alpha", 0.1f);
@@ -201,18 +200,15 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
 //	            viewPager.clearAnimation();
 //				viewPager.setVisibility(View.GONE);
                 listener.run();
-                mCurrentAnimator = null;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
 //	            viewPager.clearAnimation();
 //				viewPager.setVisibility(View.GONE);
-                mCurrentAnimator = null;
             }
         });
         as.start();
-        mCurrentAnimator = as;
 
 
     }
@@ -230,55 +226,55 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
     }
 
 
-	 class ImagePagerAdapter extends PagerAdapter {
+    class ImagePagerAdapter extends PagerAdapter {
 
 
-		@Override
-		public int getCount() {
-			return imageUrls.size();
-		}
+        @Override
+        public int getCount() {
+            return imageUrls.size();
+        }
 
-		@Override
-		public View instantiateItem(ViewGroup container, int position) {
+        @Override
+        public View instantiateItem(ViewGroup container, int position) {
 //			ImageView photoView = new ImageView(container.getContext());
 ////			photoView.setScaleType(ScaleType.FIT_CENTER);
 //			PhotoViewAttacher mAttacher=new PhotoViewAttacher(photoView);
-			// Now just add PhotoView to ViewPager and return it
-			View contentView = View.inflate(mContext, R.layout.item_view_pic, null);
-			
-			PhotoView photeView =(PhotoView) contentView.findViewById(R.id.pv_view);
-			final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-			ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(),new ImageLoadingListener() {
-				
-				@Override
-				public void onLoadingStarted(String imageUri, View view) {
-					loadingPb.setVisibility(View.VISIBLE);
-					
-				}
-				
-				@Override
-				public void onLoadingFailed(String imageUri, View view,
-						FailReason failReason) {
-					
-				}
-				
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					loadingPb.setVisibility(View.GONE);					
-				}
-				
-				@Override
-				public void onLoadingCancelled(String imageUri, View view) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			container.addView(contentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            // Now just add PhotoView to ViewPager and return it
+            View contentView = View.inflate(mContext, R.layout.item_view_pic, null);
 
-			photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-				
-				@Override
-				public void onViewTap(View view, float x, float y) {
+            PhotoView photeView = (PhotoView) contentView.findViewById(R.id.pv_view);
+            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
+            ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
+
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    loadingPb.setVisibility(View.VISIBLE);
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view,
+                                            FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    loadingPb.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            container.addView(contentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+            photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+
+                @Override
+                public void onViewTap(View view, float x, float y) {
                     zoomExitAnimation(new Runnable() {
                         @Override
                         public void run() {
@@ -286,22 +282,22 @@ public class ImageViewPagerActivity extends PeachBaseActivity {
                         }
                     });
 
-				}
-			});
-			return contentView;
-		}
+                }
+            });
+            return contentView;
+        }
 
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView((View) object);
-		}
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
 
-		@Override
-		public boolean isViewFromObject(View view, Object object) {
-			return view == object;
-		}
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
 
-	}
+    }
 
-    
+
 }

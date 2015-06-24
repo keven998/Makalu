@@ -83,8 +83,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         handler = new Handler();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .showImageForEmptyUri(R.drawable.avatar_placeholder_round)
-                .showImageOnFail(R.drawable.avatar_placeholder_round)
+                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(28))) // 设置成圆角图片
@@ -146,11 +146,11 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                             if (user != null) {
                                 Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
                                 if (bitmap == null) {
-                                    bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
+                                    bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.messages_bg_useravatar);
                                 }
                                 membersAvatars.add(bitmap);
                             } else {
-                                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.avatar_placeholder_round);
+                                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.messages_bg_useravatar);
                                 membersAvatars.add(bitmap);
                             }
                         }
@@ -166,7 +166,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     }
                 }).start();
             } else {
-                holder.avatar.setImageResource(R.drawable.avatar_placeholder_round);
+                holder.avatar.setImageResource(R.drawable.messages_bg_useravatar);
             }
             if (user != null) {
                 if (user.getNickName() != null) holder.name.setText(user.getNickName());

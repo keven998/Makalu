@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/timestamp"
@@ -15,12 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_activity"
+        android:layout_marginBottom="@dimen/margin_chat_activity"
         android:paddingRight="20dp" >
 
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"

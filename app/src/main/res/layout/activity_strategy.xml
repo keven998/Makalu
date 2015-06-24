@@ -21,7 +21,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
                     android:id="@+id/strategy_viewpager"
                     android:layout_width="match_parent"
@@ -53,9 +52,7 @@
                         android:layout_alignParentTop="true"
                         android:background="@color/base_border_color" />
 
-
                 </RelativeLayout>
-
 
                 <View
                     android:id="@+id/loading_view"
@@ -76,8 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
-                    android:drawableLeft="@drawable/ic_title_back"
-                    android:paddingLeft="20dp"
+                    android:drawableLeft="@drawable/common_icon_navigationback"
+                    android:paddingLeft="10dp"
                     android:paddingRight="30dp" />
 
                 <TextView
@@ -116,7 +113,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="11dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/ic_menu_navigationbar" />
+                        android:src="@drawable/common_icon_navigation_menu" />
 
                     <TextView
                         android:id="@+id/tv_copy_guide"
@@ -243,9 +240,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:dividerHeight="0.8dp"
-                android:divider="@color/color_line"/>
-
+                android:divider="@color/color_line"
+                android:dividerHeight="0.8dp" />
 
         </LinearLayout>
 
