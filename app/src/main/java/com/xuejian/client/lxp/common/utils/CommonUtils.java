@@ -31,7 +31,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.easemob.util.TimeInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.bean.StartCity;
@@ -272,7 +271,7 @@ public class CommonUtils {
         return (new SimpleDateFormat(var1, Locale.CHINA)).format(var0);
     }
     private static boolean isSameDay(long var0) {
-        TimeInfo var2 = getTodayStartAndEndTime();
+        com.xuejian.client.lxp.common.utils.TimeInfo var2 = getTodayStartAndEndTime();
         return var0 > var2.getStartTime() && var0 < var2.getEndTime();
     }
 

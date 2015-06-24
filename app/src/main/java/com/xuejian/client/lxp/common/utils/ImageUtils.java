@@ -302,4 +302,8 @@ public class ImageUtils {
         float var2 = var0.getResources().getDisplayMetrics().density;
         return (int)(var1 * var2 + 0.5F);
     }
+    public static int sp2px(Context var0, float var1) {
+        float var2 = var0.getResources().getDisplayMetrics().scaledDensity;
+        return (int)(var1 * var2 + 0.5F);
+    }
 }

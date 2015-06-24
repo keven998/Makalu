@@ -7,10 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.NotificationCompat;
-import com.easemob.util.EasyUtils;
+import android.support.v4.app.NotificationCompat;
 import com.lv.bean.MessageBean;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
