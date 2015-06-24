@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.config;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 import android.support.v4.BuildConfig;
 
@@ -12,8 +11,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.xuejian.client.lxp.db.DaoMaster;
-import com.xuejian.client.lxp.db.DaoSession;
 
 import java.io.File;
 
@@ -21,7 +18,6 @@ import java.io.File;
  * Created by Rjm on 2014/10/9.
  */
 public class PeachApplication extends BaseApplication {
-    public DaoSession daoSession;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -34,20 +30,7 @@ public class PeachApplication extends BaseApplication {
         super.onCreate();
         initPeachConfig();
         initImageLoader();
-        setupDatabase();
     }
-
-    private void setupDatabase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "lvxingpai-db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-    }
-
-    public DaoSession getDaoSession() {
-        return daoSession;
-    }
-
 
     private void initImageLoader() {
         File cacheDir = StorageUtils.getOwnCacheDirectory(this, SystemConfig.NET_IMAGE_CACHE_DIR);

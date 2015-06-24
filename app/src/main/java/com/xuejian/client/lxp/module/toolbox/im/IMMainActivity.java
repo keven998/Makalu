@@ -43,7 +43,6 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.module.MainActivity;
 
 public class IMMainActivity extends ChatBaseActivity  {
@@ -439,9 +438,8 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     /**
      * 保存提示新消息
      *
-     * @param msg
      */
-    private void notifyNewIviteMessage(InviteMessage msg) {
+    private void notifyNewIviteMessage( ) {
 
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();

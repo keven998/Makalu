@@ -47,7 +47,6 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.IMUser;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
@@ -589,7 +588,7 @@ public class GroupDetailsActivity extends ChatBaseActivity implements OnClickLis
 
     }
 
-    private class MemberAdapter extends ListViewDataAdapter<IMUser>{
+    private class MemberAdapter extends ListViewDataAdapter<User>{
 
         /**
          * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link com.aizou.core.widget.listHelper.ViewHolderBase}

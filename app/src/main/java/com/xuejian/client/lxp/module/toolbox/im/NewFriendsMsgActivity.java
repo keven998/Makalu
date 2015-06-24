@@ -17,18 +17,11 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
-import com.xuejian.client.lxp.db.InviteMessage;
-import com.xuejian.client.lxp.db.InviteStatus;
-import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
-
-import java.util.List;
 
 /**
  * 申请与通知
@@ -36,7 +29,6 @@ import java.util.List;
  */
 public class NewFriendsMsgActivity extends ChatBaseActivity {
 	private ListView listView;
-    private List<InviteMessage> msgs;
     private NewFriendsMsgAdapter adapter;
 
 
@@ -53,15 +45,8 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         });
 
 		listView = (ListView) findViewById(R.id.list);
-	    msgs = InviteMsgRepository.getMessagesList(mContext);
-        for (InviteMessage msg : msgs) {
-            if (msg.getStatus() == InviteStatus.BEINVITEED&& UserDBManager.getInstance().isMyFriend(msg.getUserId())) {
-                msg.setStatus(InviteStatus.AGREED);
-                InviteMsgRepository.saveMessage(mContext, msg);
-            }
-        }
 		//设置adapter
-	    adapter = new NewFriendsMsgAdapter(this, 1, msgs);
+	    //adapter = new NewFriendsMsgAdapter(this, 1, msgs);
 		listView.setAdapter(adapter);
         registerForContextMenu(listView);
 
@@ -89,9 +74,9 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_request) {
-            InviteMessage message = msgs.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
-            InviteMsgRepository.deleteInviteMsg(mContext, message.getFrom());
-            msgs.remove(message);
+//            InviteMessage message = msgs.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
+//            InviteMsgRepository.deleteInviteMsg(mContext, message.getFrom());
+//            msgs.remove(message);
             adapter.notifyDataSetChanged();
             return true;
         }

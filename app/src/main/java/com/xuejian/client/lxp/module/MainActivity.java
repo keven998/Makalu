@@ -31,7 +31,6 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
@@ -374,9 +373,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     /**
      * 保存提示新消息
      *
-     * @param msg
      */
-    private void notifyNewInviteMessage(InviteMessage msg) {
+    private void notifyNewInviteMessage() {
 
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();
