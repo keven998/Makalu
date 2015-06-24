@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -25,8 +24,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
-import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.PeachUser;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -36,10 +33,8 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.AnimationSimple;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
-import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.dest.AddPoiActivity;
 import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;

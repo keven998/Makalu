@@ -29,9 +29,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -39,7 +36,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
-import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.InviteMessage;
 import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
@@ -48,7 +44,6 @@ import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.List;
-import java.util.UUID;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
@@ -171,17 +166,17 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                // IMUtils.setUserHead(imUser);
                 UserDBManager.getInstance().saveContact(imUser);
                 AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
-                EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
-                TextMessageBody body = new TextMessageBody("");
-                contentMsg.setMsgId(UUID.randomUUID().toString());
-                contentMsg.addBody(body);
-                contentMsg.setTo(msg.getFrom());
-                contentMsg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(context).getUserId()));
-                contentMsg.setMsgTime(System.currentTimeMillis());
-                contentMsg.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
-                contentMsg.setUnread(false);
-                contentMsg.setAttribute(Constant.MSG_CONTENT, String.format(context.getResources().getString(R.string.has_add_contact), imUser.getNickName()));
-                EMChatManager.getInstance().saveMessage(contentMsg);
+//                EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+//                TextMessageBody body = new TextMessageBody("");
+//                contentMsg.setMsgId(UUID.randomUUID().toString());
+//                contentMsg.addBody(body);
+//                contentMsg.setTo(msg.getFrom());
+//                contentMsg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(context).getUserId()));
+//                contentMsg.setMsgTime(System.currentTimeMillis());
+//                contentMsg.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
+//                contentMsg.setUnread(false);
+//                contentMsg.setAttribute(Constant.MSG_CONTENT, String.format(context.getResources().getString(R.string.has_add_contact), imUser.getNickName()));
+             //   EMChatManager.getInstance().saveMessage(contentMsg);
 
                 ((Activity) context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }

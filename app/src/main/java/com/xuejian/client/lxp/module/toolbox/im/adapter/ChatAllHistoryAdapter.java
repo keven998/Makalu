@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.aizou.core.utils.LocalDisplay;
-import com.easemob.util.DateUtils;
 import com.lv.bean.ConversationBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,6 +36,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.circluaravatar.JoinBitmaps;
 import com.xuejian.client.lxp.db.userDB.User;
@@ -228,7 +228,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         if (conversation.getLastMessage() != null) {
             // 把最后一条消息的内容作为item的message内容
             String lastMessage = conversation.getLastMessage();
-            holder.time.setText(DateUtils.getTimestampString(new Date(conversation.getLastChatTime())));
+            holder.time.setText(CommonUtils.getTimestampString(new Date(conversation.getLastChatTime())));
             if (conversation.getSendType() == TYPE_SEND && conversation.getStatus() == 2) {
 //                holder.msgState.setVisibility(View.VISIBLE);
                 Drawable drawable = getContext().getResources().getDrawable(R.drawable.ic_message_send_fail);

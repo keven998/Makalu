@@ -26,16 +26,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.easemob.chat.EMGroup;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.db.userDB.User;
 
 import java.util.List;
 
-public class GroupAdapter extends ArrayAdapter<EMGroup> {
+public class GroupAdapter extends ArrayAdapter<User> {
 
 	private LayoutInflater inflater;
 
-	public GroupAdapter(Context context, int res, List<EMGroup> groups) {
+	public GroupAdapter(Context context, int res, List<User> groups) {
 		super(context, res, groups);
 		this.inflater = LayoutInflater.from(context);
 	}
@@ -97,7 +97,7 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 				convertView = inflater.inflate(R.layout.row_group, null);
 			}
 			
-			((TextView)convertView.findViewById(R.id.name)).setText(getItem(position-1).getGroupName());
+			((TextView)convertView.findViewById(R.id.name)).setText(getItem(position-1).getNickName());
 			
 		}
 		

@@ -5,9 +5,7 @@ import android.text.TextUtils;
 
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
-import com.easemob.EMCallBack;
 import com.lv.im.IMClient;
-import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
@@ -69,54 +67,54 @@ public class AccountManager {
         IMClient.getInstance().logout();
         UserDBManager.getInstance().disconnectDB();
     }
-    public void logout(final Context context, final boolean isConflict, final EMCallBack callBack) {
-        PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
-                AccountManager.getInstance().setContactList(null);
-                //处理一下用户名密码表，下次登录的时候重新建立用户名密码表，表里同时只能存在一个用户
-                UserDBManager.getInstance().disconnectDB();
-                IMClient.getInstance().disconnectDB();
-                /*IMUserRepository.clearAllContact(context);
-                InviteMsgRepository.clearAllInviteMsg(context);
-                if (callBack != null) {
-                    callBack.onSuccess();
-                }*/
-                /*MyFragment my=new MyFragment();
-                my.refresh();*/
-               /* Looper.prepare();
-                final PeachMessageDialog dialog=new PeachMessageDialog(context);
-                dialog.setMessage("下线");
-                dialog.setPositiveButton("确定",new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setCancelable(false);
-                dialog.show();
-                Looper.loop();*/
-
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                if (callBack != null) {
-                    callBack.onError(i, s);
-                }
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-                if (callBack != null) {
-                    callBack.onProgress(i, s);
-                }
-            }
-        });
-        // reset password to null
-
-    }
+//    public void logout(final Context context, final boolean isConflict, final EMCallBack callBack) {
+//        PeachHXSDKHelper.getInstance().logout(new EMCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
+//                AccountManager.getInstance().setContactList(null);
+//                //处理一下用户名密码表，下次登录的时候重新建立用户名密码表，表里同时只能存在一个用户
+//                UserDBManager.getInstance().disconnectDB();
+//                IMClient.getInstance().disconnectDB();
+//                /*IMUserRepository.clearAllContact(context);
+//                InviteMsgRepository.clearAllInviteMsg(context);
+//                if (callBack != null) {
+//                    callBack.onSuccess();
+//                }*/
+//                /*MyFragment my=new MyFragment();
+//                my.refresh();*/
+//               /* Looper.prepare();
+//                final PeachMessageDialog dialog=new PeachMessageDialog(context);
+//                dialog.setMessage("下线");
+//                dialog.setPositiveButton("确定",new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                dialog.setCancelable(false);
+//                dialog.show();
+//                Looper.loop();*/
+//
+//            }
+//
+//            @Override
+//            public void onError(int i, String s) {
+//                if (callBack != null) {
+//                    callBack.onError(i, s);
+//                }
+//            }
+//
+//            @Override
+//            public void onProgress(int i, String s) {
+//                if (callBack != null) {
+//                    callBack.onProgress(i, s);
+//                }
+//            }
+//        });
+//        // reset password to null
+//
+//    }
 
     public void saveLoginAccount(Context context, User user) {
         this.user = user;

@@ -1,20 +1,12 @@
 package com.xuejian.client.lxp.db.userDB;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import com.aizou.core.log.LogUtil;
-import com.easemob.util.HanziToPinyin;
-import com.lidroid.xutils.exception.DbException;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
-import com.lv.im.SortList;
-import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.PeachUser;
-import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,10 +14,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**

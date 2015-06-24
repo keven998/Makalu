@@ -19,11 +19,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.FragmentTabHost;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMNotifier;
-import com.easemob.chat.GroupChangeListener;
-import com.easemob.chat.TextMessageBody;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -35,24 +30,20 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.db.InviteMessage;
-import com.xuejian.client.lxp.db.InviteStatus;
 import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
-import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
@@ -415,110 +406,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         }
     };
-
-    /**
-     * MyGroupChangeListener
-     */
-    private class MyGroupChangeListener implements GroupChangeListener {
-
-        @Override
-        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            refreshChatHistoryFragment();
-
-        }
-
-        @Override
-        public void onInvitationAccpted(String groupId, String inviter, String reason) {
-            refreshChatHistoryFragment();
-        }
-
-        @Override
-        public void onInvitationDeclined(String groupId, String invitee, String reason) {
-
-        }
-
-        @Override
-        public void onUserRemoved(String groupId, String groupName) {
-            // 提示用户被T了，demo省略此步骤
-            // 刷新ui
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    try {
-                        updateUnreadMsgCount();
-                        refreshChatHistoryFragment();
-                        if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
-                            GroupsActivity.instance.onResume();
-                        }
-                    } catch (Exception e) {
-                        Log.e("###", "refresh exception " + e.getMessage());
-                    }
-
-                }
-            });
-        }
-
-        @Override
-        public void onGroupDestroy(String groupId, String groupName) {
-            // 群被解散
-            // 提示用户群被解散,demo省略
-            // 刷新ui
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    updateUnreadMsgCount();
-                    refreshChatHistoryFragment();
-                    if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
-                        GroupsActivity.instance.onResume();
-                    }
-                }
-            });
-
-        }
-
-        @Override
-        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
-            // 用户申请加入群聊
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(applyer);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(groupName);
-            msg.setReason(reason);
-            msg.setStatus(InviteStatus.BEAPPLYED);
-            notifyNewInviteMessage(msg);
-        }
-
-        @Override
-        public void onApplicationAccept(String groupId, String groupName, String accepter) {
-            //加群申请被同意
-            EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-            msg.setChatType(EMMessage.ChatType.GroupChat);
-            msg.setFrom(accepter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new TextMessageBody(accepter + "同意了你的群聊申请"));
-            // 保存同意消息
-            EMChatManager.getInstance().saveMessage(msg);
-            // 提醒新消息
-            EMNotifier.getInstance(getApplicationContext()).notifyOnNewMsg();
-
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    updateUnreadMsgCount();
-                    // 刷新ui
-                    refreshChatHistoryFragment();
-                    if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
-                        GroupsActivity.instance.onResume();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
-            //加群申请被拒绝，demo未实现
-        }
-
-    }
 
 
     public void updateUnreadMsgCount() {

@@ -12,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.xuejian.client.lxp.config.hxconfig.PeachHXSDKHelper;
 import com.xuejian.client.lxp.db.DaoMaster;
 import com.xuejian.client.lxp.db.DaoSession;
 
@@ -23,7 +22,6 @@ import java.io.File;
  */
 public class PeachApplication extends BaseApplication {
     public DaoSession daoSession;
-    public static PeachHXSDKHelper hxSDKHelper = new PeachHXSDKHelper();
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -37,7 +35,6 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initImageLoader();
         setupDatabase();
-        initIM();
     }
 
     private void setupDatabase() {
@@ -49,10 +46,6 @@ public class PeachApplication extends BaseApplication {
 
     public DaoSession getDaoSession() {
         return daoSession;
-    }
-
-    private void initIM() {
-        hxSDKHelper.onInit(this);
     }
 
 
