@@ -189,14 +189,19 @@ public class MessageAdapter extends BaseAdapter {
         switch (message.getType()) {
             case TEXT_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_TXT : MESSAGE_TYPE_SENT_TXT;
+
             case VOICE_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_VOICE : MESSAGE_TYPE_SENT_VOICE;
+
             case IMAGE_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
+
             case LOC_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
+
             case TIP_MSG:
                 return MESSAGE_TYPE_TIPS;
+
             case PLAN_MSG:
             case CITY_MSG:
             case TRAVEL_MSG:
@@ -829,7 +834,7 @@ public class MessageAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(activity, ContextMenu.class)).putExtra("position", position)
-                             //   .putExtra("type", EMMessage.Type.IMAGE.ordinal())
+                        //   .putExtra("type", EMMessage.Type.IMAGE.ordinal())
                         , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
@@ -1147,7 +1152,7 @@ public class MessageAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(activity, ContextMenu.class)).putExtra("position", position)
-                             //   .putExtra("type", Type.VOICE.ordinal())
+                        //   .putExtra("type", Type.VOICE.ordinal())
                         , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
@@ -1412,7 +1417,7 @@ public class MessageAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(activity, ContextMenu.class)).putExtra("position", position)
-                               // .putExtra("type", Type.LOCATION.ordinal())
+                        // .putExtra("type", Type.LOCATION.ordinal())
                         , ChatActivity.REQUEST_CODE_CONTEXT_MENU);
                 return false;
             }

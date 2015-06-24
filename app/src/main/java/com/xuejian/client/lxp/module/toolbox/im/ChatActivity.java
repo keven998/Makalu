@@ -822,7 +822,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param content message content
      */
     private void sendText(String content, int extType) {
-        if (TextUtils.isEmpty(content)||content.trim().isEmpty()) {
+        if (TextUtils.isEmpty(content) || content.trim().isEmpty()) {
             return;
         }
         MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), content, toChatUsername, chatType);

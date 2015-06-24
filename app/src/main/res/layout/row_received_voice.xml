@@ -14,7 +14,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity">
+        android:layout_marginTop="@dimen/margin_chat_activity"
+        android:layout_marginBottom="@dimen/margin_chat_activity">
 
         <ImageView
             android:id="@+id/iv_userhead"
@@ -41,7 +42,7 @@
             android:layout_below="@id/tv_userid"
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg_normal">
+            android:background="@drawable/messages_bg_receive">
 
             <ImageView
                 android:id="@+id/iv_voice"

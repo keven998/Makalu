@@ -41,7 +41,7 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_below="@id/tv_userid"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg_normal">
+            android:background="@drawable/messages_bg_receive">
 
             <RelativeLayout
                 android:id="@+id/rl_image"
