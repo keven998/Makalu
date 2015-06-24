@@ -53,7 +53,7 @@ public class MessageDB {
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private SQLiteDatabase mdb;
     private static String userId;
-    ExecutorService dbThread = Executors.newFixedThreadPool(1);
+//    ExecutorService dbThread = Executors.newFixedThreadPool(1);
 
     private MessageDB(String User_Id) {
         String path = CryptUtils.getMD5String(User_Id);
@@ -73,12 +73,15 @@ public class MessageDB {
         }
         return instance;
     }
-    public static void initDB(String _userId){
-        userId=_userId;
+
+    public static void initDB(String _userId) {
+        userId = _userId;
     }
-    public static void disconnectDB(){
-        instance=null;
+
+    public static void disconnectDB() {
+        instance = null;
     }
+
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
@@ -91,18 +94,20 @@ public class MessageDB {
         if (mOpenCounter.decrementAndGet() == 0) {
             db.close();
         }
-        mdb=null;
+        mdb = null;
         System.out.println("关闭数量" + mOpenCounter.get());
     }
-    public void init(){
-        mdb=getDB();
+
+    public void init() {
+        mdb = getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + con_table_name
                 + " (Friend_Id INTEGER PRIMARY KEY,lastTime INTEGER,HASH TEXT,last_rec_msgId INTEGER, IsRead INTEGER,conversation TEXT,chatType TEXT)");
         mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
 
     }
-    public synchronized long saveMsg(final String Friend_Id, final MessageBean entity,String chatType) {
+
+    public synchronized long saveMsg(final String Friend_Id, final MessageBean entity, String chatType) {
 
         String table_name = "chat_" + CryptUtils.getMD5String(Friend_Id);
         mdb = getDB();
@@ -122,7 +127,7 @@ public class MessageDB {
         values.put("Metadata", entity.getMetadata());
         values.put("SenderId", entity.getSenderId());
         long localid = mdb.insert(table_name, null, values);
-        add2Conversion(Integer.parseInt(Friend_Id), entity.getCreateTime(), table_name, entity.getServerId(), null,chatType);
+        add2Conversion(Integer.parseInt(Friend_Id), entity.getCreateTime(), table_name, entity.getServerId(), null, chatType);
         closeDB();
         return localid;
     }
@@ -135,13 +140,13 @@ public class MessageDB {
         /**
          * CMD消息
          */
-        if ("CMD".equals(chatType)){
-           return handleCMD(entity);
+        if ("CMD".equals(chatType)) {
+            return handleCMD(entity);
         }
         /**
          * 单聊
          */
-       else if ("single".equals(chatType)) {
+        else if ("single".equals(chatType)) {
             table_name = "chat_" + CryptUtils.getMD5String(entity.getSenderId() + "");
             chater = entity.getSenderId() + "";
         }
@@ -151,40 +156,39 @@ public class MessageDB {
         else if ("group".equals(chatType)) {
             table_name = "chat_" + CryptUtils.getMD5String(groupId + "");
             chater = groupId + "";
-        }
-        else{
-            if (Config.isDebug){
-                Log.e(Config.TAG,"chatType is null");
+        } else {
+            if (Config.isDebug) {
+                Log.e(Config.TAG, "chatType is null");
             }
-            if (IMClient.getInstance().isBLOCK()){
+            if (IMClient.getInstance().isBLOCK()) {
                 IMClient.getInstance().setBLOCK(false);
                 LazyQueue.getInstance().TempDequeue();
             }
             closeDB();
             return 1;
         }
-        if (entity.getType()==1) {
+        if (entity.getType() == 1) {
 
             try {
-                JSONObject object=new JSONObject(entity.getMessage());
-                String url=object.getString("url");
-                String path= Config.DownLoadAudio_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(url) + ".amr";
-                object.put("path",path);
-                object.put("isRead",false);
+                JSONObject object = new JSONObject(entity.getMessage());
+                String url = object.getString("url");
+                String path = Config.DownLoadAudio_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".amr";
+                object.put("path", path);
+                object.put("isRead", false);
                 entity.setMessage(object.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        if (entity.getType()==2) {
+        if (entity.getType() == 2) {
             try {
-                JSONObject object=new JSONObject(entity.getMessage());
-                String url=object.getString("thumb");
-                String path= Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(url) + ".jpeg";
-                String full=object.getString("full");
-                String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
-                object.put("localPath",localPath);
-                object.put("thumbPath",path);
+                JSONObject object = new JSONObject(entity.getMessage());
+                String url = object.getString("thumb");
+                String path = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".jpeg";
+                String full = object.getString("full");
+                String localPath = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(full) + ".jpeg";
+                object.put("localPath", localPath);
+                object.put("thumbPath", path);
                 entity.setMessage(object.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -203,7 +207,7 @@ public class MessageDB {
         Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
         int count = cursor.getCount();
 
-        if (count > 0){
+        if (count > 0) {
             closeDB();
             return 1;
         }
@@ -219,14 +223,15 @@ public class MessageDB {
         values.put("SenderId", entity.getSenderId());
         mdb.insert(table_name, null, values);
         IMClient.getInstance().setLastMsg(conversation, entity.getServerId());
-        add2Conversion(Long.parseLong(chater), entity.getCreateTime(), table_name, entity.getServerId(), conversation,chatType);
+        add2Conversion(Long.parseLong(chater), entity.getCreateTime(), table_name, entity.getServerId(), conversation, chatType);
         closeDB();
         return 0;
     }
 
     private int handleCMD(MessageBean entity) {
         mdb = getDB();
-        String table_name =  "cmd_" + CryptUtils.getMD5String(100+ "");;
+        String table_name = "cmd_" + CryptUtils.getMD5String(100 + "");
+        ;
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
                 + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
@@ -246,21 +251,21 @@ public class MessageDB {
         values.put("Metadata", entity.getMetadata());
         values.put("SenderId", entity.getSenderId());
         mdb.insert(table_name, null, values);
-        String cmd=entity.getMessage();
+        String cmd = entity.getMessage();
         try {
-            JSONObject object=new JSONObject(cmd);
-            String action=object.getString("action");
-            switch (action){
+            JSONObject object = new JSONObject(cmd);
+            String action = object.getString("action");
+            switch (action) {
                 case "D_INVITE":
-                long chatId=object.getLong("groupId");
-                long inviteId=object.getLong("userId");
-                String nickName=object.getString("nickName");
-                String groupName=object.getString("groupName");
-                MessageBean m=new MessageBean();
-                m.setMessage(nickName+"邀请你加入"+groupName+"讨论组");
-                m.setCreateTime(TimeUtils.getTimestamp());
-                m.setType(99);
-                saveMsg(String.valueOf(chatId),m,"group");
+                    long chatId = object.getLong("groupId");
+                    long inviteId = object.getLong("userId");
+                    String nickName = object.getString("nickName");
+                    String groupName = object.getString("groupName");
+                    MessageBean m = new MessageBean();
+                    m.setMessage(nickName + "邀请你加入" + groupName + "讨论组");
+                    m.setCreateTime(TimeUtils.getTimestamp());
+                    m.setType(99);
+                    saveMsg(String.valueOf(chatId), m, "group");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -299,22 +304,22 @@ public class MessageDB {
         return list;
     }
 
-   public synchronized void updateReadStatus(String conversation, int num) {
+    public synchronized void updateReadStatus(String conversation, int num) {
         mdb = getDB();
         ContentValues values = new ContentValues();
         if (num == 0) {
             values.put("IsRead", num);
         }
-        if (num==1){
+        if (num == 1) {
             Cursor c = mdb.rawQuery("select IsRead from " + con_table_name + " where conversation='" + conversation + "'", null);
             c.moveToLast();
-               int  n = c.getInt(0);
-                if (Config.isDebug){
-                    Log.i(Config.TAG,"未读数量： " + n);
-                }
-                values.put("IsRead", n+1);
+            int n = c.getInt(0);
+            if (Config.isDebug) {
+                Log.i(Config.TAG, "未读数量： " + n);
+            }
+            values.put("IsRead", n + 1);
             c.close();
-       }
+        }
         mdb.update(con_table_name, values, " conversation=?", new String[]{conversation});
         closeDB();
     }
@@ -329,10 +334,10 @@ public class MessageDB {
         int SendType = c.getInt(MESSAGE_INDEX_SendType);
         String Metadata = c.getString(MESSAGE_INDEX_Metadata);
         int SenderId = c.getInt(MESSAGE_INDEX_SenderId);
-        return new MessageBean(LocalId,ServerId, Status, Type, Message, CreateTime, SendType, Metadata, SenderId);
+        return new MessageBean(LocalId, ServerId, Status, Type, Message, CreateTime, SendType, Metadata, SenderId);
     }
 
-    public synchronized void add2Conversion(long Friend_Id, long lastTime, String hash, int last_rec_msgId, String conversation,String chatType) {
+    public synchronized void add2Conversion(long Friend_Id, long lastTime, String hash, int last_rec_msgId, String conversation, String chatType) {
         mdb = getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + hash
@@ -375,53 +380,55 @@ public class MessageDB {
              */
             //Cursor cursor = mdb.rawQuery("SELECT Message,Type,Status,SendType FROM " + table + " order by ServerId desc limit 1", null);
             Cursor cursor = mdb.rawQuery("SELECT Message,Type,Status,SendType FROM " + table + " order by LocalId desc limit 1", null);
-            String lastMessage=null;
-            int messageType=0;
-            int status=0;
-            int sendType=0;
-            if (cursor.getCount()>0) {
+            String lastMessage = null;
+            int messageType = 0;
+            int status = 0;
+            int sendType = 0;
+            if (cursor.getCount() > 0) {
                 cursor.moveToLast();
                 lastMessage = cursor.getString(0);
-                messageType=cursor.getInt(1);
-                status=cursor.getInt(2);
-                sendType=cursor.getInt(3);
+                messageType = cursor.getInt(1);
+                status = cursor.getInt(2);
+                sendType = cursor.getInt(3);
             }
-            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage,chatType,messageType,status,sendType));
+            list.add(new ConversationBean(friend_id, time, table, lastmsgId, isRead, conversation, lastMessage, chatType, messageType, status, sendType));
             cursor.close();
         }
         c.close();
         closeDB();
         return list;
     }
-    public synchronized void deleteConversation(String friendId){
-        mdb=getDB();
+
+    public synchronized void deleteConversation(String friendId) {
+        mdb = getDB();
         mdb.delete(con_table_name, "Friend_Id=?", new String[]{friendId});
         closeDB();
     }
-    public synchronized void deleteMessage(String friendId){
-        mdb=getDB();
+
+    public synchronized void deleteMessage(String friendId) {
+        mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(friendId);
-        mdb.delete(table_name,null,null);
+        mdb.delete(table_name, null, null);
         closeDB();
     }
 
-    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status,String message,int Type) {
+    public synchronized void updateMsg(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         ContentValues values = new ContentValues();
-        if (msgId!=null)
-        values.put("ServerId", msgId);
+        if (msgId != null)
+            values.put("ServerId", msgId);
         //values.put("conversation",conversation);
-        if (message!=null){
+        if (message != null) {
             values.put("Message", message);
         }
-        if (timestamp!=0)values.put("CreateTime", timestamp);
+        if (timestamp != 0) values.put("CreateTime", timestamp);
         values.put("Status", status);
-        values.put("Type",Type);
+        values.put("Type", Type);
         mdb.update(table_name, values, "LocalId=?", new String[]{LocalId + ""});
         int id;
-        if (msgId==null)id=-1;
-        else id=Integer.parseInt(msgId);
+        if (msgId == null) id = -1;
+        else id = Integer.parseInt(msgId);
         updateConversation(fri_ID, conversation, id);
         closeDB();
     }
@@ -429,49 +436,54 @@ public class MessageDB {
     public synchronized void updateConversation(String fri_ID, String conversation, int last_msgId) {
         mdb = getDB();
         ContentValues values = new ContentValues();
-        if (conversation!=null)values.put("conversation", conversation);
-        if (last_msgId!=-1)values.put("last_rec_msgId", last_msgId);
-        if (values.size()!=0)mdb.update(con_table_name, values, "Friend_Id=?", new String[]{fri_ID});
+        if (conversation != null) values.put("conversation", conversation);
+        if (last_msgId != -1) values.put("last_rec_msgId", last_msgId);
+        if (values.size() != 0)
+            mdb.update(con_table_name, values, "Friend_Id=?", new String[]{fri_ID});
         closeDB();
     }
+
     public synchronized void deleteSingleMessage(String fri_ID, long msgId) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
         mdb.delete(table_name, "LocalId=?", new String[]{String.valueOf(msgId)});
         closeDB();
     }
-    public synchronized void changeMessagestatus(String fri_ID, long msgId,int status) {
+
+    public synchronized void changeMessagestatus(String fri_ID, long msgId, int status) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
-        ContentValues values=new ContentValues();
-        values.put("Status",status);
+        ContentValues values = new ContentValues();
+        values.put("Status", status);
         mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
         closeDB();
     }
-    public synchronized void updateReadStatus(String fri_ID, long msgId,boolean status) {
+
+    public synchronized void updateReadStatus(String fri_ID, long msgId, boolean status) {
         mdb = getDB();
         String table_name = "chat_" + CryptUtils.getMD5String(fri_ID);
-        Cursor cursor=mdb.rawQuery("select Message from " + table_name + " where LocalId=?", new String[]{String.valueOf(msgId)});
+        Cursor cursor = mdb.rawQuery("select Message from " + table_name + " where LocalId=?", new String[]{String.valueOf(msgId)});
         cursor.moveToLast();
-        String result=cursor.getString(0);
+        String result = cursor.getString(0);
         try {
-            JSONObject object=new JSONObject(result);
-            object.put("isRead",status);
-        ContentValues values=new ContentValues();
-        values.put("Message", object.toString());
-        mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
-        } catch ( Exception e) {
+            JSONObject object = new JSONObject(result);
+            object.put("isRead", status);
+            ContentValues values = new ContentValues();
+            values.put("Message", object.toString());
+            mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
+        } catch (Exception e) {
             e.printStackTrace();
         }
         cursor.close();
         closeDB();
     }
-    public int getUnReadCount(){
-        if (con_table_name==null)return 0;
-        mdb=getDB();
-        Cursor cursor=mdb.rawQuery("select sum(isRead) from " + con_table_name, null);
+
+    public int getUnReadCount() {
+        if (con_table_name == null) return 0;
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select sum(isRead) from " + con_table_name, null);
         cursor.moveToLast();
-        int count=cursor.getInt(0);
+        int count = cursor.getInt(0);
         cursor.close();
         return count;
     }

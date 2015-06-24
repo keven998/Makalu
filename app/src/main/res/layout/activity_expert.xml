@@ -11,7 +11,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/title_bar_background"
+        android:background="@drawable/bg_navigation_bar"
         >
 
         <TextView
@@ -42,12 +42,6 @@
             android:paddingRight="13dp"
             android:paddingLeft="30dp"
             />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/home_title_color"
-            android:layout_gravity="bottom"/>
 
     </FrameLayout>
 

@@ -74,7 +74,7 @@
                 android:drawablePadding="12dp"
                 android:drawableTop="@drawable/lxp_expert_helper"
                 android:gravity="center"
-                android:text="求助达人"
+                android:text="达人咨询师"
                 android:textColor="@color/color_text_iii"
                 android:textSize="16sp" />
 

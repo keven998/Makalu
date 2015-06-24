@@ -8,7 +8,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/title_bar_background">
+        android:background="@drawable/bg_navigation_bar">
 
         <RelativeLayout
             android:id="@+id/ly_title_bar_left"
@@ -73,13 +73,6 @@
                 android:visibility="gone"/>
 
         </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/home_title_color"
-            android:layout_alignParentBottom="true"
-            />
 
     </RelativeLayout>
 

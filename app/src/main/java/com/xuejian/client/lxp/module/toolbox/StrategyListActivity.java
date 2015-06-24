@@ -320,7 +320,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         } else {
             mMyStrategyLv.setScrollLoadEnabled(false);
         }
-        if (result!=null&&result.size() == 0) {
+        if (result != null && result.size() == 0) {
             if (mCurrentPage == 0) {
                 //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
                 //mMyStrategyLv.doPullRefreshing(true, 0);
