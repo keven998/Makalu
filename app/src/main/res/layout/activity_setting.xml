@@ -19,7 +19,7 @@
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_clear_all"
         android:drawablePadding="17dp"
-        android:drawableRight="@drawable/right_arrow_icon"
+        android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
         android:paddingLeft="19dp"
         android:paddingRight="18dp"
@@ -36,11 +36,11 @@
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_message_reminder"
         android:drawablePadding="17dp"
-        android:drawableRight="@drawable/right_arrow_icon"
+        android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
-        android:text="消息和提醒"
+        android:text="提醒设置"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
 
@@ -52,11 +52,11 @@
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_upgrade"
         android:drawablePadding="16dp"
-        android:drawableRight="@drawable/right_arrow_icon"
+        android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
-        android:text="检查新版本"
+        android:text="检查更新"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
 

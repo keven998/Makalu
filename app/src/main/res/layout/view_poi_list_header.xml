@@ -48,7 +48,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:paddingBottom="12dp"
-            android:drawableRight="@drawable/arr_poi_guide"
+            android:drawableRight="@drawable/icon_arrow_right"
             android:text="详情" />
     </RelativeLayout>
 </FrameLayout>

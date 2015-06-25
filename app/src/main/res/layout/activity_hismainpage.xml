@@ -160,30 +160,6 @@
                             android:textColor="@color/base_color_white"
                             android:textSize="13sp" />
 
-                        <!--<Button android:id="@+id/btn_reg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:background="@drawable/btn_login_button"
-                            android:layout_marginLeft="8dp"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:layout_marginRight="10dp"
-                            android:text="注册"
-                            android:textColor="@color/them_botton_text_color"
-                            android:textSize="14sp"/>
-
-                        <Button android:id="@+id/btn_login"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:background="@drawable/btn_login_button"
-                            android:layout_toRightOf="@id/btn_reg"
-                            android:layout_alignTop="@id/btn_reg"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:text="登录"
-                            android:textColor="@color/them_botton_text_color"
-                            android:textSize="14sp"/>-->
-
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -245,7 +221,7 @@
                         android:layout_marginRight="11dp"
                         android:layout_weight="0"
                         android:drawablePadding="10dp"
-                        android:drawableRight="@drawable/right_arrow_icon"
+                        android:drawableRight="@drawable/icon_arrow_right"
                         android:gravity="center_vertical|right"
                         android:textColor="@color/app_theme_color"
                         android:textSize="15sp" />
@@ -284,7 +260,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:drawablePadding="10dp"
-                            android:drawableRight="@drawable/right_arrow_icon"
+                            android:drawableRight="@drawable/icon_arrow_right"
                             android:gravity="center_vertical|right"
                             android:paddingRight="11dp"
                             android:text=""
@@ -489,29 +465,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text=""
             android:textColor="@color/app_theme_color"
             android:textSize="16sp" />
-
-        <!--<View
-            android:layout_width="1dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@color/base_border_color"
-            />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="咨询达人"
-            android:gravity="center"
-            android:textColor="@color/app_theme_color"
-            android:textSize="15sp"
-            android:layout_weight="1"
-            android:id="@+id/his_query"
-            />
--->
 
 
     </LinearLayout>

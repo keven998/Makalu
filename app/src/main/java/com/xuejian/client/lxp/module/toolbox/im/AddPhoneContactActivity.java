@@ -191,7 +191,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 });
             }else {
                 actionButton.setText("邀请");
-                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.arr_poi_guide,0);
+                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_arrow_right,0);
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

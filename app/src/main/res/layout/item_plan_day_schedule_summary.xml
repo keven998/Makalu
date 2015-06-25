@@ -15,7 +15,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/arr_poi_guide"
+        android:drawableRight="@drawable/icon_arrow_right"
         android:drawablePadding="10dp"
         android:gravity="left|center_vertical"/>
 

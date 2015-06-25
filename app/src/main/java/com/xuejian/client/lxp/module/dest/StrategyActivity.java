@@ -983,7 +983,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 });
             } else {
                 place.setText(destinations.get(position).zhName);
-                place.setCompoundDrawablesWithIntrinsicBounds(null, null, StrategyActivity.this.getResources().getDrawable(R.drawable.right_arrow_icon), null);
+                place.setCompoundDrawablesWithIntrinsicBounds(null, null, StrategyActivity.this.getResources().getDrawable(R.drawable.icon_arrow_right), null);
                 place.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

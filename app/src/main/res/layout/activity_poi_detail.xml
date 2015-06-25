@@ -49,18 +49,6 @@
     </RelativeLayout>
 
 
-    <!-- <ImageView
-         android:id="@+id/iv_close"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="right"
-         android:paddingBottom="5dp"
-         android:paddingLeft="60dp"
-         android:paddingRight="9dp"
-         android:paddingTop="5dp"
-         android:scaleType="centerInside"
-         android:src="@drawable/ic_poi_close_selector" />-->
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
