@@ -57,7 +57,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private RelativeLayout mBookFl;
     private TextView mSpotNameTv, mTimeTv, mAllEvaluation;
     private TextView tipsTv, travelGuideTv, trafficGuideTv;
-    private ImageView favIv,shareIv,chatIv;
+    private ImageView chatIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
     private TextView ic_back,poi_rank_sm;
@@ -111,9 +111,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         p.height = (int) (d.getHeight());  /* - LocalDisplay.dp2px(64)*/
         p.width = (int) (d.getWidth() ); /*- LocalDisplay.dp2px(28)*/
         spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
-        favIv = (ImageView) findViewById(R.id.iv_fav);
         chatIv = (ImageView) findViewById(R.id.iv_chat);
-        shareIv = (ImageView) hv.findViewById(R.id.iv_share);
         ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
         mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
         mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
@@ -199,14 +197,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         //读取接口数据
     }
 
-    private void refreshFav(SpotDetailBean detailBean) {
-        if (detailBean.isFavorite) {
-            favIv.setImageResource(R.drawable.ic_favorite_sleceted);
-        } else {
-            favIv.setImageResource(R.drawable.ic_favorite_normal);
-        }
-    }
-
     private void bindView(final SpotDetailBean result) {
         ImageLoader.getInstance().displayImage(result.images.size() > 0 ? result.images.get(0).url : "", spotIv, UILUtils.getDefaultOption());
         spotIv.setOnClickListener(new View.OnClickListener() {
@@ -286,27 +276,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
                 IMUtils.onClickImShare(SpotDetailActivity.this);
             }
         });
-        /*shareIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActionDialog();
-            }
-        });*/
-        refreshFav(spotDetailBean);
-        favIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                User user = AccountManager.getInstance().getLoginAccount(SpotDetailActivity.this);
-                if (user == null) { // || TextUtils.isEmpty(user.easemobUser)
-                    ToastUtil.getInstance(SpotDetailActivity.this).showToast("请先登录");
-                    Intent intent = new Intent(SpotDetailActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, 11);
-                    return;
-                } else {
-                    favorite(result.isFavorite);
-                }
-            }
-        });
+
         descLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,53 +361,11 @@ public class SpotDetailActivity extends PeachBaseActivity {
         }
     }
 
-    private void favorite(boolean isFavorite) {
-        if (isFavorite) {
-            OtherApi.deleteFav(spotDetailBean.id, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0) {
-                        spotDetailBean.isFavorite = false;
-                        refreshFav(spotDetailBean);
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    if (!isFinishing())
-                        ToastUtil.getInstance(SpotDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                }
-            });
-        } else {
-            MobclickAgent.onEvent(mContext,"event_spot_favorite");
-            OtherApi.addFav(spotDetailBean.id, "vs", new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
-                        spotDetailBean.isFavorite = true;
-                        refreshFav(spotDetailBean);
-                        ToastUtil.getInstance(SpotDetailActivity.this).showToast("已收藏");
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                }
-            });
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 11) {
-                favorite(spotDetailBean.isFavorite);
-            } else {
-                IMUtils.onShareResult(mContext, spotDetailBean, requestCode, resultCode, data, null);
-            }
+            IMUtils.onShareResult(mContext, spotDetailBean, requestCode, resultCode, data, null);
         }
     }
 

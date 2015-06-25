@@ -1,53 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/poi_det_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_gray_dialog"
-    android:orientation="vertical"
-    android:id="@+id/poi_det_parent">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white"
-        >
+        android:background="@color/base_color_white">
 
         <TextView
             android:id="@+id/poi_det_back"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:drawableLeft="@drawable/selector_ic_nav_back"
-            android:paddingLeft="10dp"
-            />
+            android:paddingLeft="10dp" />
 
         <TextView
             android:id="@+id/poi_det_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/base_font_color"
-            android:textSize="18sp"
             android:layout_centerInParent="true"
             android:text="景点详情"
-            />
-
-        <ImageView
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="13dp"
-            android:layout_toLeftOf="@+id/iv_chat"
-            android:scaleType="fitCenter"
-            android:src="@drawable/checker_title_ic_favorite" />
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
-            android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_title_chat" />
 
@@ -55,9 +42,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/app_theme_color"
             android:layout_alignParentBottom="true"
-            />
+            android:background="@color/app_theme_color" />
 
 
     </RelativeLayout>
@@ -87,15 +73,13 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:fadingEdge="none"
-            android:headerDividersEnabled="false"
             android:footerDividersEnabled="false"
-            android:overScrollMode="never"
+            android:headerDividersEnabled="false"
             android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            android:paddingBottom="20dp"
             android:scrollbars="none"
-            android:visibility="visible"
-            android:paddingBottom="20dp"/>
-
-
+            android:visibility="visible" />
 
 
     </RelativeLayout>

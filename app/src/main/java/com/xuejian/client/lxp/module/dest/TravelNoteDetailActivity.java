@@ -54,9 +54,9 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         String url;
-        if(TextUtils.isEmpty(noteBean.detailUrl)){
-            url = H5Url.TRAVEL_NOTE+id;
-        }else{
+        if (TextUtils.isEmpty(noteBean.detailUrl)) {
+            url = H5Url.TRAVEL_NOTE + id;
+        } else {
             url = noteBean.detailUrl;
         }
 
@@ -78,23 +78,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                 }
             });
 
-            CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
-            txtView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checker_title_ic_favorite, 0);
-            txtView.setVisibility(View.VISIBLE);
-            txtView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    User user = AccountManager.getInstance().getLoginAccount(TravelNoteDetailActivity.this);
-                    if (user != null ) { //&& !TextUtils.isEmpty(user.easemobUser)
-                        favorite((CheckedTextView) v);
-                    } else {
-                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("请先登录");
-                        Intent intent = new Intent(TravelNoteDetailActivity.this, LoginActivity.class);
-                        startActivityForResult(intent, 11);
-                    }
-
-                }
-            });
         }
 
     }
@@ -195,6 +178,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
     public static class MoreMenu extends BlurDialogFragment {
         String id;
         TravelNoteBean noteBean;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

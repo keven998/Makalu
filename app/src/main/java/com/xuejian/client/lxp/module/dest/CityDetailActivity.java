@@ -58,10 +58,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private TextView mCityNameTv;
     private TextView mCityNameEn;
     private TextView mTTview;
-    private CheckBox mFavCb;
     private TextView mCostTimeTv;
     private ExpandableTextView bestMonthTv;
-    private TextView foodTv,shoppingTv,spotsTv,travelTv;
+    private TextView foodTv, shoppingTv, spotsTv, travelTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
@@ -73,7 +72,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
-        isFromStrategy=getIntent().getBooleanExtra("isFromStrategy",false);
+        isFromStrategy = getIntent().getBooleanExtra("isFromStrategy", false);
         initView();
         initData();
     }
@@ -97,28 +96,27 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
-            if(mPop!=null&&mPop.isShowing()){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mPop != null && mPop.isShowing()) {
                 mPop.dismiss();
-            }else{
+            } else {
                 finish();
             }
         }
         return false;
     }
 
-    private void initView(){
+    private void initView() {
         PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
         //ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
         mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
         bottom_line = (View) findViewById(R.id.title_bottom_line);
-        mFavCb = (CheckBox)findViewById(R.id.iv_fav);
-        shareToChat = (ImageView)findViewById(R.id.city_detail_chat);
+        shareToChat = (ImageView) findViewById(R.id.city_detail_chat);
         shareToChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_city_share_to_talk");
+                MobclickAgent.onEvent(mContext, "event_city_share_to_talk");
                 IMUtils.onClickImShare(CityDetailActivity.this);
             }
         });
@@ -132,7 +130,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         View hv;
         hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
         travelLv.setHeaderView(hv);
-       // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
+        // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
         mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
         View zoomView = hv.findViewById(R.id.ly1);
         travelLv.setZoomView(zoomView);
@@ -160,7 +158,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_more_city_travel_notes");
+                MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
                 Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
                 intent.putExtra("id", locId);
                 startActivity(intent);
@@ -187,18 +185,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             }
         });*/
-       // setTitleAlpha(10);
+        // setTitleAlpha(10);
     }
 
     private void setTitleAlpha(int alpha) {
 //        if (alpha <= 1) {
-            titleBar.getBackground().setAlpha(alpha);
-            bottom_line.getBackground().setAlpha(alpha);
-       //   mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
+        titleBar.getBackground().setAlpha(alpha);
+        bottom_line.getBackground().setAlpha(alpha);
+        //   mTitleTv.setTextColor(mTitleTv.getTextColors().withAlpha(alpha));
 //        }
     }
 
-    private void getCityDetailData(final String id){
+    private void getCityDetailData(final String id) {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS / 1.5), new HttpCallBack<String>() {
             @Override
@@ -221,7 +219,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
     }
 
-    private void getTravelNotes(String locId){
+    private void getTravelNotes(String locId) {
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -245,9 +243,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
     }
 
-    private void bindView(final LocBean detailBean){
+    private void bindView(final LocBean detailBean) {
         locDetailBean = detailBean;
-        if(isFromStrategy) {
+        if (isFromStrategy) {
             findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
         }
         findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
@@ -262,7 +260,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_city_photoes");
+                MobclickAgent.onEvent(mContext, "event_city_photoes");
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
@@ -271,59 +269,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        mFavCb.setChecked(locDetailBean.isFavorite);
-        mFavCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
-                User user = AccountManager.getInstance().getLoginAccount(mContext);
-                if (user == null) {
-                    ToastUtil.getInstance(mContext).showToast("请先登录");
-                    Intent intent = new Intent(mContext, LoginActivity.class);
-                    startActivity(intent);
-                    mFavCb.setChecked(!b);
-                    return;
-                }
-                if (!b) {
-                    OtherApi.deleteFav(detailBean.id, new HttpCallBack<String>() {
-                        @Override
-                        public void doSuccess(String result, String method) {
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
-
-                            } else {
-                                mFavCb.setChecked(!b);
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            mFavCb.setChecked(!b);
-                        }
-                    });
-                } else {
-                    MobclickAgent.onEvent(mContext,"event_city_favorite");
-                    OtherApi.addFav(detailBean.id, "locality", new HttpCallBack<String>() {
-                        @Override
-                        public void doSuccess(String result, String method) {
-                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                            if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
-                                ToastUtil.getInstance(CityDetailActivity.this).showToast("已收藏");
-                            } else {
-                                mFavCb.setChecked(!b);
-                            }
-                        }
-
-                        @Override
-                        public void doFailure(Exception error, String msg, String method) {
-                            mFavCb.setChecked(!b);
-                        }
-                    });
-                }
-            }
-        });
-
-        if(detailBean.imageCnt>100){
-            detailBean.imageCnt=100;
+        if (detailBean.imageCnt > 100) {
+            detailBean.imageCnt = 100;
         }
         mCityNameTv.setText(detailBean.zhName);
         mCostTimeTv.setText(String.format("参考游玩时间： %s", detailBean.timeCostDesc));
@@ -332,9 +279,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
         travelTv.setOnClickListener(this);
-        if(detailBean.enName.equals("")||detailBean.enName==null){
+        if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
-        }else{
+        } else {
             mCityNameEn.setText(detailBean.enName);
         }
         mCityNameEn.setOnClickListener(new View.OnClickListener() {
@@ -366,24 +313,24 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
         mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
-       // mTitleTv.setText(detailBean.zhName);
+        // mTitleTv.setText(detailBean.zhName);
     }
 
-    public void intentToTravel(View view){
-        if(locDetailBean!=null){
+    public void intentToTravel(View view) {
+        if (locDetailBean != null) {
             MobclickAgent.onEvent(mContext, "event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
             intent.putExtra("enable_bottom_bar", true);
             intent.putExtra("title", "旅游指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
-        }else{
-            Log.e("CLICK","没有数据");
+        } else {
+            Log.e("CLICK", "没有数据");
         }
     }
 
-    public void intentToSpots(View view){
-        MobclickAgent.onEvent(mContext,"event_city_spots");
+    public void intentToSpots(View view) {
+        MobclickAgent.onEvent(mContext, "event_city_spots");
         Intent intent = new Intent(mContext, SpotListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
@@ -392,35 +339,35 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         startActivity(intent);
     }
 
-    public void intentToFood(View view){
-        MobclickAgent.onEvent(mContext,"event_city_delicacy");
+    public void intentToFood(View view) {
+        MobclickAgent.onEvent(mContext, "event_city_delicacy");
         Intent intent = new Intent(mContext, PoiListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
         intent.putParcelableArrayListExtra("locList", locList);
         intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
-        intent.putExtra("value",locDetailBean.diningTitles);
-        intent.putExtra("isFromCityDetail",true);
+        intent.putExtra("value", locDetailBean.diningTitles);
+        intent.putExtra("isFromCityDetail", true);
         startActivity(intent);
     }
 
-    public void intentToShopping(View view){
-        MobclickAgent.onEvent(mContext,"event_city_shopping");
+    public void intentToShopping(View view) {
+        MobclickAgent.onEvent(mContext, "event_city_shopping");
         Intent intent = new Intent(mContext, PoiListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
         intent.putParcelableArrayListExtra("locList", locList);
         intent.putExtra("type", TravelApi.PeachType.SHOPPING);
-        intent.putExtra("value",locDetailBean.shoppingTitles);
-        intent.putExtra("isFromCityDetail",true);
+        intent.putExtra("value", locDetailBean.shoppingTitles);
+        intent.putExtra("isFromCityDetail", true);
         startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_travel:
-                Log.e("CLICK","点击生效");
+                Log.e("CLICK", "点击生效");
                 intentToTravel(v);
                 break;
             case R.id.tv_spots:
@@ -450,12 +397,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {*/
-                MobclickAgent.onEvent(mContext,"event_create_new_trip_plan_city");
-                Intent intent = new Intent(this, SelectDestActivity.class);
-                ArrayList<LocBean> locList = new ArrayList<LocBean>();
-                locList.add(locDetailBean);
-                intent.putExtra("locList",locList);
-                startActivity(intent);
+        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_city");
+        Intent intent = new Intent(this, SelectDestActivity.class);
+        ArrayList<LocBean> locList = new ArrayList<LocBean>();
+        locList.add(locDetailBean);
+        intent.putExtra("locList", locList);
+        startActivity(intent);
           /*      dialog.dismiss();
             }
         });

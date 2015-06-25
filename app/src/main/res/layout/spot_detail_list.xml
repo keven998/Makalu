@@ -38,16 +38,6 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/iv_chat"
-            android:paddingLeft="20dp"
-            android:paddingRight="13dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/checker_title_ic_favorite" />
-
-        <ImageView
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -56,13 +46,6 @@
             android:paddingRight="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_title_chat" />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/app_theme_color" />
 
 
     </RelativeLayout>

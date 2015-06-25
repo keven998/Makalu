@@ -120,16 +120,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     View headerView;
     View footerView;
-    /*@InjectView(R.id.iv_comment_top_mark)
-    ImageView mIvCommentTopMark;
-    @InjectView(R.id.iv_comment_bottom_mark)
-    ImageView mIvCommentBottomMark;*/
+
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
     ListViewDataAdapter commentAdapter;
 
-    private ImageView mIvFav;
     private ImageView mChat;
     private PopupWindow mPop;
 
@@ -142,7 +138,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_poi_detail);
-        mIvFav = (ImageView) findViewById(R.id.iv_fav);
         mChat = (ImageView) findViewById(R.id.iv_chat);
         mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
         WindowManager m = getWindowManager();
@@ -181,6 +176,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         getDetailData();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -238,14 +234,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
         overridePendingTransition(0, R.anim.fade_out);
     }
 
-    private void refreshFav(PoiDetailBean detailBean) {
-        if (detailBean.isFavorite) {
-            mIvFav.setImageResource(R.drawable.ic_favorite_sleceted);
-        } else {
-            mIvFav.setImageResource(R.drawable.ic_favorite_normal);
-        }
-    }
-
     private void bindView(final PoiDetailBean bean) {
         if (bean.images != null && bean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
@@ -256,18 +244,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
         } else {
             mTvPoiPrice.setText(bean.priceDesc);
         }
-        if(TextUtils.isEmpty(bean.lyPoiUrl)){
+        if (TextUtils.isEmpty(bean.lyPoiUrl)) {
             mBtnBook.setVisibility(View.GONE);
-        }else{
+        } else {
             mBtnBook.setVisibility(View.VISIBLE);
             mBtnBook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext,"event_go_booking_room");
-                    Intent intent = new Intent(mContext,PeachWebViewActivity.class);
+                    MobclickAgent.onEvent(mContext, "event_go_booking_room");
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", true);
-                    intent.putExtra("url",bean.lyPoiUrl);
-                    intent.putExtra("title",bean.zhName);
+                    intent.putExtra("url", bean.lyPoiUrl);
+                    intent.putExtra("title", bean.zhName);
                     startActivity(intent);
                 }
             });
@@ -305,13 +293,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         String address;
         if (TextUtils.isEmpty(bean.address)) {
-            address =  bean.zhName;
+            address = bean.zhName;
         } else {
             address = bean.address;   //"<img src=\"" + R.drawable.ic_poi_address + "\" />  " +
         }
 //        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
 
-        Spanned spanned = Html.fromHtml(address, imageGetter , null);
+        Spanned spanned = Html.fromHtml(address, imageGetter, null);
         if (spanned instanceof SpannableStringBuilder) {
             ImageSpan[] imageSpans = spanned.getSpans(0, spanned.length(), ImageSpan.class);
             for (ImageSpan imageSpan : imageSpans) {
@@ -349,10 +337,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
         rl_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_go_booking_room");
-                Intent intent = new Intent(mContext,PeachWebViewActivity.class);
-                intent.putExtra("url",bean.lyPoiUrl);
-                intent.putExtra("title",bean.zhName);
+                MobclickAgent.onEvent(mContext, "event_go_booking_room");
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                intent.putExtra("url", bean.lyPoiUrl);
+                intent.putExtra("title", bean.zhName);
                 startActivity(intent);
             }
         });
@@ -390,27 +378,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
 
-        refreshFav(bean);
-        mIvFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                User user = AccountManager.getInstance().getLoginAccount(PoiDetailActivity.this);
-                if (user == null) { // || TextUtils.isEmpty(user.easemobUser)
-                    ToastUtil.getInstance(PoiDetailActivity.this).showToast("请先登录");
-                    Intent intent = new Intent(PoiDetailActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, 11);
-                    return;
-                } else {
-                    favorite();
-                }
-            }
-        });
-       /* mIvShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActionDialog();
-            }
-        });*/
         if (TextUtils.isEmpty(bean.desc)) {
             rl_poi_desc.setVisibility(View.GONE);
         } else {
@@ -425,7 +392,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
 
         }
-        if(bean.comments==null||bean.comments.size()==0){
+        if (bean.comments == null || bean.comments.size() == 0) {
            /* mIvCommentTopMark.setVisibility(View.GONE);
             mIvCommentBottomMark.setVisibility(View.GONE);*/
         }
@@ -443,65 +410,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     };
 
-    private void favorite() {
-        if (poiDetailBean.isFavorite) {
-            OtherApi.deleteFav(poiDetailBean.id, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0) {
-                        poiDetailBean.isFavorite = false;
-                        refreshFav(poiDetailBean);
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-            });
-        } else {
-            if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                MobclickAgent.onEvent(mContext,"event_favorite_delicacy");
-            } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                MobclickAgent.onEvent(mContext,"event_favorite_shopping");
-            }else if (type.equals(TravelApi.PeachType.HOTEL)) {
-                MobclickAgent.onEvent(mContext,"event_favorite_hotel");
-            }
-            OtherApi.addFav(poiDetailBean.id, poiDetailBean.type, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
-                        poiDetailBean.isFavorite = true;
-                        refreshFav(poiDetailBean);
-                        ToastUtil.getInstance(PoiDetailActivity.this).showToast("已收藏");
-                    } else {
-                        if (!isFinishing()) {
-                            ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
-                        }
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    if (!isFinishing()) {
-                        ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 11) {
-                favorite();
-            } else {
-                IMUtils.onShareResult(mContext, poiDetailBean, requestCode, resultCode, data, null);
-            }
+            IMUtils.onShareResult(mContext, poiDetailBean, requestCode, resultCode, data, null);
         }
     }
 
@@ -535,8 +448,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder>
-    {
+    public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
         private LayoutInflater mInflater;
         private List<RecommendBean> mDatas;

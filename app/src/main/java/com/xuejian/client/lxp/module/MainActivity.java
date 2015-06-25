@@ -430,17 +430,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == CODE_IM_LOGIN) {
-                startActivityWithNoAnim(new Intent(this, IMMainActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
-        }
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         HandleImMessage.getInstance().unregisterMessageListener(this);
