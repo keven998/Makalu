@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
@@ -11,51 +11,35 @@
         android:layout_height="@dimen/title_bar_height" />
 
 
-
     <TextView
         android:id="@+id/ll_clear_cache"
         android:layout_width="match_parent"
         android:layout_height="41dp"
+        android:layout_marginTop="0.8dp"
+        android:background="@drawable/option_cell_selector"
+        android:drawableLeft="@drawable/ic_clear_all"
+        android:drawablePadding="17dp"
+        android:drawableRight="@drawable/right_arrow_icon"
+        android:gravity="center_vertical"
         android:paddingLeft="19dp"
         android:paddingRight="18dp"
-        android:drawablePadding="17dp"
-        android:layout_marginTop="0.8dp"
-        android:drawableLeft="@drawable/ic_clear_all"
-        android:gravity="center_vertical"
-        android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/right_arrow_icon"
         android:text="清除缓存"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/ll_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:paddingLeft="17dp"
-        android:paddingRight="18dp"
-        android:drawablePadding="15dp"
-        android:layout_marginTop="0.8dp"
-        android:drawableLeft="@drawable/ic_tucao"
-        android:gravity="center_vertical"
-        android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/right_arrow_icon"
-        android:text="意见和需求"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/ll_xt"
         android:layout_width="match_parent"
         android:layout_height="41dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/option_cell_selector"
+        android:drawableLeft="@drawable/ic_message_reminder"
+        android:drawablePadding="17dp"
+        android:drawableRight="@drawable/right_arrow_icon"
+        android:gravity="center_vertical"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
-        android:drawablePadding="17dp"
-        android:layout_marginTop="10dp"
-        android:drawableLeft="@drawable/ic_message_reminder"
-        android:gravity="center_vertical"
-        android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/right_arrow_icon"
         android:text="消息和提醒"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />
@@ -64,14 +48,14 @@
         android:id="@+id/ll_version_update"
         android:layout_width="match_parent"
         android:layout_height="41dp"
+        android:layout_marginTop="0.8dp"
+        android:background="@drawable/option_cell_selector"
+        android:drawableLeft="@drawable/ic_upgrade"
+        android:drawablePadding="16dp"
+        android:drawableRight="@drawable/right_arrow_icon"
+        android:gravity="center_vertical"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
-        android:layout_marginTop="0.8dp"
-        android:drawablePadding="16dp"
-        android:drawableLeft="@drawable/ic_upgrade"
-        android:gravity="center_vertical"
-        android:background="@drawable/option_cell_selector"
-        android:drawableRight="@drawable/right_arrow_icon"
         android:text="检查新版本"
         android:textColor="@color/base_text_color_title"
         android:textSize="15sp" />

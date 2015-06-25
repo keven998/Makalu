@@ -23,7 +23,7 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
     // private View mTitlebar;
-    private TextView versionUpdateLl, feedbackLl, xtLl;
+    private TextView versionUpdateLl, xtLl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +35,8 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         setContentView(R.layout.activity_setting);
         initTitlebar();
         versionUpdateLl = (TextView) findViewById(R.id.ll_version_update);
-        feedbackLl = (TextView) findViewById(R.id.ll_feedback);
         xtLl = (TextView) findViewById(R.id.ll_xt);
         versionUpdateLl.setOnClickListener(this);
-        feedbackLl.setOnClickListener(this);
         xtLl.setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
     }
@@ -72,12 +70,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             case R.id.ll_version_update:
                 MobclickAgent.onEvent(mContext,"event_check_version_update");
                 update();
-                break;
-
-            case R.id.ll_feedback:
-                MobclickAgent.onEvent(mContext,"event_feedback");
-                Intent feedback = new Intent(mContext, FeedbackActivity.class);
-                startActivity(feedback);
                 break;
 
             case R.id.ll_xt:
