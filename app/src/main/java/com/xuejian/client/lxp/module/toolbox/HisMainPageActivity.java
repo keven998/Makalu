@@ -233,14 +233,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
-                    UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
-                   // EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(), true);
+                     UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
                     AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUserId());
-                    //InviteMsgRepository.deleteInviteMsg(HisMainPageActivity.this, tobeDeleteUser.getUsername());
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(HisMainPageActivity.this).showToast(deleteResult.err.message);
-
                 }
 
             }

@@ -28,11 +28,6 @@ import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
@@ -191,19 +186,6 @@ public class LoginActivity extends PeachBaseActivity {
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
-
-        final Map<Long, User> userlist = new HashMap<Long, User>();
-        // 添加user"申请与通知"
-//        User newFriends = new User();
-//        newFriends.setUserId(NEWUSER);
-//        newFriends.setNickName("申请与通知");
-//        newFriends.setType(1);
-//        userlist.put(NEWUSER, newFriends);
-        // 存入内存
-        AccountManager.getInstance().setContactList(userlist);
-        List<User> users = new ArrayList<User>(userlist.values());
-        UserDBManager.getInstance().saveContactList(users);
-
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {

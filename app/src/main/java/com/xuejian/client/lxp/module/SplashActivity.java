@@ -33,11 +33,6 @@ import com.xuejian.client.lxp.db.userDB.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.RegActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * 欢迎页，等待2秒，进入主界面
  */
@@ -235,18 +230,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(this, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
-
-        final Map<Long, User> userList = new HashMap<Long, User>();
-        // 添加user"申请与通知"
-        User newFriends = new User();
-        newFriends.setUserId(NEWUSER);
-        newFriends.setNickName("申请与通知");
-        newFriends.setType(0);
-        userList.put(NEWUSER, newFriends);
-        // 存入内存
-        AccountManager.getInstance().setContactList(userList);
-        List<User> users = new ArrayList<User>(userList.values());
-        UserDBManager.getInstance().saveContactList(users);
 
         // 进入主页面
         runOnUiThread(new Runnable() {
