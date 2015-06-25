@@ -42,7 +42,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
             extMessageBean.timeCost = dayCnt+"天";
         }
         if(TextUtils.isEmpty(summary)){
-            StringBuffer sb=new StringBuffer();
+            StringBuilder sb=new StringBuilder();
             for(LocBean loc:localities){
                 sb.append(loc.zhName+" ");
             }
