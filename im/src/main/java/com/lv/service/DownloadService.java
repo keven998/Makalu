@@ -134,13 +134,14 @@ public class DownloadService extends Service {
                         bos.close();
                         bm.recycle();
                     }
-                  //  else notice(msg,newfilename);
                     if (Config.isDebug){
                         Log.i(Config.TAG, "下载完成");
                     }
+                    notice(msg,newfilename);
+                }else {
+                    msg.setStatus(1);
+                    notice(msg,newfilename);
                 }
-                notice(msg,newfilename);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 msg.setStatus(1);

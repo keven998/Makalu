@@ -55,6 +55,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.task.DownloadImage;
+import com.xuejian.client.lxp.common.task.DownloadVoice;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
@@ -1183,42 +1184,47 @@ public class MessageAdapter extends BaseAdapter {
             } else {
                 holder.iv_read_status.setVisibility(View.VISIBLE);
             }
-//            System.err.println("it is receive msg");
             if (message.getStatus() == 1) {
                 holder.pb.setVisibility(View.VISIBLE);
-//                System.err.println("!!!! back receive");
                 System.out.println("后台下载");
-//                ((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
-//
-//                    @Override
-//                    public void onSuccess() {
-//                        activity.runOnUiThread(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                holder.pb.setVisibility(View.INVISIBLE);
-//                                notifyDataSetChanged();
-//                            }
-//                        });
-//
-//                    }
-//
-//                    @Override
-//                    public void onProgress(int progress, String status) {
-//                    }
-//
-//                    @Override
-//                    public void onError(int code, String message) {
-//                        activity.runOnUiThread(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                holder.pb.setVisibility(View.INVISIBLE);
-//                            }
-//                        });
-//
-//                    }
-//                });
+                System.out.println(message.getMessage());
+                String url =null;
+                try {
+                   url = new JSONObject(message.getMessage()).get("url").toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (url==null||"".equals(url)){
+                    holder.pb.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                String filename=Config.DownLoadAudio_path +CryptUtils.getMD5String(AccountManager.getCurrentUserId())+"/"+CryptUtils.getMD5String(url)+ ".amr";
+                new DownloadVoice(url,filename).download(new DownloadVoice.DownloadListener() {
+                    @Override
+                    public void onSuccess() {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+
+                    }
+
+                    @Override
+                    public void onFail() {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    }
+                });
             } else {
                 holder.pb.setVisibility(View.INVISIBLE);
             }
@@ -1481,8 +1487,6 @@ public class MessageAdapter extends BaseAdapter {
     public void sendMsgInBackground(final MessageBean message, final ViewHolder holder) {
         holder.staus_iv.setVisibility(View.GONE);
         holder.pb.setVisibility(View.VISIBLE);
-
-        // 调用sdk发送异步发送方法
         IMClient.getInstance().sendTextMessage(message, friendId, conversation, new SendMsgListener() {
             @Override
             public void onSuccess() {
@@ -1496,51 +1500,15 @@ public class MessageAdapter extends BaseAdapter {
                 updateSendedView(message, holder);
             }
         }, chatType);
-//        EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-//
-//            @Override
-//            public void onSuccess() {
-//                updateSendedView(message, holder);
-//            }
-//
-//            @Override
-//            public void onError(int code, String error) {
-//                updateSendedView(message, holder);
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//            }
-//
-//        });
-
     }
 
-    /*
-     * chat sdk will automatic download thumbnail image for the image message we
-     * need to register callback show the download progress
-     */
     private void showDownloadImageProgress(final MessageBean message, final ViewHolder holder) {
-//        System.err.println("!!! show download image progress");
-        // final ImageMessageBody msgbody = (ImageMessageBody)
-        // message.getBody();
-        //  final FileMessageBody msgbody = (FileMessageBody) message.getBody();
         if (holder.pb != null)
             holder.pb.setVisibility(View.VISIBLE);
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
-        //      String path = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/";
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
-
-//        File file=new File(path);
-//        file.mkdirs();
-//        File cacheFile=new File(file,CryptUtils.getMD5String(thumburl) + ".jpeg");
-//        try {
-//            cacheFile.createNewFile();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
@@ -1575,48 +1543,8 @@ public class MessageAdapter extends BaseAdapter {
                 message.setStatus(2);
             }
         });
-//        msgbody.setDownloadCallback(new EMCallBack() {
-//
-//            @Override
-//            public void onSuccess() {
-//                activity.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // message.setBackReceive(false);
-//                        if (message.getType() == Type.IMAGE) {
-//                            holder.pb.setVisibility(View.GONE);
-//                            holder.tv.setVisibility(View.GONE);
-//                        }
-//                        notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(int code, String message) {
-//
-//            }
-//
-//            @Override
-//            public void onProgress(final int progress, String status) {
-//                if (message.getType() == IMAGE_MSG) {
-//                    activity.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            holder.tv.setText(progress + "%");
-//
-//                        }
-//                    });
-//                }
-//
-//            }
-//
-//        });
     }
 
-    /*
-     * send message with new sdk
-     */
     private void sendPictureMessage(final MessageBean message, final ViewHolder holder) {
         try {
             // before send, update ui
@@ -1647,7 +1575,6 @@ public class MessageAdapter extends BaseAdapter {
                             updateStatus(message, 2);
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
-                            // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                             holder.staus_iv.setVisibility(View.VISIBLE);
 //                            Toast.makeText(activity,
 //                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
@@ -1702,21 +1629,11 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv.setVisibility(View.GONE);
                 }
                 if (message.getStatus() == 0) {
-//                    if (message.getType() == EMMessage.Type.FILE) {
-//                        holder.pb.setVisibility(View.INVISIBLE);
-//                        holder.staus_iv.setVisibility(View.INVISIBLE);
-//                    } else {
-
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.GONE);
-                    //   }
 
                 } else if (message.getStatus() == 2) {
-//                    if (message.getType() == EMMessage.Type.FILE) {
-//                        holder.pb.setVisibility(View.INVISIBLE);
-//                    } else {
                     holder.pb.setVisibility(View.GONE);
-//                    }
                     holder.staus_iv.setVisibility(View.VISIBLE);
 //                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                            .show();
@@ -1732,15 +1649,12 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * load image into image view
      *
-     * @param thumbernailPath
-     * @param iv
      * @return the image exists or not
      */
     private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, final String remoteDir,
                                   final MessageBean message) {
         String remote = remoteDir;
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
-        System.out.println("thumbernailPath" + thumbernailPath);
         if (bitmap != null) {
             System.out.println("thumbnail image is already loaded, reuse the drawable");
             iv.setImageBitmap(bitmap);
@@ -1748,44 +1662,21 @@ public class MessageAdapter extends BaseAdapter {
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    System.err.println("image view on click");
                     Intent intent = new Intent(activity, ShowBigImage.class);
-                    System.out.println("32 localFullSizePath " + localFullSizePath);
                     File file = new File(localFullSizePath);
                     if (file.exists()) {
                         Uri uri = Uri.fromFile(file);
                         intent.putExtra("uri", uri);
                         intent.putExtra("downloadFilePath", localFullSizePath);
-                        System.out.println("exist localFullSizePath ");
                     } else {
-                        System.out.println("localFullSizePath " + localFullSizePath);
                         intent.putExtra("downloadFilePath", localFullSizePath);
                         intent.putExtra("remotepath", remoteDir);
-
-
-                        // The local full size pic does not exist yet.
-                        // ShowBigImage needs to download it from the server
-                        // first
-                        // intent.putExtra("", message.get);
-//                        ImageMessageBody body = (ImageMessageBody) message.getBody();
-//                        intent.putExtra("secret", body.getSecret());
-//                        intent.putExtra("remotepath", remote);
                     }
-//                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
-//                            && message.getChatType() != ChatType.GroupChat) {
-//                        try {
-//                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-//                            message.isAcked = true;
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                     ((BaseActivity) activity).startActivityWithNoAnim(intent);
                 }
             });
             return true;
         } else {
-            System.out.println("load image");
             new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message);
             return true;
         }
