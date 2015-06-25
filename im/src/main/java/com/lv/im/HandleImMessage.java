@@ -172,7 +172,9 @@ public class HandleImMessage {
               //  for (MessageHandler handler : ehList) {
                 if (ehList.size()>0){
                     if (openStateMap.containsKey(ehList.get(0))) {
+                         if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
                          IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
+                        else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                     }
                     else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                  }else {

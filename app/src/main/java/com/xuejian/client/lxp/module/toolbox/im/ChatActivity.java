@@ -38,7 +38,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -136,7 +135,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     public static final int CHATTYPE_SINGLE = 1;
     public static final int CHATTYPE_GROUP = 2;
-
+    private int PAGE;
     public static final String COPY_IMAGE = "EASEMOBIMG";
     private TitleHeaderBar titleHeaderBar;
     private DrawerLayout drawerLayout;
@@ -1355,8 +1354,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_talking");
-//        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-//        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
         if (wakeLock.isHeld())
             wakeLock.release();
         if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {
@@ -1448,12 +1445,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 case OnScrollListener.SCROLL_STATE_IDLE:
                     if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
                         loadmorePB.setVisibility(View.VISIBLE);
-                        // sdk初始化加载的聊天记录为20条，到顶时去db里获取更多
-                        //List<EMMessage> messages=null;
                         try {
-                            // 获取更多messges，调用此方法的时候从db获取的messages
-                            // sdk会自动存入到此conversation中
-
+                            messageList.clear();
+                            messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, ++PAGE));
                         } catch (Exception e1) {
                             loadmorePB.setVisibility(View.GONE);
                             return;
