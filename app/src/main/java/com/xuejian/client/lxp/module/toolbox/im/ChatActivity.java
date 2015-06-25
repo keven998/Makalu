@@ -38,6 +38,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -148,7 +150,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private View buttonSend;
     private View buttonPressToSpeak;
     private ViewPager expressionViewpager;
-    private RelativeLayout expressionContainer;
+    private FrameLayout expressionContainer;
     private LinearLayout btnContainer;
     private View more;
     private ClipboardManager clipboard;
@@ -273,7 +275,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         buttonPressToSpeak = findViewById(R.id.btn_press_to_speak);
         expressionViewpager = (ViewPager) findViewById(R.id.vPager);
         dots = (DotView) findViewById(R.id.face_dot_view);
-        expressionContainer = (RelativeLayout) findViewById(R.id.ll_face_container);
+        expressionContainer = (FrameLayout) findViewById(R.id.ll_face_container);
         btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
         iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
         iv_emoticons_checked = (ImageView) findViewById(R.id.iv_emoticons_checked);
@@ -1118,7 +1120,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
 
         }
-
+//        buttonPressToSpeak.setVisibility(View.VISIBLE);
+//        iv_emoticons_normal.setVisibility(View.VISIBLE);
+//        mEditTextContent.setVisibility(View.VISIBLE);
+//        iv_emoticons_checked.setVisibility(View.GONE);
+//        buttonSetModeVoice.setVisibility(View.GONE);
+//        buttonSetModeKeyboard.setVisibility(View.GONE);
     }
 
     /**
@@ -1333,7 +1340,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("chatActivity destroy");
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
         activityInstance = null;
         CommonUtils.fixInputMethodManagerLeak(this);
@@ -1349,7 +1355,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_talking");
-        System.out.println("chatActivity pause");
 //        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
 //        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
         if (wakeLock.isHeld())

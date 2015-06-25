@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -20,8 +20,8 @@
             <LinearLayout
                 android:id="@+id/bar_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:layout_gravity="bottom"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
                 <View
@@ -41,7 +41,6 @@
                         android:id="@+id/btn_set_mode_voice"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
-                        android:layout_gravity="left"
                         android:onClick="setModeVoice"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
@@ -52,7 +51,6 @@
                         android:id="@+id/btn_set_mode_keyboard"
                         android:layout_width="50dp"
                         android:layout_height="48dp"
-                        android:layout_gravity="left"
                         android:onClick="setModeKeyboard"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
@@ -65,7 +63,6 @@
                         android:id="@+id/edittext_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_marginBottom="6dp"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="50dp"
@@ -73,9 +70,9 @@
                         android:background="@drawable/editor_with_border"
                         android:gravity="bottom">
 
-                        <LinearLayout
+                        <FrameLayout
                             android:id="@+id/btn_press_to_speak"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:layout_weight="1"
                             android:background="@drawable/chat_press_speak_btn"
@@ -86,10 +83,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
+                                android:layout_gravity="center"
                                 android:text="@string/button_pushtotalk"
-                                android:textColor="@color/color_text_i"
+                                android:textColor="@color/color_text_ii"
                                 android:textSize="15sp" />
-                        </LinearLayout>
+                        </FrameLayout>
 
 
                         <com.xuejian.client.lxp.common.widget.PasteEditText
@@ -139,8 +137,8 @@
                         android:layout_width="50dp"
                         android:layout_height="48dp"
                         android:layout_gravity="right"
-                        android:onClick="more"
                         android:background="@null"
+                        android:onClick="more"
                         android:scaleType="center"
                         android:src="@drawable/selector_ic_chat_extra" />
 
@@ -148,7 +146,7 @@
                         android:id="@+id/btn_send"
                         android:layout_width="40dp"
                         android:layout_height="28dp"
-                        android:layout_gravity="bottom"
+                        android:layout_gravity="right|bottom"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -160,17 +158,16 @@
                         android:visibility="gone" />
                 </FrameLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/more"
                     android:layout_width="match_parent"
                     android:layout_height="192dp"
                     android:background="@color/app_backgroud"
-                    android:orientation="vertical"
                     android:visibility="gone">
 
                     <!-- 表情图片 -->
 
-                    <RelativeLayout
+                    <FrameLayout
                         android:id="@+id/ll_face_container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -196,18 +193,7 @@
                             cube_dotview:dot_span="10dp"
                             cube_dotview:dot_unselected_color="0xffffffff" />
 
-                        <!-- <LinearLayout
-                         android:id="@+id/viewGroup"
-                         android:layout_width="fill_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentBottom="true"
-                         android:layout_centerHorizontal="true"
-                         android:layout_marginBottom="10dp"
-                         android:gravity="center_horizontal"
-                         android:orientation="horizontal" >-->
-                        <!--</LinearLayout>-->
-
-                    </RelativeLayout>
+                    </FrameLayout>
 
                     <!-- 图片，表情，名片等按钮 -->
 
@@ -311,13 +297,13 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="49dp"
+                android:layout_above="@id/bar_bottom"
                 android:layout_marginTop="@dimen/content_top_margin">
 
                 <ProgressBar
@@ -373,10 +359,9 @@
             <com.xuejian.client.lxp.common.widget.TitleHeaderBar
                 android:id="@+id/title_bar"
                 android:layout_width="match_parent"
-                android:layout_gravity="top"
                 android:layout_height="@dimen/title_bar_height" />
 
-        </FrameLayout>
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/menu_frame"
