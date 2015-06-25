@@ -10,6 +10,7 @@ import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.db.userDB.UserDBManager;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class AccountManager {
     public static final String LOGIN_USER_PREF = "login_user";
     public static User user;
     public static String CurrentUserId;
-    private Map<Long, User> contactList;
+    private Map<Long, User> contactList=new Hashtable<>();
     private boolean isLogin;
     private User userInfo;
     /**
@@ -133,10 +134,12 @@ public class AccountManager {
      */
     public Map<Long, User> getContactList(Context context) {
         // 获取本地好友user list到内存,方便以后获取好友list
-        List<User> userList = UserDBManager.getInstance().getContactListWithoutGroup();
-        contactList = new HashMap<Long, User>();
-        for (User user : userList) {
-            contactList.put(user.getUserId(), user);
+        if (contactList.size()==0){
+            List<User> userList = UserDBManager.getInstance().getContactListWithoutGroup();
+            contactList = new HashMap<Long, User>();
+            for (User user : userList) {
+                contactList.put(user.getUserId(), user);
+            }
         }
         return contactList;
     }
@@ -150,5 +153,7 @@ public class AccountManager {
         this.contactList = contactList;
     }
 
-
+    public Map<Long, User> getCacheContactList(){
+        return contactList;
+    }
 }

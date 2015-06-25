@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,13 +156,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);
                     Map<Long, User> userlist = new HashMap<Long, User>();
-                    LongSparseArray<User> userList = new LongSparseArray<User>();
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
                         myUser.setType(1);
                         userlist.put(myUser.getUserId(), myUser);
-                        userList.put(myUser.getUserId(), myUser);
                     }
+                    System.out.println("contacts size "+userlist.size());
                     // 存入db
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);

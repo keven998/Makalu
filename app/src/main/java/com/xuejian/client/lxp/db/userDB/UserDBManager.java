@@ -128,10 +128,12 @@ public class UserDBManager {
 
     public synchronized void deleteContact(long userId) {
         mdb = getDB();
-        mdb.delete(fri_table_name, "where userId=?", new String[]{String.valueOf(userId)});
+        mdb.delete(fri_table_name, "userId=?", new String[]{String.valueOf(userId)});
         closeDB();
     }
+    public synchronized void updateUserType(long userId,int type,String action){
 
+    }
     public User getContactByUserId(long _id) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
@@ -304,6 +306,9 @@ public class UserDBManager {
     public synchronized void saveContactList(List<User> list) {
         if (list.size()==0)return;
         mdb = getDB();
+        ContentValues values1 = new ContentValues();
+        values1.put("Type",0);
+        mdb.update(fri_table_name,values1,null,null);
         mdb.beginTransaction();
         for (User user : list) {
             if(user.getNickName()==null||"".equals(user.getNickName())){
@@ -405,7 +410,6 @@ public class UserDBManager {
         System.out.println("updateGroupMemberInfo");
         JSONArray array=new JSONArray();
         for (User user:list){
-            //System.out.println(user.getAvatar());
             array.put(user.getUserId());
             saveContact(user);
         }
