@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/chat_surch_selectd" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/chat_surch_selectd" android:state_activated="true"></item>
-    <item android:drawable="@drawable/chat_surch_selectd" android:state_checked="true"></item>
-    <item android:drawable="@drawable/chat_surch_normal"  android:state_focused="false"></item>
+    <item android:drawable="@drawable/chat_lxpsearch_entry_highlight" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/chat_lxpsearch_entry_highlight" android:state_activated="true"></item>
+    <item android:drawable="@drawable/chat_lxpsearch_entry_highlight" android:state_checked="true"></item>
+    <item android:drawable="@drawable/chat_lxpsearch_entry_default"  android:state_focused="false"></item>
 
 </selector>

@@ -39,6 +39,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -340,6 +341,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void onClick(View v) {
+                Log.d("test", "mEditTextContent setOnClickListener");
                 mExtraPanel.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
@@ -1108,6 +1110,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     mExtraPanel.setVisibility(View.VISIBLE);
                     btnContainer.setVisibility(View.VISIBLE);
                     expressionContainer.setVisibility(View.GONE);
+
+                    buttonSetModeVoice.setVisibility(View.VISIBLE);
+                    buttonSetModeKeyboard.setVisibility(View.GONE);
+
+                    buttonPressToSpeak.setVisibility(View.GONE);
+                    mEditTextContent.setVisibility(View.VISIBLE);
+                    mEditTextContent.requestFocus();
+
+                    iv_emoticons_normal.setVisibility(View.VISIBLE);
+                    iv_emoticons_checked.setVisibility(View.GONE);
+
                 }
             }, 150);
         } else {
@@ -1121,12 +1134,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
 
         }
-//        buttonPressToSpeak.setVisibility(View.VISIBLE);
-//        iv_emoticons_normal.setVisibility(View.VISIBLE);
-//        mEditTextContent.setVisibility(View.VISIBLE);
-//        iv_emoticons_checked.setVisibility(View.GONE);
-//        buttonSetModeVoice.setVisibility(View.GONE);
-//        buttonSetModeKeyboard.setVisibility(View.GONE);
     }
 
     /**
