@@ -31,9 +31,6 @@
     <color name="app_theme_color_secondary_selected">#1cc091</color>
     <color name="app_theme_color_trans">#fd818e</color>
 
-    <drawable name="highlight_btn_color">#fd818e</drawable>
-    <drawable name="highlight_btn_color_selected">#ad313e</drawable>
-
     <color name="plan_start_end">#B2B2B2</color>
     <color name="main_color">#fd818e</color>
     <color name="main_color_second">#22B599</color>
@@ -84,10 +81,6 @@
     <color name="red_text_color">#FF2D2D</color>
     <color name="tips_text_gray_color">#909090</color>
     <color name="fragment_bg">#e4e4e4</color>
-
-    <drawable name="sub_list_cell_item">#f8f9f9</drawable>
-    <drawable name="sub_list_cell_item_clicked">#dbdbdb</drawable>
-
 
     <!-- Exceptions colors -->
     <color name="exception_button_color">#5fcf80</color>
