@@ -13,6 +13,7 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im;
 
+import android.animation.LayoutTransition;
 import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -42,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -151,7 +153,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private ViewPager expressionViewpager;
     private FrameLayout expressionContainer;
     private LinearLayout btnContainer;
-    private View more;
+    private FrameLayout mExtraPanel;
     private ClipboardManager clipboard;
     private InputMethodManager manager;
     private List<String> reslist;
@@ -282,7 +284,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         btnMore = (ImageButton) findViewById(R.id.btn_more);
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         iv_emoticons_checked.setVisibility(View.GONE);
-        more = findViewById(R.id.more);
+        mExtraPanel = (FrameLayout) findViewById(R.id.fl_extra_panel);
 
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{getResources().getDrawable(R.drawable.record_animate_00), getResources().getDrawable(R.drawable.record_animate_01),
@@ -338,7 +340,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void onClick(View v) {
-                more.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
                 expressionContainer.setVisibility(View.GONE);
@@ -457,7 +459,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 hideKeyboard();
-                more.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
                 expressionContainer.setVisibility(View.GONE);
@@ -621,7 +623,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
                     if (locationAddress != null && !locationAddress.equals("")) {
-                        more(more);
+                        more(mExtraPanel);
                         sendLocationMsg(latitude, longitude, "", locationAddress);
                     } else {
 //					Toast.makeText(this, "无法获取到您的位置信息！", Toast.LENGTH_SHORT).show();
@@ -736,7 +738,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    more.setVisibility(View.VISIBLE);
+                    mExtraPanel.setVisibility(View.VISIBLE);
                     iv_emoticons_normal.setVisibility(View.GONE);
                     iv_emoticons_checked.setVisibility(View.VISIBLE);
                     btnContainer.setVisibility(View.GONE);
@@ -748,7 +750,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             iv_emoticons_checked.setVisibility(View.GONE);
             btnContainer.setVisibility(View.VISIBLE);
             expressionContainer.setVisibility(View.GONE);
-            more.setVisibility(View.GONE);
+            mExtraPanel.setVisibility(View.GONE);
             showKeyboadrd(mEditTextContent);
 //		} else if (id == R.id.btn_video) {
 //			// 点击摄像图标
@@ -1022,7 +1024,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void run() {
                 mEditTextContent.setVisibility(View.GONE);
-                more.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
                 view.setVisibility(View.GONE);
                 buttonSetModeKeyboard.setVisibility(View.VISIBLE);
                 buttonSend.setVisibility(View.GONE);
@@ -1053,7 +1055,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         // }
         // });
         mEditTextContent.setVisibility(View.VISIBLE);
-        more.setVisibility(View.GONE);
+        mExtraPanel.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
         buttonSetModeVoice.setVisibility(View.VISIBLE);
         // mEditTextContent.setVisibility(View.VISIBLE);
@@ -1098,12 +1100,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param view
      */
     public void more(View view) {
-        if (more.getVisibility() == View.GONE) {
+        if (mExtraPanel.getVisibility() == View.GONE) {
             hideKeyboard();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    more.setVisibility(View.VISIBLE);
+                    mExtraPanel.setVisibility(View.VISIBLE);
                     btnContainer.setVisibility(View.VISIBLE);
                     expressionContainer.setVisibility(View.GONE);
                 }
@@ -1115,7 +1117,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
             } else {
-                more.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
             }
 
         }
@@ -1132,8 +1134,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     public void editClick(View v) {
         listView.setSelection(listView.getCount() - 1);
-        if (more.getVisibility() == View.VISIBLE) {
-            more.setVisibility(View.GONE);
+        if (mExtraPanel.getVisibility() == View.VISIBLE) {
+            mExtraPanel.setVisibility(View.GONE);
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
         }
@@ -1415,8 +1417,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onBackPressed() {
-        if (more.getVisibility() == View.VISIBLE) {
-            more.setVisibility(View.GONE);
+        if (mExtraPanel.getVisibility() == View.VISIBLE) {
+            mExtraPanel.setVisibility(View.GONE);
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
         } else {
