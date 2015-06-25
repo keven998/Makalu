@@ -33,7 +33,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="13dp"
                 android:scaleType="center"
-                android:src="@drawable/ic_navigationbar_menu_friendlist" />
+                android:src="@drawable/selector_btn_friendlist_home" />
 
             <TextView
                 android:id="@+id/unread_address_number"
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:drawableRight="@drawable/ic_navigationbar_menu_add"
+            android:drawableRight="@drawable/selector_btn_menu_add_navigationbar"
             android:paddingLeft="35dp"
             android:paddingRight="13dp" />
 
