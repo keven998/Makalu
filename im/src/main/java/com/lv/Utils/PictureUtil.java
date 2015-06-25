@@ -20,7 +20,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.WindowManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -76,7 +75,8 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
         // 采样率
         opts.inSampleSize = scale;
         Bitmap bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
-        if (saveBitmapToJpegFile(bitmap,imagePath,100))return imagePath;
+        if (saveBitmapToJpegFile(bitmap,imagePath,100))
+            return imagePath;
         return null;
     }
 

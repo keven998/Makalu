@@ -5,7 +5,7 @@ import android.content.Context;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -47,8 +47,8 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.List;

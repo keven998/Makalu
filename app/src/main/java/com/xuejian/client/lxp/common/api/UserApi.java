@@ -11,7 +11,7 @@ import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.xuejian.client.lxp.bean.AddressBookbean;
 import com.xuejian.client.lxp.config.SystemConfig;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;

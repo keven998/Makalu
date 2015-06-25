@@ -383,7 +383,7 @@ public class IMClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        SendMessageBean message = new SendMessageBean(Integer.parseInt(userID), friendId, Config.TEXT_MSG, object.toString());
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(userID), friendId, Config.LOC_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.LOC_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), Config.TYPE_SEND, null, Long.parseLong(userID));
@@ -482,6 +482,7 @@ public class IMClient {
     public int getUnReadMsgCount(){
         return db.getUnReadCount();
     }
+
     public void logout() {
         db.disconnectDB();
         currentUserId=null;

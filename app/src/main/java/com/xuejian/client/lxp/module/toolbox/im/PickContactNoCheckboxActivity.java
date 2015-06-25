@@ -25,8 +25,8 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.widget.Sidebar;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 import java.util.ArrayList;

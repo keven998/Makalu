@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingRight="10dp"
-     >
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#eeeeee">
+    android:background="#eeeeee"
+    android:paddingRight="10dp">
 
     <ImageView
         android:id="@+id/rec_some_iv"
@@ -22,15 +19,14 @@
         android:id="@+id/rec_name_tv"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:maxLines="2"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:background="#aaeeeeee"
-        android:textColor="@color/base_text_color_subtitle"
+        android:gravity="center"
+        android:maxLines="2"
+        android:padding="5dp"
         android:text="some info"
+        android:textColor="@color/base_text_color_subtitle"
         android:textSize="11sp" />
-    </RelativeLayout>
-
 </RelativeLayout>
+

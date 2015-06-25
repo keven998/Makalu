@@ -54,7 +54,7 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
 import com.xuejian.client.lxp.module.dest.fragment.RestaurantFragment;
 import com.xuejian.client.lxp.module.dest.fragment.ShoppingFragment;

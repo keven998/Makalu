@@ -40,7 +40,7 @@
 //import com.easemob.chat.EMMessage;
 //import com.xuejian.client.lxp.R;
 //import com.xuejian.client.lxp.common.account.AccountManager;
-//import com.xuejian.client.lxp.db.userDB.User;
+//import com.xuejian.client.lxp.db.User;
 //import com.xuejian.client.lxp.module.toolbox.im.adapter.ChatHistoryAdapter;
 //
 //import java.util.ArrayList;

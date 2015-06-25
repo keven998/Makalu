@@ -9,7 +9,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -78,7 +79,7 @@ public class HttpManager {
 //                            o.put("groupType", groupType);
 //                            o.put("isPublic", isPublic);
 //                            o.put("creator", creator);
-//                            UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId), name, o.toString(), 8));
+//                            UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.User(Long.parseLong(groupId), name, o.toString(), 8));
 //                            if (Config.isDebug) {
 //                                Log.i(Config.TAG, "群组更新成功");
 //                            }
@@ -121,7 +122,7 @@ public class HttpManager {
                         o.put("groupType", groupType);
                         o.put("isPublic", isPublic);
                         o.put("creator", creator);
-                        UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.userDB.User(Long.parseLong(groupId), name, o.toString(), 8));
+                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }
@@ -279,10 +280,10 @@ public class HttpManager {
                                 }
                                 JSONObject object = new JSONObject(result);
                                 JSONArray userList = object.getJSONArray("result");
-                                List<com.xuejian.client.lxp.db.userDB.User> list = new ArrayList<com.xuejian.client.lxp.db.userDB.User>();
+                                List<User> list = new ArrayList<User>();
                                 for (int i = 0; i < userList.length(); i++) {
                                     String str = userList.get(i).toString();
-                                    com.xuejian.client.lxp.db.userDB.User user = JSON.parseObject(str, com.xuejian.client.lxp.db.userDB.User.class);
+                                    User user = JSON.parseObject(str, User.class);
                                     list.add(user);
                                 }
                                 UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
@@ -300,7 +301,7 @@ public class HttpManager {
                                 }
                                 object = new JSONObject(result);
                                 JSONObject o = object.getJSONObject("result");
-                                com.xuejian.client.lxp.db.userDB.User user = new com.xuejian.client.lxp.db.userDB.User();
+                                User user = new User();
                                 user.setNickName(o.get("name").toString()==null?" ":o.get("name").toString());
                                 o.remove("name");
                                 user.setExt(o.toString());

@@ -29,7 +29,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;

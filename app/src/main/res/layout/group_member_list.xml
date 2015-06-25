@@ -1,74 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/option_cell_selector">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_bar_height"
-            android:minHeight="@dimen/title_bar_height">
+    android:layout_height="@dimen/title_bar_height"
+    android:background="@drawable/option_cell_selector"
+    android:minHeight="@dimen/title_bar_height">
 
 
-            <ImageView
-                android:id="@+id/iv_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:visibility="visible" />
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/tv_nickname"
-                android:layout_width="wrap_content"
-                android:layout_toRightOf="@+id/iv_avatar"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="3dp"
-                android:singleLine="true"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxWidth="100dp"
-                android:gravity="center"
-                android:layout_marginLeft="7dp"
-                android:text="fdsaf"
-                android:textColor="@color/second_font_color"
-                android:textSize="13sp"/>
-
-
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@+id/iv_avatar"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxWidth="100dp"
+        android:singleLine="true"
+        android:text="fdsaf"
+        android:textColor="@color/second_font_color"
+        android:textSize="13sp" />
 
 
-            <!--<TextView
-                android:id="@+id/group_holder_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:text=""
-                android:layout_marginRight="10dp"
-                android:textSize="15sp"
-                android:textColor="@color/third_font_color"
-                android:gravity="center_vertical"
-                />-->
+    <ImageButton
+        android:id="@+id/badge_delete"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:scaleType="center"
+        android:src="@drawable/ic_guide_archieve_selected"
+        android:visibility="gone" />
 
 
-            <ImageButton
-                android:id="@+id/badge_delete"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:layout_alignParentRight="true"
-                android:scaleType="center"
-                android:visibility="gone"
-                android:src="@drawable/ic_guide_archieve_selected" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_alignParentBottom="true"
+        android:background="#e6e6e6" />
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:background="#e6e6e6"
-                android:layout_alignParentBottom="true"
-                />
+</RelativeLayout>
 
-
-        </RelativeLayout>
-
-</FrameLayout>

@@ -13,7 +13,6 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im;
 
-import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -80,7 +79,8 @@ import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -177,7 +177,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String conversation;
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
-    private com.xuejian.client.lxp.db.userDB.User user;
+    private User user;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -235,7 +235,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson<com.xuejian.client.lxp.db.userDB.User> userInfo = CommonJson.fromJson(result, com.xuejian.client.lxp.db.userDB.User.class);
+                CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
                 UserDBManager.getInstance().saveContact(userInfo.result);
             }
 
@@ -519,7 +519,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
                 case RESULT_CODE_COPY: // 复制消息
-                    MessageBean copyMsg = adapter.getItem(data.getIntExtra("position", -1));
+                    MessageBean copyMsg = ((MessageBean) adapter.getItem(data.getIntExtra("position", -1)));
 
                     if (copyMsg.getType() == Config.IMAGE_MSG) {
 //					ImageMessageBody imageBody = (ImageMessageBody) copyMsg.getBody();
@@ -556,7 +556,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             switch (requestCode) {
                 case REQUEST_CODE_EMPTY_HISTORY:
                     // 清空会话
-                    //  EMChatManager.getInstance().clearConversation(toChatUsername);
+                    IMClient.getInstance().cleanMessageHistory(toChatUsername);
                     adapter.refresh();
                     break;
                 case REQUEST_CODE_CAMERA: // 发送照片
@@ -899,7 +899,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * @param selectedImage
      */
     private void sendPicByUri(Uri selectedImage) {
-        // String[] filePathColumn = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -1171,24 +1170,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     }
 
-    /**
-     * 消息广播接收者
-     */
-    private class NewMessageBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // EMChatManager.getInstance().getConversation(toChatUsername);
-            // 通知adapter有新消息，更新ui
-            adapter.refresh();
-            int curSelection = listView.getFirstVisiblePosition();
-            if (curSelection > listView.getCount() / 2) {
-                listView.setSelection(listView.getCount() - 1);
-            }
-            // 记得把广播给终结掉
-            abortBroadcast();
-        }
-    }
-
     private PowerManager.WakeLock wakeLock;
 
     /**
@@ -1326,6 +1307,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         }
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             }

@@ -32,8 +32,8 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 

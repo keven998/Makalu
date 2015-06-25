@@ -30,13 +30,12 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
-import com.xuejian.client.lxp.module.toolbox.im.IMMainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

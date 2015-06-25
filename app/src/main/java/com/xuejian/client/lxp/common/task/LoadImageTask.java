@@ -53,33 +53,8 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 		if (file.exists()) {
 			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
 		} else {
-			if (message.getSendType() == 0) {
-				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
-			} else {
-               // String thumburl=getImagepath(message, "thumb");
-//                new DownloadImage(thumburl,thumbnailPath).download(new DownloadImage.DownloadListener() {
-//
-//                    @Override
-//                    public void onSuccess() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onProgress(int progress) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFail() {
-//
-//                    }
-//                }
-
-				return null;
-			}
+			return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
 		}
-		
-
 	}
 
 	protected void onPostExecute(Bitmap image) {

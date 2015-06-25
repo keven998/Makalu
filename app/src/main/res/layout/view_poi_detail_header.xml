@@ -1,460 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/top_zoom_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/spot_detail_picture_height">
+
+        <ImageView
+            android:id="@+id/iv_poi"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bg_common_default"
+            android:scaleType="centerCrop" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
-        android:orientation="vertical">
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:paddingTop="14dp">
+
+        <TextView
+            android:id="@+id/tv_poi_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="fdsfds"
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <RatingBar
+            android:id="@+id/ratingBar_poi"
+            style="@style/custom_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_poi_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp" />
+
+        <TextView
+            android:id="@+id/tv_poi_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ratingBar_poi"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:text="fdsa"
+            android:textColor="@color/light_gray_text_color"
+            android:textSize="15sp" />
+
+
+        <View
+            android:id="@+id/poi_divider"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/tv_poi_rank"
+            android:layout_marginTop="14dp"
+            android:background="@color/base_color_line_color" />
+
+
+        <TextView
+            android:id="@+id/sy_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poi_divider"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:text="实用信息"
+            android:textColor="@color/base_font_color"
+            android:textSize="18sp" />
 
         <RelativeLayout
-            android:id="@+id/top_zoom_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/spot_detail_picture_height">
+            android:id="@+id/rl_fee"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/sy_tag"
+            android:background="@drawable/option_cell_selector"
+            android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/iv_poi"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/bg_common_default"
-                android:scaleType="centerCrop" />
+            <TextView
+                android:id="@+id/tv_poi_price"
+                android:layout_width="270dp"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/poi_money"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/second_font_color"
+                android:textSize="15sp" />
 
-            <!--<LinearLayout
+            <TextView
+                android:id="@+id/btn_book"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_height="28dp"
                 android:layout_alignParentRight="true"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:layout_marginTop="5dp"
+                android:background="@drawable/theme_button_selctor"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="在线预订"
+                android:textColor="@color/base_color_white"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/iv_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="30dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_poi_share_selector"
-                    android:visibility="visible"/>
-            </LinearLayout>-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/base_color_line_color" />
+
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
-            android:paddingTop="14dp">
-
-            <TextView
-                android:id="@+id/tv_poi_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/base_font_color"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="fdsfds"/>
-
-
-            <RatingBar
-                android:id="@+id/ratingBar_poi"
-                android:layout_marginTop="7dp"
-                style="@style/custom_rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/tv_poi_name"
-                />
-
-            <TextView
-                android:id="@+id/tv_poi_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:gravity="center"
-                android:textColor="@color/light_gray_text_color"
-                android:layout_below="@+id/ratingBar_poi"
-                android:layout_centerHorizontal="true"
-                android:textSize="15sp"
-                android:text="fdsa"/>
-
-
-
-            <View
-                android:id="@+id/poi_divider"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/base_color_line_color"
-                android:layout_below="@+id/tv_poi_rank"
-                android:layout_marginTop="14dp"
-                />
-
-
-            <TextView
-                android:id="@+id/sy_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="实用信息"
-                android:textColor="@color/base_font_color"
-                android:textSize="18sp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:layout_below="@+id/poi_divider"
-                android:layout_centerHorizontal="true"
-                />
-
-            <RelativeLayout
-                android:id="@+id/rl_fee"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/option_cell_selector"
-                android:layout_below="@id/sy_tag">
-
-                <TextView
-                    android:id="@+id/tv_poi_price"
-                    android:layout_width="270dp"
-                    android:layout_height="match_parent"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="15sp"
-                    android:text=""
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/poi_money"
-                    android:drawablePadding="10dp"
-                    />
-
-                <TextView
-                    android:id="@+id/btn_book"
-                    android:layout_width="wrap_content"
-                    android:layout_height="28dp"
-                    android:background="@drawable/theme_button_selctor"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingRight="10dp"
-                    android:text="在线预订"
-                    android:layout_alignParentRight="true"
-                    android:textColor="@color/base_color_white"
-                    android:textSize="15sp" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/base_color_line_color"
-                    />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
             android:id="@+id/rl_level"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center_vertical"
+            android:layout_below="@id/rl_fee"
             android:background="@drawable/option_cell_selector"
-            android:layout_below="@id/rl_fee">
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/tv_poi_level"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:textColor="@color/second_font_color"
-                android:textSize="15sp"
-                android:text="等级/评级"
-                android:gravity="center_vertical"
                 android:drawableLeft="@drawable/poi_level"
                 android:drawablePadding="10dp"
-                />
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="等级/评级"
+                android:textColor="@color/second_font_color"
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/base_color_line_color"
-                />
+                android:background="@color/base_color_line_color" />
 
 
         </RelativeLayout>
 
 
-            <RelativeLayout
-                android:id="@+id/rl_address"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/option_cell_selector"
-                android:layout_below="@id/rl_level">
-
-                <TextView
-                    android:id="@+id/tv_addr"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="15sp"
-                    android:text="地址"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/spot_det_map"
-                    android:drawablePadding="10dp"
-                    />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/base_color_line_color"
-                    />
-
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_phone"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/option_cell_selector"
-                android:layout_below="@id/rl_address">
-
-                <TextView
-                    android:id="@+id/tv_tel"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="15sp"
-                    android:text="电话"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/poi_phone"
-                    android:drawablePadding="10dp"
-                    />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/base_color_line_color"
-                    />
-
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_poi_desc"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/option_cell_selector"
-                android:layout_below="@id/rl_phone">
-
-                <TextView
-                    android:id="@+id/tv_poi_desc"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/second_font_color"
-                    android:textSize="15sp"
-                    android:text="poi简介"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/spot_det_introduction"
-                    android:drawablePadding="10dp"
-                    />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/base_color_line_color"
-                    />
-
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:paddingBottom="10dp"
-                android:layout_below="@+id/rl_poi_desc"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="网友点评"
-                    android:textColor="@color/base_font_color"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:layout_centerInParent="true"
-                    />
-
-
-                <TextView
-                    android:id="@+id/tv_more_cmt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="全部点评"
-                    android:textColor="@color/third_font_color"
-                    android:textSize="13sp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    />
-
-            </RelativeLayout>
-
-
-        </RelativeLayout>
-
-
-
-        <!--<RelativeLayout
-            android:id="@+id/rl_comment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+        <RelativeLayout
+            android:id="@+id/rl_address"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/rl_level"
+            android:background="@drawable/option_cell_selector"
+            android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/attr_tel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/bg_attr_dots"
+                android:id="@+id/tv_addr"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/spot_det_map"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:text="网友点评"
-                android:textColor="@color/app_theme_color"
+                android:singleLine="true"
+                android:text="地址"
+                android:textColor="@color/second_font_color"
                 android:textSize="15sp" />
 
-            <View
-                android:layout_width="60dp"
-                android:layout_height="0.75dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
-                android:layout_toLeftOf="@id/attr_tel"
-                android:background="@color/base_divider_color" />
 
             <View
-                android:layout_width="60dp"
-                android:layout_height="0.75dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@id/attr_tel"
-                android:background="@color/base_divider_color" />
-
-        </RelativeLayout>-->
-
-       <!-- <ImageView
-            android:id="@+id/iv_comment_top_mark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="12dp"
-            android:src="@drawable/ic_quotation_l"
-            android:visibility="gone"/>-->
-
-        <!--<LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_poi_box"
-                android:gravity="center"
-                android:text="店铺\n简介"
-                android:textColor="@color/app_theme_color_secondary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <com.aizou.core.widget.expandabletextview.ExpandableTextView xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/expand_text_view"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:paddingRight="5dp"
-                android:paddingTop="8dp"
-                expandableTextView:animAlphaStart="1"
-                expandableTextView:animDuration="200"
-                expandableTextView:collapseDrawable="@drawable/collapase_drawable"
-                expandableTextView:expandDrawable="@drawable/expand_drawable"
-                expandableTextView:maxCollapsedLines="4">
-
-                <TextView
-                    android:id="@id/expandable_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="3dp"
-                    android:textColor="@color/base_text_color_subtitle"
-                    android:textSize="13sp" />
-
-                <com.aizou.core.widget.ImageButtonWithText
-                    android:id="@id/expand_collapse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:background="@null"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="100dp"
-                    android:scaleType="center" />
-            </com.aizou.core.widget.expandabletextview.ExpandableTextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:visibility="visible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_poi_box"
-                android:gravity="center"
-                android:text="网友\n推荐"
-                android:textColor="@color/app_theme_color_secondary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_recommend"
                 android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/base_color_line_color" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_phone"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/rl_address"
+            android:background="@drawable/option_cell_selector"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_tel"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/poi_phone"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="电话"
+                android:textColor="@color/second_font_color"
+                android:textSize="15sp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/base_color_line_color" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_poi_desc"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/rl_phone"
+            android:background="@drawable/option_cell_selector"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_poi_desc"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/spot_det_introduction"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="poi简介"
+                android:textColor="@color/second_font_color"
+                android:textSize="15sp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/base_color_line_color" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_below="@+id/rl_poi_desc"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:lineSpacingExtra="3dp"
-                android:textColor="@color/base_text_color_subtitle"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="网友点评"
+                android:textColor="@color/base_font_color"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/tv_more_cmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="全部点评"
+                android:textColor="@color/third_font_color"
                 android:textSize="13sp" />
 
-        </LinearLayout>-->
+        </RelativeLayout>
 
-    </LinearLayout>
-</FrameLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
