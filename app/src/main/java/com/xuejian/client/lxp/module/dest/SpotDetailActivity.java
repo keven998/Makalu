@@ -29,10 +29,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.SpotDetailBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -40,10 +37,8 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
-import com.xuejian.client.lxp.module.my.LoginActivity;
 
 /**
  * Created by Rjm on 2014/11/17.

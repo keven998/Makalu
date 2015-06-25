@@ -64,14 +64,11 @@ public class ShowBigImage extends ChatBaseActivity {
 
 		default_res = getIntent().getIntExtra("default_image", R.drawable.messages_bg_useravatar);
 		showAvator = getIntent().getBooleanExtra("showAvator", false);
-//		username = getIntent().getStringExtra("username");
-//		deleteAfterDownload = getIntent().getBooleanExtra("delete", false);
 
 		Uri uri = getIntent().getParcelableExtra("uri");
 		String remotepath = getIntent().getExtras().getString("remotepath");
 		String secret = getIntent().getExtras().getString("secret");
         downloadFilePath=getIntent().getStringExtra("downloadFilePath");
-//		System.err.println("show big image uri:" + uri + " remotepath:" + remotepath);
 
 		//本地存在，直接显示本地的图片
 		if (uri != null && new File(uri.getPath()).exists()) {

@@ -42,7 +42,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.config.PeachApplication;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;
 import com.xuejian.client.lxp.module.dest.PoiListActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;

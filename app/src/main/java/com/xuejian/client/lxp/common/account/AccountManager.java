@@ -6,8 +6,8 @@ import android.text.TextUtils;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
 import com.lv.im.IMClient;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 import java.util.HashMap;
 import java.util.Hashtable;

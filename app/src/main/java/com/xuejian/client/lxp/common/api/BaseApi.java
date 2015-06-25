@@ -6,7 +6,7 @@ import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.PeachApplication;
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 
 /**
  * Created by Rjm on 2014/10/16.

@@ -1,6 +1,6 @@
 package com.xuejian.client.lxp.bean;
 
-import com.xuejian.client.lxp.db.userDB.User;
+import com.xuejian.client.lxp.db.User;
 
 import java.util.List;
 

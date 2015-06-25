@@ -29,15 +29,15 @@ import java.util.Random;
 public class UploadUtils {
     private UploadUtils() {
     }
-    private static UploadUtils UploadUitls = null;
+    private static UploadUtils UploadUtils = null;
 
     private UploadManager uploadManager = new UploadManager();
 
     public static UploadUtils getInstance() {
-        if (UploadUitls == null) {
-            UploadUitls = new UploadUtils();
+        if (UploadUtils == null) {
+            UploadUtils = new UploadUtils();
         }
-        return UploadUitls;
+        return UploadUtils;
     }
 
     public boolean saveBitmapToJpegFile(Bitmap bitmap, String filePath) {

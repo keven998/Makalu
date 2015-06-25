@@ -39,8 +39,8 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.FastBlurHelper;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.SupportBlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.db.userDB.UserDBManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/29.

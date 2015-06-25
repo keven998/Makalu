@@ -54,7 +54,7 @@
 //import com.xuejian.client.lxp.db.InviteStatus;
 //import com.xuejian.client.lxp.db.respository.IMUserRepository;
 //import com.xuejian.client.lxp.db.respository.InviteMsgRepository;
-//import com.xuejian.client.lxp.db.userDB.User;
+//import com.xuejian.client.lxp.db.User;
 //import com.xuejian.client.lxp.module.MainActivity;
 //import com.xuejian.client.lxp.module.SplashActivity;
 //import com.xuejian.client.lxp.module.toolbox.im.VoiceCallReceiver;
