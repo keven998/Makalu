@@ -239,9 +239,9 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
             if (city.childs != null && city.childs.size() > 0) {
                 if (isExpanded) {
-                    arrIv.setBackgroundResource(R.drawable.right_arrow_icon);
+                    arrIv.setBackgroundResource(R.drawable.icon_arrow_right);
                 } else {
-                    arrIv.setBackgroundResource(R.drawable.right_arrow_icon);
+                    arrIv.setBackgroundResource(R.drawable.icon_arrow_right);
                 }
                 convertView.setOnClickListener(new View.OnClickListener() {
 
