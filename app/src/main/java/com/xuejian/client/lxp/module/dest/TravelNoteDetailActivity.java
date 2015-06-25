@@ -22,7 +22,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -30,8 +29,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
-import com.xuejian.client.lxp.db.userDB.User;
-import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import butterknife.ButterKnife;
 
@@ -169,7 +166,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画

@@ -31,7 +31,7 @@ public class ViewUtils {
         FreeFlowItem returnValue = null;
 
 		for(FreeFlowItem item : frameDescriptors.values()) {
-			if(item.frame.contains((int)x, (int)y)) {
+			if(item.frame.contains(x, y)) {
                 returnValue =  item;
             }
 	      

@@ -18,9 +18,9 @@ public class AsyncImageLoader {
 	final Handler handler = new Handler();
 
 	public interface OnImageLoadListener {
-		public void onImageLoad(Integer t, Bitmap bitmap);
+		void onImageLoad(Integer t, Bitmap bitmap);
 
-		public void onError(Integer t);
+		void onError(Integer t);
 
 	}
 

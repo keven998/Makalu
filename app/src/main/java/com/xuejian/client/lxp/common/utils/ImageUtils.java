@@ -246,11 +246,11 @@ public class ImageUtils {
 
         for(int var8 = 0; var8 < var5; ++var8) {
             for(int var9 = 0; var9 < var5; ++var9) {
-                Bitmap var10 = (Bitmap)var2.get(var6);
+                Bitmap var10 = var2.get(var6);
                 Bitmap var11 = Bitmap.createScaledBitmap(var10, var7, var7, true);
                 Bitmap var12 = getRoundedCornerBitmap(var11, 2.0F);
                 var11.recycle();
-                var4.drawBitmap(var12, (float)(var9 * var7 + var9 + 2), (float)(var8 * var7 + var8 + 2), (Paint)null);
+                var4.drawBitmap(var12, (float)(var9 * var7 + var9 + 2), (float)(var8 * var7 + var8 + 2), null);
                 var12.recycle();
                 ++var6;
                 if(var6 == var2.size()) {

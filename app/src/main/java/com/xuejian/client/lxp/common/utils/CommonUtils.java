@@ -76,10 +76,7 @@ public class CommonUtils {
      * @return
      */
     public static boolean isExitsSdcard() {
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            return true;
-        else
-            return false;
+        return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
 
     public static String getTopActivity(Context context) {
@@ -143,11 +140,7 @@ public class CommonUtils {
         PackageManager packageManager = context.getPackageManager();
         //在系统中查询指定的Activity Action
         List resolveInfo = packageManager.queryIntentActivities(intent, PackageManager.GET_INTENT_FILTERS);
-        if(resolveInfo.size() == 0){
-            return false;
-        }else{
-            return true;
-        }
+        return resolveInfo.size() != 0;
     }
 
 

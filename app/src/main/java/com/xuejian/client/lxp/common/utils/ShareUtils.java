@@ -138,7 +138,7 @@ public class ShareUtils {
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         // lp.horizontalMargin=20;
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置

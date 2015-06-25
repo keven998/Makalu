@@ -82,9 +82,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
         if (getClass() != obj.getClass())
             return false;
         PoiDetailBean other = (PoiDetailBean) obj;
-        if (!this.id.equals(other.id))
-            return false;
-        return true;
+        return this.id.equals(other.id);
     }
 //
 //    @Override

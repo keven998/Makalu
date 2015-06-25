@@ -28,16 +28,16 @@ public interface FreeFlowEventListener {
 	/**
 	 * Event dispatched when layout change animations are about to begin.
 	 */
-	public void layoutChangeAnimationsStarting();
+	void layoutChangeAnimationsStarting();
 
-	public void layoutChangeAnimationsComplete();
+	void layoutChangeAnimationsComplete();
 
-	public void layoutComputed();
+	void layoutComputed();
 	
 	/**
 	 * Dispatched when the underlying data has been changed
 	 */
-	public void dataChanged();
+	void dataChanged();
 
 	/**
 	 * Called when the layout is about to change. Measurements based on the
@@ -46,7 +46,7 @@ public interface FreeFlowEventListener {
 	 * @param oldLayout
 	 * @param newLayout
 	 */
-	public void onLayoutChanging(FreeFlowLayout oldLayout, FreeFlowLayout newLayout);
+	void onLayoutChanging(FreeFlowLayout oldLayout, FreeFlowLayout newLayout);
 	
 	/**
 	 * Dispatched when onLayout is called and views are laid out. Note that onLayout
@@ -56,7 +56,7 @@ public interface FreeFlowEventListener {
 	 * @param areTransitionAnimationsPlaying Whether layout transition animations are 
 	 * playing
 	 */
-	public void layoutComplete(boolean areTransitionAnimationsPlaying);
+	void layoutComplete(boolean areTransitionAnimationsPlaying);
 
 	
 

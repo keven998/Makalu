@@ -280,11 +280,11 @@ public abstract class PullToZoomBase<T extends View> extends LinearLayout implem
     protected abstract boolean isReadyForPullStart();
 
     public interface OnPullZoomListener {
-        public void onPullZooming(int newScrollValue);
+        void onPullZooming(int newScrollValue);
 
-        public void onPullZoomEnd();
+        void onPullZoomEnd();
     }
     public interface OnScrollYListener{
-        public void onScrollY(float scrollY);
+        void onScrollY(float scrollY);
     }
 }

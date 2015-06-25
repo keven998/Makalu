@@ -161,11 +161,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         if (type.equals("vs")) {
             if(hasAddList!=null){
                 for (PoiDetailBean detailBean : result.vs) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
             }
             mPoiAdapter.getDataList().addAll(result.vs);
@@ -175,11 +171,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         } else if (type.equals("hotel")) {
             if(hasAddList!=null) {
                 for (PoiDetailBean detailBean : result.hotel) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
             }
             mPoiAdapter.getDataList().addAll(result.hotel);
@@ -189,11 +181,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         } else if (type.equals("restaurant")) {
             if(hasAddList!=null) {
                 for (PoiDetailBean detailBean : result.restaurant) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
             }
             mPoiAdapter.getDataList().addAll(result.restaurant);
@@ -203,11 +191,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         } else if (type.equals("shopping")) {
             if(hasAddList!=null) {
                 for (PoiDetailBean detailBean : result.shopping) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
             }
             mPoiAdapter.getDataList().addAll(result.shopping);

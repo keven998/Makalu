@@ -29,10 +29,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.SpotDetailBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -40,10 +37,8 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
-import com.xuejian.client.lxp.module.my.LoginActivity;
 
 /**
  * Created by Rjm on 2014/11/17.
@@ -108,8 +103,8 @@ public class SpotDetailActivity extends PeachBaseActivity {
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
-        p.height = (int) (d.getHeight());  /* - LocalDisplay.dp2px(64)*/
-        p.width = (int) (d.getWidth() ); /*- LocalDisplay.dp2px(28)*/
+        p.height = d.getHeight();  /* - LocalDisplay.dp2px(64)*/
+        p.width = d.getWidth(); /*- LocalDisplay.dp2px(28)*/
         spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
         chatIv = (ImageView) findViewById(R.id.iv_chat);
         ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
@@ -395,7 +390,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画

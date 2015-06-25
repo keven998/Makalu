@@ -274,7 +274,7 @@ public class NearbyActivity extends PeachBaseActivity {
                 fragment.setArguments(bundle);
                 fragment.updateLocation(mLat,mLng);
                 try {
-                    OnLocationChangeListener listener = (OnLocationChangeListener) fragment;
+                    OnLocationChangeListener listener = fragment;
                     onLocationChangeListenerList.add(listener);
                 } catch (Exception e) {
                     e.printStackTrace();

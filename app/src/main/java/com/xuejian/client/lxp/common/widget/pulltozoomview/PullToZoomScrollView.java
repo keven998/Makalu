@@ -413,12 +413,12 @@ public class PullToZoomScrollView extends ScrollView {
     }
 
     public interface OnScrollViewChangedListener {
-        public void onScrollChanged(int left, int top, int oldLeft, int oldTop);
+        void onScrollChanged(int left, int top, int oldLeft, int oldTop);
     }
 
     public interface OnScrollViewZoomListener {
-        public void onStart();
+        void onStart();
 
-        public void onFinish();
+        void onFinish();
     }
 }

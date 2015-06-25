@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.igexin.sdk.PushConsts;
 import com.lv.Listener.MsgListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.JsonValidator;
-import com.lv.bean.Message;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 
@@ -20,7 +18,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class MessageReceiver extends BroadcastReceiver {

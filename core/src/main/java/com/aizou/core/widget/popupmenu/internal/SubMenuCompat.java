@@ -1,16 +1,10 @@
 package com.aizou.core.widget.popupmenu.internal;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-
-import java.util.ArrayList;
-import java.util.List;
 
 final class SubMenuCompat extends MenuCompat implements SubMenu {
     private final MenuItem mMenuItem;

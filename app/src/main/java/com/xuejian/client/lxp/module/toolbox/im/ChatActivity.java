@@ -13,7 +13,6 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im;
 
-import android.animation.LayoutTransition;
 import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -44,7 +43,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -521,7 +519,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
                 case RESULT_CODE_COPY: // 复制消息
-                    MessageBean copyMsg = ((MessageBean) adapter.getItem(data.getIntExtra("position", -1)));
+                    MessageBean copyMsg = adapter.getItem(data.getIntExtra("position", -1));
 
                     if (copyMsg.getType() == Config.IMAGE_MSG) {
 //					ImageMessageBody imageBody = (ImageMessageBody) copyMsg.getBody();

@@ -8,8 +8,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -27,9 +25,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -40,10 +36,8 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.DrawableCenterTextView;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
-import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
-import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -111,7 +105,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         //ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
         mTravelLv = travelLv;
         titleBar = (RelativeLayout) findViewById(R.id.title_bar);
-        bottom_line = (View) findViewById(R.id.title_bottom_line);
+        bottom_line = findViewById(R.id.title_bottom_line);
         shareToChat = (ImageView) findViewById(R.id.city_detail_chat);
         shareToChat.setOnClickListener(new View.OnClickListener() {
             @Override

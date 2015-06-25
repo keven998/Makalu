@@ -347,11 +347,7 @@ public class PoiListActivity extends PeachBaseActivity {
         }
         if (canAdd) {
             for (PoiDetailBean detailBean : result) {
-                if (hasAddList.contains(detailBean)) {
-                    detailBean.hasAdded = true;
-                } else {
-                    detailBean.hasAdded = false;
-                }
+                detailBean.hasAdded = hasAddList.contains(detailBean);
             }
         }
 
@@ -374,11 +370,7 @@ public class PoiListActivity extends PeachBaseActivity {
             if (requestCode == AddPoiActivity.REQUEST_CODE_SEARCH_POI) {
                 hasAddList = data.getParcelableArrayListExtra("poiList");
                 for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
                 mPoiAdapter.notifyDataSetChanged();
             }

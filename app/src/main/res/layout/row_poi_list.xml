@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:background="@color/base_color_white"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="1dp"
-        android:background="@color/base_color_white">
-
-        <ImageView
-            android:id="@+id/poi_delete_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_line_edit_delete"
-            android:visibility="gone" />
+    <ImageView
+        android:id="@+id/poi_delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_line_edit_delete"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_content"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:padding="11dp"
-        >
+        android:layout_weight="1"
+        android:padding="11dp">
 
 
         <ImageView
             android:id="@+id/poi_image_iv"
             android:layout_width="68dp"
             android:layout_height="68dp"
-            android:layout_below="@id/vw_top"
             android:background="@drawable/bg_common_default"
             android:scaleType="centerCrop" />
 
@@ -45,33 +40,33 @@
             android:id="@+id/top_name_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignTop="@id/poi_image_iv"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/poi_image_iv">
+            android:layout_toRightOf="@id/poi_image_iv"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_poi_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:gravity="left|center_vertical"
+                android:maxWidth="160dp"
                 android:singleLine="true"
                 android:textColor="@color/second_font_color"
-                android:textSize="15sp"
-                android:maxWidth="160dp"
-                android:ellipsize="end"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/poi_address_tv"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:singleLine="true"
                 android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="@color/third_font_color"
                 android:textSize="14sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -83,7 +78,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/poi_image_iv"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/poi_rank_tv"
@@ -91,13 +86,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/top_name_layout"
             android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@id/poi_image_iv"
             android:layout_marginRight="10dp"
             android:layout_marginTop="7dp"
+            android:layout_toRightOf="@id/poi_image_iv"
             android:singleLine="true"
+            android:text="景点排名"
             android:textColor="@color/third_font_color"
-            android:textSize="14sp"
-            android:text="景点排名"/>
+            android:textSize="14sp" />
 
 
         <TextView
@@ -110,24 +105,23 @@
             android:layout_marginTop="7dp"
             android:layout_toRightOf="@id/poi_image_iv"
             android:singleLine="true"
+            android:text="参考游玩时间"
             android:textColor="@color/green_text_color"
-            android:textSize="12sp"
-            android:text="参考游玩时间"/>
+            android:textSize="12sp" />
 
 
         <TextView
             android:id="@+id/poi_price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/poi_costtime_tv"
-            android:layout_below="@+id/btn_add"
-            android:text=""
-            android:gravity="right"
-            android:textSize="10sp"
-            android:textColor="@color/third_font_color"
             android:layout_alignBaseline="@+id/poi_costtime_tv"
-            />
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/btn_add"
+            android:layout_toRightOf="@+id/poi_costtime_tv"
+            android:gravity="right"
+            android:text=""
+            android:textColor="@color/third_font_color"
+            android:textSize="10sp" />
 
 
         <CheckedTextView
@@ -147,19 +141,5 @@
 
     </RelativeLayout>
 
-        <!--<ImageView
-            android:id="@+id/poi_drag_handle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_line_edit_drag"
-            android:visibility="gone" />-->
 
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

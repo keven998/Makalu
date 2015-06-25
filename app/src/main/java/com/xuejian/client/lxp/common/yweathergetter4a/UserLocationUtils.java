@@ -102,7 +102,7 @@ class UserLocationUtils {
         }
     }
 
-    public static interface LocationResult{
-        public abstract void gotLocation(Location location);
+    public interface LocationResult{
+        void gotLocation(Location location);
     }
 }

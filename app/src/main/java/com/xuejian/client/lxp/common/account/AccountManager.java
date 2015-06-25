@@ -118,7 +118,7 @@ public class AccountManager {
 //    }
 
     public void saveLoginAccount(Context context, User user) {
-        this.user = user;
+        AccountManager.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
     public User getLoginAccountInfo(){

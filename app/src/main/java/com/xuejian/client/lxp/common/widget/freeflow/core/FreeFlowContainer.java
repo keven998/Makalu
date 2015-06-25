@@ -1259,11 +1259,11 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 				viewPortX = (mScrollableWidth + overflingDistance);
 			}
 //            LogUtil.d("freeflow","viewPortY="+viewPortY+"-- overflingDistance="+  overflingDistance);
-			if (viewPortY < (int) (-overflingDistance)) {
-				viewPortY = (int) -overflingDistance;
+			if (viewPortY < -overflingDistance) {
+				viewPortY = -overflingDistance;
 			} else if (viewPortY > mScrollableHeight + overflingDistance) {
 
-				viewPortY = (int) (mScrollableHeight + overflingDistance);
+				viewPortY = mScrollableHeight + overflingDistance;
 			}
             LogUtil.d("freeflow","moveViewPortYAfter="+viewPortY);
 			if (mEdgeEffectsEnabled) {
@@ -1681,8 +1681,8 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 		 *            <code>true</code> if the item is now checked,
 		 *            <code>false</code> if the item is now unchecked.
 		 */
-		public void onItemCheckedStateChanged(ActionMode mode, int section,
-                                              int position, long id, boolean checked);
+		void onItemCheckedStateChanged(ActionMode mode, int section,
+									   int position, long id, boolean checked);
 	}
 
 	public void setItemChecked(int sectionIndex, int positionInSection,
@@ -1926,11 +1926,11 @@ public class FreeFlowContainer extends AbsLayoutContainer {
 	}
 
 	public interface OnScrollListener {
-		public int SCROLL_STATE_IDLE = 0;
-		public int SCROLL_STATE_TOUCH_SCROLL = 1;
-		public int SCROLL_STATE_FLING = 2;
+		int SCROLL_STATE_IDLE = 0;
+		int SCROLL_STATE_TOUCH_SCROLL = 1;
+		int SCROLL_STATE_FLING = 2;
 
-		public void onScroll(FreeFlowContainer container);
+		void onScroll(FreeFlowContainer container);
 	}
 
 	/******** DEBUGGING HELPERS *******/

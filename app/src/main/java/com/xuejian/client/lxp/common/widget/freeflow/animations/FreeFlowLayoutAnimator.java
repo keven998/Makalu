@@ -29,12 +29,12 @@ public interface FreeFlowLayoutAnimator {
 	 * 
 	 * @return
 	 */
-	public LayoutChangeset getChangeSet();
+	LayoutChangeset getChangeSet();
 
 	/**
 	 * Cancels the currently running layout change animation
 	 */
-	public void cancel();
+	void cancel();
 
 	/**
 	 * Start the animation on all the changes that are wrapped in the
@@ -50,13 +50,13 @@ public interface FreeFlowLayoutAnimator {
 	 *            The Container instance to be informed when your animations are
 	 *            complete
 	 */
-	public void animateChanges(LayoutChangeset changes,
-                               FreeFlowContainer callback);
+	void animateChanges(LayoutChangeset changes,
+						FreeFlowContainer callback);
 
 	/**
 	 * @return Whether the layout animation is currently playing
 	 */
-	public boolean isRunning();
+	boolean isRunning();
 
 	/**
 	 * Called when a touch down event occurs while the layoutAnimator is
@@ -65,6 +65,6 @@ public interface FreeFlowLayoutAnimator {
 	 * 
 	 * @param event The MotionEvent received by the Container
 	 */
-	public void onContainerTouchDown(MotionEvent event);
+	void onContainerTouchDown(MotionEvent event);
 
 }

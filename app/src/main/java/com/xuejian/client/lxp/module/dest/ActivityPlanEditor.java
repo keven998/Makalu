@@ -228,11 +228,7 @@ public class ActivityPlanEditor extends FragmentActivity {
 
         @Override
         public boolean isEnabled(int position) {
-            if (isHeader(position)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !isHeader(position);
         }
     }
 

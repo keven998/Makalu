@@ -475,11 +475,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             mPoiAdapter.getDataList().clear();
         }
         for (PoiDetailBean detailBean : result) {
-            if (hasAddList.contains(detailBean)) {
-                detailBean.hasAdded = true;
-            } else {
-                detailBean.hasAdded = false;
-            }
+            detailBean.hasAdded = hasAddList.contains(detailBean);
         }
         mPoiAdapter.getDataList().addAll(result);
         mPoiAdapter.notifyDataSetChanged();
@@ -504,11 +500,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             if(requestCode==REQUEST_CODE_SEARCH_POI){
                 hasAddList = data.getParcelableArrayListExtra("poiList");
                 for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
-                    if (hasAddList.contains(detailBean)) {
-                        detailBean.hasAdded = true;
-                    } else {
-                        detailBean.hasAdded = false;
-                    }
+                    detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
                 mPoiAdapter.notifyDataSetChanged();
             }

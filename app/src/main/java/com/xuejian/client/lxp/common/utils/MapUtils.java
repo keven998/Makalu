@@ -47,11 +47,7 @@ public class MapUtils {
         boolean isInstall=false;
         try {
             PackageInfo packageInfo=context.getPackageManager().getPackageInfo(packageName, 0);
-            if (packageInfo == null) {
-                isInstall=false;
-            } else {
-                isInstall=true;
-            }
+            isInstall = packageInfo != null;
         } catch (Exception e) {
             isInstall=false;
         }

@@ -22,5 +22,5 @@ package com.xuejian.client.lxp.common.yweathergetter4a;
  * @author Zhenghong Wang
  */
 public interface YahooWeatherInfoListener {
-	public void gotWeatherInfo(WeatherInfo weatherInfo);
+	void gotWeatherInfo(WeatherInfo weatherInfo);
 }

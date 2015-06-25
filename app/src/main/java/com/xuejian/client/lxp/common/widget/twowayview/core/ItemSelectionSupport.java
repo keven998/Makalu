@@ -19,7 +19,7 @@ import static android.os.Build.VERSION_CODES.HONEYCOMB;
 public class ItemSelectionSupport {
     public static final int INVALID_POSITION = -1;
 
-    public static enum ChoiceMode {
+    public enum ChoiceMode {
         NONE,
         SINGLE,
         MULTIPLE

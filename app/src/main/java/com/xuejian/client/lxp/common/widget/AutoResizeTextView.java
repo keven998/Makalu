@@ -47,7 +47,7 @@ public class AutoResizeTextView extends CheckedTextView
      * text, it takes less space than {@code availableSpace}, > 0
      * otherwise
      */
-    public int onTestSize(int suggestedSize, RectF availableSpace);
+    int onTestSize(int suggestedSize, RectF availableSpace);
     }
 
   public AutoResizeTextView(final Context context)

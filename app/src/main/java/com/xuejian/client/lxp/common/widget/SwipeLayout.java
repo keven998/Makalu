@@ -138,8 +138,7 @@ public class SwipeLayout extends LinearLayout {
         if (mCurrentDirectionIndex == mLeftIndex && !mLeftSwipeEnabled) return false;
         if (mCurrentDirectionIndex == mRightIndex && !mRightSwipeEnabled) return false;
         if (mCurrentDirectionIndex == mTopIndex && !mTopSwipeEnabled) return false;
-        if (mCurrentDirectionIndex == mBottomIndex && !mBottomSwipeEnabled) return false;
-        return true;
+        return !(mCurrentDirectionIndex == mBottomIndex && !mBottomSwipeEnabled);
     }
     private float sX = -1, sY = -1;
     @Override

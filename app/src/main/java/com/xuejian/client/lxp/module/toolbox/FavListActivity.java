@@ -181,7 +181,7 @@ public class FavListActivity extends PeachBaseActivity {
             size = OtherApi.PAGE_SIZE;
         }
         List<FavoritesBean> cd = mAdapter.getDataList().subList(0, size);
-        PreferenceUtils.cacheData(FavListActivity.this, String.format("%s_favorites", account.getCurrentUserId()), GsonTools.createGsonString(cd));
+        PreferenceUtils.cacheData(FavListActivity.this, String.format("%s_favorites", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
 
     private void initData(final String type, final int page) {

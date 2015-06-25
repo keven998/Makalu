@@ -152,7 +152,7 @@ public class YahooWeather implements com.xuejian.client.lxp.common.yweathergette
         final String convertedlocation = AsciiUtils.convertNonAscii(cityAreaOrLocation);
 		mWeatherInfoResult = result;
 		final WeatherQueryByPlaceTask task = new WeatherQueryByPlaceTask();
-		task.execute(new String[]{convertedlocation});
+		task.execute(convertedlocation);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class YahooWeather implements com.xuejian.client.lxp.common.yweathergette
         }
 		mWeatherInfoResult = result;
 		final WeatherQueryByLatLonTask task = new WeatherQueryByLatLonTask();
-		task.execute(new String[]{lat, lon});
+		task.execute(lat, lon);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class YahooWeather implements com.xuejian.client.lxp.common.yweathergette
 		final String lat = String.valueOf(location.getLatitude());
 		final String lon = String.valueOf(location.getLongitude());
 		final WeatherQueryByLatLonTask task = new WeatherQueryByLatLonTask();
-		task.execute(new String[]{lat, lon});
+		task.execute(lat, lon);
 	}
 
 	private String getWeatherString(Context context, String woeidNumber) {

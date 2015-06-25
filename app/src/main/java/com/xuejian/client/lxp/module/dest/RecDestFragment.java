@@ -374,7 +374,7 @@ public class RecDestFragment extends PeachBaseFragment {
             Iterator<Map.Entry<Object, FreeFlowItem>> it = map.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, FreeFlowItem> pairs = it.next();
-                FreeFlowItem p = (FreeFlowItem) pairs.getValue();
+                FreeFlowItem p = pairs.getValue();
                 if (Rect.intersects(p.frame, viewport)) {
                     ret.put(pairs.getKey(), p);
                 }
@@ -415,7 +415,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public FreeFlowItem getItemAt(float x, float y) {
-            return (FreeFlowItem) ViewUtils.getItemAt(map, (int) x, (int) y);
+            return ViewUtils.getItemAt(map, (int) x, (int) y);
         }
 
         @Override

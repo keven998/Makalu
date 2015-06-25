@@ -54,7 +54,7 @@ public class PeachMessageDialog extends Dialog {
         mContetTv = (TextView) findViewById(R.id.tv_dialog_message);
         mOkBtn = (Button) findViewById(R.id.btn_ok);
         mCancleBtn = (Button) findViewById(R.id.btn_cancle);
-        midView = (View) findViewById(R.id.dialog_mid_line);
+        midView = findViewById(R.id.dialog_mid_line);
     }
 
     public void setPositiveButton(String str, View.OnClickListener listener) {

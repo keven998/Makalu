@@ -20,20 +20,20 @@ import android.view.ViewGroup;
 
 public interface SectionedAdapter {
 
-	public long getItemId(int section, int position);
+	long getItemId(int section, int position);
 
-	public View getItemView(int section, int position, View convertView, ViewGroup parent);
+	View getItemView(int section, int position, View convertView, ViewGroup parent);
 
-	public View getHeaderViewForSection(int section, View convertView, ViewGroup parent);
+	View getHeaderViewForSection(int section, View convertView, ViewGroup parent);
 
-	public int getNumberOfSections();
+	int getNumberOfSections();
 
-	public Section getSection(int index);
+	Section getSection(int index);
 
-	public Class[] getViewTypes();
+	Class[] getViewTypes();
 
-	public Class getViewType(FreeFlowItem proxy);
+	Class getViewType(FreeFlowItem proxy);
 	
-	public boolean shouldDisplaySectionHeaders();
+	boolean shouldDisplaySectionHeaders();
 
 }

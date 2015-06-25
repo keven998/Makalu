@@ -774,7 +774,7 @@ public class StringUtil {
 			temp += "0";
 		DecimalFormat format = new DecimalFormat(temp);
 		Double d = Double.valueOf(text);
-		return format.format(d).toString();
+		return format.format(d);
 	}
 
 	
@@ -802,7 +802,7 @@ public class StringUtil {
 			temp += "0";
 		DecimalFormat format = new DecimalFormat(temp);
 		Double d = Double.valueOf(text);
-		return format.format(d).toString();
+		return format.format(d);
 	}
 
 	/**

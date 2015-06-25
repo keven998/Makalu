@@ -61,7 +61,7 @@ public class RoundedImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (((BitmapDrawable) getDrawable()) != null) {
+        if (getDrawable() != null) {
             mBitmap = ((BitmapDrawable) getDrawable()).getBitmap();
             mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         }

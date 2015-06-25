@@ -100,10 +100,10 @@ public class DeviceInfo {
 				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
 					InetAddress inetAddress = enumIpAddr.nextElement();
 					if (!inetAddress.isLoopbackAddress() && (inetAddress instanceof Inet4Address)) {
-						if (inetAddress.getHostAddress().toString() == null)
+						if (inetAddress.getHostAddress() == null)
 							return "";
 						else
-							return inetAddress.getHostAddress().toString();
+							return inetAddress.getHostAddress();
 					}
 				}
 			}

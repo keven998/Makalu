@@ -41,12 +41,12 @@ import java.util.List;
 public abstract class TwoWayLayoutManager extends LayoutManager {
     private static final String LOGTAG = "TwoWayLayoutManager";
 
-    public static enum Orientation {
+    public enum Orientation {
         HORIZONTAL,
         VERTICAL
     }
 
-    public static enum Direction {
+    public enum Direction {
         START,
         END
     }

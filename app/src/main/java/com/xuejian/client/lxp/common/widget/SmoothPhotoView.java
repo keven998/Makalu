@@ -376,7 +376,7 @@ public class SmoothPhotoView extends PhotoView {
 
     private TransformListener mTransformListener;
 
-    public static interface TransformListener {
+    public interface TransformListener {
         /**
          *
          * @param mode

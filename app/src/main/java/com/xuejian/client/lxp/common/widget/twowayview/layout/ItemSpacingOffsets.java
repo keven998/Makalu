@@ -88,12 +88,9 @@ class ItemSpacingOffsets {
 
         // TODO: Figure out a robust way to compute this for layouts
         // that are dynamically placed and might span multiple lanes.
-        if (lm instanceof SpannableGridLayoutManager ||
-            lm instanceof StaggeredGridLayoutManager) {
-            return false;
-        }
+        return !(lm instanceof SpannableGridLayoutManager ||
+                lm instanceof StaggeredGridLayoutManager);
 
-        return true;
     }
 
     public void setAddSpacingAtEnd(boolean spacingAtEnd) {

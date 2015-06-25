@@ -21,7 +21,7 @@ public class StretchAnimation {
     private TYPE mType = TYPE.vertical;
     private final static int FRAMTIME = 20;// 一帧的时间 毫秒
 
-    public static enum TYPE {
+    public enum TYPE {
         horizontal, // 改变view水平方向的大小
         vertical    // 改变view竖直方向的大小
     }
@@ -151,7 +151,7 @@ public class StretchAnimation {
     private AnimationListener animationlistener;
 
     interface AnimationListener {
-        public void animationEnd(View v);
+        void animationEnd(View v);
     }
 
     public void setOnAnimationListener(AnimationListener listener) {

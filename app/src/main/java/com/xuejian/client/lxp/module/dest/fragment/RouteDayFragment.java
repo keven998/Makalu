@@ -609,11 +609,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         @Override
         public boolean isEnabled(int position) {
 
-            if (isHeader(position)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !isHeader(position);
         }
 
         private class ItemViewHolder {

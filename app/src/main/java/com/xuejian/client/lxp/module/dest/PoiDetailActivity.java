@@ -42,11 +42,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
-import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.RecommendBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -55,9 +52,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.db.userDB.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -144,8 +139,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
         p.y = LocalDisplay.dp2px(5);
-        p.height = (int) (d.getHeight());    /*- LocalDisplay.dp2px(64)*/
-        p.width = (int) (d.getWidth());   /*- LocalDisplay.dp2px(28)*/
+        p.height = d.getHeight();    /*- LocalDisplay.dp2px(64)*/
+        p.width = d.getWidth();   /*- LocalDisplay.dp2px(28)*/
 
         getWindow().setAttributes(p);
         headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
@@ -554,7 +549,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         window.setContentView(contentView);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画

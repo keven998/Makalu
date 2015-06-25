@@ -214,11 +214,7 @@ public class SearchAllActivity extends PeachBaseActivity {
             typeBeans.add(searchTypeBean);
         }
         boolean isSend;
-        if(!TextUtils.isEmpty(toId)){
-            isSend = true;
-        }else{
-            isSend = false;
-        }
+        isSend = !TextUtils.isEmpty(toId);
         SearchAllAdapter searchAllAdapter = new SearchAllAdapter(mContext, typeBeans, true,isSend);
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override

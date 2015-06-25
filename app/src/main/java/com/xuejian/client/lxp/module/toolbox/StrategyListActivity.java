@@ -148,7 +148,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
+                        StrategyBean bean = mStrategyListAdapter.getDataList().get(position);
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putExtra("id", bean.id);
                         startActivityForResult(intent, RESULT_PLAN_DETAIL);

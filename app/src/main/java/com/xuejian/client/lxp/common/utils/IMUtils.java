@@ -261,7 +261,7 @@ public class IMUtils {
         WindowManager m =((Activity) context).getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
         WindowManager.LayoutParams p =dialog.getWindow().getAttributes(); // 获取对话框当前的参数值
-        p.width = (int) (d.getWidth() -LocalDisplay.dp2px(40)); // 宽度设置为屏幕的0.65
+        p.width = d.getWidth() -LocalDisplay.dp2px(40); // 宽度设置为屏幕的0.65
         dialog.getWindow().setAttributes(p);
         dialog.show();
     }
@@ -366,7 +366,7 @@ public class IMUtils {
         }
 
         int var3 = var0 % 60;
-        return String.format("%02d:%02d", new Object[]{Integer.valueOf(var1), Integer.valueOf(var3)});
+        return String.format("%02d:%02d", Integer.valueOf(var1), Integer.valueOf(var3));
     }
     public static String getDataSize(long var0) {
         DecimalFormat var2 = new DecimalFormat("###.00");

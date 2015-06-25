@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Provides retrieving of {@link java.io.InputStream} of image by URI from network or file system or app resources.<br />

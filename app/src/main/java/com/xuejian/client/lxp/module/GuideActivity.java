@@ -108,11 +108,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 	// 当滑动状态改变时调用
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		if (arg0 == 1) {
-			isScrolling = true;
-		} else {
-			isScrolling = false;
-		}
+        isScrolling = arg0 == 1;
 
 	}
 
