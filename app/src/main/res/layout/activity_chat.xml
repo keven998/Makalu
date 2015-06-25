@@ -12,10 +12,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+                    android:id="@+id/title_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/title_bar_height" />
+
+                <ProgressBar
+                    android:id="@+id/pb_load_more"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/content_top_margin"
+                    android:visibility="gone" />
+
+                <ListView
+                    android:id="@+id/content_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/pb_load_more"
+                    android:layout_marginTop="@dimen/content_top_margin"
+                    android:cacheColorHint="#00000000"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:listSelector="#00000000"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:transcriptMode="normal" />
+
+                <RelativeLayout
+                    android:id="@+id/recording_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/recording_hint_bg"
+                    android:padding="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/mic_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="center"
+                        android:src="@drawable/record_animate_01" />
+
+                    <TextView
+                        android:id="@+id/recording_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/mic_image"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:padding="2dp"
+                        android:text="@string/move_up_to_cancel"
+                        android:textColor="@color/base_color_white"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/bar_bottom"
@@ -82,8 +147,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
                                 android:text="@string/button_pushtotalk"
                                 android:textColor="@color/color_text_ii"
                                 android:textSize="15sp" />
@@ -159,7 +224,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/more"
+                    android:id="@+id/fl_extra_panel"
                     android:layout_width="match_parent"
                     android:layout_height="192dp"
                     android:background="@color/app_backgroud"
@@ -297,71 +362,11 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
                 </FrameLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@id/bar_bottom"
-                android:layout_marginTop="@dimen/content_top_margin">
-
-                <ProgressBar
-                    android:id="@+id/pb_load_more"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerHorizontal="true"
-                    android:visibility="gone" />
-
-                <ListView
-                    android:id="@+id/content_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/pb_load_more"
-                    android:cacheColorHint="#00000000"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:listSelector="#00000000"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:transcriptMode="normal" />
-
-                <RelativeLayout
-                    android:id="@+id/recording_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/recording_hint_bg"
-                    android:padding="10dp"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/mic_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="center"
-                        android:src="@drawable/record_animate_01" />
-
-                    <TextView
-                        android:id="@+id/recording_hint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/mic_image"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:padding="2dp"
-                        android:text="@string/move_up_to_cancel"
-                        android:textColor="@color/base_color_white"
-                        android:textSize="10sp" />
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-                android:id="@+id/title_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/title_bar_height" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/menu_frame"
