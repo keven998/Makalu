@@ -844,10 +844,8 @@ public class MessageAdapter extends BaseAdapter {
             Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
             // "it is receive msg";
             if (message.getStatus() == 1) {
-                // "!!!! back receive";
                 holder.iv.setImageBitmap(defaultImage);
                 showDownloadImageProgress(message, holder);
-                // downloadImage(message, holder);
             } else if (message.getStatus() == 2) {
                 return;
             } else if (message.getStatus() == 0) {
@@ -1200,6 +1198,7 @@ public class MessageAdapter extends BaseAdapter {
                 new DownloadVoice(url,filename).download(new DownloadVoice.DownloadListener() {
                     @Override
                     public void onSuccess() {
+                        IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,0,null,Config.AUDIO_MSG);
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1215,6 +1214,7 @@ public class MessageAdapter extends BaseAdapter {
 
                     @Override
                     public void onFail() {
+                        IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,2,null,Config.AUDIO_MSG);
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1228,10 +1228,6 @@ public class MessageAdapter extends BaseAdapter {
             }
             return;
         }
-        //   String filepath=(String)getVoiceFilepath(message,"path");
-        // String durtime=(int)getVoiceFilepath(message,"duration")+"";
-        //  boolean isRead=(boolean)getVoiceFilepath(message,"isRead");
-        // until here, deal with send voice msg
         switch (message.getStatus()) {
             case 0:
                 holder.pb.setVisibility(View.GONE);
@@ -1244,7 +1240,6 @@ public class MessageAdapter extends BaseAdapter {
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
                 holder.staus_iv.setVisibility(View.GONE);
-                // sendMsgInBackground(message, holder);
                 IMClient.getInstance().sendAudioMessage(AccountManager.getCurrentUserId(), message, filepath, friendId, new UploadListener() {
                     @Override
                     public void onSucess(String fileUrl) {
@@ -1403,10 +1398,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 处理位置消息
      *
-     * @param message
-     * @param holder
-     * @param position
-     * @param convertView
      */
     private void handleLocationMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
@@ -1479,8 +1470,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 发送消息
      *
-     * @param message
-     * @param holder
      */
     public void sendMsgInBackground(final MessageBean message, final ViewHolder holder) {
         holder.staus_iv.setVisibility(View.GONE);
@@ -1511,14 +1500,12 @@ public class MessageAdapter extends BaseAdapter {
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
             public void onSuccess() {
+                IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,0,null,Config.IMAGE_MSG);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // message.setBackReceive(false);
-                        // if (message.getType() == Type.IMAGE) {
                         holder.pb.setVisibility(View.GONE);
                         holder.tv.setVisibility(View.GONE);
-                        //  }
                         message.setStatus(0);
                         notifyDataSetChanged();
                     }
@@ -1538,7 +1525,16 @@ public class MessageAdapter extends BaseAdapter {
 
             @Override
             public void onFail() {
-                message.setStatus(2);
+                IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 2, null, Config.IMAGE_MSG);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.pb.setVisibility(View.GONE);
+                        holder.tv.setVisibility(View.GONE);
+                        message.setStatus(2);
+                        notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
