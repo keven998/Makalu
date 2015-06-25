@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -280,8 +278,8 @@ public class MessageDB {
         String table_name = "chat_" + CryptUtils.getMD5String(Friend_Id);
         List<MessageBean> list = new LinkedList<MessageBean>();
         // 滚动到顶端自动加载数据
-        int from = pager * 100;
-        int to = (pager + 1) * 100;
+        int from =0;
+        int to = (pager + 1) * 20-1;
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
                 + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
