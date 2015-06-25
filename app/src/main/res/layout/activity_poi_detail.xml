@@ -17,7 +17,7 @@
             android:id="@+id/poi_det_back"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:drawableLeft="@drawable/common_icon_navigationback"
+            android:drawableLeft="@drawable/selector_ic_nav_back"
             android:paddingLeft="10dp"
             />
 

@@ -14,6 +14,7 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,10 +35,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -147,7 +150,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private View buttonSend;
     private View buttonPressToSpeak;
     private ViewPager expressionViewpager;
-    private RelativeLayout expressionContainer;
+    private FrameLayout expressionContainer;
     private LinearLayout btnContainer;
     private View more;
     private ClipboardManager clipboard;
@@ -168,7 +171,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private boolean isloading;
     private final int pagesize = 20;
     private boolean haveMoreData = true;
-    private ImageView btnMore;
+    private ImageButton btnMore;
     public String playMsgId;
     private DotView dots;
     private String conversation;
@@ -272,12 +275,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         buttonPressToSpeak = findViewById(R.id.btn_press_to_speak);
         expressionViewpager = (ViewPager) findViewById(R.id.vPager);
         dots = (DotView) findViewById(R.id.face_dot_view);
-        expressionContainer = (RelativeLayout) findViewById(R.id.ll_face_container);
+        expressionContainer = (FrameLayout) findViewById(R.id.ll_face_container);
         btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
         iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
         iv_emoticons_checked = (ImageView) findViewById(R.id.iv_emoticons_checked);
         loadmorePB = (ProgressBar) findViewById(R.id.pb_load_more);
-        btnMore = (ImageView) findViewById(R.id.btn_more);
+        btnMore = (ImageButton) findViewById(R.id.btn_more);
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         iv_emoticons_checked.setVisibility(View.GONE);
         more = findViewById(R.id.more);
@@ -407,6 +410,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //                finish();
 //            }
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
+            drawerLayout.setEnabled(false);
         } else {
             // 群聊
             titleHeaderBar.setRightViewImageRes(R.drawable.common_icon_navigation_menu);
@@ -1116,7 +1120,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
 
         }
-
+//        buttonPressToSpeak.setVisibility(View.VISIBLE);
+//        iv_emoticons_normal.setVisibility(View.VISIBLE);
+//        mEditTextContent.setVisibility(View.VISIBLE);
+//        iv_emoticons_checked.setVisibility(View.GONE);
+//        buttonSetModeVoice.setVisibility(View.GONE);
+//        buttonSetModeKeyboard.setVisibility(View.GONE);
     }
 
     /**
@@ -1331,7 +1340,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("chatActivity destroy");
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
         activityInstance = null;
         CommonUtils.fixInputMethodManagerLeak(this);
@@ -1347,7 +1355,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_talking");
-        System.out.println("chatActivity pause");
 //        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
 //        options.setNoticeBySound(new PeachHXSDKModel(mContext).getSettingMsgSound());
         if (wakeLock.isHeld())

@@ -42,8 +42,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
-                        android:drawableLeft="@drawable/common_icon_navigationback"
-                        android:paddingLeft="20dp"
+                        android:drawableLeft="@drawable/selector_ic_nav_back"
+                        android:paddingLeft="10dp"
                         android:paddingRight="30dp" />
 
                     <TextView
