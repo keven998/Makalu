@@ -56,7 +56,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private static final int TEXT_MSG = 0;
     private static final int VOICE_MSG = 1;
     private static final int IMAGE_MSG = 2;
-    private static final int LOC_MSG = 4;
+    private static final int LOC_MSG = 3;
     private static final int POI_MSG = 5;
     private static final int VIDEO_MSG = 6;
     private static final int FILE_MSG = 7;

@@ -188,13 +188,19 @@ public class StrategyListActivity extends PeachBaseActivity {
         });
 
         TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
-
-        if (isOwner)
+        if (isOwner) {
             textView.setText(String.format("%s的计划", AccountManager.getInstance().getLoginAccountInfo().getNickName()));
-        else if (user != null)
+        } else if (user != null) {
             textView.setText(String.format("%s的计划", user.getNickName()));
-        else textView.setText(String.format("%s的计划", userId));
-
+        } else {
+            textView.setText(String.format("旅行计划"));
+        }
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setupViewFromCache() {
@@ -306,14 +312,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         } else {
             mMyStrategyLv.setHasMoreData(true);
         }
-
-//        if (result.size() == 0) {
-//            if (mCurrentPage == 0) {
-//            } else {
-//                ToastUtil.getInstance(this).showToast("已取完所有内容");
-//            }
-//            return;
-//        }
 
         if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setScrollLoadEnabled(true);

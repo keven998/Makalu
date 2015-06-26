@@ -30,20 +30,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/empty_string"
                 android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/pb_iv"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@anim/loading_anim"
-                 />
+                android:background="@anim/loading_anim" />
 
             <ProgressBar
                 android:id="@+id/exception_progressbar"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:indeterminate="false" />
+                android:indeterminate="false"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/exception_message"

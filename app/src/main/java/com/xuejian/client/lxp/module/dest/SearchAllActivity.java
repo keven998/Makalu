@@ -66,7 +66,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         chatType = getIntent().getStringExtra("chatType");
         ButterKnife.inject(this);
         if (!TextUtils.isEmpty(toId)) {
-            mTitleBar.getTitleTextView().setText("发送地点");
+            mTitleBar.getTitleTextView().setText("发送攻略");
         } else {
             mTitleBar.getTitleTextView().setText("旅行搜搜");
         }

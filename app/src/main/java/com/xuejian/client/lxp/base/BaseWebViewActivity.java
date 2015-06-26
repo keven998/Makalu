@@ -15,12 +15,13 @@ import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 /**
  * Created by Rjm on 2014/11/20.
  */
-public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
-    /** 浏览器的webview，你可以在子类中使用 */
+public abstract class BaseWebViewActivity extends PeachBaseActivity {
+    /**
+     * 浏览器的webview，你可以在子类中使用
+     */
     protected WebView mWebView;
     protected String mCurrentUrl;
     protected NumberProgressBar mProgressBar;
-
 
 
     @Override
@@ -29,46 +30,41 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
     }
 
 
-
     /**
      * 载入链接之前会被调用
      *
-     * @param view
-     *            WebView
-     * @param url
-     *            链接地址
+     * @param view WebView
+     * @param url  链接地址
      */
-    protected void onUrlLoading(WebView view, String url) {}
+    protected void onUrlLoading(WebView view, String url) {
+    }
 
     /**
      * 链接载入成功后会被调用
      *
-     * @param view
-     *            WebView
-     * @param url
-     *            链接地址
+     * @param view WebView
+     * @param url  链接地址
      */
-    protected void onUrlFinished(WebView view, String url) {}
+    protected void onUrlFinished(WebView view, String url) {
+    }
 
     /**
      * 获取当前WebView显示页面的标题
      *
-     * @param view
-     *            WebView
-     * @param title
-     *            web页面标题
+     * @param view  WebView
+     * @param title web页面标题
      */
-    protected void getWebTitle(WebView view, String title) {}
+    protected void getWebTitle(WebView view, String title) {
+    }
 
     /**
      * 获取当前WebView显示页面的图标
      *
-     * @param view
-     *            WebView
-     * @param icon
-     *            web页面图标
+     * @param view WebView
+     * @param icon web页面图标
      */
-    protected void getWebIcon(WebView view, Bitmap icon) {}
+    protected void getWebIcon(WebView view, Bitmap icon) {
+    }
 
     /**
      * 初始化浏览器设置信息
@@ -144,7 +140,7 @@ public abstract  class  BaseWebViewActivity extends PeachBaseActivity {
         mWebView.stopLoading();
         View vp = (View) mWebView.getParent();
         if (vp instanceof ViewGroup) {
-            ((ViewGroup)vp).removeView(mWebView);
+            ((ViewGroup) vp).removeView(mWebView);
         }
         mWebView.removeAllViews();
         mWebView.destroy();

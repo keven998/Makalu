@@ -74,7 +74,11 @@ public class HandleImMessage {
     }
 
     public void registerMessageListener(MessageHandler listener, String conversation) {
-        if (!ehList.contains(listener))ehList.add(listener);
+        if (!ehList.contains(listener)) {
+            ehList.add(listener);
+        } else {
+            return;
+        }
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
     }

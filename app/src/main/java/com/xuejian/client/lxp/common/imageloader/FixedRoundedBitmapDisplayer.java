@@ -135,7 +135,7 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
             path.arcTo(new RectF(
                             0,
                             mRect.height()-bottomLeftRadius*2,
-                            0+bottomLeftRadius*2,
+                            bottomLeftRadius*2,
                             mRect.height()),
                     90,
                     90);
@@ -166,7 +166,7 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
                             mRect.width()-topRightRadius*2,
                             0,
                             mRect.width(),
-                            0+topRightRadius*2),
+                            topRightRadius*2),
                     -90,
                     90);
             path.close();

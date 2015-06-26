@@ -61,24 +61,27 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_guide_dot1"/>
+                android:src="@drawable/ic_guide_dot1" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_guide_dot"/>
+                android:src="@drawable/ic_guide_dot" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_guide_dot"/>
-            </LinearLayout>
+                android:src="@drawable/ic_guide_dot" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

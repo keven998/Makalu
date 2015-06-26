@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -866,7 +867,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             //接口
         } else if (requestCode == SEX) {
             String sex = data.getExtras().getString("result");
-            if (sex.equals("美女")) {
+            if (TextUtils.isEmpty(sex)) {
+                return;
+            } else if (sex.equals("美女")) {
                 modifyGender("F");
             } else if (sex.equals("帅锅")) {
                 modifyGender("M");

@@ -79,68 +79,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 11) {
-                CheckedTextView txtView = (CheckedTextView) findViewById(R.id.tv_title_bar_right_1);
-                favorite(txtView);
-            } else {
-                IMUtils.onShareResult(mContext, noteBean, requestCode, resultCode, data, null);
-            }
-        }
-    }
-
-    private void favorite(final CheckedTextView ct) {
-        final boolean isFav = ct.isChecked();
-        ct.setChecked(!isFav);
-        if (!isFav) {
-            OtherApi.addFav(id, "travelNote", new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0 || deleteResult.code == getResources().getInteger(R.integer.response_favorite_exist)) {
-                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("已收藏");
-                    } else {
-                        //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
-                        ct.setChecked(isFav);
-                    }
-
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    if (!isFinishing()) {
-                        ct.setChecked(isFav);
-                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                }
-            });
-        } else {
-            OtherApi.deleteFav(id, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                    if (deleteResult.code == 0) {
-//                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast("收藏取消");
-                    } else {
-                        ct.setChecked(isFav);
-                    }
-
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    if (!isFinishing()) {
-                        ct.setChecked(isFav);
-                        ToastUtil.getInstance(TravelNoteDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-                }
-            });
-        }
-    }
-
     private void showActionDialog() {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -187,12 +125,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
             View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_dialog_travelnote, null);
             connectionDialog.setContentView(customView);
-//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dismiss();
-//                }
-//            });
             customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

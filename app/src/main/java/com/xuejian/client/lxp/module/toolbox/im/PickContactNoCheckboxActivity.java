@@ -85,7 +85,7 @@ public class PickContactNoCheckboxActivity extends ChatBaseActivity {
 		Iterator<Entry<Long, User>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<Long, User> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME))
+			if (!entry.getKey().toString().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().toString().equals(Constant.GROUP_USERNAME))
 				contactList.add(entry.getValue());
 		}
         contactList= UserDBManager.getInstance().getContactListWithoutGroup();

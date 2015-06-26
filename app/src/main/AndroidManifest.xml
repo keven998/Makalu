@@ -344,10 +344,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 群组详情 -->
-        <activity
-            android:name=".module.toolbox.im.GroupDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"></activity>
         <!-- 修改群组名称 -->
         <activity
             android:name=".module.toolbox.im.ModifyGroupNameActivity"
@@ -388,11 +384,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 转发消息用户列表页面 -->
-        <activity
-            android:name=".module.toolbox.im.ForwardMessageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan"></activity>
         <!-- 自定义的contextmenu -->
         <activity
             android:name=".module.toolbox.im.ContextMenu"
@@ -491,35 +482,6 @@
 
         <!-- ###################注册SDK使用的Activity###################### -->
 
-        <!-- ###################UM分享###################### -->
-        <!-- 分享编辑页 -->
-        <activity
-            android:name="com.umeng.socialize.view.ShareActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
-
-        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
-                <data android:scheme="tencent1103275581" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -572,13 +534,7 @@
                 <action android:name="com.igexin.sdk.action.refreshls" />
             </intent-filter>
         </receiver>
-        <!-- <receiver
-            android:name="com.igexin.sdk.PushReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.igexin.sdk.action.pushmanager" />
-            </intent-filter>
-        </receiver> -->
+
         <receiver
             android:name="com.igexin.sdk.PushManagerReceiver"
             android:exported="false">

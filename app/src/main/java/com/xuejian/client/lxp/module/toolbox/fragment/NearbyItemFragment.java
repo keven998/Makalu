@@ -178,6 +178,8 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             poiList = result.shopping;
         } else if (type.equals(TravelApi.PeachType.HOTEL)) {
             poiList = result.hotel;
+        } else {
+            poiList = new ArrayList<>();
         }
         if (mPage == 0) {
             poiAdapter = new PoiAdapter(getActivity(), false);
