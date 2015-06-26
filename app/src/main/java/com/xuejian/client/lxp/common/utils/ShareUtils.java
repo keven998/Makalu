@@ -23,10 +23,8 @@ import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.RenrenShareContent;
-import com.umeng.socialize.media.SmsShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.SmsHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.utils.OauthHelper;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
@@ -45,7 +43,7 @@ public class ShareUtils {
 
     }
 
-    public static final String downloadUrl="http://www.lvxingpai.com/download/lxp_v1.0.apk";
+    public static final String downloadUrl = "http://www.lvxingpai.com/download/lxp_v1.0.apk";
 
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -159,7 +157,7 @@ public class ShareUtils {
         } else {
             circleMedia.setShareContent(content);
         }
-        circleMedia.setShareImage(new UMImage(act,R.drawable.ic_taozi_share));
+        circleMedia.setShareImage(new UMImage(act, R.drawable.ic_taozi_share));
         circleMedia.setTargetUrl(downloadUrl);
         mController.setShareMedia(circleMedia);
         mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
@@ -199,7 +197,7 @@ public class ShareUtils {
         mController.getConfig().closeToast();
         mController.setShareMedia(umImage);
         String shareUrl = strategyBean.detailUrl;
-        String shareTitle="分享我的旅行计划";
+        String shareTitle = "分享我的旅行计划";
         String shareContent = "我的 《" + strategyBean.title + "》 来了，亲们快快来围观~ ";
 
         mController.setShareContent(shareContent);
@@ -434,35 +432,6 @@ public class ShareUtils {
                 });
             }
 
-        } else if (SHARE_MEDIA.SMS == platform) {
-//			SmsHandler smsHandler = new SmsHandler();
-//			smsHandler.addToSocialSDK();
-            SmsShareContent content = new SmsShareContent();
-            content.setShareContent(shareContent);
-            mController.setShareMedia(content);
-            mController.directShare(act, platform, new SnsPostListener() {
-                @Override
-                public void onStart() {
-                    // Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onComplete(SHARE_MEDIA platform, int eCode,
-                                       SocializeEntity entity) {
-                    if (eCode == 200) {
-                        // Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
-                        // .show();
-                    } else {
-                        // String eMsg = "";
-                        // if (eCode == -101) {
-                        // eMsg = "没有授权";
-                        // }
-                        // Toast.makeText(act, "分享失败[" + eCode + "] " + eMsg,
-                        // Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            });
         } else {
             boolean isOauth = OauthHelper.isAuthenticated(act, platform);
             if (isOauth) {
@@ -557,7 +526,7 @@ public class ShareUtils {
         UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxHandler.addToSocialSDK();
 // 添加微信朋友圈
-        UMWXHandler wxCircleHandler = new UMWXHandler(act,  PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
+        UMWXHandler wxCircleHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxCircleHandler.setToCircle(true);
         wxCircleHandler.addToSocialSDK();
 
@@ -568,9 +537,6 @@ public class ShareUtils {
         QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
                 PlatfromSetting.QQ_APPID, PlatfromSetting.QQ_APPKEY);
         qZoneSsoHandler.addToSocialSDK();
-
-        SmsHandler smsHandler = new SmsHandler();
-        smsHandler.addToSocialSDK();
 
     }
 
