@@ -25,7 +25,7 @@ public class Config {
     public static final int TEXT_MSG= 0;
     public static final int AUDIO_MSG= 1;
     public static final int IMAGE_MSG= 2;
-    public static final int LOC_MSG= 4;
+    public static final int LOC_MSG= 3;
     public static final int GONGLVE_MSG= 10;
     public static final int CMD_MSG= 100;
     public static final int TYPE_SEND= 0;

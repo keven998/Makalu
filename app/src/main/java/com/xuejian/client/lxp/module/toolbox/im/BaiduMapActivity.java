@@ -23,7 +23,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.amap.api.location.core.GeoPoint;
 import com.baidu.location.BDLocation;
@@ -75,13 +74,8 @@ public class BaiduMapActivity extends ChatBaseActivity {
 		SDKInitializer.initialize(getApplication());
 		setContentView(R.layout.activity_baidumap);
 		mMapView = (MapView) findViewById(R.id.bmapView);
-		//mMapController = mMapView.getController();
 		sendButton = (Button) findViewById(R.id.btn_location_send);
-	//	initMapView();
-
-	//	mMapView.getController().setZoom(17);
-	//	mMapView.getController().enableClick(true);
-	//	mMapView.setBuiltInZoomControls(true);
+		mapPath=Config.mapPath+"map_"+System.currentTimeMillis()+".png";
 		initMapView();
 		Intent intent = getIntent();
 		double latitude = intent.getDoubleExtra("latitude", 0);
@@ -135,21 +129,17 @@ public class BaiduMapActivity extends ChatBaseActivity {
 	}
 
 	public void sendLocation(View view) {
-		Toast.makeText(BaiduMapActivity.this,
-				"发送中。。。。",
-				Toast.LENGTH_SHORT).show();
 		mBaiduMap.snapshot(new BaiduMap.SnapshotReadyCallback() {
 			public void onSnapshotReady(Bitmap snapshot) {
 				String path= Config.mapPath;
 				File path1=new File(path);
 				if (!path1.exists())path1.mkdirs();
-				mapPath=path+"map_"+System.currentTimeMillis()+".png";
 				File file = new File(mapPath);
 				FileOutputStream out;
 				try {
 					out = new FileOutputStream(file);
 					if (snapshot.compress(
-							Bitmap.CompressFormat.PNG, 50, out)) {
+							Bitmap.CompressFormat.PNG, 20, out)) {
 						out.flush();
 						out.close();
 					}
@@ -158,8 +148,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
 				}
 			}
 		});
-
-		Intent intent = this.getIntent();
+		Intent intent = new Intent();
 		intent.putExtra("latitude", lastLocation.getLatitude());
 		intent.putExtra("longitude", lastLocation.getLongitude());
 		intent.putExtra("address", lastLocation.getAddrStr());
@@ -260,63 +249,6 @@ public class BaiduMapActivity extends ChatBaseActivity {
 //普通地图
 		mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 	}
-
-	/**
-	 * 监听函数，有新位置的时候，格式化成字符串，输出到屏幕中
-	 */
-//	public class MyLocationListenner implements BDLocationListener {
-//		@Override
-//		public void onReceiveLocation(BDLocation location) {
-//			if (location == null) {
-//				return;
-//			}
-//			sendButton.setEnabled(true);
-//			if (progressDialog != null) {
-//				progressDialog.dismiss();
-//			}
-//
-//			if (lastLocation != null) {
-//				if (lastLocation.getLatitude() == location.getLatitude() && lastLocation.getLongitude() == location.getLongitude()) {
-//					Log.d("map", "same location, skip refresh");
-//					// mMapView.refresh(); //need this refresh?
-//					return;
-//				}
-//			}
-//
-//			lastLocation = location;
-//
-//			GeoPoint gcj02Point = new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6));
-//			Log.d(TAG, "GCJ-02 loc:" + gcj02Point);
-//			GeoPoint point = CoordinateConvert.fromGcjToBaidu(gcj02Point);
-//			Log.d(TAG, "converted BD-09 loc:" + point);
-//
-//			// GeoPoint p1 = gcjToBaidu(location.getLatitude(),
-//			// location.getLongitude());
-//			// System.err.println("johnson change to baidu:" + p1);
-//			// GeoPoint p2 = baiduToGcj(location.getLatitude(),
-//			// location.getLongitude());
-//			// System.err.println("johnson change to gcj:" + p2);
-//
-//			OverlayItem addrItem = new OverlayItem(point, "title", location.getAddrStr());
-//			mAddrOverlay.removeAll();
-//			mAddrOverlay.addItem(addrItem);
-//		//	mMapView.getController().setZoom(17);
-//		//	mMapView.refresh();
-//			mMapController.animateTo(point);
-//		}
-//
-//		public void onReceivePoi(BDLocation poiLocation) {
-//			if (poiLocation == null) {
-//				return;
-//			}
-//		}
-//	}
-//
-//	public class NotifyLister extends BDNotifyListener {
-//		public void onNotify(BDLocation mlocation, float distance) {
-//		}
-//	}
-
 
 	static final double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 
