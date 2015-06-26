@@ -238,8 +238,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
                 UserDBManager.getInstance().saveContact(userInfo.result);
             }
-
-
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();

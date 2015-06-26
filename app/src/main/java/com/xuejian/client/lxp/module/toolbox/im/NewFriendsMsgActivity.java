@@ -19,9 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
+
+import java.util.List;
 
 /**
  * 申请与通知
@@ -30,7 +33,7 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
 public class NewFriendsMsgActivity extends ChatBaseActivity {
 	private ListView listView;
     private NewFriendsMsgAdapter adapter;
-
+    private List<MessageBean> invents;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
 
 		listView = (ListView) findViewById(R.id.list);
 		//设置adapter
-	    //adapter = new NewFriendsMsgAdapter(this, 1, msgs);
+	    adapter = new NewFriendsMsgAdapter(this, 1, invents);
 		listView.setAdapter(adapter);
         registerForContextMenu(listView);
 
