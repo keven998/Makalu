@@ -1405,7 +1405,10 @@ public class MessageAdapter extends BaseAdapter {
         double lng = getDoubleAttr(message, "lng");
         String name = getStringAttr(message, "name");
         String desc = getStringAttr(message, "desc");
+        String path= getStringAttr(message,"path");
+        Bitmap bitmap= BitmapFactory.decodeFile(path);
         locationView.setText(desc);
+       // locationView.setBackground;
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override

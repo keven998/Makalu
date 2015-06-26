@@ -451,7 +451,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (count > 0) {
             listView.setSelection(count - 1);
         }
-
         listView.setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -465,7 +464,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 return false;
             }
         });
-        // show forward message if the message is not null
         String forward_msg_id = getIntent().getStringExtra("forward_msg_id");
         if (forward_msg_id != null) {
             // 显示发送要转发的消息
@@ -620,6 +618,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double latitude = data.getDoubleExtra("latitude", 0);
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
+                    String path=data.getStringExtra("path");
+                    System.out.println(path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
                         sendLocationMsg(latitude, longitude, "", locationAddress);

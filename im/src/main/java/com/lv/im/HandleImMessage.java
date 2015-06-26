@@ -77,7 +77,6 @@ public class HandleImMessage {
         if (!ehList.contains(listener))ehList.add(listener);
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
-
     }
 
     public  void unregisterMessageListener(MessageHandler listener, String conversation) {
