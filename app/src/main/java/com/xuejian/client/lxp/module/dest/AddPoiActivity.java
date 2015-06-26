@@ -473,24 +473,23 @@ public class AddPoiActivity extends PeachBaseActivity {
     private void bindView(List<PoiDetailBean> result) {
         if (curPage == 0) {
             mPoiAdapter.getDataList().clear();
+            mLvPoiList.onPullUpRefreshComplete();
+            mLvPoiList.onPullDownRefreshComplete();
+            mPoiAdapter.notifyDataSetChanged();
+        }
+        if (result == null
+                || result.size() < BaseApi.PAGE_SIZE) {
+            mLvPoiList.setHasMoreData(false);
+            return;
+        } else {
+            mLvPoiList.setHasMoreData(true);
+            mLvPoiList.onPullUpRefreshComplete();
         }
         for (PoiDetailBean detailBean : result) {
             detailBean.hasAdded = hasAddList.contains(detailBean);
         }
         mPoiAdapter.getDataList().addAll(result);
         mPoiAdapter.notifyDataSetChanged();
-        if (result == null
-                || result.size() < BaseApi.PAGE_SIZE) {
-            mLvPoiList.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
-        } else {
-            mLvPoiList.setHasMoreData(true);
-            mLvPoiList.onPullUpRefreshComplete();
-        }
-        if (curPage == 0) {
-            mLvPoiList.onPullUpRefreshComplete();
-            mLvPoiList.onPullDownRefreshComplete();
-        }
     }
 
     @Override
