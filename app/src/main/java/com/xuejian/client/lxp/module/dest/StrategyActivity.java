@@ -374,7 +374,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
-//                    ToastUtil.getInstance(mContext).showToast("已保存到旅行Memo");
                     bindView(strategyResult.result);
                     if (recommend) {
                         ToastUtil.getInstance(StrategyActivity.this).showToast(String.format("已为你创建%d行程", strategyResult.result.itineraryDays));
@@ -382,7 +381,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         new Handler() {
                             @Override
                             public void handleMessage(Message msg) {
-                                ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程，可自由定制");
+                                ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的计划");
                             }
                         }.sendEmptyMessageDelayed(0, 1000);
                     }
@@ -468,55 +467,15 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                             }
                         });
                         dialog.show();
-
-//                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-//                    dialog.setTitle("提示");
-//                    dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-//                    dialog.setMessage("复制这条攻略到我的攻略里面吗？");
-//                    dialog.setPositiveButton("确定", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            dialog.dismiss();
-//                            DialogManager.getInstance().showLoadingDialog(mContext);
-//                            TravelApi.copyStrategy(result.id,new HttpCallBack<String>() {
-//                                @Override
-//                                public void doSuccess(String result, String method) {
-//                                    DialogManager.getInstance().dissMissLoadingDialog();
-//                                }
-//
-//                                @Override
-//                                public void doFailure(Exception error, String msg, String method) {
-//                                    DialogManager.getInstance().dissMissLoadingDialog();
-//                                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-//                                }
-//                            });
-//                        }
-//                    });
-//                    dialog.setNegativeButton("取消",new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            dialog.dismiss();
-//                        }
-//                    });
                     }
                 });
             } else {
                 mIvMore.setVisibility(View.VISIBLE);
                 iv_location.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setVisibility(View.GONE);
-//            mTitleBar.setRightViewImageRes(R.drawable.ic_share);
-//            mTitleBar.getRightTextView().setText("");
-//            mTitleBar.setRightOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
-//                }
-//            });
-
                 mIvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //showActionDialog();
                         //这个与群聊chat里面的侧边栏内容一样，后期实现请参考ChatActivity
                         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                             drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
@@ -529,11 +488,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         indicatorViewPager.setCurrentItem(curIndex, false);
-
-//        mStrategyViewpager.postInvalidate();
-//
-//        mLocListRv.setAdapter(new LocAdapter(mContext, result.localities));
-//        setRVVisiable(false);
     }
 
     private void ishideSomeIcons(boolean ishide) {

@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
-    android:orientation="vertical" >
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:background="@color/top_bar_normal_bg"
-        android:gravity="center_vertical" >
+        android:background="@drawable/bg_navigation_bar"
+        android:gravity="center_vertical">
 
         <include layout="@layout/commom_back_btn" />
 
@@ -29,9 +29,9 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="7dp" />
     </RelativeLayout>
-	
+
     <include layout="@layout/search_bar" />
-    
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"

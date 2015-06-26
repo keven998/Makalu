@@ -149,7 +149,7 @@ public class ShareUtils {
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         circleMedia.setTitle("推荐\"旅行派\"给你。");
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("能跟旅行达人们互动，需求帮助的旅行应用");
+            circleMedia.setShareContent("可以向达人寻求帮助的旅行应用");
         } else {
             circleMedia.setShareContent(content);
         }
