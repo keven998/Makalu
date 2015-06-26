@@ -228,6 +228,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
+
+        initData();
     }
 
     public void getUserInfo(int userId) {
@@ -328,7 +330,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         mEditTextContent.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test", "mEditTextContent setOnClickListener = " + mEditTextContent.getVisibility());
                 mExtraPanel.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
@@ -366,7 +367,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     protected void onResume() {
         super.onResume();
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
-        initData();
     }
 
     private void setPanelAnimation() {
@@ -450,6 +450,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 iv_emoticons_checked.setVisibility(View.GONE);
                 expressionContainer.setVisibility(View.GONE);
                 btnContainer.setVisibility(View.GONE);
+                buttonPressToSpeak.setVisibility(View.GONE);
+                mEditTextContent.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -641,11 +643,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     btnContainer.setVisibility(View.GONE);
                     expressionContainer.setVisibility(View.VISIBLE);
                 }
-            }, 150);
+            }, 100);
         } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
-            btnContainer.setVisibility(View.VISIBLE);
+            btnContainer.setVisibility(View.GONE);
             expressionContainer.setVisibility(View.GONE);
             mExtraPanel.setVisibility(View.GONE);
             showKeyboadrd(mEditTextContent);
@@ -901,12 +903,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 buttonPressToSpeak.setVisibility(View.VISIBLE);
 
                 iv_emoticons_normal.setVisibility(View.GONE);
-
                 iv_emoticons_checked.setVisibility(View.GONE);
-                btnContainer.setVisibility(View.VISIBLE);
+                btnContainer.setVisibility(View.GONE);
                 expressionContainer.setVisibility(View.GONE);
             }
-        }, 150);
+        }, 100);
 
     }
 
@@ -914,22 +915,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * 显示键盘图标
      */
     public void setModeKeyboard(View view) {
-        // mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener()
-        // {
-        // @Override
-        // public void onFocusChange(View v, boolean hasFocus) {
-        // if(hasFocus){
-        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        // }
-        // }
-        // });
         mEditTextContent.setVisibility(View.VISIBLE);
         mExtraPanel.setVisibility(View.GONE);
+        btnContainer.setVisibility(View.GONE);
+        expressionContainer.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
         buttonSetModeVoice.setVisibility(View.VISIBLE);
-        // mEditTextContent.setVisibility(View.VISIBLE);
         mEditTextContent.requestFocus();
-        // buttonSend.setVisibility(View.VISIBLE);
         buttonPressToSpeak.setVisibility(View.GONE);
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(mEditTextContent.getText())) {
@@ -979,7 +971,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     iv_emoticons_checked.setVisibility(View.GONE);
 
                 }
-            }, 150);
+            }, 100);
         } else {
             if (expressionContainer.getVisibility() == View.VISIBLE) {
                 expressionContainer.setVisibility(View.GONE);
@@ -992,19 +984,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
 
         }
-    }
-
-    /**
-     * 点击文字输入框
-     */
-    public void editClick(View v) {
-        listView.setSelection(listView.getCount() - 1);
-        if (mExtraPanel.getVisibility() == View.VISIBLE) {
-            mExtraPanel.setVisibility(View.GONE);
-            iv_emoticons_normal.setVisibility(View.VISIBLE);
-            iv_emoticons_checked.setVisibility(View.GONE);
-        }
-
     }
 
     @Override
@@ -1266,14 +1245,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public void onBackPressed() {
         if (mExtraPanel.getVisibility() == View.VISIBLE) {
             mExtraPanel.setVisibility(View.GONE);
+            expressionContainer.setVisibility(View.GONE);
+            btnContainer.setVisibility(View.GONE);
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
         } else {
             finish();
-           /* Intent intent = new Intent(ChatActivity.this, IMMainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityWithNoAnim(intent);
-            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);*/
         }
     }
 
