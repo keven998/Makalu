@@ -20,12 +20,8 @@ import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
 import com.umeng.socialize.exception.SocializeException;
-import com.umeng.socialize.media.QQShareContent;
-import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.RenrenShareContent;
 import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.utils.OauthHelper;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
@@ -270,76 +266,6 @@ public class ShareUtils {
                 }
 
             });
-        } else if (SHARE_MEDIA.QQ == platform) {
-            UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, PlatfromSetting.QQ_APPID,
-                    PlatfromSetting.QQ_APPKEY);
-            qqSsoHandler.setTargetUrl(shareUrl);
-            qqSsoHandler.addToSocialSDK();
-            QQShareContent qqShareContent = new QQShareContent();
-            qqShareContent.setTitle(shareTitle);
-            qqShareContent
-                    .setShareContent(shareContent);
-            qqShareContent.setShareImage(umImage);
-            qqShareContent.setTargetUrl(shareUrl);
-            mController.setShareMedia(qqShareContent);
-            mController.postShare(act, platform, new SnsPostListener() {
-                @Override
-                public void onStart() {
-//					Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onComplete(SHARE_MEDIA platform, int eCode,
-                                       SocializeEntity entity) {
-                    if (eCode == 200) {
-                        Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
-                                .show();
-                    } else {
-                        // String eMsg = "";
-                        // if (eCode == -101) {
-                        // eMsg = "没有授权";
-                        // }
-                        // Toast.makeText(act, "分享失败[" + eCode + "] " + eMsg,
-                        // Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            });
-
-        } else if (SHARE_MEDIA.QZONE == platform) {
-            QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act, PlatfromSetting.QQ_APPID,
-                    PlatfromSetting.QQ_APPKEY);
-            qZoneSsoHandler.addToSocialSDK();
-            QZoneShareContent qzone = new QZoneShareContent();
-            qzone.setShareContent(shareContent);
-            qzone.setTargetUrl(shareUrl);
-            qzone.setTitle(shareTitle);
-            qzone.setShareMedia(umImage);
-            mController.setShareMedia(qzone);
-            mController.postShare(act, platform, new SnsPostListener() {
-                @Override
-                public void onStart() {
-//					Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onComplete(SHARE_MEDIA platform, int eCode,
-                                       SocializeEntity entity) {
-                    if (eCode == 200) {
-                        Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
-                                .show();
-                    } else {
-                        // String eMsg = "";
-                        // if (eCode == -101) {
-                        // eMsg = "没有授权";
-                        // }
-                        // Toast.makeText(act, "分享失败[" + eCode + "] " + eMsg,
-                        // Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            });
-
         } else if (SHARE_MEDIA.RENREN == platform) {
             RenrenShareContent renren = new RenrenShareContent();
             renren.setShareContent(shareContent);
@@ -529,14 +455,6 @@ public class ShareUtils {
         UMWXHandler wxCircleHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
         wxCircleHandler.setToCircle(true);
         wxCircleHandler.addToSocialSDK();
-
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, PlatfromSetting.QQ_APPID,
-                PlatfromSetting.QQ_APPKEY);
-        qqSsoHandler.addToSocialSDK();
-
-        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act,
-                PlatfromSetting.QQ_APPID, PlatfromSetting.QQ_APPKEY);
-        qZoneSsoHandler.addToSocialSDK();
 
     }
 
