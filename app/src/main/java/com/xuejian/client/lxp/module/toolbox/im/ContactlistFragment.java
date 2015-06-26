@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,42 +45,38 @@ import java.util.Map;
 
 /**
  * 联系人列表页
- * 
  */
 public class ContactlistFragment extends Fragment {
-	private ContactAdapter adapter;
-	private List<User> contactList;
-	private ListView listView;
+    private ContactAdapter adapter;
+    private List<User> contactList;
+    private ListView listView;
     private SideBar indexBar;
     private TextView indexDialogTv;
-	private boolean hidden;
+    private boolean hidden;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_contact_list, container, false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_contact_list, container, false);
+    }
 
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
             return;
-//		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		listView = (ListView) getView().findViewById(R.id.list);
+        }
+        listView = (ListView) getView().findViewById(R.id.list);
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
-        //search = (EditText) getView().findViewById(R.id.contact_search_tv);
-        /*InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);*/
         indexBar.setTextView(indexDialogTv);
         indexBar.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
         contactList = new ArrayList<User>();
-		// 获取设置contactlist
-		getContactList();
-		// 设置adapter
-		adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
+        // 获取设置contactlist
+        getContactList();
+        // 设置adapter
+        adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         indexBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
@@ -94,66 +90,44 @@ public class ContactlistFragment extends Fragment {
         });
         listView.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String username = adapter.getItem(position).getNickName();
-				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
-					// 进入申请与通知页面
-					User user = AccountManager.getInstance().getContactList(getActivity()).get(Constant.NEW_FRIENDS_USERNAME);
-					//user.setUnreadMsgCount(0);
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String username = adapter.getItem(position).getNickName();
+                if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
+                    // 进入申请与通知页面
+                    startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                } else if (Constant.GROUP_USERNAME.equals(username)) {
+                    // 进入群聊列表页面
+                    startActivity(new Intent(getActivity(), GroupsActivity.class));
+                } else {
+                    startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
+                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                }
+            }
+        });
 
-					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
-				} else if (Constant.GROUP_USERNAME.equals(username)) {
-					// 进入群聊列表页面
-                    System.out.println("GROUP_USERNAME");
-					startActivity(new Intent(getActivity(), GroupsActivity.class));
-				} else {
-                    System.out.println("other");
-					startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId().intValue()));
-				}
-			}
-		});
+    }
 
 
-//		listView.setOnTouchListener(new View.OnTouchListener() {
-//
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				// 隐藏软键盘
-//				if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-//					if (getActivity().getCurrentFocus() != null)
-//						InputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-//								InputMethodManager.HIDE_NOT_ALWAYS);
-//				}
-//				return false;
-//			}
-//		});
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        this.hidden = hidden;
+        if (!hidden) {
+            refresh();
+        }
+    }
 
-//		registerForContextMenu(listView);
-
-	}
-
-
-
-	@Override
-	public void onHiddenChanged(boolean hidden) {
-		super.onHiddenChanged(hidden);
-		this.hidden = hidden;
-		if (!hidden) {
-			refresh();
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
+    @Override
+    public void onResume() {
+        super.onResume();
 //        MobclickAgent.onPageStart("page_friends_lists");
-		if (!hidden) {
-			refresh();
-		}
+        if (!hidden) {
+            refresh();
+        }
 
 
-	}
+    }
 
     @Override
     public void onPause() {
@@ -167,108 +141,78 @@ public class ContactlistFragment extends Fragment {
     }
 
 
-
-	/**
-	 * 把user移入到黑名单
-	 */
-	private void moveToBlacklist(final String username){
-		final ProgressDialog pd = new ProgressDialog(getActivity());
-		pd.setMessage("正在移入黑名单...");
-		pd.setCanceledOnTouchOutside(false);
-		pd.show();
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					//加入到黑名单
-					//EMContactManager.getInstance().addUserToBlackList(username,true);
+    /**
+     * 把user移入到黑名单
+     */
+    private void moveToBlacklist(final String username) {
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("正在移入黑名单...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    //加入到黑名单
                     if (isAdded())
-					getActivity().runOnUiThread(new Runnable() {
-						public void run() {
-							pd.dismiss();
-//							Toast.makeText(getActivity(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
-                            ToastUtil.getInstance(getActivity()).showToast("成功移除她");
-						}
-					});
-				} catch ( Exception e) {
-					e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                pd.dismiss();
+                                ToastUtil.getInstance(getActivity()).showToast("成功移除她");
+                            }
+                        });
+                } catch (Exception e) {
+                    e.printStackTrace();
                     if (isAdded())
-					getActivity().runOnUiThread(new Runnable() {
-						public void run() {
-							pd.dismiss();
-//							Toast.makeText(getActivity(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
-                            ToastUtil.getInstance(getActivity()).showToast("呃~好像找不到网络");
-						}
-					});
-				}
-			}
-		}).start();
-		
-	}
-	
-	// 刷新ui
-	public void refresh() {
-		try {
-			// 可能会在子线程中调到这方法
-			getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					getContactList();
-					adapter.notifyDataSetChanged();
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                pd.dismiss();
+                                ToastUtil.getInstance(getActivity()).showToast("呃~好像找不到网络");
+                            }
+                        });
+                }
+            }
+        }).start();
 
-	private void getContactList() {
-		Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
+    }
 
-        if(users==null){
+    // 刷新ui
+    public void refresh() {
+        try {
+            // 可能会在子线程中调到这方法
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    getContactList();
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getContactList() {
+        Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
+
+        if (users == null) {
             return;
         }
         contactList.clear();
-//		Iterator<Map.Entry<Long, User>> iterator = users.entrySet().iterator();
-//		while (iterator.hasNext()) {
-//			Map.Entry<Long, User> entry = iterator.next();
-//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
-//                contactList.add(entry.getValue());
-//            }
-//		}
+        contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+        // 排序
+        Collections.sort(contactList, new Comparator<User>() {
 
-		// 排序
-//		Collections.sort(contactList, new Comparator<User>() {
-//		Iterator<Map.Entry<String, IMUser>> iterator = users.entrySet().iterator();
-//		while (iterator.hasNext()) {
-//			Map.Entry<String, IMUser> entry = iterator.next();
-//			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME)) {
-//                contactList.add(entry.getValue());
-//            }
-//		}
-//        contactList= UserDBManager.getInstance().getContactListWithoutGroup();
-//        contactList.clear();
-          contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
-		// 排序
-		Collections.sort(contactList, new Comparator<User>() {
-
-			@Override
-			public int compare(User lhs, User rhs) {
-				return lhs.getHeader().compareTo(rhs.getHeader());
-			}
-		});
+            @Override
+            public int compare(User lhs, User rhs) {
+                return lhs.getHeader().compareTo(rhs.getHeader());
+            }
+        });
 //		// 加入"申请与通知"和"群聊"
-//		contactList.add(0, users.get(Constant.GROUP_USERNAME));
-		// 把"申请与通知"添加到首位
+        // 把"申请与通知"添加到首位
         User newFriends = new User();
         newFriends.setUserId(2);
         newFriends.setNickName("item_new_friends");
         newFriends.setType(1);
         UserDBManager.getInstance().saveContact(newFriends);
-       // if(newFriends!=null){
-            contactList.add(0, newFriends);
-      //  }
-//        IMUser user = users.get(Constant.NEW_FRIENDS_USERNAME);
-//        if(user!=null){
-//            contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
-//        }
-	}
+        contactList.add(0, newFriends);
+    }
 }

@@ -33,7 +33,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
                 
                 <RelativeLayout android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"
