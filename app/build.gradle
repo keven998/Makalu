@@ -52,7 +52,6 @@ dependencies {
     compile project(':core')
     compile project(':social_sdk_library_project')
     compile project(':im')
-    compile files('libs/baidumapapi_v2_1_1.jar')
     compile files('libs/locSDK_3.3.jar')
     compile 'com.android.support:support-v4:22.1.1'
     compile 'com.android.support:appcompat-v7:22.1.1'
@@ -69,4 +68,5 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     //compile(name:'play-services-base-6.5.87', ext:'aar')
+    compile files('libs/baidumapapi_v3_4_0.jar')
 }

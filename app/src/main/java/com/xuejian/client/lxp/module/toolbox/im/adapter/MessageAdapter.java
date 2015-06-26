@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -59,6 +60,7 @@ import com.xuejian.client.lxp.common.task.DownloadVoice;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.db.User;
@@ -111,7 +113,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int TEXT_MSG = 0;
     private static final int VOICE_MSG = 1;
     private static final int IMAGE_MSG = 2;
-    private static final int LOC_MSG = 4;
+    private static final int LOC_MSG = 3;
     private static final int POI_MSG = 5;
     private static final int VIDEO_MSG = 6;
     private static final int FILE_MSG = 7;
@@ -330,6 +332,8 @@ public class MessageAdapter extends BaseAdapter {
                     holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
+                    break;
+                default:
                     break;
             }
             convertView.setTag(holder);
@@ -1405,7 +1409,10 @@ public class MessageAdapter extends BaseAdapter {
         double lng = getDoubleAttr(message, "lng");
         String name = getStringAttr(message, "name");
         String desc = getStringAttr(message, "desc");
+        String path=  getStringAttr(message,"path");
+        Bitmap bitmap=ImageUtils.decodeScaleImage(path, 160, 160);
         locationView.setText(desc);
+       locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override

@@ -372,7 +372,7 @@ public class IMClient {
         HttpUtils.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean CreateLocationMessage(String userID,String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress) {
+    public MessageBean CreateLocationMessage(String userID,String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress,String path) {
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
@@ -380,6 +380,7 @@ public class IMClient {
             object.put("lng", latitude);
             object.put("lat", longitude);
             object.put("desc", locationAddress);
+            object.put("path",path);
         } catch (JSONException e) {
             e.printStackTrace();
         }

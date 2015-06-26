@@ -439,7 +439,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (count > 0) {
             listView.setSelection(count - 1);
         }
-
         listView.setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -455,7 +454,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 return false;
             }
         });
-
     }
 
     /**
@@ -525,9 +523,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double latitude = data.getDoubleExtra("latitude", 0);
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
+                    String path=data.getStringExtra("path");
+                    System.out.println("path  "+path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
-                        sendLocationMsg(latitude, longitude, "", locationAddress);
+                        sendLocationMsg(latitude, longitude, "", locationAddress,path);
                     } else {
                         ToastUtil.getInstance(getApplicationContext()).showToast("找不到你在哪");
                     }
@@ -809,8 +809,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 发送位置信息
      */
-    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress);
+    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress,String path) {
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress,path);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

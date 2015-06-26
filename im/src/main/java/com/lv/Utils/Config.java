@@ -25,7 +25,7 @@ public class Config {
     public static final int TEXT_MSG= 0;
     public static final int AUDIO_MSG= 1;
     public static final int IMAGE_MSG= 2;
-    public static final int LOC_MSG= 4;
+    public static final int LOC_MSG= 3;
     public static final int GONGLVE_MSG= 10;
     public static final int CMD_MSG= 100;
     public static final int TYPE_SEND= 0;
@@ -35,6 +35,7 @@ public class Config {
     public static final String DownLoadImage_path= Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/Download/image/";
     public static final String DownLoadAudio_path= Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/Download/audio/";
     public static final String imagepath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/image/" ;
+    public static final String mapPath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/map/";
     public static final String TAG="lvFM";
     public static final boolean isDebug=true;
 }

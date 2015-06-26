@@ -81,7 +81,6 @@ public class HandleImMessage {
         }
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
-
     }
 
     public  void unregisterMessageListener(MessageHandler listener, String conversation) {
