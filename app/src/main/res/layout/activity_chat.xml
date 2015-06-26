@@ -185,14 +185,12 @@
                             android:id="@+id/face_dot_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal|bottom"
                             android:layout_marginBottom="10dp"
                             cube_dotview:dot_radius="3dp"
                             cube_dotview:dot_selected_color="@color/app_theme_color"
                             cube_dotview:dot_span="10dp"
-                            cube_dotview:dot_unselected_color="0xffffffff" />
+                            cube_dotview:dot_unselected_color="0xffe2e2e2" />
 
                     </FrameLayout>
 

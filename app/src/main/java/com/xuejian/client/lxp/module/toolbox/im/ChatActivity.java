@@ -13,6 +13,7 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im;
 
+import android.animation.LayoutTransition;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -283,6 +285,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         iv_emoticons_checked.setVisibility(View.GONE);
         mExtraPanel = (FrameLayout) findViewById(R.id.fl_extra_panel);
 
+        setPanelAnimation();
+
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{getResources().getDrawable(R.drawable.record_animate_00), getResources().getDrawable(R.drawable.record_animate_01),
                 getResources().getDrawable(R.drawable.record_animate_02), getResources().getDrawable(R.drawable.record_animate_03),
@@ -322,10 +326,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         edittext_layout.requestFocus();
         buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
         mEditTextContent.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                Log.d("test", "mEditTextContent setOnClickListener");
+                Log.d("test", "mEditTextContent setOnClickListener = " + mEditTextContent.getVisibility());
                 mExtraPanel.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
@@ -364,6 +367,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onResume();
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
         initData();
+    }
+
+    private void setPanelAnimation() {
+        LayoutTransition lt = new LayoutTransition();
+        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 20);
+        lt.setStagger(LayoutTransition.APPEARING, 60);
+        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        lt.setDuration(LayoutTransition.DISAPPEARING, 0);
+        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+        mExtraPanel.setLayoutTransition(lt);
     }
 
     private void setUpView() {
@@ -974,6 +988,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 iv_emoticons_checked.setVisibility(View.GONE);
             } else {
                 mExtraPanel.setVisibility(View.GONE);
+                btnContainer.setVisibility(View.GONE);
             }
 
         }
