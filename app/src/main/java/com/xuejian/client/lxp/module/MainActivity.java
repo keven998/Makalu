@@ -59,7 +59,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
     };
-    private String[] tabTitle = {"Talk", "旅游", "我"};
+//    private String[] tabTitle = {"Talk", "旅游", "我"};
 
     private TextView unreadMsg;
 
