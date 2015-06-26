@@ -13,6 +13,7 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.lv.bean.MessageBean;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 import java.util.List;
 
@@ -129,72 +138,40 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
      * @param msg
      */
     private void acceptInvitation(final Button button, final MessageBean msg) {
-//        DialogManager.getInstance().showLoadingDialog((Activity) context);
-//        UserApi.addContact(String.valueOf(msg.getUserId()), new HttpCallBack<String>() {
-//            @Override
-//            public void doSuccess(String result, String method) {
-//                DialogManager.getInstance().dissMissLoadingDialog();
-//                button.setText("已添加");
-//                button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
-//                msg.setStatus(InviteStatus.AGREED);
-//                InviteMsgRepository.getInviteMsgDao(context).update(msg);
-//                button.setBackgroundDrawable(null);
-//                button.setEnabled(false);
-//                User imUser = new User();
+        DialogManager.getInstance().showLoadingDialog((Activity) context);
+        UserApi.addContact(String.valueOf(msg.getSenderId()), new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                button.setText("已添加");
+                button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
+             //   msg.setStatus(InviteStatus.AGREED);
+             //   InviteMsgRepository.getInviteMsgDao(context).update(msg);
+                button.setBackgroundDrawable(null);
+                button.setEnabled(false);
+                User imUser = new User();
 //                imUser.setUserId(msg.getUserId());
 //                imUser.setNickName(msg.getNickname());
-//               // imUser.setUsername(msg.getFrom());
+//                // imUser.setUsername(msg.getFrom());
 //                imUser.setAvatar(msg.getAvatar());
 //                imUser.setAvatarSmall(msg.getAvatar());
 //                imUser.setType(1);
 //                imUser.setGender(msg.getGender());
-//               // IMUtils.setUserHead(imUser);
-//                UserDBManager.getInstance().saveContact(imUser);
-//                AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
-////                EMMessage contentMsg = EMMessage.createSendMessage(EMMessage.Type.TXT);
-////                TextMessageBody body = new TextMessageBody("");
-////                contentMsg.setMsgId(UUID.randomUUID().toString());
-////                contentMsg.addBody(body);
-////                contentMsg.setTo(msg.getFrom());
-////                contentMsg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(context).getUserId()));
-////                contentMsg.setMsgTime(System.currentTimeMillis());
-////                contentMsg.setAttribute(Constant.EXT_TYPE, Constant.ExtType.TIPS);
-////                contentMsg.setUnread(false);
-////                contentMsg.setAttribute(Constant.MSG_CONTENT, String.format(context.getResources().getString(R.string.has_add_contact), imUser.getNickName()));
-//             //   EMChatManager.getInstance().saveMessage(contentMsg);
-//
-//                ((Activity) context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
-//            }
-//
-//            @Override
-//            public void doFailure(Exception error, String msg, String method) {
-//                DialogManager.getInstance().dissMissLoadingDialog();
-//                if (!((Activity) context).isFinishing())
-//                    ToastUtil.getInstance(getContext()).showToast(getContext().getString(R.string.request_network_failed));
-//            }
-//        });
+                // IMUtils.setUserHead(imUser);
+                imUser.setType(1);
+                UserDBManager.getInstance().saveContact(imUser);
+                AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
+                IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()),"","single");
+             //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
+            }
 
-//		new Thread(new Runnable() {
-//			public void run() {
-//				// 调用sdk的同意方法
-//				try {
-//					if(msg.getGroupId() == null) //同意好友请求
-//						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-//					else //同意加群申请
-//						EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
-//				} catch (final Exception e) {
-//					((Activity) context).runOnUiThread(new Runnable() {
-//
-//						@Override
-//						public void run() {
-//							pd.dismiss();
-//							Toast.makeText(context, "同意失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//						}
-//					});
-//
-//				}
-//			}
-//		}).start();
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!((Activity) context).isFinishing())
+                    ToastUtil.getInstance(getContext()).showToast(getContext().getString(R.string.request_network_failed));
+            }
+        });
     }
     private static class ViewHolder {
         ImageView avator;

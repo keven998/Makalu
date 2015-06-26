@@ -483,6 +483,9 @@ public class IMClient {
         return db.getUnReadCount();
     }
 
+    public void addTips(String chatId,String tips,String chatType){
+        db.addTips(chatId,tips,chatType);
+    }
     public void logout() {
         db.disconnectDB();
         currentUserId=null;

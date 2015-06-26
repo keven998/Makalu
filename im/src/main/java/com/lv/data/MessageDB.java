@@ -47,7 +47,12 @@ public class MessageDB {
     private static final int MESSAGE_INDEX_SendType = 6;
     private static final int MESSAGE_INDEX_Metadata = 7;
     private static final int MESSAGE_INDEX_SenderId = 8;
-
+    private static final String CON_SCHEMA=" (Friend_Id INTEGER PRIMARY KEY,lastTime INTEGER," +
+            "HASH TEXT,last_rec_msgId INTEGER, IsRead INTEGER,conversation TEXT,chatType TEXT)";
+    private static final String MSG_SCHEMA=" (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
+            "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
+            "SenderId INTEGER)";
+    public static final int TIPS_TYPE=99;
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private SQLiteDatabase mdb;
     private static String userId;
@@ -100,7 +105,7 @@ public class MessageDB {
         mdb = getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + con_table_name
-                + " (Friend_Id INTEGER PRIMARY KEY,lastTime INTEGER,HASH TEXT,last_rec_msgId INTEGER, IsRead INTEGER,conversation TEXT,chatType TEXT)");
+                + CON_SCHEMA);
         mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
 
     }
@@ -111,9 +116,7 @@ public class MessageDB {
         mdb = getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
-                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
-                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
-                "SenderId INTEGER)");
+                + MSG_SCHEMA);
         //db.execSQL("create index if not exists index_Msg_Friend_Id on " + fri_table_name + "(Friend_Id)");
         ContentValues values = new ContentValues();
         values.put("ServerId", entity.getServerId());
@@ -197,9 +200,7 @@ public class MessageDB {
         }
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
-                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
-                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
-                "SenderId INTEGER)");
+                + MSG_SCHEMA);
         // db.execSQL("create UNIQUE index if not exists index_Msg_Id on " + table_name + "(ServerId)");
 
         Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
@@ -232,9 +233,7 @@ public class MessageDB {
         ;
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
-                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
-                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
-                "SenderId INTEGER)");
+                + MSG_SCHEMA);
         Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
         int count = cursor.getCount();
         if (count > 0) return 1;
@@ -259,11 +258,12 @@ public class MessageDB {
                     long inviteId = object.getLong("userId");
                     String nickName = object.getString("nickName");
                     String groupName = object.getString("groupName");
-                    MessageBean m = new MessageBean();
-                    m.setMessage(nickName + "邀请你加入" + groupName + "讨论组");
-                    m.setCreateTime(TimeUtils.getTimestamp());
-                    m.setType(99);
-                    saveMsg(String.valueOf(chatId), m, "group");
+                    addTips(String.valueOf(chatId),(nickName + "邀请你加入" + groupName + "讨论组"),"group");
+//                    MessageBean m = new MessageBean();
+//                    m.setMessage(nickName + "邀请你加入" + groupName + "讨论组");
+//                    m.setCreateTime(TimeUtils.getTimestamp());
+//                    m.setType(TIPS_TYPE);
+//                    saveMsg(String.valueOf(chatId), m, "group");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -282,9 +282,7 @@ public class MessageDB {
         int to = (pager + 1) * 20-1;
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
-                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
-                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
-                "SenderId INTEGER)");
+                + MSG_SCHEMA);
         Cursor c = mdb.rawQuery("SELECT * from " + table_name
                 + " ORDER BY LocalId DESC LIMIT " + from + "," + to, null);
         if (c.getCount() == 0)
@@ -339,9 +337,7 @@ public class MessageDB {
         mdb = getDB();
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + hash
-                + " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
-                "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
-                "SenderId INTEGER)");
+                + MSG_SCHEMA);
         ContentValues values = new ContentValues();
         values.put("Friend_Id", Friend_Id);
         values.put("lastTime", lastTime);
@@ -484,5 +480,12 @@ public class MessageDB {
         int count = cursor.getInt(0);
         cursor.close();
         return count;
+    }
+    public synchronized void addTips(String chatId,String tips,String chatType){
+        MessageBean m=new MessageBean();
+        m.setMessage(tips);
+        m.setCreateTime(TimeUtils.getTimestamp());
+        m.setType(TIPS_TYPE);
+        saveMsg(String.valueOf(chatId), m, chatType);
     }
 }
