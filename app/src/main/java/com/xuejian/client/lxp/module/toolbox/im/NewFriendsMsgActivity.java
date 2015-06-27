@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
                 finish();
             }
         });
-
+        invents=new ArrayList<>();
 		listView = (ListView) findViewById(R.id.list);
 		//设置adapter
 	    adapter = new NewFriendsMsgAdapter(this, 1, invents);

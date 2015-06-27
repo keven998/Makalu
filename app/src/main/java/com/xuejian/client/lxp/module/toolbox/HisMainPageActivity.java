@@ -13,20 +13,15 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -41,8 +36,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
@@ -67,7 +60,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private ArrayList<String> all_pics = new ArrayList<String>();
     User me;
     private User imUser;
-
+    private TextView tv_send_action;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +99,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-        findViewById(R.id.tv_send_action).setOnClickListener(new View.OnClickListener() {
+        tv_send_action = (TextView) findViewById(R.id.tv_send_action);
+        tv_send_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addToFriend();
@@ -114,6 +108,18 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
 
         initData(userId);
+//        UserApi.editMemo(100000+"", "hihi", new HttpCallBack() {
+//            @Override
+//            public void doSuccess(Object result, String method) {
+//                System.out.println(result.toString());
+//            }
+//
+//            @Override
+//            public void doFailure(Exception error, String msg, String method) {
+//                System.out.println(msg);
+//                error.printStackTrace();
+//            }
+//        });
     }
 
     private void addToFriend() {
@@ -250,7 +256,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         nameTv.setText(bean.getNickName());
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
-
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
@@ -265,9 +270,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (bean.getGender().equalsIgnoreCase("M")) {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
+            tvLevel.setText(bean.getLevel());
         } else if (bean.getGender().equalsIgnoreCase("F")) {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
+            tvLevel.setText(bean.getLevel());
         } else {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
@@ -348,15 +355,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 startActivity(intent);
             }
         });
-
-        TextView tvAlbum = (TextView) findViewById(R.id.tv_profile_album);
-        SpannableString albumStr = new SpannableString("相册");
-        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder asb = new SpannableStringBuilder();
-        asb.append(String.format("%d张\n", 999)).append(albumStr);
-        tvAlbum.setText(asb);
-
         TextView tvNotes = (TextView) findViewById(R.id.tv_profile_travelnotes);
         SpannableString noteStr = new SpannableString("游记");
         noteStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, noteStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -395,6 +393,34 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络~");
             }
         });
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        updatePics(object.length());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+            }
+        });
+    }
+
+    private void updatePics(int num) {
+        TextView tvAlbum = (TextView) findViewById(R.id.tv_profile_album);
+        SpannableString albumStr = new SpannableString("相册");
+        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder asb = new SpannableStringBuilder();
+        asb.append(String.format("%d张\n", num)).append(albumStr);
+        tvAlbum.setText(asb);
     }
 
     public void initFlDestion(List<LocBean> locBeans) {

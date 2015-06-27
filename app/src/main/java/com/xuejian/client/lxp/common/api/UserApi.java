@@ -70,6 +70,9 @@ public class UserApi extends BaseApi {
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 
+//    //根据足迹获取达人
+//    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
+//    /app/users/:id/memo
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -524,8 +527,8 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL+ SEACH_CONTACT);
         request.putUrlParams("keyword",key);
-        request.putUrlParams("field",field);
-        request.putUrlParams("page",page+"");
+        request.putUrlParams("field", field);
+        request.putUrlParams("page", page + "");
         request.putUrlParams("pageSize",pageSize+"");
         setDefaultParams(request);
         return HttpManager.request(request,callback);
@@ -543,7 +546,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler searchExpertFootPrint(boolean abroad,HttpCallBack callback){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL+ SEARCH_EXPERT_FOOTPRINT);
+        request.setUrl(SystemConfig.BASE_URL + SEARCH_EXPERT_FOOTPRINT);
         request.putUrlParams("abroad",String.valueOf(abroad));
         setDefaultParams(request);
         return HttpManager.request(request,callback);
@@ -561,7 +564,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getUserPicAlbumn(String userId,HttpCallBack callback){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL+ USERINFO + userId + "/albums");
+        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/albums");
         setDefaultParams(request);
         return HttpManager.request(request,callback);
     }
@@ -697,6 +700,29 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
 
+
+        return HttpManager.request(request, callback);
+    }
+    public static PTRequestHandler editMemo
+            (String userId, String memo, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.BASE_URL + "/users/"+userId+"/memo");
+                request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("memo", memo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
 
         return HttpManager.request(request, callback);
     }
