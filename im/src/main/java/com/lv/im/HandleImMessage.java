@@ -138,6 +138,9 @@ public class HandleImMessage {
                 /**
                  * 处理消息重组、丢失
                  */
+                if (!IMClient.getInstance().isLogin()){
+                    return;
+                }
                 queue.addMsg(newmsg.getConversation(), newmsg);
         }
     };

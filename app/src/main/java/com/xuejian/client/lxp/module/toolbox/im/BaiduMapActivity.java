@@ -18,7 +18,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,10 +38,8 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.lv.Utils.Config;
 import com.xuejian.client.lxp.R;
@@ -83,9 +83,19 @@ public class BaiduMapActivity extends ChatBaseActivity {
 			location();
 		} else {
 			double longtitude = intent.getDoubleExtra("longitude", 0);
-			showMap(latitude,longtitude,null);
+		 	showMap(longtitude,latitude,null);
 		}
 	}
+
+	private Rect getScreenSize() {
+		DisplayMetrics dm=new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		System.out.println(dm.heightPixels + "" + dm.widthPixels);
+		Rect rect=new Rect();
+		rect.set((dm.widthPixels/4),(dm.heightPixels/4),(dm.widthPixels/4*3),(dm.heightPixels/4*3));
+		return rect;
+	}
+
 	public void location(){
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCanceledOnTouchOutside(false);
@@ -129,32 +139,45 @@ public class BaiduMapActivity extends ChatBaseActivity {
 	}
 
 	public void sendLocation(View view) {
-		mBaiduMap.snapshot(new BaiduMap.SnapshotReadyCallback() {
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDialog.setMessage("发送中...");
+		Rect rect=getScreenSize();
+		mBaiduMap.snapshotScope(rect, new BaiduMap.SnapshotReadyCallback() {
 			public void onSnapshotReady(Bitmap snapshot) {
-				String path= Config.mapPath;
-				File path1=new File(path);
-				if (!path1.exists())path1.mkdirs();
+				String path = Config.mapPath;
+				File path1 = new File(path);
+				if (!path1.exists()) path1.mkdirs();
 				File file = new File(mapPath);
 				FileOutputStream out;
 				try {
 					out = new FileOutputStream(file);
 					if (snapshot.compress(
-							Bitmap.CompressFormat.PNG, 20, out)) {
+							Bitmap.CompressFormat.PNG, 100, out)) {
 						out.flush();
 						out.close();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Intent intent = new Intent();
+						intent.putExtra("latitude", lastLocation.getLatitude());
+						intent.putExtra("longitude", lastLocation.getLongitude());
+						intent.putExtra("address", lastLocation.getAddrStr());
+						intent.putExtra("path", mapPath);
+						progressDialog.dismiss();
+						BaiduMapActivity.this.setResult(RESULT_OK, intent);
+						finish();
+					}
+				});
+
 			}
 		});
-		Intent intent = new Intent();
-		intent.putExtra("latitude", lastLocation.getLatitude());
-		intent.putExtra("longitude", lastLocation.getLongitude());
-		intent.putExtra("address", lastLocation.getAddrStr());
-		intent.putExtra("path", mapPath);
-		this.setResult(RESULT_OK, intent);
-		finish();
+
 //		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 	}
 
@@ -188,7 +211,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
 				isFirstLoc = false;
 				LatLng ll = new LatLng(location.getLatitude(),
 						location.getLongitude());
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll,17);
+				MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll,19);
 				mBaiduMap.animateMapStatus(u);
 
 			}
@@ -199,18 +222,26 @@ public class BaiduMapActivity extends ChatBaseActivity {
 	}
 
 	public void showMap(double latitude,double longtitude,String address){
-		if (mBaiduMap==null)mBaiduMap=mMapView.getMap();
-		LatLng ll = new LatLng(latitude,
-				longtitude);
-		System.out.println(ll.toString());
-		BitmapDescriptor bitmap = BitmapDescriptorFactory
+		sendButton.setVisibility(View.GONE);
+		BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
 				.fromResource(R.drawable.icon_marka);
-		OverlayOptions option = new MarkerOptions()
-				.position(ll)
-				//	.title(address)
-				.icon(bitmap);
-		mBaiduMap.addOverlay(option);
-		MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+		mBaiduMap = mMapView.getMap();
+		mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
+		mBaiduMap
+				.setMyLocationConfigeration(new MyLocationConfiguration(
+						mCurrentMode, true, mCurrentMarker));
+		// 开启定位图层
+		mBaiduMap.setMyLocationEnabled(true);
+		// 定位初始化
+		MyLocationData locData = new MyLocationData.Builder()
+				.accuracy(100)
+						// 此处设置开发者获取到的方向信息，顺时针0-360
+				.direction(0).latitude(latitude)
+				.longitude(longtitude).build();
+		mBaiduMap.setMyLocationData(locData);
+			LatLng ll = new LatLng(latitude,
+					longtitude);
+			MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll,19);
 			mBaiduMap.animateMapStatus(u);
 	}
 
