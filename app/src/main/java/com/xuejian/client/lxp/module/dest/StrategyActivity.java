@@ -58,6 +58,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
 import com.xuejian.client.lxp.module.dest.fragment.RestaurantFragment;
 import com.xuejian.client.lxp.module.dest.fragment.ShoppingFragment;
+import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONObject;
 
@@ -428,7 +429,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
-                        dialog.setMessage("确定保存到我的旅程？");
+                        dialog.setMessage("保存到我的计划");
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -440,12 +441,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
                                         if (modifyResult.code == 0) {
-                                            strategy.id = modifyResult.result.id;
-                                            strategy.userId = user.getUserId();
-                                            bindView(strategy);
-                                            if (!isFinishing()) {
-                                                ToastUtil.getInstance(StrategyActivity.this).showToast("已保存到我的旅程");
-                                            }
+                                            Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
+                                            User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
+                                            intent.putExtra("userId", String.valueOf(user.getUserId()));
+                                            intent.putExtra("user_name", user.getNickName());
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
                                         }
 
                                     }
@@ -453,8 +454,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                     @Override
                                     public void doFailure(Exception error, String msg, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (!isFinishing())
+                                        if (!isFinishing()) {
                                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
                                     }
                                 });
                             }
