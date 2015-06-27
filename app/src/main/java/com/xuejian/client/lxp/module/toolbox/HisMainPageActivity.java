@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -58,9 +63,6 @@ import java.util.List;
  */
 public class HisMainPageActivity extends PeachBaseActivity implements View.OnClickListener {
 
-
-    private TextView mPlanCard;
-
     private int userId;
     private ArrayList<String> all_pics = new ArrayList<String>();
     User me;
@@ -108,17 +110,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 addToFriend();
-            }
-        });
-
-        mPlanCard = (TextView) findViewById(R.id.tv_profile_plan);
-        mPlanCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
-                intent.putExtra("userId", String.valueOf(userId));
-                intent.putExtra("user_name", imUser.getNickName());
-                startActivity(intent);
             }
         });
 
@@ -183,7 +174,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
         Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setTextColor(getResources().getColor(R.color.app_theme_color));
+        btn.setTextColor(getResources().getColor(R.color.color_checked));
         btn.setText("删除");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,81 +276,94 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
         constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
 
+        TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
+        if (!TextUtils.isEmpty(bean.getMemo())) {
+            tvMemo.setText(bean.getMemo());
+        } else {
+            tvMemo.setText("~什么都没留~");
+        }
+
         TextView tvLocation = (TextView) findViewById(R.id.tv_location);
+        if (TextUtils.isEmpty(bean.getResidence())) {
+            tvLocation.setText("未设置");
+        } else {
+            tvLocation.setText(bean.getResidence());
+        }
         TextView tvAge = (TextView) findViewById(R.id.tv_age);
+        if (bean.getBirthday() == null) {
+            tvAge.setText("未设置");
+        } else {
+            tvAge.setText(String.valueOf(getAge(bean.getBirthday())));
+        }
 
         TextView tvPlan = (TextView) findViewById(R.id.tv_profile_plan);
-        TextView tvTrack = (TextView) findViewById(R.id.tv_profile_track);
-        TextView tvAlbum = (TextView) findViewById(R.id.tv_profile_album);
-        TextView tvNotes = (TextView) findViewById(R.id.tv_profile_travelnotes);
+        SpannableString planStr = new SpannableString("计划");
+        planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        planStr.setSpan(new AbsoluteSizeSpan(14, true), 0, planStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder spb = new SpannableStringBuilder();
+        spb.append(String.format("%d条\n", bean.getGuideCnt())).append(planStr);
+        tvPlan.setText(spb);
+        tvPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
+                intent.putExtra("userId", String.valueOf(userId));
+                intent.putExtra("user_name", imUser.getNickName());
+                startActivity(intent);
+            }
+        });
 
-//        if (me != null) {
-//            int type;
-//            User user = UserDBManager.getInstance().getContactByUserId(bean.getUserId());
-//            if (user != null) {
-//                type = user.getType();
-//                bean.setType(type | EXPERT_INT);
-//            } else {
-//                bean.setType(EXPERT_INT);
-//            }
-//            UserDBManager.getInstance().saveContact(bean);
-//        }
-//        DisplayImageOptions options = UILUtils.getRadiusOption(LocalDisplay.dp2px(4));
-//        his_name.setText(bean.getNickName());
-//        ImageLoader.getInstance().displayImage(bean.getAvatarSmall(), his_avatar, options);
-//        his_level.setText("V" + bean.getLevel());
-//        if (bean.getGender().equals("F")) {
-//            his_gender.setImageResource(R.drawable.girl);
-//        } else if (bean.getGender().equals("F")) {
-//            his_gender.setImageResource(R.drawable.boy);
-//        }
-//        xingzuo.setText(bean.getZodiac());
-//        his_id.setText(String.valueOf(bean.getUserId()));
-//        if (!TextUtils.isEmpty(bean.getTravelStatus())) {
-//            his_status.setText(bean.getTravelStatus());
-//        }
-//        sign.setText(bean.getSignature());
-//        his_trip_plan.setText("共" + bean.getGuideCnt() + "篇旅行计划");
-//        if (bean.getResidence().equals("") || bean.getResidence() == null) {
-//            resident.setText("未设置");
-//        } else {
-//            resident.setText(bean.getResidence());
-//        }
-//        if (bean.getBirthday() == null) {
-//            age.setText("未设置");
-//        } else {
-//            age.setText(getAge(bean.getBirthday()) + "");
-//        }
-//
-//        try {
-//            int countries = 0;
-//            int citys;
-//            JSONObject jsonObject = new JSONObject(bean.getTracks().toString());
-//            Iterator iterator = jsonObject.keys();
-//            while (iterator.hasNext()) {
-//                countries++;
-//                String key = (String) iterator.next();
-//                for (int i = 0; i < bean.getTracks().get(key).size(); i++) {
-//                    all_foot_print_list.add(bean.getTracks().get(key).get(i));
-//                }
-//            }
-//            citys = all_foot_print_list.size();
-//            foot_print.setText("已经去过" + countries + "个国家， " + citys + "个城市");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        initFlDestion(all_foot_print_list);
-//        ll_foot_print.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
-//                intent.putExtra("isExpertFootPrint", true);
-//                intent.putParcelableArrayListExtra("ExpertFootPrintBean", all_foot_print_list);
-//                startActivity(intent);
-//            }
-//        });
+        TextView tvTrack = (TextView) findViewById(R.id.tv_profile_track);
+        SpannableString trackStr = new SpannableString("足迹");
+        trackStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, trackStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        trackStr.setSpan(new AbsoluteSizeSpan(14, true), 0, trackStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        int countries = 0;
+        int cityCount = 0;
+        final ArrayList<LocBean> trackCitys = new ArrayList<LocBean>();
+        try {
+            JSONObject jsonObject = new JSONObject(bean.getTracks().toString());
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                countries++;
+                String key = (String) iterator.next();
+                int size = bean.getTracks().get(key).size();
+                cityCount += size;
+                for (int i = 0; i < size; i++) {
+                    trackCitys.add(bean.getTracks().get(key).get(i));
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ssb.append(String.format("%d国%d城市\n", countries, cityCount)).append(trackStr);
+        tvTrack.setText(ssb);
+        tvTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
+                intent.putExtra("isExpertFootPrint", true);
+                intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
+                startActivity(intent);
+            }
+        });
+
+        TextView tvAlbum = (TextView) findViewById(R.id.tv_profile_album);
+        SpannableString albumStr = new SpannableString("相册");
+        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder asb = new SpannableStringBuilder();
+        asb.append(String.format("%d张\n", 999)).append(albumStr);
+        tvAlbum.setText(asb);
+
+        TextView tvNotes = (TextView) findViewById(R.id.tv_profile_travelnotes);
+        SpannableString noteStr = new SpannableString("游记");
+        noteStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, noteStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        noteStr.setSpan(new AbsoluteSizeSpan(14, true), 0, noteStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder nsb = new SpannableStringBuilder();
+        nsb.append(String.format("%d篇\n", 99)).append(noteStr);
+        tvNotes.setText(nsb);
     }
 
 

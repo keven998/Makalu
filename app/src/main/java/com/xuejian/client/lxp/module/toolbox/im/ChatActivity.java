@@ -371,8 +371,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
-        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 20);
-        lt.setStagger(LayoutTransition.APPEARING, 60);
+        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 0);
+        lt.setStagger(LayoutTransition.APPEARING, 35);
         lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
         lt.setDuration(LayoutTransition.DISAPPEARING, 0);
         lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
@@ -523,11 +523,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double latitude = data.getDoubleExtra("latitude", 0);
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
-                    String path=data.getStringExtra("path");
-                    System.out.println("path  "+path);
+                    String path = data.getStringExtra("path");
+                    System.out.println("path  " + path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
-                        sendLocationMsg(latitude, longitude, "", locationAddress,path);
+                        sendLocationMsg(latitude, longitude, "", locationAddress, path);
                     } else {
                         ToastUtil.getInstance(getApplicationContext()).showToast("找不到你在哪");
                     }
@@ -809,8 +809,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 发送位置信息
      */
-    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress,String path) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress,path);
+    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress, String path) {
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress, path);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
