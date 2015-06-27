@@ -404,7 +404,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             drawerLayout.setEnabled(false);
         } else {
             // 群聊
-            titleHeaderBar.setRightViewImageRes(R.drawable.common_icon_navigation_menu);
+            titleHeaderBar.setRightViewImageRes(R.drawable.selector_ic_common_navigation_menu);
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
@@ -1071,7 +1071,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             if (time > 0) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
-                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
+                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

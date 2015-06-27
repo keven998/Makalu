@@ -113,7 +113,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="11dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/common_icon_navigation_menu" />
+                        android:src="@drawable/selector_ic_common_navigation_menu" />
 
                     <TextView
                         android:id="@+id/tv_copy_guide"

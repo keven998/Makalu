@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="@drawable/mm_listitem_simple"
+        android:background="@color/base_color_white"
         android:padding="11dp">
 
         <EditText
