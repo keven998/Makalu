@@ -50,7 +50,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/avatar"
-            android:src="@drawable/msg_state_fail_resend"
+            android:src="@drawable/ic_message_send_fail"
             android:visibility="gone" />
 
         <TextView
