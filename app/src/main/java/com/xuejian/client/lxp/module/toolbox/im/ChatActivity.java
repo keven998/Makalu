@@ -404,7 +404,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             drawerLayout.setEnabled(false);
         } else {
             // 群聊
-            titleHeaderBar.setRightViewImageRes(R.drawable.common_icon_navigation_menu);
+            titleHeaderBar.setRightViewImageRes(R.drawable.selector_ic_common_navigation_menu);
             titleHeaderBar.getTitleTextView().setText(toChatUsername);
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();

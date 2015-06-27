@@ -26,22 +26,13 @@
                 android:src="@drawable/ic_guide_archieve_selector"
                 android:textColor="@color/base_color_white" />
 
-           <!-- <ImageButton
-                android:id="@+id/edit_title"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="#aaaaaa"
-                android:scaleType="center"
-                android:src="@drawable/white_more"
-                android:textColor="@color/base_color_white" />-->
-
             <ImageButton
                 android:id="@+id/edit_more"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="#aaaaaa"
                 android:scaleType="center"
-                android:src="@drawable/white_more"
+                android:src="@drawable/selector_ic_common_navigation_menu"
                 android:textColor="@color/base_color_white" />
 
         </LinearLayout>
