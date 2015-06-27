@@ -369,8 +369,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
-        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 20);
-        lt.setStagger(LayoutTransition.APPEARING, 60);
+        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 0);
+        lt.setStagger(LayoutTransition.APPEARING, 35);
         lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
         lt.setDuration(LayoutTransition.DISAPPEARING, 0);
         lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
@@ -521,8 +521,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double latitude = data.getDoubleExtra("latitude", 0);
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
-                    String path=data.getStringExtra("path");
-                    System.out.println("path  "+path);
+                    String path = data.getStringExtra("path");
+                    System.out.println("path  " + path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
                         sendLocationMsg(latitude, longitude,locationAddress,path);
@@ -814,7 +814,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         adapter.notifyDataSetChanged();
         listView.setSelection(listView.getCount() - 1);
         setResult(RESULT_OK);
-
     }
 
     /**

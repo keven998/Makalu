@@ -91,9 +91,9 @@ public class StrategyListActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        userId = getIntent().getStringExtra("userId");
-        isOwner = AccountManager.getInstance().getLoginAccount(this) != null && userId.equals(AccountManager.getCurrentUserId());
-        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
+        resetMemberValue(getIntent());
+        toId = getIntent().getStringExtra("toId");
+        chatType = getIntent().getStringExtra("chatType");
         initView();
         initData();
     }
@@ -101,6 +101,24 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        resetMemberValue(intent);
+        mContentType = 0;
+        mCurrentPage = 0;
+        if (!isOwner) {
+            mEditBtn.setVisibility(View.GONE);
+        }
+        getStrategyListData(0, mContentType);
+    }
+
+    private void resetMemberValue(Intent intent) {
+        userId = intent.getStringExtra("userId");
+        isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
+        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
     }
 
     @Override
@@ -261,8 +279,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void initData() {
-        toId = getIntent().getStringExtra("toId");
-        chatType = getIntent().getStringExtra("chatType");
         setupViewFromCache();
     }
 
