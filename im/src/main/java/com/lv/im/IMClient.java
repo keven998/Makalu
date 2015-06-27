@@ -183,6 +183,9 @@ public class IMClient {
      * @return List<ConversationBean>
      */
     public List<ConversationBean> getConversationList() {
+        if (db==null){
+            return null;
+        }
         convercationList = db.getConversationList();
         count = 0;
         for (ConversationBean c : convercationList) {
