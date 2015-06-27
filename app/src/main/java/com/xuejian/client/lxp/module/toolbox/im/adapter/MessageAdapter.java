@@ -407,7 +407,6 @@ public class MessageAdapter extends BaseAdapter {
 //                break;
             default:
                 break;
-            // not supported
         }
 
 
@@ -1409,7 +1408,7 @@ public class MessageAdapter extends BaseAdapter {
         double lng = getDoubleAttr(message, "lng");
         String desc = getStringAttr(message, "address");
         String path=  getStringAttr(message,"path");
-        Bitmap bitmap=ImageUtils.decodeScaleImage(path, 160, 160);
+        Bitmap bitmap=ImageUtils.decodeScaleImage(path, 320, 320);
         locationView.setText(desc);
         if (bitmap!=null)locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
@@ -1555,7 +1554,8 @@ public class MessageAdapter extends BaseAdapter {
             // before send, update ui
             holder.staus_iv.setVisibility(View.GONE);
             holder.pb.setVisibility(View.VISIBLE);
-            holder.tv.setVisibility(View.INVISIBLE);
+           // holder.tv.setVisibility(View.INVISIBLE);
+            holder.tv.setVisibility(View.VISIBLE);
             holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
             IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(), message, friendId, new UploadListener() {

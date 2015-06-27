@@ -198,7 +198,7 @@ public class IMClient {
      */
     public List<ConversationBean> getConversationList() {
         if (db == null) {
-            return null;
+            return convercationList;
         }
         convercationList = db.getConversationList();
         count = 0;
@@ -320,7 +320,7 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
-        UploadUtils.getInstance().upload(path, userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe,0,0,null);
+        UploadUtils.getInstance().upload(path, userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe, 0, 0, null);
     }
 
     public MessageBean createAudioMessage(String userId, String path, String friendId, String durtime, String chatTpe) {
@@ -377,9 +377,8 @@ public class IMClient {
 
     /**
      * 发送位置信息
-     *
      */
-    public void sendLocationMessage(String userId, MessageBean message, String path, String friendId, UploadListener listener, String chatTpe,double lat,double lng,String desc) {
+    public void sendLocationMessage(String userId, MessageBean message, String path, String friendId, UploadListener listener, String chatTpe, double lat, double lng, String desc) {
         if (taskMap.containsKey(friendId)) {
             if (taskMap.get(friendId).contains(message.getLocalId())) return;
             else taskMap.get(friendId).add(message.getLocalId());
@@ -387,7 +386,7 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
-        UploadUtils.getInstance().upload(path, userId, friendId, Config.LOC_MSG, message.getLocalId(), listener, chatTpe,lat,lng,desc);
+        UploadUtils.getInstance().upload(path, userId, friendId, Config.LOC_MSG, message.getLocalId(), listener, chatTpe, lat, lng, desc);
     }
 
     public MessageBean CreateLocationMessage(String userID, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress, String path) {

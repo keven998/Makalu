@@ -34,7 +34,7 @@ public class MediaRecordFunc {
                 return 1002;
             } else {
                 if (mMediaRecorder == null)
-                    if (createMediaRecord())return 1004;
+                    if (!createMediaRecord())return 1004;
                         try {
                             mMediaRecorder.prepare();
                             mMediaRecorder.start();

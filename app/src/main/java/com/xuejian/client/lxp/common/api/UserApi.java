@@ -699,8 +699,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return HttpManager.request(request, callback);
     }
     public static PTRequestHandler editMemo

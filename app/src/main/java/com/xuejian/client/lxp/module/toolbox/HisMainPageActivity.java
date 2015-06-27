@@ -270,11 +270,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (bean.getGender().equalsIgnoreCase("M")) {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
-            tvLevel.setText(bean.getLevel());
+            tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
-            tvLevel.setText(bean.getLevel());
+            tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
