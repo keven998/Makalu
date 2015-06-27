@@ -445,8 +445,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                             User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
                                             intent.putExtra("userId", String.valueOf(user.getUserId()));
                                             intent.putExtra("user_name", user.getNickName());
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             startActivity(intent);
+                                            finish();
                                         }
 
                                     }

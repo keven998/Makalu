@@ -22,7 +22,6 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
-    // private View mTitlebar;
     private TextView versionUpdateLl, xtLl;
 
     @Override
@@ -40,6 +39,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         xtLl.setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,18 +68,18 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_version_update:
-                MobclickAgent.onEvent(mContext,"event_check_version_update");
+                MobclickAgent.onEvent(mContext, "event_check_version_update");
                 update();
                 break;
 
             case R.id.ll_xt:
-                MobclickAgent.onEvent(mContext,"event_push_setting");
+                MobclickAgent.onEvent(mContext, "event_push_setting");
                 Intent pushIntent = new Intent(mContext, PushSettingActivity.class);
                 startActivity(pushIntent);
                 break;
 
             case R.id.ll_clear_cache:
-                MobclickAgent.onEvent(mContext,"event_clear_cache");
+                MobclickAgent.onEvent(mContext, "event_clear_cache");
                 clearCache();
                 break;
 
@@ -88,12 +88,12 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         }
     }
 
-    private void clearCache(){
+    private void clearCache() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定清除缓存？");
-        dialog.setPositiveButton("确定",new OnClickListener() {
+        dialog.setPositiveButton("确定", new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -114,7 +114,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
             }
         });
-        dialog.setNegativeButton("取消",new OnClickListener() {
+        dialog.setNegativeButton("取消", new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

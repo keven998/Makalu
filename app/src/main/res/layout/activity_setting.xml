@@ -14,50 +14,71 @@
     <TextView
         android:id="@+id/ll_clear_cache"
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_marginTop="0.8dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
-        android:drawableLeft="@drawable/ic_clear_all"
-        android:drawablePadding="17dp"
+        android:drawableLeft="@drawable/ic_setting_cache_clean"
+        android:drawablePadding="10dp"
         android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
-        android:paddingLeft="19dp"
-        android:paddingRight="18dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
         android:text="清除缓存"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp" />
+        android:textColor="@color/color_text_ii"
+        android:textSize="14sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/color_line" />
 
     <TextView
         android:id="@+id/ll_xt"
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_message_reminder"
-        android:drawablePadding="17dp"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
         android:text="提醒设置"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp" />
+        android:textColor="@color/color_text_ii"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/color_line" />
 
     <TextView
         android:id="@+id/ll_version_update"
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_marginTop="0.8dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_upgrade"
-        android:drawablePadding="16dp"
+        android:drawablePadding="10dp"
         android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
         android:text="检查更新"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp" />
+        android:textColor="@color/color_text_ii"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/color_line" />
 
 </LinearLayout>
