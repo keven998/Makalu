@@ -1071,7 +1071,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             if (time > 0) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
-                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短了");
+                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
