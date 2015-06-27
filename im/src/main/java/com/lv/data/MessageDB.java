@@ -168,32 +168,35 @@ public class MessageDB {
             closeDB();
             return 1;
         }
-        if (entity.getType() == 1) {
-
-            try {
-                JSONObject object = new JSONObject(entity.getMessage());
-                String url = object.getString("url");
-                String path = Config.DownLoadAudio_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".amr";
-                object.put("path", path);
-                object.put("isRead", false);
-                entity.setMessage(object.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        if (entity.getType() == 2) {
-            try {
-                JSONObject object = new JSONObject(entity.getMessage());
-                String url = object.getString("thumb");
-                String path = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".jpeg";
-                String full = object.getString("full");
-                String localPath = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(full) + ".jpeg";
-                object.put("localPath", localPath);
-                object.put("thumbPath", path);
-                entity.setMessage(object.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        switch (entity.getType()){
+            case Config.AUDIO_MSG :
+                try {
+                    JSONObject object = new JSONObject(entity.getMessage());
+                    String url = object.getString("url");
+                    String path = Config.DownLoadAudio_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".amr";
+                    object.put("path", path);
+                    object.put("isRead", false);
+                    entity.setMessage(object.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Config.IMAGE_MSG:
+                try {
+                    JSONObject object = new JSONObject(entity.getMessage());
+                    String url = object.getString("thumb");
+                    String path = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".jpeg";
+                    String full = object.getString("full");
+                    String localPath = Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(full) + ".jpeg";
+                    object.put("localPath", localPath);
+                    object.put("thumbPath", path);
+                    entity.setMessage(object.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
         }
         if (Config.isDebug) {
             Log.i(Config.TAG, "table_name " + table_name);

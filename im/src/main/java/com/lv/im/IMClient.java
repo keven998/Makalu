@@ -50,6 +50,16 @@ public class IMClient {
     private static List<String> invokeStatus = new ArrayList<>();
     private Timer timer;
     private boolean isRunning;
+
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(boolean isLogin) {
+        this.isLogin = isLogin;
+    }
+
+    private boolean isLogin;
     private CountFrequency countFrequency;
 
     public String getCurrentUserId() {
@@ -61,12 +71,13 @@ public class IMClient {
     }
 
     private String currentUserId;
+
     private IMClient() {
         cidMap = new HashMap<>();
         lastMsgMap = new ConcurrentHashMap<>();
         acklist = new JSONArray();
         conList = new ArrayList<>();
-        countFrequency=new CountFrequency();
+        countFrequency = new CountFrequency();
     }
 
     public static IMClient getInstance() {
@@ -80,6 +91,7 @@ public class IMClient {
         MessageDB.initDB(userId);
         db = MessageDB.getInstance();
         MessageDB.getInstance().init();
+        isLogin = true;
     }
 
     public void disconnectDB() {
@@ -104,8 +116,8 @@ public class IMClient {
     public void add2ackList(String id) {
         acklist.put(id);
         System.out.println("ack list size:" + acklist.length());
-        if (!isRunning){
-            ack(countFrequency.getFrequency()*5);
+        if (!isRunning) {
+            ack(countFrequency.getFrequency() * 5);
         }
 //        if (acklist.length() > 10) {
 //            HttpUtils.FetchNewMsg(User.getUser().getCurrentUser(), (list) -> {
@@ -117,12 +129,13 @@ public class IMClient {
 //        }
 
     }
-    public void ack(long frequency){
-        if (Config.isDebug){
-            Log.i(Config.TAG,"ACK  频率"+frequency);
+
+    public void ack(long frequency) {
+        if (Config.isDebug) {
+            Log.i(Config.TAG, "ACK  频率" + frequency);
         }
-        if (frequency==0)frequency=30*1000;
-        isRunning=true;
+        if (frequency == 0) frequency = 30 * 1000;
+        isRunning = true;
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -143,6 +156,7 @@ public class IMClient {
             }
         }, frequency);
     }
+
     public void clearackList() {
         acklist = new JSONArray();
     }
@@ -183,7 +197,7 @@ public class IMClient {
      * @return List<ConversationBean>
      */
     public List<ConversationBean> getConversationList() {
-        if (db==null){
+        if (db == null) {
             return null;
         }
         convercationList = db.getConversationList();
@@ -272,19 +286,19 @@ public class IMClient {
     }
 
 
-    public void sendTextMessage(MessageBean message,String friendId, String conversation, SendMsgListener listen, String chatType) {
+    public void sendTextMessage(MessageBean message, String friendId, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
-        SendMessageBean imessage = new SendMessageBean((int)message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
-       System.out.println("message.getSenderId()  ===="+message.getSenderId());
+        SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
+        System.out.println("message.getSenderId()  ====" + message.getSenderId());
         HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean createTextMessage(String UserId,String text, String friendId, String chatType) {
+    public MessageBean createTextMessage(String UserId, String text, String friendId, String chatType) {
         if (TextUtils.isEmpty(text)) return null;
         SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, Config.TEXT_MSG, text);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-     //   MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
+        //   MessageBean m = new MessageBean(0, 1, 0, text, TimeUtils.getTimestamp(), 0, null, Long.parseLong(friendId));
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, text, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
         m.setLocalId((int) localId);
         return m;
@@ -298,7 +312,7 @@ public class IMClient {
      * @param listener listener
      * @param chatTpe  聊天类型
      */
-    public void sendAudioMessage(String userId,MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
+    public void sendAudioMessage(String userId, MessageBean message, String path, String friendId, UploadListener listener, String chatTpe) {
         if (taskMap.containsKey(friendId)) {
             if (taskMap.get(friendId).contains(message.getLocalId())) return;
             else taskMap.get(friendId).add(message.getLocalId());
@@ -306,10 +320,10 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
-        UploadUtils.getInstance().upload(path,userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
+        UploadUtils.getInstance().upload(path, userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
     }
 
-    public MessageBean createAudioMessage(String userId,String path, String friendId, String durtime, String chatTpe) {
+    public MessageBean createAudioMessage(String userId, String path, String friendId, String durtime, String chatTpe) {
         JSONObject object = new JSONObject();
         try {
             object.put("isRead", false);
@@ -326,7 +340,7 @@ public class IMClient {
         return m;
     }
 
-    public MessageBean CreateImageMessage(String userId,String path, String friendId, String chatTpe) {
+    public MessageBean CreateImageMessage(String userId, String path, String friendId, String chatTpe) {
 
         String sdkPath = PictureUtil.reSizeImage(path);
         String thumbnailPath = PictureUtil.getThumbImagePath(sdkPath, 160, 160);
@@ -346,7 +360,7 @@ public class IMClient {
         return m;
     }
 
-    public void sendImageMessage(String userId,MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
+    public void sendImageMessage(String userId, MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
         if (taskMap.containsKey(friendId)) {
             if (taskMap.get(friendId).contains(messageBean.getLocalId())) return;
             else taskMap.get(friendId).add(messageBean.getLocalId());
@@ -369,13 +383,13 @@ public class IMClient {
      * @param listen
      * @param chatType
      */
-    public void sendLocationMessage(String userId,String friendId,MessageBean message, String conversation, SendMsgListener listen, String chatType) {
+    public void sendLocationMessage(String userId, String friendId, MessageBean message, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         SendMessageBean imessage = new SendMessageBean(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
         HttpUtils.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
     }
 
-    public MessageBean CreateLocationMessage(String userID,String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress,String path) {
+    public MessageBean CreateLocationMessage(String userID, String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress, String path) {
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
@@ -383,7 +397,7 @@ public class IMClient {
             object.put("lng", latitude);
             object.put("lat", longitude);
             object.put("desc", locationAddress);
-            object.put("path",path);
+            object.put("path", path);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -395,7 +409,7 @@ public class IMClient {
         return m;
     }
 
-    public void sendExtMessage(String UserId,String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
+    public void sendExtMessage(String UserId, String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
         if (TextUtils.isEmpty(contentJson)) return;
         SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type + 9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
@@ -404,7 +418,7 @@ public class IMClient {
         m.setLocalId((int) localId);
         //return m;
         //if ("0".equals(conversation)) conversation = null;
-        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId),friendId, type + 9, m.getMessage());
+        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type + 9, m.getMessage());
         HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
@@ -483,16 +497,19 @@ public class IMClient {
     public void updateReadStatus(String chatId, long messageId, boolean isRead) {
         db.updateReadStatus(chatId, messageId, isRead);
     }
-    public int getUnReadMsgCount(){
+
+    public int getUnReadMsgCount() {
         return db.getUnReadCount();
     }
 
-    public void addTips(String chatId,String tips,String chatType){
-        db.addTips(chatId,tips,chatType);
+    public void addTips(String chatId, String tips, String chatType) {
+        db.addTips(chatId, tips, chatType);
     }
+
     public void logout() {
+        isLogin = false;
         db.disconnectDB();
-        currentUserId=null;
+        currentUserId = null;
         client = null;
 
     }
