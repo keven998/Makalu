@@ -287,7 +287,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (!TextUtils.isEmpty(bean.getMemo())) {
             tvMemo.setText(bean.getMemo());
         } else {
-            tvMemo.setText("~什么都没留~");
+            tvMemo.setText("~什么都没写~");
         }
 
         TextView tvLocation = (TextView) findViewById(R.id.tv_location);
@@ -362,6 +362,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         SpannableStringBuilder nsb = new SpannableStringBuilder();
         nsb.append(String.format("%d篇\n", 99)).append(noteStr);
         tvNotes.setText(nsb);
+        tvNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
@@ -421,6 +427,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         SpannableStringBuilder asb = new SpannableStringBuilder();
         asb.append(String.format("%d张\n", num)).append(albumStr);
         tvAlbum.setText(asb);
+        tvAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public void initFlDestion(List<LocBean> locBeans) {
