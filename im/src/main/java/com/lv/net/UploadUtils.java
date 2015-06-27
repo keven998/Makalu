@@ -48,7 +48,7 @@ public class UploadUtils {
         if (!path.exists()) path.mkdirs();
         String imagepath1 = Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
         if (saveBitmapToJpegFile(bitmap, imagepath1))
-            upload(imagepath1, sender, receive, msgType, localId, listener,chatType);
+            upload(imagepath1, sender, receive, msgType, localId, listener,chatType,0,0,null);
         else if (Config.isDebug){
             Log.i(Config.TAG, "文件出错！ ");
         }
@@ -69,7 +69,7 @@ public class UploadUtils {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        upload(path, sender, receive, msgType, localId, listener,chatType);
+        upload(path, sender, receive, msgType, localId, listener,chatType,0,0,null);
     }
     private Bitmap getImageThumbnail(String imagePath, int width, int height) {
         Bitmap bitmap = null;
@@ -104,10 +104,10 @@ public class UploadUtils {
         // upload(file.getAbsolutePath(), listener);
     }
 
-    public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType) {
+    public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType,final double lat,final double lng,final String desc) {
         System.out.println("localId "+localId+" filePath:" + filePath);
         if (Config.isDebug)Log.i(Config.TAG,"开始上传 ");
-        HttpUtils.getToken(new HttpUtils.tokenGet() {
+        HttpUtils.getToken(msgType,new HttpUtils.tokenGet() {
             @Override
             public void OnSuccess(String key, String token) {
                 if (token == null) {
@@ -121,6 +121,11 @@ public class UploadUtils {
                 pamas.put("x:chatType", chatType);
                 pamas.put("x:msgType", msgType + "");
                 pamas.put("x:receiver", receive);
+                if (msgType==Config.LOC_MSG) {
+                    pamas.put("x:lng", String.valueOf(lng));
+                    pamas.put("x:lat", String.valueOf(lat));
+                    pamas.put("x:address", desc);
+                }
                 uploadManager.put(filePath, key, token, new UpCompletionHandler() {
                     public void complete(String key, ResponseInfo info, JSONObject response) {
                         System.out.println("debug:info = " + info + ",response = " + response);
@@ -167,6 +172,10 @@ public class UploadUtils {
                     }
                 }, null));
             }
+            @Override
+            public void OnFailed(){
+                listener.onError(0,null);
+            }
         });
 
 
@@ -187,7 +196,27 @@ public class UploadUtils {
         String filePath = "http://7xiktj.com1.z0.glb.clouddn.com/" + fileUrlUUID;
         return filePath;
     }
+    private double getDoubleAttr(MessageBean message, String name) {
+        try {
+            JSONObject object = new JSONObject(message.getMessage());
+            return object.getDouble(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return 0;
+        }
 
+    }
+
+    private String getStringAttr(MessageBean message, String name) {
+        try {
+            JSONObject object = new JSONObject(message.getMessage());
+            return object.getString(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }
 
 

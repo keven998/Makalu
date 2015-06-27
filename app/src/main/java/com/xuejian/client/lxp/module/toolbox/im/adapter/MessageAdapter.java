@@ -1407,12 +1407,11 @@ public class MessageAdapter extends BaseAdapter {
         TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
         double lat = getDoubleAttr(message, "lat");
         double lng = getDoubleAttr(message, "lng");
-        String name = getStringAttr(message, "name");
-        String desc = getStringAttr(message, "desc");
+        String desc = getStringAttr(message, "address");
         String path=  getStringAttr(message,"path");
         Bitmap bitmap=ImageUtils.decodeScaleImage(path, 160, 160);
         locationView.setText(desc);
-       locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
+        if (bitmap!=null)locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -1440,9 +1439,9 @@ public class MessageAdapter extends BaseAdapter {
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
-                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(), friendId, message, conversation, new SendMsgListener() {
+                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(), message, getStringAttr(message,"path") ,friendId, new UploadListener() {
                     @Override
-                    public void onSuccess() {
+                    public void onSucess(String fileUrl) {
                         message.setStatus(0);
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -1455,7 +1454,7 @@ public class MessageAdapter extends BaseAdapter {
                     }
 
                     @Override
-                    public void onFailed(int code) {
+                    public void onError(int errorCode, String msg) {
                         message.setStatus(2);
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -1466,7 +1465,12 @@ public class MessageAdapter extends BaseAdapter {
                             }
                         });
                     }
-                }, chatType);
+
+                    @Override
+                    public void onProgress(int progress) {
+
+                    }
+                }, chatType,lat,lng,desc);
                 break;
             default:
                 break;

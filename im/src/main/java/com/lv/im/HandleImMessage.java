@@ -33,6 +33,7 @@ public class HandleImMessage {
     private Context c;
     private long lastTime;
     private static HashMap<MessageHandler, String> openStateMap = new HashMap<>();
+    public static MyHandler handler=new MyHandler();
     private HandleImMessage() {
         queue.setDequeueListener(dequeueListener);
     }
@@ -48,28 +49,29 @@ public class HandleImMessage {
 
     public static abstract interface MessageHandler {
         /**
-         *
          * @param m 收到的消息
          */
-        public void onMsgArrive(MessageBean m,String groupId);
+        public void onMsgArrive(MessageBean m, String groupId);
 
         public void onCMDMessageArrive(MessageBean m);
     }
 
     /**
      * Activity注册消息listener
+     *
      * @param listener listener
      */
-    public  void registerMessageListener(MessageHandler listener) {
-        if (!ehList.contains(listener))ehList.add(listener);
+    public void registerMessageListener(MessageHandler listener) {
+        if (!ehList.contains(listener)) ehList.add(listener);
 
     }
 
     /**
      * 解除注册
+     *
      * @param listener listener
      */
-    public  void unregisterMessageListener(MessageHandler listener) {
+    public void unregisterMessageListener(MessageHandler listener) {
         ehList.remove(listener);
     }
 
@@ -83,14 +85,15 @@ public class HandleImMessage {
         IMClient.getInstance().updateReadStatus(conversation);
     }
 
-    public  void unregisterMessageListener(MessageHandler listener, String conversation) {
+    public void unregisterMessageListener(MessageHandler listener, String conversation) {
         ehList.remove(listener);
         openStateMap.clear();
     }
 
-    public static Handler handler = new Handler() {
+    public static class MyHandler extends Handler{
         @Override
         public void handleMessage(android.os.Message message) {
+            super.handleMessage(message);
             System.out.println("new Message");
             switch (message.what) {
                 case Config.CMD_MSG:
@@ -101,47 +104,47 @@ public class HandleImMessage {
                     break;
                 case Config.TEXT_MSG:
                     Message newMessage = (Message) message.obj;
-                    System.out.println(ehList.size()+"  handlerMessage "+newMessage.getContents());
+                    System.out.println(ehList.size() + "  handlerMessage " + newMessage.getContents());
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMessage),String.valueOf(newMessage.getGroupId()));
+                        handler.onMsgArrive(Msg2Bean(newMessage), String.valueOf(newMessage.getGroupId()));
                     }
                     break;
-                case Config.LOC_MSG:
-                    Message newLocMessage = (Message) message.obj;
-                    for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newLocMessage),String.valueOf(newLocMessage.getGroupId()));
-                    }
-                    break;
+//                case Config.LOC_MSG:
+//                    Message newLocMessage = (Message) message.obj;
+//                    for (MessageHandler handler : ehList) {
+//                        handler.onMsgArrive(Msg2Bean(newLocMessage), String.valueOf(newLocMessage.getGroupId()));
+//                    }
+//                    break;
                 case Config.DOWNLOAD_SUCCESS:
                 case Config.DOWNLOAD_FILED:
                     Message newMediaMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(newMediaMessage),String.valueOf(newMediaMessage.getGroupId()));
+                        handler.onMsgArrive(Msg2Bean(newMediaMessage), String.valueOf(newMediaMessage.getGroupId()));
                     }
                     break;
                 default:
                     Message extMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onMsgArrive(Msg2Bean(extMessage),String.valueOf(extMessage.getGroupId()));
+                        handler.onMsgArrive(Msg2Bean(extMessage), String.valueOf(extMessage.getGroupId()));
                     }
                     break;
             }
         }
-    };
+    }
 
     public MsgListener listener = new MsgListener() {
         @Override
         public void OnMessage(Context context, String message) {
             c = context;
-                Message newmsg = JSON.parseObject(message, Message.class);
-                newmsg.setSendType(1);
-                /**
-                 * 处理消息重组、丢失
-                 */
-                if (!IMClient.getInstance().isLogin()){
-                    return;
-                }
-                queue.addMsg(newmsg.getConversation(), newmsg);
+            Message newmsg = JSON.parseObject(message, Message.class);
+            newmsg.setSendType(1);
+            /**
+             * 处理消息重组、丢失
+             */
+            if (!IMClient.getInstance().isLogin()) {
+                return;
+            }
+            queue.addMsg(newmsg.getConversation(), newmsg);
         }
     };
     /**
@@ -154,10 +157,9 @@ public class HandleImMessage {
                 Log.i(Config.TAG, "onDequeueMsg ");
             }
 
-            if (lastTime==0){
-                lastTime=messageBean.getTimestamp();
-            }
-            else if (messageBean.getTimestamp()<lastTime){
+            if (lastTime == 0) {
+                lastTime = messageBean.getTimestamp();
+            } else if (messageBean.getTimestamp() < lastTime) {
                 messageBean.setTimestamp(TimeUtils.getTimestamp());
             }
             messageBean.setSendType(1);
@@ -166,25 +168,24 @@ public class HandleImMessage {
                 Log.i(Config.TAG, "result :" + result);
             }
             if (result == 0) {
-                if (messageBean.getMsgType()==100){
+                if (messageBean.getMsgType() == 100) {
                     android.os.Message cmd_msg = android.os.Message.obtain();
                     cmd_msg.obj = messageBean;
                     cmd_msg.what = Config.CMD_MSG;
                     handler.sendMessage(cmd_msg);
                     return;
                 }
-                System.out.println("ehList size: "+ehList.size());
+                System.out.println("ehList size: " + ehList.size());
 
-              //  for (MessageHandler handler : ehList) {
-                if (ehList.size()>0){
+                //  for (MessageHandler handler : ehList) {
+                if (ehList.size() > 0) {
                     if (openStateMap.containsKey(ehList.get(0))) {
-                         if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
-                         IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
+                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
+                            IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
                         else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                    }
-                    else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                 }else {
-                    notifyMsg(c,messageBean);
+                    } else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                } else {
+                    notifyMsg(c, messageBean);
                     IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                 }
 
@@ -198,11 +199,29 @@ public class HandleImMessage {
                             handlermsg.what = Config.TEXT_MSG;
                             handler.sendMessage(handlermsg);
                             break;
+                        /**
+                         * {"snapshot":"http://7xirnn.com1.z0.glb.clouddn.com/70b4c860-60e1-4631-b3a0-d7fdf595a3dd!thumb?e=1435989212&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:lq1V2KaxGaTtZrlZHzWi8YlvFog=",
+                         * "lat":39.99049,"lng":116.313248,"address":"北京市海淀区海淀西大街36号205号"}
+                         */
                         case Config.LOC_MSG:
-                            android.os.Message loc_msg = android.os.Message.obtain();
-                            loc_msg.obj = messageBean;
-                            loc_msg.what = Config.LOC_MSG;
-                            handler.sendMessage(loc_msg);
+                            try {
+                                object = new JSONObject(content);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            String Murl = null;
+                            try {
+                                Murl = object.getString("snapshot");
+                                if (Config.isDebug) {
+                                    Log.i(Config.TAG, "snapshot " + Murl);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            messageBean.setUrl(Murl);
+                            Intent dlM_intent = new Intent(c, DownloadService.class);
+                            dlM_intent.putExtra("msg", messageBean);
+                            c.startService(dlM_intent);
                             break;
 
                         case Config.AUDIO_MSG:
@@ -254,41 +273,44 @@ public class HandleImMessage {
                             handler.sendMessage(ext_msg);
                             break;
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
     };
+
     private static MessageBean Msg2Bean(Message msg) {
         return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
     }
-   public void notifyMsg(Context c,Message message){
-           NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-           NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c)
-                   .setSmallIcon(c.getApplicationInfo().icon)
-                   .setWhen(System.currentTimeMillis()).setAutoCancel(true);
 
-           // String ticker = IMUtils.getMessageDigest(message, this);
-           // if(message.getType() == EMMessage.Type.TXT)
-           //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
-           //设置状态栏提示
-           mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
-           mBuilder.setContentTitle("new message");
-           mBuilder.setContentText("你有一条新消息！");
-           //必须设置pendingintent，否则在2.3的机器上会有bug
-           Intent intent = new Intent("android.intent.action.notify");
-           intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-           PendingIntent pendingIntent = PendingIntent.getActivity(c, 11, intent, PendingIntent.FLAG_ONE_SHOT);
-           mBuilder.setContentIntent(pendingIntent);
+    public void notifyMsg(Context c, Message message) {
+        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c)
+                .setSmallIcon(c.getApplicationInfo().icon)
+                .setWhen(System.currentTimeMillis()).setAutoCancel(true);
 
-           Notification notification = mBuilder.build();
-           notificationManager.notify(11, notification);
+        // String ticker = IMUtils.getMessageDigest(message, this);
+        // if(message.getType() == EMMessage.Type.TXT)
+        //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+        //设置状态栏提示
+        mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
+        mBuilder.setContentTitle("new message");
+        mBuilder.setContentText("你有一条新消息！");
+        //必须设置pendingintent，否则在2.3的机器上会有bug
+        Intent intent = new Intent("android.intent.action.notify");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 11, intent, PendingIntent.FLAG_ONE_SHOT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        Notification notification = mBuilder.build();
+        notificationManager.notify(11, notification);
         //   notificationManager.cancel(11);
-   }
+    }
+
     public boolean isAppRunningForeground(Context var0) {
-        ActivityManager var1 = (ActivityManager)var0.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager var1 = (ActivityManager) var0.getSystemService(Context.ACTIVITY_SERVICE);
         List var2 = var1.getRunningTasks(1);
-        return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo)var2.get(0)).baseActivity.getPackageName());
+        return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo) var2.get(0)).baseActivity.getPackageName());
     }
 }

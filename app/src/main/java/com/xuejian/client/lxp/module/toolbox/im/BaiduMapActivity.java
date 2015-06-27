@@ -83,7 +83,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
 			location();
 		} else {
 			double longtitude = intent.getDoubleExtra("longitude", 0);
-		 	showMap(longtitude,latitude,null);
+		 	showMap(latitude,longtitude,null);
 		}
 	}
 

@@ -320,7 +320,7 @@ public class IMClient {
             taskMap.put(friendId, new ArrayList<Long>());
             taskMap.get(friendId).add(message.getLocalId());
         }
-        UploadUtils.getInstance().upload(path, userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe);
+        UploadUtils.getInstance().upload(path, userId, friendId, Config.AUDIO_MSG, message.getLocalId(), listener, chatTpe,0,0,null);
     }
 
     public MessageBean createAudioMessage(String userId, String path, String friendId, String durtime, String chatTpe) {
@@ -378,25 +378,25 @@ public class IMClient {
     /**
      * 发送位置信息
      *
-     * @param message
-     * @param conversation
-     * @param listen
-     * @param chatType
      */
-    public void sendLocationMessage(String userId, String friendId, MessageBean message, String conversation, SendMsgListener listen, String chatType) {
-        if ("0".equals(conversation)) conversation = null;
-        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(userId), String.valueOf(friendId), Config.LOC_MSG, message.getMessage());
-        HttpUtils.sendMessage(conversation, String.valueOf(friendId), imessage, message.getLocalId(), listen, chatType);
+    public void sendLocationMessage(String userId, MessageBean message, String path, String friendId, UploadListener listener, String chatTpe,double lat,double lng,String desc) {
+        if (taskMap.containsKey(friendId)) {
+            if (taskMap.get(friendId).contains(message.getLocalId())) return;
+            else taskMap.get(friendId).add(message.getLocalId());
+        } else {
+            taskMap.put(friendId, new ArrayList<Long>());
+            taskMap.get(friendId).add(message.getLocalId());
+        }
+        UploadUtils.getInstance().upload(path, userId, friendId, Config.LOC_MSG, message.getLocalId(), listener, chatTpe,lat,lng,desc);
     }
 
-    public MessageBean CreateLocationMessage(String userID, String name, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress, String path) {
+    public MessageBean CreateLocationMessage(String userID, String conversation, String friendId, String chatType, double latitude, double longitude, String locationAddress, String path) {
         if ("0".equals(conversation)) conversation = null;
         JSONObject object = new JSONObject();
         try {
-            object.put("name", name);
-            object.put("lng", latitude);
-            object.put("lat", longitude);
-            object.put("desc", locationAddress);
+            object.put("lng", longitude);
+            object.put("lat", latitude);
+            object.put("address", locationAddress);
             object.put("path", path);
         } catch (JSONException e) {
             e.printStackTrace();
