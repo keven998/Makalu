@@ -278,8 +278,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     // 从sdk中提到了ui中，使用更简单不犯错的获取string的方法
                     // digest = EasyUtils.getAppResourceString(context,
                     // "location_recv");
+                    User user=UserDBManager.getInstance().getContactByUserId(conversationBean.getFriendId());
                     digest = getString(context, R.string.location_recv);
-                    //  digest = String.format(digest, message.);
+                    if (user!=null)digest = String.format(digest, user.getNickName());
+                    else digest = String.format(digest, conversationBean.getFriendId());
                     return digest;
                 } else {
                     // digest = EasyUtils.getAppResourceString(context,

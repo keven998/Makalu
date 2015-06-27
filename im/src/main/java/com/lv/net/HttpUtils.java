@@ -206,13 +206,14 @@ public class HttpUtils {
 
     public interface tokenGet {
         public void OnSuccess(String key, String token);
+        public void OnFailed();
     }
 
-    public static void getToken(final tokenGet listener) {
+    public static void getToken(final int msgType,final tokenGet listener) {
         exec.execute(() -> {
             JSONObject object = new JSONObject();
             try {
-                object.put("action", 1);
+                object.put("msgType", msgType);
                 Response response = HttpRequest("http://hedy.zephyre.me/upload/token-generator", object.toString());
                 if (response.isSuccessful()) {
                     String result = response.body().string();
@@ -223,6 +224,7 @@ public class HttpUtils {
                     listener.OnSuccess(key, token);
                 } else if (Config.isDebug) {
                     Log.i(Config.TAG, "TokenGet Error :" + response.code());
+                    listener.OnFailed();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -24,15 +24,13 @@ public class AudioFileFunc {
 
     public static String getAMRFilePath() {
         File sd = Environment.getExternalStorageDirectory();
-        String path = sd.getPath() + "/lvxingpai/audio/";
+        String path = Config.audioPath;
         File file = new File(path);
         if (!file.exists())
             file.mkdirs();
         String mAudioAMRPath = "";
         if (isSdcardExit()) {
-            String fileBasePath = Environment.getExternalStorageDirectory()
-                    .toString();
-            mAudioAMRPath = fileBasePath + "/lvxingpai/audio/" + TimeUtils.getTimestamp() + "_" + Config.AUDIO_AMR_FILENAME;
+            mAudioAMRPath = Config.audioPath+ TimeUtils.getTimestamp() + "_" + Config.AUDIO_AMR_FILENAME;
         }
         return mAudioAMRPath;
     }

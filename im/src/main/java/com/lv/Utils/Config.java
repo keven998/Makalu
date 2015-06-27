@@ -34,8 +34,10 @@ public class Config {
     public static final String ACTION_START="ACTION.IMSDK.STARTDOWNLOAD";
     public static final String DownLoadImage_path= Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/Download/image/";
     public static final String DownLoadAudio_path= Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/Download/audio/";
+    public static final String DownLoadMap_path= Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/Download/map/";
     public static final String imagepath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/image/" ;
     public static final String mapPath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/map/";
+    public static final String audioPath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/audio/";
     public static final String TAG="lvFM";
     public static final boolean isDebug=true;
 }

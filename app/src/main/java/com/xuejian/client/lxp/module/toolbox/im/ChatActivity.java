@@ -38,12 +38,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -527,7 +525,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     System.out.println("path  " + path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
-                        sendLocationMsg(latitude, longitude, "", locationAddress, path);
+                        sendLocationMsg(latitude, longitude,locationAddress,path);
                     } else {
                         ToastUtil.getInstance(getApplicationContext()).showToast("找不到你在哪");
                     }
@@ -809,14 +807,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 发送位置信息
      */
-    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress, String path) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), "haha", conversation, toChatUsername, chatType, latitude, longitude, locationAddress, path);
+    private void sendLocationMsg(double latitude, double longitude, String locationAddress,String path) {
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), conversation, toChatUsername, chatType, latitude, longitude, locationAddress,path);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         listView.setSelection(listView.getCount() - 1);
         setResult(RESULT_OK);
-
     }
 
     /**

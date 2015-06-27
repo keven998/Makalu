@@ -100,6 +100,13 @@ public class DownloadService extends Service {
                             file = new File(path, name+ ".jpeg");
                             newfilename=Config.DownLoadImage_path +user+"/"+name+ ".jpeg";
                             break;
+                        case 3:
+                            path = new File(Config.DownLoadMap_path +user);
+                            file = new File(path, name+ ".png");
+                            newfilename=Config.DownLoadMap_path +user+"/"+name+ ".png";
+                            break;
+                        default:
+                            break;
                     }
 
                     if (!path.exists()) {
@@ -130,6 +137,14 @@ public class DownloadService extends Service {
                         Bitmap bm = BitmapFactory.decodeStream(input);
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfile));
                         bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                        bos.flush();
+                        bos.close();
+                        bm.recycle();
+                    }
+                    if (msgType==3) {
+                        Bitmap bm = BitmapFactory.decodeStream(input);
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfile));
+                        bm.compress(Bitmap.CompressFormat.PNG, 80, bos);
                         bos.flush();
                         bos.close();
                         bm.recycle();
@@ -183,6 +198,15 @@ public class DownloadService extends Service {
                 String localPath=Config.DownLoadImage_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" +CryptUtils.getMD5String(full) + ".jpeg";
                 o.put("localPath",localPath);
                 o.put("thumbPath",path);
+                msg.setContents(o.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (msg.getMsgType()==3){
+            try {
+                JSONObject o=new JSONObject(msg.getContents());
+                o.put("path",path);
                 msg.setContents(o.toString());
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -195,6 +195,17 @@ public class MessageDB {
                     e.printStackTrace();
                 }
                 break;
+            case Config.LOC_MSG:
+                try {
+                    JSONObject object = new JSONObject(entity.getMessage());
+                    String snapShot = object.getString("snapshot");
+                    String path = Config.DownLoadMap_path + CryptUtils.getMD5String(IMClient.getInstance().getCurrentUserId()) + "/" + CryptUtils.getMD5String(snapShot) + ".png";
+                    object.put("path", path);
+                    entity.setMessage(object.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 break;
         }
