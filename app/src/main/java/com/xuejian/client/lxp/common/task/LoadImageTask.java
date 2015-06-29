@@ -16,11 +16,14 @@ package com.xuejian.client.lxp.common.task;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.lv.Utils.Config;
 import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.common.utils.ImageCache;
@@ -37,7 +40,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 	MessageBean message = null;
 	String chatType;
 	Activity activity;
-
+	private TextView tv = null;
 	@Override
 	protected Bitmap doInBackground(Object... args) {
 		thumbnailPath = (String) args[0];
@@ -49,8 +52,15 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 		activity = (Activity) args[5];
 		// }
 		message = (MessageBean) args[6];
+		tv=(TextView)args[7];
 		File file = new File(thumbnailPath);
-		if (file.exists()) {
+		if (message.getType()== Config.LOC_MSG){
+			if (file.exists()) {
+				return ImageUtils.decodeScaleImage(thumbnailPath, 320, 320);
+			}
+			else return null;
+		}
+		else if (file.exists()) {
 			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
 		} else {
 			return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
@@ -58,7 +68,13 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 	}
 
 	protected void onPostExecute(Bitmap image) {
-		if (image != null) {
+		if (message.getType()==Config.LOC_MSG){
+			if (image!=null){
+				tv.setBackgroundDrawable(new BitmapDrawable(image));
+				ImageCache.getInstance().put(thumbnailPath, image);
+			}
+		}
+		else if (image != null) {
 			iv.setImageBitmap(image);
 			ImageCache.getInstance().put(thumbnailPath, image);
 			iv.setClickable(true);
@@ -93,7 +109,8 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 					}
 				}
 			});
-		} else {
+		}
+		else {
 			if (message.getStatus() == 2) {
 //				if (CommonUtils.isNetWorkConnected(activity)) {
 //					new Thread(new Runnable() {
