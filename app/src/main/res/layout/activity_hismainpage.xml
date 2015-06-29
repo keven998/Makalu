@@ -88,7 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_above="@id/title1"
-                        android:background="@color/color_line" />
+                        android:background="@drawable/user_profile_line" />
 
                     <TextView
                         android:id="@+id/tv_location"
@@ -124,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_above="@id/title2"
-                        android:background="@color/color_line" />
+                        android:background="@drawable/user_profile_line" />
 
                     <TextView
                         android:id="@+id/tv_age"
@@ -155,6 +155,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
                 android:layout_height="@dimen/user_profile_entry_height"
                 android:orientation="horizontal">
 
@@ -280,11 +281,19 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="48dp"
+        android:layout_gravity="bottom"
+        android:background="@color/color_line"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/base_color_white">
 
         <TextView
             android:id="@+id/tv_send_message"

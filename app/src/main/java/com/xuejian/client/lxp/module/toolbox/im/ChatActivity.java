@@ -368,8 +368,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
-        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 0);
-        lt.setStagger(LayoutTransition.APPEARING, 35);
+        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
+        lt.setStagger(LayoutTransition.APPEARING, 20);
         lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
         lt.setDuration(LayoutTransition.DISAPPEARING, 0);
         lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
