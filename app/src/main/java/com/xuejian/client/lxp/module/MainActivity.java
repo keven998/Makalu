@@ -57,13 +57,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class};
 
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user,
-    };
+    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user};
 //    private String[] tabTitle = {"Talk", "旅游", "我"};
 
     private TextView unreadMsg;
 
-    private Long NEWFRIEND = 2l;
+//    private Long NEWFRIEND = 2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
 //    private MyGroupChangeListener groupChangeListener;
