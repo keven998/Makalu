@@ -515,29 +515,13 @@ public class MessageAdapter extends BaseAdapter {
             statusView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     // 显示重发消息的自定义alertdialog
-                    Intent intent = new Intent(activity, IMAlertDialog.class);
-                    intent.putExtra("msg", activity.getString(R.string.confirm_resend));
-                    intent.putExtra("title", activity.getString(R.string.resend));
-                    intent.putExtra("cancel", true);
-                    intent.putExtra("position", position);
                     switch (message.getType()) {
                         case TEXT_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
-                            break;
                         case VOICE_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VOICE);
-                            break;
                         case IMAGE_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_PICTURE);
-                            break;
                         case LOC_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_LOCATION);
-                            break;
                         case VIDEO_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
-                            break;
                         //添加扩展类型的跳转
                         case PLAN_MSG:
                         case CITY_MSG:
@@ -546,22 +530,9 @@ public class MessageAdapter extends BaseAdapter {
                         case FOOD_MSG:
                         case SHOP_MSG:
                         case HOTEL_MSG:
-                            activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_EXT);
+                            ((ChatActivity)activity).resendMessage(position);
                             break;
                     }
-//                    if (message.getType() == Type.TXT)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
-//                    else if (message.getType() == Type.VOICE)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VOICE);
-//                    else if (message.getType() == Type.IMAGE)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_PICTURE);
-//                    else if (message.getType() == Type.LOCATION)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_LOCATION);
-//                    else if (message.getType() == Type.FILE)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_FILE);
-//                    else if (message.getType() == Type.VIDEO)
-//                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
-//
                 }
             });
 
@@ -609,10 +580,8 @@ public class MessageAdapter extends BaseAdapter {
      * @param position
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
-        //TextMessageBody txtBody = (TextMessageBody) message.getBody();
         Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
-        // holder.tv.setText(span, BufferType.SPANNABLE);
         holder.tv.setText(SmileUtils.getSmiledText(context, message.getMessage()));
         // 设置长按事件监听
         holder.tv.setOnLongClickListener(new OnLongClickListener() {

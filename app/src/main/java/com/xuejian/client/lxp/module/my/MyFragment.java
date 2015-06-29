@@ -62,8 +62,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @ViewInject(R.id.tv_subtitle)
     private TextView idTv;
 
-    @ViewInject(R.id.tv_friends_count)
-    private TextView tvFriendsCount;
+    @ViewInject(R.id.tv_pictures_count)
+    private TextView tvPictureCount;
     @ViewInject(R.id.tv_plans_count)
     private TextView tvPlansCount;
     @ViewInject(R.id.tv_tracks_count)
@@ -81,7 +81,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.tv_feedback).setOnClickListener(this);
         rootView.findViewById(R.id.tv_edit_profile).setOnClickListener(this);
         rootView.findViewById(R.id.iv_more_header_frame_gender1).setOnClickListener(this);
-        rootView.findViewById(R.id.fl_friends_entry).setOnClickListener(this);
+        rootView.findViewById(R.id.rl_picture_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         return rootView;
@@ -94,8 +94,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
             nickNameTv.setText("旅行派");
             idTv.setText("未登录");
-            tvFriendsCount.setText("0");
-            tvPlansCount.setText("0");
+            tvPictureCount.setText("0图");
+            tvPlansCount.setText("0条");
             tvTracksCount.setText("0");
             tvLevel.setText("Lv0");
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
@@ -132,7 +132,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
-            tvFriendsCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "人");
+            tvPictureCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "图");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
             tvLevel.setText("LV" + level);
@@ -219,9 +219,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 }
                 break;
 
-            case R.id.fl_friends_entry:
-                Intent intent = new Intent(getActivity(), ContactActivity.class);
-                startActivity(intent);
+            case R.id.rl_picture_entry:
+
                 break;
 
             case R.id.fl_plans_entry:
