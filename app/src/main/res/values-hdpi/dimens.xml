@@ -22,7 +22,7 @@
     <dimen name="tools_search_bar_height">140dp</dimen>
     <dimen name="tools_tool_card_height">140dp</dimen>
     <dimen name="option_cell_height">44dp</dimen>
-    <dimen name="edit_page_bg_size">110dp</dimen>
+    <dimen name="edit_page_bg_size">116dp</dimen>
     <dimen name="user_profile_entry_height">80dp</dimen>
 
 </resources>

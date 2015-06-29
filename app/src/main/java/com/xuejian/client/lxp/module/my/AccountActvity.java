@@ -97,6 +97,13 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView tv_foot_print;
     @ViewInject(R.id.tv_photo)
     private TextView tv_photo;
+    @ViewInject(R.id.tv_bind_phone)
+    private TextView tv_bind_phone;
+    @ViewInject(R.id.tv_modify_pwd)
+    private TextView tv_modify_pwd;
+    @ViewInject(R.id.btn_logout)
+    private Button btn_logout;
+
 
     private TextView phoneTv;
     private File tempImage;
@@ -147,7 +154,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_photo).setOnClickListener(this);
         findViewById(R.id.ll_plan).setOnClickListener(this);
         findViewById(R.id.ll_foot_print).setOnClickListener(this);
-
+        findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
+        findViewById(R.id.ll_bind_phone).setOnClickListener(this);
+        findViewById(R.id.btn_logout).setOnClickListener(this);
         // logoutBtn.setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
@@ -272,7 +281,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
                         getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
                 .build());
-        avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
         if (user.getGender().equalsIgnoreCase("M")) {
             iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
             tv_gender.setText("帅锅");
@@ -443,18 +451,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 overridePendingTransition(R.anim.fade_in, 0);
                 break;
 
+            case R.id.ll_modify_pwd:
+                MobclickAgent.onEvent(mContext, "event_update_password");
+                Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
+                startActivity(modifyPwdIntent);
+                break;
 
-//            case R.id.ll_modify_pwd:
-//                MobclickAgent.onEvent(mContext, "event_update_password");
-//                Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
-//                startActivity(modifyPwdIntent);
-//                break;
-//
-//            case R.id.ll_bind_phone:
-//                MobclickAgent.onEvent(mContext, "event_update_phone");
-//                Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
-//                startActivityForResult(bindPhoneIntent, BINDPHONE);
-//                break;
+            case R.id.ll_bind_phone:
+                MobclickAgent.onEvent(mContext, "event_update_phone");
+                Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
+                startActivityForResult(bindPhoneIntent, BINDPHONE);
+                break;
 
             case R.id.btn_logout:
                 MobclickAgent.onEvent(mContext, "event_logout");
@@ -467,6 +474,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void refreshUserInfo() {
         User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
+            if (user.getGender().equalsIgnoreCase("M")) {
+                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+            } else if (user.getGender().equalsIgnoreCase("F")) {
+                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+            } else {
+                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+            }
+
             UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {

@@ -3,12 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       android:background="@color/base_color_white"
-        android:orientation="vertical">
-
         <com.xuejian.client.lxp.common.widget.TitleHeaderBar
             android:id="@+id/ly_header_bar_title_wrap"
             android:layout_width="match_parent"
@@ -16,7 +10,8 @@
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -34,7 +29,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/edit_page_bg_size"
                         android:scaleType="centerCrop"
-                        android:background="@drawable/ic_home_header_unlogin"
                         />
 
                     <ImageView
@@ -103,8 +97,7 @@
                         android:text="性别"
                         android:textColor="@color/third_font_color"
                         android:textSize="14sp"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="9dp"/>
+                        />
 
                     <TextView
                         android:id="@+id/tv_gender"
@@ -143,8 +136,7 @@
                         android:text="年龄"
                         android:textColor="@color/third_font_color"
                         android:textSize="14sp"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="9dp"/>
+                        />
 
                     <TextView
                         android:id="@+id/tv_age"
@@ -172,7 +164,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     android:background="@drawable/option_cell_selector"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -183,8 +176,7 @@
                         android:text="星座"
                         android:textColor="@color/third_font_color"
                         android:textSize="14sp"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="9dp"/>
+                        />
 
                     <TextView
                         android:id="@+id/tv_zodiac"
@@ -353,22 +345,86 @@
                         android:textSize="15sp"/>
 
                 </LinearLayout>
-                <Button
-                    android:id="@+id/btn_logout"
+                <LinearLayout
+                    android:id="@+id/ll_bind_phone"
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/option_cell_selector"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="11dp"
+                        android:drawablePadding="15dp"
+                        android:gravity="center_vertical"
+                        android:text="安全绑定"
+                        android:textColor="@color/third_font_color"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_bind_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/icon_arrow_right"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="11dp"
+                        android:textColor="@color/base_text_color_title"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/base_color_line_color"
+                    android:layout_marginLeft="11dp"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_modify_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:background="@drawable/option_cell_selector"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="11dp"
+                        android:drawablePadding="15dp"
+                        android:gravity="center_vertical"
+                        android:text="修改密码"
+                        android:textColor="@color/third_font_color"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_modify_pwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/icon_arrow_right"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="11dp"
+                        android:textColor="@color/base_text_color_title"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+                <Button android:layout_width="match_parent"
+                    android:layout_height="41dp"
                     android:background="@color/base_color_white"
-                    android:gravity="center"
+                    android:id="@+id/btn_logout"
+                    android:layout_marginTop="10dp"
                     android:text="退出登录"
-                    android:textColor="@color/red_text_color"
-                    android:textSize="15sp" />
-
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:textColor="@color/red_text_color"/>
             </LinearLayout>
-
         </ScrollView>
 
-    </LinearLayout>
 
 
 </RelativeLayout>

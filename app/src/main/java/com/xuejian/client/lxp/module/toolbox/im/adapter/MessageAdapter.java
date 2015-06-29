@@ -1386,7 +1386,6 @@ public class MessageAdapter extends BaseAdapter {
         } else new LoadImageTask().execute(path, null, remote, chatType, null, activity, message,locationView);
 
 
-    //    if (bitmap!=null)locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
