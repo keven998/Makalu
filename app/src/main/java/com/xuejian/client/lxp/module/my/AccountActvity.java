@@ -1,11 +1,15 @@
 package com.xuejian.client.lxp.module.my;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -13,8 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,20 +52,19 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
+import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -73,43 +74,35 @@ import java.util.Map;
 public class AccountActvity extends PeachBaseActivity implements View.OnClickListener {
 
 
+    @ViewInject(R.id.iv_more_header_frame_gender)
+    private ImageView iv_header_frame_gender;
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
     @ViewInject(R.id.iv_gender)
     private ImageView genderIv;
 
-    @ViewInject(R.id.tv_gender)
-    private TextView genderTv;
-    @ViewInject(R.id.tv_resident)
-    private TextView residentTv;
-    @ViewInject(R.id.tv_brithday)
-    private TextView brithdayTv;
-    /*@ViewInject(R.id.tv_profession)
-    private TextView professinoTv;*/
-    @ViewInject(R.id.all_pics_sv)
-    private HorizontalScrollView all_pics;
-    @ViewInject(R.id.my_destination)
-    private FlowLayout my_destination;
-
     @ViewInject(R.id.tv_nickname)
-    private TextView nickNameTv;
-    @ViewInject(R.id.tv_status)
-    private TextView status;
-    @ViewInject(R.id.tv_id)
-    private TextView idTv;
-    @ViewInject(R.id.tv_sign)
-    private TextView signTv;
-    @ViewInject(R.id.ll_modify_pwd)
-    private TextView modifPwdLl;
-    @ViewInject(R.id.btn_logout)
-    private Button logoutBtn;
-    @ViewInject(R.id.tv_bind_phone)
-    private TextView bindPhoneTv;
-    @ViewInject(R.id.tv_phone)
+    private TextView tv_nickname;
+    @ViewInject(R.id.tv_gender)
+    private TextView tv_gender;
+    @ViewInject(R.id.tv_age)
+    private TextView tv_age;
+    @ViewInject(R.id.tv_zodiac)
+    private TextView tv_zodiac;
+    @ViewInject(R.id.tv_resident)
+    private TextView tv_resident;
+    @ViewInject(R.id.tv_plan)
+    private TextView tv_plan;
+    @ViewInject(R.id.tv_foot_print)
+    private TextView tv_foot_print;
+    @ViewInject(R.id.tv_photo)
+    private TextView tv_photo;
+
     private TextView phoneTv;
     private File tempImage;
     private User user;
     DisplayImageOptions options;
+
     private TextView tvGender;
 
     private int RESIDENT = 1;
@@ -147,22 +140,18 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         //tvGender = (TextView) findViewById(R.id.tv_gender);
         //findViewById(R.id.ll_avatar).setOnClickListener(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
-        findViewById(R.id.ll_status).setOnClickListener(this);
-
-        findViewById(R.id.ll_sign).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
-        findViewById(R.id.ll_birthday).setOnClickListener(this);
+        findViewById(R.id.ll_age).setOnClickListener(this);
         findViewById(R.id.ll_resident).setOnClickListener(this);
-        //findViewById(R.id.ll_profession).setOnClickListener(this);
-
-        findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
-        findViewById(R.id.ll_bind_phone).setOnClickListener(this);
+        findViewById(R.id.ll_zodiac).setOnClickListener(this);
+        findViewById(R.id.ll_photo).setOnClickListener(this);
+        findViewById(R.id.ll_plan).setOnClickListener(this);
         findViewById(R.id.ll_foot_print).setOnClickListener(this);
 
-        logoutBtn.setOnClickListener(this);
+        // logoutBtn.setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("我");
+        titleBar.getTitleTextView().setText("编辑资料");
         titleBar.enableBackKey(true);
     }
 
@@ -214,17 +203,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void initFootPrint(final ArrayList<LocBean> prints) {
-        my_destination.removeAllViews();
+      //  my_destination.removeAllViews();
         for (int j = 0; j < prints.size(); j++) {
             View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
             cityNameTv.setText(prints.get(j).zhName);
-            my_destination.addView(contentView);
+            //my_destination.addView(contentView);
         }
     }
 
     public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
-        all_pics.removeAllViews();
+      //  all_pics.removeAllViews();
         llPics = new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llPics.removeAllViews();
@@ -254,7 +243,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
             llPics.addView(view);
         }
-        all_pics.addView(llPics);
+        //all_pics.addView(llPics);
     }
 
 
@@ -273,29 +262,92 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //        MobclickAgent.onPageEnd("page_personal_profile");
     }
 
-    private void bindView(User user) {
-        nickNameTv.setText(user.getNickName());
-        genderTv.setText(user.getGenderDesc());
-        options = new DisplayImageOptions.Builder()
+    private void bindView(final User user) {
+        tv_nickname.setText(user.getNickName());
+        ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .cacheOnDisc(true)
-                        // 设置下载的图片是否缓存在SD卡中
-                .displayer(
-                        new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                                0))) // 设置成圆角图片
-                .build();
-       /* ImageLoader.getInstance().displayImage(user.avatarSmall, avatarIv,
-                options);*/
-       /* idTv.setText(user.userId + "");*/
-        signTv.setText(user.getSignature());
-        phoneTv.setText(user.getTel());
-        residentTv.setText(user.getResidence());
-        brithdayTv.setText(user.getBirthday());
-        status.setText(user.getTravelStatus());
-        getUserPics(user.getUserId());
-        initFlDestion(user.getTracks());
+                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
+                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .build());
+        avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
+        if (user.getGender().equalsIgnoreCase("M")) {
+            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+            tv_gender.setText("帅锅");
+        } else if (user.getGender().equalsIgnoreCase("F")) {
+            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+            tv_gender.setText("镁铝");
+        } else {
+            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+        }
+
+//        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
+//        constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+        if (TextUtils.isEmpty(user.getResidence())) {
+            tv_resident.setText("未设置");
+        } else {
+            tv_resident.setText(user.getResidence());
+        }
+        if (user.getBirthday() == null) {
+            tv_age.setText("未设置");
+        } else {
+            tv_age.setText(String.valueOf(getAge(user.getBirthday())));
+        }
+
+        SpannableString planStr = new SpannableString("");
+        planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        planStr.setSpan(new AbsoluteSizeSpan(14, true), 0, planStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder spb = new SpannableStringBuilder();
+        spb.append(String.format("%d条", user.getGuideCnt())).append(planStr);
+        tv_plan.setText(spb);
+        tv_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountActvity.this, StrategyListActivity.class);
+                intent.putExtra("userId", String.valueOf(user.getUserId()));
+                intent.putExtra("user_name", user.getNickName());
+                startActivity(intent);
+            }
+        });
+
+        SpannableString trackStr = new SpannableString("");
+        trackStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, trackStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        trackStr.setSpan(new AbsoluteSizeSpan(14, true), 0, trackStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        int countries = 0;
+        int cityCount = 0;
+        final ArrayList<LocBean> trackCitys = new ArrayList<LocBean>();
+        try {
+            JSONObject jsonObject = new JSONObject(user.getTracks().toString());
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                countries++;
+                String key = (String) iterator.next();
+                int size = user.getTracks().get(key).size();
+                cityCount += size;
+                for (int i = 0; i < size; i++) {
+                    trackCitys.add(user.getTracks().get(key).get(i));
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ssb.append(String.format("%d国%d城", countries, cityCount)).append(trackStr);
+        tv_foot_print.setText(ssb);
+        tv_foot_print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountActvity.this, StrategyMapActivity.class);
+                intent.putExtra("isExpertFootPrint", true);
+                intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
+                startActivity(intent);
+            }
+        });
+    tv_photo.setText("99张");
+
     }
 
     private void initData() {
@@ -321,11 +373,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 startActivityForResult(nickNameIntent, NICKNAME);
                 break;
 
-            case R.id.ll_sign:
-                MobclickAgent.onEvent(mContext, "event_update_memo");
-                Intent signIntent = new Intent(mContext, ModifySignActivity.class);
-                startActivityForResult(signIntent, SIGNATURE);
-                break;
+//            case R.id.ll_sign:
+//                MobclickAgent.onEvent(mContext, "event_update_memo");
+//                Intent signIntent = new Intent(mContext, ModifySignActivity.class);
+//                startActivityForResult(signIntent, SIGNATURE);
+//                break;
 
             case R.id.ll_gender:
                 MobclickAgent.onEvent(mContext, "event_update_gender");
@@ -336,11 +388,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
 
-            case R.id.ll_status:
-                Intent statusIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
-                statusIntent.putExtra("type", "status");
-                startActivityForResult(statusIntent, STATUS);
-                break;
+//            case R.id.ll_status:
+//                Intent statusIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
+//                statusIntent.putExtra("type", "status");
+//                startActivityForResult(statusIntent, STATUS);
+//                break;
 
             /*case R.id.ll_avatar:
                 MobclickAgent.onEvent(mContext,"event_update_avatar");
@@ -354,35 +406,35 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 // startActivity(intent);
                 break;
 
-            case R.id.ll_birthday:
-                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (!birthTimeFlag) {
-                            monthOfYear++;
-                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                            try {
-                                Date date = format.parse(dateString);
-                                if (date.after(new Date())) {
-                                    warn("无效的生日设置");
-                                } else {
-                                    editBirthdayToInterface(dateString);
-                                }
-                            } catch (ParseException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                            birthTimeFlag = true;
-                        } else {
-                            birthTimeFlag = false;
-                        }
-                    }
-                }, 1990, 0, 0);
-                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-                dialog.setCancelable(true);
-                dialog.show();
-                break;
+//            case R.id.ll_birthday:
+//                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        if (!birthTimeFlag) {
+//                            monthOfYear++;
+//                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+//                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                            try {
+//                                Date date = format.parse(dateString);
+//                                if (date.after(new Date())) {
+//                                    warn("无效的生日设置");
+//                                } else {
+//                                    editBirthdayToInterface(dateString);
+//                                }
+//                            } catch (ParseException e) {
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                            birthTimeFlag = true;
+//                        } else {
+//                            birthTimeFlag = false;
+//                        }
+//                    }
+//                }, 1990, 0, 0);
+//                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+//                dialog.setCancelable(true);
+//                dialog.show();
+//                break;
 
 
             case R.id.ll_resident:
@@ -392,17 +444,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
 
-            case R.id.ll_modify_pwd:
-                MobclickAgent.onEvent(mContext, "event_update_password");
-                Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
-                startActivity(modifyPwdIntent);
-                break;
-
-            case R.id.ll_bind_phone:
-                MobclickAgent.onEvent(mContext, "event_update_phone");
-                Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
-                startActivityForResult(bindPhoneIntent, BINDPHONE);
-                break;
+//            case R.id.ll_modify_pwd:
+//                MobclickAgent.onEvent(mContext, "event_update_password");
+//                Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
+//                startActivity(modifyPwdIntent);
+//                break;
+//
+//            case R.id.ll_bind_phone:
+//                MobclickAgent.onEvent(mContext, "event_update_phone");
+//                Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
+//                startActivityForResult(bindPhoneIntent, BINDPHONE);
+//                break;
 
             case R.id.btn_logout:
                 MobclickAgent.onEvent(mContext, "event_logout");
@@ -636,7 +688,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    genderTv.setText(user.getGenderDesc());
+                    //genderTv.setText(user.getGenderDesc());
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -884,11 +936,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             all_foot_print_list = data.getParcelableArrayListExtra("footprint");
             initFootPrint(all_foot_print_list);
         } else if (requestCode == SIGNATURE) {
-            signTv.setText(data.getExtras().getString("signature"));
+            //signTv.setText(data.getExtras().getString("signature"));
         } else if (requestCode == NICKNAME) {
-            nickNameTv.setText(data.getExtras().getString("nickname"));
+           // nickNameTv.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {
-            bindPhoneTv.setText(data.getExtras().getString("bindphone"));
+          //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
     }
 
@@ -908,7 +960,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setTravelStatus(sstatus);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    status.setText(sstatus);
+                    //status.setText(sstatus);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -942,7 +994,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    residentTv.setText(residence);
+                    //residentTv.setText(residence);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -975,7 +1027,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    brithdayTv.setText(birth);
+                    //brithdayTv.setText(birth);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -998,4 +1050,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.finish();
 //        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
+    public int getAge(String birth) {
+        int age = 0;
+        String birthType = birth.substring(0, 4);
+        int birthYear = Integer.parseInt(birthType);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String date = sdf.format(new java.util.Date());
+        age = Integer.parseInt(date) - birthYear;
+        return age;
+    }
+
 }

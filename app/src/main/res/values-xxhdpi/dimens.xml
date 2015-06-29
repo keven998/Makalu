@@ -28,7 +28,7 @@
     <dimen name="tools_search_bar_height">248dp</dimen>
     <dimen name="tools_tool_card_height">248dp</dimen>
     <dimen name="option_cell_height">102dp</dimen>
-
+    <dimen name="edit_page_bg_size">206dp</dimen>
     <dimen name="user_profile_entry_height">150dp</dimen>
 
     <dimen name="city_picture_collection_height">212dp</dimen>

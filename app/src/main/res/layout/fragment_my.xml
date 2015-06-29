@@ -24,7 +24,8 @@
                     android:id="@+id/iv_more_header_frame_gender1"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_more_header_frame_height"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    />
 
                 <ImageView
                     android:id="@+id/iv_avatar"
