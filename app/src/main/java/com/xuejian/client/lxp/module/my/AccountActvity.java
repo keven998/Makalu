@@ -157,6 +157,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
         findViewById(R.id.btn_logout).setOnClickListener(this);
+        findViewById(R.id.iv_avatar).setOnClickListener(this);
         // logoutBtn.setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
@@ -402,10 +403,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                startActivityForResult(statusIntent, STATUS);
 //                break;
 
-            /*case R.id.ll_avatar:
+            case R.id.iv_avatar:
                 MobclickAgent.onEvent(mContext,"event_update_avatar");
                 showSelectPicDialog();
-                break;*/
+                break;
 
             case R.id.ll_foot_print:
                 Intent intent = new Intent(AccountActvity.this, MyFootPrinterActivity.class);
@@ -703,7 +704,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    //genderTv.setText(user.getGenderDesc());
+                    if (gender.equalsIgnoreCase("M")) {
+                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+                        tv_gender.setText("帅锅");
+                    } else if (gender.equalsIgnoreCase("F")) {
+                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+                        tv_gender.setText("镁铝");
+                    } else {
+                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                    }
+
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
@@ -953,7 +963,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (requestCode == SIGNATURE) {
             //signTv.setText(data.getExtras().getString("signature"));
         } else if (requestCode == NICKNAME) {
-           // nickNameTv.setText(data.getExtras().getString("nickname"));
+             tv_nickname.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {
           //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
