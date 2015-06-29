@@ -1408,9 +1408,16 @@ public class MessageAdapter extends BaseAdapter {
         double lng = getDoubleAttr(message, "lng");
         String desc = getStringAttr(message, "address");
         String path=  getStringAttr(message,"path");
-        Bitmap bitmap=ImageUtils.decodeScaleImage(path, 320, 320);
+        String remote=getStringAttr(message,"snapshot");
         locationView.setText(desc);
-        if (bitmap!=null)locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
+
+        Bitmap bitmap = ImageCache.getInstance().get(path);
+        if (bitmap!=null){
+            locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
+        } else new LoadImageTask().execute(path, null, remote, chatType, null, activity, message,locationView);
+
+
+    //    if (bitmap!=null)locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
         locationView.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -1682,7 +1689,7 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message,null);
             return true;
         }
 
