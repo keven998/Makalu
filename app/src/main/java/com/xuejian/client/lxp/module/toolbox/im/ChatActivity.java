@@ -160,7 +160,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String toChatUsername;
     private MessageAdapter adapter;
     private File cameraFile;
-    static int resendPos;
 
 
     private ImageView iv_emoticons_normal;
@@ -469,10 +468,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 case RESULT_CODE_COPY: // 复制消息
                     MessageBean copyMsg = ((MessageBean) adapter.getItem(data.getIntExtra("position", -1)));
                     if (copyMsg.getType() == Config.IMAGE_MSG) {
+
                     } else {
                         clipboard.setText(copyMsg.getMessage());
                     }
                     break;
+
                 case RESULT_CODE_DELETE: // 删除消息
                     int pos = data.getIntExtra("position", -1);
                     IMClient.getInstance().deleteSingleMessage(toChatUsername, messageList.get(pos).getLocalId());
@@ -522,10 +523,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     double longitude = data.getDoubleExtra("longitude", 0);
                     String locationAddress = data.getStringExtra("address");
                     String path = data.getStringExtra("path");
-                    System.out.println("path  " + path);
                     if (locationAddress != null && !locationAddress.equals("")) {
                         more(mExtraPanel);
-                        sendLocationMsg(latitude, longitude,locationAddress,path);
+                        sendLocationMsg(latitude, longitude, locationAddress, path);
                     } else {
                         ToastUtil.getInstance(getApplicationContext()).showToast("找不到你在哪");
                     }
@@ -536,7 +536,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 case REQUEST_CODE_PICTURE:
                 case REQUEST_CODE_LOCATION:
                 case REQUEST_CODE_EXT:
-                    resendMessage();
+//                    resendMessage();
                     break;
                 case REQUEST_CODE_COPY_AND_PASTE:
                     // 粘贴
@@ -546,7 +546,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             // 把图片前缀去掉，还原成正常的path
                             sendPicture(pasteText.replace(COPY_IMAGE, ""));
                         }
-
                     }
                     break;
 
@@ -769,8 +768,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         adapter.refresh();
         listView.setSelection(listView.getCount() - 1);
         setResult(RESULT_OK);
-
-
     }
 
     /**
@@ -785,7 +782,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             int columnIndex = cursor.getColumnIndex("_data");
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            cursor = null;
 
             if (picturePath == null || picturePath.equals("null")) {
                 ToastUtil.getInstance(getApplicationContext()).showToast("找不到图片");
@@ -797,7 +793,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             if (!file.exists()) {
                 ToastUtil.getInstance(ChatActivity.this).showToast("找不到图片");
                 return;
-
             }
             sendPicture(file.getAbsolutePath());
         }
@@ -807,8 +802,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 发送位置信息
      */
-    private void sendLocationMsg(double latitude, double longitude, String locationAddress,String path) {
-        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), conversation, toChatUsername, chatType, latitude, longitude, locationAddress,path);
+    private void sendLocationMsg(double latitude, double longitude, String locationAddress, String path) {
+        MessageBean m = IMClient.getInstance().CreateLocationMessage(AccountManager.getCurrentUserId(), conversation, toChatUsername, chatType, latitude, longitude, locationAddress, path);
         messageList.add(m);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -874,11 +869,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 重发消息
      */
-    private void resendMessage() {
-        IMClient.getInstance().changeMessageStatus(toChatUsername, messageList.get(resendPos).getLocalId(), 1);
-        messageList.get(resendPos).setStatus(1);
+    public void resendMessage(int msgPostion) {
+        IMClient.getInstance().changeMessageStatus(toChatUsername, messageList.get(msgPostion).getLocalId(), 1);
+        messageList.get(msgPostion).setStatus(1);
         adapter.refresh();
-        listView.setSelection(resendPos);
+//        listView.setSelection(msgPostion);
     }
 
     /**
@@ -1254,7 +1249,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onStop() {
         super.onStop();
-        System.out.println("chatActivity stop");
     }
 
     /**

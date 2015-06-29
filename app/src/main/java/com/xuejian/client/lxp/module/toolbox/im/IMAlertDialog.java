@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,65 +27,64 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 
 public class IMAlertDialog extends ChatBaseActivity {
-	private TextView mTextView;
-	private Button mButton;
-	private int position;
-	private ImageView imageView;
-	private EditText editText;
-	private boolean isEditextShow;
-	private String voicePath;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.alert_dialog);
+    private TextView mTextView;
+    private Button mButton;
+    private int position;
+    private ImageView imageView;
+    private EditText editText;
+    private boolean isEditextShow;
+    private String voicePath;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.alert_dialog);
 //		mTextView = (TextView) findViewById(R.id.title);
 //		mButton = (Button) findViewById(R.id.btn_cancel);
 //		imageView = (ImageView) findViewById(R.id.image);
 //		editText = (EditText) findViewById(R.id.edit);
-		//提示内容
-		String msg = getIntent().getStringExtra("msg");
-		//提示标题
-		String title = getIntent().getStringExtra("title");
+        //提示内容
+        String msg = getIntent().getStringExtra("msg");
+        //提示标题
+        String title = getIntent().getStringExtra("title");
 //		voicePath = getIntent().getStringExtra("voicePath");
-		position = getIntent().getIntExtra("position", -1);
-		//是否显示取消标题
-		boolean isCanceTitle=getIntent().getBooleanExtra("titleIsCancel", false);
-		//是否显示取消按钮
-		boolean isCanceShow = getIntent().getBooleanExtra("cancel", false);
-		//是否显示文本编辑框
-		isEditextShow = getIntent().getBooleanExtra("editTextShow",false);
-		//转发复制的图片的path
-		String path = getIntent().getStringExtra("forwardImage");
+        position = getIntent().getIntExtra("position", -1);
+        //是否显示取消标题
+        boolean isCanceTitle = getIntent().getBooleanExtra("titleIsCancel", false);
+        //是否显示取消按钮
+        boolean isCanceShow = getIntent().getBooleanExtra("cancel", false);
+        //是否显示文本编辑框
+        isEditextShow = getIntent().getBooleanExtra("editTextShow", false);
+        //转发复制的图片的path
+        String path = getIntent().getStringExtra("forwardImage");
 
 //        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
         final PeachMessageDialog dialog = new PeachMessageDialog(this);
 //        builder.title(title)
-		if(msg != null)
+        if (msg != null)
             dialog.setMessage(msg);
 //		    ((TextView)findViewById(R.id.alert_message)).setText(msg);
-		if(title != null)
+        if (title != null)
             dialog.setTitle(title);
 //			mTextView.setText(title);
-		if(isCanceTitle){
+        if (isCanceTitle) {
 //			mTextView.setVisibility(View.GONE);
-		}
-		if(isCanceShow){
-            dialog.setNegativeButton("取消",new View.OnClickListener() {
+        }
+        if (isCanceShow) {
+            dialog.setNegativeButton("取消", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cancel();
                 }
             });
         }
-        dialog.setPositiveButton("确定",new View.OnClickListener() {
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ok();
             }
         });
         dialog.show();
-
 
 
 //			mButton.setVisibility(View.VISIBLE);
@@ -108,31 +107,31 @@ public class IMAlertDialog extends ChatBaseActivity {
 //			editText.setVisibility(View.VISIBLE);
 //
 //		}
-	}
-	
-	public void ok(){
-		setResult(RESULT_OK,new Intent().putExtra("position", position).
-				putExtra("edittext","")
-				/*.putExtra("voicePath", voicePath)*/);
-		if(position != -1)
-			ChatActivity.resendPos = position;
-		finish();
-		
-	}
-	
-	public void cancel(){
-		finish();
-	}
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event){
-		finish();
-		return true;
-	}
+    public void ok() {
+        setResult(RESULT_OK, new Intent().putExtra("position", position).
+                putExtra("edittext", ""));
+//        if (position != -1) {
+//            ChatActivity.resendPos = position;
+//        }
+        finish();
+
+    }
+
+    public void cancel() {
+        finish();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        finish();
+        return true;
+    }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0,R.anim.fade_out);
+        overridePendingTransition(0, R.anim.fade_out);
     }
 }
