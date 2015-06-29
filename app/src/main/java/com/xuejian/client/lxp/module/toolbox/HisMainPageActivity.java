@@ -61,6 +61,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     User me;
     private User imUser;
     private TextView tv_send_action;
+    private boolean isMyFriend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,10 +102,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
 
         tv_send_action = (TextView) findViewById(R.id.tv_send_action);
+        isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
+        if (isMyFriend) {
+            tv_send_action.setText("备注");
+        }
         tv_send_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToFriend();
+                if (isMyFriend) {
+                    editMemo("123");
+                } else addToFriend();
             }
         });
 
@@ -120,6 +128,20 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //                error.printStackTrace();
 //            }
 //        });
+    }
+
+    private void editMemo(String memo) {
+        UserApi.editMemo(String.valueOf(userId), memo, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                ToastUtil.getInstance(HisMainPageActivity.this).showToast("修改成功");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+        });
     }
 
     private void addToFriend() {
@@ -413,6 +435,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void doFailure(Exception error, String msg, String method) {
             }
