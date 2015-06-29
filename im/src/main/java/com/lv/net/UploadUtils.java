@@ -30,6 +30,16 @@ public class UploadUtils {
     private UploadUtils() {
     }
     private static UploadUtils UploadUtils = null;
+    static {
+//        Configuration config = new Configuration();
+//
+//
+//                .chunkSize(256 * 1024)  //分片上传时，每片的大小。 默认 256K
+//                .putThreshhold(512 * 1024)  // 启用分片上传阀值。默认 512K
+//                .connectTimeout(10) // 链接超时。默认 10秒
+//                .responseTimeout(60) // 服务器响应超时。默认 60秒
+//                .build();
+    }
 
     private UploadManager uploadManager = new UploadManager();
 
