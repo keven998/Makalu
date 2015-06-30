@@ -187,9 +187,9 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.putExtra("Name", user.getNickName());
+                    intent.putExtra("name", user.getNickName());
                     intent.putExtra("chatType", "single");
-                    intent.putExtra("friend_id", user.getUserId() + "");
+                    intent.putExtra("friend_id", String.valueOf(user.getUserId()));
                     intent.setClass(getContext(), ChatActivity.class);
                     getContext().startActivity(intent);
                 }

@@ -8,7 +8,8 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/content_top_margin">
+        android:layout_marginTop="@dimen/content_top_margin"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -327,7 +328,7 @@
             android:paddingRight="14dp"
             android:singleLine="true"
             android:text="编辑"
-            android:textColor="@color/color_text_titlebar"
+            android:textColor="@color/selector_white_text_color"
             android:textSize="16sp" />
 
     </RelativeLayout>

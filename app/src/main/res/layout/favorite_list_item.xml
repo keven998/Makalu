@@ -19,7 +19,7 @@
                 android:id="@+id/delete"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:background="@color/app_theme_color_secondary"
+                android:background="@color/app_theme_color"
                 android:scaleType="center"
                 android:src="@drawable/ic_guide_archieve_normal" />
         </LinearLayout>

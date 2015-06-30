@@ -30,7 +30,7 @@
         android:layout_marginBottom="5dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="40dp"
-        android:textColor="@color/second_font_color"
+        android:textColor="@color/color_text_ii"
         />
 
     <LinearLayout
@@ -63,7 +63,7 @@
         android:layout_marginBottom="5dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="40dp"
-        android:textColor="@color/second_font_color"
+        android:textColor="@color/color_text_ii"
         />
 
     <FrameLayout

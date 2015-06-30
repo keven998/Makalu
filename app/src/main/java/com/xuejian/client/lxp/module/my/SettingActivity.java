@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -19,10 +20,10 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.config.SettingConfig;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
-    private TextView versionUpdateLl, xtLl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,22 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     private void initView() {
         setContentView(R.layout.activity_setting);
         initTitlebar();
-        versionUpdateLl = (TextView) findViewById(R.id.ll_version_update);
-        xtLl = (TextView) findViewById(R.id.ll_xt);
-        versionUpdateLl.setOnClickListener(this);
-        xtLl.setOnClickListener(this);
+        findViewById(R.id.ll_version_update).setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
+
+        CheckedTextView ctv = (CheckedTextView) findViewById(R.id.ll_xt);
+        ctv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckedTextView cv = (CheckedTextView) v;
+                boolean checked = !cv.isChecked();
+                cv.setChecked(checked);
+                SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this, checked);
+            }
+        });
+
+        boolean notifyStatus = SettingConfig.getInstance().getLxqPushSetting(this);
+        ctv.setChecked(notifyStatus);
     }
 
     @Override
@@ -72,12 +84,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 update();
                 break;
 
-            case R.id.ll_xt:
-                MobclickAgent.onEvent(mContext, "event_push_setting");
-                Intent pushIntent = new Intent(mContext, PushSettingActivity.class);
-                startActivity(pushIntent);
-                break;
-
             case R.id.ll_clear_cache:
                 MobclickAgent.onEvent(mContext, "event_clear_cache");
                 clearCache();
@@ -91,7 +97,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     private void clearCache() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
-        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定清除缓存？");
         dialog.setPositiveButton("确定", new OnClickListener() {
             @Override
@@ -136,7 +141,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                         UpdateUtil.showUpdateDialog(mContext, "检测到新版本",
                                 updateResult.result.downloadUrl);
                     } else {
-                        ToastUtil.getInstance(mContext).showToast("已是最新版本！");
+                        ToastUtil.getInstance(mContext).showToast("已是最新版本");
                     }
                 }
             }
@@ -146,32 +151,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
         });
-
-//		LxpRequest.updateAfter(mContext, map, new AsyncHttpResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(int statusCode, Header[] headers,
-//					byte[] responseBody) {
-//				closeProgressDialog();
-//				mUpdateResult = GsonTools.parseJsonToBean(new String(
-//						responseBody), UpdateResult.class);
-//				if (mUpdateResult.result.update) {
-//					UpdateUtil.showUpdateDialog(mContext, "有新的版本!",
-//							mUpdateResult.result.downloadUrl);
-//				} else {
-//					ToastUtil.getInstance(mContext).showToast("已是最新版本！");
-//				}
-//
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers,
-//					byte[] responseBody, Throwable error) {
-//				DialogManager.getInstance().dissMissLoadingDialog();
-//
-//			}
-//
-//		});
     }
 
 }

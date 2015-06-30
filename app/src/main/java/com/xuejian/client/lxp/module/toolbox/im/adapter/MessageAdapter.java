@@ -66,11 +66,10 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
-import com.xuejian.client.lxp.module.toolbox.im.SeachContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
 
@@ -95,21 +94,21 @@ public class MessageAdapter extends BaseAdapter {
     private static final int MESSAGE_TYPE_RECV_IMAGE = 5;
     private static final int MESSAGE_TYPE_SENT_VOICE = 6;
     private static final int MESSAGE_TYPE_RECV_VOICE = 7;
-    private static final int MESSAGE_TYPE_SENT_VIDEO = 8;
-    private static final int MESSAGE_TYPE_RECV_VIDEO = 9;
-    private static final int MESSAGE_TYPE_SENT_FILE = 10;
-    private static final int MESSAGE_TYPE_RECV_FILE = 11;
-    private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 12;
-    private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 13;
+//    private static final int MESSAGE_TYPE_SENT_VIDEO = 8;
+//    private static final int MESSAGE_TYPE_RECV_VIDEO = 9;
+//    private static final int MESSAGE_TYPE_SENT_FILE = 10;
+//    private static final int MESSAGE_TYPE_RECV_FILE = 11;
+//    private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 12;
+//    private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 13;
     private static final int MESSAGE_TYPE_SENT_EXT = 14;
     private static final int MESSAGE_TYPE_RECV_EXT = 15;
     private static final int MESSAGE_TYPE_TIPS = 16;
-    private static final int MESSAGE_TYPE_SENT_UNKOWN = 17;
-    private static final int MESSAGE_TYPE_RECV_UNKOWN = 18;
+//    private static final int MESSAGE_TYPE_SENT_UNKOWN = 17;
+//    private static final int MESSAGE_TYPE_RECV_UNKOWN = 18;
 
     public static final String IMAGE_DIR = "chat/image/";
-    public static final String VOICE_DIR = "chat/audio/";
-    public static final String VIDEO_DIR = "chat/video";
+//    public static final String VOICE_DIR = "chat/audio/";
+//    public static final String VIDEO_DIR = "chat/video";
     private static final int TEXT_MSG = 0;
     private static final int VOICE_MSG = 1;
     private static final int IMAGE_MSG = 2;
@@ -543,31 +542,11 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    if (UserDBManager.getInstance().isMyFriend(message.getSenderId())) {
-                        Intent intent = new Intent(context, ContactDetailActivity.class);
-                        User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
-                        intent.putExtra("userId", user.getUserId());
-                        intent.putExtra("userNick", user.getNickName());
-                        context.startActivity(intent);
-                    } else {
-                        User itemData = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
-                        /*User user = new User();
-                        if (itemData != null) {
-                            user.nickName = itemData.getNick();
-                            user.userId = itemData.getUserId();
-                            user.easemobUser = itemData.getUsername();
-                            user.avatar = itemData.getAvatar();
-                            user.avatarSmall = itemData.getAvatarSmall();
-                            user.signature = itemData.getSignature();
-                            user.gender = itemData.getGender();
-                            user.memo = itemData.getMemo();
-                        } else {
-                            user.easemobUser = message.getSenderId()+"";
-                        }*/
-                        Intent intent = new Intent(context, SeachContactDetailActivity.class);
-                        intent.putExtra("user", itemData);
-                        context.startActivity(intent);
-                    }
+                    Intent intent = new Intent(context, HisMainPageActivity.class);
+                    User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
+                    intent.putExtra("userId", user.getUserId());
+                    intent.putExtra("userNick", user.getNickName());
+                    context.startActivity(intent);
                 }
             });
         }

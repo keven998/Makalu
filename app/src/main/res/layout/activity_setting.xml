@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-
     <TextView
         android:id="@+id/ll_clear_cache"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         android:background="@drawable/option_cell_selector"
         android:drawableLeft="@drawable/ic_setting_cache_clean"
         android:drawablePadding="10dp"
-        android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
@@ -35,20 +33,18 @@
         android:background="@color/color_line" />
 
     <TextView
-        android:id="@+id/ll_xt"
+        android:id="@+id/ll_version_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
-        android:drawableLeft="@drawable/ic_setting_msg_notify"
+        android:drawableLeft="@drawable/ic_setting_version_upgrade"
         android:drawablePadding="10dp"
-        android:layout_marginTop="10dp"
-        android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="15dp"
-        android:text="提醒设置"
+        android:text="版本更新"
         android:textColor="@color/color_text_ii"
         android:textSize="14sp" />
 
@@ -58,20 +54,22 @@
         android:layout_marginLeft="10dp"
         android:background="@color/color_line" />
 
-    <TextView
-        android:id="@+id/ll_version_update"
+
+    <CheckedTextView
+        android:id="@+id/ll_xt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/option_cell_selector"
-        android:drawableLeft="@drawable/ic_setting_version_upgrade"
+        android:drawableLeft="@drawable/ic_setting_msg_notify"
         android:drawablePadding="10dp"
-        android:drawableRight="@drawable/icon_arrow_right"
+        android:drawableRight="@drawable/checker_for_checkbox"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="15dp"
-        android:text="版本更新"
+        android:text="聊天提醒"
         android:textColor="@color/color_text_ii"
         android:textSize="14sp" />
 

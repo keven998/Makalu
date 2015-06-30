@@ -38,13 +38,6 @@
             android:paddingRight="20dp"
             android:scaleType="center"
             android:src="@drawable/selector_ic_nav_back"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:background="@color/app_theme_color_secondary"/>
-
     </FrameLayout>
 
     <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager

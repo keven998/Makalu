@@ -147,7 +147,7 @@
                         android:layout_width="40dp"
                         android:layout_height="28dp"
                         android:layout_gravity="right|bottom"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/chat_send_btn_selector"
@@ -408,11 +408,38 @@
                         android:textSize="10sp" />
                 </RelativeLayout>
             </RelativeLayout>
+            
+            <FrameLayout android:layout_width="match_parent"
+                android:layout_height="@dimen/title_bar_height"
+                android:background="@drawable/bg_navigation_bar">
 
-            <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-                android:id="@+id/title_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/title_bar_height" />
+                <ImageView android:id="@+id/iv_na_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="30dp"
+                    android:scaleType="center"
+                    android:src="@drawable/selector_ic_nav_back"/>
+
+                <TextView android:id="@+id/tv_na_title"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@color/color_text_titlebar"
+                    android:textSize="18sp"/>
+
+                <ImageView android:id="@+id/iv_nav_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="12dp"
+                    android:layout_gravity="right"
+                    android:scaleType="center"
+                    android:src="@drawable/selector_ic_common_navigation_menu"/>
+            </FrameLayout>
 
         </RelativeLayout>
 

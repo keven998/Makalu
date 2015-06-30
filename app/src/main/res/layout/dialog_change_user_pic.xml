@@ -16,7 +16,7 @@
             android:id="@+id/btn_pic_touserpic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/app_theme_color_secondary"
+            android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
             android:text="设置为头像" />
@@ -32,7 +32,7 @@
             android:id="@+id/btn_pic_zoom_big"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/app_theme_color_secondary"
+            android:textColor="@color/app_theme_color"
             android:background="@drawable/btn_white_selector"
             android:textSize="18sp"
             android:text="查看大图" />
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/app_theme_color_secondary"
+        android:textColor="@color/app_theme_color"
         android:background="@drawable/btn_white_selector"
         android:textSize="18sp"
         android:text="取消" />

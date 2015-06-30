@@ -114,44 +114,6 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
-                android:id="@+id/ll_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/option_cell_selector"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:text="年龄"
-                    android:textColor="@color/color_text_iii"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="12dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical|right"
-                    android:paddingBottom="17dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="17dp"
-                    android:text="未设置"
-                    android:textColor="@color/color_text_i"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="15dp"
-                android:background="@color/color_line" />
-
-            <LinearLayout
                 android:id="@+id/ll_zodiac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -414,15 +376,24 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_line" />
+
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/base_color_white"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/selecter_theme_btn_radius_4"
                 android:gravity="center"
                 android:text="退出登录"
-                android:textColor="@color/color_checked"
+                android:textColor="@color/base_color_white"
                 android:textSize="17sp" />
         </LinearLayout>
     </ScrollView>
