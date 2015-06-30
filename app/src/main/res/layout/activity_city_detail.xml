@@ -21,7 +21,7 @@
                 android:id="@+id/ly1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/base_color_white"
+                android:background="@drawable/btn_city_photo"
                 android:orientation="vertical"
                 android:layout_margin="10dp"
                 >
@@ -82,7 +82,7 @@
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginBottom="5dp">
 
                     <ImageView
@@ -171,6 +171,7 @@
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
                         android:lineSpacingExtra="6dp"
+                        android:maxEms="20"
                         android:lines="2"
                         android:textColor="@color/second_font_color"
                         android:textSize="14sp" />
@@ -200,7 +201,7 @@
 
                 <View
                     android:id="@+id/temp"
-                    android:layout_width="1dp"
+                    android:layout_width="1px"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true">
 
@@ -210,10 +211,10 @@
                     android:id="@+id/tv_spots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
+                    android:layout_margin="2dp"
                     android:layout_toLeftOf="@id/temp"
-                    android:background="@drawable/city_button_spot_default"
-                    android:drawablePadding="5dp"
+                    android:background="@drawable/btn_city_spot"
+                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToSpots"
                     android:scaleType="centerCrop" />
@@ -222,10 +223,10 @@
                     android:id="@+id/tv_travel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
+                    android:layout_margin="2dp"
                     android:layout_toLeftOf="@id/tv_spots"
-                    android:background="@drawable/city_button_guide_default"
-                    android:drawablePadding="5dp"
+                    android:background="@drawable/btn_city_guide"
+                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToTravel"
                     android:scaleType="centerCrop" />
@@ -234,11 +235,11 @@
                     android:id="@+id/tv_restaurant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
+                    android:layout_margin="2dp"
                     android:layout_toRightOf="@id/temp"
                     android:layout_weight="1"
-                    android:background="@drawable/city_button_food_default"
-                    android:drawablePadding="5dp"
+                    android:background="@drawable/btn_city_food"
+                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToFood"
                     android:scaleType="centerCrop" />
@@ -247,11 +248,11 @@
                     android:id="@+id/tv_shopping"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
+                    android:layout_margin="2dp"
                     android:layout_toRightOf="@id/tv_restaurant"
                     android:layout_weight="1"
-                    android:background="@drawable/city_button_shopping_default"
-                    android:drawablePadding="5dp"
+                    android:background="@drawable/btn_city_shopping"
+                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToShopping"
                     android:scaleType="centerCrop" />

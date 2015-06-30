@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -158,6 +159,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
        travelLv.setAdapter(travelAdapter);
+        travelLv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true ;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
       //  travelLv.setParallax(false);
 
 
@@ -233,7 +246,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
-
+                    System.out.println(detailResult.result+"  =====");
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
                     travelAdapter.notifyDataSetChanged();
@@ -298,8 +311,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
             String spannable=mCityNameEn.getText().toString();
-            System.out.println(spannable.length());
-            mCityNameEn.setText(spannable.substring(0,spannable.length()-5));
+            mCityNameEn.setText(spannable.substring(0, spannable.length() - 5));
 
         } else {
             mCityNameEn.setText(detailBean.enName);
