@@ -83,8 +83,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private TextView tv_nickname;
     @ViewInject(R.id.tv_gender)
     private TextView tv_gender;
-    @ViewInject(R.id.tv_age)
-    private TextView tv_age;
     @ViewInject(R.id.tv_zodiac)
     private TextView tv_zodiac;
     @ViewInject(R.id.tv_resident)
@@ -108,22 +106,18 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private User user;
     DisplayImageOptions options;
 
-    private TextView tvGender;
-
     private int RESIDENT = 1;
     private int STATUS = 2;
     private int SEX = 3;
     private ImageView my_pics_cell;
     private ArrayList<String> pics = new ArrayList<String>();
     private ArrayList<String> pic_ids = new ArrayList<String>();
-    private ArrayList<JSONObject> objects = new ArrayList<JSONObject>();
     LinearLayout llPics;
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private int FOOTPRINT = 4;
     private int SIGNATURE = 5;
     private int NICKNAME = 6;
     private int BINDPHONE = 7;
-    private boolean birthTimeFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +132,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         ViewUtils.inject(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
-        findViewById(R.id.ll_age).setOnClickListener(this);
         findViewById(R.id.ll_resident).setOnClickListener(this);
         findViewById(R.id.ll_zodiac).setOnClickListener(this);
         findViewById(R.id.ll_photo).setOnClickListener(this);
@@ -202,7 +195,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void initFootPrint(final ArrayList<LocBean> prints) {
-      //  my_destination.removeAllViews();
+        //  my_destination.removeAllViews();
         for (int j = 0; j < prints.size(); j++) {
             View contentView = View.inflate(AccountActvity.this, R.layout.des_text_style2, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
@@ -212,7 +205,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
-      //  all_pics.removeAllViews();
+        //  all_pics.removeAllViews();
         llPics = new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llPics.removeAllViews();
@@ -276,7 +269,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_gender.setText("帅锅");
         } else if (user.getGender().equalsIgnoreCase("F")) {
             iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
-            tv_gender.setText("镁铝");
+            tv_gender.setText("美女");
         } else {
             iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
         }
@@ -287,11 +280,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_resident.setText("未设置");
         } else {
             tv_resident.setText(user.getResidence());
-        }
-        if (user.getBirthday() == null) {
-            tv_age.setText("未设置");
-        } else {
-            tv_age.setText(String.valueOf(getAge(user.getBirthday())));
         }
 
         SpannableString planStr = new SpannableString("");
@@ -333,7 +321,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ssb.append(String.format("%d国%d城", countries, cityCount)).append(trackStr);
+        ssb.append(String.format("%d国%d城市", countries, cityCount)).append(trackStr);
         tv_foot_print.setText(ssb);
         tv_foot_print.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,22 +332,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 startActivity(intent);
             }
         });
-    tv_photo.setText("99张");
+        tv_photo.setText("99张");
 
-    }
-
-    private void initData() {
-        bindView(user);
-
-
-//        if(TextUtils.isEmpty(user.tel)){
-//            modifPwdLl.setVisibility(View.GONE);
-//            bindPhoneTv.setText("绑定手机");
-//        }else{
-//            modifPwdLl.setVisibility(View.VISIBLE);
-//            bindPhoneTv.setText("更改手机");
-//            phoneTv.setText(user.tel);
-//        }
     }
 
     @Override
@@ -379,12 +353,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             case R.id.ll_gender:
                 MobclickAgent.onEvent(mContext, "event_update_gender");
-                //showSelectGenderDialog();
                 Intent sexIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
                 sexIntent.putExtra("type", "sex");
                 startActivityForResult(sexIntent, SEX);
                 break;
-
 
 //            case R.id.ll_status:
 //                Intent statusIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
@@ -393,7 +365,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                break;
 
             case R.id.iv_avatar:
-                MobclickAgent.onEvent(mContext,"event_update_avatar");
+                MobclickAgent.onEvent(mContext, "event_update_avatar");
                 showSelectPicDialog();
                 break;
 
@@ -952,9 +924,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (requestCode == SIGNATURE) {
             //signTv.setText(data.getExtras().getString("signature"));
         } else if (requestCode == NICKNAME) {
-             tv_nickname.setText(data.getExtras().getString("nickname"));
+            tv_nickname.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {
-          //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
+            //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
         }
     }
 
@@ -1064,6 +1036,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.finish();
 //        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
+
     public int getAge(String birth) {
         int age = 0;
         String birthType = birth.substring(0, 4);
