@@ -50,7 +50,7 @@ public class IMClient {
     private static List<String> invokeStatus = new ArrayList<>();
     private Timer timer;
     private boolean isRunning;
-
+    public int p;
     public boolean isLogin() {
         return isLogin;
     }

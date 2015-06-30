@@ -16,7 +16,7 @@
 -->
 
 <resources>
-
+    <dimen name="page_detail_pic_height">50dp</dimen>
     <dimen name="page_more_header_frame_height">80dp</dimen>
     <dimen name="page_more_avatar_frame_size">84dp</dimen>
     <dimen name="tools_search_bar_height">140dp</dimen>

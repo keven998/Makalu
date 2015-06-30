@@ -3,12 +3,10 @@ package com.xuejian.client.lxp.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.widget.expandabletextview.ExpandableTextView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -33,8 +30,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.widget.DrawableCenterTextView;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
@@ -48,20 +44,26 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private PullToZoomListViewEx mTravelLv;
     private RelativeLayout titleBar;
     private View bottom_line;
+    private ImageView mCityIv1;
+    private ImageView mCityIv2;
+    private ImageView mCityIv3;
+    private ImageView mCityIv4;
+    private ImageView mCityIv5;
+    private ImageView mCityIv6;
     private ImageView mCityIv;
     private TextView mCityNameTv;
     private TextView mCityNameEn;
     private TextView mTTview;
     private TextView mCostTimeTv;
-    private ExpandableTextView bestMonthTv;
-    private TextView foodTv, shoppingTv, spotsTv, travelTv;
+    private TextView bestMonthTv;
+    private ImageView foodTv, shoppingTv, spotsTv, travelTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
     private String locId;
     private ImageView shareToChat;
     private PopupWindow mPop;
     private boolean isFromStrategy;
-
+    ImageView [] imageViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,19 +103,29 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void initView() {
-        PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
-        //ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
-        mTravelLv = travelLv;
-        titleBar = (RelativeLayout) findViewById(R.id.title_bar);
-        bottom_line = findViewById(R.id.title_bottom_line);
-        shareToChat = (ImageView) findViewById(R.id.city_detail_chat);
-        shareToChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_city_share_to_talk");
-                IMUtils.onClickImShare(CityDetailActivity.this);
-            }
-        });
+     //   PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
+        ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
+       // mTravelLv = travelLv;
+        mCityIv1 = (ImageView) findViewById(R.id.iv_city_1);
+        mCityIv2 = (ImageView) findViewById(R.id.iv_city_2);
+        mCityIv3 = (ImageView) findViewById(R.id.iv_city_3);
+        mCityIv4 = (ImageView) findViewById(R.id.iv_city_4);
+        mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
+        mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
+        imageViews=new ImageView[]{mCityIv1,mCityIv2,mCityIv3,mCityIv4,mCityIv5,mCityIv6};
+        TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.title_bar);
+        titleBar.getTitleTextView().setText("");
+        titleBar.enableBackKey(true);
+       // titleBar = (RelativeLayout) findViewById(R.id.title_bar);
+//        bottom_line = findViewById(R.id.title_bottom_line);
+//        shareToChat = (ImageView) findViewById(R.id.city_detail_chat);
+//        shareToChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext, "event_city_share_to_talk");
+//                IMUtils.onClickImShare(CityDetailActivity.this);
+//            }
+//        });
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,22 +133,23 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        View hv;
-        hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
-        travelLv.setHeaderView(hv);
+      //  View hv;
+      //  hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
+      //  travelLv.setHeaderView(hv);
         // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
-        mCityIv = (ImageView) hv.findViewById(R.id.iv_city_detail);
-        View zoomView = hv.findViewById(R.id.ly1);
-        travelLv.setZoomView(zoomView);
-        mTTview = (TextView) hv.findViewById(R.id.travel_title);
-        mCityNameTv = (TextView) hv.findViewById(R.id.tv_city_name);
-        mCityNameEn = (TextView) hv.findViewById(R.id.tv_city_name_en);
-        mCostTimeTv = (TextView) hv.findViewById(R.id.tv_cost_time);
-        bestMonthTv = (ExpandableTextView) hv.findViewById(R.id.tv_best_month);
-        travelTv = (TextView) hv.findViewById(R.id.tv_travel);
-        spotsTv = (TextView) hv.findViewById(R.id.tv_spots);
-        foodTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_restaurant);
-        shoppingTv = (DrawableCenterTextView) hv.findViewById(R.id.tv_shopping);
+      //  View zoomView = hv.findViewById(R.id.ly1);
+      //  travelLv.setZoomView(zoomView);
+        mTTview = (TextView)findViewById(R.id.travel_title);
+        mCityNameTv = (TextView) findViewById(R.id.tv_city_name);
+        mCityNameEn = (TextView) findViewById(R.id.tv_city_name_en);
+        mCostTimeTv = (TextView) findViewById(R.id.tv_cost_time);
+        bestMonthTv = (TextView) findViewById(R.id.tv_best_month);
+        travelTv = (ImageView) findViewById(R.id.tv_travel);
+        spotsTv = (ImageView) findViewById(R.id.tv_spots);
+        foodTv = (ImageView)findViewById(R.id.tv_restaurant);
+        shoppingTv = (ImageView)findViewById(R.id.tv_shopping);
+
+
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -144,12 +157,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 return viewHolder;
             }
         });
-        travelLv.setAdapter(travelAdapter);
-        travelLv.setParallax(false);
+       travelLv.setAdapter(travelAdapter);
+      //  travelLv.setParallax(false);
 
 
         //用来点击查看更多
-        hv.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
+       findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
@@ -248,64 +261,77 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 showActionDialog();
             }
         });
+//        if (detailBean.images != null && detailBean.images.size() > 0) {
+//
+//            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
+//        }
         if (detailBean.images != null && detailBean.images.size() > 0) {
-            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
-        }
-        mCityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_city_photoes");
-                Intent intent = new Intent(mContext, CityPictureActivity.class);
-                intent.putExtra("id", locDetailBean.id);
-                intent.putExtra("title", locDetailBean.zhName);
-                startActivityWithNoAnim(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            for (int i = 0; i < detailBean.images.size(); i++) {
+                System.out.println(detailBean.images.get(i).url);
+                ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], UILUtils.getDefaultOption());
+                if (i==5)break;
             }
-        });
+        }
+//        mCityIv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext, "event_city_photoes");
+//                Intent intent = new Intent(mContext, CityPictureActivity.class);
+//                intent.putExtra("id", locDetailBean.id);
+//                intent.putExtra("title", locDetailBean.zhName);
+//                startActivityWithNoAnim(intent);
+//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//            }
+//        });
 
         if (detailBean.imageCnt > 100) {
             detailBean.imageCnt = 100;
         }
+        System.out.println(detailBean.zhName + detailBean.timeCostDesc + detailBean.travelMonth);
         mCityNameTv.setText(detailBean.zhName);
-        mCostTimeTv.setText(String.format("参考游玩时间： %s", detailBean.timeCostDesc));
-        bestMonthTv.setText(String.format("最佳旅行时节： %s", detailBean.travelMonth));
+        mCostTimeTv.setText(String.format("～参考游玩时间·%s～", detailBean.timeCostDesc));
+        bestMonthTv.setText(String.format("～推荐游玩时间：%s～",  detailBean.travelMonth.substring(0,detailBean.travelMonth.indexOf("。"))));
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
         travelTv.setOnClickListener(this);
         if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
+            String spannable=mCityNameEn.getText().toString();
+            System.out.println(spannable.length());
+            mCityNameEn.setText(spannable.substring(0,spannable.length()-5));
+
         } else {
             mCityNameEn.setText(detailBean.enName);
         }
-        mCityNameEn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//自定义布局
-                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-                        R.layout.text_diaplay, null, true);
-                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-
-                TextView tv = (TextView) menuView.findViewById(R.id.msg);
-                tv.setText(detailBean.desc);
-                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-                mPop.setContentView(menuView);//设置包含视图
-                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setAnimationStyle(R.style.PopAnimation);
-                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
-                pop_dismiss.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mPop.dismiss();
-                    }
-                });
-            }
-        });
-        mTTview.setText(String.format("玩转%s", detailBean.zhName));
+//        mCityNameEn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+////自定义布局
+//                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+//                        R.layout.text_diaplay, null, true);
+//                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+//
+//                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+//                tv.setText(detailBean.desc);
+//                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+//                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+//                mPop.setContentView(menuView);//设置包含视图
+//                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+//                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+//                mPop.setAnimationStyle(R.style.PopAnimation);
+//                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
+//                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mPop.dismiss();
+//                    }
+//                });
+//            }
+//        });
+//        mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
         // mTitleTv.setText(detailBean.zhName);
     }

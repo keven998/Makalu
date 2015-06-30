@@ -9,13 +9,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.module.dest.TravelNoteDetailActivity;
 
 import java.text.SimpleDateFormat;
@@ -40,13 +41,21 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     private boolean mIsShowSend;
     private boolean mIsShowMore;
 
-    private DisplayImageOptions picOptions;
+    private DisplayImageOptions options;
 
     public TravelNoteViewHolder(Activity context, boolean isShowSend, boolean isShowMore){
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
         activity= context;
-        picOptions = UILUtils.getRadiusOption();
+     //   picOptions = UILUtils.getRadiusOption();
+         options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true)
+                .displayer(new RoundedBitmapDisplayer(activity.getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                .build();
     }
 
     public void setOnSendClickListener(OnSendClickListener onSendClickListener){
@@ -68,7 +77,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         mFee = (TextView) view.findViewById(R.id.trip_fee);*/
         return view;
     }
-
     @Override
     public void showData(int position, final TravelNoteBean itemData) {
         if(mIsShowSend){
@@ -84,7 +92,8 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         } else {
             mSendRl.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(itemData.getNoteImage(),mTravelIv, picOptions);
+        ImageLoader.getInstance().displayImage(itemData.authorAvatar,mTravelIv,options);
+       // ImageLoader.getInstance().displayImage(itemData.authorAvatar,mTravelIv, picOptions);
         mNoteNameTv.setText(itemData.title);
         String[] strArray=itemData.summary.split("\n");
         String maxLengthStr=strArray[0];

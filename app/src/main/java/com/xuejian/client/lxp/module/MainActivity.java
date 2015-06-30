@@ -115,7 +115,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
                 @Override
                 public void doSuccess(Object result, String method) {
-                    System.out.println(result.toString());
                     CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                     if (Info.code == 0) {
                         AccountManager.getInstance().setLoginAccountInfo(Info.result);

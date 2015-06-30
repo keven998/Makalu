@@ -6,7 +6,7 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <FrameLayout android:id="@+id/ly1"
+    <RelativeLayout android:id="@+id/ly1"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/city_picture_collection_height">
 
@@ -35,7 +35,7 @@
             android:visibility="gone"/>
 
 
-    </FrameLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ly2"
@@ -111,7 +111,6 @@
             android:textSize="15sp"
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="6dp"
-            android:text=""
             android:textColor="@color/second_font_color"/>
 
         <com.aizou.core.widget.expandabletextview.ExpandableTextView
@@ -171,7 +170,7 @@
                 android:textSize="13sp"
                 android:gravity="center"
                 android:drawablePadding="11dp"
-                android:drawableTop="@drawable/ic_nrq_trip"
+                android:drawableTop="@drawable/city_button_guide_default"
                 android:onClick="intentToTravel"
                 android:text="旅游指南"/>
 
@@ -182,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/base_font_color"
-                android:drawableTop="@drawable/ic_nrq_spot"
+                android:drawableTop="@drawable/city_button_spot_default"
                 android:drawablePadding="11dp"
                 android:textSize="13sp"
                 android:onClick="intentToFood"
@@ -195,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/base_font_color"
-                android:drawableTop="@drawable/ic_nrq_food"
+                android:drawableTop="@drawable/city_button_food_default"
                 android:drawablePadding="11dp"
                 android:textSize="13sp"
                 android:onClick="intentToFood"
@@ -207,7 +206,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_nrq_shop"
+                android:drawableTop="@drawable/city_button_shopping_default"
                 android:drawablePadding="11dp"
                 android:textColor="@color/base_font_color"
                 android:textSize="13sp"

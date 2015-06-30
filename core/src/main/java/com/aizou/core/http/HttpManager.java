@@ -175,7 +175,7 @@ public class HttpManager {
                 httpMethod = HttpRequest.HttpMethod.TRACE;
             }
             httpUtils.configCurrentHttpCacheExpiry(1000 * 1);
-            httpUtils.configTimeout(1000 * 10);
+            httpUtils.configTimeout(1000 * 1000000);
             HttpHandler handler = httpUtils.send(httpMethod, url, requestParams,
                     ajaxCallBack);
             PTRequestHandler ptHandler = new PTRequestHandler();

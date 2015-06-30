@@ -8,31 +8,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="11dp"
+        android:paddingLeft="14dp"
         android:paddingRight="11dp"
-        android:paddingTop="8dp"
+        android:paddingTop="12dp"
         android:paddingBottom="9dp">
 
         <ImageView
             android:id="@+id/iv_travels"
             android:layout_width="68dp"
             android:layout_height="68dp"
-            android:background="@drawable/bg_common_default"
+            android:layout_marginTop="-5dp"
+            android:layout_marginLeft="-4dp"
+            android:padding="5dp"
+            android:background="@color/base_color_white"
             android:scaleType="centerCrop" />
-
+        <ImageView
+            android:id="@+id/iv_travels_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:layout_marginLeft="-3dp"
+            android:background="@drawable/city_icon_mt_userpic"
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/tv_travels_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/iv_travels"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="14dp"
             android:singleLine="true"
             android:textColor="@color/base_font_color"
             android:textSize="15sp"
             android:ellipsize="end"
-            android:text="fdjsaklfjdkljfdfsadfsafdsaffdfdsaddsa"/>
-
+            android:text="fdjsaklfjdkljdsaddsa"/>
+        <ImageView
+            android:id="@+id/iv_travels_image"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:background="@drawable/city_bg_photo_default"
+            android:layout_below="@id/iv_travels"
+            android:visibility="gone"
+            android:scaleType="centerCrop" />
         <!--<TextView
             android:id="@+id/trip_fee"
             android:layout_width="wrap_content"
@@ -65,13 +82,14 @@
             android:id="@+id/tv_travels_desc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tv_travels_name"
-            android:layout_below="@id/tv_travels_name"
+            android:layout_below="@id/iv_travels_image"
             android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:gravity="left|top"
             android:singleLine="true"
+            android:lines="2"
             android:textColor="@color/second_font_color"
+            android:text="fdjsaklfjdkljdsaddsa1231231313"
             android:textSize="12sp" />
 
         <TextView
@@ -82,8 +100,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/iv_travels"
-            android:layout_below="@+id/tv_travels_desc"
-            android:layout_marginTop="6dp"
+            android:layout_below="@+id/tv_travels_name"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textColor="@color/third_font_color"
@@ -108,7 +126,7 @@
             android:text="发送"
             android:textColor="@color/base_color_white"
             android:textSize="13sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View

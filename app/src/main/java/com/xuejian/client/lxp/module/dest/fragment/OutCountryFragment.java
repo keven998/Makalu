@@ -104,7 +104,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             public void doSuccess(String result, String method, Header[] headers) {
                 box.hideAll();
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
-                System.out.println(result);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);

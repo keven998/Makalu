@@ -121,9 +121,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             int guideCount =0;
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
                 User info= AccountManager.getInstance().getLoginAccountInfo();
-                System.out.println(user.getTracks());
                 for (String key :info.getTracks().keySet()) {
-                    System.out.println(key);
                     all_foot_print_list.addAll(info.getTracks().get(key));
                 }
                 cityCount=all_foot_print_list.size();

@@ -60,7 +60,6 @@ import com.xuejian.client.lxp.common.task.DownloadVoice;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
-import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.db.User;
@@ -71,7 +70,6 @@ import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
-import com.xuejian.client.lxp.module.toolbox.im.IMAlertDialog;
 import com.xuejian.client.lxp.module.toolbox.im.SeachContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
@@ -82,6 +80,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MessageAdapter extends BaseAdapter {
 
@@ -137,7 +137,8 @@ public class MessageAdapter extends BaseAdapter {
     private Context context;
     private String chatType;
     private String conversation;
-
+    private HashMap<Long,Timer> timers=new HashMap<>();
+    String progress1;
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -897,41 +898,43 @@ public class MessageAdapter extends BaseAdapter {
 
                 // set a timer
                 //    if (message.getStatus()==1) sendPictureMessage(message, holder);
+                if (timers.containsKey(message.getLocalId()))
+                    return;
                 sendPictureMessage(message, holder);
-//                final Timer timer = new Timer();
-//                timers.put(message.getLocalId() + "", timer);
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        activity.runOnUiThread(new Runnable() {
-//                            public void run() {
-//                                holder.pb.setVisibility(View.VISIBLE);
-//                                holder.tv.setVisibility(View.VISIBLE);
-//                                // holder.tv.setText(message.progress + "%");
-//                                if (message.getStatus() == 0) {
-//                                    holder.pb.setVisibility(View.GONE);
-//                                    holder.tv.setVisibility(View.GONE);
-//                                    // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
-//                                    timer.cancel();
-//                                } else if (message.getStatus() == 2) {
-//                                    holder.pb.setVisibility(View.GONE);
-//                                    holder.tv.setVisibility(View.GONE);
-//                                    // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-//                                    // message.setProgress(0);
-//                                    holder.staus_iv.setVisibility(View.VISIBLE);
-////                                    Toast.makeText(activity,
-////                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
-////                                            .show();
-//                                    if (activity != null && !activity.isFinishing())
-//                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
-//                                    timer.cancel();
-//                                }
-//
-//                            }
-//                        });
-//
-//                    }
-//                }, 0, 500);
+                final Timer timer = new Timer();
+                timers.put(message.getLocalId(), timer);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                holder.pb.setVisibility(View.VISIBLE);
+                                holder.tv.setVisibility(View.VISIBLE);
+                                holder.tv.setText(message.getProgress() + "%");
+                                if (message.getStatus() == 0) {
+                                    holder.pb.setVisibility(View.GONE);
+                                    holder.tv.setVisibility(View.GONE);
+                                    // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
+                                    timer.cancel();
+                                } else if (message.getStatus() == 2) {
+                                    holder.pb.setVisibility(View.GONE);
+                                    holder.tv.setVisibility(View.GONE);
+                                    // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
+                                    // message.setProgress(0);
+                                    holder.staus_iv.setVisibility(View.VISIBLE);
+//                                    Toast.makeText(activity,
+//                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
+//                                            .show();
+                                    if (activity != null && !activity.isFinishing())
+                                        ToastUtil.getInstance(activity).showToast("呃~好像没找到网络");
+                                    timer.cancel();
+                                }
+
+                            }
+                        });
+
+                    }
+                }, 0, 500);
                 break;
             default:
         }
@@ -1531,7 +1534,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.pb.setVisibility(View.VISIBLE);
            // holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setVisibility(View.VISIBLE);
-            holder.tv.setText("0%");
+           // holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
             IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(), message, friendId, new UploadListener() {
                 @Override
@@ -1565,13 +1568,17 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onProgress(final int progress) {
+                    System.out.println(progress);
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             if (progress == 100) {
                                 message.setStatus(0);
                                 holder.pb.setVisibility(View.GONE);
                                 holder.tv.setVisibility(View.GONE);
-                            } else holder.tv.setText(progress + "%");
+                            } else {
+                                //holder.tv.setText(progress + "%");
+                                message.setProgress(progress);
+                            }
                         }
                     });
                 }
