@@ -104,6 +104,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             public void doSuccess(String result, String method, Header[] headers) {
                 box.hideAll();
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
+                System.out.println(result);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
                     PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);
@@ -161,7 +162,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     @Override
-    public void onDestAdded(LocBean locBean,boolean isEdit) {
+    public void onDestAdded(LocBean locBean,boolean isEdit,String type) {
         if(outCountryAdapter!=null){
             for(CountryBean countryBean:outCountryAdapter.getDataList()){
                 for(LocBean kLocBean :countryBean.destinations ){
@@ -176,7 +177,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     @Override
-    public void onDestRemoved(LocBean locBean) {
+    public void onDestRemoved(LocBean locBean,String type) {
         if(outCountryAdapter!=null){
             for(CountryBean countryBean:outCountryAdapter.getDataList()){
                 for(LocBean kLocBean :countryBean.destinations ){
@@ -238,12 +239,12 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                                     if(isClickable){
                                     cityNameTv.setCompoundDrawables(selected, null, null, null);
                                     }
-                                    mOnDestActionListener.onDestAdded(bean,true);
+                                    mOnDestActionListener.onDestAdded(bean,true,"out");
                                 } else {
                                     if(isClickable){
                                     cityNameTv.setCompoundDrawables(add, null, null, null);
                                     }
-                                    mOnDestActionListener.onDestRemoved(bean);
+                                    mOnDestActionListener.onDestRemoved(bean,"out");
                                 }
                             }
                             outCountryAdapter.notifyDataSetChanged();

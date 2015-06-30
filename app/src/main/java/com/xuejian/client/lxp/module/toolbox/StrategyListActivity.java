@@ -581,6 +581,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                         CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (deleteResult.code == 0) {
                             deleteThisItem(itemData);
+                            int cnt= AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                            AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt -1);
                         } else {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())

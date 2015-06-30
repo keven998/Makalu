@@ -70,7 +70,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         userId = getIntent().getExtras().getInt("userId");
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         imUser = UserDBManager.getInstance().getContactByUserId(userId);
-
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

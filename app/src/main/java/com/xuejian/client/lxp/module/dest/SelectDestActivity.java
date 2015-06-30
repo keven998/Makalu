@@ -59,7 +59,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
 
     @Override
-    public void onDestAdded(final LocBean locBean,boolean isEdit) {
+    public void onDestAdded(final LocBean locBean,boolean isEdit,String type) {
         MobclickAgent.onEvent(mContext,"event_select_city");
         if(allAddCityList.contains(locBean)){
             ToastUtil.getInstance(mContext).showToast("已添加");
@@ -81,7 +81,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                     next.setVisibility(View.GONE);
                 }
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestRemoved(locBean);
+                    onDestActionListener.onDestRemoved(locBean,null);
                 }
                 autoScrollPanel();
             }
@@ -96,7 +96,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     }
 
     @Override
-    public void onDestRemoved(LocBean locBean) {
+    public void onDestRemoved(LocBean locBean,String type) {
         int index = allAddCityList.indexOf(locBean);
         citysLl.removeViewAt(index);
         allAddCityList.remove(locBean);
@@ -205,9 +205,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         hasSelectLoc = getIntent().getParcelableArrayListExtra("locList");
         if(hasSelectLoc!=null){
             for(LocBean locBean:hasSelectLoc){
-                onDestAdded(locBean,true);
+                onDestAdded(locBean,true,null);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestAdded(locBean,true);
+                    onDestActionListener.onDestAdded(locBean,true,null);
                 }
             }
 
@@ -305,9 +305,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_SEARCH_LOC) {
                 LocBean locBean = data.getParcelableExtra("loc");
-                onDestAdded(locBean,true);
+                onDestAdded(locBean,true,null);
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
-                    onDestActionListener.onDestAdded(locBean,true);
+                    onDestActionListener.onDestAdded(locBean,true,null);
                 }
             } else if (requestCode == REQUEST_CODE_LOGIN) {
                 Intent intent = new Intent(mContext, StrategyActivity.class);

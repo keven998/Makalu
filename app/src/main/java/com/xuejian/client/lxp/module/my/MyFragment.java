@@ -34,7 +34,6 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,10 +118,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             int countryCount = 0;
             int cityCount = 0;
             String level="0";
-            int guideCount = user.getGuideCnt();
+            int guideCount =0;
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
                 User info= AccountManager.getInstance().getLoginAccountInfo();
+                System.out.println(user.getTracks());
                 for (String key :info.getTracks().keySet()) {
+                    System.out.println(key);
                     all_foot_print_list.addAll(info.getTracks().get(key));
                 }
                 cityCount=all_foot_print_list.size();

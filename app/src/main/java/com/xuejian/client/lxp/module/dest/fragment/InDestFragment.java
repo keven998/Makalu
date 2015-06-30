@@ -208,7 +208,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     @Override
-    public void onDestAdded(LocBean locBean,boolean isEdit) {
+    public void onDestAdded(LocBean locBean,boolean isEdit,String type) {
             for (InDestBean inDestBean : incityList) {
                 for (LocBean kLocBean : inDestBean.locList) {
                     if (locBean.id.equals(kLocBean.id)) {
@@ -220,7 +220,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     @Override
-    public void onDestRemoved(LocBean locBean) {
+    public void onDestRemoved(LocBean locBean,String type) {
             for (InDestBean inDestBean : incityList) {
                 for (LocBean kLocBean : inDestBean.locList) {
                     if (locBean.id.equals(kLocBean.id)) {
@@ -293,9 +293,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                         bean.isAdded = !bean.isAdded;
                         if (mOnDestActionListener != null) {
                             if (bean.isAdded) {
-                                mOnDestActionListener.onDestAdded(bean,true);
+                                mOnDestActionListener.onDestAdded(bean,true,"in");
                             } else {
-                                mOnDestActionListener.onDestRemoved(bean);
+                                mOnDestActionListener.onDestRemoved(bean,"in");
                             }
                         }
                         inCityAdapter.notifyDataSetChanged();
@@ -472,11 +472,11 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                                 if (bean.isAdded) {
                                     cityNameTv.setCompoundDrawables(selected, null, null, null);
 
-                                    mOnDestActionListener.onDestAdded(bean,true);
+                                    mOnDestActionListener.onDestAdded(bean,true,"in");
                                 } else {
                                     cityNameTv.setCompoundDrawables(add, null, null, null);
 
-                                    mOnDestActionListener.onDestRemoved(bean);
+                                    mOnDestActionListener.onDestRemoved(bean,"in");
                                 }
                             }
                             inCityAdapter.notifyDataSetChanged();

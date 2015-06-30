@@ -386,7 +386,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                             }
                         }.sendEmptyMessageDelayed(0, 1000);
                     }
-
+                    int cnt=AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                    AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt+1);
                 } else {
                     iv_location.setVisibility(View.GONE);
                     if (!isFinishing())
