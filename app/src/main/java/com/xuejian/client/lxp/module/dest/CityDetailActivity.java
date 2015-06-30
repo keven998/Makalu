@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.api.OtherApi;
@@ -31,6 +32,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
+import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -246,7 +248,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
-                    System.out.println(detailResult.result+"  =====");
+                    System.out.println(detailResult.result + "  =====");
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
                     travelAdapter.notifyDataSetChanged();
@@ -300,8 +302,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         if (detailBean.imageCnt > 100) {
             detailBean.imageCnt = 100;
         }
-        System.out.println(detailBean.zhName + detailBean.timeCostDesc + detailBean.travelMonth);
-        mCityNameTv.setText(detailBean.zhName);
+
+     ;
+        mCityNameTv.setText(getCityName(detailBean.zhName));
         mCostTimeTv.setText(String.format("～参考游玩时间·%s～", detailBean.timeCostDesc));
         bestMonthTv.setText(String.format("～推荐游玩时间：%s～",  detailBean.travelMonth.substring(0,detailBean.travelMonth.indexOf("。"))));
         foodTv.setOnClickListener(this);
@@ -346,6 +349,28 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //        mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
         // mTitleTv.setText(detailBean.zhName);
+    }
+
+    private String getCityName(String name) {
+        String outcountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_outcountry");
+        String inCountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_indest_group");
+        CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
+        CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
+            for (CountryBean countryBean : countryListResult.result) {
+                for (LocBean kLocBean : countryBean.destinations) {
+                    if (kLocBean.zhName.equals(name)) {
+                        return countryBean.zhName+"·"+name;
+                    }
+                }
+            }
+            for (CountryBean incountryBean : groupListResult.result) {
+                for (LocBean kLocBean : incountryBean.destinations) {
+                    if (kLocBean.zhName.equals(name)) {
+                        return "中国·"+incountryBean.zhName+"·"+name;
+                    }
+                }
+            }
+        return name;
     }
 
     public void intentToTravel(View view) {

@@ -23,13 +23,15 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_city_photo"
                 android:orientation="vertical"
+                android:scaleType="fitCenter"
                 android:layout_margin="10dp"
                 >
 
                 <RelativeLayout
                     android:id="@+id/top_Pic"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp">
 
                     <ImageView
                         android:id="@+id/iv_city_2"
@@ -68,7 +70,7 @@
                     android:gravity="center"
                     android:textColor="@color/color_text_i"
                     android:textSize="18sp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/tv_cost_time"
@@ -82,8 +84,8 @@
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginTop="10dp"
+                    >
 
                     <ImageView
                         android:id="@+id/iv_city_5"

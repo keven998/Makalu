@@ -19,7 +19,7 @@
 
     <dimen name="image_thumbnail_size">148dp</dimen>
     <dimen name="image_thumbnail_spacing">2dp</dimen>
-    <dimen name="page_detail_pic_height">100dp</dimen>
+    <dimen name="page_detail_pic_height">103dp</dimen>
     <dimen name="my_plan_img_height">132dp</dimen>
     <dimen name="my_plan_title_width">248dp</dimen>
 

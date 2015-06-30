@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
@@ -25,17 +26,25 @@ import com.lv.user.LoginSuccessListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
+import com.xuejian.client.lxp.bean.CountryBean;
+import com.xuejian.client.lxp.bean.GroupLocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
+import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
+
+import org.apache.http.Header;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,6 +139,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
                 }
             });
+            getInLocList();
+            getOutCountryList();
         }
     }
 
@@ -446,5 +457,54 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             connectionReceiver = null;
         }
     }
+    private void getInLocList() {
+        //这个地方也需要判断一下做出接口读取的选择
+        String lastModify = PreferenceUtils.getCacheData(MainActivity.this, "indest_group_last_modify");
+        TravelApi.getInDestListByGroup(lastModify, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
 
+            }
+
+            @Override
+            public void doSuccess(String result, String method, Header[] headers) {
+                CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
+                if (locListResult.code == 0) {
+                    PreferenceUtils.cacheData(MainActivity.this, "destination_indest_group", result);
+                    PreferenceUtils.cacheData(MainActivity.this, "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+//                if (isAdded()) {
+//                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                }
+            }
+        });
+    }
+    private void getOutCountryList(){
+        String lastModify= PreferenceUtils.getCacheData(MainActivity.this, "outcountry_last_modify");
+        TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+            }
+
+            @Override
+            public void doSuccess(String result, String method, Header[] headers) {
+                CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
+                if (countryListResult.code == 0) {
+                    PreferenceUtils.cacheData(MainActivity.this, "destination_outcountry", result);
+                    PreferenceUtils.cacheData(MainActivity.this, "outcountry_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+//                if (isAdded())
+//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+    }
 }
