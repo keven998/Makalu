@@ -414,15 +414,24 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_line" />
+
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/base_color_white"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/selecter_theme_btn_radius_4"
                 android:gravity="center"
                 android:text="退出登录"
-                android:textColor="@color/color_checked"
+                android:textColor="@color/base_color_white"
                 android:textSize="17sp" />
         </LinearLayout>
     </ScrollView>

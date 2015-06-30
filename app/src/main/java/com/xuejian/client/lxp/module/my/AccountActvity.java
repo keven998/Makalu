@@ -124,12 +124,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int NICKNAME = 6;
     private int BINDPHONE = 7;
     private boolean birthTimeFlag = false;
-    /*private ImageZoomAnimator2 zoomAnimator;
-
-    @ViewInject(R.id.ac_zoom_container)
-    private RelativeLayout zoomContainer;
-    @ViewInject(R.id.ac_vp_zoom_pic)
-    private HackyViewPager zoomPicVp;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +136,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private void initView() {
         setContentView(R.layout.activity_account);
         ViewUtils.inject(this);
-        //tvGender = (TextView) findViewById(R.id.tv_gender);
-        //findViewById(R.id.ll_avatar).setOnClickListener(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
         findViewById(R.id.ll_age).setOnClickListener(this);
@@ -156,7 +148,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
         findViewById(R.id.btn_logout).setOnClickListener(this);
         findViewById(R.id.iv_avatar).setOnClickListener(this);
-        // logoutBtn.setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("编辑资料");
@@ -519,7 +510,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage("确定退出已登陆账号吗？");
+        dialog.setMessage("确定退出登录");
         dialog.setPositiveButton("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
