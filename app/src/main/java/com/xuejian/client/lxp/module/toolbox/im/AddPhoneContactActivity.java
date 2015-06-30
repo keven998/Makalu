@@ -24,6 +24,8 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PhoneContactUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,8 +37,9 @@ import java.util.List;
 public class AddPhoneContactActivity extends ChatBaseActivity {
 
     private ListView mListView;
-    List<AddressBookbean> contactListInMobile ;
+    List<AddressBookbean> contactListInMobile;
     ListViewDataAdapter<AddressBookbean> contactAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +48,8 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         initTitleBar();
         initData();
     }
-    private void initTitleBar(){
+
+    private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 //        titleHeaderBar.setRightViewImageRes(R.drawable.add);
 
@@ -53,9 +57,9 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         titleHeaderBar.enableBackKey(true);
     }
 
-    private void initData(){
+    private void initData() {
         DialogManager.getInstance().showLoadingDialog(this);
-        contactListInMobile= PhoneContactUtils.getPhoneContact(mContext);
+        contactListInMobile = PhoneContactUtils.getPhoneContact(mContext);
         UserApi.searchByAddressBook(contactListInMobile, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -132,9 +136,9 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
     }
 
 
-    public class PhoneContactViewHolder extends ViewHolderBase<AddressBookbean>{
+    public class PhoneContactViewHolder extends ViewHolderBase<AddressBookbean> {
 
-        private TextView name,phone;
+        private TextView name, phone;
         private TextView actionButton;
 
         @Override
@@ -150,48 +154,47 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         public void showData(int position, final AddressBookbean itemData) {
             name.setText(itemData.name);
             phone.setText(itemData.tel);
-            if(itemData.isContact){
+            if (itemData.isContact) {
                 actionButton.setText("");
-                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_gray_complete,0);
+                actionButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_gray_complete, 0);
                 actionButton.setOnClickListener(null);
-            }else if(itemData.isUser){
+            } else if (itemData.isUser) {
                 actionButton.setText("");
-                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_add_phone_contact,0);
+                actionButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_add_phone_contact, 0);
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       if(itemData.userId == AccountManager.getInstance().getLoginAccount(mContext).getUserId()){
+                        if (itemData.userId == AccountManager.getInstance().getLoginAccount(mContext).getUserId()) {
                             ToastUtil.getInstance(mContext).showToast("那是自己");
-                           return;
-                       }
-                       DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
-                       UserApi.getUserInfo(itemData.userId + "", new HttpCallBack<String>() {
-                           @Override
-                           public void doSuccess(String result, String method) {
-                               DialogManager.getInstance().dissMissLoadingDialog();
-                               CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
-                               if (userResult.code == 0) {
-                                   Intent intent = new Intent(mContext, SeachContactDetailActivity.class);
-                                   intent.putExtra("isSeach", true);
-                                   intent.putExtra("user", userResult.result);
-                                   startActivity(intent);
-                               } else {
+                            return;
+                        }
+                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
+                        UserApi.getUserInfo(String.valueOf(itemData.userId), new HttpCallBack<String>() {
+                            @Override
+                            public void doSuccess(String result, String method) {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
+                                if (userResult.code == 0) {
+                                    Intent intent = new Intent(AddPhoneContactActivity.this, HisMainPageActivity.class);
+                                    intent.putExtra("userId", userResult.result.getUserId());
+                                    startActivity(intent);
+                                } else {
 
-                               }
-                           }
+                                }
+                            }
 
-                           @Override
-                           public void doFailure(Exception error, String msg, String method) {
-                               DialogManager.getInstance().dissMissLoadingDialog();
-                               if (!isFinishing())
-                                   ToastUtil.getInstance(mContext).showToast("获取用户信息失败");
-                           }
-                       });
+                            @Override
+                            public void doFailure(Exception error, String msg, String method) {
+                                DialogManager.getInstance().dissMissLoadingDialog();
+                                if (!isFinishing())
+                                    ToastUtil.getInstance(mContext).showToast("获取用户信息失败");
+                            }
+                        });
                     }
                 });
-            }else {
+            } else {
                 actionButton.setText("邀请");
-                actionButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.icon_arrow_right,0);
+                actionButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_right, 0);
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
