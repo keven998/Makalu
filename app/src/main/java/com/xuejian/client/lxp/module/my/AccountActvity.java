@@ -444,7 +444,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             }
 
-            UserApi.getUserInfo(user.getUserId() + "", new HttpCallBack<String>() {
+            UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
@@ -463,25 +463,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
     }
 
-    private void warn(String msg) {
-        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-        dialog.setTitle("提示");
-        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage(msg);
-        dialog.setPositiveButton("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        dialog.isCancle(false);
-    }
-
     private void warnLogout() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
-        // dialog.setTitleIcon(R.drawable.ic_dialog_tip);
         dialog.setMessage("确定退出登录");
         dialog.setPositiveButton("确定", new View.OnClickListener() {
             @Override
@@ -539,7 +523,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 //删除接口
-                //tempImage= SelectPicUtils.getInstance().selectZoomPicFromLocal(AccountActvity.this);
                 delThisPic(id, index);
                 dialog.dismiss();
 
@@ -553,8 +536,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         });
-        // dialog.setView(contentView);
-        // dialog.setContentView(contentView);
         dialog.show();
         WindowManager windowManager = getWindowManager();
         Window window = dialog.getWindow();
