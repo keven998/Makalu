@@ -138,7 +138,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public static final int CHATTYPE_GROUP = 2;
     private int PAGE;
     public static final String COPY_IMAGE = "EASEMOBIMG";
-    private TitleHeaderBar titleHeaderBar;
     private DrawerLayout drawerLayout;
     private View recordingContainer;
     private ImageView micImage;
@@ -206,7 +205,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private final MyHandler handler = new MyHandler(this);
 
-    private String name;
     private boolean isRecord;
 
     @Override
@@ -218,7 +216,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
-        name = intent.getStringExtra("Name");
         initView();
         setUpView();
         user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
@@ -260,7 +257,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      * initView
      */
     protected void initView() {
-        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.title_bar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         recordingContainer = findViewById(R.id.recording_container);
         micImage = (ImageView) findViewById(R.id.mic_image);
@@ -378,9 +374,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     }
 
     private void setUpView() {
-        titleHeaderBar.enableBackKey(true);
-
-        findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.iv_na_back).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChatActivity.this, MainActivity.class);
@@ -397,14 +391,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
 
+        String name = UserDBManager.getInstance().getContactByUserId(Long.valueOf(toChatUsername)).getNickName();
+        TextView titleView = (TextView) findViewById(R.id.tv_na_title);
+        titleView.setText(name);
+
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
-            titleHeaderBar.getTitleTextView().setText(toChatUsername);
             drawerLayout.setEnabled(false);
         } else {
             // 群聊
-            titleHeaderBar.setRightViewImageRes(R.drawable.selector_ic_common_navigation_menu);
-            titleHeaderBar.getTitleTextView().setText(toChatUsername);
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
@@ -413,7 +408,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.menu_frame, fragment).commit();
-            titleHeaderBar.setRightOnClickListener(new OnClickListener() {
+            findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //END即gravity.right 从右向左显示   START即left  从左向右弹出显示

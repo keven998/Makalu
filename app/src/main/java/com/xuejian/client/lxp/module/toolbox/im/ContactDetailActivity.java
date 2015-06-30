@@ -277,6 +277,7 @@ public class ContactDetailActivity extends ChatBaseActivity {
         MobclickAgent.onEvent(mContext,"event_talk_with_it");
         startActivity(new Intent(mContext, ChatActivity.class)
                         .putExtra("friend_id", String.valueOf(imUser.getUserId()))
+                        .putExtra("name", imUser.getNickName())
                         .putExtra("chatType","single")
         );
 //        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
