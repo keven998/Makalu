@@ -78,8 +78,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private ImageView iv_header_frame_gender;
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
-    @ViewInject(R.id.iv_gender)
-    private ImageView genderIv;
 
     @ViewInject(R.id.tv_nickname)
     private TextView tv_nickname;

@@ -60,18 +60,16 @@ import com.xuejian.client.lxp.common.task.DownloadVoice;
 import com.xuejian.client.lxp.common.task.LoadImageTask;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
-import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
-import com.xuejian.client.lxp.module.toolbox.im.ContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
-import com.xuejian.client.lxp.module.toolbox.im.IMAlertDialog;
 import com.xuejian.client.lxp.module.toolbox.im.SeachContactDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
@@ -543,7 +541,7 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (UserDBManager.getInstance().isMyFriend(message.getSenderId())) {
-                        Intent intent = new Intent(context, ContactDetailActivity.class);
+                        Intent intent = new Intent(context, HisMainPageActivity.class);
                         User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                         intent.putExtra("userId", user.getUserId());
                         intent.putExtra("userNick", user.getNickName());

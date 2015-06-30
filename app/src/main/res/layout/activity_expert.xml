@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="旅行派达人"
-            android:textColor="@color/base_font_color"
+            android:textColor="@color/color_text_i"
             android:textSize="18sp"
             />
 

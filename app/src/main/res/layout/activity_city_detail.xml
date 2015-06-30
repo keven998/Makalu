@@ -47,7 +47,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="城市详情"
-            android:textColor="@color/base_font_color"
+            android:textColor="@color/color_text_i"
             android:textSize="18sp" />
 
         <LinearLayout

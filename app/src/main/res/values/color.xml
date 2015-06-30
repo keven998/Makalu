@@ -27,9 +27,6 @@
     <color name="base_font_color">#2e2727</color>
     <color name="second_font_color">#626262</color>
     <color name="third_font_color">#cdcdcd</color>
-    <color name="app_theme_color_secondary">#00a071</color>
-    <color name="app_theme_color_secondary_selected">#1cc091</color>
-    <color name="app_theme_color_trans">#fd818e</color>
 
     <color name="plan_start_end">#B2B2B2</color>
     <color name="main_color">#fd818e</color>

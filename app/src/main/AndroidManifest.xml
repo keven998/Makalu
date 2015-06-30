@@ -329,10 +329,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"></activity>
         <!-- 好友详情 -->
-        <activity
-            android:name=".module.toolbox.im.ContactDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"></activity>
         <!-- 搜索好友详情 -->
         <activity
             android:name=".module.toolbox.im.SeachContactDetailActivity"

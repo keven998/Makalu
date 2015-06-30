@@ -103,7 +103,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 //            }
 //        });
         mSbIndex.setTextView(mDialog);
-        mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color_secondary));
+        mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color));
         initData();
         return rootView;
     }
