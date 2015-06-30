@@ -137,26 +137,27 @@
                         android:textSize="12sp" />
                 </RelativeLayout>
 
-                <TextView android:id="@+id/tv_memo"
-                    android:visibility="gone"
+                <TextView
+                    android:id="@+id/tv_memo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rl_base_info"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:lineSpacingExtra="2dp"
                     android:gravity="center"
+                    android:lineSpacingExtra="2dp"
                     android:paddingBottom="10dp"
                     android:textColor="@color/app_theme_color"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
                 android:layout_height="@dimen/user_profile_entry_height"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -176,9 +177,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:lineSpacingExtra="5dp"
                     android:background="@drawable/selector_userprofile_entry_card"
                     android:gravity="center"
+                    android:lineSpacingExtra="5dp"
                     android:text="足迹"
                     android:textColor="@color/color_text_i"
                     android:textSize="16sp" />
@@ -196,8 +197,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/selector_userprofile_entry_card"
-                    android:lineSpacingExtra="5dp"
                     android:gravity="center"
+                    android:lineSpacingExtra="5dp"
                     android:text="相册"
                     android:textColor="@color/color_text_i"
                     android:textSize="16sp" />
@@ -208,8 +209,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/selector_userprofile_entry_card"
-                    android:lineSpacingExtra="5dp"
                     android:gravity="center"
+                    android:lineSpacingExtra="5dp"
                     android:text="游记"
                     android:textColor="@color/color_text_i"
                     android:textSize="16sp" />
@@ -271,53 +272,59 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/selector_profile_icon"
             android:gravity="center_vertical"
             android:paddingLeft="32dp"
-            android:paddingRight="14dp"
-            android:singleLine="true"
-            android:text="更多"
-            android:textColor="@color/color_text_titlebar"
-            android:textSize="16sp" />
+            android:paddingRight="14dp"/>
 
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginBottom="48dp"
-        android:layout_gravity="bottom"
-        android:background="@color/color_line"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:background="@color/base_color_white">
+        android:background="@drawable/user_profile_bar"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_send_message"
+        <FrameLayout
+            android:id="@+id/fl_send_message"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selector_userprofile_entry_card"
-            android:gravity="center"
-            android:text="发起聊天"
-            android:textColor="@color/color_text_ii"
-            android:textSize="16sp" />
+            android:background="@drawable/selector_profile_bar_item_entry">
 
-        <TextView
-            android:id="@+id/tv_send_action"
+            <TextView
+                android:id="@+id/tv_send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_talk_normal"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="发起聊天"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_send_action"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selector_userprofile_entry_card"
-            android:gravity="center"
-            android:text="加为好友"
-            android:textColor="@color/color_text_ii"
-            android:textSize="16sp" />
+            android:background="@drawable/selector_profile_bar_item_entry">
 
+            <TextView
+                android:id="@+id/tv_send_action"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/account_labbar_icon_follow_default"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="加为好友"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
+        </FrameLayout>
     </LinearLayout>
-
 
 </FrameLayout>
