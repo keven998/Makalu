@@ -93,7 +93,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             handleView.setVisibility(View.GONE);
         }
 
-        findViewById(R.id.tv_send_message).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTalk();
@@ -105,12 +105,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (isMyFriend) {
             tv_send_action.setText("备注");
         }
-        tv_send_action.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
                     editMemo("123");
-                } else addToFriend();
+                } else {
+                    addToFriend();
+                }
             }
         });
 
