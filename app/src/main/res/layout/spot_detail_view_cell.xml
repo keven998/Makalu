@@ -15,9 +15,10 @@
 
         <ImageView
             android:id="@+id/spot_detail_dp_pic"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:scaleType="fitCenter"
+            android:layout_marginTop="5dp"
             android:src="@drawable/poi_comment_pic"/>
 
         <TextView
@@ -28,8 +29,8 @@
             android:textColor="@color/third_font_color"
             android:text="莫言"
             android:layout_toRightOf="@+id/spot_detail_dp_pic"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             />
 
 
@@ -44,29 +45,21 @@
             android:layout_marginLeft="10dp"
             android:layout_alignParentRight="true"
             />
-
+        <TextView
+            android:id="@+id/spot_detail_dp_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/second_font_color"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/spot_detail_dp_pic"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/spot_detail_dp_name"
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="少安演的太好了，太好看了。。。。"
+            />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/spot_detail_dp_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/second_font_color"
-        android:textSize="16sp"
-        android:layout_below="@+id/spot_detail_dp_info"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="5dp"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:text="少安演的太好了，太好看了。。。。"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/base_color_line_color"
-        android:layout_below="@+id/spot_detail_dp_msg"
-        android:layout_marginTop="5dp"
-        />
 
 </RelativeLayout>
