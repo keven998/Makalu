@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -47,19 +48,21 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
     private ImageView closeIv;
     private ImageView spotIv;
-    private RelativeLayout descLl,priceLl,timeLl;
-    private RelativeLayout addressLl;
-    private RelativeLayout mBookFl;
+    private RelativeLayout descLl;
+    private LinearLayout priceLl,timeLl;
+    private LinearLayout addressLl;
+    private LinearLayout mBookFl;
     private TextView mSpotNameTv, mTimeTv, mAllEvaluation;
-    private TextView tipsTv, travelGuideTv, trafficGuideTv;
+    private ImageView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView chatIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
     private TextView ic_back,poi_rank_sm;
     private ListViewDataAdapter adapter;
     private BaseAdapter  bAdapter;
-
-
+    TextView tv_poi_desc;
+    TextView tv_poi_addr;
+    TextView tv_poi_tel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,16 +114,18 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
         mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
         poi_rank_sm = (TextView) hv.findViewById(R.id.poi_rank_sm);
-        descLl = (RelativeLayout) hv.findViewById(R.id.ll_desc);
-        priceLl = (RelativeLayout) hv.findViewById(R.id.ll_price);
-        timeLl = (RelativeLayout) hv.findViewById(R.id.ll_time);
-        addressLl = (RelativeLayout) hv.findViewById(R.id.rl_address);
-        mBookFl = (RelativeLayout) hv.findViewById(R.id.fl_book);
-        tipsTv = (TextView) hv.findViewById(R.id.tv_tips);
-        travelGuideTv = (TextView) hv.findViewById(R.id.tv_travel_guide);
-        trafficGuideTv = (TextView) hv.findViewById(R.id.tv_traffic_guide);
+      //  descLl = (RelativeLayout) hv.findViewById(R.id.ll_desc);
+        priceLl = (LinearLayout) hv.findViewById(R.id.ll_price);
+        timeLl = (LinearLayout) hv.findViewById(R.id.ll_time);
+        addressLl = (LinearLayout) hv.findViewById(R.id.rl_address);
+        mBookFl = (LinearLayout) hv.findViewById(R.id.fl_book);
+        tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
+        travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
+        trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
         mAllEvaluation = (TextView) hv.findViewById(R.id.all_evaluation);
-
+        tv_poi_desc=(TextView)hv.findViewById(R.id.tv_poi_desc);
+        tv_poi_addr=(TextView)hv.findViewById(R.id.tv_addr1);
+        tv_poi_tel=(TextView)hv.findViewById(R.id.tv_tel1);
         //这个是备着以后读接口
         adapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
@@ -204,25 +209,29 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mAllEvaluation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+               Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", "更多评论");
                 intent.putExtra("url", result.lyPoiUrl);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
-
+        tv_poi_desc.setText(result.desc);
+        tv_poi_desc.setText(result.desc);
+        int numChars = tv_poi_desc.getLayout().getLineEnd(2);
+        if (IMUtils.isEnglish(result.desc)) {
+            String text = result.desc.substring(0, result.desc.substring(0, numChars - 4).lastIndexOf(" "));
+            tv_poi_desc.setText(text + "...");
+        }else {
+            String text =result.desc.substring(0, numChars - 4);
+            tv_poi_desc.setText(text+"...");
+        }
+        tv_poi_addr.setText(result.address);
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
         if(result.getRank().equals("0")) {
             poi_rank_sm.setText("");
         }else{
             poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
-        }
-        if(TextUtils.isEmpty(result.desc)){
-            descLl.setVisibility(View.GONE);
-        }else{
-            descLl.setVisibility(View.VISIBLE);
-            //descTv.setText(result.desc);
         }
         //mPriceDescTv.setText("门票 "+result.priceDesc);
         mTimeTv.setText("开放时间"+result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
@@ -261,7 +270,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
 
         } else {
-            mBookFl.setVisibility(View.GONE);
+          //  mBookFl.setVisibility(View.GONE);
 
         }
         chatIv.setOnClickListener(new View.OnClickListener() {
@@ -272,16 +281,16 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
 
-        descLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_spot_information");
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", result.zhName);
-                intent.putExtra("url", result.descUrl);
-                startActivity(intent);
-            }
-        });
+//        descLl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext,"event_spot_information");
+//                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+//                intent.putExtra("title", result.zhName);
+//                intent.putExtra("url", result.descUrl);
+//                startActivity(intent);
+//            }
+//        });
         timeLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,7 +326,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //tipsTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            tipsTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_little_disabled),null,null);
+          //  tipsTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_little_disabled),null,null);
             tipsTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.trafficInfoUrl)) {
@@ -334,7 +343,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //trafficGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            trafficGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_travle_disabled),null,null);
+           // trafficGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_travle_disabled),null,null);
             trafficGuideTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.visitGuideUrl)) {
@@ -351,7 +360,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //travelGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            travelGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_spots_disabled),null,null);
+           // travelGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_spots_disabled),null,null);
             travelGuideTv.setEnabled(false);
         }
     }

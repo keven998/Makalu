@@ -146,7 +146,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
 
       //  View hv;
-      //  hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
+     //  hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
       //  travelLv.setHeaderView(hv);
         // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
       //  View zoomView = hv.findViewById(R.id.ly1);
