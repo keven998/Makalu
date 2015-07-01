@@ -183,7 +183,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginBottom="7dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginBottom="1dp"
                         android:gravity="center"
                         android:text="全文"
                         android:textColor="@color/app_theme_color"
@@ -263,6 +264,7 @@
 <ListView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:id="@+id/lv_city_detail"
     >
 

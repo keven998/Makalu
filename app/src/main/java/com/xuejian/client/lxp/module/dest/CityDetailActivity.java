@@ -63,6 +63,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private TextView mCityNameTv;
     private TextView mCityNameEn;
     private TextView mTTview;
+    private TextView more;
     private TextView mCostTimeTv;
     private TextView bestMonthTv;
     private ImageView foodTv, shoppingTv, spotsTv, travelTv;
@@ -123,6 +124,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
         mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
         imageViews=new ImageView[]{mCityIv1,mCityIv2,mCityIv3,mCityIv4,mCityIv5,mCityIv6};
+        more=(TextView)findViewById(R.id.tv_pic_num1);
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.title_bar);
         titleBar.getTitleTextView().setText("");
         titleBar.enableBackKey(true);
@@ -322,11 +324,20 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         travelTv.setOnClickListener(this);
         if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
-           // int length=mCityNameEn.getText().length();
-          //  mCityNameEn.setText(detailBean.desc.substring(0, length - 5));
+            int numChars = mCityNameEn.getLayout().getLineEnd(1);
+            String text =detailBean.desc.substring(0, numChars - 8);
+            mCityNameEn.setText(text+"...");
         } else {
             mCityNameEn.setText(detailBean.enName);
         }
+     //   more.t
+
+//        Bitmap bitmap= BitmapFactory.decodeResource(CityDetailActivity.this.getResources(), R.drawable.ic_add_friend);
+//        ImageSpan imgSpan = new ImageSpan(CityDetailActivity.this,bitmap);
+//        SpannableString spanString = new SpannableString("icon");
+//        spanString.setSpan(imgSpan, 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        vh.outline1.append(spanString);
+//        vh.outline2.append(spanString);
        // System.out.println("length ------" + mCityNameEn.getLayout().getLineEnd(2));
        // setLines(mCityNameTv);
         mCityNameEn.setOnClickListener(new View.OnClickListener() {
@@ -498,6 +509,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画*/
     }
+
     public void setLines(final TextView tv) {
         //测试
         ViewTreeObserver observer = tv.getViewTreeObserver(); //textAbstract为TextView控件
