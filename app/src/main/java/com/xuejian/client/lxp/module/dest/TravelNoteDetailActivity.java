@@ -51,12 +51,11 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         id = getIntent().getStringExtra("id");
         noteBean = getIntent().getParcelableExtra("travelNote");
         String url;
-        if (TextUtils.isEmpty(noteBean.detailUrl)) {
-            url = H5Url.TRAVEL_NOTE + id;
-        } else {
+        url = H5Url.TRAVEL_NOTE+id;
+       /* if(TextUtils.isEmpty(noteBean.detailUrl)){
+        }else{
             url = noteBean.detailUrl;
-        }
-
+        }*/
         mWebView.loadUrl(url);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
