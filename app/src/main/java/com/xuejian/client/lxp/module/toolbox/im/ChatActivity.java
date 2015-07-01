@@ -1050,21 +1050,20 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (wakeLock.isHeld())
                         wakeLock.release();
                     if (event.getY() < 0) {
-                        // discard the recorded audio.
                         MediaRecordFunc.getInstance().cancleRecord();
                     } else {
-                        // stop recording and send voice file
                         try {
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                             long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
                             if (time > 1000) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
-                                MediaRecordFunc.getInstance().cancleRecord();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短");
+                                MediaRecordFunc.getInstance().cancleRecord();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            MediaRecordFunc.getInstance().cancleRecord();
                             if (!isFinishing())
                                 ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像找不到网络");
                         }

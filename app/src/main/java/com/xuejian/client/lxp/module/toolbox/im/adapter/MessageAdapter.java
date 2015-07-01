@@ -24,6 +24,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -833,27 +834,14 @@ public class MessageAdapter extends BaseAdapter {
             }
             return;
         }
-
+        // 发送的消息
         String localPath = getStringAttr(message, "localPath");
         String thumbPath = getThumbImagepath(message);
         if (localPath != null && new File(localPath).exists()) {
             showImageView(thumbPath, holder.iv, localPath, null, message);
-
-            // showImageView(filePath, holder.iv, filePath, null, message);
         } else {
             showImageView(thumbPath, holder.iv, localPath, IMAGE_DIR, message);
         }
-
-        // 发送的消息
-        // process send message
-        // send pic, show the pic directly
-//        ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
-//        String filePath = imgBody.getLocalUrl();
-//        if (filePath != null && new File(filePath).exists()) {
-//          //  showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
-//        } else {
-//          //  showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message);
-//        }
 
         switch (message.getStatus()) {
             case 0:
@@ -877,8 +865,13 @@ public class MessageAdapter extends BaseAdapter {
 
                 // set a timer
                 //    if (message.getStatus()==1) sendPictureMessage(message, holder);
-                if (timers.containsKey(message.getLocalId()))
+                if (timers.containsKey(message.getLocalId())){
+                    if (Config.isDebug){
+                        Log.i(Config.TAG,"already exist time Task");
+                    }
                     return;
+                }
+
                 sendPictureMessage(message, holder);
                 final Timer timer = new Timer();
                 timers.put(message.getLocalId(), timer);
@@ -889,11 +882,16 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.VISIBLE);
                                 holder.tv.setVisibility(View.VISIBLE);
-                                holder.tv.setText(message.getProgress() + "%");
-                                if (message.getStatus() == 0) {
+                                int progress=IMClient.getInstance().getProgress(friendId + message.getLocalId());
+                                holder.tv.setText(progress+"%");
+                                if (progress==100){
                                     holder.pb.setVisibility(View.GONE);
                                     holder.tv.setVisibility(View.GONE);
-                                    // message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
+                                    timer.cancel();
+                                }
+                                else if (message.getStatus() == 0) {
+                                    holder.pb.setVisibility(View.GONE);
+                                    holder.tv.setVisibility(View.GONE);
                                     timer.cancel();
                                 } else if (message.getStatus() == 2) {
                                     holder.pb.setVisibility(View.GONE);
@@ -1547,19 +1545,18 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onProgress(final int progress) {
-                    System.out.println(progress);
-                    activity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            if (progress == 100) {
-                                message.setStatus(0);
-                                holder.pb.setVisibility(View.GONE);
-                                holder.tv.setVisibility(View.GONE);
-                            } else {
-                                //holder.tv.setText(progress + "%");
-                                message.setProgress(progress);
-                            }
-                        }
-                    });
+//                    activity.runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            if (progress == 100) {
+//                                message.setStatus(0);
+//                                holder.pb.setVisibility(View.GONE);
+//                                holder.tv.setVisibility(View.GONE);
+//                            } else {
+//                                //holder.tv.setText(progress + "%");
+//                                message.setProgress(progress);
+//                            }
+//                        }
+//                    });
                 }
             }, chatType);
         } catch (Exception e) {

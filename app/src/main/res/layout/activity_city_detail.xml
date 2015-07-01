@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="6dp"
                     android:textColor="@color/color_text_iii"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:id="@+id/line_view"
@@ -175,7 +175,7 @@
                         android:lineSpacingExtra="6dp"
                         android:lines="2"
                         android:textColor="@color/second_font_color"
-                        android:textSize="14sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_pic_num1"

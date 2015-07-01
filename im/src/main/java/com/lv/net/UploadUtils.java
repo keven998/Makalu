@@ -176,6 +176,7 @@ public class UploadUtils {
                     }
                 }, new UploadOptions(pamas, null, false, new UpProgressHandler() {
                     public void progress(String key, double percent) {
+                        IMClient.getInstance().savePrograss(receive+localId,(int) (percent * 100));
                         if (listener != null) {
                             listener.onProgress((int) (percent * 100));
                         }

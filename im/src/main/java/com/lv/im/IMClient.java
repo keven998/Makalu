@@ -48,6 +48,7 @@ public class IMClient {
     private int count;
     public static HashMap<String, ArrayList<Long>> taskMap = new HashMap<>();
     private static List<String> invokeStatus = new ArrayList<>();
+    private static ConcurrentHashMap<String,Integer> prograssMap=new ConcurrentHashMap<>();
     private Timer timer;
     private boolean isRunning;
     public int p;
@@ -504,13 +505,23 @@ public class IMClient {
     public void addTips(String chatId, String tips, String chatType) {
         db.addTips(chatId, tips, chatType);
     }
-
+    public void savePrograss(String id,int prograss){
+        prograssMap.put(id, prograss);
+    }
+    public int getProgress(String id){
+        if (prograssMap.containsKey(id)){
+            return prograssMap.get(id);
+        }
+        else {
+            prograssMap.put(id,0);
+            return 0;
+        }
+    }
     public void logout() {
         isLogin = false;
         db.disconnectDB();
         currentUserId = null;
         client = null;
-
     }
 }
 
