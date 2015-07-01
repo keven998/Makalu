@@ -3,10 +3,15 @@ package com.xuejian.client.lxp.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -33,6 +38,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -67,6 +73,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private PopupWindow mPop;
     private boolean isFromStrategy;
     ImageView [] imageViews;
+    ListView travelLv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +114,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void initView() {
      //   PullToZoomListViewEx travelLv = (PullToZoomListViewEx) findViewById(R.id.lv_city_detail);
-        ListView travelLv = (ListView) findViewById(R.id.lv_city_detail);
+        travelLv = (ListView) findViewById(R.id.lv_city_detail);
        // mTravelLv = travelLv;
         mCityIv1 = (ImageView) findViewById(R.id.iv_city_1);
         mCityIv2 = (ImageView) findViewById(R.id.iv_city_2);
@@ -142,7 +149,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
       //  View zoomView = hv.findViewById(R.id.ly1);
       //  travelLv.setZoomView(zoomView);
-        mTTview = (TextView)findViewById(R.id.travel_title);
+       // mTTview = (TextView)findViewById(R.id.travel_title);
         mCityNameTv = (TextView) findViewById(R.id.tv_city_name);
         mCityNameEn = (TextView) findViewById(R.id.tv_city_name_en);
         mCostTimeTv = (TextView) findViewById(R.id.tv_cost_time);
@@ -161,6 +168,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
        travelLv.setAdapter(travelAdapter);
+
+        //fixListViewHeight(travelLv);
         travelLv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -248,9 +257,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
-                    System.out.println(detailResult.result + "  =====");
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
+                    setListViewHeightBasedOnChildren(travelLv);
                     travelAdapter.notifyDataSetChanged();
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -306,46 +315,47 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
      ;
         mCityNameTv.setText(getCityName(detailBean.zhName));
         mCostTimeTv.setText(String.format("～参考游玩时间·%s～", detailBean.timeCostDesc));
-        bestMonthTv.setText(String.format("～推荐游玩时间·%s～",  detailBean.travelMonth.substring(0,detailBean.travelMonth.indexOf("。"))));
+        bestMonthTv.setText(String.format("～推荐游玩时间·%s～", detailBean.travelMonth.substring(0, detailBean.travelMonth.indexOf("。"))));
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
         travelTv.setOnClickListener(this);
         if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
-            String spannable=mCityNameEn.getText().toString();
-            mCityNameEn.setText(spannable.substring(0, spannable.length() - 5));
-
+           // int length=mCityNameEn.getText().length();
+          //  mCityNameEn.setText(detailBean.desc.substring(0, length - 5));
         } else {
             mCityNameEn.setText(detailBean.enName);
         }
-//        mCityNameEn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-////自定义布局
-//                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-//                        R.layout.text_diaplay, null, true);
-//                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-//
-//                TextView tv = (TextView) menuView.findViewById(R.id.msg);
-//                tv.setText(detailBean.desc);
-//                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-//                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-//                mPop.setContentView(menuView);//设置包含视图
-//                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setAnimationStyle(R.style.PopAnimation);
-//                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
-//                pop_dismiss.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mPop.dismiss();
-//                    }
-//                });
-//            }
-//        });
+       // System.out.println("length ------" + mCityNameEn.getLayout().getLineEnd(2));
+       // setLines(mCityNameTv);
+        mCityNameEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                        R.layout.text_diaplay, null, true);
+                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+                tv.setText(detailBean.desc);
+                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+                mPop.setContentView(menuView);//设置包含视图
+                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setAnimationStyle(R.style.PopAnimation);
+                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
+                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPop.dismiss();
+                    }
+                });
+            }
+        });
 //        mTTview.setText(String.format("玩转%s", detailBean.zhName));
 
         // mTitleTv.setText(detailBean.zhName);
@@ -488,5 +498,48 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画*/
     }
+    public void setLines(final TextView tv) {
+        //测试
+        ViewTreeObserver observer = tv.getViewTreeObserver(); //textAbstract为TextView控件
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (tv.getLineCount() > 1) {
+                    int length = tv.getText().length();
+                    System.out.println("length " + length);
+                    int lineEndIndex = tv.getLayout().getLineEnd(2); //设置第六行打省略号
+                    System.out.println("lineEndIndex " + lineEndIndex);
+                    System.out.println(length + "   " + lineEndIndex);
+                    String text = "..." + tv.getText().toString().substring(length - lineEndIndex - 5, length - 5);
+                    tv.setText(text);
+                }
+            }
+        });
+
+    }
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+//获取ListView对应的Adapter
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+// pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) { //listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0); //计算子项View 的宽高
+            totalHeight += listItem.getMeasuredHeight(); //统计所有子项的总高度
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+//listView.getDividerHeight()获取子项间分隔符占用的高度
+//params.height最后得到整个ListView完整显示需要的高度
+        listView.setLayoutParams(params);
+    }
 }
