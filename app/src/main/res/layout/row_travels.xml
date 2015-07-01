@@ -44,8 +44,8 @@
             android:text="fdjsaklfjdkljdsaddsa"/>
         <ImageView
             android:id="@+id/iv_travels_image"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/city_bg_photo_default"
             android:layout_below="@id/iv_travels"
             android:visibility="gone"

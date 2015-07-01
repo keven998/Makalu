@@ -78,7 +78,6 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -1058,9 +1057,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         try {
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                             long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
-                            if (time > 0) {
+                            if (time > 1000) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
+                                MediaRecordFunc.getInstance().cancleRecord();
                                 ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短");
                             }
                         } catch (Exception e) {

@@ -261,8 +261,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (detailResult.code == 0) {
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
-                    setListViewHeightBasedOnChildren(travelLv);
-                    travelAdapter.notifyDataSetChanged();
+                     setListViewHeightBasedOnChildren(travelLv);
+                  //  travelAdapter.notifyDataSetChanged();
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -335,16 +335,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         } else {
             mCityNameEn.setText(detailBean.enName);
         }
-     //   more.t
-
-//        Bitmap bitmap= BitmapFactory.decodeResource(CityDetailActivity.this.getResources(), R.drawable.ic_add_friend);
-//        ImageSpan imgSpan = new ImageSpan(CityDetailActivity.this,bitmap);
-//        SpannableString spanString = new SpannableString("icon");
-//        spanString.setSpan(imgSpan, 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        vh.outline1.append(spanString);
-//        vh.outline2.append(spanString);
-       // System.out.println("length ------" + mCityNameEn.getLayout().getLineEnd(2));
-       // setLines(mCityNameTv);
         mCityNameEn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
