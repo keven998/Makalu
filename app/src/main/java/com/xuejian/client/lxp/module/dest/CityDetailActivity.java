@@ -325,8 +325,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         if (detailBean.enName.equals("") || detailBean.enName == null) {
             mCityNameEn.setText(detailBean.desc);
             int numChars = mCityNameEn.getLayout().getLineEnd(1);
-            String text =detailBean.desc.substring(0, numChars - 8);
-            mCityNameEn.setText(text+"...");
+            if (IMUtils.isEnglish(detailBean.desc)){
+                String text =detailBean.desc.substring(0, detailBean.desc.substring(0, numChars - 4).lastIndexOf(" "));
+                mCityNameEn.setText(text+"...");
+            }else {
+                String text =detailBean.desc.substring(0, numChars - 4);
+                mCityNameEn.setText(text+"...");
+            }
         } else {
             mCityNameEn.setText(detailBean.enName);
         }

@@ -372,4 +372,26 @@ public class IMUtils {
         DecimalFormat var2 = new DecimalFormat("###.00");
         return var0 < 1024L?var0 + "bytes":(var0 < 1048576L?var2.format((double)((float)var0 / 1024.0F)) + "KB":(var0 < 1073741824L?var2.format((double)((float)var0 / 1024.0F / 1024.0F)) + "MB":(var0 < 0L?var2.format((double)((float)var0 / 1024.0F / 1024.0F / 1024.0F)) + "GB":"error")));
     }
+    public static void isChinese(char c) {
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+        if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+            System.out.println(c + "--CJK_UNIFIED_IDEOGRAPHS");
+        } else if (ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS) {
+            System.out.println(c + "--CJK_COMPATIBILITY_IDEOGRAPHS");
+        } else if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A) {
+            // CJK Unified Ideographs Extension WikipediaUnicode扩展汉字
+            // CJK Unified Ideographs Extension A 中日韩统一表意文字扩展区A ; 表意文字扩充A
+            // CJK Unified Ideographs Extension B 中日韩统一表意文字扩展区B
+            System.out.println(c + "--CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A");
+        } else if (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) {// 通用标点
+            System.out.println(c + "--GENERAL_PUNCTUATION");
+        } else if (ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION) {
+            System.out.println(c + "--CJK_SYMBOLS_AND_PUNCTUATION");
+        } else if (ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+            System.out.println(c + "--HALFWIDTH_AND_FULLWIDTH_FORMS");
+        }
+    }
+    public static boolean isEnglish(String charaString) {
+        return charaString.matches("^[a-zA-Z]*");
+    }
 }
