@@ -280,22 +280,21 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="1px"
                     android:layout_alignParentBottom="true"
                     android:background="@color/app_backgroud" />
 
 
                 <TextView
                     android:id="@+id/tv_more"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginBottom="6dp"
-                    android:background="@drawable/city_bg_more_default"
+                    android:layout_marginTop="6dp"
                     android:gravity="center"
-                    android:text="更多"
-                    android:textColor="@color/base_color_white"
+                    android:text="～阅读更多·达人游记～"
+                    android:textColor="@color/app_theme_color"
                     android:textSize="14sp"
                     android:visibility="visible" />
 

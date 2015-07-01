@@ -306,7 +306,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
      ;
         mCityNameTv.setText(getCityName(detailBean.zhName));
         mCostTimeTv.setText(String.format("～参考游玩时间·%s～", detailBean.timeCostDesc));
-        bestMonthTv.setText(String.format("～推荐游玩时间：%s～",  detailBean.travelMonth.substring(0,detailBean.travelMonth.indexOf("。"))));
+        bestMonthTv.setText(String.format("～推荐游玩时间·%s～",  detailBean.travelMonth.substring(0,detailBean.travelMonth.indexOf("。"))));
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
         spotsTv.setOnClickListener(this);
