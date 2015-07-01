@@ -206,7 +206,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
                     setListViewHeightBasedOnChildren(travelLv);
-                    //  travelAdapter.notifyDataSetChanged();
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -267,32 +266,44 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         final String bt = String.format("～最佳季节：%s", detailBean.travelMonth);
         bestMonthTv.setText(bt);
-        int nc = bestMonthTv.getLayout().getLineEnd(0);
-        if (nc < bt.length()) {
-            String text = bt.substring(0, nc - 4);
-            SpannableString planStr = new SpannableString("全文");
-            planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            SpannableStringBuilder spb = new SpannableStringBuilder();
-            spb.append(String.format("%s... ", text)).append(planStr);
-            bestMonthTv.setText(spb);
-        }
+        ViewTreeObserver observer2 = bestMonthTv.getViewTreeObserver();
+        observer2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int nc = bestMonthTv.getLayout().getLineEnd(0);
+                if (nc < bt.length()) {
+                    String text = bt.substring(0, nc - 4);
+                    SpannableString planStr = new SpannableString("更多");
+                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    SpannableStringBuilder spb = new SpannableStringBuilder();
+                    spb.append(String.format("%s... ", text)).append(planStr);
+                    bestMonthTv.setText(spb);
+                }
+            }
+        });
 
         final String desc = detailBean.desc;
         mCityDesc.setText(desc);
-        if (mCityDesc.getLineCount() > 1) {
-            int numChars = mCityDesc.getLayout().getLineEnd(1);
-            String text;
-            if (IMUtils.isEnglish(desc)) {
-                text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
-            } else {
-                text = desc.substring(0, numChars - 4);
+        ViewTreeObserver observer = mCityDesc.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mCityDesc.getLineCount() > 1) {
+                    int numChars = mCityDesc.getLayout().getLineEnd(1);
+                    String text;
+                    if (IMUtils.isEnglish(desc)) {
+                        text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
+                    } else {
+                        text = desc.substring(0, numChars - 4);
+                    }
+                    SpannableString planStr = new SpannableString("更多");
+                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    SpannableStringBuilder spb = new SpannableStringBuilder();
+                    spb.append(String.format("%s... ", text)).append(planStr);
+                    mCityDesc.setText(spb);
+                }
             }
-            SpannableString planStr = new SpannableString("全文");
-            planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            SpannableStringBuilder spb = new SpannableStringBuilder();
-            spb.append(String.format("%s... ", text)).append(planStr);
-            mCityDesc.setText(spb);
-        }
+        });
 
 
 //        mCityNameEn.setOnClickListener(new View.OnClickListener() {
@@ -319,7 +330,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //                });
 //            }
 //        });
-        }
+    }
 
     private String getCityName(String name) {
         String outcountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_outcountry");
