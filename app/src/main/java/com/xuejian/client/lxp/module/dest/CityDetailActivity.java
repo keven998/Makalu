@@ -324,6 +324,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private String getCityName(String name) {
         String outcountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_outcountry");
         CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
+        if (countryListResult == null || countryListResult.result == null) return name;
         for (CountryBean countryBean : countryListResult.result) {
             for (LocBean kLocBean : countryBean.destinations) {
                 if (kLocBean.zhName.equals(name)) {

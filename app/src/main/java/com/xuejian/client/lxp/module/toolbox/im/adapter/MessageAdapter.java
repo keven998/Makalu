@@ -695,9 +695,9 @@ public class MessageAdapter extends BaseAdapter {
                     break;
             }
             if (message.getSendType() == TYPE_REV) {
-                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small, 0, 0, 0);
+                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_highlight, 0, 0, 0);
             } else {
-                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small_unselect, 0, 0, 0);
+                holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_default, 0, 0, 0);
             }
 
             holder.tv_desc.setText(bean.address);

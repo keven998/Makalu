@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background"
-        android:drawable="@drawable/ic_star_selected_k" />
-    <item android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/ic_star_selected_k" />
-    <item android:id="@android:id/progress"
-        android:drawable="@drawable/ic__star_stlected" />
+    <item
+        android:id="@android:id/background"
+        android:drawable="@drawable/ic_rating_start_default" />
+    <item
+        android:id="@android:id/secondaryProgress"
+        android:drawable="@drawable/ic_rating_start_default" />
+    <item
+        android:id="@android:id/progress"
+        android:drawable="@drawable/ic_rating_start_highlight" />
 </layer-list>   

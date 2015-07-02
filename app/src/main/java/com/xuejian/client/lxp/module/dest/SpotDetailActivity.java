@@ -55,7 +55,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private LinearLayout priceLl, timeLl;
     private LinearLayout addressLl;
     private LinearLayout mBookFl;
-    private TextView mSpotNameTv, mTimeTv, mAllEvaluation;
+    private TextView mSpotNameTv, mTimeTv;
     private ImageView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView chatIv;
     private SpotDetailBean spotDetailBean;
@@ -91,7 +91,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private void initView() {
         ListView spotLv = (ListView) findViewById(R.id.spot_detail_list);
         View hv;
-        View footerView = View.inflate(mContext, R.layout.activity_poi_foot, null);
         hv = View.inflate(mContext, R.layout.activity_spot_detail, null);
         spotLv.addHeaderView(hv);
         ic_back = (TextView) findViewById(R.id.poi_det_back);
@@ -102,29 +101,28 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
 
-        spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
-        chatIv = (ImageView) findViewById(R.id.iv_chat);
-        ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
-        mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
-        mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
-        priceLl = (LinearLayout) hv.findViewById(R.id.ll_price);
-        timeLl = (LinearLayout) hv.findViewById(R.id.ll_time);
-        addressLl = (LinearLayout) hv.findViewById(R.id.rl_address);
-        mBookFl = (LinearLayout) hv.findViewById(R.id.fl_book);
-        tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
-        travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
-        trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
-        mAllEvaluation = (TextView) footerView.findViewById(R.id.all_evaluation);
-        tv_poi_desc = (TextView) hv.findViewById(R.id.tv_poi_desc);
-        tv_poi_addr = (TextView) hv.findViewById(R.id.tv_addr1);
-        tv_poi_tel = (TextView) hv.findViewById(R.id.tv_tel1);
+//        spotIv = (ImageView) hv.findViewById(R.id.vp_poi);
+//        chatIv = (ImageView) findViewById(R.id.iv_chat);
+//        ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
+//        mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
+//        mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
+//        priceLl = (LinearLayout) hv.findViewById(R.id.ll_price);
+//        timeLl = (LinearLayout) hv.findViewById(R.id.ll_time);
+//        addressLl = (LinearLayout) hv.findViewById(R.id.rl_address);
+//        mBookFl = (LinearLayout) hv.findViewById(R.id.fl_book);
+//        tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
+//        travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
+//        trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
+//        tv_poi_desc = (TextView) hv.findViewById(R.id.tv_poi_desc);
+//        tv_poi_addr = (TextView) hv.findViewById(R.id.tv_addr1);
+//        tv_poi_tel = (TextView) hv.findViewById(R.id.tv_tel1);
         //这个是备着以后读接口
 
 
         adapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                SpotDpViewHolder viewHolder = new SpotDpViewHolder(SpotDetailActivity.this);
+                PoiDetailActivity.CommentViewHolder viewHolder = new PoiDetailActivity.CommentViewHolder(SpotDetailActivity.this);
                 return viewHolder;
             }
         });
@@ -169,6 +167,27 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private void bindView(final SpotDetailBean result) {
         TextView titleView = (TextView) findViewById(R.id.poi_det_title);
         titleView.setText(result.zhName);
+        findViewById(R.id.iv_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(SpotDetailActivity.this);
+            }
+        });
+
+//        commentAdapter.getDataList().addAll(result.comments);
+//        if (bean.comments != null && bean.comments.size() > 3) {
+//            View footerView = View.inflate(this, R.layout.activity_poi_foot, null);
+//            mLvFoodshopDetail.addFooterView(footerView);
+//            footerView.findViewById(R.id.all_evaluation).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, MoreCommentActivity.class);
+//                    intent.putExtra("id", id);
+//                    intent.putExtra("poi", poiDetailBean);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
 
         ImageLoader.getInstance().displayImage(result.images.size() > 0 ? result.images.get(0).url : "", spotIv, UILUtils.getDefaultOption());
         spotIv.setOnClickListener(new View.OnClickListener() {
@@ -178,15 +197,16 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
 
-        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", "更多评论");
-                intent.putExtra("url", result.lyPoiUrl);
-                startActivity(intent);
-            }
-        });
+//        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+//                intent.putExtra("title", "更多评论");
+//                intent.putExtra("url", result.lyPoiUrl);
+//                startActivity(intent);
+//            }
+//        });
+
         tv_poi_desc.setText(result.desc);
         int numChars = tv_poi_desc.getLayout().getLineEnd(2);
         if (IMUtils.isEnglish(result.desc)) {
@@ -371,38 +391,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
             IMUtils.onShareResult(mContext, spotDetailBean, requestCode, resultCode, data, null);
         }
-    }
-
-    private void showActionDialog() {
-        final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.share_to_talk_confirm_action, null);
-        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setText("Talk分享");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
-                IMUtils.onClickImShare(SpotDetailActivity.this);
-                dialog.dismiss();
-            }
-        });
-        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = display.getWidth(); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
 }

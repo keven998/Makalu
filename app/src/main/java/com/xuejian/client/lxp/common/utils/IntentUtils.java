@@ -28,7 +28,8 @@ public class IntentUtils {
             intent.putExtra("id", id);
             act.startActivity(intent);
         } else if (type.equals(TravelApi.PeachType.SPOT)) {
-            Intent intent = new Intent(act, SpotDetailActivity.class);
+            Intent intent = new Intent(act, PoiDetailActivity.class);
+            intent.putExtra("type", type);
             intent.putExtra("id", id);
             act.startActivity(intent);
         } else if (type.equals(TravelApi.PeachType.SHOPPING) || type.equals(TravelApi.PeachType.RESTAURANTS) || type.equals(TravelApi.PeachType.HOTEL)) {
@@ -54,12 +55,12 @@ public class IntentUtils {
 
 
     public static void intentToPicGallery(Activity act, ArrayList<ImageBean> imageBeanList, int pos) {
-        if(imageBeanList!=null&&imageBeanList.size()>0){
+        if (imageBeanList != null && imageBeanList.size() > 0) {
             Intent intent = new Intent(act, PicPagerActivity.class);
             intent.putParcelableArrayListExtra("imageUrlList", imageBeanList);
             intent.putExtra("pos", pos);
             act.startActivity(intent);
-            act.overridePendingTransition(0, R.anim.fade_in);
+            act.overridePendingTransition(R.anim.slide_stay, R.anim.fade_in);
         }
 
     }
@@ -67,11 +68,11 @@ public class IntentUtils {
 
     public static void intentToPicGallery2(Activity act, ArrayList<String> urls, int pos) {
 
-            Intent intent = new Intent(act, PicPagerActivity2.class);
-            intent.putStringArrayListExtra("imageStringUrlList", urls);
-            intent.putExtra("pos", pos);
-            act.startActivity(intent);
-            act.overridePendingTransition(0, R.anim.fade_in);
+        Intent intent = new Intent(act, PicPagerActivity2.class);
+        intent.putStringArrayListExtra("imageStringUrlList", urls);
+        intent.putExtra("pos", pos);
+        act.startActivity(intent);
+        act.overridePendingTransition(0, R.anim.fade_in);
 
 
     }
