@@ -101,27 +101,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
         mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
         imageViews = new ImageView[]{mCityIv1, mCityIv2, mCityIv3, mCityIv4, mCityIv5, mCityIv6};
-        TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.title_bar);
-        titleBar.getTitleTextView().setText("");
-        titleBar.enableBackKey(true);
-        // titleBar = (RelativeLayout) findViewById(R.id.title_bar);
-//        bottom_line = findViewById(R.id.title_bottom_line);
-//        shareToChat = (ImageView) findViewById(R.id.city_detail_chat);
-//        shareToChat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MobclickAgent.onEvent(mContext, "event_city_share_to_talk");
-//                IMUtils.onClickImShare(CityDetailActivity.this);
-//            }
-//        });
-
-        //  View hv;
-        //  hv = View.inflate(mContext, R.layout.view_city_detail_head, null);
-        //  travelLv.setHeaderView(hv);
-        // travelLv.getRootView().addFooterView(getLayoutInflater().inflate(R.layout.no_more_action_list_footerview, null));
-        //  View zoomView = hv.findViewById(R.id.ly1);
-        //  travelLv.setZoomView(zoomView);
-        // mTTview = (TextView)findViewById(R.id.travel_title);
         mCityNameTv = (TextView) findViewById(R.id.tv_city_name);
         mCityDesc = (TextView) findViewById(R.id.tv_city_desc);
         mCostTimeTv = (TextView) findViewById(R.id.tv_cost_time);
@@ -164,6 +143,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
+        findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getCityDetailData(final String id) {
@@ -213,6 +198,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void bindView(final LocBean detailBean) {
+        TextView titleTv = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleTv.setText(detailBean.zhName);
+
         locDetailBean = detailBean;
         if (isFromStrategy) {
             findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
@@ -225,7 +213,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
         if (detailBean.images != null && detailBean.images.size() > 0) {
             for (int i = 0; i < detailBean.images.size(); i++) {
-                System.out.println(detailBean.images.get(i).url);
                 ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], UILUtils.getDefaultOption());
                 if (i == 5) break;
             }
@@ -300,49 +287,24 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-
-//        mCityNameEn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-//                        R.layout.text_diaplay, null, true);
-//                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-//                TextView tv = (TextView) menuView.findViewById(R.id.msg);
-//                tv.setText(detailBean.desc);
-//                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-//                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-//                mPop.setContentView(menuView);//设置包含视图
-//                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setAnimationStyle(R.style.PopAnimation);
-//                mPop.showAtLocation(findViewById(R.id.city_parent), Gravity.BOTTOM, 0, 0);
-//                pop_dismiss.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mPop.dismiss();
-//                    }
-//                });
-//            }
-//        });
     }
 
     private String getCityName(String name) {
         String outcountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_outcountry");
-        String inCountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_indest_group");
         CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
-        CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
         for (CountryBean countryBean : countryListResult.result) {
             for (LocBean kLocBean : countryBean.destinations) {
                 if (kLocBean.zhName.equals(name)) {
-                    return countryBean.zhName + "·" + name;
+                    return countryBean.zhName + " · " + name;
                 }
             }
         }
+        String inCountry = PreferenceUtils.getCacheData(CityDetailActivity.this, "destination_indest_group");
+        CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
         for (CountryBean incountryBean : groupListResult.result) {
             for (LocBean kLocBean : incountryBean.destinations) {
                 if (kLocBean.zhName.equals(name)) {
-                    return "中国·" + incountryBean.zhName + "·" + name;
+                    return "中国"+" · " + name;
                 }
             }
         }
