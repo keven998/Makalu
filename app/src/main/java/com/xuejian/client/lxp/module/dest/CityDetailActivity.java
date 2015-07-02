@@ -7,9 +7,6 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +14,6 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -42,9 +37,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.common.widget.pulltozoomview.PullToZoomListViewEx;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 
@@ -230,10 +223,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 showActionDialog();
             }
         });
-//        if (detailBean.images != null && detailBean.images.size() > 0) {
-//
-//            ImageLoader.getInstance().displayImage(detailBean.images.get(0).url, mCityIv, UILUtils.getDefaultOption());
-//        }
         if (detailBean.images != null && detailBean.images.size() > 0) {
             for (int i = 0; i < detailBean.images.size(); i++) {
                 System.out.println(detailBean.images.get(i).url);
@@ -266,18 +255,21 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         final String bt = String.format("～最佳季节：%s", detailBean.travelMonth);
         bestMonthTv.setText(bt);
-        ViewTreeObserver observer2 = bestMonthTv.getViewTreeObserver();
-        observer2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        ViewTreeObserver observer1 = bestMonthTv.getViewTreeObserver();
+        observer1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
             @Override
             public void onGlobalLayout() {
-                int nc = bestMonthTv.getLayout().getLineEnd(0);
-                if (nc < bt.length()) {
-                    String text = bt.substring(0, nc - 4);
-                    SpannableString planStr = new SpannableString("更多");
+                TextView timeView = bestMonthTv;
+                int nc = timeView.getLayout().getLineEnd(0);
+                if (nc < bt.length() && nc < timeView.getText().length()) {
+                    String text = bt.substring(0, nc - 8);
+                    SpannableString planStr = new SpannableString("全文");
                     planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb = new SpannableStringBuilder();
                     spb.append(String.format("%s... ", text)).append(planStr);
-                    bestMonthTv.setText(spb);
+                    timeView.setText(spb);
                 }
             }
         });
@@ -288,19 +280,22 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if (mCityDesc.getLineCount() > 1) {
-                    int numChars = mCityDesc.getLayout().getLineEnd(1);
-                    String text;
-                    if (IMUtils.isEnglish(desc)) {
-                        text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
-                    } else {
-                        text = desc.substring(0, numChars - 4);
+                TextView descView = mCityDesc;
+                if (descView.getLineCount() > 1) {
+                    int numChars = descView.getLayout().getLineEnd(1);
+                    if (descView.getText().length() > numChars) {
+                        String text;
+                        if (IMUtils.isEnglish(desc)) {
+                            text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
+                        } else {
+                            text = desc.substring(0, numChars - 4);
+                        }
+                        SpannableString planStr = new SpannableString("全文");
+                        planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableStringBuilder spb = new SpannableStringBuilder();
+                        spb.append(String.format("%s... ", text)).append(planStr);
+                        descView.setText(spb);
                     }
-                    SpannableString planStr = new SpannableString("更多");
-                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    SpannableStringBuilder spb = new SpannableStringBuilder();
-                    spb.append(String.format("%s... ", text)).append(planStr);
-                    mCityDesc.setText(spb);
                 }
             }
         });
