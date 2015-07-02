@@ -68,6 +68,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     ImageView[] imageViews;
     ListView travelLv;
     PopupWindow mPop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
