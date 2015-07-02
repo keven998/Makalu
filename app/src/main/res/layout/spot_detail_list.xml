@@ -1,23 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_spot_detail_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/rl_spot_detail_list"
-    android:background="@color/app_backgroud">
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
 
     <ListView
-        android:layout_marginTop="-2dp"
-        android:layout_below="@id/top_bar"
         android:id="@+id/spot_detail_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/content_top_margin"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
-        android:background="@color/app_backgroud"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
         android:listSelector="@null"
-        android:overScrollMode="never"
         android:paddingBottom="20dp" />
 
     <RelativeLayout
@@ -35,7 +32,6 @@
             android:textColor="@color/base_font_color"
             android:textSize="18sp" />
 
-
         <TextView
             android:id="@+id/tv_more_cmt"
             android:layout_width="wrap_content"
@@ -47,6 +43,7 @@
             android:textSize="13sp" />
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -62,11 +59,12 @@
 
         <TextView
             android:id="@+id/poi_det_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="景点详情"
-            android:textColor="@color/base_font_color"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
             android:textSize="18sp" />
 
         <ImageView
@@ -74,11 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="13dp"
+            android:paddingLeft="32dp"
             android:paddingRight="12dp"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             android:src="@drawable/ic_title_chat" />
-
 
     </RelativeLayout>
 

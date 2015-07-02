@@ -171,13 +171,11 @@
         <activity
             android:name=".module.dest.PoiDetailActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/DialogActivity"></activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".module.dest.SpotDetailActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/DialogActivity"></activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".module.dest.SpotIntroActivity"
             android:label="@string/app_name"

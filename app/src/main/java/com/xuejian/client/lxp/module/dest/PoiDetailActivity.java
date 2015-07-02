@@ -78,9 +78,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
     TextView mTvDesc;
     TextView mBtnBook;
     TextView mTvRank;
-    TextView mTvMoreCmt;
-    TextView titleBack;
-    TextView title;
     LinearLayout rl_address;
     RelativeLayout rl_fee;
     RelativeLayout rl_level;
@@ -89,7 +86,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
     LinearLayout ll_time;
     TextView tv_time;
     View headerView;
-    View footview;
     View footerView;
     LinearLayout ll_price;
     private String id;
@@ -101,7 +97,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
     private PopupWindow mPop;
     private ImageView tipsiv, travelGuideiv, trafficGuideiv;
     private TextView mAllEvaluation;
-    private RelativeLayout rl_foot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,20 +109,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
         setContentView(R.layout.spot_detail_list);
         mChat = (ImageView) findViewById(R.id.iv_chat);
         mLvFoodshopDetail = (ListView) findViewById(R.id.spot_detail_list);
-        WindowManager m = getWindowManager();
-        Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
-        WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
-        p.y = LocalDisplay.dp2px(5);
-        p.height = d.getHeight();    /*- LocalDisplay.dp2px(64)*/
-        p.width = d.getWidth();   /*- LocalDisplay.dp2px(28)*/
 
-        getWindow().setAttributes(p);
-        headerView = View.inflate(mContext, R.layout.activity_spot_detail, null);
-        //footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
-        footerView= View.inflate(mContext, R.layout.activity_poi_foot,null);
+        headerView = View.inflate(this, R.layout.activity_spot_detail, null);
+        footerView = View.inflate(this, R.layout.activity_poi_foot, null);
 
         mLvFoodshopDetail.addHeaderView(headerView);
-        //mLvFoodshopDetail.addFooterView(footerView);
         mIvPoi = (ImageView) headerView.findViewById(R.id.iv_spot);
         mTvPoiName = (TextView) headerView.findViewById(R.id.tv_spot_name);
         mPoiStar = (RatingBar) headerView.findViewById(R.id.ratingBar_spot);
@@ -136,11 +123,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         mTvDesc = (TextView) headerView.findViewById(R.id.tv_poi_desc);
         mBtnBook = (TextView) headerView.findViewById(R.id.btn_book);
         mTvRank = (TextView) headerView.findViewById(R.id.tv_poi_rank);
-        mTvMoreCmt = (TextView) footerView.findViewById(R.id.all_evaluation);
-        titleBack = (TextView) findViewById(R.id.poi_det_back);
-        title = (TextView) findViewById(R.id.poi_det_title);
         tv_time = (TextView) headerView.findViewById(R.id.tv_spot_time);
-        rl_foot=(RelativeLayout)findViewById(R.id.foot);
         ll_time = (LinearLayout) headerView.findViewById(R.id.ll_time);
         rl_address = (LinearLayout) headerView.findViewById(R.id.rl_address);
         rl_fee = (RelativeLayout) headerView.findViewById(R.id.rl_fee);
@@ -154,21 +137,19 @@ public class PoiDetailActivity extends PeachBaseActivity {
         travelGuideiv = (ImageView) headerView.findViewById(R.id.tv_travel_guide);
         tipsiv = (ImageView) headerView.findViewById(R.id.tv_tips);
 
-       // mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
                 return new CommentViewHolder(PoiDetailActivity.this);
             }
         });
-        titleBack.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.poi_det_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0, R.anim.fade_out);
             }
         });
-        title.setText("景点介绍");
         mLvFoodshopDetail.setAdapter(commentAdapter);
 
     }
@@ -230,17 +211,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        finishWithNoAnim();
-        overridePendingTransition(0, R.anim.fade_out);
-    }
-
     private void bindView(final PoiDetailBean bean) {
+        TextView titleView = (TextView) findViewById(R.id.poi_det_title);
+        titleView.setText(bean.zhName);
+
         if (bean.images != null && bean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
-        System.out.println(bean.desc + " ============");
         mTvPoiName.setText(bean.zhName);
         if (TextUtils.isEmpty(bean.priceDesc)) {
             //  rl_fee.setVisibility(View.GONE);
@@ -277,7 +254,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
 //            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
             //      mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         }
-        mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
+        footerView.findViewById(R.id.all_evaluation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MoreCommentActivity.class);
@@ -326,7 +303,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     if (CommonUtils.checkIntent(mContext, mIntent)) {
                         startActivity(mIntent);
                     } else {
-                        ToastUtil.getInstance(mContext).showToast("没有找到地图应用");
+                        ToastUtil.getInstance(mContext).showToast("没有地图应用");
                     }
                 }
             }

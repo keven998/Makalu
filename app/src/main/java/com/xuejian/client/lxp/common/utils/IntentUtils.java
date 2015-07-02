@@ -30,14 +30,12 @@ public class IntentUtils {
         } else if (type.equals(TravelApi.PeachType.SPOT)) {
             Intent intent = new Intent(act, SpotDetailActivity.class);
             intent.putExtra("id", id);
-            ((BaseActivity) act).startActivityWithNoAnim(intent);
-            act.overridePendingTransition(0, R.anim.fade_in);
+            act.startActivity(intent);
         } else if (type.equals(TravelApi.PeachType.SHOPPING) || type.equals(TravelApi.PeachType.RESTAURANTS) || type.equals(TravelApi.PeachType.HOTEL)) {
             Intent intent = new Intent(act, PoiDetailActivity.class);
             intent.putExtra("type", type);
             intent.putExtra("id", id);
-            ((BaseActivity) act).startActivityWithNoAnim(intent);
-            act.overridePendingTransition(0, R.anim.fade_in);
+            act.startActivity(intent);
         } else if (type.equals(TravelApi.PeachType.LOC)) {
             Intent intent = new Intent();
             intent.setClass(act, CityDetailActivity.class);
