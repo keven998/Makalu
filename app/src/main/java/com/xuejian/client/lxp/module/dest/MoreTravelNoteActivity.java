@@ -34,7 +34,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     @InjectView(R.id.more_travel_note_lv)
     PullToRefreshListView mMoreTravelNoteLv;
     ListViewDataAdapter mTravelNoteAdapter;
-    int mPage=0;
+    int mPage = 0;
     String locId;
 
 
@@ -45,8 +45,9 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         ButterKnife.inject(this);
         locId = getIntent().getStringExtra("id");
 
-        mTitleBar.getTitleTextView().setText("精选游记");
+        mTitleBar.getTitleTextView().setText("全部游记");
         mTitleBar.enableBackKey(true);
+
         mMoreTravelNoteLv.setPullLoadEnabled(false);
         mMoreTravelNoteLv.setPullRefreshEnabled(false);
         mMoreTravelNoteLv.setScrollLoadEnabled(true);
@@ -54,7 +55,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                TravelNoteViewHolder viewHolder =  new TravelNoteViewHolder(MoreTravelNoteActivity.this,false,false);
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(MoreTravelNoteActivity.this, false, false);
                 return viewHolder;
             }
         });
@@ -75,8 +76,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     }
 
 
-
-    private void getTravelNoteList(final int page){
+    private void getTravelNoteList(final int page) {
         OtherApi.getTravelNoteByLocId(locId, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -85,13 +85,11 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
                 if (detailResult.code == 0) {
                     mPage = page;
                     bindView(detailResult.result);
-
                 } else {
 //                  ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
                 mMoreTravelNoteLv.onPullUpRefreshComplete();
                 mMoreTravelNoteLv.onPullDownRefreshComplete();
-
             }
 
             @Override
@@ -110,15 +108,15 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     private void bindView(List<TravelNoteBean> result) {
         if (result == null || result.size() == 0) {
             mMoreTravelNoteLv.setHasMoreData(false);
-            if (mPage == 0) {
-                if (!isFinishing()) {
-                    ToastUtil.getInstance(this).showToast("好像没找到收藏");
-                }
-            } else {
-                if (!isFinishing()) {
-                    ToastUtil.getInstance(this).showToast("已取完全部收藏啦");
-                }
-            }
+//            if (mPage == 0) {
+//                if (!isFinishing()) {
+//                    ToastUtil.getInstance(this).showToast("好像没找到收藏");
+//                }
+//            } else {
+//                if (!isFinishing()) {
+//                    ToastUtil.getInstance(this).showToast("已取完全部收藏啦");
+//                }
+//            }
             return;
         } else {
             mMoreTravelNoteLv.setHasMoreData(true);

@@ -37,7 +37,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 
@@ -132,8 +131,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        //用来点击查看更多
-        findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
+        //全部游记
+        findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
@@ -152,7 +151,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void getCityDetailData(final String id) {
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        DialogManager.getInstance().showModelessLoadingDialog(this);
         TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS / 1.5), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -162,6 +161,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     getTravelNotes(id);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                    DialogManager.getInstance().dissMissModelessLoadingDialog();
                 }
             }
 
@@ -170,6 +170,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (!isFinishing()) {
                     ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
         });
     }
@@ -304,7 +305,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         for (CountryBean incountryBean : groupListResult.result) {
             for (LocBean kLocBean : incountryBean.destinations) {
                 if (kLocBean.zhName.equals(name)) {
-                    return "中国"+" · " + name;
+                    return "中国" + " · " + name;
                 }
             }
         }
@@ -424,29 +425,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画*/
-    }
-
-    public void setLines(final TextView tv) {
-        //测试
-        ViewTreeObserver observer = tv.getViewTreeObserver(); //textAbstract为TextView控件
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                ViewTreeObserver obs = tv.getViewTreeObserver();
-                obs.removeGlobalOnLayoutListener(this);
-                if (tv.getLineCount() > 1) {
-                    int length = tv.getText().length();
-                    System.out.println("length " + length);
-                    int lineEndIndex = tv.getLayout().getLineEnd(2); //设置第六行打省略号
-                    System.out.println("lineEndIndex " + lineEndIndex);
-                    System.out.println(length + "   " + lineEndIndex);
-                    String text = "..." + tv.getText().toString().substring(length - lineEndIndex - 5, length - 5);
-                    tv.setText(text);
-                }
-            }
-        });
-
     }
 
     public void setListViewHeightBasedOnChildren(ListView listView) {
