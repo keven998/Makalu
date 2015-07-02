@@ -562,7 +562,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     IntentUtils.intentToPicGallery(PoiDetailActivity.this, mDatas, position);
                 }
             });
-            ((ViewPager) container).addView(imageView, position);
+//            ((ViewPager) container).addView(imageView, position);
             return imageView;
         }
 
