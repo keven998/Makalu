@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
@@ -37,7 +38,9 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -60,70 +63,45 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Optional;
 
 /**
  * Created by Rjm on 2014/11/22.
  */
 public class PoiDetailActivity extends PeachBaseActivity {
     ListView mLvFoodshopDetail;
-    @Optional
-    @InjectView(R.id.iv_poi)
     ImageView mIvPoi;
-    @Optional
-    @InjectView(R.id.tv_poi_name)
     TextView mTvPoiName;
-    @Optional
-    @InjectView(R.id.ratingBar_poi)
     RatingBar mPoiStar;
-    @Optional
-    @InjectView(R.id.tv_poi_price)
     TextView mTvPoiPrice;
-    @Optional
-    @InjectView(R.id.tv_tel)
     TextView mTvTel;
-    @Optional
-    @InjectView(R.id.tv_addr)
     TextView mTvAddr;
-    @InjectView(R.id.tv_poi_desc)
     TextView mTvDesc;
-    @Optional
-
-    @InjectView(R.id.btn_book)
     TextView mBtnBook;
-    @InjectView(R.id.tv_poi_rank)
     TextView mTvRank;
-    @InjectView(R.id.tv_more_cmt)
     TextView mTvMoreCmt;
-
-    @InjectView(R.id.poi_det_back)
     TextView titleBack;
-    @InjectView(R.id.poi_det_title)
     TextView title;
-
-    @InjectView(R.id.rl_address)
-    RelativeLayout rl_address;
-    @InjectView(R.id.rl_fee)
+    LinearLayout rl_address;
     RelativeLayout rl_fee;
-    @InjectView(R.id.rl_level)
     RelativeLayout rl_level;
-    @InjectView(R.id.rl_phone)
-    RelativeLayout rl_phone;
-    @InjectView(R.id.rl_poi_desc)
+    LinearLayout rl_phone;
     RelativeLayout rl_poi_desc;
-
-
+    LinearLayout ll_time;
+    TextView tv_time;
     View headerView;
+    View footview;
     View footerView;
-
+    LinearLayout ll_price;
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
     ListViewDataAdapter commentAdapter;
-
+    TextView tv_price;
     private ImageView mChat;
     private PopupWindow mPop;
-
+    private ImageView tipsiv, travelGuideiv, trafficGuideiv;
+    private TextView mAllEvaluation;
+    private RelativeLayout rl_foot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,9 +110,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     private void initView() {
-        setContentView(R.layout.activity_poi_detail);
+        setContentView(R.layout.spot_detail_list);
         mChat = (ImageView) findViewById(R.id.iv_chat);
-        mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
+        mLvFoodshopDetail = (ListView) findViewById(R.id.spot_detail_list);
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
@@ -143,17 +121,46 @@ public class PoiDetailActivity extends PeachBaseActivity {
         p.width = d.getWidth();   /*- LocalDisplay.dp2px(28)*/
 
         getWindow().setAttributes(p);
-        headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
+        headerView = View.inflate(mContext, R.layout.activity_spot_detail, null);
         //footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
+        footerView= View.inflate(mContext, R.layout.activity_poi_foot,null);
+
         mLvFoodshopDetail.addHeaderView(headerView);
         //mLvFoodshopDetail.addFooterView(footerView);
+        mIvPoi = (ImageView) headerView.findViewById(R.id.iv_spot);
+        mTvPoiName = (TextView) headerView.findViewById(R.id.tv_spot_name);
+        mPoiStar = (RatingBar) headerView.findViewById(R.id.ratingBar_spot);
+        mTvPoiPrice = (TextView) headerView.findViewById(R.id.tv_poi_price);
+        mTvTel = (TextView) headerView.findViewById(R.id.tv_tel1);
+        mTvAddr = (TextView) headerView.findViewById(R.id.tv_addr1);
+        mTvDesc = (TextView) headerView.findViewById(R.id.tv_poi_desc);
+        mBtnBook = (TextView) headerView.findViewById(R.id.btn_book);
+        mTvRank = (TextView) headerView.findViewById(R.id.tv_poi_rank);
+        mTvMoreCmt = (TextView) footerView.findViewById(R.id.all_evaluation);
+        titleBack = (TextView) findViewById(R.id.poi_det_back);
+        title = (TextView) findViewById(R.id.poi_det_title);
+        tv_time = (TextView) headerView.findViewById(R.id.tv_spot_time);
+        rl_foot=(RelativeLayout)findViewById(R.id.foot);
+        ll_time = (LinearLayout) headerView.findViewById(R.id.ll_time);
+        rl_address = (LinearLayout) headerView.findViewById(R.id.rl_address);
+        rl_fee = (RelativeLayout) headerView.findViewById(R.id.rl_fee);
+        rl_level = (RelativeLayout) headerView.findViewById(R.id.rl_level);
+        rl_phone = (LinearLayout) headerView.findViewById(R.id.fl_book);
+        rl_poi_desc = (RelativeLayout) headerView.findViewById(R.id.rl_poi_desc);
+        ll_price = (LinearLayout) headerView.findViewById(R.id.ll_price);
+        tv_price = (TextView) headerView.findViewById(R.id.tv_price1);
+
+        trafficGuideiv = (ImageView) headerView.findViewById(R.id.tv_traffic_guide);
+        travelGuideiv = (ImageView) headerView.findViewById(R.id.tv_travel_guide);
+        tipsiv = (ImageView) headerView.findViewById(R.id.tv_tips);
+
+        mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new CommentViewHolder();
+                return new CommentViewHolder(PoiDetailActivity.this);
             }
         });
-        ButterKnife.inject(this);
         titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,14 +240,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
         if (bean.images != null && bean.images.size() > 0) {
             ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
         }
+        System.out.println(bean.desc + " ============");
         mTvPoiName.setText(bean.zhName);
         if (TextUtils.isEmpty(bean.priceDesc)) {
-            rl_fee.setVisibility(View.GONE);
+            //  rl_fee.setVisibility(View.GONE);
         } else {
-            mTvPoiPrice.setText(bean.priceDesc);
+            //  mTvPoiPrice.setText(bean.priceDesc);
         }
         if (TextUtils.isEmpty(bean.lyPoiUrl)) {
-            mBtnBook.setVisibility(View.GONE);
+            // mBtnBook.setVisibility(View.GONE);
         } else {
             mBtnBook.setVisibility(View.VISIBLE);
             mBtnBook.setOnClickListener(new View.OnClickListener() {
@@ -256,18 +264,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
             });
         }
 
-        mChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
-                IMUtils.onClickImShare(PoiDetailActivity.this);
-            }
-        });
+//        mChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
+//                IMUtils.onClickImShare(PoiDetailActivity.this);
+//            }
+//        });
 
         mPoiStar.setRating(bean.getRating());
         if (!poiDetailBean.getFormatRank().equals("0")) {
 //            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
-            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
+            //      mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         }
         mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +291,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvTel.setVisibility(View.VISIBLE);
             mTvTel.setText(bean.tel.get(0));
         } else {
-            rl_phone.setVisibility(View.GONE);
+            //    rl_phone.setVisibility(View.GONE);
         }
 
         String address;
@@ -292,6 +300,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         } else {
             address = bean.address;   //"<img src=\"" + R.drawable.ic_poi_address + "\" />  " +
         }
+        //      mTvAddr.setText(address);
 //        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
 
         Spanned spanned = Html.fromHtml(address, imageGetter, null);
@@ -323,12 +332,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             }
         });
 
-        rl_fee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         rl_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -366,12 +369,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
             }
         });
-        rl_level.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         if (TextUtils.isEmpty(bean.desc)) {
             rl_poi_desc.setVisibility(View.GONE);
@@ -379,18 +376,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvDesc.setVisibility(View.VISIBLE);
             mTvDesc.setText(bean.desc);
         }
+        //更多评论
+        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         commentAdapter.getDataList().addAll(bean.comments);
         if (bean.comments == null || bean.comments.size() < 2) {
 
             if (mLvFoodshopDetail.getFooterViewsCount() > 0) {
                 mLvFoodshopDetail.removeFooterView(footerView);
             }
-
         }
         if (bean.comments == null || bean.comments.size() == 0) {
            /* mIvCommentTopMark.setVisibility(View.GONE);
             mIvCommentBottomMark.setVisibility(View.GONE);*/
         }
+
         commentAdapter.notifyDataSetChanged();
     }
 
@@ -422,9 +426,23 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView mTvComment;
         @InjectView(R.id.poi_detail_dp_pic)
         ImageView mImageView;
+        @InjectView(R.id.ratingBar_spot)
+        RatingBar starbar;
         /*@InjectView(R.id.comment_star)
         RatingBar mCommentStar;*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        private DisplayImageOptions options;
+
+        public CommentViewHolder(Activity context) {
+            options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                    .resetViewBeforeLoading(true)
+                    .cacheOnDisk(true)
+                    .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                    .build();
+        }
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -437,9 +455,10 @@ public class PoiDetailActivity extends PeachBaseActivity {
         public void showData(int position, final CommentBean itemData) {
             mTvName.setText(itemData.authorName);
             mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
-            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, UILUtils.getDefaultOption());
             //mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
+            starbar.setRating(itemData.getRating());
+            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, options);
         }
     }
 

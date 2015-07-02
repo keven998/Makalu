@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
 
@@ -63,6 +67,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     TextView tv_poi_desc;
     TextView tv_poi_addr;
     TextView tv_poi_tel;
+    PopupWindow mPop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +118,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
         mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
         mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
-        poi_rank_sm = (TextView) hv.findViewById(R.id.poi_rank_sm);
+      //  poi_rank_sm = (TextView) hv.findViewById(R.id.poi_rank_sm);
       //  descLl = (RelativeLayout) hv.findViewById(R.id.ll_desc);
         priceLl = (LinearLayout) hv.findViewById(R.id.ll_price);
         timeLl = (LinearLayout) hv.findViewById(R.id.ll_time);
@@ -122,11 +127,13 @@ public class SpotDetailActivity extends PeachBaseActivity {
         tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
         travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
-        mAllEvaluation = (TextView) hv.findViewById(R.id.all_evaluation);
+        mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
         tv_poi_desc=(TextView)hv.findViewById(R.id.tv_poi_desc);
         tv_poi_addr=(TextView)hv.findViewById(R.id.tv_addr1);
         tv_poi_tel=(TextView)hv.findViewById(R.id.tv_tel1);
         //这个是备着以后读接口
+
+
         adapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -179,7 +186,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
                     bindView(detailResult.result);
                     getDpView(detailResult.result.id);
                 }
-
             }
 
             @Override
@@ -209,13 +215,12 @@ public class SpotDetailActivity extends PeachBaseActivity {
         mAllEvaluation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", "更多评论");
                 intent.putExtra("url", result.lyPoiUrl);
                 startActivity(intent);
             }
         });
-        tv_poi_desc.setText(result.desc);
         tv_poi_desc.setText(result.desc);
         int numChars = tv_poi_desc.getLayout().getLineEnd(2);
         if (IMUtils.isEnglish(result.desc)) {
@@ -225,16 +230,44 @@ public class SpotDetailActivity extends PeachBaseActivity {
             String text =result.desc.substring(0, numChars - 4);
             tv_poi_desc.setText(text+"...");
         }
+        tv_poi_desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                        R.layout.text_diaplay, null, true);
+                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+                tv.setText(result.desc);
+                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+                mPop.setContentView(menuView);//设置包含视图
+                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setAnimationStyle(R.style.PopAnimation);
+                mPop.showAtLocation(findViewById(R.id.rl_spot_detail_list), Gravity.BOTTOM, 0, 0);
+                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPop.dismiss();
+                    }
+                });
+
+            }
+        });
+        //adapter.getDataList().addAll(result.)
         tv_poi_addr.setText(result.address);
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
         if(result.getRank().equals("0")) {
-            poi_rank_sm.setText("");
+        //    poi_rank_sm.setText("");
         }else{
-            poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
+        //    poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
         }
         //mPriceDescTv.setText("门票 "+result.priceDesc);
-        mTimeTv.setText("开放时间"+result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
+        mTimeTv.setText("开放时间" + result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
        /* if(TextUtils.isEmpty(result.address)){
             mAddressTv.setText(result.zhName);
         }else{
@@ -256,6 +289,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             }
         });
+
         if(!TextUtils.isEmpty(result.lyPoiUrl)){
             mBookFl.setOnClickListener(new View.OnClickListener() {
                 @Override

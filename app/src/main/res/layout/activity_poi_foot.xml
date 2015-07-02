@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/foot">
+
+    <TextView
+        android:id="@+id/all_evaluation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="～更多·点评～"
+        android:gravity="center"
+        android:textColor="@color/app_theme_color"
+        android:textSize="13sp" />
+</RelativeLayout>
