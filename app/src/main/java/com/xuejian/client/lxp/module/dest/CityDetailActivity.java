@@ -210,12 +210,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         if (isFromStrategy) {
             findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
         }
-        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showActionDialog();
-            }
-        });
+//        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showActionDialog();
+//            }
+//        });
         if (detailBean.images != null && detailBean.images.size() > 0) {
             for (int i = 0; i < detailBean.images.size(); i++) {
                 ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], UILUtils.getDefaultOption());

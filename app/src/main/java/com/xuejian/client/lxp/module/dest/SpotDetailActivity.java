@@ -97,6 +97,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
     private void initView() {
         ListView spotLv=(ListView) findViewById(R.id.spot_detail_list);
         View hv;
+        View footerView= View.inflate(mContext, R.layout.activity_poi_foot,null);
         hv=View.inflate(mContext,R.layout.activity_spot_detail,null);
         spotLv.addHeaderView(hv);
         ic_back=(TextView)findViewById(R.id.poi_det_back);
@@ -127,7 +128,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
         travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
         trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
-        mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
+        mAllEvaluation = (TextView)footerView. findViewById(R.id.all_evaluation);
         tv_poi_desc=(TextView)hv.findViewById(R.id.tv_poi_desc);
         tv_poi_addr=(TextView)hv.findViewById(R.id.tv_addr1);
         tv_poi_tel=(TextView)hv.findViewById(R.id.tv_tel1);

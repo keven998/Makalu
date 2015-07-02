@@ -154,7 +154,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         travelGuideiv = (ImageView) headerView.findViewById(R.id.tv_travel_guide);
         tipsiv = (ImageView) headerView.findViewById(R.id.tv_tips);
 
-        mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
+       // mAllEvaluation = (TextView) findViewById(R.id.all_evaluation);
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -377,12 +377,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvDesc.setText(bean.desc);
         }
         //更多评论
-        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         commentAdapter.getDataList().addAll(bean.comments);
         if (bean.comments == null || bean.comments.size() < 2) {
 
