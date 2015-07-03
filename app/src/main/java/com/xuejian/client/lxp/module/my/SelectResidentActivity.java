@@ -29,74 +29,36 @@ import butterknife.InjectView;
  * Created by rjm on 2015/3/26.
  */
 public class SelectResidentActivity extends PeachBaseActivity {
-   /* @InjectView(R.id.et_search)
-    EditText etSearch;*/
-    @InjectView(R.id.elv_city)
-    ExpandableListView elvCity;
-    @InjectView(R.id.tv_loc_name)
-    TextView loc_name;
-    @ViewInject(R.id.tv_confirm)
-    private TextView tv_confirm;
-    @ViewInject(R.id.tv_cancel)
-    private TextView tv_cancel;
-    @ViewInject(R.id.tv_title_bar_title)
-    private TextView tv_title_bar_title;
-
+    private TextView loc_name;
+    private ExpandableListView elvCity;
     private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<StartCity> startCitys = new ArrayList<StartCity>();
     private ArrayList<StartCity> allCitys;
     private CityListAdapter aAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_resident);
-        ButterKnife.inject(this);
-        tv_title_bar_title.setText("地区设置");
-        tv_confirm.setText("");
-        tv_cancel.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleView.setText("地区设置");
+        findViewById(R.id.tv_confirm).setVisibility(View.GONE);
+        findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0,R.anim.fade_out);
             }
         });
+        elvCity = (ExpandableListView) findViewById(R.id.elv_city);
+        loc_name = (TextView) findViewById(R.id.tv_loc_name);
         mLocationManagerProxy = LocationManagerProxy.getInstance(SelectResidentActivity.this);
         mLocationManagerProxy.setGpsEnable(false);
         requestLocation();
-        /*etSearch.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                    if (TextUtils.isEmpty(s.toString())) {
-                        startCitys.clear();
-                        startCitys.addAll(allCitys);
-                    } else {
-                        searchCity(s.toString());
-                    }
-                    aAdapter.notifyDataSetChanged();
-                }
-
-
-        });*/
         initData();
     }
 
     private void requestLocation() {
-        if(mLocationManagerProxy == null){
+        if (mLocationManagerProxy == null) {
             mLocationManagerProxy = LocationManagerProxy.getInstance(SelectResidentActivity.this);
             mLocationManagerProxy.setGpsEnable(false);
         }
@@ -110,11 +72,10 @@ public class SelectResidentActivity extends PeachBaseActivity {
                             loc_name.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent=new Intent();
-                                    intent.putExtra("result",aMapLocation.getCity());
-                                    setResult(RESULT_OK,intent);
+                                    Intent intent = new Intent();
+                                    intent.putExtra("result", aMapLocation.getCity());
+                                    setResult(RESULT_OK, intent);
                                     finish();
-                                    overridePendingTransition(0,R.anim.fade_out);
                                 }
                             });
                         }
@@ -144,8 +105,6 @@ public class SelectResidentActivity extends PeachBaseActivity {
     }
 
     private void initData() {
-        // ArrayList<String> allCities = new ArrayList<String>();
-
         new Thread(new Runnable() {
 
             @Override
@@ -185,7 +144,8 @@ public class SelectResidentActivity extends PeachBaseActivity {
             }
         }
     }
-    class CityListAdapter extends BaseExpandableListAdapter {
+
+    private class CityListAdapter extends BaseExpandableListAdapter {
 
         @Override
         public int getGroupCount() {
@@ -243,9 +203,9 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
             if (city.childs != null && city.childs.size() > 0) {
                 if (isExpanded) {
-                    arrIv.setBackgroundResource(R.drawable.icon_arrow_right);
+                    arrIv.setBackgroundResource(R.drawable.common_icon_up);
                 } else {
-                    arrIv.setBackgroundResource(R.drawable.icon_arrow_right);
+                    arrIv.setBackgroundResource(R.drawable.common_icon_down);
                 }
                 convertView.setOnClickListener(new View.OnClickListener() {
 
@@ -264,14 +224,13 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent();
-                        intent.putExtra("result",city.name);
-                        setResult(RESULT_OK,intent);
+                        Intent intent = new Intent();
+                        intent.putExtra("result", city.name);
+                        setResult(RESULT_OK, intent);
                         finish();
-                        overridePendingTransition(0,R.anim.fade_out);
                     }
                 });
-                arrIv.setBackgroundDrawable(null);
+                arrIv.setBackgroundResource(0);
             }
 
             return convertView;
@@ -286,9 +245,6 @@ public class SelectResidentActivity extends PeachBaseActivity {
             }
             TextView nameTv = (TextView) convertView
                     .findViewById(R.id.tv_city_child_name);
-            ImageView arrIv = (ImageView) convertView
-                    .findViewById(R.id.iv_child_arr);
-            //arrIv.setVisibility(View.INVISIBLE);
             final StartCity city = startCitys.get(groupPosition).childs
                     .get(childPosition);
             nameTv.setText(city.name);
@@ -297,11 +253,10 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent();
-                    intent.putExtra("result",city.name);
-                    setResult(RESULT_OK,intent);
+                    Intent intent = new Intent();
+                    intent.putExtra("result", city.name);
+                    setResult(RESULT_OK, intent);
                     finish();
-                    overridePendingTransition(0,R.anim.fade_out);
 
                 }
             });

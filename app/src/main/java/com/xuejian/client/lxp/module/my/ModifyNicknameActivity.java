@@ -29,7 +29,7 @@ import com.xuejian.client.lxp.db.User;
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyNicknameActivity extends PeachBaseActivity {
-    @ViewInject(R.id.et_nickname)
+    @ViewInject(R.id.et_modify_content)
     private EditText nickEt;
     @ViewInject(R.id.tv_confirm)
     private TextView tv_confirm;
@@ -44,11 +44,10 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_nickname);
+        setContentView(R.layout.common_content_editor);
         ViewUtils.inject(this);
 
         tv_title_bar_title.setText("姓名设置");
-        tv_confirm.setText("保存");
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,18 +58,18 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
-                    ToastUtil.getInstance(mContext).showToast("请输入1-12位中英文昵称");
+                    ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("请输入1-12位中英文昵称");
                     return;
                 } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())) {
-                    ToastUtil.getInstance(mContext).showToast("昵称不能为纯数字");
+                    ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("昵称不能为纯数字");
                     return;
                 }
-                if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+                if (!CommonUtils.isNetWorkConnected(ModifyNicknameActivity.this)) {
+                    ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("无网络连接，请检查网络");
                     return;
                 }
 
-                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                DialogManager.getInstance().showLoadingDialog(ModifyNicknameActivity.this, "请稍后");
                 UserApi.editUserNickName(user, nickEt.getText().toString().trim(), new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -79,14 +78,9 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         if (modifyResult.code == 0) {
                             user.setNickName(nickEt.getText().toString().trim());
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                            /*boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(user.getNickName());
-                            if (!updatenick) {
-                                EMLog.e("ModifyNicknameActivity", "update current user nick fail");
-                            }*/
                             Intent intent = new Intent();
                             intent.putExtra("nickname", nickEt.getText().toString().trim());
                             setResult(RESULT_OK, intent);
-                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
                         } else {
                             if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
@@ -117,7 +111,6 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         user = AccountManager.getInstance().getLoginAccount(this);
         nickEt.setText(user.getNickName());
         CharSequence text = nickEt.getText();
-        //Debug.asserts(text instanceof Spannable);
         if (text instanceof Spannable) {
             Spannable spanText = (Spannable) text;
             Selection.setSelection(spanText, text.length());

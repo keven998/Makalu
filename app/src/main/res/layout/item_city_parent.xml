@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="43dp"
-    android:minHeight="43dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/option_cell_selector"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="20dp"
-    android:paddingRight="15dp"
-    android:orientation="horizontal" >
+    android:paddingRight="15dp">
 
     <TextView
         android:id="@+id/tv_city_parent_name"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:textColor="@color/color_text_i"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="68dp"
         android:gravity="center_vertical"
-        android:textSize="15sp"
-        android:layout_weight="1" />
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
 
     <ImageView
         android:id="@+id/iv_parent_arr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       />
-</LinearLayout>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_line" />
+
+</RelativeLayout>

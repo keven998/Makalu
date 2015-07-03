@@ -28,15 +28,16 @@ public class ModifyStatusOrSexActivity extends PeachBaseActivity implements View
     private String type;
     private String[] sexs = {"美女", "帅锅", "一言难尽", "保密"};
     private String[] status = {"旅行灵感时期", "正在准备旅行", "旅行中", "不知道"};
-    CheckedTextView [] checkBoxes;
+    CheckedTextView[] checkBoxes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statusorsex);
-        ctv1= (CheckedTextView) findViewById(R.id.ctv_1);
-        ctv2= (CheckedTextView) findViewById(R.id.ctv_2);
-        ctv3= (CheckedTextView) findViewById(R.id.ctv_3);
-        ctv4= (CheckedTextView) findViewById(R.id.ctv_4);
+        ctv1 = (CheckedTextView) findViewById(R.id.ctv_1);
+        ctv2 = (CheckedTextView) findViewById(R.id.ctv_2);
+        ctv3 = (CheckedTextView) findViewById(R.id.ctv_3);
+        ctv4 = (CheckedTextView) findViewById(R.id.ctv_4);
 
         tv_cancel = (TextView) findViewById(R.id.tv_cancel);
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
@@ -49,7 +50,7 @@ public class ModifyStatusOrSexActivity extends PeachBaseActivity implements View
         tv_confirm.setOnClickListener(this);
         type = getIntent().getExtras().getString("type");
         user = AccountManager.getInstance().getLoginAccount(this);
-        checkBoxes=new CheckedTextView[]{ctv1,ctv2,ctv3,ctv4};
+        checkBoxes = new CheckedTextView[]{ctv1, ctv2, ctv3, ctv4};
         if (type.equals("sex")) {
             tv_title_bar_title.setText("性别设置");
             ctv1.setText(sexs[0]);
@@ -99,25 +100,25 @@ public class ModifyStatusOrSexActivity extends PeachBaseActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ctv_1:
-                gender=sexs[0];
+                gender = sexs[0];
                 changeStatus(0);
                 checkBoxes[0].setChecked(true);
                 break;
 
             case R.id.ctv_2:
-                gender=sexs[1];
+                gender = sexs[1];
                 changeStatus(1);
                 checkBoxes[1].setChecked(true);
                 break;
 
             case R.id.ctv_3:
-                gender=sexs[2];
+                gender = sexs[2];
                 changeStatus(2);
                 checkBoxes[2].setChecked(true);
                 break;
 
             case R.id.ctv_4:
-                gender=sexs[3];
+                gender = sexs[3];
                 changeStatus(3);
                 checkBoxes[3].setChecked(true);
                 break;
@@ -137,7 +138,7 @@ public class ModifyStatusOrSexActivity extends PeachBaseActivity implements View
     private void changeStatus(int i) {
         for (int j = 0; j < 4; j++) {
             if (i != j)
-             checkBoxes[j].setChecked(false);
+                checkBoxes[j].setChecked(false);
         }
     }
 

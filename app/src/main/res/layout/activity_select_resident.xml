@@ -1,86 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/title_bar_layout"/>
-    <!--<EditText
-        android:id="@+id/et_search"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_search"
-        android:drawableLeft="@drawable/ic_search"
-        android:drawablePadding="5dp"
-        android:hint="@string/please_input_city_name"
-        android:inputType="text"
-        android:paddingLeft="10dp"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textColorHint="@color/base_text_color_text_hint"
-        android:textSize="14sp" />-->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar_layout" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="15dp"
-        android:text="定位到的位置"
-        android:textSize="12sp"
-        android:layout_marginTop="12dp"
         android:layout_marginBottom="5dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
-        android:textColor="@color/color_text_ii"
-        />
+        android:layout_marginTop="20dp"
+        android:text="定位位置"
+        android:textColor="@color/color_text_iii"
+        android:textSize="11sp" />
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="15dp"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <TextView
+        android:id="@+id/tv_loc_name"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
         android:background="@drawable/option_cell_selector"
-        android:orientation="horizontal" >
+        android:drawableLeft="@drawable/poi_icon_address"
+        android:drawablePadding="9dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/tv_loc_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_i"
-            android:gravity="center_vertical"
-            android:drawableLeft="@drawable/poi_icon_address"
-            android:drawablePadding="9dp"
-            android:textSize="15sp"
-            android:layout_weight="1" />
-
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:text="全部位置"
-        android:textSize="12sp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:textColor="@color/color_text_ii"
-        />
-
-    <FrameLayout
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="20dp"
+        android:text="全部"
+        android:textColor="@color/color_text_iii"
+        android:textSize="11sp" />
 
-        <ExpandableListView
-            android:id="@+id/elv_city"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:childDivider="@color/base_divider_color"
-            android:divider="@color/base_divider_color"
-            android:dividerHeight="1dp"
-            android:fadingEdge="none"
-            android:groupIndicator="@null"
-            android:listSelector="@android:color/transparent" />
-    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <ExpandableListView
+        android:id="@+id/elv_city"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:childDivider="@null"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none"
+        android:groupIndicator="@null"
+        android:listSelector="@android:color/transparent" />
 
 </LinearLayout>

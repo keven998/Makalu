@@ -33,8 +33,6 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
     private EditText phoneEt;
     @ViewInject(R.id.et_sms)
     private EditText smsEt;
-    /*  @ViewInject(R.id.btn_next)
-      private Button nextBtn;*/
     @ViewInject(R.id.tv_confirm)
     private TextView tv_confirm;
     @ViewInject(R.id.tv_cancel)
@@ -54,13 +52,17 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_phone);
         ViewUtils.inject(this);
-        //nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
         tv_confirm.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);
         tv_title_bar_title.setText("安全设置");
         tv_confirm.setText("提交");
+
+        if (!TextUtils.isEmpty(user.getTel())) {
+            TextView tv = (TextView) findViewById(R.id.bind_hint);
+            tv.setText(String.format("已绑定手机：%s", user.getTel()));
+        }
     }
 
     private void startCountDownTime() {

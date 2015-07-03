@@ -4,22 +4,21 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar"
-        >
+        android:background="@drawable/bg_navigation_bar">
 
-        <TextView android:id="@+id/tv_cancel"
+        <TextView
+            android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:scaleType="center"
-            android:text="取消"
             android:gravity="center"
-            android:textColor="@color/color_text_titlebar"
-            android:src="@drawable/selector_ic_nav_back"
             android:paddingLeft="12dp"
-            android:paddingRight="30dp"/>
+            android:paddingRight="30dp"
+            android:text="取消"
+            android:textColor="@color/color_text_titlebar" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -31,26 +30,25 @@
             android:textColor="@color/color_text_titlebar"
             android:textSize="15sp" />
 
-        <TextView android:id="@+id/tv_confirm"
+        <TextView
+            android:id="@+id/tv_confirm"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="保存"
-            android:textColor="@color/base_color_white"
             android:gravity="center_vertical"
-            android:scaleType="center"
-            android:src="@drawable/add_contact"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"/>
+            android:paddingLeft="36dp"
+            android:paddingRight="12dp"
+            android:text="保存"
+            android:textColor="@color/color_text_titlebar" />
 
     </RelativeLayout>
+
     <CheckedTextView
         android:id="@+id/ctv_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/option_cell_selector"
-        android:drawablePadding="10dp"
         android:drawableRight="@drawable/checker_for_checkbox"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
@@ -59,17 +57,18 @@
         android:paddingTop="15dp"
         android:textColor="@color/color_text_i"
         android:textSize="15sp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="15dp"
         android:background="@color/color_line" />
+
     <CheckedTextView
         android:id="@+id/ctv_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
-        android:drawablePadding="10dp"
         android:drawableRight="@drawable/checker_for_checkbox"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
@@ -78,18 +77,19 @@
         android:paddingTop="15dp"
         android:textColor="@color/color_text_i"
         android:textSize="15sp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="15dp"
         android:background="@color/color_line" />
+
     <CheckedTextView
         android:id="@+id/ctv_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/option_cell_selector"
-        android:drawablePadding="10dp"
         android:drawableRight="@drawable/checker_for_checkbox"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"
@@ -98,17 +98,18 @@
         android:paddingTop="15dp"
         android:textColor="@color/color_text_i"
         android:textSize="15sp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="15dp"
         android:background="@color/color_line" />
+
     <CheckedTextView
         android:id="@+id/ctv_4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/option_cell_selector"
-        android:drawablePadding="10dp"
         android:drawableRight="@drawable/checker_for_checkbox"
         android:gravity="center_vertical"
         android:paddingBottom="15dp"

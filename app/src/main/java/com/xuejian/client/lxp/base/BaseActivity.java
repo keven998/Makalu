@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
+
 import com.lv.bean.MessageBean;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -21,9 +22,9 @@ public class BaseActivity extends FragmentActivity {
     protected Context mContext;
     protected boolean isFroground;
     protected boolean isAccountAbout;
-    protected boolean isConflict;
     private static final int notifiId = 11;
     protected NotificationManager notificationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +35,14 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isFroground=true;
+        isFroground = true;
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        isFroground=false;
+        isFroground = false;
         MobclickAgent.onPause(this);
     }
 
@@ -76,36 +77,32 @@ public class BaseActivity extends FragmentActivity {
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
-    public void setAccountAbout(boolean isAccountAbout){
+    public void setAccountAbout(boolean isAccountAbout) {
         this.isAccountAbout = isAccountAbout;
     }
 
 
-
-    public void onDrivingLogout() {
-
-    }
-
     /**
      * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下
      * 如果不需要，注释掉即可
+     *
      * @param message
      */
     protected void notifyNewMessage(MessageBean message) {
         //如果是设置了不提醒只显示数目的群组(这个是app里保存这个数据的，demo里不做判断)
         //以及设置了setShowNotificationInbackgroup:false(设为false后，后台时sdk也发送广播)
-        if(IMUtils.isAppRunningForeground(this)){
+        if (IMUtils.isAppRunningForeground(this)) {
             return;
         }
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(getApplicationInfo().icon)
                 .setWhen(System.currentTimeMillis()).setAutoCancel(true);
 
-       // String ticker = IMUtils.getMessageDigest(message, this);
-       // if(message.getType() == EMMessage.Type.TXT)
+        // String ticker = IMUtils.getMessageDigest(message, this);
+        // if(message.getType() == EMMessage.Type.TXT)
         //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
         //设置状态栏提示
-        mBuilder.setTicker(message.getSenderId()+": 你有一条新消息");
+        mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
 
         //必须设置pendingintent，否则在2.3的机器上会有bug
         Intent intent = new Intent(this, MainActivity.class);

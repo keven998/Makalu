@@ -101,7 +101,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private Button btn_logout;
 
 
-    private TextView phoneTv;
     private File tempImage;
     private User user;
     DisplayImageOptions options;
@@ -373,7 +372,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 Intent intent = new Intent(AccountActvity.this, MyFootPrinterActivity.class);
                 intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
                 startActivityForResult(intent, FOOTPRINT);
-                // startActivity(intent);
                 break;
 
 //            case R.id.ll_birthday:
@@ -410,7 +408,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             case R.id.ll_resident:
                 Intent residentIntent = new Intent(mContext, SelectResidentActivity.class);
                 startActivityForResult(residentIntent, RESIDENT);
-                overridePendingTransition(R.anim.fade_in, 0);
                 break;
 
             case R.id.ll_modify_pwd:
@@ -477,7 +474,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                AccountActvity.this.finish();
             }
         });
         dialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -1012,11 +1008,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         });
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-//        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
-    }
 
     public int getAge(String birth) {
         int age = 0;

@@ -3,123 +3,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <include layout="@layout/title_bar_layout"/>
+    <include layout="@layout/title_bar_layout" />
 
+    <TextView android:id="@+id/bind_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="18dp"
+        android:text="为了安全和使用方便，建议您绑定手机号"
+        android:textColor="@color/color_text_iii"
+        android:textSize="11sp" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rl_input"
         android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:background="@color/base_color_white"
-        android:gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:textColor="@color/color_text_iii"
-            android:text="手机号: "/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape_theme_dialog">
 
         <EditText
             android:id="@+id/et_phone"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:inputType="phone"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:cursorVisible="true"
+            android:gravity="center_vertical"
+            android:hint="手机号"
             android:imeOptions="actionNext"
-            android:layout_weight="1"
-            android:background="@null"
-            android:textSize="15sp"
-            android:textColor="@color/color_text_i"
-            android:paddingLeft="14dp"
-            android:hint="输入要绑定的手机号"
-            android:textColorHint="@color/color_text_iv"
-            android:layout_gravity="center_vertical"/>
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/color_line" />
-
-        <TextView
-            android:id="@+id/btn_time_down"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:gravity="center_vertical"
-            android:background="@color/base_color_white"
-            android:layout_gravity="center_vertical"
-            android:textSize="14sp"
-            android:textColor="@color/color_text_i"
-            android:text="获取验证码"/>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:background="@color/base_color_white"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/title_yzm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="14sp"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/color_text_iii"
-            android:text="验证码: "/>
-
-        <EditText
-            android:id="@+id/et_sms"
-            android:layout_width="fill_parent"
-            android:layout_height="43dp"
-            android:inputType="number"
-            android:imeOptions="actionDone"
-            android:layout_toRightOf="@+id/title_yzm"
-            android:background="@null"
-            android:textSize="15sp"
-            android:textColor="@color/color_text_i"
-            android:paddingLeft="14dp"
+            android:inputType="phone"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:hint="输入短信验证码"
-            android:textColorHint="@color/color_text_iv"
-            android:layout_gravity="center_vertical"/>
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="@color/color_text_i"
+            android:textColorHint="@color/color_disable"
+            android:textSize="15sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="15dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/color_line" />
+            android:layout_height="1dp"
+            android:layout_below="@id/et_phone"
+            android:background="@color/app_theme_color" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_phone"
+            android:layout_marginTop="1dp">
+
+            <EditText
+                android:id="@+id/et_sms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:gravity="center_vertical"
+                android:hint="短信验证码"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:textColor="@color/color_text_i"
+                android:textColorHint="@color/color_disable"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_time_down"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/selecter_theme_btn_radius_4"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="获取验证码"
+                android:textColor="@color/base_color_white"
+                android:textSize="11sp" />
+        </FrameLayout>
 
     </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="为了账户安全和使用方便，建议您绑定手机号"
-        android:layout_marginTop="8dp"
-        android:textSize="10sp"
-        android:textColor="@color/color_text_iii"/>
-   <!-- <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="确定"
-        android:textSize="15sp"
-        android:textColor="@color/base_color_white"
-        android:background="@drawable/theme_button_selctor"/>-->
+
 
 </LinearLayout>

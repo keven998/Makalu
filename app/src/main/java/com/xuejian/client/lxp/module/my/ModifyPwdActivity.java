@@ -44,7 +44,6 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_pwd);
         ViewUtils.inject(this);
-       // okBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
         tv_confirm.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);
@@ -54,18 +53,18 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_confirm:
-                if(!RegexUtils.isPwdOk(oldPwdEt.getText().toString().trim())){
+                if (!RegexUtils.isPwdOk(oldPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请输入你的当前密码");
-                }else if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())){
+                } else if (!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-12位新密码");
-                }else if(!RegexUtils.isPwdOk(rePwdEt.getText().toString().trim())){
+                } else if (!RegexUtils.isPwdOk(rePwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-12位确认密码");
-                }else if(!newPwdEt.getText().toString().trim().equals(rePwdEt.getText().toString().trim())){
+                } else if (!newPwdEt.getText().toString().trim().equals(rePwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("新密码不一致");
-                }else{
-                    if(!CommonUtils.isNetWorkConnected(mContext)){
+                } else {
+                    if (!CommonUtils.isNetWorkConnected(mContext)) {
 //                        ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                         ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         return;
@@ -92,7 +91,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         }
                     });
                 }
-            break;
+                break;
             case R.id.tv_cancel:
                 finish();
                 break;

@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="43dp"
-    android:minHeight="43dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/sub_cell_selector">
+
     <TextView
         android:id="@+id/tv_city_child_name"
-        android:layout_width="0dp"
-        android:layout_marginLeft="25dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_text_color_subtitle"
-        android:textSize="14sp"
-        android:layout_weight="1" />
+        android:paddingBottom="13dp"
+        android:paddingLeft="45dp"
+        android:paddingTop="13dp"
+        android:textColor="@color/color_text_ii"
+        android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/iv_child_arr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_arrow_right"
-        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="45dp"
+        android:background="@color/color_line"/>
 
-</LinearLayout>
+</FrameLayout>

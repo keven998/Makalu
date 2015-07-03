@@ -3,55 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-   <include layout="@layout/title_bar_layout"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:background="@color/base_color_white"
-        android:orientation="vertical">
+    <include layout="@layout/title_bar_layout" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:gravity="center_vertical"
+        android:layout_marginTop="18dp"
         android:background="@color/base_color_white"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:textColor="@color/color_text_iii"
-            android:textSize="13sp"
-            android:text="当前密码: "/>
+            android:text="当前密码: "
+            android:textColor="@color/color_text_ii"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/et_old_pwd"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:inputType="textPassword"
-            android:imeOptions="actionNext"
-            android:singleLine="true"
+            android:layout_height="match_parent"
             android:background="@null"
-            android:paddingLeft="6dp"
-            android:textSize="15sp"
-            android:textColor="@color/color_text_i"
+            android:gravity="center_vertical"
             android:hint="输入当前密码"
-            android:textColorHint="@color/color_text_iv"
-            android:paddingRight="10dp"/>
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/color_text_i"
+            android:textColorHint="@color/color_disable"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="15dp"
-            android:background="@color/color_line" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,34 +58,36 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:textColor="@color/color_text_iii"
-            android:text="预设密码: "/>
+            android:text="新的密码: "
+            android:textColor="@color/color_text_ii"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/et_new_password"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:inputType="textPassword"
-            android:imeOptions="actionNext"
+            android:layout_height="match_parent"
             android:background="@null"
-            android:textColor="@color/color_text_i"
-            android:hint="输入预设密码"
-            android:textColorHint="@color/color_text_iv"
+            android:gravity="center_vertical"
+            android:hint="设置新密码"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
-            android:paddingLeft="6dp"
-            android:textSize="15sp"
-            android:paddingRight="10dp"/>
+            android:textColor="@color/color_text_i"
+            android:textColorHint="@color/color_disable"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="15dp"
-            android:background="@color/color_line" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,42 +98,30 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/color_text_iii"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:text="确认密码: "/>
+            android:text="确认密码: "
+            android:textColor="@color/color_text_ii"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/et_re_password"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:inputType="textPassword"
-            android:imeOptions="actionNext"
+            android:layout_height="match_parent"
             android:background="@null"
-            android:textColor="@color/color_text_i"
+            android:gravity="center_vertical"
+            android:hint="确认新密码"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
-            android:hint="确认预设密码"
-            android:textColorHint="@color/color_text_iv"
-            android:textSize="15sp"
-            android:paddingLeft="6dp"
-            android:paddingRight="10dp"/>
+            android:textColor="@color/color_text_i"
+            android:textColorHint="@color/color_disable"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
 
-    </LinearLayout>
-
-    <!--<Button
-        android:id="@+id/btn_ok"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textSize="15sp"
-        android:textColor="@color/base_color_white"
-        android:background="@drawable/theme_button_selctor"
-        android:text="确定"/>
--->
 </LinearLayout>
