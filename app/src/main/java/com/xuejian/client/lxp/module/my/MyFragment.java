@@ -35,6 +35,10 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +73,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView tvTracksCount;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private View rootView;
+    private int picsNum=0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -131,7 +137,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
-            tvPictureCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "图");
+            tvPictureCount.setText( getUserPicsNum(user.getUserId()) + "图");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
             tvLevel.setText("LV" + level);
@@ -284,6 +290,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
 
+    }
+
+    public int getUserPicsNum(Long userId) {
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        picsNum = object.length();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
+            }
+        });
+
+        return picsNum;
     }
 
 

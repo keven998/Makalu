@@ -493,6 +493,7 @@ public class MessageDB {
         cursor.moveToLast();
         int count = cursor.getInt(0);
         cursor.close();
+        closeDB();
         return count;
     }
     public synchronized void addTips(String chatId,String tips,String chatType){
