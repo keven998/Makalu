@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/icon"
+        android:src="@drawable/icon_little"
         android:scaleType="fitCenter" />
 
     <RelativeLayout
