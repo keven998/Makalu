@@ -100,7 +100,7 @@ public class LoginActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
         initTitlebar();
-        findViewById(R.id.btn_weixin_login).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.tv_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 //    MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");

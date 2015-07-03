@@ -142,6 +142,7 @@
         android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
+        android:id="@+id/tv_weixin_login"
         android:text="微信登录"
         android:textColor="@color/base_color_white"
         android:textSize="17sp" />
