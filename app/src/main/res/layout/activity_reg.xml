@@ -48,6 +48,7 @@
             android:paddingRight="10dp"
             android:paddingTop="10dp"
             android:singleLine="true"
+            android:inputType="phone"
             android:textColor="@color/color_text_i"
             android:textColorHint="@color/color_disable"
             android:textSize="15sp" />

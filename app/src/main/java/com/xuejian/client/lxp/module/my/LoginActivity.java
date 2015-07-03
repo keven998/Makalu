@@ -138,8 +138,6 @@ public class LoginActivity extends PeachBaseActivity {
         }
 
         //登录的时候需要新建用户名密码token表，方便用户自动登录的时候查询用户密码登录
-        //UserDBManager.getInstance().buildNewTokenTable();
-        //UserDBManager.getInstance().saveToToken(user);
 
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
