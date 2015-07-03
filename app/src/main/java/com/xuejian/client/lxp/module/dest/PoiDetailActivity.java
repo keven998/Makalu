@@ -1,12 +1,8 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -18,7 +14,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +48,6 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.text.SimpleDateFormat;
@@ -314,7 +309,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            ptv.setChecked(true);
+            ptv.setChecked(false);
             findViewById(R.id.rl_ticket).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -324,24 +319,28 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         //操作
-        findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if ("vs".equals(bean.type)) {
+            findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                }
+            });
+            findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                }
+            });
+            findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
+                }
+            });
+        } else {
+            findViewById(R.id.ll_actions).setVisibility(View.GONE);
+        }
 
         //点评
         commentAdapter.getDataList().addAll(bean.comments);
@@ -372,15 +371,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public static class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.poi_detail_dp_name)
-        TextView mTvName;
-        @InjectView(R.id.poi_detail_dp_time)
-        TextView mTvTime;
-        @InjectView(R.id.tv_comment)
+        @InjectView(R.id.tv_commenter_property)
+        TextView mTvCommentProperty;
+        @InjectView(R.id.tv_comment_content)
         TextView mTvComment;
-        @InjectView(R.id.poi_detail_dp_pic)
-        ImageView mImageView;
-        @InjectView(R.id.ratingBar_spot)
+        @InjectView(R.id.iv_commenter_avatar)
+        ImageView mCommeterAvatar;
+        @InjectView(R.id.rb_comment_rating)
         RatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         private DisplayImageOptions options;
@@ -393,7 +390,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
-                    .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(29))) // 设置成圆角图片
                     .build();
             mContext = context;
         }
@@ -407,11 +404,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvName.setText(itemData.authorName);
-            mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
+            mTvCommentProperty.setText(String.format("%s | %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
             starbar.setRating(itemData.getRating());
-            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, options);
+            Log.d("test", "item ratiing = " + itemData.getRating());
+            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mCommeterAvatar, options);
         }
     }
 
@@ -460,71 +457,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    public static class PoiMoreMenu extends BlurDialogFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
-            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_poi_more, null);
-            connectionDialog.setContentView(customView);
-//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dismiss();
-//                }
-//            });
-            customView.findViewById(R.id.add_fav).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //todo:添加收藏
-                    dismiss();
-                }
-            });
-
-            customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    dismiss();
-                }
-            });
-            return connectionDialog;
-        }
-    }
-
-    public class StickerSpan extends ImageSpan {
-
-        public StickerSpan(Drawable b, int verticalAlignment) {
-            super(b, verticalAlignment);
-
-        }
-
-        @Override
-        public void draw(Canvas canvas, CharSequence text,
-                         int start, int end, float x,
-                         int top, int y, int bottom, Paint paint) {
-            Drawable b = getDrawable();
-            canvas.save();
-            int transY = bottom - b.getBounds().bottom - LocalDisplay.dp2px(2);
-            if (mVerticalAlignment == ALIGN_BASELINE) {
-                int textLength = text.length();
-                for (int i = 0; i < textLength; i++) {
-                    if (Character.isLetterOrDigit(text.charAt(i))) {
-                        transY -= paint.getFontMetricsInt().descent;
-                        break;
-                    }
-                }
-            }
-            canvas.translate(x, transY);
-            b.draw(canvas);
-            canvas.restore();
-        }
-    }
-
 
     private class POIImageVPAdapter extends PagerAdapter {
         private ArrayList<ImageBean> mDatas;
@@ -554,6 +486,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
             ImageBean ib = mDatas.get(position);
             ImageLoader.getInstance().displayImage(ib.url, imageView, diop);
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -562,13 +495,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     IntentUtils.intentToPicGallery(PoiDetailActivity.this, mDatas, position);
                 }
             });
-//            ((ViewPager) container).addView(imageView, position);
+            container.addView(imageView, 0);
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((ImageView) object);
+            container.removeView((ImageView) object);
         }
     }
 
