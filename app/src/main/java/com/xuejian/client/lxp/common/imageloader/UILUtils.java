@@ -9,18 +9,19 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class UILUtils {
-	public static final String QINIU_URL_FORMART="?imageView/1/w/%1$d/h/%2$d/q/70/format/jpg/interlace/1";
-	public static DisplayImageOptions getDefaultOption() {
-		DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
-				.cacheInMemory(true)
-				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
-				.resetViewBeforeLoading(true)
+    public static final String QINIU_URL_FORMART = "?imageView/1/w/%1$d/h/%2$d/q/70/format/jpg/interlace/1";
+
+    public static DisplayImageOptions getDefaultOption() {
+        DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                .resetViewBeforeLoading(true)
 //				.decodingOptions(D)
-				.displayer(new FadeInBitmapDisplayer(300, true, true, false))
-				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
-				
-		return picOptions;
-	}
+                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
+        return picOptions;
+    }
 
     public static DisplayImageOptions getRadiusOption() {
         DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
@@ -33,6 +34,7 @@ public class UILUtils {
 
         return picOptions;
     }
+
     public static DisplayImageOptions getRadiusOption(int radius) {
         DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
@@ -43,26 +45,25 @@ public class UILUtils {
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         return picOptions;
     }
-    public static DisplayImageOptions getRadiusOption(int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius) {
+
+    public static DisplayImageOptions getRadiusOption(int topLeftRadius, int topRightRadius, int bottomLeftRadius, int bottomRightRadius) {
         DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
 //				.decodingOptions(D)
-                .displayer(new FixedRoundedBitmapDisplayer(topLeftRadius,topRightRadius,bottomLeftRadius,bottomRightRadius))
+                .displayer(new FixedRoundedBitmapDisplayer(topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
         return picOptions;
     }
 
 
-
-
-    public static String formartQiNiuUrl(String imageUrl,int width,int height){
+    public static String formartQiNiuUrl(String imageUrl, int width, int height) {
 //		if(imageUrl.contains("qiniudn")&&width>0){
 //			String url = String.format(imageUrl+QINIU_URL_FORMART, width,height);
 //			return url;
 //		}
-		return imageUrl;
-	}
+        return imageUrl;
+    }
 }

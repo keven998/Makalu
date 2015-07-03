@@ -3,10 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:background="@drawable/option_cell_selector">
+    android:paddingTop="5dp">
 
     <RelativeLayout
         android:id="@+id/poi_detail_dp_info"
@@ -18,46 +17,44 @@
             android:id="@+id/poi_detail_dp_pic"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:scaleType="fitCenter"
             android:background="@drawable/ic_home_userentry_unlogin"
-            android:src="@drawable/poi_comment_pic"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/poi_comment_pic" />
 
         <TextView
             android:id="@+id/poi_detail_dp_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/third_font_color"
-            android:text="莫言"
-            android:layout_toRightOf="@+id/poi_detail_dp_pic"
             android:layout_marginLeft="5dp"
-            />
+            android:layout_toRightOf="@+id/poi_detail_dp_pic"
+            android:text="莫言"
+            android:textColor="@color/third_font_color"
+            android:textSize="13sp" />
 
 
         <TextView
             android:id="@+id/poi_detail_dp_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/third_font_color"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/poi_detail_dp_name"
             android:text="2015-05-04 12:30:00"
-            android:layout_marginLeft="10dp"
-            />
+            android:textColor="@color/third_font_color"
+            android:textSize="13sp" />
+
         <TextView
             android:id="@+id/tv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/second_font_color"
-            android:textSize="15sp"
             android:layout_below="@id/poi_detail_dp_name"
-            android:layout_toRightOf="@id/poi_detail_dp_pic"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
-            android:singleLine="true"
+            android:layout_toRightOf="@id/poi_detail_dp_pic"
             android:ellipsize="end"
+            android:singleLine="true"
             android:text="少安演的太好了，太好看了。。。。"
-            />
+            android:textColor="@color/second_font_color"
+            android:textSize="15sp" />
 
 
         <RatingBar
@@ -65,13 +62,11 @@
             style="@style/custom_small_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/poi_detail_dp_time"
             android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/poi_detail_dp_time"
             android:numStars="5"
             android:visibility="visible" />
     </RelativeLayout>
-
-
 
 
     <!--<RatingBar
