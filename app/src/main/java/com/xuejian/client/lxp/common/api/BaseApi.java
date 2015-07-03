@@ -37,6 +37,7 @@ public class BaseApi {
         if(user!=null){
             request.setHeader("UserId", user.getUserId()+"");
         }
+        request.setHeader("Accept","application/vnd.lvxingpai.v1+json");
         request.setHeader("Platform", "Android "+android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);
     }

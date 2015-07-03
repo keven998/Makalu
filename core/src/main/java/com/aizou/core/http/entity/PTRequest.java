@@ -8,7 +8,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import java.util.List;
 public class PTRequest implements Serializable {
     public static final String GET = "GET";
     String httpMethod = GET;
+    public static final String PATCH = "PATCH";
     public static final String POST = "POST";
     public static final String PUT = "PUT";
     public static final String HEAD = "HEAD";
