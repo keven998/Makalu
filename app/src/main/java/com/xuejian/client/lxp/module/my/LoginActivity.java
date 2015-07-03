@@ -23,7 +23,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -32,15 +31,13 @@ public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
-    @ViewInject(R.id.et_user)
+    @ViewInject(R.id.et_account)
     private EditText loginNameEt;
     @ViewInject(R.id.et_password)
     private EditText pwdEt;
 
     @ViewInject(R.id.btn_login)
     private Button loginBtn;
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleBar;
     private int request_code;
     private boolean autoLogin = false;
     private boolean isBackWeixinLoginPage = true;
@@ -57,22 +54,24 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 如果用户名密码都有，直接进入主页面
-        /**
-         * 注释掉登陆
-         */
-   /* //   if (SharedPreferencesUtil.getBooleanValue(LoginActivity.this,"isLogin",false)) {
-           //时刻保持内存记录登录状态
-            AccountManager.getInstance().setLogin(true);
-            autoLogin = true;
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            overridePendingTransition(0,R.anim.push_bottom_out);
-            return;
- //       }*/
         initView();
+        findViewById(R.id.iv_nav_back).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithNoAnim();
+            }
+        });
+        findViewById(R.id.tv_reg).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_REG);
+            }
+        });
+
         request_code = getIntent().getIntExtra("request_code", 0);
         if (request_code == REQUEST_CODE_REG) {
-            Intent intent = new Intent(mContext, RegActivity.class);
+            Intent intent = new Intent(this, RegActivity.class);
             startActivityForResult(intent, REQUEST_CODE_REG);
         }
     }
@@ -99,30 +98,16 @@ public class LoginActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
-        initTitlebar();
         findViewById(R.id.tv_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 //    MobclickAgent.onEvent(mContext,"event_login_with_weichat_account");
                 weixinLogin();
-//                UserApi.authSignUp("123456",new HttpCallBack() {
-//                    @Override
-//                    public void doSuccess(Object result, String method) {
-//
-//                    }
-//
-//                    @Override
-//                    public void doFailure(Exception error, String msg, String method) {
-//
-//                    }
-//                });
             }
         });
         loginBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent =new Intent(mContext,AccountActvity.class);
-//                startActivity(intent);
                 signIn();
             }
         });
@@ -135,37 +120,11 @@ public class LoginActivity extends PeachBaseActivity {
         });
     }
 
-    private void initTitlebar() {
-        titleBar.getRightTextView().setText("新用户");
-        titleBar.setRightOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, RegActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_REG);
-            }
-        });
-
-        titleBar.getTitleTextView().setText("登录");
-        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(0, R.anim.push_bottom_out);
-            }
-        });
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(0, R.anim.push_bottom_out);
-    }
-
-    @Override
-    public void finish() {
-        // TODO Auto-generated method stub
-        super.finish();
+        finishWithNoAnim();
+        overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
 
     private void imLogin(final User user, int type) {
@@ -179,8 +138,6 @@ public class LoginActivity extends PeachBaseActivity {
         }
 
         //登录的时候需要新建用户名密码token表，方便用户自动登录的时候查询用户密码登录
-        //UserDBManager.getInstance().buildNewTokenTable();
-        //UserDBManager.getInstance().saveToToken(user);
 
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
@@ -192,10 +149,8 @@ public class LoginActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
 //                ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到旅行派");
                 setResult(RESULT_OK);
-                finish();
+                finishWithNoAnim();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                overridePendingTransition(0, R.anim.push_bottom_out);
-
             }
         });
 
@@ -419,12 +374,11 @@ public class LoginActivity extends PeachBaseActivity {
         if (requestCode == REQUEST_CODE_REG && resultCode == RESULT_OK) {
             User user = (User) data.getSerializableExtra("user");
             loginNameEt.setText(user.getTel());
-            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             imLogin(user, REGISTER);
-
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             User user = (User) data.getSerializableExtra("user");
-            DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             imLogin(user, FINDPASSWORD);
         }
     }

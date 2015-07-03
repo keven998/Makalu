@@ -27,7 +27,7 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
  * Created by Rjm on 2014/10/13.
  */
 public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
-    public final static int REQUEST_CODE_RESET_PWD=300;
+    public final static int REQUEST_CODE_RESET_PWD = 300;
     @ViewInject(R.id.et_phone)
     private EditText phoneEt;
     @ViewInject(R.id.et_sms)
@@ -47,20 +47,20 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
-        titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("用户验证");
+        titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
+        titleBar.getTitleTextView().setText("账户验证");
         titleBar.enableBackKey(true);
         ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
     }
 
-    private void startCountDownTime(){
+    private void startCountDownTime() {
         downTimeBtn.setEnabled(false);
-        countDownTimer= new CountDownTimer(countDown*1000, 1000) {
+        countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText("(" + (millisUntilFinished / 1000) + ")");
+                downTimeBtn.setText(String.format("(%ds)", millisUntilFinished / 1000));
             }
 
             @Override
@@ -73,13 +73,13 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_time_down:
-                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+                if (!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
@@ -110,15 +110,15 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                 break;
 
             case R.id.btn_next:
-                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+                if (!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if(TextUtils.isEmpty(smsEt.getText().toString())){
+                if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
@@ -153,8 +153,8 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_RESET_PWD){
-            setResult(RESULT_OK,data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_RESET_PWD) {
+            setResult(RESULT_OK, data);
             finish();
         }
     }

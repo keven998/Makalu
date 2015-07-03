@@ -189,13 +189,13 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
                 startActivity(logActivity);
-                overridePendingTransition(R.anim.push_bottom_in, 0);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 break;
 
             case R.id.sp_reg:
                 Intent regActivity = new Intent(SplashActivity.this, RegActivity.class);
                 startActivityForResult(regActivity, REGESTER_REQUEST);
-                overridePendingTransition(R.anim.push_bottom_in, 0);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 break;
 
             case R.id.sp_bounce:

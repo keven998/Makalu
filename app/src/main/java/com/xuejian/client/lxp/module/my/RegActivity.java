@@ -33,24 +33,17 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     @ViewInject(R.id.et_password)
     private EditText pwdEt;
 
-    @ViewInject(R.id.btn_reg)
-    private Button regBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg);
         ViewUtils.inject(this);
-        regBtn.setOnClickListener(this);
+        findViewById(R.id.btn_reg).setOnClickListener(this);
         findViewById(R.id.user_agreement).setOnClickListener(this);
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("注册");
-        //titleBar.enableBackKey(true);
-        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(0,R.anim.push_bottom_out);
+                finishWithNoAnim();
             }
         });
     }
@@ -58,8 +51,8 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(0,R.anim.push_bottom_out);
+        finishWithNoAnim();
+        overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
 
     @Override
@@ -132,7 +125,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHECH_VALICATION){
             setResult(RESULT_OK, data);
-            finish();
+            finishWithNoAnim();
         }
     }
 
