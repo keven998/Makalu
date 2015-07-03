@@ -33,7 +33,12 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +51,7 @@ import java.util.Map;
 public class MyFragment extends PeachBaseFragment implements View.OnClickListener {
     public final static int CODE_PLANS = 102;
     public final static int CODE_FOOTPRINT = 103;
+    public final static int CODE_PICS = 104;
 
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
@@ -69,6 +75,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView tvTracksCount;
     ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
     private View rootView;
+    private int picsNum=0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -131,7 +139,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
-            tvPictureCount.setText(AccountManager.getInstance().getContactList(getActivity().getApplicationContext()).size() + "图");
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
             tvLevel.setText("LV" + level);
@@ -145,6 +152,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .build();
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
+            getUserPicsNum(user.getUserId());
         }
     }
 
@@ -217,6 +225,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.rl_picture_entry:
+                final User userPics = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (userPics != null) {
+                    Intent intent2 = new Intent(getActivity(), CityPictureActivity.class);
+                    intent2.putExtra("id", String.valueOf(userPics.getUserId()));
+                    intent2.putExtra("user_name", userPics.getNickName());
+                    intent2.putExtra("isUserPics",true);
+                    startActivity(intent2);
+                } else {
+                    Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(LoginIntent, CODE_PICS);
+                    getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                }
 
                 break;
 
@@ -279,6 +299,35 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 refreshLoginStatus();
+            }
+        });
+
+    }
+
+    public void getUserPicsNum(Long userId) {
+        System.out.print("yunxing==================");
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                JSONObject jsonObject = null;
+                System.out.print("yunxing+++++++++++++++++");
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        picsNum = object.length();
+                        tvPictureCount.setText( picsNum + "图");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                tvPictureCount.setText( picsNum + "图");
+                ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
             }
         });
 
