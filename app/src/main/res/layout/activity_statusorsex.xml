@@ -1,84 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/ss_title_bar"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar"
+        >
 
+        <TextView android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:text="取消"
+            android:gravity="center"
+            android:textColor="@color/color_text_titlebar"
+            android:src="@drawable/selector_ic_nav_back"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp"/>
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="15sp" />
+
+        <TextView android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="保存"
+            android:textColor="@color/base_color_white"
+            android:gravity="center_vertical"
+            android:scaleType="center"
+            android:src="@drawable/add_contact"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"/>
+
+    </RelativeLayout>
+    <CheckedTextView
+        android:id="@+id/ctv_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:textSize="15sp"
-            android:textColor="@color/base_font_color"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            android:id="@+id/ss_tv_first"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/base_border_color"
-            android:layout_marginLeft="15dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:textSize="15sp"
-            android:textColor="@color/base_font_color"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            android:id="@+id/ss_tv_second"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/base_border_color"
-            android:layout_marginLeft="15dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:textSize="15sp"
-            android:textColor="@color/base_font_color"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            android:id="@+id/ss_tv_third"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/base_border_color"
-            android:layout_marginLeft="15dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:textSize="15sp"
-            android:textColor="@color/base_font_color"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            android:id="@+id/ss_tv_fourth"/>
-
-    </LinearLayout>
-
-
+        android:layout_marginTop="10dp"
+        android:background="@drawable/option_cell_selector"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/checker_for_checkbox"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line" />
+    <CheckedTextView
+        android:id="@+id/ctv_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/option_cell_selector"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/checker_for_checkbox"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line" />
+    <CheckedTextView
+        android:id="@+id/ctv_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/option_cell_selector"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/checker_for_checkbox"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line" />
+    <CheckedTextView
+        android:id="@+id/ctv_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/option_cell_selector"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/checker_for_checkbox"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
 </LinearLayout>

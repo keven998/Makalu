@@ -129,7 +129,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         // 获取传过来的groupid
         groupId = getArguments().getString("groupId");
-        name = getArguments().getString("name");
         if (groupId!=null){
             group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
         }
