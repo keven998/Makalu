@@ -83,8 +83,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
             // 防止被T后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
             // 三个fragment里加的判断同理
-            finish();
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
             return;
         }
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);

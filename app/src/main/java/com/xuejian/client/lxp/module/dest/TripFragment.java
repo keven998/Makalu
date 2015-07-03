@@ -54,7 +54,6 @@ public class TripFragment extends PeachBaseFragment {
                 } else {
                     Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(LoginIntent, 1);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 }
             }
         });

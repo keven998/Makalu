@@ -177,7 +177,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             editDialog.show();
         } else {
             Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
-            startActivity(intent);
+            startActivityWithNoAnim(intent);
             overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
         }
     }
@@ -190,7 +190,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             startActivity(intent);
         } else {
             Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
-            startActivity(intent);
+            startActivityWithNoAnim(intent);
             overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
         }
     }

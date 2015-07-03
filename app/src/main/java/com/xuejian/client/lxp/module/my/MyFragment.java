@@ -180,7 +180,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user1 == null) {
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 }
                 break;
 
@@ -211,7 +210,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user == null) {
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 } else {
                     Intent accountIntent = new Intent(getActivity(), AccountActvity.class);
                     startActivity(accountIntent);

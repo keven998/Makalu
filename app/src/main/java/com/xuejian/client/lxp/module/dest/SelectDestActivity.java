@@ -177,7 +177,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                     ToastUtil.getInstance(mContext).showToast("请先登录");
                     Intent intent = new Intent(mContext, LoginActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_LOGIN);
-                    overridePendingTransition(R.anim.push_bottom_in,0);
                 }
             }
         });
