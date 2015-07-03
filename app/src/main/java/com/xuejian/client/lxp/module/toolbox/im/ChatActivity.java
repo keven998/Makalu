@@ -390,10 +390,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
 
-        String name = UserDBManager.getInstance().getContactByUserId(Long.valueOf(toChatUsername)).getNickName();
         TextView titleView = (TextView) findViewById(R.id.tv_na_title);
-        titleView.setText(name);
 
+        if (user==null){
+            titleView.setText(toChatUsername);
+        }
+        else  titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
             drawerLayout.setEnabled(false);
@@ -402,7 +404,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
-            args.putString("name", name);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()

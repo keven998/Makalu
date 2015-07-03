@@ -14,11 +14,11 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.StartCity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
 import java.util.ArrayList;
 
@@ -29,15 +29,18 @@ import butterknife.InjectView;
  * Created by rjm on 2015/3/26.
  */
 public class SelectResidentActivity extends PeachBaseActivity {
-    @InjectView(R.id.ly_header_bar_title_wrap)
-    TitleHeaderBar titleHeaderBar;
    /* @InjectView(R.id.et_search)
     EditText etSearch;*/
     @InjectView(R.id.elv_city)
     ExpandableListView elvCity;
     @InjectView(R.id.tv_loc_name)
     TextView loc_name;
-
+    @ViewInject(R.id.tv_confirm)
+    private TextView tv_confirm;
+    @ViewInject(R.id.tv_cancel)
+    private TextView tv_cancel;
+    @ViewInject(R.id.tv_title_bar_title)
+    private TextView tv_title_bar_title;
 
     private LocationManagerProxy mLocationManagerProxy;
     private ArrayList<StartCity> startCitys = new ArrayList<StartCity>();
@@ -48,8 +51,9 @@ public class SelectResidentActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_resident);
         ButterKnife.inject(this);
-        titleHeaderBar.getTitleTextView().setText("现住地");
-        titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        tv_title_bar_title.setText("地区设置");
+        tv_confirm.setText("");
+        tv_cancel.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

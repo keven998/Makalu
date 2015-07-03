@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.my;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -17,7 +18,6 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
 /**
@@ -30,8 +30,12 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
     private EditText newPwdEt;
     @ViewInject(R.id.et_re_password)
     private EditText rePwdEt;
-   /* @ViewInject(R.id.btn_ok)
-    private Button okBtn;*/
+    @ViewInject(R.id.tv_confirm)
+    private TextView tv_confirm;
+    @ViewInject(R.id.tv_cancel)
+    private TextView tv_cancel;
+    @ViewInject(R.id.tv_title_bar_title)
+    private TextView tv_title_bar_title;
     private User user;
 
     @Override
@@ -42,19 +46,16 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
         ViewUtils.inject(this);
        // okBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
-
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("密码修改");
-        titleBar.getRightTextView().setText("确定");
-        titleBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
-        titleBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(this);
-        titleBar.enableBackKey(true);
+        tv_confirm.setOnClickListener(this);
+        tv_cancel.setOnClickListener(this);
+        tv_title_bar_title.setText("修改密码");
+        tv_confirm.setText("保存");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.ly_title_bar_right:
+            case R.id.tv_confirm:
                 if(!RegexUtils.isPwdOk(oldPwdEt.getText().toString().trim())){
                     ToastUtil.getInstance(this).showToast("请输入你的当前密码");
                 }else if(!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())){
@@ -92,6 +93,9 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                     });
                 }
             break;
+            case R.id.tv_cancel:
+                finish();
+                break;
         }
     }
 }

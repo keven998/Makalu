@@ -5,36 +5,35 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+    <include layout="@layout/title_bar_layout" />
 
     <EditText
         android:id="@+id/et_nickname"
         android:layout_width="match_parent"
-        android:layout_height="43dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@color/base_color_white"
+        android:gravity="center_vertical"
+        android:hint="姓名"
+        android:paddingBottom="17dp"
         android:paddingLeft="17dp"
         android:paddingRight="20dp"
-        android:gravity="center_vertical"
-        android:textSize="15sp"
-        android:textColor="@color/base_text_color_title"
+        android:paddingTop="17dp"
         android:singleLine="true"
-        android:hint="姓名或昵称"
-        android:textColorHint="@color/base_text_color_text_placeholder"/>
+        android:textColor="@color/color_text_i"
+        android:textColorHint="@color/color_text_iii"
+        android:textSize="15sp" />
 
-   <!-- <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:text="确定"
-        android:textSize="15sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textColor="@color/base_color_white"
-        android:background="@drawable/theme_button_selctor"/>-->
+    <!-- <Button
+         android:id="@+id/btn_save"
+         android:layout_width="match_parent"
+         android:layout_height="35dp"
+         android:layout_marginTop="20dp"
+         android:text="确定"
+         android:textSize="15sp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:textColor="@color/base_color_white"
+         android:background="@drawable/theme_button_selctor"/>-->
 
 </LinearLayout>

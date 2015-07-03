@@ -10,16 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
 
-    <TextView
-        android:id="@+id/tips_reg"
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/ly_header_bar_title_wrap"
+        android:background="@drawable/icon_little"
+        android:layout_below="@+id/ly_header_bar_title_wrap"/>
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:text="请保持手机畅通，接收验证码"
+        android:gravity="left"
+        android:layout_marginLeft="6dp"
+        android:id="@+id/notice"
+        android:drawableLeft="@drawable/zhuce_user_default"
+        android:layout_marginTop="20dp"
+        android:text="我已阅读并同意遵守《旅行派用户协议》"
         android:textSize="10sp"
+        android:layout_below="@+id/icon"
         android:textColor="@color/base_text_color_text_hint"/>
 
 
@@ -27,7 +36,7 @@
         android:id="@+id/reg_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tips_reg"
+        android:layout_below="@+id/notice"
         android:layout_marginTop="5dp"
         android:background="@color/base_color_white"
         android:orientation="vertical">
@@ -121,16 +130,7 @@
         android:background="@drawable/theme_button_selctor"
         android:text="注册"/>
 
-    <TextView
-        android:layout_below="@+id/btn_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="38dp"
-        android:text="点击注册即表明你已阅读并同意《旅行派用户协议》"
-        android:textSize="10sp"
-        android:textColor="@color/base_text_color_text_hint"/>
+
 
     <TextView
         android:id="@+id/user_agreement"

@@ -19,7 +19,7 @@ public class AccountManager {
     public static final String LOGIN_USER_PREF = "login_user";
     public static User user;
     public static String CurrentUserId;
-    private Map<Long, User> contactList=new Hashtable<>();
+    private static Map<Long, User> contactList=new Hashtable<>();
     private boolean isLogin;
     private User userInfo;
     /**

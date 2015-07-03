@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -23,7 +23,6 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
 /**
@@ -34,10 +33,16 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
     private EditText phoneEt;
     @ViewInject(R.id.et_sms)
     private EditText smsEt;
-  /*  @ViewInject(R.id.btn_next)
-    private Button nextBtn;*/
+    /*  @ViewInject(R.id.btn_next)
+      private Button nextBtn;*/
+    @ViewInject(R.id.tv_confirm)
+    private TextView tv_confirm;
+    @ViewInject(R.id.tv_cancel)
+    private TextView tv_cancel;
+    @ViewInject(R.id.tv_title_bar_title)
+    private TextView tv_title_bar_title;
     @ViewInject(R.id.btn_time_down)
-    private Button downTimeBtn;
+    private TextView downTimeBtn;
     private CountDownTimer countDownTimer;
     private int countDown;
     private User user;
@@ -52,18 +57,15 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         //nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
-
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleBar.getTitleTextView().setText("绑定手机");
-        titleBar.getRightTextView().setText("提交");
-        titleBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
-        titleBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(this);
-        titleBar.enableBackKey(true);
+        tv_confirm.setOnClickListener(this);
+        tv_cancel.setOnClickListener(this);
+        tv_title_bar_title.setText("安全设置");
+        tv_confirm.setText("提交");
     }
 
-    private void startCountDownTime(){
+    private void startCountDownTime() {
         downTimeBtn.setEnabled(false);
-        countDownTimer= new CountDownTimer(countDown*1000, 1000) {
+        countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 downTimeBtn.setText((millisUntilFinished / 1000) + "s");
@@ -79,21 +81,21 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_time_down:
-                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+                if (!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
                 DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
 
-                String uid=null ;
-                if(user!=null){
-                    uid = user.getUserId()+"";
+                String uid = null;
+                if (user != null) {
+                    uid = user.getUserId() + "";
                 }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE, uid, new HttpCallBack<String>() {
                     @Override
@@ -117,15 +119,15 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 });
 
                 break;
-            case R.id.ly_title_bar_right:
-                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+            case R.id.tv_confirm:
+                if (!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if(TextUtils.isEmpty(smsEt.getText().toString())){
+                if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
@@ -151,9 +153,9 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                         if (bindResult.code == 0) {
                                             user.setTel(sendSuccessPhone);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                            Intent intent=new Intent();
+                                            Intent intent = new Intent();
                                             intent.putExtra("bindphone", sendSuccessPhone);
-                                            setResult(RESULT_OK,intent);
+                                            setResult(RESULT_OK, intent);
                                             ToastUtil.getInstance(mContext).showToast("OK~绑定成功");
                                             finish();
                                         } else {
@@ -182,9 +184,9 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                             ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
-
-
-
+                break;
+            case R.id.tv_cancel:
+                finish();
                 break;
         }
     }
