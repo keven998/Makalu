@@ -54,11 +54,24 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initView();
+        findViewById(R.id.iv_nav_back).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithNoAnim();
+            }
+        });
+        findViewById(R.id.tv_reg).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_REG);
+            }
+        });
+
         request_code = getIntent().getIntExtra("request_code", 0);
         if (request_code == REQUEST_CODE_REG) {
-            Intent intent = new Intent(mContext, RegActivity.class);
+            Intent intent = new Intent(this, RegActivity.class);
             startActivityForResult(intent, REQUEST_CODE_REG);
         }
     }
@@ -110,14 +123,8 @@ public class LoginActivity extends PeachBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(0, R.anim.push_bottom_out);
-    }
-
-    @Override
-    public void finish() {
-        // TODO Auto-generated method stub
-        super.finish();
+        finishWithNoAnim();
+        overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
 
     private void imLogin(final User user, int type) {
@@ -144,10 +151,8 @@ public class LoginActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
 //                ToastUtil.getInstance(LoginActivity.this).showToast("欢迎回到旅行派");
                 setResult(RESULT_OK);
-                finish();
+                finishWithNoAnim();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                overridePendingTransition(0, R.anim.push_bottom_out);
-
             }
         });
 
