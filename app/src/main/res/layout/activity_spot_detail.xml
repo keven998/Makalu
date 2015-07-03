@@ -51,7 +51,7 @@
 
         <RatingBar
             android:id="@+id/rb_poi"
-            style="@style/custom_small_rating_bar"
+            style="@style/custom_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp" />
@@ -64,6 +64,7 @@
         android:layout_marginBottom="10dp"
         android:ellipsize="end"
         android:lineSpacingExtra="3dp"
+        android:paddingLeft="14dp"
         android:maxLines="3"
         android:padding="10dp"
         android:textColor="@color/color_text_i"
@@ -246,14 +247,13 @@
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="10dp"
-        android:weightSum="4"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/tv_travel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:gravity="center"
             android:scaleType="fitCenter"
@@ -263,7 +263,7 @@
             android:id="@+id/tv_tips"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="intentToTravel"
@@ -274,7 +274,7 @@
             android:id="@+id/tv_traffic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="intentToFood"
@@ -288,7 +288,8 @@
         android:layout_height="1px"
         android:layout_marginLeft="14dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_line" />
+        android:background="@color/color_line"
+        android:layout_marginBottom="10dp"/>
 
 
 </LinearLayout>

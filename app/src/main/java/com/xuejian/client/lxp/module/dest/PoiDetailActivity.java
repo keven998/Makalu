@@ -19,6 +19,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -372,15 +373,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public static class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.poi_detail_dp_name)
-        TextView mTvName;
-        @InjectView(R.id.poi_detail_dp_time)
-        TextView mTvTime;
-        @InjectView(R.id.tv_comment)
+        @InjectView(R.id.tv_commenter_property)
+        TextView mTvCommentProperty;
+        @InjectView(R.id.tv_comment_content)
         TextView mTvComment;
-        @InjectView(R.id.poi_detail_dp_pic)
-        ImageView mImageView;
-        @InjectView(R.id.ratingBar_spot)
+        @InjectView(R.id.iv_commenter_avatar)
+        ImageView mCommeterAvatar;
+        @InjectView(R.id.rb_comment_rating)
         RatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         private DisplayImageOptions options;
@@ -393,7 +392,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
-                    .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(29))) // 设置成圆角图片
                     .build();
             mContext = context;
         }
@@ -407,11 +406,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvName.setText(itemData.authorName);
-            mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
+            mTvCommentProperty.setText(String.format("%s | %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
             starbar.setRating(itemData.getRating());
-            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, options);
+            Log.d("test", "item ratiing = " + itemData.getRating());
+            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mCommeterAvatar, options);
         }
     }
 
@@ -553,7 +552,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
             ImageView imageView = new ImageView(cxt);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
             imageView.setLayoutParams(layoutParams);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setBackgroundColor(getResources().getColor(android.R.color.black));
             ImageBean ib = mDatas.get(position);
             ImageLoader.getInstance().displayImage(ib.url, imageView, diop);
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -562,13 +562,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     IntentUtils.intentToPicGallery(PoiDetailActivity.this, mDatas, position);
                 }
             });
-//            ((ViewPager) container).addView(imageView, position);
+            container.addView(imageView, 0);
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((ImageView) object);
+            container.removeView((ImageView) object);
         }
     }
 

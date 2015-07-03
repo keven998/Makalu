@@ -3,7 +3,6 @@
 
     <item android:drawable="@drawable/poi_icon_ticket_enable" android:state_checked="true"/>
     <item android:drawable="@drawable/poi_icon_ticket_enable" android:state_checked="true" android:state_pressed="true" />
-    <item android:drawable="@drawable/poi_icon_ticket_disabled" android:state_checked="false" android:state_pressed="true" />
     <item android:drawable="@drawable/poi_icon_ticket_disabled"/>
 
 </selector>
