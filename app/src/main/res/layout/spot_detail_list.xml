@@ -14,7 +14,7 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
-        android:listSelector="@null" />
+        android:listSelector="@android:color/transparent" />
 
     <RelativeLayout
         android:id="@+id/top_bar"

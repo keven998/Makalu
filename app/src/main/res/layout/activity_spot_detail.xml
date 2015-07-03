@@ -202,6 +202,7 @@
         android:id="@+id/rl_run_time"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/option_cell_selector"
         android:orientation="horizontal"
         android:paddingLeft="14dp"
@@ -240,10 +241,9 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/ll_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="10dp"
@@ -287,9 +287,10 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_line"
-        android:layout_marginBottom="10dp"/>
+        android:background="@color/color_line"/>
 
 
 </LinearLayout>

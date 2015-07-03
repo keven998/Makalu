@@ -1,12 +1,8 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -18,7 +14,6 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +48,6 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.text.SimpleDateFormat;
@@ -315,7 +309,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            ptv.setChecked(true);
+            ptv.setChecked(false);
             findViewById(R.id.rl_ticket).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -325,24 +319,28 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         //操作
-        findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if ("vs".equals(bean.type)) {
+            findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                }
+            });
+            findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                }
+            });
+            findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
+                }
+            });
+        } else {
+            findViewById(R.id.ll_actions).setVisibility(View.GONE);
+        }
 
         //点评
         commentAdapter.getDataList().addAll(bean.comments);
@@ -459,71 +457,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    public static class PoiMoreMenu extends BlurDialogFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
-            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_poi_more, null);
-            connectionDialog.setContentView(customView);
-//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dismiss();
-//                }
-//            });
-            customView.findViewById(R.id.add_fav).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //todo:添加收藏
-                    dismiss();
-                }
-            });
-
-            customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    dismiss();
-                }
-            });
-            return connectionDialog;
-        }
-    }
-
-    public class StickerSpan extends ImageSpan {
-
-        public StickerSpan(Drawable b, int verticalAlignment) {
-            super(b, verticalAlignment);
-
-        }
-
-        @Override
-        public void draw(Canvas canvas, CharSequence text,
-                         int start, int end, float x,
-                         int top, int y, int bottom, Paint paint) {
-            Drawable b = getDrawable();
-            canvas.save();
-            int transY = bottom - b.getBounds().bottom - LocalDisplay.dp2px(2);
-            if (mVerticalAlignment == ALIGN_BASELINE) {
-                int textLength = text.length();
-                for (int i = 0; i < textLength; i++) {
-                    if (Character.isLetterOrDigit(text.charAt(i))) {
-                        transY -= paint.getFontMetricsInt().descent;
-                        break;
-                    }
-                }
-            }
-            canvas.translate(x, transY);
-            b.draw(canvas);
-            canvas.restore();
-        }
-    }
-
 
     private class POIImageVPAdapter extends PagerAdapter {
         private ArrayList<ImageBean> mDatas;
@@ -552,8 +485,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
             ImageView imageView = new ImageView(cxt);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
             imageView.setLayoutParams(layoutParams);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setBackgroundColor(getResources().getColor(android.R.color.black));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
             ImageBean ib = mDatas.get(position);
             ImageLoader.getInstance().displayImage(ib.url, imageView, diop);
             imageView.setOnClickListener(new View.OnClickListener() {
