@@ -1,17 +1,16 @@
 package com.xuejian.client.lxp.module.toolbox;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -20,13 +19,12 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.widget.listHelper.ListViewDataAdapter;
+import com.aizou.core.widget.listHelper.ViewHolderBase;
+import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
-import com.lv.Listener.SendMsgListener;
-import com.lv.im.IMClient;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -36,17 +34,13 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
-import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.swipelistview.SwipeLayout;
-import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
@@ -54,7 +48,6 @@ import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -77,7 +70,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @InjectView(R.id.edit_btn)
     ImageButton mEditBtn;
 
-    StrategyAdapter mStrategyListAdapter;
+    ListViewDataAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
     String chatType;
@@ -144,7 +137,12 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setScrollLoadEnabled(false);
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
-        mStrategyListAdapter = new StrategyAdapter(isShare);
+        mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
+            @Override
+            public ViewHolderBase createViewHolder() {
+                return new StrategyAdapter();
+            }
+        });
         if (!isOwner) {
             mEditBtn.setVisibility(View.GONE);
         }
@@ -166,7 +164,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        StrategyBean bean = mStrategyListAdapter.getDataList().get(position);
+                        StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putExtra("id", bean.id);
                         startActivityForResult(intent, RESULT_PLAN_DETAIL);
@@ -223,7 +221,6 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void setupViewFromCache() {
         if (isOwner) {
-            AccountManager account = AccountManager.getInstance();
             String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", userId));
             if (!TextUtils.isEmpty(data)) {
                 List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
@@ -317,19 +314,18 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void bindView(List<StrategyBean> result) {
-        StrategyAdapter adapter = mStrategyListAdapter;
         if (mCurrentPage == 0) {
-            adapter.getDataList().clear();
+            mStrategyListAdapter.getDataList().clear();
         }
-        adapter.getDataList().addAll(result);
-        adapter.notifyDataSetChanged();
+        mStrategyListAdapter.getDataList().addAll(result);
+        mStrategyListAdapter.notifyDataSetChanged();
         if (result == null || result.size() < BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setHasMoreData(false);
         } else {
             mMyStrategyLv.setHasMoreData(true);
         }
 
-        if (adapter.getCount() >= BaseApi.PAGE_SIZE) {
+        if (mStrategyListAdapter.getCount() >= BaseApi.PAGE_SIZE) {
             mMyStrategyLv.setScrollLoadEnabled(true);
         } else {
             mMyStrategyLv.setScrollLoadEnabled(false);
@@ -345,142 +341,330 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
     }
 
-    public class StrategyAdapter extends BaseSwipeAdapter {
-        protected ArrayList<StrategyBean> mItemDataList = new ArrayList<StrategyBean>();
-        DisplayImageOptions poptions;
-        boolean isSend;
-        private LinearLayout swipe_ll;
-
-        public StrategyAdapter(boolean isSend) {
-            poptions = UILUtils.getDefaultOption();
-            this.isSend = isSend;
-        }
-
+    //    public class StrategyAdapter extends BaseSwipeAdapter {
+//        protected ArrayList<StrategyBean> mItemDataList = new ArrayList<StrategyBean>();
+//        DisplayImageOptions poptions;
+//        boolean isSend;
+//        private LinearLayout swipe_ll;
+//
+//        public StrategyAdapter(boolean isSend) {
+//            poptions = UILUtils.getDefaultOption();
+//            this.isSend = isSend;
+//        }
+//
+//
+//        @Override
+//        public int getSwipeLayoutResourceId(int position) {
+//            return R.id.swipe;
+//        }
+//
+//        public ArrayList<StrategyBean> getDataList() {
+//            return mItemDataList;
+//        }
+//
+//        @Override
+//        public View generateView(int position, ViewGroup parent) {
+//            View v = LayoutInflater.from(mContext).inflate(R.layout.row_my_strategy, null);
+//          //  swipe_ll = (LinearLayout) v.findViewById(R.id.swipe_bg_ll);
+//            return v;
+//        }
+//
+//        @Override
+//        public void fillValues(final int position, View convertView) {
+//            TextView mDayTv = (TextView) convertView.findViewById(R.id.day_tv);
+//            TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
+//            TextView mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
+//            TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
+//            ImageView mDelete= (ImageView) convertView.findViewById(R.id.iv_delete);
+//            ImageView mCheck= (ImageView) convertView.findViewById(R.id.iv_check);
+//            ImageView mModify= (ImageView) convertView.findViewById(R.id.iv_modify_name);
+//            final StrategyBean itemData = (StrategyBean) getItem(position);
+//
+//            //TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
+//            //RelativeLayout mRlSend = (RelativeLayout) convertView.findViewById(R.id.rl_send);
+//            mDayTv.setText(String.valueOf(itemData.dayCnt));
+//            mCitysTv.setText(itemData.summary);
+//            mNameTv.setText(itemData.title);
+//            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
+//            mModify.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+//                    editDialog.setTitle("修改计划名");
+//                    editDialog.setMessage(itemData.title);
+//                    editDialog.setPositiveButton("确定", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            editDialog.dismiss();
+//                            DialogManager.getInstance().showLoadingDialog(mContext);
+//                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
+//                                @Override
+//                                public void doSuccess(String result, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+//                                    if (modifyResult.code == 0) {
+//                                        itemData.title = editDialog.getMessage();
+//                                        mStrategyListAdapter.notifyDataSetChanged();
+//                                        cachePage();
+//                                    } else {
+//                                        if (!isFinishing()) {
+//                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                                        }
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void doFailure(Exception error, String msg, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    if (!isFinishing()) {
+//                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    });
+//                    editDialog.show();
+//                }
+//            });
+//            mDelete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    deleteItem(itemData);
+//                }
+//            });
+//        mCheck.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                haveBeenVisited(itemData);
+//            }
+//        });
+//
+//        }
+////            if (isSend) {  //isSend
+////                mRlSend.setVisibility(View.VISIBLE);
+////                mBtnSend.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
+////                            @Override
+////                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+////                                DialogManager.getInstance().showLoadingDialog(mContext);
+////                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new SendMsgListener() {
+////                                    @Override
+////                                    public void onSuccess() {
+////                                        DialogManager.getInstance().dissMissLoadingDialog();
+////                                        runOnUiThread(new Runnable() {
+////                                            public void run() {
+////                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+////                                            }
+////                                        });
+////                                    }
+////
+////                                    @Override
+////                                    public void onFailed(int code) {
+////                                        DialogManager.getInstance().dissMissLoadingDialog();
+////                                        runOnUiThread(new Runnable() {
+////                                            public void run() {
+////                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+////
+////                                            }
+////                                        });
+////
+////                                    }
+////                                });
+////                            }
+////
+////                            @Override
+////                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+////                            }
+////                        });
+////                    }
+////                });
+////            } else {
+////                mRlSend.setVisibility(View.GONE);
+////            }
+//
+////            mMore.setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View v) {
+////                    showMoreDialog(itemData);
+////                }
+////            });
+////            mDeleteItem.setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View view) {
+////                    deleteItem(itemData);
+////                }
+////            });
+////        }
+//
+//        public void showMoreDialog(final StrategyBean strBean) {
+//            String[] names = {"修改计划名", "签到"};
+//            final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
+//            dialog.setMoreStyle(true, 2, names);
+//            dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+//            dialog.setTitle("更多");
+//            dialog.setMessage(strBean.title);
+//            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+//                    editDialog.setTitle("修改计划名");
+//                    editDialog.setMessage(strBean.title);
+//                    editDialog.setPositiveButton("确定", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            editDialog.dismiss();
+//                            DialogManager.getInstance().showLoadingDialog(mContext);
+//                            TravelApi.modifyGuideTitle(strBean.id, editDialog.getMessage(), new HttpCallBack<String>() {
+//                                @Override
+//                                public void doSuccess(String result, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+//                                    if (modifyResult.code == 0) {
+//                                        strBean.title = editDialog.getMessage();
+//                                        mStrategyListAdapter.notifyDataSetChanged();
+//                                        cachePage();
+//                                    } else {
+//                                        if (!isFinishing()) {
+//                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                                        }
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void doFailure(Exception error, String msg, String method) {
+//                                    DialogManager.getInstance().dissMissLoadingDialog();
+//                                    if (!isFinishing()) {
+//                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    });
+//                    editDialog.show();
+//                }
+//            });
+//
+//
+//            //置顶操作
+////            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View v) {
+////                    dialog.dismiss();
+////                    backToTop(strBean);
+////                }
+////            });
+//
+//            //去过操作
+//            dialog.getTv4().setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                    haveBeenVisited(strBean);
+////                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
+////                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+////                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+////                    cdialog.setTitle("提示");
+////                    cdialog.setMessage(strBean.title + "已保存为去过，成为了您的历史足迹");
+////                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
+////                        @Override
+////                        public void onClick(View v) {
+////                            cdialog.dismiss();
+////                        }
+////                    });
+////                    final Handler handler = new Handler() {
+////                        public void handleMessage(Message msg) {
+////                            switch (msg.what) {
+////                                case 1:
+////                                    cdialog.show();
+////                            }
+////                            super.handleMessage(msg);
+////                        }
+////                    };
+////                    Message message = handler.obtainMessage(1);
+////                    handler.sendMessageDelayed(message, 300);
+//                }
+//            });
+//            dialog.show();
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mItemDataList.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return mItemDataList.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//    }
+    public class StrategyAdapter extends ViewHolderBase<StrategyBean> {
+        TextView tv_tian;
+        TextView tv_day;
+        TextView mCitysTv;
+        TextView mNameTv;
+        TextView mTimeTv;
+        ImageView mDelete;
+        ImageView mCheck;
+        ImageView mModify;
+        RelativeLayout rl_plan;
+        ImageView mCheckStatus;
 
         @Override
-        public int getSwipeLayoutResourceId(int position) {
-            return R.id.swipe;
-        }
-
-        public ArrayList<StrategyBean> getDataList() {
-            return mItemDataList;
+        public View createView(LayoutInflater layoutInflater) {
+            View convertView = layoutInflater.inflate(R.layout.row_my_strategy, null);
+            tv_tian = (TextView) convertView.findViewById(R.id.tian);
+            tv_day = (TextView) convertView.findViewById(R.id.day_tv);
+            mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
+            mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
+            mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
+            mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
+            mCheck = (ImageView) convertView.findViewById(R.id.iv_check);
+            mModify = (ImageView) convertView.findViewById(R.id.iv_modify_name);
+            mCheckStatus= (ImageView) convertView.findViewById(R.id.iv_check_status);
+            rl_plan= (RelativeLayout) convertView.findViewById(R.id.rl_plan);
+            return convertView;
         }
 
         @Override
-        public View generateView(int position, ViewGroup parent) {
-            View v = LayoutInflater.from(mContext).inflate(R.layout.row_my_strategy, null);
-            swipe_ll = (LinearLayout) v.findViewById(R.id.swipe_bg_ll);
-            return v;
-        }
-
-        @Override
-        public void fillValues(final int position, View convertView) {
-            ImageView mStrategyIv = (ImageView) convertView.findViewById(R.id.strategy_iv);
-            TextView mDayTv = (TextView) convertView.findViewById(R.id.day_tv);
-            TextView mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
-            TextView mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
-            TextView mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
-            ImageButton mMore = (ImageButton) convertView.findViewById(R.id.edit_more);
-            ImageButton mDeleteItem = (ImageButton) convertView.findViewById(R.id.delete_item);
-            SwipeLayout slyt = (SwipeLayout) convertView.findViewById(R.id.swipe);
-            slyt.setSwipeEnabled(isOwner);
-
-            final StrategyBean itemData = (StrategyBean) getItem(position);
-            TextView mBtnSend = (TextView) convertView.findViewById(R.id.btn_send);
-            RelativeLayout mRlSend = (RelativeLayout) convertView.findViewById(R.id.rl_send);
-            if (itemData.images != null && itemData.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(itemData.images.get(0).url, mStrategyIv, poptions);
-            } else {
-                mStrategyIv.setImageDrawable(null);
-            }
-            mDayTv.setText(String.valueOf(itemData.dayCnt));
+        public void showData(final int position, final StrategyBean itemData) {
+            tv_tian.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            if (isSend) {  //isSend
-                mRlSend.setVisibility(View.VISIBLE);
-                mBtnSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        IMUtils.showImShareDialog(mContext, itemData, new IMUtils.OnDialogShareCallBack() {
-                            @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content) {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new SendMsgListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("已发送~");
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailed(int code) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
-
-                                            }
-                                        });
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                            }
-                        });
-                    }
-                });
-            } else {
-                mRlSend.setVisibility(View.GONE);
+            System.out.println(itemData.status);
+            if (itemData.status.equals("traveled")) {
+                rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
+                mCheckStatus.setVisibility(View.VISIBLE);
+            }else {
+                rl_plan.setBackgroundResource(R.drawable.plan_bg_default);
+                mCheckStatus.setVisibility(View.GONE);
             }
-
-            mMore.setOnClickListener(new View.OnClickListener() {
+            mModify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showMoreDialog(itemData);
-                }
-            });
-            mDeleteItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteItem(itemData);
-                }
-            });
-        }
-
-        public void showMoreDialog(final StrategyBean strBean) {
-            String[] names = {"修改计划名", "签到"};
-            final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
-            dialog.setMoreStyle(true, 2, names);
-            dialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-            dialog.setTitle("更多");
-            dialog.setMessage(strBean.title);
-            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
                     final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                     editDialog.setTitle("修改计划名");
-                    editDialog.setMessage(strBean.title);
+                    editDialog.setMessage(itemData.title);
                     editDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             editDialog.dismiss();
                             DialogManager.getInstance().showLoadingDialog(mContext);
-                            TravelApi.modifyGuideTitle(strBean.id, editDialog.getMessage(), new HttpCallBack<String>() {
+                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
                                 @Override
                                 public void doSuccess(String result, String method) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                     if (modifyResult.code == 0) {
-                                        strBean.title = editDialog.getMessage();
+                                        itemData.title = editDialog.getMessage();
                                         mStrategyListAdapter.notifyDataSetChanged();
                                         cachePage();
                                     } else {
@@ -503,63 +687,41 @@ public class StrategyListActivity extends PeachBaseActivity {
                     editDialog.show();
                 }
             });
-
-
-            //置顶操作
-//            dialog.getTv3().setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                    backToTop(strBean);
-//                }
-//            });
-
-            //去过操作
-            dialog.getTv4().setOnClickListener(new View.OnClickListener() {
+            mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
-                    haveBeenVisited(strBean);
-//                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
-//                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-//                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-//                    cdialog.setTitle("提示");
-//                    cdialog.setMessage(strBean.title + "已保存为去过，成为了您的历史足迹");
-//                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            cdialog.dismiss();
-//                        }
-//                    });
-//                    final Handler handler = new Handler() {
-//                        public void handleMessage(Message msg) {
-//                            switch (msg.what) {
-//                                case 1:
-//                                    cdialog.show();
-//                            }
-//                            super.handleMessage(msg);
-//                        }
-//                    };
-//                    Message message = handler.obtainMessage(1);
-//                    handler.sendMessageDelayed(message, 300);
+                    deleteItem(itemData);
                 }
             });
-            dialog.show();
-        }
-
-        @Override
-        public int getCount() {
-            return mItemDataList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mItemDataList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
+            mCheck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    haveBeenVisited(itemData);
+                    mStrategyListAdapter.notifyDataSetChanged();
+                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
+                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                    cdialog.setTitle("提示");
+                    cdialog.setMessage(itemData.title + "已保存为去过，成为了您的历史足迹");
+                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cdialog.dismiss();
+                        }
+                    });
+                    final Handler handler = new Handler() {
+                        public void handleMessage(Message msg) {
+                            switch (msg.what) {
+                                case 1:
+                                    cdialog.show();
+                            }
+                            super.handleMessage(msg);
+                        }
+                    };
+                    Message message = handler.obtainMessage(1);
+                    handler.sendMessageDelayed(message, 300);
+                }
+            });
         }
     }
 
@@ -581,8 +743,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                         CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (deleteResult.code == 0) {
                             deleteThisItem(itemData);
-                            int cnt= AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
-                            AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt -1);
+                            int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                            AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
                         } else {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())
@@ -611,7 +773,6 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void deleteThisItem(StrategyBean data) {
         int index = mStrategyListAdapter.getDataList().indexOf(data);
-        mStrategyListAdapter.closeItem(index);
         mStrategyListAdapter.getDataList().remove(index);
         mStrategyListAdapter.notifyDataSetChanged();
         if (mStrategyListAdapter.getCount() == 0) {
@@ -631,7 +792,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 CommonJson<ModifyResult> topResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (topResult.code == 0) {
                     int index = mStrategyListAdapter.getDataList().indexOf(itemData1);
-                    mStrategyListAdapter.closeItem(index);
                     mStrategyListAdapter.getDataList().remove(index);
                     mStrategyListAdapter.notifyDataSetChanged();
                     addToTop(itemData1);
