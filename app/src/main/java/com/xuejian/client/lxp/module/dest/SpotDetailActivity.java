@@ -8,13 +8,17 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
 
@@ -45,20 +50,23 @@ import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
  */
 public class SpotDetailActivity extends PeachBaseActivity {
     private String mSpotId;
-    private ImageView closeIv;
     private ImageView spotIv;
-    private RelativeLayout descLl,priceLl,timeLl;
-    private RelativeLayout addressLl;
-    private RelativeLayout mBookFl;
-    private TextView mSpotNameTv, mTimeTv, mAllEvaluation;
-    private TextView tipsTv, travelGuideTv, trafficGuideTv;
+    private RelativeLayout descLl;
+    private LinearLayout priceLl, timeLl;
+    private LinearLayout addressLl;
+    private LinearLayout mBookFl;
+    private TextView mSpotNameTv, mTimeTv;
+    private ImageView tipsTv, travelGuideTv, trafficGuideTv;
     private ImageView chatIv;
     private SpotDetailBean spotDetailBean;
     private RatingBar ratingBar;
-    private TextView ic_back,poi_rank_sm;
+    private TextView ic_back, poi_rank_sm;
     private ListViewDataAdapter adapter;
-    private BaseAdapter  bAdapter;
-
+    private BaseAdapter bAdapter;
+    TextView tv_poi_desc;
+    TextView tv_poi_addr;
+    TextView tv_poi_tel;
+    PopupWindow mPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,79 +88,44 @@ public class SpotDetailActivity extends PeachBaseActivity {
 //        MobclickAgent.onPageStart("page_spot_detail");
     }
 
-    @Override
-    public void onBackPressed() {
-        finishWithNoAnim();
-        overridePendingTransition(0, android.R.anim.fade_out);
-    }
-
     private void initView() {
-        ListView spotLv=(ListView) findViewById(R.id.spot_detail_list);
+        ListView spotLv = (ListView) findViewById(R.id.spot_detail_list);
         View hv;
-        hv=View.inflate(mContext,R.layout.activity_spot_detail,null);
+        hv = View.inflate(mContext, R.layout.activity_spot_detail, null);
         spotLv.addHeaderView(hv);
-        ic_back=(TextView)findViewById(R.id.poi_det_back);
+        ic_back = (TextView) findViewById(R.id.poi_det_back);
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0,R.anim.fade_out);
             }
         });
-        WindowManager m = getWindowManager();
-        Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
-        WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
-        p.y = LocalDisplay.dp2px(5);
-        p.height = d.getHeight();  /* - LocalDisplay.dp2px(64)*/
-        p.width = d.getWidth(); /*- LocalDisplay.dp2px(28)*/
-        spotIv = (ImageView) hv.findViewById(R.id.iv_spot);
-        chatIv = (ImageView) findViewById(R.id.iv_chat);
-        ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
-        mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
-        mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
-        poi_rank_sm = (TextView) hv.findViewById(R.id.poi_rank_sm);
-        descLl = (RelativeLayout) hv.findViewById(R.id.ll_desc);
-        priceLl = (RelativeLayout) hv.findViewById(R.id.ll_price);
-        timeLl = (RelativeLayout) hv.findViewById(R.id.ll_time);
-        addressLl = (RelativeLayout) hv.findViewById(R.id.rl_address);
-        mBookFl = (RelativeLayout) hv.findViewById(R.id.fl_book);
-        tipsTv = (TextView) hv.findViewById(R.id.tv_tips);
-        travelGuideTv = (TextView) hv.findViewById(R.id.tv_travel_guide);
-        trafficGuideTv = (TextView) hv.findViewById(R.id.tv_traffic_guide);
-        mAllEvaluation = (TextView) hv.findViewById(R.id.all_evaluation);
 
+//        spotIv = (ImageView) hv.findViewById(R.id.vp_poi);
+//        chatIv = (ImageView) findViewById(R.id.iv_chat);
+//        ratingBar = (RatingBar) hv.findViewById(R.id.ratingBar_spot);
+//        mSpotNameTv = (TextView) hv.findViewById(R.id.tv_spot_name);
+//        mTimeTv = (TextView) hv.findViewById(R.id.tv_spot_time);
+//        priceLl = (LinearLayout) hv.findViewById(R.id.ll_price);
+//        timeLl = (LinearLayout) hv.findViewById(R.id.ll_time);
+//        addressLl = (LinearLayout) hv.findViewById(R.id.rl_address);
+//        mBookFl = (LinearLayout) hv.findViewById(R.id.fl_book);
+//        tipsTv = (ImageView) hv.findViewById(R.id.tv_tips);
+//        travelGuideTv = (ImageView) hv.findViewById(R.id.tv_travel_guide);
+//        trafficGuideTv = (ImageView) hv.findViewById(R.id.tv_traffic_guide);
+//        tv_poi_desc = (TextView) hv.findViewById(R.id.tv_poi_desc);
+//        tv_poi_addr = (TextView) hv.findViewById(R.id.tv_addr1);
+//        tv_poi_tel = (TextView) hv.findViewById(R.id.tv_tel1);
         //这个是备着以后读接口
+
+
         adapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                SpotDpViewHolder viewHolder = new SpotDpViewHolder(SpotDetailActivity.this);
+                PoiDetailActivity.CommentViewHolder viewHolder = new PoiDetailActivity.CommentViewHolder(SpotDetailActivity.this);
                 return viewHolder;
             }
         });
-        /*bAdapter=new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return 3;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView==null){
-                    convertView=View.inflate(SpotDetailActivity.this,R.layout.spot_detail_view_cell,null);
-                }
-                return convertView;
-            }
-        };*/
         spotLv.setAdapter(adapter);
     }
 
@@ -174,7 +147,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
                     bindView(detailResult.result);
                     getDpView(detailResult.result.id);
                 }
-
             }
 
             @Override
@@ -188,11 +160,35 @@ public class SpotDetailActivity extends PeachBaseActivity {
         });
     }
 
-    private void getDpView(String id){
+    private void getDpView(String id) {
         //读取接口数据
     }
 
     private void bindView(final SpotDetailBean result) {
+        TextView titleView = (TextView) findViewById(R.id.poi_det_title);
+        titleView.setText(result.zhName);
+        findViewById(R.id.iv_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(SpotDetailActivity.this);
+            }
+        });
+
+//        commentAdapter.getDataList().addAll(result.comments);
+//        if (bean.comments != null && bean.comments.size() > 3) {
+//            View footerView = View.inflate(this, R.layout.activity_poi_foot, null);
+//            mLvFoodshopDetail.addFooterView(footerView);
+//            footerView.findViewById(R.id.all_evaluation).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, MoreCommentActivity.class);
+//                    intent.putExtra("id", id);
+//                    intent.putExtra("poi", poiDetailBean);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
+
         ImageLoader.getInstance().displayImage(result.images.size() > 0 ? result.images.get(0).url : "", spotIv, UILUtils.getDefaultOption());
         spotIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,31 +197,63 @@ public class SpotDetailActivity extends PeachBaseActivity {
             }
         });
 
-        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+//        mAllEvaluation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+//                intent.putExtra("title", "更多评论");
+//                intent.putExtra("url", result.lyPoiUrl);
+//                startActivity(intent);
+//            }
+//        });
+
+        tv_poi_desc.setText(result.desc);
+        int numChars = tv_poi_desc.getLayout().getLineEnd(2);
+        if (IMUtils.isEnglish(result.desc)) {
+            String text = result.desc.substring(0, result.desc.substring(0, numChars - 4).lastIndexOf(" "));
+            tv_poi_desc.setText(text + "...");
+        } else {
+            String text = result.desc.substring(0, numChars - 4);
+            tv_poi_desc.setText(text + "...");
+        }
+        tv_poi_desc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", "更多评论");
-                intent.putExtra("url", result.lyPoiUrl);
-                startActivity(intent);*/
+                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                        R.layout.text_diaplay, null, true);
+                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+                TextView tv = (TextView) menuView.findViewById(R.id.msg);
+                tv.setText(result.desc);
+                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                        FlowLayout.LayoutParams.MATCH_PARENT, true);
+                mPop.setContentView(menuView);//设置包含视图
+                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+                mPop.setAnimationStyle(R.style.PopAnimation);
+                mPop.showAtLocation(findViewById(R.id.rl_spot_detail_list), Gravity.BOTTOM, 0, 0);
+                pop_dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPop.dismiss();
+                    }
+                });
+
             }
         });
-
+        //adapter.getDataList().addAll(result.)
+        tv_poi_addr.setText(result.address);
         ratingBar.setRating(result.getRating());
         mSpotNameTv.setText(result.zhName);
-        if(result.getRank().equals("0")) {
-            poi_rank_sm.setText("");
-        }else{
-            poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
-        }
-        if(TextUtils.isEmpty(result.desc)){
-            descLl.setVisibility(View.GONE);
-        }else{
-            descLl.setVisibility(View.VISIBLE);
-            //descTv.setText(result.desc);
+        if (result.getRank().equals("0")) {
+            //    poi_rank_sm.setText("");
+        } else {
+            //    poi_rank_sm.setText(result.zhName + " 景点排名" + result.getRank());
         }
         //mPriceDescTv.setText("门票 "+result.priceDesc);
-        mTimeTv.setText("开放时间"+result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
+        mTimeTv.setText("开放时间" + result.timeCostDesc);    /*String.format("建议游玩 %s\n开放时间 %s", result.timeCostDesc, result.openTime)*/
        /* if(TextUtils.isEmpty(result.address)){
             mAddressTv.setText(result.zhName);
         }else{
@@ -247,45 +275,46 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
             }
         });
-        if(!TextUtils.isEmpty(result.lyPoiUrl)){
+
+        if (!TextUtils.isEmpty(result.lyPoiUrl)) {
             mBookFl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext,"event_book_ticket");
-                    Intent intent = new Intent(mContext,PeachWebViewActivity.class);
-                    intent.putExtra("url",result.lyPoiUrl);
-                    intent.putExtra("title",result.zhName);
+                    MobclickAgent.onEvent(mContext, "event_book_ticket");
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    intent.putExtra("url", result.lyPoiUrl);
+                    intent.putExtra("title", result.zhName);
                     intent.putExtra("enable_bottom_bar", true);
                     startActivity(intent);
                 }
             });
 
         } else {
-            mBookFl.setVisibility(View.GONE);
+            //  mBookFl.setVisibility(View.GONE);
 
         }
         chatIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_spot_share_to_talk");
+                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
                 IMUtils.onClickImShare(SpotDetailActivity.this);
             }
         });
 
-        descLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_spot_information");
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("title", result.zhName);
-                intent.putExtra("url", result.descUrl);
-                startActivity(intent);
-            }
-        });
+//        descLl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext,"event_spot_information");
+//                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+//                intent.putExtra("title", result.zhName);
+//                intent.putExtra("url", result.descUrl);
+//                startActivity(intent);
+//            }
+//        });
         timeLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_spot_information");
+                MobclickAgent.onEvent(mContext, "event_spot_information");
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
@@ -295,7 +324,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
         priceLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_spot_information");
+                MobclickAgent.onEvent(mContext, "event_spot_information");
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 intent.putExtra("title", result.zhName);
                 intent.putExtra("url", result.descUrl);
@@ -307,7 +336,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             tipsTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext,"event_spot_travel_tips");
+                    MobclickAgent.onEvent(mContext, "event_spot_travel_tips");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "游玩小贴士");
                     intent.putExtra("url", result.tipsUrl);
@@ -317,7 +346,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //tipsTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            tipsTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_little_disabled),null,null);
+            //  tipsTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_little_disabled),null,null);
             tipsTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.trafficInfoUrl)) {
@@ -325,7 +354,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             trafficGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext,"event_spot_traffic_summary");
+                    MobclickAgent.onEvent(mContext, "event_spot_traffic_summary");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "景点交通");
                     intent.putExtra("url", result.trafficInfoUrl);
@@ -334,7 +363,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //trafficGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            trafficGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_travle_disabled),null,null);
+            // trafficGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_travle_disabled),null,null);
             trafficGuideTv.setEnabled(false);
         }
         if (!TextUtils.isEmpty(result.visitGuideUrl)) {
@@ -342,7 +371,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             travelGuideTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext,"event_spot_travel_experience");
+                    MobclickAgent.onEvent(mContext, "event_spot_travel_experience");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("title", "景点体验");
                     intent.putExtra("url", result.visitGuideUrl);
@@ -351,7 +380,7 @@ public class SpotDetailActivity extends PeachBaseActivity {
             });
         } else {
             //travelGuideTv.setTextColor(getResources().getColor(R.color.third_font_color));
-            travelGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_spots_disabled),null,null);
+            // travelGuideTv.setCompoundDrawablesWithIntrinsicBounds(null,SpotDetailActivity.this.getResources().getDrawable(R.drawable.ic_spots_disabled),null,null);
             travelGuideTv.setEnabled(false);
         }
     }
@@ -362,38 +391,6 @@ public class SpotDetailActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
             IMUtils.onShareResult(mContext, spotDetailBean, requestCode, resultCode, data, null);
         }
-    }
-
-    private void showActionDialog() {
-        final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.share_to_talk_confirm_action, null);
-        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setText("Talk分享");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MobclickAgent.onEvent(mContext,"event_spot_share_to_talk");
-                IMUtils.onClickImShare(SpotDetailActivity.this);
-                dialog.dismiss();
-            }
-        });
-        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = display.getWidth(); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
 }

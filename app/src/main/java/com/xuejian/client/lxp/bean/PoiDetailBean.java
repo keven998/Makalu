@@ -31,7 +31,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
     public float rating;
     public int commentCnt;
     public LocationBean location;
-    public List<ImageBean> images = new ArrayList<ImageBean>();
+    public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
     public List<LocBean> locList = new ArrayList<LocBean>();
     public LocBean locality;
     public String address = "";
@@ -41,6 +41,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
     public String moreCommentsUrl;
     private int rank;
     public String lyPoiUrl;
+    public String openTime;
 
     public PoiDetailBean() {
     }
@@ -54,9 +55,9 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
 
     public String getFormatRank() {
         if (rank > 100) {
-            return ">100";
+            return "99+";
         }
-        return rank + "";
+        return String.valueOf(rank);
     }
 
     public String getPoiTypeName() {
@@ -84,11 +85,6 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
         PoiDetailBean other = (PoiDetailBean) obj;
         return this.id.equals(other.id);
     }
-//
-//    @Override
-//    public int hashCode() {
-//        return id.hashCode();
-//    }
 
     @Override
     public ShareDialogBean createShareBean() {
@@ -144,6 +140,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
         dest.writeString(this.moreCommentsUrl);
         dest.writeInt(this.rank);
         dest.writeString(this.lyPoiUrl);
+        dest.writeString(this.openTime);
     }
 
     private PoiDetailBean(Parcel in) {
@@ -170,6 +167,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
         this.moreCommentsUrl = in.readString();
         this.rank = in.readInt();
         this.lyPoiUrl = in.readString();
+        this.openTime = in.readString();
     }
 
     public static final Creator<PoiDetailBean> CREATOR = new Creator<PoiDetailBean>() {

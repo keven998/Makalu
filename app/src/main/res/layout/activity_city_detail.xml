@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/city_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/content_top_margin">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/app_backgroud"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="12dp">
 
             <LinearLayout
                 android:id="@+id/ly1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_city_photo"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/selector_bg_city_album_panel"
                 android:orientation="vertical"
-                android:scaleType="fitCenter"
-                android:layout_margin="10dp"
-                >
+                android:scaleType="fitCenter">
 
                 <RelativeLayout
                     android:id="@+id/top_Pic"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp">
+                    android:layout_marginTop="15dp">
 
                     <ImageView
                         android:id="@+id/iv_city_2"
@@ -67,25 +67,31 @@
                     android:id="@+id/tv_city_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:ellipsize="end"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textColor="@color/color_text_i"
-                    android:textSize="18sp"
-                    android:layout_marginTop="10dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_cost_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:gravity="center"
-                    android:lineSpacingExtra="6dp"
+                    android:singleLine="true"
                     android:textColor="@color/color_text_iii"
-                    android:textSize="15sp" />
+                    android:textSize="11sp" />
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    >
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="5dp">
 
                     <ImageView
                         android:id="@+id/iv_city_5"
@@ -117,198 +123,160 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_pic_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="6dp"
-                    android:background="@drawable/shape_black_panel"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="3dp"
-                    android:text="画册"
-                    android:textColor="@color/base_color_white"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ly2"
+            <TextView
+                android:id="@+id/tv_best_month"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingLeft="11dp"
-                android:paddingRight="11dp"
-                android:paddingTop="10dp">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/color_text_iii"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tv_best_month"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="6dp"
-                    android:textColor="@color/color_text_iii"
-                    android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_city_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="2"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
 
-                <View
-                    android:id="@+id/line_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/app_backgroud" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tv_city_name_en"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:lineSpacingExtra="6dp"
-                        android:lines="2"
-                        android:textColor="@color/second_font_color"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tv_pic_num1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center"
-                        android:text="全文"
-                        android:textColor="@color/app_theme_color"
-                        android:textSize="14sp"
-                        android:visibility="visible" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/temp"
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true">
-
-                </View>
 
                 <ImageView
                     android:id="@+id/tv_spots"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_toLeftOf="@id/temp"
-                    android:background="@drawable/btn_city_spot"
-                    android:drawablePadding="3dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:onClick="intentToSpots"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_city_spot" />
 
                 <ImageView
                     android:id="@+id/tv_travel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_toLeftOf="@id/tv_spots"
-                    android:background="@drawable/btn_city_guide"
-                    android:drawablePadding="3dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:onClick="intentToTravel"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_city_guide" />
 
                 <ImageView
                     android:id="@+id/tv_restaurant"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_toRightOf="@id/temp"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_city_food"
-                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToFood"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_city_food" />
 
                 <ImageView
                     android:id="@+id/tv_shopping"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_toRightOf="@id/tv_restaurant"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_city_shopping"
-                    android:drawablePadding="3dp"
                     android:gravity="center"
                     android:onClick="intentToShopping"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_city_shopping" />
 
+            </LinearLayout>
 
-            </RelativeLayout>
+            <ListView
+                android:id="@+id/lv_city_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="6dp"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
 
-<ListView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:id="@+id/lv_city_detail"
-    >
-
-</ListView>
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/fd"
-                android:layout_width="fill_parent"
-                android:layout_height="41dp"
-                android:background="@color/base_color_white"
-                android:paddingLeft="11dp"
-                android:paddingRight="11dp">
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/app_backgroud" />
-
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
 
                 <TextView
-                    android:id="@+id/tv_more"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="6dp"
+                    android:id="@+id/tv_all_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_bg_city_album_panel"
                     android:gravity="center"
                     android:text="～阅读更多·达人游记～"
-                    android:textColor="@color/app_theme_color"
-                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_color_highlight"
+                    android:textSize="12sp"
                     android:visibility="visible" />
-
-            </RelativeLayout>
+            </FrameLayout>
         </LinearLayout>
 
-
     </ScrollView>
-    <!---->
 
-    <!-- android:cachehintcolor-->
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/title_bar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
 
-</RelativeLayout>
+        <ImageView android:id="@+id/iv_nav_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/selector_ic_nav_back"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp"/>
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="18sp" />
+
+        <ImageView android:id="@+id/iv_create_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@drawable/add_contact"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"/>
+
+        <ImageView android:id="@+id/iv_talk_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/iv_create_plan"
+            android:scaleType="center"
+            android:src="@drawable/ic_talk_normal"
+            android:paddingLeft="24dp"
+            android:paddingRight="12dp"/>
+
+
+    </RelativeLayout>
+
+</FrameLayout>

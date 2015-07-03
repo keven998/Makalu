@@ -36,6 +36,6 @@
     <dimen name="note_picture_size">80dp</dimen>
 
     <dimen name="operation_section_height">238dp</dimen>
-    <dimen name="spot_detail_picture_height">160dp</dimen>
+    <dimen name="spot_detail_picture_height">280dp</dimen>
 
 </resources>

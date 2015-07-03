@@ -235,7 +235,7 @@ public class IMUtils {
             attrTv.setVisibility(View.GONE);
         }else{
             if(dialogBean.getExtType()== Constant.ExtType.FOOD||dialogBean.getExtType()== Constant.ExtType.HOTEL||dialogBean.getExtType()== Constant.ExtType.SHOPPING){
-                attrTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score_start_small,0,0,0);
+                attrTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_highlight,0,0,0);
             }
             attrTv.setVisibility(View.VISIBLE);
             attrTv.setText(dialogBean.getAttr());

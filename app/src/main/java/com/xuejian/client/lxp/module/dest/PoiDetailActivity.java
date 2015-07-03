@@ -1,47 +1,44 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ImageSpan;
-import android.view.Display;
-import android.view.Gravity;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
+import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.RecommendBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -50,79 +47,27 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
-import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Optional;
 
 /**
  * Created by Rjm on 2014/11/22.
  */
 public class PoiDetailActivity extends PeachBaseActivity {
-    ListView mLvFoodshopDetail;
-    @Optional
-    @InjectView(R.id.iv_poi)
-    ImageView mIvPoi;
-    @Optional
-    @InjectView(R.id.tv_poi_name)
-    TextView mTvPoiName;
-    @Optional
-    @InjectView(R.id.ratingBar_poi)
-    RatingBar mPoiStar;
-    @Optional
-    @InjectView(R.id.tv_poi_price)
-    TextView mTvPoiPrice;
-    @Optional
-    @InjectView(R.id.tv_tel)
-    TextView mTvTel;
-    @Optional
-    @InjectView(R.id.tv_addr)
-    TextView mTvAddr;
-    @InjectView(R.id.tv_poi_desc)
-    TextView mTvDesc;
-    @Optional
-
-    @InjectView(R.id.btn_book)
-    TextView mBtnBook;
-    @InjectView(R.id.tv_poi_rank)
-    TextView mTvRank;
-    @InjectView(R.id.tv_more_cmt)
-    TextView mTvMoreCmt;
-
-    @InjectView(R.id.poi_det_back)
-    TextView titleBack;
-    @InjectView(R.id.poi_det_title)
-    TextView title;
-
-    @InjectView(R.id.rl_address)
-    RelativeLayout rl_address;
-    @InjectView(R.id.rl_fee)
-    RelativeLayout rl_fee;
-    @InjectView(R.id.rl_level)
-    RelativeLayout rl_level;
-    @InjectView(R.id.rl_phone)
-    RelativeLayout rl_phone;
-    @InjectView(R.id.rl_poi_desc)
-    RelativeLayout rl_poi_desc;
-
-
+    ListView mCommentsList;
     View headerView;
-    View footerView;
-
     private String id;
     PoiDetailBean poiDetailBean;
     private String type;
     ListViewDataAdapter commentAdapter;
-
-    private ImageView mChat;
-    private PopupWindow mPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,38 +77,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     private void initView() {
-        setContentView(R.layout.activity_poi_detail);
-        mChat = (ImageView) findViewById(R.id.iv_chat);
-        mLvFoodshopDetail = (ListView) findViewById(R.id.lv_poi_detail);
-        WindowManager m = getWindowManager();
-        Display d = m.getDefaultDisplay();  //为获取屏幕宽、高
-        WindowManager.LayoutParams p = getWindow().getAttributes();  //获取对话框当前的参数值
-        p.y = LocalDisplay.dp2px(5);
-        p.height = d.getHeight();    /*- LocalDisplay.dp2px(64)*/
-        p.width = d.getWidth();   /*- LocalDisplay.dp2px(28)*/
+        setContentView(R.layout.spot_detail_list);
 
-        getWindow().setAttributes(p);
-        headerView = View.inflate(mContext, R.layout.view_poi_detail_header, null);
-        //footerView = View.inflate(mContext, R.layout.footer_more_comment, null);
-        mLvFoodshopDetail.addHeaderView(headerView);
-        //mLvFoodshopDetail.addFooterView(footerView);
+        mCommentsList = (ListView) findViewById(R.id.spot_detail_list);
+        headerView = View.inflate(this, R.layout.activity_spot_detail, null);
+        mCommentsList.addHeaderView(headerView);
         commentAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new CommentViewHolder();
+                return new CommentViewHolder(PoiDetailActivity.this);
             }
         });
-        ButterKnife.inject(this);
-        titleBack.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.poi_det_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0, R.anim.fade_out);
             }
         });
-        title.setText("景点介绍");
-        mLvFoodshopDetail.setAdapter(commentAdapter);
-
+        mCommentsList.setAdapter(commentAdapter);
     }
 
     private void initData() {
@@ -206,7 +138,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 CommonJson<PoiDetailBean> detailBean = CommonJson.fromJson(result, PoiDetailBean.class);
                 if (detailBean.code == 0) {
                     poiDetailBean = detailBean.result;
-                    bindView(detailBean.result);
+                    bindView(poiDetailBean);
                 } else {
 //                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -223,27 +155,149 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        finishWithNoAnim();
-        overridePendingTransition(0, R.anim.fade_out);
-    }
-
     private void bindView(final PoiDetailBean bean) {
-        if (bean.images != null && bean.images.size() > 0) {
-            ImageLoader.getInstance().displayImage(bean.images.get(0).url, mIvPoi, UILUtils.getDefaultOption());
+        //标题
+        TextView titleView = (TextView) findViewById(R.id.poi_det_title);
+        titleView.setText(bean.zhName);
+        findViewById(R.id.iv_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
+                IMUtils.onClickImShare(PoiDetailActivity.this);
+            }
+        });
+
+        //图片
+        if (bean.images != null) {
+            ViewPager vp = (ViewPager) findViewById(R.id.vp_poi);
+            vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+            final DotView dotview = (DotView) findViewById(R.id.dot_view);
+            int pc = bean.images.size();
+            if (pc > 1) {
+                dotview.setNum(bean.images.size());
+                vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        dotview.setSelected(position);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                    }
+                });
+            } else {
+                dotview.setVisibility(View.GONE);
+            }
         }
-        mTvPoiName.setText(bean.zhName);
+
+        //评分、类型、排名
+        RatingBar rb = (RatingBar) findViewById(R.id.rb_poi);
+        rb.setRating(bean.getRating());
+        TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
+        styleTV.setText(bean.zhName);
+        if (!bean.getFormatRank().equals("0")) {
+//            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
+        } else {
+
+        }
+
+        //简介
+        final TextView descView = (TextView) findViewById(R.id.tv_poi_desc);
+        final String desc = bean.desc;
+        if (TextUtils.isEmpty(desc)) {
+            descView.setVisibility(View.GONE);
+        } else {
+            descView.setText(desc);
+            if (descView.getLineCount() > 2) {
+                TextView dv = descView;
+                int numChars = dv.getLayout().getLineEnd(2);
+                if (dv.getText().length() > numChars) {
+                    String text;
+                    if (IMUtils.isEnglish(desc)) {
+                        text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
+                    } else {
+                        text = desc.substring(0, numChars - 4);
+                    }
+                    SpannableString planStr = new SpannableString("全文");
+                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    SpannableStringBuilder spb = new SpannableStringBuilder();
+                    spb.append(String.format("%s... ", text)).append(planStr);
+                    dv.setText(spb);
+                }
+            }
+        }
+
+
+        //地址
+        String address;
+        if (TextUtils.isEmpty(bean.address)) {
+            address = bean.zhName;
+        } else {
+            address = bean.address;
+        }
+        TextView addrT = (TextView) findViewById(R.id.tv_address);
+        addrT.setText(address);
+        findViewById(R.id.rl_address).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bean.location != null && bean.location.coordinates != null) {
+                    Uri mUri = Uri.parse("geo:" + bean.location.coordinates[1] + "," + bean.location.coordinates[0] + "?q=" + bean.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                    if (CommonUtils.checkIntent(mContext, mIntent)) {
+                        startActivity(mIntent);
+                    } else {
+                        ToastUtil.getInstance(mContext).showToast("没有地图应用");
+                    }
+                }
+            }
+        });
+
+        //电话
+        if (bean.tel != null && bean.tel.size() > 0) {
+            final String phoneNum = bean.tel.get(0);
+            TextView tp = (TextView) findViewById(R.id.tv_phone);
+            tp.setText(phoneNum);
+            findViewById(R.id.rl_phone).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    Uri data = Uri.parse("tel:" + phoneNum);
+                    intent.setData(data);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            findViewById(R.id.rl_phone).setVisibility(View.GONE);
+        }
+
+        //开放时间
+        TextView rttv = (TextView) findViewById(R.id.tv_run_time);
+        if (TextUtils.isEmpty(bean.openTime)) {
+            rttv.setText("全天");
+        } else {
+            rttv.setText(bean.openTime);
+        }
+        findViewById(R.id.rl_run_time).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//// TODO: 15/7/2
+            }
+        });
+
+        //费用
+        CheckedTextView ptv = (CheckedTextView) findViewById(R.id.ctv_ticket);
         if (TextUtils.isEmpty(bean.priceDesc)) {
-            rl_fee.setVisibility(View.GONE);
+            ptv.setText("未知");
         } else {
-            mTvPoiPrice.setText(bean.priceDesc);
+            ptv.setText(bean.priceDesc);
         }
-        if (TextUtils.isEmpty(bean.lyPoiUrl)) {
-            mBtnBook.setVisibility(View.GONE);
-        } else {
-            mBtnBook.setVisibility(View.VISIBLE);
-            mBtnBook.setOnClickListener(new View.OnClickListener() {
+        if (!TextUtils.isEmpty(bean.lyPoiUrl)) {
+            ptv.setChecked(true);
+            findViewById(R.id.rl_ticket).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MobclickAgent.onEvent(mContext, "event_go_booking_room");
@@ -254,156 +308,59 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     startActivity(intent);
                 }
             });
-        }
-
-        mChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
-                IMUtils.onClickImShare(PoiDetailActivity.this);
-            }
-        });
-
-        mPoiStar.setRating(bean.getRating());
-        if (!poiDetailBean.getFormatRank().equals("0")) {
-//            mTvRank.setText("热度排名 " + poiDetailBean.getFormatRank());
-            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
-        }
-        mTvMoreCmt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, MoreCommentActivity.class);
-                intent.putExtra("id", id);
-                intent.putExtra("poi", poiDetailBean);
-                startActivity(intent);
-            }
-        });
-
-        if (bean.tel != null && bean.tel.size() > 0) {
-            mTvTel.setVisibility(View.VISIBLE);
-            mTvTel.setText(bean.tel.get(0));
         } else {
-            rl_phone.setVisibility(View.GONE);
-        }
+            ptv.setChecked(false);
+            findViewById(R.id.rl_ticket).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        String address;
-        if (TextUtils.isEmpty(bean.address)) {
-            address = bean.zhName;
-        } else {
-            address = bean.address;   //"<img src=\"" + R.drawable.ic_poi_address + "\" />  " +
-        }
-//        mTvAddr.setText(Html.fromHtml(address, imageGetter, null));
-
-        Spanned spanned = Html.fromHtml(address, imageGetter, null);
-        if (spanned instanceof SpannableStringBuilder) {
-            ImageSpan[] imageSpans = spanned.getSpans(0, spanned.length(), ImageSpan.class);
-            for (ImageSpan imageSpan : imageSpans) {
-                int start = spanned.getSpanStart(imageSpan);
-                int end = spanned.getSpanEnd(imageSpan);
-                Drawable d = imageSpan.getDrawable();
-                StickerSpan newImageSpan = new StickerSpan(d, ImageSpan.ALIGN_BASELINE);
-                ((SpannableStringBuilder) spanned).setSpan(newImageSpan, start, end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                ((SpannableStringBuilder) spanned).removeSpan(imageSpan);
-            }
-        }
-        mTvAddr.setText(spanned);
-
-        rl_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bean.location != null && bean.location.coordinates != null) {
-                    Uri mUri = Uri.parse("geo:" + bean.location.coordinates[1] + "," + bean.location.coordinates[0] + "?q=" + bean.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
-                    if (CommonUtils.checkIntent(mContext, mIntent)) {
-                        startActivity(mIntent);
-                    } else {
-                        ToastUtil.getInstance(mContext).showToast("没有找到地图应用");
-                    }
                 }
-            }
-        });
+            });
+        }
 
-        rl_fee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //操作
+        if ("vs".equals(bean.type)) {
+            findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        rl_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_go_booking_room");
-                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                intent.putExtra("url", bean.lyPoiUrl);
-                intent.putExtra("title", bean.zhName);
-                startActivity(intent);
-            }
-        });
-        rl_poi_desc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//自定义布局
-                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-                        R.layout.text_diaplay, null, true);
-                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+                }
+            });
+            findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                TextView tv = (TextView) menuView.findViewById(R.id.msg);
-                tv.setText(bean.desc);
-                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-                mPop.setContentView(menuView);//设置包含视图
-                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-                mPop.setAnimationStyle(R.style.PopAnimation);
-                mPop.showAtLocation(findViewById(R.id.poi_det_parent), Gravity.BOTTOM, 0, 0);
-                pop_dismiss.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mPop.dismiss();
-                    }
-                });
+                }
+            });
+            findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        rl_level.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        if (TextUtils.isEmpty(bean.desc)) {
-            rl_poi_desc.setVisibility(View.GONE);
+                }
+            });
         } else {
-            mTvDesc.setVisibility(View.VISIBLE);
-            mTvDesc.setText(bean.desc);
+            findViewById(R.id.ll_actions).setVisibility(View.GONE);
         }
+
+        //点评
         commentAdapter.getDataList().addAll(bean.comments);
-        if (bean.comments == null || bean.comments.size() < 2) {
-
-            if (mLvFoodshopDetail.getFooterViewsCount() > 0) {
-                mLvFoodshopDetail.removeFooterView(footerView);
-            }
-
+        if (bean.comments != null && bean.comments.size() > 1) {
+            View footerView = View.inflate(this, R.layout.activity_poi_foot, null);
+            mCommentsList.addFooterView(footerView);
+            footerView.findViewById(R.id.all_evaluation).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MoreCommentActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("poi", poiDetailBean);
+                    startActivity(intent);
+                }
+            });
         }
-        if (bean.comments == null || bean.comments.size() == 0) {
-           /* mIvCommentTopMark.setVisibility(View.GONE);
-            mIvCommentBottomMark.setVisibility(View.GONE);*/
-        }
+
         commentAdapter.notifyDataSetChanged();
     }
 
-    Html.ImageGetter imageGetter = new Html.ImageGetter() {
-
-        public Drawable getDrawable(String source) {
-            Drawable drawable = null;
-            int rId = Integer.parseInt(source);
-            drawable = getResources().getDrawable(rId);
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            return drawable;
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -413,18 +370,30 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    public class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.poi_detail_dp_name)
-        TextView mTvName;
-        @InjectView(R.id.poi_detail_dp_time)
-        TextView mTvTime;
-        @InjectView(R.id.tv_comment)
+    public static class CommentViewHolder extends ViewHolderBase<CommentBean> {
+        @InjectView(R.id.tv_commenter_property)
+        TextView mTvCommentProperty;
+        @InjectView(R.id.tv_comment_content)
         TextView mTvComment;
-        @InjectView(R.id.poi_detail_dp_pic)
-        ImageView mImageView;
-        /*@InjectView(R.id.comment_star)
-        RatingBar mCommentStar;*/
+        @InjectView(R.id.iv_commenter_avatar)
+        ImageView mCommeterAvatar;
+        @InjectView(R.id.rb_comment_rating)
+        RatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        private DisplayImageOptions options;
+        private Context mContext;
+
+        public CommentViewHolder(Activity context) {
+            options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                    .resetViewBeforeLoading(true)
+                    .cacheOnDisk(true)
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(29))) // 设置成圆角图片
+                    .build();
+            mContext = context;
+        }
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -435,11 +404,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         @Override
         public void showData(int position, final CommentBean itemData) {
-            mTvName.setText(itemData.authorName);
-            mTvTime.setText(dateFormat.format(new Date(itemData.publishTime)));
-            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mImageView, UILUtils.getDefaultOption());
-            //mTvProperty.setText(String.format("%s  %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
+            mTvCommentProperty.setText(String.format("%s | %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
+            starbar.setRating(itemData.getRating());
+            Log.d("test", "item ratiing = " + itemData.getRating());
+            ImageLoader.getInstance().displayImage(itemData.authorAvatar, mCommeterAvatar, options);
         }
     }
 
@@ -488,99 +457,51 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
     }
 
-    public static class PoiMoreMenu extends BlurDialogFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+
+    private class POIImageVPAdapter extends PagerAdapter {
+        private ArrayList<ImageBean> mDatas;
+        private Context mContext;
+        private DisplayImageOptions diop;
+
+        public POIImageVPAdapter(Context context, ArrayList<ImageBean> datas) {
+            mDatas = datas;
+            mContext = context;
+            diop = UILUtils.getDefaultOption();
         }
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog connectionDialog = new Dialog(getActivity(), R.style.TransparentDialog);
-            View customView = getActivity().getLayoutInflater().inflate(R.layout.menu_poi_more, null);
-            connectionDialog.setContentView(customView);
-//            customView.findViewById(R.id.dialog_frame).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dismiss();
-//                }
-//            });
-            customView.findViewById(R.id.add_fav).setOnClickListener(new View.OnClickListener() {
+        public int getCount() {
+            return mDatas.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+            Context cxt = mContext;
+            ImageView imageView = new ImageView(cxt);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
+            imageView.setLayoutParams(layoutParams);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
+            ImageBean ib = mDatas.get(position);
+            ImageLoader.getInstance().displayImage(ib.url, imageView, diop);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    //todo:添加收藏
-                    dismiss();
+                public void onClick(View v) {
+                    IntentUtils.intentToPicGallery(PoiDetailActivity.this, mDatas, position);
                 }
             });
-
-            customView.findViewById(R.id.im_share).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    dismiss();
-                }
-            });
-            return connectionDialog;
-        }
-    }
-
-    private void showActionDialog() {
-        final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.share_to_talk_confirm_action, null);
-        Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn.setText("Talk分享");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IMUtils.onClickImShare(PoiDetailActivity.this);
-                dialog.dismiss();
-            }
-        });
-        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = display.getWidth(); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-    }
-
-    public class StickerSpan extends ImageSpan {
-
-        public StickerSpan(Drawable b, int verticalAlignment) {
-            super(b, verticalAlignment);
-
+            container.addView(imageView, 0);
+            return imageView;
         }
 
         @Override
-        public void draw(Canvas canvas, CharSequence text,
-                         int start, int end, float x,
-                         int top, int y, int bottom, Paint paint) {
-            Drawable b = getDrawable();
-            canvas.save();
-            int transY = bottom - b.getBounds().bottom - LocalDisplay.dp2px(2);
-            if (mVerticalAlignment == ALIGN_BASELINE) {
-                int textLength = text.length();
-                for (int i = 0; i < textLength; i++) {
-                    if (Character.isLetterOrDigit(text.charAt(i))) {
-                        transY -= paint.getFontMetricsInt().descent;
-                        break;
-                    }
-                }
-            }
-            canvas.translate(x, transY);
-            b.draw(canvas);
-            canvas.restore();
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((ImageView) object);
         }
     }
 

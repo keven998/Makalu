@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -22,7 +23,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.InputCheckUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
 /**
@@ -31,9 +31,12 @@ import com.xuejian.client.lxp.db.User;
 public class ModifyNicknameActivity extends PeachBaseActivity {
     @ViewInject(R.id.et_nickname)
     private EditText nickEt;
-
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleHeaderBar;
+    @ViewInject(R.id.tv_confirm)
+    private TextView tv_confirm;
+    @ViewInject(R.id.tv_cancel)
+    private TextView tv_cancel;
+    @ViewInject(R.id.tv_title_bar_title)
+    private TextView tv_title_bar_title;
 
     private User user;
 
@@ -44,11 +47,15 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_modify_nickname);
         ViewUtils.inject(this);
 
-        titleHeaderBar.getTitleTextView().setText("修改昵称");
-        titleHeaderBar.getRightTextView().setText("保存");
-        titleHeaderBar.enableBackKey(true);
-
-        findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
+        tv_title_bar_title.setText("姓名设置");
+        tv_confirm.setText("保存");
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
@@ -76,9 +83,9 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                             if (!updatenick) {
                                 EMLog.e("ModifyNicknameActivity", "update current user nick fail");
                             }*/
-                            Intent intent=new Intent();
-                            intent.putExtra("nickname",nickEt.getText().toString().trim());
-                            setResult(RESULT_OK,intent);
+                            Intent intent = new Intent();
+                            intent.putExtra("nickname", nickEt.getText().toString().trim());
+                            setResult(RESULT_OK, intent);
                             ToastUtil.getInstance(mContext).showToast("OK~成功修改");
                             finish();
                         } else {

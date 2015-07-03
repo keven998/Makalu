@@ -43,12 +43,12 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     private DisplayImageOptions options;
 
-    public TravelNoteViewHolder(Activity context, boolean isShowSend, boolean isShowMore){
+    public TravelNoteViewHolder(Activity context, boolean isShowSend, boolean isShowMore) {
         mIsShowSend = isShowSend;
         mIsShowMore = isShowMore;
-        activity= context;
-     //   picOptions = UILUtils.getRadiusOption();
-         options = new DisplayImageOptions.Builder()
+        activity = context;
+        //   picOptions = UILUtils.getRadiusOption();
+        options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
                 .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
@@ -58,7 +58,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
                 .build();
     }
 
-    public void setOnSendClickListener(OnSendClickListener onSendClickListener){
+    public void setOnSendClickListener(OnSendClickListener onSendClickListener) {
         mOnSendClickListener = onSendClickListener;
     }
 
@@ -69,45 +69,43 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         mSendRl = (RelativeLayout) view.findViewById(R.id.rl_send);
         mSendBtn = (Button) view.findViewById(R.id.btn_send);
         mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
-        mNoteNameTv = (TextView) view.findViewById(R.id.tv_travels_name);
+        mNoteNameTv = (TextView) view.findViewById(R.id.tv_note_title);
         mNoteDescTv = (TextView) view.findViewById(R.id.tv_travels_desc);
         mPropertyTv = (TextView) view.findViewById(R.id.tv_property);
-
-       /* mDays = (TextView) view.findViewById(R.id.trip_days);
-        mFee = (TextView) view.findViewById(R.id.trip_fee);*/
         return view;
     }
+
     @Override
     public void showData(int position, final TravelNoteBean itemData) {
-        if(mIsShowSend){
+        if (mIsShowSend) {
             mSendRl.setVisibility(View.VISIBLE);
             mSendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mOnSendClickListener!=null){
-                        mOnSendClickListener.onSendClick(v,itemData);
+                    if (mOnSendClickListener != null) {
+                        mOnSendClickListener.onSendClick(v, itemData);
                     }
                 }
             });
         } else {
             mSendRl.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(itemData.authorAvatar,mTravelIv,options);
-       // ImageLoader.getInstance().displayImage(itemData.authorAvatar,mTravelIv, picOptions);
+        ImageLoader.getInstance().displayImage(itemData.authorAvatar, mTravelIv, options);
+        // ImageLoader.getInstance().displayImage(itemData.authorAvatar,mTravelIv, picOptions);
         mNoteNameTv.setText(itemData.title);
-        String[] strArray=itemData.summary.split("\n");
-        String maxLengthStr=strArray[0];
-        for(String str:strArray){
-            if(str.length()>maxLengthStr.length()){
-                maxLengthStr=str;
+        String[] strArray = itemData.summary.split("\n");
+        String maxLengthStr = strArray[0];
+        for (String str : strArray) {
+            if (str.length() > maxLengthStr.length()) {
+                maxLengthStr = str;
             }
         }
         mNoteDescTv.setText(maxLengthStr);
-        mPropertyTv.setText(String.format("%s  %s  %s", itemData.authorName, itemData.source, simpleDateFormat.format(new Date(itemData.publishTime))));
+        mPropertyTv.setText(String.format("%s    %s", itemData.authorName, simpleDateFormat.format(new Date(itemData.publishTime))));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(activity,"event_city_travel_note_item");
+                MobclickAgent.onEvent(activity, "event_city_travel_note_item");
                 Intent intent = new Intent(activity, TravelNoteDetailActivity.class);
                 intent.putExtra("travelNote", itemData);
                 intent.putExtra("id", itemData.id);
@@ -117,7 +115,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
 
     }
 
-    public interface OnSendClickListener{
+    public interface OnSendClickListener {
         void onSendClick(View view, TravelNoteBean itemData);
     }
 

@@ -24,5 +24,6 @@
     <dimen name="option_cell_height">102dp</dimen>
     <dimen name="edit_page_bg_size">220dp</dimen>
     <dimen name="user_profile_entry_height">160dp</dimen>
+    <dimen name="spot_detail_picture_height">300dp</dimen>
 
 </resources>

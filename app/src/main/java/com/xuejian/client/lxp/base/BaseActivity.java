@@ -97,7 +97,6 @@ public class BaseActivity extends FragmentActivity {
         if(IMUtils.isAppRunningForeground(this)){
             return;
         }
-System.out.println("notify");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(getApplicationInfo().icon)
                 .setWhen(System.currentTimeMillis()).setAutoCancel(true);

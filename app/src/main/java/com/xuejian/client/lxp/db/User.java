@@ -14,6 +14,8 @@ import java.util.HashMap;
 public class User implements Serializable {
     public static final String M="M";
     public static final String F="F";
+    public static final String S="S";
+    public static final String U="U";
     private long userId;
     private String nickName;
     private String avatar;

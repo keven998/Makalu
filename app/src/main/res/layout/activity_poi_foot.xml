@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/all_evaluation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="～更多·点评～"
+        android:gravity="center"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/option_cell_selector"
+        android:textColor="@color/app_theme_color_highlight"
+        android:textSize="13sp" />
+</FrameLayout>
