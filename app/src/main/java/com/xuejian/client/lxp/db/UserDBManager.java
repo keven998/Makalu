@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
-import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 
 import org.json.JSONArray;
@@ -25,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UserDBManager {
     private SQLiteDatabase db;
     private String fri_table_name;
-    private String token_table_name;
+    private String request_mag_table_name;
     private String databaseFilename;
     private static UserDBManager instance;
     private SQLiteDatabase mdb;
@@ -37,7 +36,7 @@ public class UserDBManager {
     public void initDB(String User_Id) {
         String path = CryptUtils.getMD5String(User_Id);
         fri_table_name = "FRI_" + path;
-        token_table_name="token_"+path;
+        request_mag_table_name ="request_"+path;
         String DATABASE_PATH = Config.DB_PATH + path;
         databaseFilename = DATABASE_PATH + "/" + "lxp.db";
         File dir = new File(DATABASE_PATH);
@@ -50,8 +49,8 @@ public class UserDBManager {
                 + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT,gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT,memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT,header TEXT)");
         db.execSQL("CREATE table IF NOT EXISTS "
-                + token_table_name
-                + " (userId INTEGER PRIMARY KEY,UserName TEXT,pwd TEXT,code TEXT,type INTEGER)");
+                + request_mag_table_name
+                + " (Id INTEGER PRIMARY KEY AUTOINCREMENT ,UserId INTEGER,nickName TEXT,avatarSmall TEXT,requestMsg TEXT,requestId TEXT,status INTEGER,time INTEGER)");
     }
 
     public static UserDBManager getInstance() {
@@ -432,20 +431,54 @@ public class UserDBManager {
         if (pwd!=null)values.put("avatarSmall", pwd);
         if (code!=null)values.put("gender", code);
         values.put("signature", type);
-        mdb.insert(token_table_name, null, values);
+        mdb.insert(request_mag_table_name, null, values);
         closeDB();
     }
-
-    public synchronized void saveInventMessage(){
+    public synchronized void saveInventMessage(InventMessage inventMessage){
+        mdb=getDB();
+        ContentValues values=new ContentValues();
+        values.put("UserId", inventMessage.getUserId());
+        values.put("nickName", inventMessage.getNickName());
+        values.put("avatarSmall",inventMessage.getAvatarSmall());
+        values.put("requestMsg", inventMessage.getRequestMsg());
+        values.put("requestId", inventMessage.getRequestId());
+        values.put("status", inventMessage.getStatus());
+        values.put("time", inventMessage.getTime());
+        mdb.insert(request_mag_table_name, null, values);
+        closeDB();
 
     }
-    public synchronized void deleteInventMessage(){
+    public synchronized void deleteInventMessage(String Id){
+        mdb=getDB();
+        mdb.delete(request_mag_table_name,"Id=?",new String[]{Id});
 
     }
-    public List<MessageBean> getInventMessages(){
-        return null;
+    public List<InventMessage> getInventMessages(){
+        mdb = getDB();
+        List<InventMessage> list = new ArrayList<InventMessage>();
+        Cursor cursor = mdb.rawQuery("select * from " + request_mag_table_name, null);
+        while (cursor.moveToNext()) {
+            int Id = cursor.getInt(0);
+            long userId = cursor.getLong(1);
+            String nickName = cursor.getString(2);
+            String avatarSmall = cursor.getString(3);
+            String requestMsg = cursor.getString(4);
+            String requestId = cursor.getString(5);
+            int status = cursor.getInt(6);
+            long time =cursor.getLong(7);
+                list.add(new InventMessage(Id, userId, nickName, avatarSmall, requestMsg, requestId, status, time));
+        }
+        cursor.close();
+        closeDB();
+        return list;
     }
-    public synchronized void updateInventMessageStatus(){
-
+    public synchronized void updateInventMessageStatus(int Id,int status){
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select * from " + request_mag_table_name + " where Id=?", new String[]{String.valueOf(Id)});
+        if (cursor.getCount()>0){
+            ContentValues values =new ContentValues();
+            values.put("Status",status);
+            mdb.update(request_mag_table_name,values,"Id=?",new String[]{String.valueOf(Id)});
+        }
     }
 }

@@ -165,6 +165,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
+                            error.printStackTrace();
+                            System.out.println(msg+method);
                             DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
@@ -182,9 +184,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
-            User iu = imUser;
             Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra("friend_id", String.valueOf(iu.getUserId()));
+            intent.putExtra("friend_id", String.valueOf(userId));
             intent.putExtra("chatType", "single");
             startActivity(intent);
         } else {
@@ -338,7 +339,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
-                intent.putExtra("user_name", imUser.getNickName());
                 startActivity(intent);
             }
         });
