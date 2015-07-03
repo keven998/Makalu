@@ -228,8 +228,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     if (!AccountManager.getInstance().isLogin()) {
                         mTabHost.setCurrentTab(1);
                         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(logIntent);
-                        overridePendingTransition(R.anim.push_bottom_in, 0);
+                        startActivityWithNoAnim(logIntent);
+                        overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                     }
                 } else if (s.equals(mTagArray[1])) {
                 }
