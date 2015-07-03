@@ -20,7 +20,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/app_backgroud">
 
         <TextView
             android:id="@+id/tv_title_bar_left"
@@ -41,13 +41,24 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="17sp"
-            android:textColor="@color/color_text_titlebar"/>
+            android:textColor="@color/app_theme_color"/>
 
+
+        <ImageButton
+            android:id="@+id/edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/plan_10_dashboard_add"
+            />
         <Spinner
             android:id="@+id/type_spinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@id/edit_btn"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="3dp"
@@ -57,17 +68,6 @@
             android:spinnerMode="dropdown"
             android:dropDownVerticalOffset="0dp"
             android:dropDownWidth="65dp"/>
-
     </RelativeLayout>
-
-    <ImageButton
-        android:id="@+id/edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/btn_new_plan_selector"
-        />
 
 </RelativeLayout>
