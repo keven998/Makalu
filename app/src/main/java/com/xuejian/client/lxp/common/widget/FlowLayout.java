@@ -56,7 +56,7 @@ public class FlowLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.getPaddingRight() - this.getPaddingLeft();
-        int sizeWidth = LocalDisplay.SCREEN_WIDTH_PIXELS - this.getPaddingRight() - this.getPaddingLeft() - LocalDisplay.dp2px(20);
+        int sizeWidth = LocalDisplay.SCREEN_WIDTH_PIXELS - this.getPaddingRight() - this.getPaddingLeft() /*- LocalDisplay.dp2px(20)*/;
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - this.getPaddingTop() - this.getPaddingBottom();
 
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
