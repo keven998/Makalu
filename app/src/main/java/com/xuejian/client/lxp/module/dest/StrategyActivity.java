@@ -107,7 +107,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private ListView draw_list;
     private DrawAdapter adapter;
     private RelativeLayout plan_title, selected_place_title;
-
+    private TextView tv_add_plan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,10 +153,30 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         draw_share = (TextView) findViewById(R.id.strategy_share);
         editPlan = (TextView) findViewById(R.id.tv_edit_plan);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
-
+        tv_add_plan  =(TextView) findViewById(R.id.tv_add_plan);
         plan_title = (RelativeLayout) findViewById(R.id.plan_title);
         selected_place_title = (RelativeLayout) findViewById(R.id.selected_place_title);
-
+        tv_add_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.END);
+                final Handler handler = new Handler() {
+                    public void handleMessage(Message msg) {
+                        switch (msg.what) {
+                            case 1:
+                                Intent intent = new Intent(mContext, SelectDestActivity.class);
+                                intent.putExtra("locList", destinations);
+                                intent.putExtra("guide_id", strategy.id);
+                                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
+                                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
+                        }
+                        super.handleMessage(msg);
+                    }
+                };
+                Message message = handler.obtainMessage(1);
+                handler.sendMessageDelayed(message, 300);
+            }
+        });
 //        plan_title.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -895,7 +915,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
         @Override
         public int getCount() {
-            return destinations.size() + 1;
+            return destinations.size();
         }
 
         @Override
@@ -914,33 +934,33 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 convertView = View.inflate(drawContext, R.layout.strategy_draw_list_cell, null);
             }
             place = (TextView) convertView.findViewById(R.id.user_been_place);
-            if (position == destinations.size()) {
-                place.setText("添加");
-                place.setCompoundDrawablesWithIntrinsicBounds(StrategyActivity.this.getResources().getDrawable(R.drawable.add_contact), null, null, null);
-                place.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        drawerLayout.closeDrawer(GravityCompat.END);
-                        final Handler handler = new Handler() {
-                            public void handleMessage(Message msg) {
-                                switch (msg.what) {
-                                    case 1:
-                                        Intent intent = new Intent(mContext, SelectDestActivity.class);
-                                        intent.putExtra("locList", destinations);
-                                        intent.putExtra("guide_id", strategy.id);
-                                        intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
-                                        startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
-                                }
-                                super.handleMessage(msg);
-                            }
-                        };
-                        Message message = handler.obtainMessage(1);
-                        handler.sendMessageDelayed(message, 300);
-                    }
-                });
-            } else {
+//            if (position == destinations.size()) {
+//                place.setText("添加");
+//                place.setCompoundDrawablesWithIntrinsicBounds(StrategyActivity.this.getResources().getDrawable(R.drawable.add_contact), null, null, null);
+//                place.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        drawerLayout.closeDrawer(GravityCompat.END);
+//                        final Handler handler = new Handler() {
+//                            public void handleMessage(Message msg) {
+//                                switch (msg.what) {
+//                                    case 1:
+//                                        Intent intent = new Intent(mContext, SelectDestActivity.class);
+//                                        intent.putExtra("locList", destinations);
+//                                        intent.putExtra("guide_id", strategy.id);
+//                                        intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
+//                                        startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
+//                                }
+//                                super.handleMessage(msg);
+//                            }
+//                        };
+//                        Message message = handler.obtainMessage(1);
+//                        handler.sendMessageDelayed(message, 300);
+//                    }
+//                });
+//            } else {
                 place.setText(destinations.get(position).zhName);
-                place.setCompoundDrawablesWithIntrinsicBounds(null, null, StrategyActivity.this.getResources().getDrawable(R.drawable.icon_arrow_right), null);
+          //      place.setCompoundDrawablesWithIntrinsicBounds(null, null, StrategyActivity.this.getResources().getDrawable(R.drawable.icon_arrow_right), null);
                 place.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -963,7 +983,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
                     }
                 });
-            }
+  //          }
             return convertView;
         }
     }
