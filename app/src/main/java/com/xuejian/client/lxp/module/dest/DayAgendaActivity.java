@@ -33,12 +33,21 @@ public class DayAgendaActivity extends FragmentActivity {
         setContentView(R.layout.activity_day_agenda_layout);
 
         TitleHeaderBar titleHeaderBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("日程详情");
-
+        titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.getRightTextView().setText("修改");
+        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
+                intent.putExtra("strategy", strategy);
+                startActivityForResult(intent, RESULT_UPDATE_PLAN_DETAIL);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+            }
+        });
         strategy = getIntent().getParcelableExtra("strategy");
         resizeData(strategy.itinerary);
         currentDay = getIntent().getIntExtra("current_day", 0);
-
+        titleHeaderBar.getTitleTextView().setText(String.format("第%d天",currentDay+1));
         mListView = (ListView) findViewById(R.id.listview_common);
         mListView.setAdapter(new POIAdapter(this, routeDayMap.get(currentDay)));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,15 +57,15 @@ public class DayAgendaActivity extends FragmentActivity {
             }
         });
 
-        findViewById(R.id.edit_plan).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
-                intent.putExtra("strategy", strategy);
-                startActivityForResult(intent, RESULT_UPDATE_PLAN_DETAIL);
-                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
-            }
-        });
+//        findViewById(R.id.edit_plan).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
+//                intent.putExtra("strategy", strategy);
+//                startActivityForResult(intent, RESULT_UPDATE_PLAN_DETAIL);
+//                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+//            }
+//        });
     }
 
     @Override

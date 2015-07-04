@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/strategy_tab_title"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_gravity="center"
+        android:drawablePadding="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:text="dfs"
+        android:textColor="@color/poi_tab_checker_text_color"
+        android:textSize="10sp" />
 
-    android:id="@+id/strategy_tab_title"
-    android:layout_width="match_parent"
-    android:layout_height="37dp"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:textColor="@color/poi_tab_checker_text_color"
-    android:drawablePadding="0dp"
-    android:textSize="10sp"
-    android:text="dfs"/>
     <!-- android:layout_width="match_parent"
        android:layout_height="match_parent">
 
-       <TextView-->
-    <!--<TextView
+       <TextView--><!--<TextView
         android:id="@+id/strategy_unread_msg_number"
         android:layout_width="wrap_content"
         android:layout_height="22dp"

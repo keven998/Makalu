@@ -33,7 +33,7 @@ public class PlanScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strategy = getStrategy();
-        if (strategy!=null)resizeData(strategy.itinerary);
+        if (strategy!=null)resizeData(strategy.itinerary,strategy);
     }
 
     @Override
@@ -59,13 +59,15 @@ public class PlanScheduleFragment extends Fragment {
         return ((StrategyActivity) getActivity()).getStrategy();
     }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary,StrategyBean str) {
         StrategyBean strategyBean = getStrategy();
+                System.out.println("strategyBean.summary "+str.summary+" strategyBean.dayCnt "+str.dayCnt+" strategyBean.itineraryDays " +
+                        ""+str.itineraryDays);
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
-
+//strategyBean.localities
         for (StrategyBean.IndexPoi indexPoi : itinerary) {
             if(routeDayMap.size()>indexPoi.dayIndex){
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
@@ -103,20 +105,24 @@ public class PlanScheduleFragment extends Fragment {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.item_plan_day_schedule_summary, null);
                 holder = new ViewHolder();
                 holder.summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
+                holder.tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
+                holder.tv_schedule_title= (TextView) convertView.findViewById(R.id.tv_schedule_title);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             List<PoiDetailBean> poiList = routeDayMap.get(position);
+            holder.tv_day_index.setText(String.valueOf(position+1));
+           // holder.tv_schedule_title.setText(routeDayMap.s);
             int count = poiList.size();
-            String desc = "";
+            String desc ="";
             PoiDetailBean pdb;
             for (int i = 0; i < count; ++i) {
                 pdb = poiList.get(i);
                 if (i == 0) {
-                    desc = String.format("1.%s", pdb.zhName);
+                    desc= String.format("%s", pdb.zhName);
                 } else {
-                    desc = String.format("%s → %d.%s", desc, (i+1), pdb.zhName);
+                    desc = String.format("%s → %s", desc, pdb.zhName);
                 }
             }
             holder.summaryTextView.setText(desc);
@@ -126,6 +132,8 @@ public class PlanScheduleFragment extends Fragment {
 
     private class ViewHolder {
         public TextView summaryTextView;
+        public TextView tv_day_index;
+        public TextView tv_schedule_title;
     }
 
 }

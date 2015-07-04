@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 
 import java.util.ArrayList;
 
@@ -43,19 +46,28 @@ public class POIAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_plan_day_schedule_summary, null);
+            convertView = inflater.inflate(R.layout.item_plan_day_detil, null);
             holder = new ViewHolder();
-            holder.poiNameTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
+            holder.tv_poi_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
+            holder.tv_poi_level = (TextView) convertView.findViewById(R.id.tv_poi_level);
+            holder.tv_poi_time = (TextView) convertView.findViewById(R.id.tv_poi_time);
+            holder.iv_poi = (ImageView) convertView.findViewById(R.id.iv_poi_img);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         PoiDetailBean poi = mPOIs.get(position);
-        holder.poiNameTextView.setText(poi.zhName);
+        ImageLoader.getInstance().displayImage(poi.images.get(0).url, holder.iv_poi, UILUtils.getDefaultOption());
+        holder.tv_poi_time.setText(String.format("建议游玩 %s",poi.timeCostDesc));
+        holder.tv_poi_level.setText(String.valueOf(poi.commentCnt));
+        holder.tv_poi_title.setText(poi.zhName);
         return convertView;
     }
 
     private class ViewHolder {
-        public TextView poiNameTextView;
+        public TextView tv_poi_title;
+        public TextView tv_poi_time;
+        public TextView tv_poi_level;
+        public ImageView iv_poi;
     }
 }

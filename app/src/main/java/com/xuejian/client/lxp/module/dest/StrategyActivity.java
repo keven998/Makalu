@@ -55,9 +55,8 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.dest.fragment.CollectionFragment;
 import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
-import com.xuejian.client.lxp.module.dest.fragment.RestaurantFragment;
-import com.xuejian.client.lxp.module.dest.fragment.ShoppingFragment;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONObject;
@@ -96,8 +95,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private ArrayList<LocBean> destinations;
     private int curIndex = 0;
     PlanScheduleFragment routeDayFragment;
-    RestaurantFragment restFragment;
-    ShoppingFragment shoppingFragment;
+    CollectionFragment collectionFragment;
     private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
     private ImageView iv_location, iv_more;
     private TextView tv_back;
@@ -108,7 +106,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private DrawAdapter adapter;
     private RelativeLayout plan_title, selected_place_title;
     private TextView tv_add_plan;
-
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -256,8 +254,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         mStrategyViewpager = null;
         mStrategyIndicator = null;
         routeDayFragment = null;
-        restFragment = null;
-        shoppingFragment = null;
+        collectionFragment = null;
     }
 
     @Override
@@ -625,8 +622,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"行程计划", "美食清单", "购物清单",};
-        private int[] tabIcons = {R.drawable.poi_tab_checker_trip, R.drawable.poi_tab_checker_food, R.drawable.poi_tab_checker_shop};
+        private String[] tabNames = {"计划", "收藏"};
+       // private int[] tabIcons = {R.drawable.poi_tab_checker_trip, R.drawable.poi_tab_checker_food};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 
@@ -648,7 +645,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             }
             TextView textView = (TextView) convertView;
             textView.setText(tabNames[position]);
-            textView.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[position], 0, 0);
+           // textView.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[position], 0, 0);
             return textView;
         }
 
@@ -661,20 +658,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 }
 
                 return routeDayFragment;
-            } else if (position == 1) {
-                if (restFragment == null) {
-                    restFragment = new RestaurantFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
-                }
-
-                return restFragment;
             } else {
-                if (shoppingFragment == null) {
-                    shoppingFragment = new ShoppingFragment();
+                if (collectionFragment == null) {
+                    collectionFragment = new CollectionFragment();
 //                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
-                return shoppingFragment;
+                return collectionFragment;
             }
         }
     }
@@ -716,10 +706,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         if (routeDayFragment != null) {
 //            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
         }
-        if (shoppingFragment != null) {
-            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
-        }
-        if (restFragment != null) {
+        if (collectionFragment != null) {
             StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
         }
         topTitle.setText("正在保存");
@@ -775,11 +762,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 //        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
 //            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
 //        } else
-        if (shoppingFragment != null && shoppingFragment.isEditableMode()) {
-            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
-        } else if (restFragment != null && restFragment.isEditableMode()) {
-            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
-        }
+//        if (collectionFragment != null && collectionFragment.isEditableMode()) {
+//            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
+//        } else if (collectionFragment != null && collectionFragment.isEditableMode()) {
+//            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
+//        }
 
         final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
         messageDialog.setTitle("提示");
