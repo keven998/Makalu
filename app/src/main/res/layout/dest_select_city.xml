@@ -2,9 +2,38 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:id="@+id/des_box_fl">
 
-    <CheckedTextView
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/des_bg_pic"
+        android:scaleType="center"
+        />
+
+    <TextView
+        android:id="@+id/des_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/base_color_white"
+        android:textSize="16sp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/des_selected_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/plan_country_selected"
+        android:padding="5dp"
+        android:layout_gravity="right"
+        android:visibility="gone"
+        />
+
+
+
+    <!--<CheckedTextView
         android:id="@+id/tv_cell_name"
         android:layout_width="wrap_content"
         android:layout_height="26dp"
@@ -21,6 +50,6 @@
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:text="dsaf"
-       />
+       />-->
 
 </FrameLayout>
