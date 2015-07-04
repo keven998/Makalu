@@ -71,10 +71,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private TextView unreadMsg;
 
-//    private Long NEWFRIEND = 2l;
+    //    private Long NEWFRIEND = 2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-//    private MyGroupChangeListener groupChangeListener;
+    //    private MyGroupChangeListener groupChangeListener;
     private boolean FromBounce;
     private Vibrator vibrator;
 
@@ -105,6 +105,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 public void OnSuccess() {
                     IMClient.getInstance().initAckAndFetch();
                 }
+
                 @Override
                 public void OnFailed(int code) {
                     runOnUiThread(new Runnable() {
@@ -170,7 +171,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         myUser.setType(1);
                         userlist.put(myUser.getUserId(), myUser);
                     }
-                    System.out.println("contacts size "+userlist.size());
+                    System.out.println("contacts size " + userlist.size());
                     // 存入db
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
@@ -380,7 +381,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     /**
      * 保存提示新消息
-     *
      */
     private void notifyNewInviteMessage() {
 
@@ -404,7 +404,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (talkFragment != null) {
                     talkFragment.netStateChange("(未连接)");
                 }
-            }else {
+            } else {
                 TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
                 if (talkFragment != null) {
                     talkFragment.netStateChange("");
@@ -457,6 +457,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             connectionReceiver = null;
         }
     }
+
     private void getInLocList() {
         //这个地方也需要判断一下做出接口读取的选择
         String lastModify = PreferenceUtils.getCacheData(MainActivity.this, "indest_group_last_modify");
@@ -484,8 +485,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
     }
-    private void getOutCountryList(){
-        String lastModify= PreferenceUtils.getCacheData(MainActivity.this, "outcountry_last_modify");
+
+    private void getOutCountryList() {
+        String lastModify = PreferenceUtils.getCacheData(MainActivity.this, "outcountry_last_modify");
         TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

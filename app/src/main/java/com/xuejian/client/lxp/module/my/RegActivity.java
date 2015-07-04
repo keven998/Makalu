@@ -41,7 +41,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishWithNoAnim();
+                finish();
             }
         });
         phoneEt = (EditText) findViewById(R.id.et_account);

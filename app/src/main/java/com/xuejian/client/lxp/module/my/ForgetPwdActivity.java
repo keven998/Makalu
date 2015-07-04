@@ -60,7 +60,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText(String.format("(%ds)", millisUntilFinished / 1000));
+                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
             }
 
             @Override
@@ -158,4 +158,14 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
             finish();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
 }

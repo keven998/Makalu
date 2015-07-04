@@ -147,9 +147,9 @@ public class LoginActivity extends PeachBaseActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityWithNoAnim(intent);
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivityWithNoAnim(intent);
                 setResult(RESULT_OK);
                 finishWithNoAnim();
             }

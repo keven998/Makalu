@@ -235,10 +235,9 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                setResult(RESULT_OK);
-                finish();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                finish();
             }
         });
     }

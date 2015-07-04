@@ -67,6 +67,15 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 //        MobclickAgent.onPageEnd("page_verify_phone");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
     private void initData() {
         tel = getIntent().getStringExtra("tel");
         pwd = getIntent().getStringExtra("pwd");
@@ -83,7 +92,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText("(" + (millisUntilFinished / 1000) + ")");
+                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
             }
 
             @Override
@@ -113,12 +122,15 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
-//                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
-                                    ToastUtil.getInstance(mContext).showToast("注册成功");
-                                    Intent intent = new Intent();
+                                    Intent accountIntent = new Intent(VerifyPhoneActivity.this, AccountActvity.class);
+                                    startActivityWithNoAnim(accountIntent);
+
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
+
+                                    Intent intent = getIntent();
                                     intent.putExtra("user", userResult.result);
                                     setResult(RESULT_OK, intent);
-                                    finish();
+                                    finishWithNoAnim();
                                 } else {
                                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                                 }
