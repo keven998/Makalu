@@ -60,7 +60,7 @@ public class UserDBManager {
         return instance;
     }
     public void disconnectDB(){
-      //  db.close();
+        //db.close();
         db=null;
         instance=null;
     }
@@ -93,8 +93,10 @@ public class UserDBManager {
             for (int i = 0; i < array.length(); i++) {
                 list.add(array.getLong(i));
             }
+            cursor.close();
             return list;
         } catch (JSONException e) {
+            cursor.close();
             e.printStackTrace();
             return null;
         }
