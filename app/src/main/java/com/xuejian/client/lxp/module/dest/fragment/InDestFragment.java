@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -26,6 +28,8 @@ import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.section.BaseSectionAdapter;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.GroupLocBean;
@@ -33,6 +37,7 @@ import com.xuejian.client.lxp.bean.InDestBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
@@ -67,7 +72,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     DynamicBox box;
     protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
-    private Drawable add,selected;
     private boolean isClickable;
     OnDestActionListener mOnDestActionListener;
 
@@ -89,7 +93,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         if(isClickable) {
             //in_out_search.setVisibility(View.VISIBLE);
             View view = new View(getActivity());
-            view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
+            view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(50)));
             mLvInCity.addFooterView(view);
         }
         mLvInCity.setAdapter(inCityAdapter);
@@ -231,7 +235,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             inCityAdapter.notifyDataSetChanged();
     }
 
-    private class InCityAdapter2 extends BaseSectionAdapter {
+   /* private class InCityAdapter2 extends BaseSectionAdapter {
         private List<InDestBean> mInDestBeanList;
 
         public InCityAdapter2(List<InDestBean> inDestBeanList) {
@@ -322,9 +326,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             return mInDestBeanList.size();
         }
 
-        /**
+        *//**
          * 根据分类的首字母获取其第一次出现该首字母的位置
-         */
+         *//*
         public int getPositionForIndex(String indexStr) {
             for (int i = 0; i < getSectionCount(); i++) {
                 String sortStr = mInDestBeanList.get(i).section;
@@ -349,7 +353,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         public boolean shouldListHeaderFloat(int headerIndex) {
             return false;
         }
-    }
+    }*/
 
     private class InCityAdapter extends ListViewDataAdapter<InDestBean> implements SectionIndexer {
         private List<String> sections;
@@ -426,6 +430,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         private TextView sectionTv;
         private FlowLayout cityListFl;
         private FrameLayout des_display_box;
+        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -445,36 +450,42 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-                final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+
+                AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
+                        (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
+
+                final FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
+                final TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
+                final ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
+                final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+
+                des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
-                //if(isClickable) {
-                    cityNameTv.setChecked(bean.isAdded);
-                    //更新按钮的图片的
-                    add = getResources().getDrawable(R.drawable.ic_green_add_icon);
-                    selected = getResources().getDrawable(R.drawable.ic_white_selected_icon);
-                    /// 这一步必须要做,否则不会显示.
-                    add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
-                    selected.setBounds(0, 0, selected.getMinimumWidth(), selected.getMinimumHeight());
+                ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
                     if (!bean.isAdded) {
                         if(isClickable) {
-                            cityNameTv.setCompoundDrawables(add, null, null, null);
+                            addIcon.setVisibility(View.GONE);
+                            //cityNameTv.setCompoundDrawables(add, null, null, null);
                         }
                     } else {
                         if(isClickable) {
-                            cityNameTv.setCompoundDrawables(selected, null, null, null);
+                            addIcon.setVisibility(View.VISIBLE);
+                           // cityNameTv.setCompoundDrawables(selected, null, null, null);
                         }
                     }
-                    cityNameTv.setOnClickListener(new View.OnClickListener() {
+                    contentView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             bean.isAdded = !bean.isAdded;
                             if (mOnDestActionListener != null) {
                                 if (bean.isAdded) {
-                                    cityNameTv.setCompoundDrawables(selected, null, null, null);
+                                    addIcon.setVisibility(View.VISIBLE);
+                                    //cityNameTv.setCompoundDrawables(selected, null, null, null);
 
                                     mOnDestActionListener.onDestAdded(bean,true,"in");
                                 } else {
-                                    cityNameTv.setCompoundDrawables(add, null, null, null);
+                                    addIcon.setVisibility(View.GONE);
+                                    //cityNameTv.setCompoundDrawables(add, null, null, null);
 
                                     mOnDestActionListener.onDestRemoved(bean,"in");
                                 }
@@ -482,25 +493,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                             inCityAdapter.notifyDataSetChanged();
                         }
                     });
-              /* }else{
-                    bean.isAdded=false;
-                    cityNameTv.setChecked(bean.isAdded);
-                    cityNameTv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bean.isAdded = !bean.isAdded;
-                            if(mOnDestActionListener != null){
-                                if(bean.isAdded){
-                                    mOnDestActionListener.onDestAdded(bean);
-                                } else {
-                                    mOnDestActionListener.onDestRemoved(bean);
-                                }
-                            }
-                        }
-                    });
-                }*/
-
-
                 cityListFl.addView(contentView);
             }
         }

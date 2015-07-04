@@ -3,25 +3,25 @@
     android:id="@+id/des_display_box"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dp">
+    android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
         android:orientation="vertical">
 
         <FrameLayout android:layout_width="match_parent"
-            android:layout_height="32dp">
+            android:layout_height="44dp">
 
             <TextView
                 android:id="@+id/tv_section"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/base_color_black"
-                android:textSize="14sp"
-                android:paddingLeft="12dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/color_text_i"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:paddingLeft="18dp"
                 android:text="直辖市"/>
 
         </FrameLayout>
@@ -29,17 +29,8 @@
         <com.xuejian.client.lxp.common.widget.FlowLayout
             android:id="@+id/fl_city_list"
             android:layout_width="fill_parent"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="11dp"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="@color/base_border_color"
-        android:layout_gravity="bottom"/>
 </FrameLayout>

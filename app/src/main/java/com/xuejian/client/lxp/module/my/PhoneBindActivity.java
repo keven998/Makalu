@@ -70,7 +70,8 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText((millisUntilFinished / 1000) + "s");
+//                downTimeBtn.setText((millisUntilFinished / 1000) + "s");
+                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
             }
 
             @Override
@@ -192,4 +193,14 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
 }

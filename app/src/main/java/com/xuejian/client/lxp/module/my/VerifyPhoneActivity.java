@@ -33,7 +33,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     @ViewInject(R.id.btn_time_down)
     private Button downTimeBtn;
     private CountDownTimer countDownTimer;
-    private String tel,pwd,actionCode;
+    private String tel, pwd, actionCode;
     private int countDown;
     private User user;
 
@@ -47,13 +47,14 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         initData();
         startCountDownTime();
 
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("验证");
         titleBar.enableBackKey(true);
 
-        TextView tips = (TextView)findViewById(R.id.tips);
-        tips.setText(String.format("已发送短信验证码至 %s\n网络有延迟,请稍后", tel));
+        TextView tips = (TextView) findViewById(R.id.tips);
+        tips.setText(String.format("验证码已发至：%s\n网络有延迟，请稍后", tel));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,23 +66,33 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         super.onPause();
 //        MobclickAgent.onPageEnd("page_verify_phone");
     }
-    private void initData(){
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
+    private void initData() {
         tel = getIntent().getStringExtra("tel");
         pwd = getIntent().getStringExtra("pwd");
-        countDown = getIntent().getIntExtra("countDown",60);
+        countDown = getIntent().getIntExtra("countDown", 60);
         actionCode = getIntent().getStringExtra("actionCode");
         user = AccountManager.getInstance().getLoginAccount(this);
-        if(user!=null){
+        if (user != null) {
             setAccountAbout(true);
         }
     }
 
-    private void startCountDownTime(){
+    private void startCountDownTime() {
         downTimeBtn.setEnabled(false);
-        countDownTimer= new CountDownTimer(countDown*1000, 1000) {
+        countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText("(" + (millisUntilFinished / 1000) + ")");
+                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
             }
 
             @Override
@@ -94,16 +105,16 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_next:
-                if(TextUtils.isEmpty(smsEt.getText().toString())){
+                if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
-                }else{
-                    if(!CommonUtils.isNetWorkConnected(mContext)){
+                } else {
+                    if (!CommonUtils.isNetWorkConnected(mContext)) {
                         ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                         return;
                     }
-                    if(actionCode.equals(UserApi.ValidationCode.REG_CODE)){
+                    if (actionCode.equals(UserApi.ValidationCode.REG_CODE)) {
                         DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
                         UserApi.signUp(tel, pwd, smsEt.getText().toString().trim(), new HttpCallBack<String>() {
                             @Override
@@ -111,12 +122,15 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
-//                                    AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
-                                    ToastUtil.getInstance(mContext).showToast("注册成功");
-                                    Intent intent = new Intent();
+                                    Intent accountIntent = new Intent(VerifyPhoneActivity.this, AccountActvity.class);
+                                    startActivityWithNoAnim(accountIntent);
+
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
+
+                                    Intent intent = getIntent();
                                     intent.putExtra("user", userResult.result);
                                     setResult(RESULT_OK, intent);
-                                    finish();
+                                    finishWithNoAnim();
                                 } else {
                                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                                 }
@@ -129,22 +143,22 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
-                    }else if(actionCode.equals(UserApi.ValidationCode.FIND_PWD)){
+                    } else if (actionCode.equals(UserApi.ValidationCode.FIND_PWD)) {
 
                     }
 
                 }
                 break;
             case R.id.btn_time_down:
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
                 DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
 
-                String uid=null ;
-                if(user!=null){
-                    uid = user.getUserId()+"";
+                String uid = null;
+                if (user != null) {
+                    uid = user.getUserId() + "";
                 }
                 UserApi.sendValidation(tel, actionCode, uid, new HttpCallBack<String>() {
                     @Override

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,12 +21,15 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
@@ -192,6 +197,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
+        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -207,65 +213,50 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-                final CheckedTextView cityNameTv = (CheckedTextView) contentView.findViewById(R.id.tv_cell_name);
+
+                AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
+                        (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
+
+                final FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
+                final TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
+                final ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
+                final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+
+                des_box_fl.setLayoutParams(lytp);
+
                 cityNameTv.setText(bean.zhName);
-                cityNameTv.setChecked(bean.isAdded);
-
-                /*if(isClickable) {*/
-
-                    //更新按钮的图片的
-                    add = getResources().getDrawable(R.drawable.ic_cell_item_unchoose);
-                    selected = getResources().getDrawable(R.drawable.ic_cell_item_chooesed);
-                    /// 这一步必须要做,否则不会显示.
-                    add.setBounds(0, 0, add.getMinimumWidth(), add.getMinimumHeight());
-                    selected.setBounds(0, 0, selected.getMinimumWidth(), selected.getMinimumHeight());
-                    if (!bean.isAdded) {
-                        if(isClickable) {
-                            cityNameTv.setCompoundDrawables(add, null, null, null);
-                        }
-                    } else {
-                        if(isClickable) {
-                            cityNameTv.setCompoundDrawables(selected, null, null, null);
-                        }
+                ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
+                if (!bean.isAdded) {
+                    if(isClickable) {
+                        addIcon.setVisibility(View.GONE);
+                        //cityNameTv.setCompoundDrawables(add, null, null, null);
                     }
+                } else {
+                    if(isClickable) {
+                        addIcon.setVisibility(View.VISIBLE);
+                        // cityNameTv.setCompoundDrawables(selected, null, null, null);
+                    }
+                }
+                contentView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bean.isAdded = !bean.isAdded;
+                        if (mOnDestActionListener != null) {
+                            if (bean.isAdded) {
+                                addIcon.setVisibility(View.VISIBLE);
+                                //cityNameTv.setCompoundDrawables(selected, null, null, null);
 
-                    cityNameTv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            bean.isAdded = !bean.isAdded;
-                            if (mOnDestActionListener != null) {
-                                if (bean.isAdded) {
-                                    if(isClickable){
-                                    cityNameTv.setCompoundDrawables(selected, null, null, null);
-                                    }
-                                    mOnDestActionListener.onDestAdded(bean,true,"out");
-                                } else {
-                                    if(isClickable){
-                                    cityNameTv.setCompoundDrawables(add, null, null, null);
-                                    }
-                                    mOnDestActionListener.onDestRemoved(bean,"out");
-                                }
-                            }
-                            outCountryAdapter.notifyDataSetChanged();
-                        }
-                    });
+                                mOnDestActionListener.onDestAdded(bean,true,"in");
+                            } else {
+                                addIcon.setVisibility(View.GONE);
+                                //cityNameTv.setCompoundDrawables(add, null, null, null);
 
-               /* }else{
-                    cityNameTv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bean.isAdded = !bean.isAdded;
-                            if(mOnDestActionListener != null){
-                                if(bean.isAdded){
-                                    mOnDestActionListener.onDestAdded(bean);
-                                } else {
-                                    mOnDestActionListener.onDestRemoved(bean);
-                                }
+                                mOnDestActionListener.onDestRemoved(bean,"in");
                             }
                         }
-                    });
-                }*/
-
+                        outCountryAdapter.notifyDataSetChanged();
+                    }
+                });
                 cityListFl.addView(contentView);
             }
 

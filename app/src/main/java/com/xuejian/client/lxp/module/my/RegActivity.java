@@ -28,9 +28,7 @@ import com.xuejian.client.lxp.module.PeachWebViewActivity;
 public class RegActivity extends PeachBaseActivity implements View.OnClickListener {
     public static final int REQUEST_CODE_CHECH_VALICATION = 201;
 
-    @ViewInject(R.id.et_phone)
     private EditText phoneEt;
-    @ViewInject(R.id.et_password)
     private EditText pwdEt;
 
     @Override
@@ -43,16 +41,17 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishWithNoAnim();
+                finish();
             }
         });
+        phoneEt = (EditText) findViewById(R.id.et_account);
+        pwdEt = (EditText) findViewById(R.id.et_password);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finishWithNoAnim();
-        overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
 
     @Override
