@@ -29,7 +29,7 @@ public class PTRequest implements Serializable {
     public static final String COPY = "COPY";
     public static final String DELETE = "DELETE";
     public static final String OPTIONS = "OPTIONS";
-    public static final String TRACE = "TRACE";
+    public static final String TRACE = "PATCH";
     public static final String CONNECT = "CONNECT";
     private static final long serialVersionUID = -562005098855409537L;
     /**

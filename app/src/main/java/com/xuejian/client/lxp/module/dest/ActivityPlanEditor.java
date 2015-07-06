@@ -45,6 +45,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         EditorAdapter editorAdapter = new EditorAdapter(this);
         mDragListView.setDropListener(editorAdapter);
         SectionController c = new SectionController(mDragListView, editorAdapter);
+        c.setSortEnabled(true);
         mDragListView.setFloatViewManager(c);
         mDragListView.setOnTouchListener(c);
         mDragListView.setAdapter(editorAdapter);

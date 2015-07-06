@@ -140,7 +140,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
-                return new StrategyAdapter();
+                return new StrategyAdapter(isOwner);
             }
         });
         if (!isOwner) {
@@ -616,7 +616,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         ImageView mModify;
         RelativeLayout rl_plan;
         ImageView mCheckStatus;
-
+        boolean isOwner;
+        public StrategyAdapter(boolean isOwner){
+            this.isOwner=isOwner;
+        }
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View convertView = layoutInflater.inflate(R.layout.row_my_strategy, null);
@@ -647,6 +650,13 @@ public class StrategyListActivity extends PeachBaseActivity {
                 rl_plan.setBackgroundResource(R.drawable.plan_bg_default);
                 mCheckStatus.setVisibility(View.GONE);
             }
+
+            if (!isOwner){
+                mModify.setVisibility(View.INVISIBLE);
+                mDelete.setVisibility(View.INVISIBLE);
+                mCheck.setVisibility(View.INVISIBLE);
+            }
+
             mModify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
