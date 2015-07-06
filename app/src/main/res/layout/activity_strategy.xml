@@ -32,7 +32,7 @@
                     android:id="@+id/bottom_indicator"
                     android:layout_width="fill_parent"
                     android:layout_height="48dp"
-                    android:layout_marginTop="46dp"
+                    android:layout_marginTop="@dimen/content_top_margin"
                     android:layout_gravity="top"
                     android:layout_marginBottom="5dp"
                     android:background="@color/base_color_white">
