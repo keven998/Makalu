@@ -101,7 +101,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:text="确认密码: "
+            android:text="再次输入: "
             android:textColor="@color/color_text_ii"
             android:textSize="12sp" />
 

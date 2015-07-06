@@ -92,7 +92,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         countDownTimer = new CountDownTimer(countDown * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
+                downTimeBtn.setText(String.format("%ds后重发", (millisUntilFinished / 1000)));
             }
 
             @Override
