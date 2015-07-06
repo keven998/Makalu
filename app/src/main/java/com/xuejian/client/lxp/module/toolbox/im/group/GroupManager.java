@@ -18,7 +18,8 @@ public class GroupManager {
 
     public void createGroup(String groupName, String groupType, boolean isPublic, List<Long> groupMember,CreateSuccessListener listener) {
       // long row= UserDao.getInstance().addGroup2User(groupName,groupType,isPublic,null,groupMember);
-       HttpManager.createGroup(groupName, groupType, isPublic, null, groupMember, 0, listener);
+    //   HttpManager.createGroup(groupName, groupType, isPublic, null, groupMember, 0, listener);
+        HttpManager.createGroup1(groupName, groupType, isPublic, null, groupMember, 0, listener);
     }
 
 

@@ -400,18 +400,27 @@ public class CityPictureActivity extends PeachBaseActivity {
                                         LogUtil.d(response.toString());
                                         ImageBean ib = new ImageBean();
                                         ib.url = Uri.fromFile(file).toString();
-                                        /*ArrayList<ImageBean> newUserPics = userPics;
+
+                                        //上传图片，最新的图片置首位显示处理
+                                        ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
+                                        for(int i=0;i<userPics.size();i++){
+                                            newUserPics.add(userPics.get(i));
+                                        }
                                         userPics.clear();
                                         for (int j = 0; j <= newUserPics.size(); j++) {
                                             if (j == 0) {
                                                 userPics.add(ib);
                                             } else {
-                                                userPics.add(newUserPics.get(j - 1));
+                                                userPics.add(newUserPics.get(j-1));
                                             }
-                                        }*/
-                                    userPics.add(ib);
+                                        }
+                                    //userPics.add(ib);
                                     try {
-                                       /* ArrayList<String> newPicId = pic_ids;
+                                        //上传图片，最新的图片置首位显示处理
+                                        ArrayList<String> newPicId = new ArrayList<String>();
+                                        for(int i=0;i <pic_ids.size();i++){
+                                            newPicId.add(pic_ids.get(i));
+                                        }
                                         pic_ids.clear();
                                         for (int j = 0; j <= newPicId.size(); j++) {
                                             if (j == 0) {
@@ -419,8 +428,9 @@ public class CityPictureActivity extends PeachBaseActivity {
                                             } else {
                                                 pic_ids.add(newPicId.get(j - 1));
                                             }
-                                        }*/
-                                        pic_ids.add(response.getString("id"));
+                                        }
+
+                                        //pic_ids.add(response.getString("id"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

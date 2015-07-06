@@ -404,7 +404,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                         }.sendEmptyMessageDelayed(0, 1000);
                     }
                     int cnt=AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
-                    AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt+1);
+                    AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt + 1);
                 } else {
                     iv_location.setVisibility(View.GONE);
                     if (!isFinishing())
@@ -640,13 +640,25 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
-            if (convertView == null) {
+           /* if (convertView == null) {
                 convertView = inflater.inflate(R.layout.tab_strategy, container, false);
             }
             TextView textView = (TextView) convertView;
             textView.setText(tabNames[position]);
            // textView.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[position], 0, 0);
-            return textView;
+            return textView;*/
+
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.tab_select_dest, container, false);
+            }
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
+            textView.setText(tabNames[position]);
+            if(position==0){
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
+            }else if(position==1){
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
+            }
+            return convertView;
         }
 
         @Override

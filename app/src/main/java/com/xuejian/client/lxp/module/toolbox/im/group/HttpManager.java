@@ -369,5 +369,105 @@ public class HttpManager {
             }
         });
     }
+
+    public static void createGroup1(final String name, String groupType, final boolean isPublic, String avatar, final List<Long> participants, final long row, final CreateSuccessListener listener) {
+        final JSONObject obj = new JSONObject();
+        final JSONArray array = new JSONArray();
+        try {
+
+            for (long member : participants) {
+                array.put(member);
+            }
+           // array.put(Long.parseLong(AccountManager.getCurrentUserId()));
+            obj.put("name", name);
+            obj.put("avatar", "");
+            obj.put("desc", "");
+            obj.put("members", array);
+            System.out.println(obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
+//                GroupApi.createGroup(obj.toString(), new HttpCallBack() {
+//                    @Override
+//                    public void doSuccess(Object result, String method) {
+//                        try {
+//                            String r = result.toString();
+//                            if (Config.isDebug) {
+//                                Log.i(Config.TAG, "create group Result : " + result);
+//                            }
+//                            JSONObject object = new JSONObject(r);
+//                            JSONObject jsonObject = object.getJSONObject("result");
+//                            String groupId = jsonObject.getString("groupId");
+//                            String conversation = jsonObject.getString("conversation");
+//                            String groupType = jsonObject.getString("groupType");
+//                            long creator = jsonObject.getLong("creator");
+//                            IMClient.getInstance().addGroup2Conversation(groupId, conversation);
+//                            JSONObject o = new JSONObject();
+//                            o.put("GroupMember", array);
+//                            o.put("groupType", groupType);
+//                            o.put("isPublic", isPublic);
+//                            o.put("creator", creator);
+//                            UserDBManager.getInstance().saveContact(new com.xuejian.client.lxp.db.User(Long.parseLong(groupId), name, o.toString(), 8));
+//                            if (Config.isDebug) {
+//                                Log.i(Config.TAG, "群组更新成功");
+//                            }
+//                            listener.OnSuccess(groupId, conversation);
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method) {
+//                            Log.i("GroupApi", "create group Error : " + msg);
+//                    }
+//                });
+                HttpPost post = new HttpPost("http://api-dev.lvxingpai.com/app/chatgroups");
+               // post.addHeader("Accept","application/vnd.lvxingpai.v1+json");
+                post.addHeader("UserId","100014");
+                HttpResponse httpResponse = null;
+                try {
+                    StringEntity entity = new StringEntity(obj.toString(),
+                            HTTP.UTF_8);
+                    entity.setContentType("application/json");
+                    post.setEntity(entity);
+                    httpResponse = new DefaultHttpClient().execute(post);
+                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
+                    if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                        HttpEntity res = httpResponse.getEntity();
+                        String result = EntityUtils.toString(res);
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "create group Result : " + result);
+                        }
+//                        JSONObject object = new JSONObject(result);
+//                        JSONObject jsonObject = object.getJSONObject("result");
+//                        String groupId = jsonObject.getString("groupId");
+//                        String conversation = jsonObject.getString("conversation");
+//                        String groupType = jsonObject.getString("groupType");
+//                        long creator = jsonObject.getLong("creator");
+//                        IMClient.getInstance().addGroup2Conversation(groupId, conversation);
+//                        JSONObject o = new JSONObject();
+//                        o.put("GroupMember", array);
+//                        o.put("groupType", groupType);
+//                        o.put("isPublic", isPublic);
+//                        o.put("creator", creator);
+//                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
+//                        if (Config.isDebug) {
+//                            Log.i(Config.TAG, "群组更新成功");
+//                        }
+                        listener.OnSuccess("0", null);
+                    }
+                    else listener.OnFailed();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 }
 
