@@ -270,7 +270,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         }
         //单聊
         else if (request == 0) {
-            System.out.println("add ");
             List<Long> list = new ArrayList<>();
             for (User user : toBeAddContacts) {
                 list.add(user.getUserId());

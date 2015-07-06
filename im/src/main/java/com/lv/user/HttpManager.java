@@ -134,13 +134,17 @@ public class HttpManager {
                 post.addHeader("UserId", 100002 + "");
                 HttpResponse httpResponse = null;
                 try {
-                    System.out.println(obj.toString());
+                    if (Config.isDebug) {
+                        System.out.println(obj.toString());
+                    }
                     StringEntity entity = new StringEntity(obj.toString(),
                             HTTP.UTF_8);
                     entity.setContentType("application/json");
                     post.setEntity(entity);
                     httpResponse = new DefaultHttpClient().execute(post);
-                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
+                    if (Config.isDebug) {
+                        System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
+                    }
                     if (httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity res = httpResponse.getEntity();
                         if (Config.isDebug) {
@@ -187,7 +191,9 @@ public class HttpManager {
                 get.addHeader("UserId", 100001 + "");
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
-                    System.out.println("code " + httpResponse.getStatusLine().getStatusCode());
+                    if (Config.isDebug) {
+                        System.out.println("code " + httpResponse.getStatusLine().getStatusCode());
+                    }
                     HttpEntity res = httpResponse.getEntity();
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "User-Group Info : " + EntityUtils.toString(res));

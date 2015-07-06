@@ -71,7 +71,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
             @Override
             public void onTick(long millisUntilFinished) {
 //                downTimeBtn.setText((millisUntilFinished / 1000) + "s");
-                downTimeBtn.setText(String.format("%ds后重试", (millisUntilFinished / 1000)));
+                downTimeBtn.setText(String.format("%ds后重发", (millisUntilFinished / 1000)));
             }
 
             @Override
@@ -98,7 +98,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                 String uid = null;
                 if (user != null) {
-                    uid = user.getUserId() + "";
+                    uid = String.valueOf(user.getUserId());
                 }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE, uid, new HttpCallBack<String>() {
                     @Override

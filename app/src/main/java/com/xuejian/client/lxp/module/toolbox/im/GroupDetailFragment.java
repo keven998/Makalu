@@ -79,9 +79,10 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     //清空所有聊天记录
     private RelativeLayout clearAllHistory;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_group_details,container,false);
+        return inflater.inflate(R.layout.fragment_group_details, container, false);
     }
 
     @Override
@@ -129,8 +130,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
         // 获取传过来的groupid
         groupId = getArguments().getString("groupId");
-        if (groupId!=null){
-            group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+        if (groupId != null) {
+            group = UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
         }
 //        if (group==null){
 //            GroupManager.getGroupManager().getGroupInformation(groupId, new CallBack() {
@@ -145,8 +146,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                }
 //            });
 //        }
-      //  group = EMGroupManager.getInstance().getGroup(groupId);
-      //  options = EMChatManager.getInstance().getChatOptions();
+        //  group = EMGroupManager.getInstance().getGroup(groupId);
+        //  options = EMChatManager.getInstance().getChatOptions();
         bindView();
 
 
@@ -260,7 +261,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 deleteGrop();
             }
         });
-        dialog.setNegativeButton("取消",new View.OnClickListener() {
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -276,8 +277,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     public void clearGroupHistory() {
 
         IMClient.getInstance().cleanMessageHistory(groupId);
-       // EMChatManager.getInstance().clearConversation(group.getGroupId());
-		//adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
+        // EMChatManager.getInstance().clearConversation(group.getGroupId());
+        //adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
 
 
     }
@@ -339,7 +340,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                    });
 
                 } catch (final Exception e) {
-                    if (getActivity()!=null&&!getActivity().isFinishing())
+                    if (getActivity() != null && !getActivity().isFinishing())
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -385,7 +386,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     }
 
 
-
     private void bindView() {
         memberAdapter = new MemberAdapter(new ViewHolderCreator<User>() {
             @Override
@@ -394,7 +394,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             }
         });
 
- //       如果自己是群主，显示解散按钮
+        //       如果自己是群主，显示解散按钮
 //        if (group.getOwner() == null || "".equals(group.getOwner())) {
 ////            exitBtn.setVisibility(View.GONE);
 ////            deleteBtn.setVisibility(View.GONE);
@@ -414,43 +414,43 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                }
 //
 //                delGroupMember.setVisibility(View.VISIBLE);
-                rl_groupName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
-                        intent.putExtra("groupId", groupId);
-                        startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
-                    }
-                });
+        rl_groupName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ModifyGroupNameActivity.class);
+                intent.putExtra("groupId", groupId);
+                startActivityForResult(intent, REQUEST_CODE_MODIFY_GROUP_NAME);
+            }
+        });
 //            } else {
-                getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
-                if (memberGv.getFooterViewsCount() == 0) {
-                    View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
-                    memberGv.addFooterView(view);
-                    Button btn = (Button) view.findViewById(R.id.footer_btn);
-                    btn.setText("退出此群");
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            exitGroupTips();
-                        }
-                    });
+        getView().findViewById(R.id.iv_arr).setVisibility(View.GONE);
+        if (memberGv.getFooterViewsCount() == 0) {
+            View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
+            memberGv.addFooterView(view);
+            Button btn = (Button) view.findViewById(R.id.footer_btn);
+            btn.setText("退出此群");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    exitGroupTips();
                 }
+            });
+        }
 //            }
- //       }
+        //       }
 
         memberGv.setAdapter(memberAdapter);
         setUpGroupMemeber("");
-        if (group!=null&&group.getNickName()!=null)
-        groupNameTv.setText(group.getNickName());
+        if (group != null && group.getNickName() != null)
+            groupNameTv.setText(group.getNickName());
 //        List<String> notReceiveNotifyGroups = options.getReceiveNoNotifyGroup();
 //        if (notReceiveNotifyGroups == null || !notReceiveNotifyGroups.contains(groupId)) {
 //            iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
 //            iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //        } else if (notReceiveNotifyGroups.contains(groupId)) {
-            iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-            iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-       // }
+        iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
+        iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
+        // }
     }
 
    /* public class MemberAdapter2 extends BaseAdapter{
@@ -505,21 +505,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         }
     }*/
 
-    private void setUpGroupMemeber(String type){
-        final List<User> members=UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
-        final List<String> unkownMembers= new ArrayList<String>();
+    private void setUpGroupMemeber(String type) {
+        final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
+        final List<String> unkownMembers = new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        if (members==null||"update".equals(type)){
+        if (members == null || "update".equals(type)) {
             //fetch info
-            System.out.println("fetch info");
             GroupManager.getGroupManager().getGroupMembers(groupId, new CallBack() {
                 @Override
                 public void onSuccess() {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("getGroupMemberSuccess");
-                            List<User>  members=UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
+                            List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
                             memberAdapter.getDataList().clear();
                             for (User user : members) {
                                 memberAdapter.getDataList().add(user);
@@ -534,14 +532,13 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
                 }
             });
-        }
-        else {
+        } else {
             for (User user : members) {
                 memberAdapter.getDataList().add(user);
             }
         }
         memberAdapter.notifyDataSetChanged();
-        if(unkownMembers.size() > 0) {
+        if (unkownMembers.size() > 0) {
 //            UserApi.getContactByHx(unkownMembers, new HttpCallBack<String>() {
 //                @Override
 //                public void doSuccess(String result, String method) {
@@ -588,7 +585,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     protected void updateGroup() {
         //更新本地数据
-        GroupManager.getGroupManager().getGroupInformation(groupId,new CallBack() {
+        GroupManager.getGroupManager().getGroupInformation(groupId, new CallBack() {
             @Override
             public void onSuccess() {
                 getActivity().runOnUiThread(new Runnable() {
@@ -621,7 +618,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                         iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
 //                    EMChatManager.getInstance().setChatOptions(options);
-                      //  PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        //  PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -633,7 +630,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                          */
                         iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
                         iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-                       // PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
+                        // PreferenceUtils.cacheData(getActivity(), String.format("%s_not_notify", AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()), GsonTools.createGsonString(notReceiveNotifyGroups));
                     } catch (Exception e) {
                         e.printStackTrace();
                         //todo: 显示错误给用户
@@ -641,7 +638,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 }
                 break;
 
-            default:break;
+            default:
+                break;
         }
 
     }
@@ -664,7 +662,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private class MemberViewHolder extends ViewHolderBase<User> {
         private View contentView;
         private ImageView avatarIv, removeIv;
-        private TextView nicknameTv,viewHolderName;
+        private TextView nicknameTv, viewHolderName;
         private DisplayImageOptions picOptions;
 
         public MemberViewHolder() {
@@ -761,7 +759,6 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                 });
 
 
-
                 if (isInDeleteMode) {
                     removeIv.setVisibility(View.VISIBLE);
                     /**
@@ -843,8 +840,10 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
             }
         }
+
         /**
          * 删除群成员
+         *
          * @param imUser
          */
         protected void deleteMembersFromGroup(final User imUser) {

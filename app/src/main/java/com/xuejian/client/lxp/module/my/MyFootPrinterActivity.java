@@ -155,7 +155,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
 //                        }
 //                    }
 //                } else System.out.println("unCaught ============");
-                ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("修改成功");
+//                ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("修改成功");
             }
 
             @Override

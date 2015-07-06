@@ -33,7 +33,8 @@ public class HandleImMessage {
     private Context c;
     private long lastTime;
     private static HashMap<MessageHandler, String> openStateMap = new HashMap<>();
-    public static MyHandler handler=new MyHandler();
+    public static MyHandler handler = new MyHandler();
+
     private HandleImMessage() {
         queue.setDequeueListener(dequeueListener);
     }
@@ -90,11 +91,10 @@ public class HandleImMessage {
         openStateMap.clear();
     }
 
-    public static class MyHandler extends Handler{
+    public static class MyHandler extends Handler {
         @Override
         public void handleMessage(android.os.Message message) {
             super.handleMessage(message);
-            System.out.println("new Message");
             switch (message.what) {
                 case Config.CMD_MSG:
                     Message newCMDMessage = (Message) message.obj;
@@ -104,7 +104,9 @@ public class HandleImMessage {
                     break;
                 case Config.TEXT_MSG:
                     Message newMessage = (Message) message.obj;
-                    System.out.println(ehList.size() + "  handlerMessage " + newMessage.getContents());
+                    if (Config.isDebug) {
+                        System.out.println(ehList.size() + "  handlerMessage " + newMessage.getContents());
+                    }
                     for (MessageHandler handler : ehList) {
                         handler.onMsgArrive(Msg2Bean(newMessage), String.valueOf(newMessage.getGroupId()));
                     }
@@ -175,8 +177,9 @@ public class HandleImMessage {
                     handler.sendMessage(cmd_msg);
                     return;
                 }
-                System.out.println("ehList size: " + ehList.size());
-
+                if (Config.isDebug) {
+                    System.out.println("ehList size: " + ehList.size());
+                }
                 //  for (MessageHandler handler : ehList) {
                 if (ehList.size() > 0) {
                     if (openStateMap.containsKey(ehList.get(0))) {

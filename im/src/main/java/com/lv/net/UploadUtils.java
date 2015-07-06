@@ -115,7 +115,9 @@ public class UploadUtils {
     }
 
     public void upload(final String filePath, final String sender, final String receive, final int msgType, final long localId, final UploadListener listener,String chatType,final double lat,final double lng,final String desc) {
-        System.out.println("localId "+localId+" filePath:" + filePath);
+        if (Config.isDebug) {
+            System.out.println("localId " + localId + " filePath:" + filePath);
+        }
         if (Config.isDebug)Log.i(Config.TAG,"开始上传 ");
         HttpUtils.getToken(msgType,new HttpUtils.tokenGet() {
             @Override
@@ -138,7 +140,9 @@ public class UploadUtils {
                 }
                 uploadManager.put(filePath, key, token, new UpCompletionHandler() {
                     public void complete(String key, ResponseInfo info, JSONObject response) {
-                        System.out.println("debug:info = " + info + ",response = " + response);
+                        if (Config.isDebug) {
+                            System.out.println("debug:info = " + info + ",response = " + response);
+                        }
                         if (info != null && info.statusCode == 200) {// 上传成功
                             String conversation = null;
                             try {

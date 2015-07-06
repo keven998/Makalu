@@ -52,7 +52,6 @@ public class HttpManager {
             obj.put("isPublic", isPublic);
             obj.put("avatar", avatar);
             obj.put("participants", array);
-            System.out.println(obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,7 +94,7 @@ public class HttpManager {
 //                    }
 //                });
                 HttpPost post = new HttpPost(Config.HOST + "/groups");
-                post.addHeader("UserId",AccountManager.getCurrentUserId());
+                post.addHeader("UserId", AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
                 try {
                     StringEntity entity = new StringEntity(obj.toString(),
@@ -103,7 +102,6 @@ public class HttpManager {
                     entity.setContentType("application/json");
                     post.setEntity(entity);
                     httpResponse = new DefaultHttpClient().execute(post);
-                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
                     if (httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity res = httpResponse.getEntity();
                         String result = EntityUtils.toString(res);
@@ -132,7 +130,7 @@ public class HttpManager {
                     e.printStackTrace();
                 }
             }
-         });
+        });
     }
 
     public static void addMembers(String groupId, List<Long> members, boolean isPublic, CallBack callBack) {
@@ -191,13 +189,11 @@ public class HttpManager {
                 post.addHeader("UserId", AccountManager.getCurrentUserId());
                 HttpResponse httpResponse = null;
                 try {
-                    System.out.println(obj.toString());
                     StringEntity entity = new StringEntity(obj.toString(),
                             HTTP.UTF_8);
                     entity.setContentType("application/json");
                     post.setEntity(entity);
                     httpResponse = new DefaultHttpClient().execute(post);
-                    System.out.println("create status code:" + httpResponse.getStatusLine().getStatusCode());
                     if (httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity res = httpResponse.getEntity();
                         String result = EntityUtils.toString(res);
@@ -216,8 +212,8 @@ public class HttpManager {
         });
     }
 
-    public static void editGroup(final String groupId,final String groupName ,final CallBack callBack) {
-       final String url = Config.GET_GROUP + groupId;
+    public static void editGroup(final String groupId, final String groupName, final CallBack callBack) {
+        final String url = Config.GET_GROUP + groupId;
         exec.execute(new Runnable() {
             @Override
             public void run() {
@@ -235,14 +231,12 @@ public class HttpManager {
                     HttpEntity res = httpResponse.getEntity();
                     int code = httpResponse.getStatusLine().getStatusCode();
                     String result = EntityUtils.toString(res);
-                    System.out.println(code + " " + result);
                     if (code == 200) {
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "edit group : " + result);
                         }
                         callBack.onSuccess();
-                    }
-                    else callBack.onFailed();
+                    } else callBack.onFailed();
                 } catch (Exception e) {
                     e.printStackTrace();
                     callBack.onFailed();
@@ -327,7 +321,7 @@ public class HttpManager {
     }
 
     public static void getUserGroupInfo(String userId) {
-        final String url = Config.HOST + "/users/"+ AccountManager.getCurrentUserId()+"/groups";
+        final String url = Config.HOST + "/users/" + AccountManager.getCurrentUserId() + "/groups";
         exec.execute(new Runnable() {
             @Override
             public void run() {
@@ -335,7 +329,6 @@ public class HttpManager {
                 get.addHeader("UserId", AccountManager.getCurrentUserId());
                 try {
                     HttpResponse httpResponse = new DefaultHttpClient().execute(get);
-                    System.out.println("code " + httpResponse.getStatusLine().getStatusCode());
                     HttpEntity res = httpResponse.getEntity();
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "User-Group Info : " + EntityUtils.toString(res));
@@ -356,7 +349,7 @@ public class HttpManager {
                 RequestParams params = new RequestParams();
                 params.put(tag, value);
                 // params.add("UserId",100001+"");
-                client.addHeader("UserId",  AccountManager.getCurrentUserId());
+                client.addHeader("UserId", AccountManager.getCurrentUserId());
                 client.get(url, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int i, Header[] headers, String s, Throwable throwable) {

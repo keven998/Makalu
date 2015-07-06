@@ -89,7 +89,9 @@ public class MessageDB {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
         }
-        System.out.println("开启数量" + mOpenCounter.get());
+        if (Config.isDebug) {
+            System.out.println("开启数量" + mOpenCounter.get());
+        }
         return db;
     }
 
@@ -98,7 +100,9 @@ public class MessageDB {
             db.close();
         }
         mdb = null;
-        System.out.println("关闭数量" + mOpenCounter.get());
+        if (Config.isDebug) {
+            System.out.println("关闭数量" + mOpenCounter.get());
+        }
     }
 
     public void init() {
@@ -137,7 +141,9 @@ public class MessageDB {
         mdb = getDB();
         String table_name = null;
         String chater = null;
-        System.out.println("Friend_Id " + Friend_Id + " conversation " + conversation);
+        if (Config.isDebug) {
+            System.out.println("Friend_Id " + Friend_Id + " conversation " + conversation);
+        }
         /**
          * CMD消息
          */

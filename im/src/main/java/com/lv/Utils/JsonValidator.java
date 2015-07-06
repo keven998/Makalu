@@ -205,11 +205,15 @@ public class JsonValidator {
         }
 
         private boolean error(String type, int col) {
-            System.out.printf("type: %s, col: %s%s", type, col, System.getProperty("line.separator"));
+            if (Config.isDebug) {
+                System.out.printf("type: %s, col: %s%s", type, col, System.getProperty("line.separator"));
+            }
             return false;
         }
         public static void main(String[] args){
             String jsonStr = "{\"website\":\"oschina.net\"}";
-            System.out.println(jsonStr+":"+new JsonValidator().validate(jsonStr));
+            if (Config.isDebug) {
+                System.out.println(jsonStr + ":" + new JsonValidator().validate(jsonStr));
+            }
         }
     }
