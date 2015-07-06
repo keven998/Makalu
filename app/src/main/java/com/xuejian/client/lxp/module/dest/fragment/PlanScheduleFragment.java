@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.dest.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.xuejian.client.lxp.module.dest.DayAgendaActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -111,9 +113,10 @@ public class PlanScheduleFragment extends Fragment {
             }
             List<PoiDetailBean> poiList = routeDayMap.get(position);
             holder.tv_day_index.setText(String.valueOf(position+1));
-           // holder.tv_schedule_title.setText(routeDayMap.s);
             int count = poiList.size();
             String desc ="";
+            String descTitle = "";
+            HashSet<String> set = new HashSet<String>();
             PoiDetailBean pdb;
             for (int i = 0; i < count; ++i) {
                 pdb = poiList.get(i);
@@ -122,11 +125,23 @@ public class PlanScheduleFragment extends Fragment {
                 } else {
                     desc = String.format("%s → %s", desc, pdb.zhName);
                 }
+                if(pdb.locality!=null){
+                    set.add(pdb.locality.zhName);
+                }
+            }
+            for(String desName: set){
+                if(descTitle.equals("")){
+                    descTitle = desName;
+                }else {
+                    descTitle = String.format("%s > %s", descTitle, desName);
+                }
             }
             holder.summaryTextView.setText(desc);
+            holder.tv_schedule_title.setText(descTitle);
             return convertView;
         }
     }
+
 
     private class ViewHolder {
         public TextView summaryTextView;
