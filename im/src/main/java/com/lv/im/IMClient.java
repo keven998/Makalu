@@ -116,7 +116,9 @@ public class IMClient {
 
     public void add2ackList(String id) {
         acklist.put(id);
-        System.out.println("ack list size:" + acklist.length());
+        if (Config.isDebug) {
+            System.out.println("ack list size:" + acklist.length());
+        }
         if (!isRunning) {
             ack(countFrequency.getFrequency() * 5);
         }
@@ -243,12 +245,10 @@ public class IMClient {
 
     public void updateReadStatus(String conversation) {
         db.updateReadStatus(conversation, 0);
-        System.out.println("updateReadStatus");
     }
 
     public void increaseUnRead(String conversation) {
         db.updateReadStatus(conversation, 1);
-        System.out.println("increaseUnRead");
     }
 
     public List<MessageBean> getMessages(String friendId, int page) {
@@ -290,7 +290,9 @@ public class IMClient {
     public void sendTextMessage(MessageBean message, String friendId, String conversation, SendMsgListener listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
-        System.out.println("message.getSenderId()  ====" + message.getSenderId());
+        if (Config.isDebug) {
+            System.out.println("message.getSenderId()  ====" + message.getSenderId());
+        }
         HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
@@ -354,7 +356,9 @@ public class IMClient {
         }
         SendMessageBean message = new SendMessageBean(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
         MessageBean messageBean = imessage2Bean(message);
-        System.out.println("message " + messageBean.getMessage());
+        if (Config.isDebug) {
+            System.out.println("message " + messageBean.getMessage());
+        }
         long localId = db.saveMsg(friendId, messageBean, chatTpe);
         MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
         m.setLocalId((int) localId);

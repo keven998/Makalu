@@ -53,8 +53,8 @@ import java.util.Map;
 
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
-    public final static int CODE_IM_LOGIN = 101;
-    public static final int NEW_CHAT_REQUEST_CODE = 102;
+//    public final static int CODE_IM_LOGIN = 101;
+//    public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
     public boolean isConflict = false;
     //定义FragmentTabHost对象
@@ -71,10 +71,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private TextView unreadMsg;
 
-    //    private Long NEWFRIEND = 2l;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
-    //    private MyGroupChangeListener groupChangeListener;
     private boolean FromBounce;
     private Vibrator vibrator;
 
@@ -171,7 +169,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         myUser.setType(1);
                         userlist.put(myUser.getUserId(), myUser);
                     }
-                    System.out.println("contacts size " + userlist.size());
                     // 存入db
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);

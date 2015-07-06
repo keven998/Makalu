@@ -39,20 +39,20 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
-                if(TextUtils.isEmpty(groupNameEt.getText())){
+                if (TextUtils.isEmpty(groupNameEt.getText())) {
                     ToastUtil.getInstance(mContext).showToast("请输入群名称");
                     return;
                 }
-                GroupManager.getGroupManager().editGroupName(groupId,groupNameEt.getText().toString().trim(), new CallBack() {
+                GroupManager.getGroupManager().editGroupName(groupId, groupNameEt.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess() {
-                        Intent result=new Intent();
-                        result.putExtra("groupName",groupNameEt.getText().toString().trim());
-                        setResult(RESULT_OK,result);
+                        Intent result = new Intent();
+                        result.putExtra("groupName", groupNameEt.getText().toString().trim());
+                        setResult(RESULT_OK, result);
                         finish();
                     }
 
@@ -78,7 +78,6 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
 
     private void initData() {
         groupId = getIntent().getStringExtra("groupId");
-        System.out.println("groupId "+groupId);
         group = UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
         groupNameEt.setText(group.getNickName());
         CharSequence text = groupNameEt.getText();

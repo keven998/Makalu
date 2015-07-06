@@ -61,8 +61,6 @@ public class PlanScheduleFragment extends Fragment {
 
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary,StrategyBean str) {
         StrategyBean strategyBean = getStrategy();
-                System.out.println("strategyBean.summary "+str.summary+" strategyBean.dayCnt "+str.dayCnt+" strategyBean.itineraryDays " +
-                        ""+str.itineraryDays);
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());

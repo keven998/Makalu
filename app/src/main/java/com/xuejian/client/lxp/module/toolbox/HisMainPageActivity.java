@@ -165,8 +165,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            error.printStackTrace();
-                            System.out.println(msg+method);
+//                            error.printStackTrace();
                             DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }

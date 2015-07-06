@@ -20,6 +20,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -397,13 +398,15 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
                 byte[] buffer = new byte[1024];
                 while ((byteread = inStream.read(buffer)) != -1) {
                     bytesum += byteread; //字节数 文件大小
-                    System.out.println(bytesum);
+                    if (Config.isDebug) {
+                        System.out.println(bytesum);
+                    }
                     fs.write(buffer, 0, byteread);
                 }
                 inStream.close();
             }
         } catch (Exception e) {
-            System.out.println("复制单个文件操作出错");
+            Log.e("lxp", "复制单个文件操作出错");
             e.printStackTrace();
         }
     }

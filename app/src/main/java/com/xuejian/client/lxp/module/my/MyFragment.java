@@ -305,12 +305,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
     public void getUserPicsNum(Long userId) {
-        System.out.print("yunxing==================");
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
-                System.out.print("yunxing+++++++++++++++++");
                 try {
                     jsonObject = new JSONObject(result);
                     if (jsonObject.getInt("code") == 0) {

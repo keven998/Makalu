@@ -95,7 +95,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int MESSAGE_TYPE_RECV_IMAGE = 5;
     private static final int MESSAGE_TYPE_SENT_VOICE = 6;
     private static final int MESSAGE_TYPE_RECV_VOICE = 7;
-//    private static final int MESSAGE_TYPE_SENT_VIDEO = 8;
+    //    private static final int MESSAGE_TYPE_SENT_VIDEO = 8;
 //    private static final int MESSAGE_TYPE_RECV_VIDEO = 9;
 //    private static final int MESSAGE_TYPE_SENT_FILE = 10;
 //    private static final int MESSAGE_TYPE_RECV_FILE = 11;
@@ -108,7 +108,7 @@ public class MessageAdapter extends BaseAdapter {
 //    private static final int MESSAGE_TYPE_RECV_UNKOWN = 18;
 
     public static final String IMAGE_DIR = "chat/image/";
-//    public static final String VOICE_DIR = "chat/audio/";
+    //    public static final String VOICE_DIR = "chat/audio/";
 //    public static final String VIDEO_DIR = "chat/video";
     private static final int TEXT_MSG = 0;
     private static final int VOICE_MSG = 1;
@@ -137,8 +137,9 @@ public class MessageAdapter extends BaseAdapter {
     private Context context;
     private String chatType;
     private String conversation;
-    private HashMap<Long,Timer> timers=new HashMap<>();
+    private HashMap<Long, Timer> timers = new HashMap<>();
     String progress1;
+
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -523,7 +524,7 @@ public class MessageAdapter extends BaseAdapter {
                         case IMAGE_MSG:
                         case LOC_MSG:
                         case VIDEO_MSG:
-                        //添加扩展类型的跳转
+                            //添加扩展类型的跳转
                         case PLAN_MSG:
                         case CITY_MSG:
                         case TRAVEL_MSG:
@@ -531,7 +532,7 @@ public class MessageAdapter extends BaseAdapter {
                         case FOOD_MSG:
                         case SHOP_MSG:
                         case HOTEL_MSG:
-                            ((ChatActivity)activity).resendMessage(position);
+                            ((ChatActivity) activity).resendMessage(position);
                             break;
                     }
                 }
@@ -865,9 +866,9 @@ public class MessageAdapter extends BaseAdapter {
 
                 // set a timer
                 //    if (message.getStatus()==1) sendPictureMessage(message, holder);
-                if (timers.containsKey(message.getLocalId())){
-                    if (Config.isDebug){
-                        Log.i(Config.TAG,"already exist time Task");
+                if (timers.containsKey(message.getLocalId())) {
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "already exist time Task");
                     }
                     return;
                 }
@@ -882,14 +883,13 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.VISIBLE);
                                 holder.tv.setVisibility(View.VISIBLE);
-                                int progress=IMClient.getInstance().getProgress(friendId + message.getLocalId());
-                                holder.tv.setText(progress+"%");
-                                if (progress==100){
+                                int progress = IMClient.getInstance().getProgress(friendId + message.getLocalId());
+                                holder.tv.setText(progress + "%");
+                                if (progress == 100) {
                                     holder.pb.setVisibility(View.GONE);
                                     holder.tv.setVisibility(View.GONE);
                                     timer.cancel();
-                                }
-                                else if (message.getStatus() == 0) {
+                                } else if (message.getStatus() == 0) {
                                     holder.pb.setVisibility(View.GONE);
                                     holder.tv.setVisibility(View.GONE);
                                     timer.cancel();
@@ -1134,23 +1134,21 @@ public class MessageAdapter extends BaseAdapter {
             }
             if (message.getStatus() == 1) {
                 holder.pb.setVisibility(View.VISIBLE);
-                System.out.println("后台下载");
-                System.out.println(message.getMessage());
-                String url =null;
+                String url = null;
                 try {
-                   url = new JSONObject(message.getMessage()).get("url").toString();
+                    url = new JSONObject(message.getMessage()).get("url").toString();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (url==null||"".equals(url)){
+                if (url == null || "".equals(url)) {
                     holder.pb.setVisibility(View.INVISIBLE);
                     return;
                 }
-                String filename=Config.DownLoadAudio_path +CryptUtils.getMD5String(AccountManager.getCurrentUserId())+"/"+CryptUtils.getMD5String(url)+ ".amr";
-                new DownloadVoice(url,filename).download(new DownloadVoice.DownloadListener() {
+                String filename = Config.DownLoadAudio_path + CryptUtils.getMD5String(AccountManager.getCurrentUserId()) + "/" + CryptUtils.getMD5String(url) + ".amr";
+                new DownloadVoice(url, filename).download(new DownloadVoice.DownloadListener() {
                     @Override
                     public void onSuccess() {
-                        IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,0,null,Config.AUDIO_MSG);
+                        IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 0, null, Config.AUDIO_MSG);
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1166,7 +1164,7 @@ public class MessageAdapter extends BaseAdapter {
 
                     @Override
                     public void onFail() {
-                        IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,2,null,Config.AUDIO_MSG);
+                        IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 2, null, Config.AUDIO_MSG);
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1349,21 +1347,21 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 处理位置消息
-     *
      */
     private void handleLocationMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
         double lat = getDoubleAttr(message, "lat");
         double lng = getDoubleAttr(message, "lng");
         String desc = getStringAttr(message, "address");
-        String path=  getStringAttr(message,"path");
-        String remote=getStringAttr(message,"snapshot");
+        String path = getStringAttr(message, "path");
+        String remote = getStringAttr(message, "snapshot");
         locationView.setText(desc);
 
         Bitmap bitmap = ImageCache.getInstance().get(path);
-        if (bitmap!=null){
+        if (bitmap != null) {
             locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
-        } else new LoadImageTask().execute(path, null, remote, chatType, null, activity, message,locationView);
+        } else
+            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, locationView);
 
 
         locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
@@ -1393,7 +1391,7 @@ public class MessageAdapter extends BaseAdapter {
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
-                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(), message, getStringAttr(message,"path") ,friendId, new UploadListener() {
+                IMClient.getInstance().sendLocationMessage(AccountManager.getCurrentUserId(), message, getStringAttr(message, "path"), friendId, new UploadListener() {
                     @Override
                     public void onSucess(String fileUrl) {
                         message.setStatus(0);
@@ -1424,7 +1422,7 @@ public class MessageAdapter extends BaseAdapter {
                     public void onProgress(int progress) {
 
                     }
-                }, chatType,lat,lng,desc);
+                }, chatType, lat, lng, desc);
                 break;
             default:
                 break;
@@ -1434,7 +1432,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 发送消息
-     *
      */
     public void sendMsgInBackground(final MessageBean message, final ViewHolder holder) {
         holder.staus_iv.setVisibility(View.GONE);
@@ -1465,7 +1462,7 @@ public class MessageAdapter extends BaseAdapter {
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
             public void onSuccess() {
-                IMClient.getInstance().updateMessage(friendId,message.getLocalId(),null,null,0,0,null,Config.IMAGE_MSG);
+                IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 0, null, Config.IMAGE_MSG);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1509,9 +1506,9 @@ public class MessageAdapter extends BaseAdapter {
             // before send, update ui
             holder.staus_iv.setVisibility(View.GONE);
             holder.pb.setVisibility(View.VISIBLE);
-           // holder.tv.setVisibility(View.INVISIBLE);
+            // holder.tv.setVisibility(View.INVISIBLE);
             holder.tv.setVisibility(View.VISIBLE);
-           // holder.tv.setText("0%");
+            // holder.tv.setText("0%");
             // if (chatType == ChatActivity.CHATTYPE_SINGLE) {
             IMClient.getInstance().sendImageMessage(AccountManager.getCurrentUserId(), message, friendId, new UploadListener() {
                 @Override
@@ -1619,7 +1616,6 @@ public class MessageAdapter extends BaseAdapter {
         String remote = remoteDir;
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
         if (bitmap != null) {
-            System.out.println("thumbnail image is already loaded, reuse the drawable");
             iv.setImageBitmap(bitmap);
             iv.setClickable(true);
             iv.setOnClickListener(new OnClickListener() {
@@ -1640,7 +1636,7 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message,null);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message, null);
             return true;
         }
 

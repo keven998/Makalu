@@ -81,7 +81,9 @@ public class UserDao {
                 + " (_Id INTEGER PRIMARY KEY AUTOINCREMENT ,User_Id INTEGER ,NickName TEXT, Avatar TEXT, AvatarSmall TEXT," +
                 " ShortPY TEXT, FullPY TEXT, Singature TEXT,Memo TEXT,Sex INTEGER  ,Type INTEGER,conversation TEXT,ext TEXT)");
         //db.execSQL("create index if not exists index_User_Id on " + User_table_name + "(User_Id)");
-        System.out.println("user_table_name:" + User_table_name);
+        if (Config.isDebug) {
+            System.out.println("user_table_name:" + User_table_name);
+        }
         JSONObject object = new JSONObject();
         try {
             //object.put("participants",participants.toString());

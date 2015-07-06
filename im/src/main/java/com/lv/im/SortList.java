@@ -9,7 +9,8 @@ import com.lv.bean.Message;
  * Created by q on 2015/4/25.
  */
 public class SortList {
-  private int size=0;
+    private int size = 0;
+
     private class Data {
         public int value;
         public Message msg;
@@ -17,7 +18,7 @@ public class SortList {
 
         Data(Message messageBean) {
             this.value = messageBean.getMsgId();
-            this.msg=messageBean;
+            this.msg = messageBean;
         }
     }
 
@@ -27,21 +28,19 @@ public class SortList {
         Data data = new Data(obj);
         size++;
         Data pre = null;
-        if (first==null){
-            first=data;
+        if (first == null) {
+            first = data;
             return;
         }
 
         Data cur = first;
-        while (cur!=null) {
-            if (data.value==cur.value)return;
+        while (cur != null) {
+            if (data.value == cur.value) return;
 
-            if(data.value>cur.value)
-            {
+            if (data.value > cur.value) {
                 pre = cur;
-                cur = cur.next;}
-
-            else break;
+                cur = cur.next;
+            } else break;
         }
         if (pre == null)
             first = data;
@@ -50,9 +49,9 @@ public class SortList {
         data.next = cur;
     }
 
-    public synchronized Message deleteFirst(){
+    public synchronized Message deleteFirst() {
         if (first == null) {
-            if (Config.isDebug) Log.i(Config.TAG,"first null");
+            if (Config.isDebug) Log.i(Config.TAG, "first null");
             size--;
             return null;
         }
@@ -73,7 +72,8 @@ public class SortList {
         }
         System.out.print("\n");
     }
-public int size(){
-    return size;
-}
+
+    public int size() {
+        return size;
+    }
 }

@@ -386,7 +386,6 @@ public class UserDBManager {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
         if (cursor.getCount()==0)return;
-        System.out.println("updateGroupInfo");
         cursor.moveToLast();
         String ext=cursor.getString(0);
         cursor.close();
@@ -398,7 +397,6 @@ public class UserDBManager {
                 String key=it.next().toString();
                 o1.put(key,o2.get(key));
             }
-            System.out.println(groupId+" "+o1.toString());
             user.setExt(o1.toString());
             user.setUserId(Long.parseLong(groupId));
             saveContact(user);
@@ -409,7 +407,6 @@ public class UserDBManager {
         closeDB();
     }
     public synchronized void updateGroupMemberInfo(List<User> list,String groupId){
-        System.out.println("updateGroupMemberInfo");
         JSONArray array=new JSONArray();
         for (User user:list){
             array.put(user.getUserId());

@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.module.MainActivity;
 
-public class IMMainActivity extends ChatBaseActivity  {
+public class IMMainActivity extends ChatBaseActivity {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
 
     protected static final String TAG = "MainActivity";
@@ -72,8 +72,7 @@ public class IMMainActivity extends ChatBaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_main);
         initView();
-        System.out.println("IMMainActivity");
-ToastUtil.getInstance(this).showToast("IMMainActivity");
+//        ToastUtil.getInstance(this).showToast("IMMainActivity");
         //这个fragment只显示好友和群组的聊天记录
 //		chatHistoryFragment = new ChatHistoryFragment();
         //显示所有人消息记录的fragment
@@ -95,7 +94,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
             }
         });
 
-        indicatorViewPager.setCurrentItem(currentTabIndex,false);
+        indicatorViewPager.setCurrentItem(currentTabIndex, false);
 
 //        EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
 //            @Override
@@ -185,7 +184,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(mContext,"event_create_new_talk");
+                MobclickAgent.onEvent(mContext, "event_create_new_talk");
                 startActivityForResult(new Intent(IMMainActivity.this, PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                 dialog.dismiss();
             }
@@ -195,7 +194,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(mContext,"event_add_new_friend");
+                MobclickAgent.onEvent(mContext, "event_add_new_friend");
                 startActivity(new Intent(IMMainActivity.this, AddContactActivity.class));
                 dialog.dismiss();
             }
@@ -309,7 +308,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     }
 
 
-
     private class IMMainAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
 
         public IMMainAdapter(FragmentManager fragmentManager) {
@@ -360,7 +358,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         int count = getUnreadMsgCountTotal();
         if (count > 0) {
             unreadLabel.setVisibility(View.VISIBLE);
-            unreadLabel.setText(count+"");
+            unreadLabel.setText(count + "");
         } else {
             unreadLabel.setVisibility(View.GONE);
         }
@@ -374,7 +372,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-					unreadAddressLable.setText(String.valueOf(count));
+                    unreadAddressLable.setText(String.valueOf(count));
                     unreadAddressLable.setVisibility(View.VISIBLE);
                 } else {
                     unreadAddressLable.setVisibility(View.GONE);
@@ -413,7 +411,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
     }
 
 
-
 //	private BroadcastReceiver offlineMessageReceiver = new BroadcastReceiver() {
 //
 //		@Override
@@ -439,7 +436,7 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
      * 保存提示新消息
      *
      */
-    private void notifyNewIviteMessage( ) {
+    private void notifyNewIviteMessage() {
 
         // 刷新bottom bar消息未读数
         updateUnreadAddressLable();
@@ -447,7 +444,6 @@ ToastUtil.getInstance(this).showToast("IMMainActivity");
         if (currentTabIndex == 1)
             contactListFragment.refresh();
     }
-
 
 
     @Override

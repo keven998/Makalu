@@ -107,12 +107,10 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         };
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");
-        System.out.println("storyImageUrl " + storyImageUrl);
         ImageLoader.getInstance().displayImage(storyImageUrl, splashIv, picOptions);
         OtherApi.getCoverStory(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                System.out.println("getCoverStory " + result);
                 CommonJson<CoverStoryBean> storyResult = CommonJson.fromJson(result, CoverStoryBean.class);
                 if (storyResult.code == 0) {
                     if (!storyResult.result.image.equals(storyImageUrl)) {

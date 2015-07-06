@@ -639,7 +639,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
             mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
-            System.out.println(itemData.status);
             if (itemData.status.equals("traveled")) {
                 rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
                 mCheckStatus.setVisibility(View.VISIBLE);

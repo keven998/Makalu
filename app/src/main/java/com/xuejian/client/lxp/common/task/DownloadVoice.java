@@ -14,16 +14,21 @@ import java.net.URL;
 public class DownloadVoice {
     private String url;
     private String filename;
-    public DownloadVoice(String url,String fileName){
-        this.url=url;
-        this.filename=fileName;
+
+    public DownloadVoice(String url, String fileName) {
+        this.url = url;
+        this.filename = fileName;
     }
-    public interface DownloadListener{
+
+    public interface DownloadListener {
         void onSuccess();
+
         void onProgress(int progress);
+
         void onFail();
     }
-    public void download(final DownloadListener listener){
+
+    public void download(final DownloadListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -32,16 +37,14 @@ public class DownloadVoice {
                     HttpURLConnection conn = (HttpURLConnection) myURL.openConnection();
                     conn.setConnectTimeout(5000);
                     conn.connect();
-                    System.out.println("开始下载 "+conn.getResponseCode());
                     InputStream is = conn.getInputStream();
                     int fileSize = conn.getContentLength();//根据响应获取文件大小
 
                     if (fileSize <= 0) throw new RuntimeException("无法获知文件大小 ");
                     if (is == null) throw new RuntimeException("stream is null");
-                    System.out.println(filename);
-                    String path=filename.substring(0, filename.lastIndexOf("/"));
-                    File file=new File(path);
-                    if (!file.exists())file.mkdirs();
+                    String path = filename.substring(0, filename.lastIndexOf("/"));
+                    File file = new File(path);
+                    if (!file.exists()) file.mkdirs();
                     FileOutputStream fos = new FileOutputStream(filename);
                     //把数据存入路径+文件名
                     byte buf[] = new byte[1024];
