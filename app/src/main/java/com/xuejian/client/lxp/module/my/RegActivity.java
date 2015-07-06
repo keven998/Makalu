@@ -65,19 +65,20 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         super.onPause();
 //        MobclickAgent.onPageEnd("page_register");
     }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_reg:
-                if(!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())){
+                if (!RegexUtils.isMobileNO(phoneEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if(!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())){
+                if (!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-12位密码");
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
@@ -122,7 +123,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHECH_VALICATION){
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHECH_VALICATION) {
             setResult(RESULT_OK, data);
             finishWithNoAnim();
         }

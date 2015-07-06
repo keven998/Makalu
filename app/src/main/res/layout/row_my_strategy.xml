@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/app_backgroud"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/rl_plan"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/rl_plan"
         android:background="@drawable/selector_plan_item">
 
         <TextView
@@ -20,7 +18,6 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:gravity="right"
-            android:textStyle="bold"
             android:textColor="@color/base_color_white"
             android:textSize="21sp" />
 
@@ -29,13 +26,11 @@
             android:layout_width="@dimen/my_plan_title_width"
             android:layout_height="wrap_content"
             android:layout_below="@id/tian"
-            android:ellipsize="end"
-            android:layout_marginTop="3dp"
             android:layout_marginLeft="15dp"
+            android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/base_color_white"
-            android:textSize="9sp"
-            />
+            android:textSize="11sp" />
 
         <TextView
             android:id="@+id/day_tv"
@@ -44,23 +39,21 @@
             android:layout_marginTop="15dp"
             android:layout_toRightOf="@id/tian"
             android:gravity="right"
-            android:text="天"
             android:singleLine="true"
+            android:text="天"
             android:textColor="@color/base_color_white"
-            android:textSize="21sp"
-            />
+            android:textSize="21sp" />
 
 
         <TextView
             android:id="@+id/citys_tv"
-            android:layout_width="@dimen/my_plan_title_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tian"
+            android:layout_below="@id/name_tv"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
             android:ellipsize="end"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp"
             android:singleLine="true"
             android:textColor="@color/base_color_white"
             android:textSize="15sp" />
@@ -74,62 +67,71 @@
             android:gravity="center"
             android:singleLine="true"
             android:textColor="@color/base_color_white"
-            android:textSize="9sp" />
+            android:textSize="10sp" />
 
         <RelativeLayout
             android:id="@+id/rl_action"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/plan_10_dashboard_share"
-                android:padding="5dp"
-                android:scaleType="centerCrop" />
-
-            <ImageView
-                android:id="@+id/iv_modify_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@id/iv_delete"
-                android:background="@drawable/plan_10_dashboard_copy"
-                android:scaleType="centerCrop" />
+            android:layout_alignParentRight="true">
 
             <ImageView
                 android:id="@+id/iv_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/iv_modify_name"
-                android:background="@drawable/plan_10_dashboard_edit"
-                android:scaleType="centerCrop" />
+                android:layout_alignParentRight="true"
+                android:paddingBottom="24dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plan_10_dashboard_share" />
+
+            <ImageView
+                android:id="@+id/iv_modify_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/iv_check"
+                android:paddingBottom="24dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plan_10_dashboard_copy" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/iv_modify_name"
+                android:paddingBottom="24dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="6dp"
+                android:paddingTop="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plan_10_dashboard_edit" />
         </RelativeLayout>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_below="@id/rl_action"
-            android:background="@drawable/plan_bg_page_spot_zhedang"
-            android:scaleType="centerCrop" />
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/plan_bg_page_spot_zhedang" />
+
         <ImageView
             android:id="@+id/iv_check_status"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/rl_action"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/plan_bg_page_qian"
-            android:visibility="gone"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/plan_bg_page_dao"
+            android:visibility="gone" />
     </RelativeLayout>
 
 
-</LinearLayout>
+</FrameLayout>

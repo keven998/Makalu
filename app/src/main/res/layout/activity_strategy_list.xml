@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/my_strategy_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
+        android:layout_marginTop="@dimen/content_top_margin"
         android:background="@color/app_backgroud"
-        android:overScrollMode="never"
+        android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
-        android:layout_marginTop="@dimen/content_top_margin"/>
+        android:overScrollMode="never" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -27,47 +27,43 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back_theme"
             android:minWidth="60dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="20dp"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+            android:paddingLeft="12dp" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:ellipsize="end"
-            android:textSize="17sp"
-            android:textColor="@color/app_theme_color"/>
-
+            android:textColor="@color/color_text_i"
+            android:textSize="17sp" />
 
         <ImageButton
             android:id="@+id/edit_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/plan_10_dashboard_add"
-            />
-        <Spinner
-            android:id="@+id/type_spinner"
+            android:src="@drawable/plan_10_dashboard_add"
+            android:background="@null"
+            android:scaleType="center"
+            android:paddingRight="13dp"
+            android:paddingLeft="6dp"/>
+
+        <ImageButton
+            android:id="@+id/ivb_content_filter"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/edit_btn"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginRight="3dp"
+            android:layout_alignWithParentIfMissing="true"
+            android:src="@drawable/plan_10_dashboard_sift"
             android:background="@null"
-            android:paddingRight="5dp"
-            android:overlapAnchor="false"
-            android:spinnerMode="dropdown"
-            android:dropDownVerticalOffset="0dp"
-            android:dropDownWidth="65dp"/>
+            android:scaleType="center"
+            android:paddingRight="6dp"
+            android:paddingLeft="32dp"/>
     </RelativeLayout>
 
 </RelativeLayout>
