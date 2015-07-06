@@ -420,7 +420,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
-            unreadMsg.setText(unreadMsgCountTotal + "");
+            if(unreadMsgCountTotal<100){
+                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
+            }else{
+                unreadMsg.setText("...");
+            }
         } else {
             unreadMsg.setVisibility(View.GONE);
         }

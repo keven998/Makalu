@@ -121,7 +121,8 @@
                             android:paddingRight="12dp"
                             android:singleLine="true"
                             android:maxEms="6"
-                            android:textColor="@color/color_text_i"/>
+                            android:textColor="@color/color_text_i"
+                            android:text="图"/>
 
                         <TextView
                             android:layout_width="wrap_content"

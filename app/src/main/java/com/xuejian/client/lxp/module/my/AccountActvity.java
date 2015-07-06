@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.my;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,8 +65,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -117,6 +121,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int SIGNATURE = 5;
     private int NICKNAME = 6;
     private int BINDPHONE = 7;
+    private boolean birthTimeFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -374,35 +379,35 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 startActivityForResult(intent, FOOTPRINT);
                 break;
 
-//            case R.id.ll_birthday:
-//                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                        if (!birthTimeFlag) {
-//                            monthOfYear++;
-//                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
-//                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//                            try {
-//                                Date date = format.parse(dateString);
-//                                if (date.after(new Date())) {
-//                                    warn("无效的生日设置");
-//                                } else {
-//                                    editBirthdayToInterface(dateString);
-//                                }
-//                            } catch (ParseException e) {
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//                            birthTimeFlag = true;
-//                        } else {
-//                            birthTimeFlag = false;
-//                        }
-//                    }
-//                }, 1990, 0, 0);
-//                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-//                dialog.setCancelable(true);
-//                dialog.show();
-//                break;
+            case R.id.ll_zodiac:
+                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if (!birthTimeFlag) {
+                            monthOfYear++;
+                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date date = format.parse(dateString);
+                                if (date.after(new Date())) {
+                                    ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+                                } else {
+                                    editBirthdayToInterface(dateString);
+                                }
+                            } catch (ParseException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                            birthTimeFlag = true;
+                        } else {
+                            birthTimeFlag = false;
+                        }
+                    }
+                }, 1990, 0, 0);
+                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dialog.setCancelable(true);
+                dialog.show();
+                break;
 
 
             case R.id.ll_resident:
@@ -990,7 +995,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    //brithdayTv.setText(birth);
+                    tv_zodiac.setText(birth);
                     ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
