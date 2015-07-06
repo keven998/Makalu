@@ -657,7 +657,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                     }
 
-                    ToastUtil.getInstance(mContext).showToast("修改成功");
+//                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 
@@ -792,7 +792,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setAvatarSmall(url);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    ToastUtil.getInstance(mContext).showToast("修改成功");
+//                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 
@@ -929,7 +929,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.setTravelStatus(sstatus);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     //status.setText(sstatus);
-                    ToastUtil.getInstance(mContext).showToast("修改成功");
+//                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 
@@ -963,7 +963,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     //residentTv.setText(residence);
-                    ToastUtil.getInstance(mContext).showToast("修改成功");
+//                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 
@@ -996,7 +996,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tv_zodiac.setText(birth);
-                    ToastUtil.getInstance(mContext).showToast("修改成功");
+//                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }
 

@@ -76,7 +76,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                             DialogManager.getInstance().dissMissLoadingDialog();
                             CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (modifyResult.code == 0) {
-                                ToastUtil.getInstance(mContext).showToast("OK~修改成功");
+                                ToastUtil.getInstance(mContext).showToast("修改成功");
                                 finish();
                             } else {
                                 ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);

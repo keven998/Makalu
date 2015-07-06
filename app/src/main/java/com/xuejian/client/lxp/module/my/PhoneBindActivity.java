@@ -98,7 +98,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
 
                 String uid = null;
                 if (user != null) {
-                    uid = user.getUserId() + "";
+                    uid = String.valueOf(user.getUserId());
                 }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.BIND_PHONE, uid, new HttpCallBack<String>() {
                     @Override
