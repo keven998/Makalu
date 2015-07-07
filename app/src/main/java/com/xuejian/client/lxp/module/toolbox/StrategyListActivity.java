@@ -636,7 +636,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             tv_tian.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
-            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
+            mTimeTv.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
                 rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
                 mCheckStatus.setVisibility(View.VISIBLE);
