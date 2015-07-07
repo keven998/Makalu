@@ -32,6 +32,7 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -60,6 +61,7 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.Utils.Config;
@@ -174,6 +176,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
+    public Handler mHandler;
+
+    public void setHandler(Handler handler) {
+        mHandler = handler;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -353,11 +360,34 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             }
         });
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Message msg = new Message();
+                msg.what = 1;
+                mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        LogUtil.d("resume");
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
     }
 
@@ -401,13 +431,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             drawerLayout.setEnabled(false);
         } else {
             // 群聊
-            Fragment fragment = new GroupDetailFragment();
+            final Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.menu_frame, fragment).commit();
+            FragmentTransaction ft= fragmentManager.beginTransaction();
+            ft.add(fragment, "GroupDrawer");
+            ft.replace(R.id.menu_frame, fragment).commit();
             findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
@@ -73,8 +75,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private TextView addGroup;
     private TextView delGroupMember;
 
-    public static boolean isInDeleteMode;
-    private MemberAdapter memberAdapter;
+    public boolean isInDeleteMode;
+    public MemberAdapter memberAdapter;
     private User group;
     /**
      * 屏蔽群消息imageView
@@ -88,11 +90,30 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     //清空所有聊天记录
     private RelativeLayout clearAllHistory;
+    private ChatActivity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_group_details, container, false);
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (ChatActivity) activity;
+        mActivity.setHandler(mHandler);
+    }
+
+    public Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+                    isInDeleteMode=false;
+                    memberAdapter.notifyDataSetChanged();
+                    break;
+            }
+        };
+    };
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -350,7 +371,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     }
 
 
-    private void bindView() {
+    public void bindView() {
         memberAdapter = new MemberAdapter(new ViewHolderCreator<User>() {
             @Override
             public ViewHolderBase<User> createViewHolder() {
@@ -655,6 +676,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         }
 
     }
+
 
     private class MemberAdapter extends ListViewDataAdapter<User> {
 
