@@ -13,7 +13,7 @@
         android:paddingRight="32dp"
         android:paddingTop="20dp"
         android:scaleType="center"
-        android:src="@drawable/login_back_defaut" />
+        android:src="@drawable/selector_ic_nav_back_theme" />
 
     <ImageView
         android:id="@+id/icon"

@@ -10,6 +10,7 @@ import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.xuejian.client.lxp.bean.AddressBookbean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.User;
 
@@ -431,12 +432,13 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler requestAddContact(String uid,String message, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
+       // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
+        request.setUrl(SystemConfig.DEV_URL + "/users/"+ AccountManager.getCurrentUserId()+"/contact-requests");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId", uid);
+            jsonObject.put("contactId", 100004);
             jsonObject.put("message",message);
         } catch (JSONException e) {
             e.printStackTrace();
