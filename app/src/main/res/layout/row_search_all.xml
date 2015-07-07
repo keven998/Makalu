@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         android:background="@drawable/selector_frame_white_card">
 
         <ImageView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textColor="@color/base_font_color"
+                android:textColor="@color/color_text_i"
                 android:textSize="16sp"
                 android:gravity="center_vertical"/>
 
@@ -63,7 +63,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:layout_marginTop="3dp"
-                android:textColor="@color/third_font_color"
+                android:textColor="@color/color_text_iii"
                 android:textSize="13sp"/>
 
         </LinearLayout>
@@ -83,27 +83,5 @@
             android:visibility="gone"/>
 
     </RelativeLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/all_result_tv"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/selector_frame_white_card"
-            android:drawableRight="@drawable/icon_arrow_right"
-            android:paddingRight="10dp"
-            android:gravity="center_vertical"
-            android:paddingBottom="11dp"
-            android:paddingLeft="14dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/base_font_color"
-            android:textSize="16sp" />
-
-    </FrameLayout>
-
 
 </LinearLayout>

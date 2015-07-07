@@ -133,9 +133,6 @@ public class LoginActivity extends PeachBaseActivity {
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
-        if (type == FINDPASSWORD) {
-            //存入修改好的密码
-        }
 
         //登录的时候需要新建用户名密码token表，方便用户自动登录的时候查询用户密码登录
 
@@ -147,11 +144,11 @@ public class LoginActivity extends PeachBaseActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivityWithNoAnim(intent);
-                setResult(RESULT_OK);
-                finishWithNoAnim();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityWithNoAnim(intent);
+               // setResult(RESULT_OK);
+               // finishWithNoAnim();
             }
         });
 

@@ -438,7 +438,7 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("contactId", 100004);
+            jsonObject.put("contactId", uid);
             jsonObject.put("message",message);
         } catch (JSONException e) {
             e.printStackTrace();

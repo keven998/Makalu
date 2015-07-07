@@ -1,6 +1,9 @@
 package com.xuejian.client.lxp.module.dest.adapter;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -150,36 +153,6 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                 holder.mSendTv.setVisibility(View.GONE);
             }
         }
-        if(mIsShowMore){
-            if(position == 4) {
-                holder.mAllResultTv.setVisibility(View.VISIBLE);
-                if (typeBean.type.equals("loc")) {
-                    holder.mAllResultTv.setText("查看全部城市");
-                } else if (typeBean.type.equals("vs")) {
-                    holder.mAllResultTv.setText("查看全部景点");
-                } else if (typeBean.type.equals("hotel")) {
-                    holder.mAllResultTv.setText("查看全部酒店");
-                } else if (typeBean.type.equals("restaurant")) {
-                    holder.mAllResultTv.setText("查看全部美食");
-                } else if (typeBean.type.equals("shopping")) {
-                    holder.mAllResultTv.setText("查看全部购物");
-                }
-                holder.mAllResultTv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(mOnSearchResultClickListener != null) {
-                            mOnSearchResultClickListener.onMoreResultClick(typeBean.type);
-                        }
-                    }
-                });
-            } else {
-                holder.mAllResultTv.setVisibility(View.GONE);
-            }
-        }else{
-            holder.mAllResultTv.setVisibility(View.GONE);
-        }
-
-
         return convertView;
     }
 
@@ -189,7 +162,8 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             convertView = View.inflate(mContext,R.layout.row_search_all_section,null);
         }
         TextView typeName = (TextView) convertView.findViewById(R.id.type_name_tv);
-        SearchTypeBean typeBean = mSearchList.get(section);
+        TextView searchMore = (TextView) convertView.findViewById(R.id.tv_search_more);
+        final SearchTypeBean typeBean = mSearchList.get(section);
         if(typeBean.type.equals("loc")){
             typeName.setText("城市");
         }else if(typeBean.type.equals("vs")){
@@ -201,6 +175,33 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         }else if(typeBean.type.equals("shopping")){
             typeName.setText("购物");
         }
+        if(mIsShowMore){
+            if(typeBean.type.equals("loc")){
+                searchMore.setText("查看全部城市");
+            }else if(typeBean.type.equals("vs")){
+                searchMore.setText("查看全部景点");
+            }else if(typeBean.type.equals("hotel")){
+                searchMore.setText("查看全部酒店");
+            }else if(typeBean.type.equals("restaurant")){
+                searchMore.setText("查看全部美食");
+            }else if(typeBean.type.equals("shopping")){
+                searchMore.setText("查看全部购物");
+            }
+            SpannableStringBuilder builder = new SpannableStringBuilder(searchMore.getText().toString());
+            ForegroundColorSpan Span = new ForegroundColorSpan(mContext.getResources().getColor(R.color.app_theme_color_highlight));
+            builder.setSpan(Span, 4, 6, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            searchMore.setText(builder);
+        }else {
+            searchMore.setVisibility(View.INVISIBLE);
+        }
+        searchMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnSearchResultClickListener != null) {
+                    mOnSearchResultClickListener.onMoreResultClick(typeBean.type);
+                }
+            }
+        });
         return convertView;
     }
 
@@ -243,8 +244,6 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         TextView mNameTv;
         @InjectView(R.id.address_tv)
         TextView mAddressTv;
-        @InjectView(R.id.all_result_tv)
-        TextView mAllResultTv;
         @InjectView(R.id.btn_send)
         TextView mSendTv;
 
