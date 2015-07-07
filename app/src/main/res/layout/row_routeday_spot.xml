@@ -33,7 +33,7 @@
             android:paddingRight="5dp"
             android:scaleType="center"
             android:src="@drawable/ic_guide_delete"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/rl_content"
