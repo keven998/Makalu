@@ -106,7 +106,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
+//        mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_plan_lists");
     }
 
