@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.alibaba.fastjson.JSON;
+import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -31,14 +35,18 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
-import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -289,68 +297,23 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
      */
     public void exitGroup() {
         DialogManager.getInstance().showLoadingDialog(getActivity());
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-
-//                    EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-//                    msg.setChatType(EMMessage.ChatType.GroupChat);
-//                    msg.setFrom(String.valueOf(AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getUserId()));
-//                    //msg.setReceipt(group.getGroupId());
-//                    IMUtils.setMessageWithTaoziUserInfo(PeachApplication.getContext(), msg);
-//                    String myNickname = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext()).getNickName();
-//                    String content = myNickname + " 退出了群聊";
-//                    IMUtils.setMessageWithExtTips(PeachApplication.getContext(), msg, content);
-//                    msg.addBody(new TextMessageBody(content));
-//                    EMChatManager.getInstance().sendGroupMessage(msg, new EMCallBack() {
-//                        @Override
-//                        public void onSuccess() {
-//                            try {
-//                                EMGroupManager.getInstance().exitFromGroup(groupId);
-//                            } catch (EaseMobException e) {
-//                                e.printStackTrace();
-//                            }
-//                            if (getActivity()!=null&&!getActivity().isFinishing())
-//                                getActivity().runOnUiThread(new Runnable() {
-//                                    public void run() {
-//                                        DialogManager.getInstance().dissMissLoadingDialog();
-//                                        getActivity().setResult(Activity.RESULT_OK);
-//                                        getActivity().finish();
-////                                        ChatActivity.activityInstance.finish();
-//                                    }
-//                                });
-//                        }
-//
-//                        @Override
-//                        public void onError(int i, String s) {
-//                            if (getActivity()!=null&&!getActivity().isFinishing())
-//                                getActivity().runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        DialogManager.getInstance().dissMissLoadingDialog();
-//                                        ToastUtil.getInstance(PeachApplication.getContext()).showToast("退出群聊失败");
-//                                    }
-//                                });
-//                        }
-//
-//                        @Override
-//                        public void onProgress(int i, String s) {
-//
-//                        }
-//                    });
-
-                } catch (final Exception e) {
-                    if (getActivity() != null && !getActivity().isFinishing())
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-//							Toast.makeText(getApplicationContext(), "退出群聊失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(PeachApplication.getContext()).showToast("呃~网络有些问题");
-                            }
-                        });
+        GroupManager.getGroupManager().quitGroup(groupId, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                IMClient.getInstance().deleteConversation(groupId);
+                if (getActivity()!=null&&!getActivity().isFinishing()){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
                 }
             }
-        }).start();
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(PeachApplication.getContext()).showToast("呃~网络有些问题");
+            }
+        });
     }
 
     /**
@@ -511,27 +474,57 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         memberAdapter.getDataList().clear();
         if (members == null || "update".equals(type)) {
             //fetch info
-            GroupManager.getGroupManager().getGroupMembers(groupId, new CallBack() {
+            GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
                 @Override
-                public void onSuccess() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
-                            memberAdapter.getDataList().clear();
-                            for (User user : members) {
-                                memberAdapter.getDataList().add(user);
-                                memberAdapter.notifyDataSetChanged();
-                            }
+                public void doSuccess(Object result, String method) {
+                    JSONObject object = null;
+                    JSONArray userList =null;
+                    List<User> list = new ArrayList<User>();
+                    try {
+                        object = new JSONObject(result.toString());
+                        userList = object.getJSONArray("result");
+                        for (int i = 0; i < userList.length(); i++) {
+                            String str = userList.get(i).toString();
+                            User user = JSON.parseObject(str, User.class);
+                            list.add(user);
                         }
-                    });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
+                    memberAdapter.getDataList().clear();
+                    memberAdapter.getDataList().addAll(list);
+                    memberAdapter.notifyDataSetChanged();
                 }
 
                 @Override
-                public void onFailed() {
+                public void doFailure(Exception error, String msg, String method) {
 
                 }
             });
+
+//            GroupManager.getGroupManager().getGroupMembers(groupId, new CallBack() {
+//                @Override
+//                public void onSuccess() {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
+//                            memberAdapter.getDataList().clear();
+//                            for (User user : members) {
+//                                memberAdapter.getDataList().add(user);
+//                                memberAdapter.notifyDataSetChanged();
+//                            }
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onFailed() {
+//
+//                }
+//            });
         } else {
             for (User user : members) {
                 memberAdapter.getDataList().add(user);
@@ -585,21 +578,49 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     protected void updateGroup() {
         //更新本地数据
-        GroupManager.getGroupManager().getGroupInformation(groupId, new CallBack() {
+        GroupApi.getGroupInfo(groupId, new HttpCallBack() {
             @Override
-            public void onSuccess() {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        bindView();
+            public void doSuccess(Object result, String method) {
+                JSONObject object = null;
+                try {
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "group info : " + result);
                     }
-                });
+                    object = new JSONObject(result.toString());
+                    JSONObject o = object.getJSONObject("result");
+                    User user = new User();
+                    user.setNickName(o.get("name").toString() == null ? " " : o.get("name").toString());
+                    o.remove("name");
+                    user.setAvatar(o.get("avatar").toString());
+                    o.remove("avatar");
+                    user.setExt(o.toString());
+                    user.setType(8);
+                    UserDBManager.getInstance().updateGroupInfo(user, groupId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                bindView();
             }
 
             @Override
-            public void onFailed() {
-                System.out.println("更新失败");
+            public void doFailure(Exception error, String msg, String method) {
+
             }
         });
+//        GroupManager.getGroupManager().getGroupInformation(groupId, new CallBack() {
+//            @Override
+//            public void onSuccess() {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        bindView();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//            }
+//        });
     }
 
     @Override

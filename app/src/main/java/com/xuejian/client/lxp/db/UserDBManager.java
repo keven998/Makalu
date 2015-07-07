@@ -114,7 +114,9 @@ public class UserDBManager {
             try {
                 JSONArray userlist = new JSONArray((new JSONObject(data).get("GroupMember")).toString());
                 for (int i = 0; i < userlist.length(); i++) {
-                    list.add(getContactByUserId(userlist.getLong(i)));
+                    User user=getContactByUserId(userlist.getLong(i));
+                    if (user==null)return null;
+                    list.add(user);
                 }
                 cursor.close();
                 return list;

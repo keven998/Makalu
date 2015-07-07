@@ -33,7 +33,6 @@ import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 
@@ -84,12 +83,12 @@ public class IMUtils {
             String action = object.getString("action");
             switch (action) {
                 case "D_INVITE":
-                    long chatId = object.getLong("groupId");
-                    long inviteId = object.getLong("userId");
-                    String nickName = object.getString("nickName");
-                    String groupName = object.getString("groupName");
-                    User group = new User(chatId, groupName, "", 8);
-                    UserDBManager.getInstance().saveContact(group);
+//                    long chatId = object.getLong("groupId");
+//                    long inviteId = object.getLong("userId");
+//                    String nickName = object.getString("nickName");
+//                    String groupName = object.getString("groupName");
+//                    User group = new User(chatId, groupName, "", 8);
+//                    UserDBManager.getInstance().saveContact(group);
             }
         } catch (JSONException e) {
             e.printStackTrace();

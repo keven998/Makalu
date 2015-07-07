@@ -9,16 +9,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
-import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
 public class ModifyGroupNameActivity extends PeachBaseActivity implements View.OnClickListener {
     @ViewInject(R.id.et_groupname)
@@ -47,22 +47,38 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
                     ToastUtil.getInstance(mContext).showToast("请输入群名称");
                     return;
                 }
-                GroupManager.getGroupManager().editGroupName(groupId, groupNameEt.getText().toString().trim(), new CallBack() {
+                GroupApi.editGroupName(groupNameEt.getText().toString().trim(), groupId, new HttpCallBack() {
                     @Override
-                    public void onSuccess() {
-                        Intent result = new Intent();
-                        result.putExtra("groupName", groupNameEt.getText().toString().trim());
-                        setResult(RESULT_OK, result);
+                    public void doSuccess(Object result, String method) {
+                        Intent intent = new Intent();
+                        intent.putExtra("groupName", groupNameEt.getText().toString().trim());
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
 
                     @Override
-                    public void onFailed() {
+                    public void doFailure(Exception error, String msg, String method) {
                         ToastUtil.getInstance(mContext).showToast("额～修改失败了");
                         setResult(RESULT_OK);
                         finish();
                     }
                 });
+//                GroupManager.getGroupManager().editGroupName(groupId, groupNameEt.getText().toString().trim(), new CallBack() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Intent result = new Intent();
+//                        result.putExtra("groupName", groupNameEt.getText().toString().trim());
+//                        setResult(RESULT_OK, result);
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//                        ToastUtil.getInstance(mContext).showToast("额～修改失败了");
+//                        setResult(RESULT_OK);
+//                        finish();
+//                    }
+//                });
 //                try {
 //                    EMGroupManager.getInstance().changeGroupName(groupId,groupNameEt.getText().toString().trim());
 //                    setResult(RESULT_OK);

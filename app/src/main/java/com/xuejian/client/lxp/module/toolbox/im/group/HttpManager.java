@@ -120,7 +120,7 @@ public class HttpManager {
                         o.put("groupType", groupType);
                         o.put("isPublic", isPublic);
                         o.put("creator", creator);
-                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
+                    //    UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }

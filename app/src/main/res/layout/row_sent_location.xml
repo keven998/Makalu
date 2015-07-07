@@ -41,7 +41,7 @@
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:background="@drawable/location_msg"
-                android:gravity="center"
+                android:gravity="bottom|center_horizontal"
                 android:scaleType="fitCenter"
             android:textColor="@android:color/white" />
         </LinearLayout>

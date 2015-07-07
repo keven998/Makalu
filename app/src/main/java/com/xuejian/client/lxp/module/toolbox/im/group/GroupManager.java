@@ -1,5 +1,13 @@
 package com.xuejian.client.lxp.module.toolbox.im.group;
 
+import com.aizou.core.http.HttpCallBack;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.GroupApi;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 
@@ -16,10 +24,19 @@ public class GroupManager {
         return groupManager;
     }
 
-    public void createGroup(String groupName, String groupType, boolean isPublic, List<Long> groupMember,CreateSuccessListener listener) {
-      // long row= UserDao.getInstance().addGroup2User(groupName,groupType,isPublic,null,groupMember);
-    //   HttpManager.createGroup(groupName, groupType, isPublic, null, groupMember, 0, listener);
-        HttpManager.createGroup1(groupName, groupType, isPublic, null, groupMember, 0, listener);
+    public void createGroup(String groupName, String avatar,String desc, JSONArray groupMember,HttpCallBack callBack) {
+        final JSONObject obj = new JSONObject();
+        try {
+            obj.put("name", groupName);
+            obj.put("avatar", avatar);
+            obj.put("desc", desc);
+            obj.put("members", groupMember);
+            System.out.println(obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        GroupApi.createGroup(obj.toString(), callBack);
+       // HttpManager.createGroup1(groupName, groupType, isPublic, null, groupMember, 0, listener);
     }
 
 
@@ -40,8 +57,8 @@ public class GroupManager {
         HttpManager.silenceMembers(groupId, members, isPublic, callBack);
     }
 
-    public void quitGroup(String groupId) {
-
+    public void quitGroup(String groupId,HttpCallBack callBack) {
+        GroupApi.deleteGroupMember(groupId,Long.parseLong(AccountManager.getCurrentUserId()),callBack);
     }
 
     public void getGroupInformation(String groupId,CallBack callBack) {
@@ -51,6 +68,7 @@ public class GroupManager {
     public void getGroupMembers(String groupId,CallBack callBack) {
         HttpManager.getGroupMembers(groupId, callBack);
     }
+
     public void getUserGroupInfo(String userId){
         HttpManager.getUserGroupInfo(userId);
     }

@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@id/iv_userhead"
+            android:padding="10dp"
             android:background="@drawable/messages_bg_send">
 
             <RelativeLayout
@@ -58,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
                     android:gravity="center_vertical"
                     android:textColor="@color/base_color_white"
                     android:textSize="23sp"

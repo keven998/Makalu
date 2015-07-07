@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,14 +40,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.Utils.Config;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
+import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.utils.AnimationSimple;
 import com.xuejian.client.lxp.common.utils.StretchAnimation;
@@ -54,9 +59,10 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
-import com.xuejian.client.lxp.module.toolbox.im.group.CallBack;
-import com.xuejian.client.lxp.module.toolbox.im.group.CreateSuccessListener;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -236,61 +242,153 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 ChatName.append("...");
             }
             if (toBeAddContacts.size() > 1) {
-                List<Long> ids = new ArrayList<>();
+              //  List<Long> ids = new ArrayList<>();
+             final JSONArray ids=new JSONArray();
                 for (User user : toBeAddContacts) {
-                    ids.add(user.getUserId());
+                    ids.put(user.getUserId());
                 }
-                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
+                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, null, ids, new HttpCallBack() {
                     @Override
-                    public void OnSuccess(final String groupId, String conversation) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent();
+                    public void doSuccess(Object result, String method) {
+                        try {
+                            JSONObject object = new JSONObject(result.toString());
+                            JSONObject jsonObject = object.getJSONObject("result");
+                            String groupId = jsonObject.getString("groupId");
+                            String name = jsonObject.getString("name");
+                            String avatar = jsonObject.getString("avatar");
+                            jsonObject.remove("groupId");
+                            jsonObject.remove("name");
+                            jsonObject.remove("avatar");
+                            jsonObject.put("GroupMember",ids);
+                           // long creator = jsonObject.getLong("creator");
+                            IMClient.getInstance().addGroup2Conversation(groupId, null);
+                            UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8,avatar));
+                            if (Config.isDebug) {
+                                Log.i(Config.TAG, "群组更新成功");
+                            }
+                            Intent intent = new Intent();
                                 intent.putExtra("chatType", "group");
                                 intent.putExtra("toId", Long.parseLong(groupId));
                                 setResult(RESULT_OK, intent);
                                 finishWithNoAnim();
-                            }
-                        });
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
-                    public void OnFailed() {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
                                 ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
-                            }
-                        });
+
                     }
                 });
+//                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
+//                    @Override
+//                    public void OnSuccess(final String groupId, String conversation) {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Intent intent = new Intent();
+//                                intent.putExtra("chatType", "group");
+//                                intent.putExtra("toId", Long.parseLong(groupId));
+//                                setResult(RESULT_OK, intent);
+//                                finishWithNoAnim();
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void OnFailed() {
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+//                            }
+//                        });
+//                    }
+//                });
 
             }
         }
-        //单聊
+        //增加成员
         else if (request == 0) {
-            List<Long> list = new ArrayList<>();
-            for (User user : toBeAddContacts) {
-                list.add(user.getUserId());
+            try {
+                final JSONArray ids = new JSONArray();
+                for (User user : toBeAddContacts) {
+                    ids.put(user.getUserId());
+                }
+                if (ids.length() == 1) {
+                    GroupApi.addGroupMember(groupId, ids.getLong(0), new HttpCallBack() {
+                        @Override
+                        public void doSuccess(Object result, String method) {
+                            Intent intent = new Intent();
+                            intent.putExtra("chatType", "group");
+                            intent.putExtra("toId", groupId + "");
+                         //   intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+                            setResult(RESULT_OK, intent);
+                            finishWithNoAnim();
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+
+                        }
+                    });
+                } else {
+                    GroupApi.editGroupMembers(groupId, ids, 1, new HttpCallBack() {
+                        @Override
+                        public void doSuccess(Object result, String method) {
+                            Intent intent = new Intent();
+                            intent.putExtra("chatType", "group");
+                            intent.putExtra("toId", groupId + "");
+                            //intent.putExtra("Ids", ids.);
+                            setResult(RESULT_OK, intent);
+                            finishWithNoAnim();
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            error.printStackTrace();
+                            System.out.println("error "+msg+" method "+method);
+                        }
+                    });
+//                    GroupManager.getGroupManager().addMembers(groupId, ids, true, new CallBack() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Intent intent = new Intent();
+//                        intent.putExtra("chatType", "group");
+//                        intent.putExtra("toId", groupId + "");
+//                        //intent.putExtra("Ids", ids.);
+//                        setResult(RESULT_OK, intent);
+//                        finishWithNoAnim();
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//
+//                    }
+//                });
+                }
+//                GroupManager.getGroupManager().addMembers(groupId, list, true, new CallBack() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Intent intent = new Intent();
+//                        intent.putExtra("chatType", "group");
+//                        intent.putExtra("toId", groupId + "");
+//                        intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+//                        setResult(RESULT_OK, intent);
+//                        finishWithNoAnim();
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//
+//                    }
+//                });
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            GroupManager.getGroupManager().addMembers(groupId, list, true, new CallBack() {
-                @Override
-                public void onSuccess() {
-                    Intent intent = new Intent();
-                    intent.putExtra("chatType", "group");
-                    intent.putExtra("toId", groupId + "");
-                    intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
-                    setResult(RESULT_OK, intent);
-                    finishWithNoAnim();
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
-
         } else if (toBeAddContacts.size() == 1) {
             Intent intent = new Intent();
             intent.putExtra("chatType", "single");
@@ -315,33 +413,44 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             if (toBeAddContacts.size() > 3) {
                 ChatName.append("...");
             }
-            List<Long> ids = new ArrayList<>();
+           final JSONArray ids=new JSONArray();
             for (User user : toBeAddContacts) {
-                ids.add(user.getUserId());
+                ids.put(user.getUserId());
             }
-            GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
+            GroupManager.getGroupManager().createGroup(ChatName.toString(), null, null, ids, new HttpCallBack() {
                 @Override
-                public void OnSuccess(final String groupId, String conversation) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent();
-                            intent.putExtra("chatType", "group");
-                            intent.putExtra("toId", Long.parseLong(groupId));
-                            setResult(RESULT_OK, intent);
-                            finishWithNoAnim();
+                public void doSuccess(Object result, String method) {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        JSONObject jsonObject = object.getJSONObject("result");
+                        String groupId = jsonObject.getString("groupId");
+                        String name = jsonObject.getString("name");
+                        String avatar = jsonObject.getString("avatar");
+                        jsonObject.remove("groupId");
+                        jsonObject.remove("name");
+                        jsonObject.remove("avatar");
+                        jsonObject.put("GroupMember", ids);
+                        // long creator = jsonObject.getLong("creator");
+                        IMClient.getInstance().addGroup2Conversation(groupId, null);
+                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8,avatar));
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "群组更新成功");
                         }
-                    });
+                        Intent intent = new Intent();
+                        intent.putExtra("chatType", "group");
+                        intent.putExtra("toId", Long.parseLong(groupId));
+                        setResult(RESULT_OK, intent);
+                        finishWithNoAnim();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
-                public void OnFailed() {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            DialogManager.getInstance().dissMissLoadingDialog();
-                            ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
-                        }
-                    });
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+
                 }
             });
 
