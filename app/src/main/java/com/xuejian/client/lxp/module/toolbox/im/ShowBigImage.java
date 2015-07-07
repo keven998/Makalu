@@ -23,12 +23,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import com.xuejian.client.lxp.common.utils.ImageUtils;
+
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.task.DownloadImage;
 import com.xuejian.client.lxp.common.task.LoadLocalBigImgTask;
 import com.xuejian.client.lxp.common.utils.ImageCache;
+import com.xuejian.client.lxp.common.utils.ImageUtils;
 import com.xuejian.client.lxp.common.widget.photoview.PhotoView;
 import com.xuejian.client.lxp.common.widget.photoview.PhotoViewAttacher;
 

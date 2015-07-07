@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -12,7 +11,6 @@ import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.PicPagerActivity;
 import com.xuejian.client.lxp.module.dest.PicPagerActivity2;
 import com.xuejian.client.lxp.module.dest.PoiDetailActivity;
-import com.xuejian.client.lxp.module.dest.SpotDetailActivity;
 import com.xuejian.client.lxp.module.dest.TravelNoteDetailActivity;
 
 import java.util.ArrayList;

@@ -14,16 +14,12 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.StartCity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by rjm on 2015/3/26.

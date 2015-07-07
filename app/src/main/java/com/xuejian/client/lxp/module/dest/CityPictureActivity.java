@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
