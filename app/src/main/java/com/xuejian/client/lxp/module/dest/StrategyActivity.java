@@ -264,7 +264,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            final PeachMessageDialog dialog = new PeachMessageDialog(this);
             dialog.setTitle("提示");
             dialog.setMessage("是否需要为你创建行程模版");
             dialog.setCanceledOnTouchOutside(false);
@@ -390,6 +390,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
         final User user = AccountManager.getInstance().getLoginAccount(this);
+
+        topTitle.setText(result.title);
 
         if (user == null) {
             mIvMore.setVisibility(View.GONE);

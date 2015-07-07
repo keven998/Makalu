@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
 
-    <ListView android:id="@+id/listview_plan_schedule"
-        android:layout_marginTop="50dp"
+    <ListView
+        android:id="@+id/listview_plan_schedule"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:cacheColorHint="@android:color/transparent"
-        android:divider="@color/color_line"
-        android:dividerHeight="0.5dp"></ListView>
+        android:divider="@null"
+        android:dividerHeight="0dp"></ListView>
 
 </FrameLayout>
