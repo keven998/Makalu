@@ -142,10 +142,10 @@ public class GroupApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        System.out.println("editGroupMembers "+object.toString());
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/"+groupId);
+        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/"+groupId+"/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         StringEntity entity = null;

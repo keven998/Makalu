@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
@@ -16,9 +16,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="44dp"
         android:gravity="center_vertical"
-        android:background="@color/base_color_white"
+        android:background="@color/app_theme_color"
         android:focusable="true"
+        android:id="@+id/search_bar"
         android:focusableInTouchMode="true"
         android:padding="11dp">
 
@@ -54,7 +56,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_bar">
 
         <ListView
             android:id="@+id/search_all_lv"
@@ -64,17 +67,16 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:fadingEdge="none"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
-        <TextView android:id="@+id/empty_text"
-            android:layout_width="match_parent"
+        <ImageView android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/base_text_color_text_placeholder"
-            android:textSize="14sp"
-            android:gravity="center"
+            android:background="@drawable/search_bg_default"
+            android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="36dp"
-            android:lineSpacingExtra="8dp"
-            android:visibility="gone"
-            android:text="旅行搜搜\n搜索旅行的城市/景点/美食/购物/酒店等"/>
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            />
     </FrameLayout>
-</LinearLayout>
+</RelativeLayout>
