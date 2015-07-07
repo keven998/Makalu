@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -14,6 +15,8 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.dest.CommonViewUnit.POIAdapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by luoyong on 15/6/12.
@@ -26,16 +29,15 @@ public class DayAgendaActivity extends FragmentActivity {
     private ListView mListView;
 
     private int currentDay;
+    private TextView mTitleView;
+    private TextView mSubTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_agenda_layout);
 
-        TitleHeaderBar titleHeaderBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.getRightTextView().setText("修改");
-        titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_edit_schedule).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
@@ -44,10 +46,19 @@ public class DayAgendaActivity extends FragmentActivity {
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
+        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mTitleView = (TextView) findViewById(R.id.tv_title);
+        mSubTitleView = (TextView) findViewById(R.id.tv_subtitle);
+
         strategy = getIntent().getParcelableExtra("strategy");
         resizeData(strategy.itinerary);
         currentDay = getIntent().getIntExtra("current_day", 0);
-        titleHeaderBar.getTitleTextView().setText(String.format("第%d天",currentDay+1));
+
         mListView = (ListView) findViewById(R.id.listview_common);
         mListView.setAdapter(new POIAdapter(this, routeDayMap.get(currentDay)));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,15 +68,7 @@ public class DayAgendaActivity extends FragmentActivity {
             }
         });
 
-//        findViewById(R.id.edit_plan).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
-//                intent.putExtra("strategy", strategy);
-//                startActivityForResult(intent, RESULT_UPDATE_PLAN_DETAIL);
-//                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
-//            }
-//        });
+        setupTitle();
     }
 
     @Override
@@ -86,10 +89,36 @@ public class DayAgendaActivity extends FragmentActivity {
         }
 
         for (StrategyBean.IndexPoi indexPoi : itinerary) {
-            if(routeDayMap.size()>indexPoi.dayIndex){
+            if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
         }
+
+    }
+
+    private void setupTitle() {
+        mTitleView.setText(String.format("第%d天", currentDay + 1));
+
+        List<PoiDetailBean> poiList = routeDayMap.get(currentDay);
+        String descTitle = "";
+        HashSet<String> set = new HashSet<String>();
+        PoiDetailBean pdb;
+        int count = poiList.size();
+        for (int i = 0; i < count; ++i) {
+            pdb = poiList.get(i);
+            if (pdb.locality != null) {
+                set.add(pdb.locality.zhName);
+            }
+        }
+        for (String desName : set) {
+            if (descTitle.equals("")) {
+                descTitle = desName;
+            } else {
+                descTitle = String.format("%s > %s", descTitle, desName);
+            }
+        }
+
+        mSubTitleView.setText(descTitle);
 
     }
 

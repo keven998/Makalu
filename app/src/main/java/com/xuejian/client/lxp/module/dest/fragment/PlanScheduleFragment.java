@@ -71,7 +71,6 @@ public class PlanScheduleFragment extends Fragment {
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
-//strategyBean.localities
         for (StrategyBean.IndexPoi indexPoi : itinerary) {
             if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);

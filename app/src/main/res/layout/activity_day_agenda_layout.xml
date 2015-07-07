@@ -4,6 +4,71 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
 
-    <include layout="@layout/base_listview_layout"/>
+    <ListView
+        android:id="@+id/listview_common"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/title_bar_height"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
+
+        <TextView
+            android:id="@+id/tv_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="90dp"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="90dp"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="-2dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tv_edit_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="14dp"
+            android:singleLine="true"
+            android:text="修改"
+            android:textColor="@color/selector_white_text_color"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
 </FrameLayout>

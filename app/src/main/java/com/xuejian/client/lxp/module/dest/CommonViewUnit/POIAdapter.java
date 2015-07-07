@@ -48,7 +48,7 @@ public class POIAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_plan_day_detil, null);
             holder = new ViewHolder();
-            holder.tv_poi_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
+            holder.tv_poi_title = (TextView) convertView.findViewById(R.id.tv_poi_title);
             holder.tv_poi_level = (TextView) convertView.findViewById(R.id.tv_poi_level);
             holder.tv_poi_time = (TextView) convertView.findViewById(R.id.tv_poi_time);
             holder.iv_poi = (ImageView) convertView.findViewById(R.id.iv_poi_img);
@@ -58,7 +58,7 @@ public class POIAdapter extends BaseAdapter {
         }
         PoiDetailBean poi = mPOIs.get(position);
         ImageLoader.getInstance().displayImage(poi.images.get(0).url, holder.iv_poi, UILUtils.getDefaultOption());
-        holder.tv_poi_time.setText(String.format("建议游玩 %s",poi.timeCostDesc));
+        holder.tv_poi_time.setText(String.format("建议游玩 %s", poi.timeCostDesc));
         holder.tv_poi_level.setText(String.valueOf(poi.commentCnt));
         holder.tv_poi_title.setText(poi.zhName);
         return convertView;
