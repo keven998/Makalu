@@ -4,16 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -25,6 +26,8 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnItemClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -45,15 +48,10 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
-import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/1.
@@ -63,11 +61,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     public static final int RESULT_PLAN_DETAIL = 1;
     public static final int REQUEST_CODE_NEW_PLAN = 2;
 
-    private final static String[] CONTENT_TYPE = {"全部", "只看计划", "只看去过"};
-
-    @InjectView(R.id.my_strategy_lv)
     PullToRefreshListView mMyStrategyLv;
-    @InjectView(R.id.edit_btn)
     ImageButton mEditBtn;
 
     ListViewDataAdapter mStrategyListAdapter;
@@ -78,7 +72,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private String userId;
     private boolean isOwner;
     private User user;
-    private int mContentType = 0; // 0 = ALL, 1 = plans, 2 = pass
+    private int mContentType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +83,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         chatType = getIntent().getStringExtra("chatType");
         initView();
         initData();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
     }
 
     @Override
@@ -117,7 +106,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
+//        mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_plan_lists");
     }
 
@@ -129,7 +118,9 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
-        ButterKnife.inject(this);
+
+        mMyStrategyLv = (PullToRefreshListView) findViewById(R.id.my_strategy_lv);
+        mEditBtn = (ImageButton) findViewById(R.id.edit_btn);
 
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
@@ -184,25 +175,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
         );
 
-        Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
-        spinner.setAdapter(new StringSpinnerAdapter(this, Arrays.asList(CONTENT_TYPE)));
-        spinner.setSelection(0, true);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                MobclickAgent.onEvent(StrategyListActivity.this, "event_do_filter");
-                mContentType = position;
-                mMyStrategyLv.onPullDownRefreshComplete();
-                mMyStrategyLv.onPullUpRefreshComplete();
-                mMyStrategyLv.doPullRefreshing(true, 0);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
         if (isOwner) {
             textView.setText(String.format("%s的计划", AccountManager.getInstance().getLoginAccount(this).getNickName()));
@@ -215,6 +187,29 @@ public class StrategyListActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        findViewById(R.id.ivb_content_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DialogPlus.Builder(StrategyListActivity.this)
+                        .setAdapter(new MenuAdapter())
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                                dialog.dismiss();
+                                mContentType = position;
+                                mMyStrategyLv.onPullDownRefreshComplete();
+                                mMyStrategyLv.onPullUpRefreshComplete();
+                                mMyStrategyLv.doPullRefreshing(true, 0);
+                            }
+                        })
+                        .setExpanded(false)  // This will enable the expand feature, (similar to android L share dialog)
+                        .setGravity(Gravity.CENTER)
+                        .setOutAnimation(R.anim.fade_out)
+                        .create()
+                        .show();
             }
         });
     }
@@ -605,7 +600,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 //            return position;
 //        }
 //    }
-    public class StrategyAdapter extends ViewHolderBase<StrategyBean> {
+    private class StrategyAdapter extends ViewHolderBase<StrategyBean> {
         TextView tv_tian;
         TextView tv_day;
         TextView mCitysTv;
@@ -631,8 +626,8 @@ public class StrategyListActivity extends PeachBaseActivity {
             mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
             mCheck = (ImageView) convertView.findViewById(R.id.iv_check);
             mModify = (ImageView) convertView.findViewById(R.id.iv_modify_name);
-            mCheckStatus= (ImageView) convertView.findViewById(R.id.iv_check_status);
-            rl_plan= (RelativeLayout) convertView.findViewById(R.id.rl_plan);
+            mCheckStatus = (ImageView) convertView.findViewById(R.id.iv_check_status);
+            rl_plan = (RelativeLayout) convertView.findViewById(R.id.rl_plan);
             return convertView;
         }
 
@@ -641,12 +636,12 @@ public class StrategyListActivity extends PeachBaseActivity {
             tv_tian.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
             mNameTv.setText(itemData.title);
-            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(itemData.updateTime)));
+            mTimeTv.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
                 rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
                 mCheckStatus.setVisibility(View.VISIBLE);
-            }else {
-                rl_plan.setBackgroundResource(R.drawable.plan_bg_default);
+            } else {
+                rl_plan.setBackgroundResource(R.drawable.selector_plan_item);
                 mCheckStatus.setVisibility(View.GONE);
             }
 
@@ -851,4 +846,35 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
     }
+
+
+    private class MenuAdapter extends BaseAdapter {
+        private final String[] CONTENT_TYPE = {"全部", "只看计划", "只看已签到"};
+
+        @Override
+        public int getCount() {
+            return CONTENT_TYPE.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return CONTENT_TYPE[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.spinner_item_dropdown, null);
+            }
+            TextView ttv = (TextView) convertView.findViewById(R.id.tv_title);
+            ttv.setText(CONTENT_TYPE[position]);
+            return convertView;
+        }
+    }
+
 }

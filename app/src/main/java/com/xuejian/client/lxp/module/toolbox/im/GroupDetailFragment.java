@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.common.utils.AnimationSimple;
 import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -70,7 +72,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
     private LinearLayout rl_groupName;
     private TextView groupNameTv;
     private TextView addGroup;
-    private CheckedTextView delGroupMember;
+    private TextView delGroupMember;
 
     private boolean isInDeleteMode;
     private MemberAdapter memberAdapter;
@@ -98,19 +100,19 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         super.onActivityCreated(savedInstanceState);
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
-        delGroupMember = (CheckedTextView) getView().findViewById(R.id.tv_del_to_group);
+        delGroupMember = (TextView) getView().findViewById(R.id.tv_del_to_group);
         delGroupMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckedTextView view = (CheckedTextView) v;
+               // CheckedTextView view = (CheckedTextView) v;
                 if (!isInDeleteMode) {
                     isInDeleteMode = true;
-                    view.setText("完成");
+                  //  view.setText("完成");
                 } else {
                     isInDeleteMode = false;
-                    view.setText("删除");
+                   // view.setText("删除");
                 }
-                view.setChecked(isInDeleteMode);
+              //  view.setChecked(isInDeleteMode);
                 memberAdapter.notifyDataSetChanged();
             }
         });
@@ -682,8 +684,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
     private class MemberViewHolder extends ViewHolderBase<User> {
         private View contentView;
-        private ImageView avatarIv, removeIv;
-        private TextView nicknameTv, viewHolderName;
+        private ImageView avatarIv , removeIv;
+        private TextView nicknameTv, viewHolderName , removeTv;
         private DisplayImageOptions picOptions;
 
         public MemberViewHolder() {
@@ -706,7 +708,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
         public View createView(LayoutInflater layoutInflater) {
             contentView = layoutInflater.inflate(R.layout.group_member_list, null);
             avatarIv = (ImageView) contentView.findViewById(R.id.iv_avatar);
-            removeIv = (ImageView) contentView.findViewById(R.id.badge_delete);
+            removeTv = (TextView) contentView.findViewById(R.id.badge_delete);
+            removeIv = (ImageView) contentView.findViewById(R.id.group_del_icon);
             nicknameTv = (TextView) contentView.findViewById(R.id.tv_nickname);
             //viewHolderName = (TextView) contentView.findViewById(R.id.group_holder_name);
             return contentView;
@@ -781,7 +784,39 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 
 
                 if (isInDeleteMode) {
-                    removeIv.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationSimple.expand(removeIv);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            //isAnimationEnd = true;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    removeIv.startAnimation(animation);
+                    animation = AnimationSimple.expand(removeTv);
+                    removeTv.startAnimation(animation);
+                    removeTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //删除方法
+                        }
+                    });
+                    removeIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //删除方法
+                        }
+                    });
+                    //removeIv.setVisibility(View.VISIBLE);
                     /**
                      * 群组踢人功能
                      */
@@ -813,15 +848,8 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
 //                    }
 //                }
 //            else {
-                    removeIv.setVisibility(View.GONE);
-                    contentView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //      if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
-                            Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
-                            intent.putExtra("userId", itemData.getUserId());
-                            intent.putExtra("userNick", itemData.getNickName());
-                            startActivity(intent);
+                    //removeIv.setVisibility(View.GONE);
+
 //                            } else {
 //                                PeachUser user = new PeachUser();
 //                                user.nickName = itemData.getNick();
@@ -855,10 +883,20 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
                                 intent.putExtra("user", user);
                                 startActivity(intent);
                             }*/
+                        }else{
+                    removeIv.setVisibility(View.GONE);
+                    removeTv.setVisibility(View.GONE);
+                    contentView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //      if (UserDBManager.getInstance().isMyFriend(itemData.getUserId())) {
+                            Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
+                            intent.putExtra("userId", itemData.getUserId());
+                            intent.putExtra("userNick", itemData.getNickName());
+                            startActivity(intent);
                         }
                     });
                 }
-
             }
         }
 
