@@ -43,7 +43,7 @@ import java.util.Map.Entry;
 public class HttpManager {
     private static final String TAG = "httplog";
     private static HashMap<String, HttpHandler> downloadsMap = new HashMap<String, HttpHandler>();
-
+    private static final int TIMEOUT_SECOND =1000000;
 
     private static void requestFilter(Map<String, ? extends Object> map) {
         for (Entry entryMap : map.entrySet()) {
@@ -175,7 +175,7 @@ public class HttpManager {
                 httpMethod = HttpRequest.HttpMethod.TRACE;
             }
             httpUtils.configCurrentHttpCacheExpiry(1000 * 1);
-            httpUtils.configTimeout(1000 * 1000000);
+            httpUtils.configTimeout(1000 * TIMEOUT_SECOND);
             HttpHandler handler = httpUtils.send(httpMethod, url, requestParams,
                     ajaxCallBack);
             PTRequestHandler ptHandler = new PTRequestHandler();

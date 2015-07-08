@@ -35,7 +35,6 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -45,6 +44,7 @@ import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ import java.util.Map;
 
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
-//    public final static int CODE_IM_LOGIN = 101;
+    //    public final static int CODE_IM_LOGIN = 101;
 //    public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
     public boolean isConflict = false;
@@ -285,6 +285,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if (talkFragment != null) {
                 talkFragment.loadConversation();
+                talkFragment.updateUnreadAddressLable();
             }
             updateUnreadMsgCount();
         }
@@ -395,7 +396,35 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     public void onCMDMessageArrive(MessageBean m) {
-        IMUtils.HandleCMDInfoFromMessage(m);
+        try {
+            String cmd = m.getMessage();
+            JSONObject object = new JSONObject(cmd);
+            String action = object.getString("action");
+            switch (action) {
+                case "F_AGREE":
+                    long userId = object.getLong("userId");
+                    String avatar = object.getString("avatar");
+                    String nickName = object.getString("nickName");
+                    User user = new User();
+                    user.setUserId(userId);
+                    user.setNickName(nickName);
+                    user.setAvatar(avatar);
+                    user.setType(1);
+                    UserDBManager.getInstance().saveContact(user);
+                    AccountManager.getInstance().getContactList(MainActivity.this).put(user.getUserId(), user);
+                    break;
+                case "F_ADD":
+                    updateUnreadMsgCount();
+                    updateUnreadAddressLable();
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // IMUtils.HandleCMDInfoFromMessage(m);
     }
 
     /**
@@ -435,13 +464,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     public void updateUnreadMsgCount() {
         int unreadMsgCountTotal = 0;
-        // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+getUnreadAddressCountTotal();
-        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount();
+        // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+
+        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
-            if(unreadMsgCountTotal<100){
+            if (unreadMsgCountTotal < 100) {
                 unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
-            }else{
+            } else {
                 unreadMsg.setText("...");
             }
         } else {

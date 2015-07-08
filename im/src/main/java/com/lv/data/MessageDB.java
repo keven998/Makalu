@@ -9,6 +9,7 @@ import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.ConversationBean;
+import com.lv.bean.InventMessage;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
@@ -47,21 +48,27 @@ public class MessageDB {
     private static final int MESSAGE_INDEX_SendType = 6;
     private static final int MESSAGE_INDEX_Metadata = 7;
     private static final int MESSAGE_INDEX_SenderId = 8;
-    private static final String CON_SCHEMA=" (Friend_Id INTEGER PRIMARY KEY,lastTime INTEGER," +
+    private static final String CON_SCHEMA = " (Friend_Id INTEGER PRIMARY KEY,lastTime INTEGER," +
             "HASH TEXT,last_rec_msgId INTEGER, IsRead INTEGER,conversation TEXT,chatType TEXT)";
-    private static final String MSG_SCHEMA=" (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
+    private static final String MSG_SCHEMA = " (LocalId INTEGER PRIMARY KEY AUTOINCREMENT,ServerId INTEGER,Status INTEGER," +
             "Type INTEGER, Message TEXT,CreateTime INTEGER, SendType INTEGER, Metadata TEXT," +
             "SenderId INTEGER)";
-    public static final int TIPS_TYPE=99;
+    private static final String REQUEST_SCHEMA = " (Id INTEGER PRIMARY KEY AUTOINCREMENT ,UserId INTEGER," +
+            "nickName TEXT,avatarSmall TEXT,requestMsg TEXT,requestId TEXT,status INTEGER,time INTEGER，isRead INTEGER)";
+    public static final int TIPS_TYPE = 99;
+    private String request_msg_table_name;
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private SQLiteDatabase mdb;
     private static String userId;
+    private static final int AGREE = 1;
+    private static final int DEFAULT = 0;
 //    ExecutorService dbThread = Executors.newFixedThreadPool(1);
 
     private MessageDB(String User_Id) {
         String path = CryptUtils.getMD5String(User_Id);
         con_table_name = "con_" + path;
         fri_table_name = "fri_" + path;
+        request_msg_table_name = "request_" + path;
         String DATABASE_PATH = Config.DB_PATH + path;
         databaseFilename = DATABASE_PATH + "/" + Config.MSG_DBNAME;
         File dir = new File(DATABASE_PATH);
@@ -112,6 +119,10 @@ public class MessageDB {
                 + CON_SCHEMA);
         mdb.execSQL("create index if not exists index_Con_Friend_Id on " + con_table_name + "(Friend_Id)");
 
+        mdb.execSQL("CREATE table IF NOT EXISTS "
+                + request_msg_table_name
+                + REQUEST_SCHEMA);
+
     }
 
     public synchronized long saveMsg(final String Friend_Id, final MessageBean entity, String chatType) {
@@ -147,7 +158,7 @@ public class MessageDB {
         /**
          * CMD消息
          */
-        if ("CMD".equals(chatType)) {
+        if (entity.getType() == 100) {
             return handleCMD(entity);
         }
         /**
@@ -174,8 +185,12 @@ public class MessageDB {
             closeDB();
             return 1;
         }
-        switch (entity.getType()){
-            case Config.AUDIO_MSG :
+        /**
+         * 屏蔽欢迎回来
+         */
+        if (entity.getSenderId()==0)return 1;
+        switch (entity.getType()) {
+            case Config.AUDIO_MSG:
                 try {
                     JSONObject object = new JSONObject(entity.getMessage());
                     String url = object.getString("url");
@@ -249,48 +264,166 @@ public class MessageDB {
 
     private int handleCMD(MessageBean entity) {
         mdb = getDB();
-        String table_name = "cmd_" + CryptUtils.getMD5String(100 + "");
-        ;
-        mdb.execSQL("CREATE table IF NOT EXISTS "
-                + table_name
-                + MSG_SCHEMA);
-        Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
-        int count = cursor.getCount();
-        if (count > 0) return 1;
-        cursor.close();
-        ContentValues values = new ContentValues();
-        values.put("ServerId", entity.getServerId());
-        values.put("Status", entity.getStatus());
-        values.put("Type", entity.getType());
-        values.put("Message", entity.getMessage());
-        values.put("CreateTime", entity.getCreateTime());
-        values.put("SendType", entity.getSendType());
-        values.put("Metadata", entity.getMetadata());
-        values.put("SenderId", entity.getSenderId());
-        mdb.insert(table_name, null, values);
-        String cmd = entity.getMessage();
         try {
+            String cmd = entity.getMessage();
             JSONObject object = new JSONObject(cmd);
             String action = object.getString("action");
-            switch (action) {
-                case "D_INVITE":
-                    long chatId = object.getLong("groupId");
-                    long inviteId = object.getLong("userId");
-                    String nickName = object.getString("nickName");
-                    String groupName = object.getString("groupName");
-                    addTips(String.valueOf(chatId),(nickName + "邀请你加入" + groupName + "讨论组"),"group");
+//            switch (action) {
+//            case "D_INVITE":
+//                    long chatId = object.getLong("groupId");
+//                    long inviteId = object.getLong("userId");
+//                    String nickName = object.getString("nickName");
+//                    String groupName = object.getString("groupName");
+//                    addTips(String.valueOf(chatId),(nickName + "邀请你加入" + groupName + "讨论组"),"group");
 //                    MessageBean m = new MessageBean();
 //                    m.setMessage(nickName + "邀请你加入" + groupName + "讨论组");
 //                    m.setCreateTime(TimeUtils.getTimestamp());
 //                    m.setType(TIPS_TYPE);
 //                    saveMsg(String.valueOf(chatId), m, "group");
+//                    return 1;
+//                    break;
+            if ("F_ADD".equals(action)) {
+                String message = object.getString("message");
+                long userId = object.getLong("userId");
+                String avatar = object.getString("avatar");
+                String nickName = object.getString("nickName");
+                String requestId = object.getString("requestId");
+                Cursor cursor = mdb.rawQuery("select status from " + request_msg_table_name + " where requestId=?", new String[]{requestId});
+                if (cursor.getCount() == 0) {
+                    saveInventMessage(new InventMessage(userId, nickName, avatar, message, requestId, DEFAULT, TimeUtils.getTimestamp()));
+                    closeDB();
+                    return 0;
+                }
+                cursor.moveToLast();
+                int status = cursor.getInt(0);
+                if (status == DEFAULT) {
+                    closeDB();
+                    return 1;
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put("status", DEFAULT);
+                    mdb.update(request_msg_table_name, values, "requestId=?", new String[]{requestId});
+                    closeDB();
+                    return 0;
+                }
+            } else if ("F_AGREE".equals(action)) {
+                long userId = object.getLong("userId");
+                String nickName = object.getString("nickName");
+                addTips(String.valueOf(userId), nickName + "已同意你的好友请求，现在可以开始聊天", "single");
+                closeDB();
+                return 0;
+            } else {
+                closeDB();
+                return 1;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            closeDB();
+            return 1;
         }
+//        String table_name = "cmd_" + CryptUtils.getMD5String(100 + "");
+//        mdb.execSQL("CREATE table IF NOT EXISTS "
+//                + table_name
+//                + MSG_SCHEMA);
+//        Cursor cursor = mdb.rawQuery("select * from " + table_name + " where ServerId=?", new String[]{entity.getServerId() + ""});
+//        int count = cursor.getCount();
+//        if (count > 0) return 1;
+//        cursor.close();
+//        ContentValues values = new ContentValues();
+//        values.put("ServerId", entity.getServerId());
+//        values.put("Status", entity.getStatus());
+//        values.put("Type", entity.getType());
+//        values.put("Message", entity.getMessage());
+//        values.put("CreateTime", entity.getCreateTime());
+//        values.put("SendType", entity.getSendType());
+//        values.put("Metadata", entity.getMetadata());
+//        values.put("SenderId", entity.getSenderId());
+//        mdb.insert(table_name, null, values);
+//        String cmd = entity.getMessage();
+//        try {
+//            JSONObject object = new JSONObject(cmd);
+//            String action = object.getString("action");
+//            switch (action) {
+//                case "D_INVITE":
+//                    long chatId = object.getLong("groupId");
+//                    long inviteId = object.getLong("userId");
+//                    String nickName = object.getString("nickName");
+//                    String groupName = object.getString("groupName");
+//                    addTips(String.valueOf(chatId),(nickName + "邀请你加入" + groupName + "讨论组"),"group");
+////                    MessageBean m = new MessageBean();
+////                    m.setMessage(nickName + "邀请你加入" + groupName + "讨论组");
+////                    m.setCreateTime(TimeUtils.getTimestamp());
+////                    m.setType(TIPS_TYPE);
+////                    saveMsg(String.valueOf(chatId), m, "group");
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        closeDB();
+//        return 0;
+    }
 
+    public int getUnAcceptMsg() {
+        mdb=getDB();
+        Cursor cursor = mdb.rawQuery("select status from " + request_msg_table_name, null);
+        int num=0;
+        while (cursor.moveToNext()){
+            int c=cursor.getInt(0);
+            if (c==0)num++;
+        }
+        return num;
+    }
+
+    public synchronized void saveInventMessage(InventMessage inventMessage) {
+        mdb = getDB();
+        ContentValues values = new ContentValues();
+        values.put("UserId", inventMessage.getUserId());
+        values.put("nickName", inventMessage.getNickName());
+        values.put("avatarSmall", inventMessage.getAvatarSmall());
+        values.put("requestMsg", inventMessage.getRequestMsg());
+        values.put("requestId", inventMessage.getRequestId());
+        values.put("status", inventMessage.getStatus());
+        values.put("time", inventMessage.getTime());
+        mdb.insert(request_msg_table_name, null, values);
         closeDB();
-        return 0;
+
+    }
+
+    public synchronized void deleteInventMessage(String Id) {
+        mdb = getDB();
+        mdb.delete(request_msg_table_name, "Id=?", new String[]{Id});
+
+    }
+
+    public List<InventMessage> getInventMessages() {
+        mdb = getDB();
+        List<InventMessage> list = new ArrayList<InventMessage>();
+        Cursor cursor = mdb.rawQuery("select * from " + request_msg_table_name, null);
+        while (cursor.moveToNext()) {
+            int Id = cursor.getInt(0);
+            long userId = cursor.getLong(1);
+            String nickName = cursor.getString(2);
+            String avatarSmall = cursor.getString(3);
+            String requestMsg = cursor.getString(4);
+            String requestId = cursor.getString(5);
+            int status = cursor.getInt(6);
+            long time = cursor.getLong(7);
+            list.add(new InventMessage(Id, userId, nickName, avatarSmall, requestMsg, requestId, status, time));
+        }
+        cursor.close();
+        closeDB();
+        return list;
+    }
+
+    public synchronized void updateInventMessageStatus(long UserId, int status) {
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select * from " + request_msg_table_name + " where Id=?", new String[]{String.valueOf(UserId)});
+        if (cursor.getCount() > 0) {
+            ContentValues values = new ContentValues();
+            values.put("Status", status);
+            mdb.update(request_msg_table_name, values, "Id=?", new String[]{String.valueOf(UserId)});
+        }
     }
 
     public List<MessageBean> getAllMsg(String Friend_Id, int pager) {
@@ -298,8 +431,8 @@ public class MessageDB {
         String table_name = "chat_" + CryptUtils.getMD5String(Friend_Id);
         List<MessageBean> list = new LinkedList<MessageBean>();
         // 滚动到顶端自动加载数据
-        int from =0;
-        int to = (pager + 1) * 20-1;
+        int from = 0;
+        int to = (pager + 1) * 20 - 1;
         mdb.execSQL("CREATE table IF NOT EXISTS "
                 + table_name
                 + MSG_SCHEMA);
@@ -502,8 +635,9 @@ public class MessageDB {
         closeDB();
         return count;
     }
-    public synchronized void addTips(String chatId,String tips,String chatType){
-        MessageBean m=new MessageBean();
+
+    public synchronized void addTips(String chatId, String tips, String chatType) {
+        MessageBean m = new MessageBean();
         m.setMessage(tips);
         m.setCreateTime(TimeUtils.getTimestamp());
         m.setType(TIPS_TYPE);

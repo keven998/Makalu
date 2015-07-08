@@ -32,6 +32,7 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -215,9 +216,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
+        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
         initView();
         setUpView();
-        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
@@ -406,8 +407,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             args.putString("groupId", toChatUsername);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.menu_frame, fragment).commit();
+            FragmentTransaction ft=fragmentManager.beginTransaction();
+            ft.add(fragment,"Group");
+            ft  .replace(R.id.menu_frame, fragment).commit();
             findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -420,7 +422,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
                 }
             });
-
         }
         // 把此会话的未读数置为0
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
@@ -582,6 +583,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
+            intent.putExtra("isShare", true);
             intent.setAction("action.chat");
             startActivityWithNoAnim(intent);
             overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);

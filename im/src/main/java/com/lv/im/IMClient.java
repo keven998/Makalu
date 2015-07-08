@@ -15,6 +15,7 @@ import com.lv.Utils.PictureUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
+import com.lv.bean.InventMessage;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.bean.SendMessageBean;
@@ -520,6 +521,15 @@ public class IMClient {
             prograssMap.put(id,0);
             return 0;
         }
+    }
+    public List<InventMessage> getInventMessages(){
+        return db.getInventMessages();
+    }
+    public int getUnAcceptMsg(){
+        return db.getUnAcceptMsg();
+    }
+    public void updateInventMsgStatus(long userId,int status){
+        db.updateInventMessageStatus(userId,status);
     }
     public void logout() {
         isLogin = false;

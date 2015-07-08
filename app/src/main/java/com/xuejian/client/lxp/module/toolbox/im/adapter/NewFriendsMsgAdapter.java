@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@ package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,9 +27,10 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
-import com.lv.bean.MessageBean;
+import com.lv.bean.InventMessage;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -39,12 +41,12 @@ import com.xuejian.client.lxp.db.UserDBManager;
 
 import java.util.List;
 
-public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
+public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
 
     private Context context;
     DisplayImageOptions options;
 
-    public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<MessageBean> objects) {
+    public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<InventMessage> objects) {
         super(context, textViewResourceId, objects);
         this.context = context;
         options = new DisplayImageOptions.Builder()
@@ -75,58 +77,58 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        final InviteMessage msg = getItem(position);
-//        if (msg != null) {
+        final InventMessage msg = getItem(position);
+        if (msg != null) {
 //            if(msg.getGroupId() != null){ // 显示群聊提示
 //                holder.groupContainer.setVisibility(View.VISIBLE);
 //                holder.groupname.setText(msg.getGroupName());
 //            } else{
-//                holder.groupContainer.setVisibility(View.GONE);
-//            }
-//
-//            holder.reason.setText(msg.getReason());
-//            holder.name.setText(msg.getNickname());
-//            // holder.time.setText(DateUtils.getTimestampString(new
-//            // Date(msg.getTime())));
-//            if (msg.getStatus() == InviteStatus.BEAGREED) {
+            holder.groupContainer.setVisibility(View.GONE);
+            //         }
+            if (TextUtils.isEmpty(msg.getRequestMsg())) {
+                // 如果没写理由
+                holder.reason.setText("请求加你为好友");
+            }else holder.reason.setText(msg.getRequestMsg());
+            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(),holder.avator,options);
+            holder.name.setText(msg.getNickName());
+            // holder.time.setText(DateUtils.getTimestampString(new
+            // Date(msg.getTime())));
+//            if (msg.getStatus() == 1) {
 //                holder.status.setVisibility(View.GONE);
 //                holder.reason.setText("已同意你的好友请求");
-//            } else if (msg.getStatus() == InviteStatus.BEINVITEED || msg.getStatus() == InviteStatus.BEAPPLYED) {
-//                holder.status.setVisibility(View.VISIBLE);
-//                holder.status.setText("同意");
-//                if(msg.getStatus() == InviteStatus.BEINVITEED){
-//                    if (msg.getReason() == null) {
-//                        // 如果没写理由
-//                        holder.reason.setText("请求加你为好友");
-//                    }
+//            } else
+//                if (msg.getStatus() == 0) {
+            holder.status.setVisibility(View.VISIBLE);
+            holder.status.setText("同意");
+//                if(msg.getStatus() == 0){
 //                }else{ //入群申请
-//                    if (TextUtils.isEmpty(msg.getReason())) {
-//                        holder.reason.setText("申请加入群：" + msg.getGroupName());
+            //                   if (TextUtils.isEmpty(msg.getRequestMsg())) {
+            //  holder.reason.setText("申请加入群：" + msg.getGroupName());
 //                    }
 //                }
-//                // 设置点击事件
-//                holder.status.setOnClickListener(new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        // 同意别人发的好友请求
-//                        acceptInvitation(holder.status, msg);
-//                    }
-//                });
-//            } else if (msg.getStatus() ==  InviteStatus.AGREED) {
-//                holder.status.setText("已添加");
-//                holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
-//                holder.status.setBackgroundResource(0);
-//                holder.status.setEnabled(false);
+            // 设置点击事件
+            holder.status.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 同意别人发的好友请求
+                    acceptInvitation(holder.status, msg);
+                }
+            });
+        } else if (msg.getStatus() == 1) {
+            holder.status.setText("已添加");
+            holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
+            holder.status.setBackgroundResource(0);
+            holder.status.setEnabled(false);
 //            } else if(msg.getStatus() ==  InviteStatus.REFUSED) {
 //                holder.status.setText("已拒绝");
 //                holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
 //                holder.status.setBackgroundResource(0);
 //                holder.status.setEnabled(false);
 //            }
-//            ImageLoader.getInstance().displayImage(msg.getAvatar(),holder.avator, options);
-//
-//            // 设置用户头像
-//        }
+            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(), holder.avator, options);
+
+            // 设置用户头像
+        }
 
         return convertView;
     }
@@ -137,32 +139,28 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
      * @param button
      * @param msg
      */
-    private void acceptInvitation(final Button button, final MessageBean msg) {
+    private void acceptInvitation(final Button button, final InventMessage msg) {
         DialogManager.getInstance().showLoadingDialog((Activity) context);
-        UserApi.addContact(String.valueOf(msg.getSenderId()), new HttpCallBack<String>() {
+        UserApi.addContact(msg.getRequestId(),null,new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 button.setText("已添加");
                 button.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
-             //   msg.setStatus(InviteStatus.AGREED);
-             //   InviteMsgRepository.getInviteMsgDao(context).update(msg);
+                //   msg.setStatus(InviteStatus.AGREED);
+                //   InviteMsgRepository.getInviteMsgDao(context).update(msg);
                 button.setBackgroundDrawable(null);
                 button.setEnabled(false);
                 User imUser = new User();
-//                imUser.setUserId(msg.getUserId());
-//                imUser.setNickName(msg.getNickname());
-//                // imUser.setUsername(msg.getFrom());
-//                imUser.setAvatar(msg.getAvatar());
-//                imUser.setAvatarSmall(msg.getAvatar());
-//                imUser.setType(1);
-//                imUser.setGender(msg.getGender());
-                // IMUtils.setUserHead(imUser);
+                imUser.setUserId(msg.getUserId());
+                imUser.setNickName(msg.getNickName());
+                imUser.setAvatarSmall(msg.getAvatarSmall());
                 imUser.setType(1);
                 UserDBManager.getInstance().saveContact(imUser);
                 AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
-                IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()),"","single");
-             //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
+                IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()), "你已添加" + imUser.getNickName() + "为好友，可以开始聊天", "single");
+                IMClient.getInstance().updateInventMsgStatus(imUser.getUserId(),1);
+                //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }
 
             @Override
@@ -173,6 +171,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<MessageBean> {
             }
         });
     }
+
     private static class ViewHolder {
         ImageView avator;
         TextView name;

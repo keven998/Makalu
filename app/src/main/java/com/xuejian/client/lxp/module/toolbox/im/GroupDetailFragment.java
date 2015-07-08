@@ -937,5 +937,7 @@ public class GroupDetailFragment extends PeachBaseFragment implements View.OnCli
             });
         }
     }
+public static void refresh(){
 
+}
 }

@@ -163,7 +163,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
 
         );
-
         mEditBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

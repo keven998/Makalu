@@ -19,7 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.lv.bean.MessageBean;
+import com.lv.bean.InventMessage;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.NewFriendsMsgAdapter;
@@ -34,7 +35,7 @@ import java.util.List;
 public class NewFriendsMsgActivity extends ChatBaseActivity {
 	private ListView listView;
     private NewFriendsMsgAdapter adapter;
-    private List<MessageBean> invents;
+    private List<InventMessage> invents;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
             }
         });
         invents=new ArrayList<>();
+        invents= IMClient.getInstance().getInventMessages();
+        System.out.println("invent size  "+invents.size());
 		listView = (ListView) findViewById(R.id.list);
 		//设置adapter
 	    adapter = new NewFriendsMsgAdapter(this, 1, invents);

@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.db;
+package com.lv.bean;
 
 /**
  * Created by yibiao.qin on 2015/7/3.

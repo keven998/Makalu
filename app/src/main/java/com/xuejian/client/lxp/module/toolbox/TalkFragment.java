@@ -246,14 +246,7 @@ public class TalkFragment extends PeachBaseFragment {
      * @return
      */
     public int getUnreadAddressCountTotal() {
-       /* int unreadAddressCountTotal = 0;
-        unreadAddressCountTotal = (int) InviteMsgRepository.getUnAcceptMsgCount(PeachApplication.getContext());
-        if (AccountManager.getInstance().getContactList(PeachApplication.getContext()).get(Constant.NEW_FRIENDS_USERNAME) != null) {
-            com.xuejian.client.lxp.db.User imUser = AccountManager.getInstance().getContactList(PeachApplication.getContext()).get(Constant.NEW_FRIENDS_USERNAME);
-            //imUser.setUnreadMsgCount(unreadAddressCountTotal);
-            UserDBManager.getInstance().saveContact(imUser);
-        }*/
-        return 0;
+        return IMClient.getInstance().getUnAcceptMsg();
     }
 
     /**

@@ -27,7 +27,8 @@ public class GroupApi {
     public static final String GetGroupMember2 = "/members";
     public static final String AddGroupMember1 = "/chatgroups/";
     public static final String AddGroupMember2 = "/members";
-
+    public final static int ADD_MEMBER = 1;
+    public final static int DELETE_MEMBER = 2;
 
     public static PTRequestHandler createGroup(String requestBody,HttpCallBack callback){
         PTRequest request = new PTRequest();
@@ -142,9 +143,12 @@ public class GroupApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println("editGroupMembers "+object.toString());
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.TRACE);
+        if (action==ADD_MEMBER){
+            request.setHttpMethod(PTRequest.TRACE);
+        }else {
+            request.setHttpMethod(PTRequest.DELETE);
+        }
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/"+groupId+"/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);

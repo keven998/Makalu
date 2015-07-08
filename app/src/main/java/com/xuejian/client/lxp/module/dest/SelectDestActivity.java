@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -61,8 +60,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private TextView preview;
     private TextView selectNum;
     private ArrayList<String> allSelectedPics = new ArrayList<String>();
-
-
+    HorizontalScrollView mScrollPanel;
+    LinearLayout citysLl;
     @Override
     public void onDestAdded(final LocBean locBean,boolean isEdit,String type) {
         MobclickAgent.onEvent(mContext,"event_select_city");
@@ -71,7 +70,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             return;
         }
         View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
-       // citysLl.addView(cityView);
+         citysLl.addView(cityView);
         allAddCityList.add(locBean);
         if(allAddCityList.size()>0) {
             selectNum.setText("已选：" + allAddCityList.size());
@@ -103,7 +102,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     public void onDestRemoved(LocBean locBean,String type) {
         int index = allAddCityList.indexOf(locBean);
-      //  citysLl.removeViewAt(index);
+         citysLl.removeViewAt(index);
         allAddCityList.remove(locBean);
         if (allAddCityList.size() == 0) {
            // mBottomPanel.setVisibility(View.GONE);
@@ -134,8 +133,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         View rootView = View.inflate(mContext, R.layout.activity_select_dest, null);
         setContentView(rootView);
         initTitleBar();
-       // citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
-       // mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
+       citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
+        mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (RelativeLayout) rootView.findViewById(R.id.bottom_panel);
         preview = (TextView) rootView.findViewById(R.id.des_pic_preview);
         selectNum = (TextView) rootView.findViewById(R.id.des_selected_num);

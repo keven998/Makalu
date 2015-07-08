@@ -262,13 +262,13 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler signIn(String loginName, String pwd, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + SIGNIN);
+        request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("loginName", loginName);
-            jsonObject.put("pwd", pwd);
+            jsonObject.put("password", pwd);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -438,7 +438,7 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("contactId", uid);
+            jsonObject.put("contactId", Long.parseLong(uid));
             jsonObject.put("message",message);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -459,15 +459,16 @@ public class UserApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler addContact(String uid, HttpCallBack callback) {
+    public static PTRequestHandler addContact( String requestId, String message,HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS);
+        request.setHttpMethod(PTRequest.TRACE);
+        request.setUrl(SystemConfig.DEV_URL + "/users/"+ AccountManager.getCurrentUserId()+"/contact-requests/"+requestId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId", uid);
+            jsonObject.put("action", 1);
+            jsonObject.put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }

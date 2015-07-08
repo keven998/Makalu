@@ -103,7 +103,7 @@
         android:background="@drawable/plan_country_down"
         android:visibility="visible">
 
-        <!--<HorizontalScrollView android:id="@+id/scroll_panel"
+       <HorizontalScrollView android:id="@+id/scroll_panel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
@@ -119,7 +119,7 @@
                 android:layout_marginLeft="6dp"
                 android:paddingRight="10dp"
                 android:layout_marginBottom="0dp"/>
-        </HorizontalScrollView>-->
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/des_pic_preview"

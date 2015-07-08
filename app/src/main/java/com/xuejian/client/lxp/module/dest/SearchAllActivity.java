@@ -34,7 +34,6 @@ import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
 
 import java.util.ArrayList;
@@ -46,8 +45,8 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/9.
  */
 public class SearchAllActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
-    TitleHeaderBar mTitleBar;
+//    @InjectView(R.id.title_bar)
+//    TitleHeaderBar mTitleBar;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
@@ -65,30 +64,37 @@ public class SearchAllActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
         ButterKnife.inject(this);
-        if (!TextUtils.isEmpty(toId)) {
-            mTitleBar.getTitleTextView().setText("发送攻略");
-        } else {
-            mTitleBar.getTitleTextView().setText("旅行搜搜");
-        }
-
-        mTitleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishWithNoAnim();
-                overridePendingTransition(0, android.R.anim.fade_out);
-            }
-        });
+//        if (!TextUtils.isEmpty(toId)) {
+//            mTitleBar.getTitleTextView().setText("发送攻略");
+//        } else {
+//            mTitleBar.getTitleTextView().setText("旅行搜搜");
+//        }
+//
+//        mTitleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finishWithNoAnim();
+//                overridePendingTransition(0, android.R.anim.fade_out);
+//            }
+//        });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(mEtSearch.getText())) {
-//                    ToastUtil.getInstance(mContext).showToast("你要找什么");
-                    return;
-                } else {
-                    searchAll(mEtSearch.getText().toString().trim());
+                if (mBtnSearch.getText().toString().trim().equals("取消")){
+                    finishWithNoAnim();
+                    overridePendingTransition(0, android.R.anim.fade_out);
                 }
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                else {
+                    if (TextUtils.isEmpty(mEtSearch.getText())) {
+//                    ToastUtil.getInstance(mContext).showToast("你要找什么");
+                        return;
+                    } else {
+                        searchAll(mEtSearch.getText().toString().trim());
+                    }
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    mBtnSearch.setText("取消");
+                }
             }
         });
 
@@ -110,13 +116,17 @@ public class SearchAllActivity extends PeachBaseActivity {
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                mBtnSearch.setText("取消");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
                     mSearchAllLv.setAdapter(null);
+                    mBtnSearch.setText("取消");
+                }
+                if (s.length()>0){
+                    mBtnSearch.setText("搜索");
                 }
             }
 
