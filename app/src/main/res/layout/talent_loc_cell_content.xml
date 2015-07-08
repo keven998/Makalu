@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/talent_loc_cell_height">
+
+    <ImageView
+        android:id="@+id/talent_loc_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#5f000000"
+        />
+
+    <TextView
+        android:id="@+id/talent_loc_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/base_color_white"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-15dp"
+        android:text="99位"
+        />
+
+    <TextView
+        android:id="@+id/talent_loc_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/base_color_white"
+        android:layout_marginTop="15dp"
+        android:text="~派派.美国.达人~"
+        />
+
+</FrameLayout>
