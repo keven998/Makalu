@@ -108,18 +108,18 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public static final int REQUEST_CODE_VOICE = 6;
     public static final int REQUEST_CODE_PICTURE = 7;
     public static final int REQUEST_CODE_LOCATION = 8;
-//    public static final int REQUEST_CODE_NET_DISK = 9;
+    //    public static final int REQUEST_CODE_NET_DISK = 9;
 //    public static final int REQUEST_CODE_FILE = 10;
     public static final int REQUEST_CODE_COPY_AND_PASTE = 11;
-//    public static final int REQUEST_CODE_PICK_VIDEO = 12;
+    //    public static final int REQUEST_CODE_PICK_VIDEO = 12;
 //    public static final int REQUEST_CODE_DOWNLOAD_VIDEO = 13;
 //    public static final int REQUEST_CODE_VIDEO = 14;
     public static final int REQUEST_CODE_EXT = 15;
-//    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
+    //    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
 //    public static final int REQUEST_CODE_SEND_USER_CARD = 17;
     public static final int REQUEST_CODE_CAMERA = 18;
     public static final int REQUEST_CODE_LOCAL = 19;
-//    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
+    //    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
 //    public static final int REQUEST_CODE_GROUP_DETAIL = 21;
     public static final int REQUEST_CODE_SELECT_VIDEO = 23;
     public static final int REQUEST_CODE_SELECT_FILE = 24;
@@ -422,10 +422,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         TextView titleView = (TextView) findViewById(R.id.tv_na_title);
 
-        if (user==null){
+        if (user == null) {
             titleView.setText(toChatUsername);
-        }
-        else  titleView.setText(user.getNickName());
+        } else titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
             drawerLayout.setEnabled(false);
@@ -436,7 +435,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             args.putString("groupId", toChatUsername);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft= fragmentManager.beginTransaction();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.add(fragment, "GroupDrawer");
             ft.replace(R.id.menu_frame, fragment).commit();
             findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
@@ -1261,7 +1260,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onBackPressed() {
-        if (mExtraPanel.getVisibility() == View.VISIBLE) {
+        if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+        } else if (mExtraPanel.getVisibility() == View.VISIBLE) {
             mExtraPanel.setVisibility(View.GONE);
             expressionContainer.setVisibility(View.GONE);
             btnContainer.setVisibility(View.GONE);

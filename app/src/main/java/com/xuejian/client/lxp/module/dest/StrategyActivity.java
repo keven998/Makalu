@@ -367,7 +367,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         dtv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
         adapter = new DrawAdapter(StrategyActivity.this);
