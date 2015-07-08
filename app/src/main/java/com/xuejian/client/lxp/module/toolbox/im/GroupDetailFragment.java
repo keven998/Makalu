@@ -278,9 +278,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
         if (memberGv.getFooterViewsCount() == 0) {
             View view = getActivity().getLayoutInflater().inflate(R.layout.im_group_option_footer, null);
             memberGv.addFooterView(view);
-            Button btn = (Button) view.findViewById(R.id.footer_btn);
-            btn.setText("退出此群");
-            btn.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.footer_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     exitGroupTips();
@@ -395,7 +393,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
     private class MemberViewHolder extends ViewHolderBase<User> {
         private View contentView;
         private ImageView avatarIv, removeIv;
-        private TextView nicknameTv, viewHolderName, removeTv;
+        private TextView nicknameTv, viewHolderName;
         private DisplayImageOptions picOptions;
 
         public MemberViewHolder() {
@@ -407,7 +405,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
                     .showImageOnLoading(R.drawable.messages_bg_useravatar)
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6)))
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -416,10 +414,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
         public View createView(LayoutInflater layoutInflater) {
             contentView = layoutInflater.inflate(R.layout.group_member_list, null);
             avatarIv = (ImageView) contentView.findViewById(R.id.iv_avatar);
-            removeTv = (TextView) contentView.findViewById(R.id.badge_delete);
             removeIv = (ImageView) contentView.findViewById(R.id.group_del_icon);
             nicknameTv = (TextView) contentView.findViewById(R.id.tv_nickname);
-            //viewHolderName = (TextView) contentView.findViewById(R.id.group_holder_name);
             return contentView;
         }
 
@@ -444,9 +440,9 @@ public class GroupDetailFragment extends PeachBaseFragment {
             if (isInDeleteMode) {
                 Animation animation = AnimationSimple.expand(removeIv);
                 removeIv.startAnimation(animation);
-                animation = AnimationSimple.expand(removeTv);
-                removeTv.startAnimation(animation);
-                removeTv.setOnClickListener(new View.OnClickListener() {
+                animation = AnimationSimple.expand(removeIv);
+                removeIv.startAnimation(animation);
+                removeIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
@@ -471,7 +467,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 });
             } else {
                 removeIv.setVisibility(View.GONE);
-                removeTv.setVisibility(View.GONE);
             }
         }
 
@@ -480,7 +475,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
          */
         protected void deleteMembersFromGroup(final long userID) {
             final ProgressDialog deleteDialog = new ProgressDialog(getActivity());
-            deleteDialog.setMessage("正在移除...");
+            deleteDialog.setMessage("正在移除");
             deleteDialog.setCanceledOnTouchOutside(false);
             deleteDialog.show();
             GroupApi.deleteGroupMember(groupId, userID, new HttpCallBack() {
