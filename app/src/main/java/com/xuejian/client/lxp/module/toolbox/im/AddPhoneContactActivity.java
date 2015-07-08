@@ -24,7 +24,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PhoneContactUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.Collections;

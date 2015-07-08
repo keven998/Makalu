@@ -61,6 +61,7 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.Utils.Config;
@@ -107,18 +108,18 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public static final int REQUEST_CODE_VOICE = 6;
     public static final int REQUEST_CODE_PICTURE = 7;
     public static final int REQUEST_CODE_LOCATION = 8;
-//    public static final int REQUEST_CODE_NET_DISK = 9;
+    //    public static final int REQUEST_CODE_NET_DISK = 9;
 //    public static final int REQUEST_CODE_FILE = 10;
     public static final int REQUEST_CODE_COPY_AND_PASTE = 11;
-//    public static final int REQUEST_CODE_PICK_VIDEO = 12;
+    //    public static final int REQUEST_CODE_PICK_VIDEO = 12;
 //    public static final int REQUEST_CODE_DOWNLOAD_VIDEO = 13;
 //    public static final int REQUEST_CODE_VIDEO = 14;
     public static final int REQUEST_CODE_EXT = 15;
-//    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
+    //    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
 //    public static final int REQUEST_CODE_SEND_USER_CARD = 17;
     public static final int REQUEST_CODE_CAMERA = 18;
     public static final int REQUEST_CODE_LOCAL = 19;
-//    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
+    //    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
 //    public static final int REQUEST_CODE_GROUP_DETAIL = 21;
     public static final int REQUEST_CODE_SELECT_VIDEO = 23;
     public static final int REQUEST_CODE_SELECT_FILE = 24;
@@ -175,6 +176,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
+    public Handler mHandler;
+
+    public void setHandler(Handler handler) {
+        mHandler = handler;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -354,11 +360,34 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             }
         });
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Message msg = new Message();
+                msg.what = 1;
+                mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        LogUtil.d("resume");
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
     }
 
@@ -393,23 +422,22 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         TextView titleView = (TextView) findViewById(R.id.tv_na_title);
 
-        if (user==null){
+        if (user == null) {
             titleView.setText(toChatUsername);
-        }
-        else  titleView.setText(user.getNickName());
+        } else titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
             drawerLayout.setEnabled(false);
         } else {
             // 群聊
-            Fragment fragment = new GroupDetailFragment();
+            final Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft=fragmentManager.beginTransaction();
-            ft.add(fragment,"Group");
-            ft  .replace(R.id.menu_frame, fragment).commit();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.add(fragment, "GroupDrawer");
+            ft.replace(R.id.menu_frame, fragment).commit();
             findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1232,7 +1260,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onBackPressed() {
-        if (mExtraPanel.getVisibility() == View.VISIBLE) {
+        if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+        } else if (mExtraPanel.getVisibility() == View.VISIBLE) {
             mExtraPanel.setVisibility(View.GONE);
             expressionContainer.setVisibility(View.GONE);
             btnContainer.setVisibility(View.GONE);

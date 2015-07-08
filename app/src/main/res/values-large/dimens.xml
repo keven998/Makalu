@@ -21,5 +21,6 @@
     <dimen name="image_thumbnail_spacing">2dp</dimen>
 
     <dimen name="my_plan_img_height">125dp</dimen>
+    <dimen name="talent_loc_cell_height">305dp</dimen>
 
 </resources>

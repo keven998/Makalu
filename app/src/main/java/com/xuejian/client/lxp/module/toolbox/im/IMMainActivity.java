@@ -29,7 +29,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;

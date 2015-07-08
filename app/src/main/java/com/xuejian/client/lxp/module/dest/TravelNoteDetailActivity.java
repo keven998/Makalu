@@ -3,9 +3,7 @@ package com.xuejian.client.lxp.module.dest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 
 import com.aizou.core.dialog.ToastUtil;

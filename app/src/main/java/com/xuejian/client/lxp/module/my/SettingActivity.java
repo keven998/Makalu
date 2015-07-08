@@ -1,11 +1,9 @@
 package com.xuejian.client.lxp.module.my;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;

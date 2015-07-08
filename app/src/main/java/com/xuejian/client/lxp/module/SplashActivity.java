@@ -44,6 +44,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     private TextView sp_bounce;
     Handler handler;
     int REGESTER_REQUEST = 5;
+    int LOGIN_REQUEST = 6;
     private Long NEWUSER = 1l;
 
     @Override
@@ -186,7 +187,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
-                startActivity(logActivity);
+                startActivityForResult(logActivity, LOGIN_REQUEST);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 break;
 
@@ -216,6 +217,8 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             User user = (User) data.getSerializableExtra("user");
             DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             imLogin(user);
+        } else {
+            finish();
         }
     }
 
@@ -234,7 +237,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
             }
         });

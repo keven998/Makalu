@@ -1,20 +1,14 @@
 package com.xuejian.client.lxp.module.dest;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,7 +19,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -43,7 +36,6 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.dest.adapter.SpotDpViewHolder;
 
 /**
  * Created by Rjm on 2014/11/17.

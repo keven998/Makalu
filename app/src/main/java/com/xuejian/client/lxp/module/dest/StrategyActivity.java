@@ -1,7 +1,5 @@
 package com.xuejian.client.lxp.module.dest;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,18 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -32,7 +23,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
@@ -41,10 +31,8 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.common.account.StrategyManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -52,14 +40,10 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.utils.ShareUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.fragment.CollectionFragment;
 import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,8 +58,6 @@ import butterknife.InjectView;
  */
 public class StrategyActivity extends PeachBaseActivity implements OnStrategyModeChangeListener {
     public final static int EDIT_LOC_REQUEST_CODE = 110;
-    @InjectView(R.id.tv_title_back)
-    TextView mTvTitleBack;
     @InjectView(R.id.strategy_title)
     TextView topTitle;
     @InjectView(R.id.iv_more)
@@ -97,16 +79,11 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     PlanScheduleFragment routeDayFragment;
     CollectionFragment collectionFragment;
     private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
-    private ImageView iv_location, iv_more;
-    private TextView tv_back;
-    private RelativeLayout bottom_indicator;
+    private ImageView iv_location;
     private View loading_view;
-    private TextView draw_title, draw_share, editPlan;
     private ListView draw_list;
     private DrawAdapter adapter;
-    private RelativeLayout plan_title, selected_place_title;
-    private TextView tv_add_plan;
-    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -144,52 +121,19 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             }
         });
         iv_location = (ImageView) findViewById(R.id.iv_location);
-        iv_more = (ImageView) findViewById(R.id.iv_more);
-        tv_back = (TextView) findViewById(R.id.tv_title_back);
-
-        draw_title = (TextView) findViewById(R.id.jh_title);
-        draw_share = (TextView) findViewById(R.id.strategy_share);
-        editPlan = (TextView) findViewById(R.id.tv_edit_plan);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
-        tv_add_plan  =(TextView) findViewById(R.id.tv_add_plan);
-        plan_title = (RelativeLayout) findViewById(R.id.plan_title);
-        selected_place_title = (RelativeLayout) findViewById(R.id.selected_place_title);
-        tv_add_plan.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.tv_add_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.closeDrawer(GravityCompat.END);
-                final Handler handler = new Handler() {
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case 1:
-                                Intent intent = new Intent(mContext, SelectDestActivity.class);
-                                intent.putExtra("locList", destinations);
-                                intent.putExtra("guide_id", strategy.id);
-                                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
-                                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
-                        }
-                        super.handleMessage(msg);
-                    }
-                };
-                Message message = handler.obtainMessage(1);
-                handler.sendMessageDelayed(message, 300);
-            }
-        });
-//        plan_title.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
-        selected_place_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, SelectDestActivity.class);
+                intent.putExtra("locList", destinations);
+                intent.putExtra("guide_id", strategy.id);
+                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
+                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
             }
         });
 
-        bottom_indicator = (RelativeLayout) findViewById(R.id.bottom_indicator);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(false);
         mStrategyViewpager.setOffscreenPageLimit(3);
@@ -197,17 +141,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         mStrategyViewpager.setPrepareNumber(2);
         mStrategyIndicator.setDividerDrawable(getResources().getDrawable(R.color.gray_normal));
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
-            @Override
-            public void onIndicatorPageChange(int preItem, int currentItem) {
-                if (currentItem == 0) {
-                    iv_location.setVisibility(View.VISIBLE);
-                } else {
-                    iv_location.setVisibility(View.GONE);
-                }
-            }
-        });
-        iv_location.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.iv_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StrategyActivity.this, StrategyMapActivity.class);
@@ -216,10 +151,10 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 list.add(getSaveStrategy());
                 intent.putParcelableArrayListExtra("strategy", list);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_from_right, 0);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
-        mTvTitleBack.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
@@ -229,14 +164,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             }
         });
 
-        draw_share.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.strategy_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IMUtils.onClickImShare(StrategyActivity.this);
             }
         });
 
-        editPlan.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_edit_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
@@ -305,7 +240,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            final PeachMessageDialog dialog = new PeachMessageDialog(this);
             dialog.setTitle("提示");
             dialog.setMessage("是否需要为你创建行程模版");
             dialog.setCanceledOnTouchOutside(false);
@@ -339,8 +274,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 bindView(strategy);
             } else {
                 boolean hasCache = setupViewFromCache(id);
-                if (!hasCache)
-                    DialogManager.getInstance().showLoadingDialog(mContext);
+                if (!hasCache) {
+                    DialogManager.getInstance().showLoadingDialog(this);
+                }
                 getStrategyDataById(id);
             }
         }
@@ -403,7 +339,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                             }
                         }.sendEmptyMessageDelayed(0, 1000);
                     }
-                    int cnt=AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                    int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
                     AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt + 1);
                 } else {
                     iv_location.setVisibility(View.GONE);
@@ -426,10 +362,19 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         destinations = result.localities;
         strategy = result;
         originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
-        draw_title.setText(result.title);
+        TextView dtv = (TextView) findViewById(R.id.jh_title);
+        dtv.setText(result.title);
+        dtv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
-        final User user = AccountManager.getInstance().getLoginAccount(mContext);
+        final User user = AccountManager.getInstance().getLoginAccount(this);
+
+        topTitle.setText(result.title);
 
         if (user == null) {
             mIvMore.setVisibility(View.GONE);
@@ -447,7 +392,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
-                        dialog.setMessage("保存到我的计划");
+                        dialog.setMessage("保存到我的旅行计划");
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -466,7 +411,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                                             startActivity(intent);
                                             finish();
                                         }
-
                                     }
 
                                     @Override
@@ -510,44 +454,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         indicatorViewPager.setCurrentItem(curIndex, false);
     }
 
-    private void ishideSomeIcons(boolean ishide) {
-        if (ishide) {
-            tv_back.setVisibility(View.GONE);
-            iv_location.setVisibility(View.GONE);
-            iv_more.setVisibility(View.GONE);
-            bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_out));
-            bottom_indicator.setVisibility(View.GONE);
-        } else {
-            if (indicatorViewPager.getCurrentItem() == 0) {
-                iv_location.setVisibility(View.VISIBLE);
-            } else {
-                iv_location.setVisibility(View.GONE);
-            }
-            tv_back.setVisibility(View.VISIBLE);
-            iv_more.setVisibility(View.VISIBLE);
-            bottom_indicator.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_bottom_in));
-            bottom_indicator.setVisibility(View.VISIBLE);
-
-        }
-    }
-
-    private void showSaveFailureIcons() {
-        tv_back.setVisibility(View.VISIBLE);
-        tv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.putExtra("strategy", originalStrategy);
-                setResult(RESULT_OK, intent);
-                finish();
-              /*  Intent intent = getIntent();
-                intent.putExtra("strategy", originalStrategy);
-                setResult(RESULT_OK, intent);
-                finish();*/
-            }
-        });
-    }
-
     @Override
     public void finish() {
         super.finish();
@@ -558,72 +464,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     }
 
 
-    public class LocAdapter extends RecyclerView.Adapter<LocAdapter.ViewHolder> {
-
-        private LayoutInflater mInflater;
-        private List<LocBean> mDatas;
-
-        public LocAdapter(Context context, List<LocBean> datas) {
-            mInflater = LayoutInflater.from(context);
-            mDatas = datas;
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public ViewHolder(View arg0) {
-                super(arg0);
-            }
-
-            ImageView mImg;
-            TextView mTxt;
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDatas.size();
-        }
-
-        /**
-         * 创建ViewHolder
-         */
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
-            View view = mInflater.inflate(R.layout.item_guide_loc,
-                    viewGroup, false);
-            ViewHolder viewHolder = new ViewHolder(view);
-            viewHolder.mTxt = (TextView) view
-                    .findViewById(R.id.tv_name);
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-
-            return viewHolder;
-        }
-
-
-        /**
-         * 设置值
-         */
-        @Override
-        public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-            LocBean locBean = mDatas.get(i);
-            viewHolder.mTxt.setText(locBean.zhName);
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CityDetailActivity.class);
-                    intent.putExtra("id", mDatas.get(i).id);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         private String[] tabNames = {"计划", "收藏"};
-       // private int[] tabIcons = {R.drawable.poi_tab_checker_trip, R.drawable.poi_tab_checker_food};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 
@@ -640,22 +482,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
-           /* if (convertView == null) {
-                convertView = inflater.inflate(R.layout.tab_strategy, container, false);
-            }
-            TextView textView = (TextView) convertView;
-            textView.setText(tabNames[position]);
-           // textView.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[position], 0, 0);
-            return textView;*/
-
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.tab_select_dest, container, false);
             }
             TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
             textView.setText(tabNames[position]);
-            if(position==0){
+            if (position == 0) {
                 textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
-            }else if(position==1){
+            } else if (position == 1) {
                 textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
             }
             return convertView;
@@ -712,199 +546,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
     }
 
-    private void saveStrategy(final boolean finish) {
-        final JSONObject jsonObject = new JSONObject();
-        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
-        if (routeDayFragment != null) {
-//            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
-        }
-        if (collectionFragment != null) {
-            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
-        }
-        topTitle.setText("正在保存");
-        loading_view.setVisibility(View.VISIBLE);
-        ishideSomeIcons(true);
-        //DialogManager.getInstance().showLoadingDialog(mContext);
-        TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                //DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result, ModifyResult.class);
-                if (saveResult.code == 0) {
-
-                    topTitle.setText("");
-                    loading_view.setVisibility(View.GONE);
-                    ishideSomeIcons(false);
-
-                    originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
-                    for (OnStrategyModeChangeListener onEditModeChangeListener : mOnEditModeChangeListeners) {
-                        onEditModeChangeListener.onEditModeChange(false);
-                    }
-                    if (routeDayFragment != null) {
-//                        routeDayFragment.resumeItinerary();
-                    }
-                    if (finish) {
-                        finish();
-                    }
-                } else {
-                    topTitle.setText("保存失败");
-                    loading_view.setVisibility(View.GONE);
-                    showSaveFailureIcons();
-                    if (!isFinishing())
-                        ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_server_failed));
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                //DialogManager.getInstance().dissMissLoadingDialog();
-//                                ToastUtil.getInstance(getActivity()).showToast("保存失败");
-                topTitle.setText("保存失败");
-                loading_view.setVisibility(View.GONE);
-                showSaveFailureIcons();
-                if (!isFinishing())
-                    ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
-            }
-        });
-    }
-
-    private void warnCancel() {
-        final JSONObject jsonObject = new JSONObject();
-        StrategyManager.putSaveGuideBaseInfo(jsonObject, mContext, strategy);
-//        if (routeDayFragment != null && routeDayFragment.isEditableMode()) {
-//            StrategyManager.putItineraryJson(mContext, jsonObject, strategy, routeDayFragment.getRouteDayMap());
-//        } else
-//        if (collectionFragment != null && collectionFragment.isEditableMode()) {
-//            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
-//        } else if (collectionFragment != null && collectionFragment.isEditableMode()) {
-//            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
-//        }
-
-        final PeachMessageDialog messageDialog = new PeachMessageDialog(mContext);
-        messageDialog.setTitle("提示");
-        messageDialog.setMessage("计划已编辑，是否保存");
-        messageDialog.setPositiveButton("保存", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-                saveStrategy(true);
-            }
-        });
-        messageDialog.setNegativeButton("直接返回", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-                Intent intent = getIntent();
-                intent.putExtra("strategy", originalStrategy);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-        messageDialog.show();
-    }
-
-    private void showActionDialog() {
-        final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.dialog_city_detail_action, null);
-        Button btn1 = (Button) contentView.findViewById(R.id.btn_go_plan);
-        btn1.setText("分享");
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_share_plan_detail");
-                ShareUtils.showSelectPlatformDialog(StrategyActivity.this, strategy);
-                dialog.dismiss();
-            }
-        });
-        Button btn2 = (Button) contentView.findViewById(R.id.btn_go_share);
-        btn2.setText("热门城市");
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLocDialog();
-                dialog.dismiss();
-            }
-        });
-        contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = display.getWidth(); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-    }
-
-    private void showLocDialog() {
-        final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-        View contentView = View.inflate(act, R.layout.dialog_strategy_loclist, null);
-        FlowLayout locListFl = (FlowLayout) contentView.findViewById(R.id.fl_loc_list);
-        TextView cancleTv = (TextView) contentView.findViewById(R.id.tv_cancle);
-        for (final LocBean loc : destinations) {
-            View view = View.inflate(mContext, R.layout.item_strategy_loc, null);
-            TextView nameTv = (TextView) view.findViewById(R.id.tv_cell_name);
-            nameTv.setText(loc.zhName);
-            nameTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext, "event_go_city_detail");
-                    Intent intent = new Intent(mContext, CityDetailActivity.class);
-                    intent.putExtra("id", loc.id);
-                    startActivity(intent);
-                }
-            });
-            locListFl.addView(view);
-        }
-        View editView = View.inflate(mContext, R.layout.item_strategy_loc, null);
-        TextView nameTv = (TextView) editView.findViewById(R.id.tv_cell_name);
-        ViewGroup.LayoutParams tvLp = nameTv.getLayoutParams();
-        tvLp.width = LocalDisplay.dp2px(80);
-        tvLp.height = LocalDisplay.dp2px(32);
-        nameTv.setLayoutParams(tvLp);
-        nameTv.setBackgroundResource(R.drawable.btn_loc_add);
-        nameTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_rechoose_destination");
-                Intent intent = new Intent(mContext, SelectDestActivity.class);
-                intent.putExtra("locList", destinations);
-                intent.putExtra("guide_id", strategy.id);
-                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
-                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
-                dialog.dismiss();
-
-            }
-        });
-        locListFl.addView(editView);
-        cancleTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        WindowManager windowManager = act.getWindowManager();
-        Window window = dialog.getWindow();
-        window.setContentView(contentView);
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = display.getWidth(); // 设置宽度
-        window.setAttributes(lp);
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-    }
-
-    public class DrawAdapter extends BaseAdapter {
+    private class DrawAdapter extends BaseAdapter {
         private TextView place;
         private Context drawContext;
 
@@ -933,56 +575,17 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 convertView = View.inflate(drawContext, R.layout.strategy_draw_list_cell, null);
             }
             place = (TextView) convertView.findViewById(R.id.user_been_place);
-//            if (position == destinations.size()) {
-//                place.setText("添加");
-//                place.setCompoundDrawablesWithIntrinsicBounds(StrategyActivity.this.getResources().getDrawable(R.drawable.add_contact), null, null, null);
-//                place.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        drawerLayout.closeDrawer(GravityCompat.END);
-//                        final Handler handler = new Handler() {
-//                            public void handleMessage(Message msg) {
-//                                switch (msg.what) {
-//                                    case 1:
-//                                        Intent intent = new Intent(mContext, SelectDestActivity.class);
-//                                        intent.putExtra("locList", destinations);
-//                                        intent.putExtra("guide_id", strategy.id);
-//                                        intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
-//                                        startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
-//                                }
-//                                super.handleMessage(msg);
-//                            }
-//                        };
-//                        Message message = handler.obtainMessage(1);
-//                        handler.sendMessageDelayed(message, 300);
-//                    }
-//                });
-//            } else {
-                place.setText(destinations.get(position).zhName);
-          //      place.setCompoundDrawablesWithIntrinsicBounds(null, null, StrategyActivity.this.getResources().getDrawable(R.drawable.icon_arrow_right), null);
-                place.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        drawerLayout.closeDrawer(GravityCompat.END);
-                        final Handler handler = new Handler() {
-                            public void handleMessage(Message msg) {
-                                switch (msg.what) {
-                                    case 1:
-                                        MobclickAgent.onEvent(mContext, "event_go_city_detail");
-                                        Intent intent = new Intent(mContext, CityDetailActivity.class);
-                                        intent.putExtra("id", destinations.get(position).id);
-                                        intent.putExtra("isFromStrategy", true);
-                                        startActivity(intent);
-                                }
-                                super.handleMessage(msg);
-                            }
-                        };
-                        Message message = handler.obtainMessage(1);
-                        handler.sendMessageDelayed(message, 300);
-
-                    }
-                });
-  //          }
+            place.setText(destinations.get(position).zhName);
+            place.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MobclickAgent.onEvent(mContext, "event_go_city_detail");
+                    Intent intent = new Intent(mContext, CityDetailActivity.class);
+                    intent.putExtra("id", destinations.get(position).id);
+                    intent.putExtra("isFromStrategy", true);
+                    startActivity(intent);
+                }
+            });
             return convertView;
         }
     }

@@ -37,7 +37,7 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_helper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent ExpertIntent = new Intent(getActivity(), LXPGuiderDistributeListAcitivity.class);
+                Intent ExpertIntent = new Intent(getActivity(), TalentLocActivity.class);
                 startActivity(ExpertIntent);
             }
         });

@@ -3,7 +3,11 @@ package com.xuejian.client.lxp.module.dest.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +39,7 @@ public class PlanScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strategy = getStrategy();
-        if (strategy!=null)resizeData(strategy.itinerary,strategy);
+        if (strategy != null) resizeData(strategy.itinerary, strategy);
     }
 
     @Override
@@ -61,15 +65,14 @@ public class PlanScheduleFragment extends Fragment {
         return ((StrategyActivity) getActivity()).getStrategy();
     }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary,StrategyBean str) {
+    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary, StrategyBean str) {
         StrategyBean strategyBean = getStrategy();
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
-//strategyBean.localities
         for (StrategyBean.IndexPoi indexPoi : itinerary) {
-            if(routeDayMap.size()>indexPoi.dayIndex){
+            if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
         }
@@ -106,33 +109,43 @@ public class PlanScheduleFragment extends Fragment {
                 holder = new ViewHolder();
                 holder.summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
                 holder.tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
-                holder.tv_schedule_title= (TextView) convertView.findViewById(R.id.tv_schedule_title);
+                holder.tv_schedule_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             List<PoiDetailBean> poiList = routeDayMap.get(position);
-            holder.tv_day_index.setText(String.valueOf(position+1));
+
+            SpannableString planStr = new SpannableString("Day");
+            planStr.setSpan(new AbsoluteSizeSpan(11, true), 0, planStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            SpannableStringBuilder spb = new SpannableStringBuilder();
+            if (position < 9) {
+                spb.append(String.format("0%s.\n", (position + 1))).append(planStr);
+            } else {
+                spb.append(String.format("%s.\n", (position + 1))).append(planStr);
+            }
+            holder.tv_day_index.setText(spb);
+
             int count = poiList.size();
-            String desc ="";
+            String desc = "";
             String descTitle = "";
             HashSet<String> set = new HashSet<String>();
             PoiDetailBean pdb;
             for (int i = 0; i < count; ++i) {
                 pdb = poiList.get(i);
                 if (i == 0) {
-                    desc= String.format("%s", pdb.zhName);
+                    desc = String.format("%s", pdb.zhName);
                 } else {
                     desc = String.format("%s → %s", desc, pdb.zhName);
                 }
-                if(pdb.locality!=null){
+                if (pdb.locality != null) {
                     set.add(pdb.locality.zhName);
                 }
             }
-            for(String desName: set){
-                if(descTitle.equals("")){
+            for (String desName : set) {
+                if (descTitle.equals("")) {
                     descTitle = desName;
-                }else {
+                } else {
                     descTitle = String.format("%s > %s", descTitle, desName);
                 }
             }
