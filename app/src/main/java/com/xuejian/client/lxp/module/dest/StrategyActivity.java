@@ -80,12 +80,9 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     CollectionFragment collectionFragment;
     private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
     private ImageView iv_location;
-    private RelativeLayout bottom_indicator;
     private View loading_view;
-    private TextView draw_title;
     private ListView draw_list;
     private DrawAdapter adapter;
-    private RelativeLayout plan_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,40 +121,19 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             }
         });
         iv_location = (ImageView) findViewById(R.id.iv_location);
-        draw_title = (TextView) findViewById(R.id.jh_title);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
-        plan_title = (RelativeLayout) findViewById(R.id.plan_title);
 
         findViewById(R.id.tv_add_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.closeDrawer(GravityCompat.END);
-                final Handler handler = new Handler() {
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case 1:
-                                Intent intent = new Intent(mContext, SelectDestActivity.class);
-                                intent.putExtra("locList", destinations);
-                                intent.putExtra("guide_id", strategy.id);
-                                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
-                                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
-                        }
-                        super.handleMessage(msg);
-                    }
-                };
-                Message message = handler.obtainMessage(1);
-                handler.sendMessageDelayed(message, 300);
+                Intent intent = new Intent(mContext, SelectDestActivity.class);
+                intent.putExtra("locList", destinations);
+                intent.putExtra("guide_id", strategy.id);
+                intent.putExtra("request_code", EDIT_LOC_REQUEST_CODE);
+                startActivityForResult(intent, EDIT_LOC_REQUEST_CODE);
             }
         });
 
-        findViewById(R.id.selected_place_title).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        bottom_indicator = (RelativeLayout) findViewById(R.id.bottom_indicator);
         ButterKnife.inject(this);
         mStrategyViewpager.setCanScroll(false);
         mStrategyViewpager.setOffscreenPageLimit(3);
@@ -175,7 +151,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 list.add(getSaveStrategy());
                 intent.putParcelableArrayListExtra("strategy", list);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_from_right, 0);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_stay);
             }
         });
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
@@ -386,7 +362,14 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         destinations = result.localities;
         strategy = result;
         originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
-        draw_title.setText(result.title);
+        TextView dtv = (TextView) findViewById(R.id.jh_title);
+        dtv.setText(result.title);
+        dtv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
         final User user = AccountManager.getInstance().getLoginAccount(this);
@@ -563,7 +546,7 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         }
     }
 
-    public class DrawAdapter extends BaseAdapter {
+    private class DrawAdapter extends BaseAdapter {
         private TextView place;
         private Context drawContext;
 
@@ -596,26 +579,13 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             place.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    drawerLayout.closeDrawer(GravityCompat.END);
-                    final Handler handler = new Handler() {
-                        public void handleMessage(Message msg) {
-                            switch (msg.what) {
-                                case 1:
-                                    MobclickAgent.onEvent(mContext, "event_go_city_detail");
-                                    Intent intent = new Intent(mContext, CityDetailActivity.class);
-                                    intent.putExtra("id", destinations.get(position).id);
-                                    intent.putExtra("isFromStrategy", true);
-                                    startActivity(intent);
-                            }
-                            super.handleMessage(msg);
-                        }
-                    };
-                    Message message = handler.obtainMessage(1);
-                    handler.sendMessageDelayed(message, 300);
-
+                    MobclickAgent.onEvent(mContext, "event_go_city_detail");
+                    Intent intent = new Intent(mContext, CityDetailActivity.class);
+                    intent.putExtra("id", destinations.get(position).id);
+                    intent.putExtra("isFromStrategy", true);
+                    startActivity(intent);
                 }
             });
-            //          }
             return convertView;
         }
     }
