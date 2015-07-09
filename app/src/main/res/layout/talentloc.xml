@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/talent_loc_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/talent_loc_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/content_top_margin"
         android:divider="@null"
-        />
+        android:dividerHeight="0dp" />
 
-</LinearLayout>
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/talent_loc_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+
+</FrameLayout>

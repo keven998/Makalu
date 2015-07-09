@@ -118,7 +118,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="16dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingTop="16dp"
             android:singleLine="true"
             android:text="群成员"
             android:textColor="@color/color_text_i"

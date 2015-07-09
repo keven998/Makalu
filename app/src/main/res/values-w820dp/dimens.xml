@@ -10,6 +10,4 @@
     <dimen name="my_plan_img_height">118dp</dimen>
     <dimen name="my_plan_title_width">256dp</dimen>
 
-    <dimen name="talent_loc_cell_height">295dp</dimen>
-
 </resources>
