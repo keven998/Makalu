@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/talent_loc_cell_height">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/talent_loc_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#5f000000"
-        />
+        android:layout_height="@dimen/talent_loc_cell_height"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/talent_loc_num"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/base_color_white"
-        android:textSize="30sp"
         android:layout_gravity="center"
-        android:layout_marginTop="-15dp"
-        android:text="99位"
-        />
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="-7dp"
+        android:singleLine="true"
+        android:gravity="center"
+        android:textColor="@color/base_color_white"
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/talent_loc_city"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="16sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="middle"
         android:textColor="@color/base_color_white"
-        android:layout_marginTop="15dp"
-        android:text="~派派.美国.达人~"
-        />
+        android:shadowColor="@color/color_disable"
+        android:textStyle="bold"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:textSize="12sp" />
 
 </FrameLayout>

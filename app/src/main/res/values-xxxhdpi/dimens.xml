@@ -26,4 +26,6 @@
     <dimen name="user_profile_entry_height">160dp</dimen>
     <dimen name="spot_detail_picture_height">300dp</dimen>
 
+    <dimen name="talent_loc_cell_height">220dp</dimen>
+
 </resources>
