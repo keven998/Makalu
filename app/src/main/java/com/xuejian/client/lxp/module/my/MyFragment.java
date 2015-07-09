@@ -73,9 +73,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView tvPlansCount;
     @ViewInject(R.id.tv_tracks_count)
     private TextView tvTracksCount;
-    ArrayList<LocBean> all_foot_print_list=new ArrayList<LocBean>();
+    ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
-    private int picsNum=0;
+    private int picsNum = 0;
 
 
     @Override
@@ -125,17 +125,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
             int countryCount = 0;
             int cityCount = 0;
-            String level="0";
-            int guideCount =0;
+            String level = "0";
+            int guideCount = 0;
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
-                User info= AccountManager.getInstance().getLoginAccountInfo();
-                for (String key :info.getTracks().keySet()) {
+                User info = AccountManager.getInstance().getLoginAccountInfo();
+                for (String key : info.getTracks().keySet()) {
                     all_foot_print_list.addAll(info.getTracks().get(key));
                 }
-                cityCount=all_foot_print_list.size();
+                cityCount = all_foot_print_list.size();
                 countryCount = info.getTracks().keySet().size();
                 guideCount = info.getGuideCnt();
-                level=info.getLevel();
+                level = info.getLevel();
             }
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
@@ -230,7 +230,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent intent2 = new Intent(getActivity(), CityPictureActivity.class);
                     intent2.putExtra("id", String.valueOf(userPics.getUserId()));
                     intent2.putExtra("user_name", userPics.getNickName());
-                    intent2.putExtra("isUserPics",true);
+                    intent2.putExtra("isUserPics", true);
                     startActivity(intent2);
                 } else {
                     Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
@@ -314,7 +314,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     if (jsonObject.getInt("code") == 0) {
                         JSONArray object = jsonObject.getJSONArray("result");
                         picsNum = object.length();
-                        tvPictureCount.setText( picsNum + "图");
+                        tvPictureCount.setText(picsNum + "图");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -324,7 +324,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                tvPictureCount.setText( picsNum + "图");
+                tvPictureCount.setText(picsNum + "图");
                 ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
             }
         });

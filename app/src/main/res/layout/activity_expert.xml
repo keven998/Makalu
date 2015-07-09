@@ -1,89 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_backgroud"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:background="@color/app_backgroud">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar"
-        >
-
-        <TextView
-            android:id="@+id/expert_back"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:drawableLeft="@drawable/selector_ic_nav_back"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
-            android:layout_gravity="left|center_vertical"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="旅行派达人"
-            android:textColor="@color/color_text_i"
-            android:textSize="18sp"
-            />
-
-        <TextView
-            android:id="@+id/expert_right"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|center_vertical"
-            android:paddingRight="13dp"
-            android:paddingLeft="30dp"
-            />
-
-    </FrameLayout>
-
-    <!--<EditText
-        android:id="@+id/search_expert_name"
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:drawableLeft="@drawable/navigation_surch"
-        android:gravity="center"
-        android:hint="姓名或拼音首字母"
-        android:textSize="15sp"
-        android:background="@drawable/search_box_half_radius"
-        android:textColor="@color/search_edit_text_hint_color"
-        android:layout_gravity="center_horizontal"
-        />-->
     <com.aizou.core.widget.prv.PullToRefreshGridView
         android:id="@+id/expert_grid"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:cacheColorHint="@android:color/transparent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/content_top_margin"
         android:background="@color/app_backgroud"
-        android:overScrollMode="never"
-        android:numColumns="2"
-        android:divider="@null"
+        android:cacheColorHint="@android:color/transparent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:scrollbarStyle="outsideOverlay"
         android:fadingEdge="none"
-        android:dividerHeight="0.8dp"
-        />
-    <!--<com.aizou.core.widget.prv.PullToRefreshListView-->
-        <!--android:id="@+id/expert_list"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:cacheColorHint="@android:color/transparent"-->
-        <!--android:background="@color/app_backgroud"-->
-        <!--android:overScrollMode="never"-->
-        <!--android:divider="@null"-->
-        <!--android:fadingEdge="none"-->
-        <!--android:dividerHeight="0.8dp"-->
-        <!--/>-->
+        android:numColumns="2"
+        android:overScrollMode="never" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
+
+        <ImageView
+            android:id="@+id/expert_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="32dp"
+            android:scaleType="center"
+            android:src="@drawable/selector_ic_nav_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="-1dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="10sp" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

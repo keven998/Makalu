@@ -1,22 +1,26 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshGridView;
@@ -30,6 +34,7 @@ import com.xuejian.client.lxp.bean.ExpertBean;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.toolbox.ExpertFilterActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
@@ -41,62 +46,41 @@ import java.util.List;
  * Created by lxp_dqm07 on 2015/4/14.
  */
 public class GuilderListActivity extends PeachBaseActivity {
-
-    //private PullToRefreshListView listView;
     private PullToRefreshGridView gridView;
-    private ImageView user_pic;
-    private TextView user_name;
-    private TextView user_status_01, user_status_02, user_status_03;
-    private TextView expert_age;
-    private TextView user_loc;
-    private TextView expert_zod;
     private ExpertAdapter adapter;
-    private LayoutInflater inflater;
-    private TextView places_layout;
     private int EXPERT_DES = 1;
-    int mCurrentPage = 0;
-    int PAGE_SIZE = 15;
+    private int mCurrentPage = 0;
+    private  int PAGE_SIZE = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expert);
-        //search_expert=(EditText)findViewById(R.id.search_expert_name);
+
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        findViewById(R.id.expert_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GuilderListActivity.this, ExpertFilterActivity.class);
-                startActivityForResult(intent, EXPERT_DES);
-                overridePendingTransition(R.anim.push_bottom_in, 0);
-            }
-        });
-        inflater = LayoutInflater.from(this);
+
+        TextView titleView = (TextView) findViewById(R.id.tv_title);
+        titleView.setText("~派派 · 阿尔及利亚 · 达人~");
+        TextView stView = (TextView) findViewById(R.id.tv_subtitle);
+        stView.setText("9999位");
+
         initList();
     }
 
     private void initList() {
-        gridView= (PullToRefreshGridView) findViewById(R.id.expert_grid);
+        gridView = (PullToRefreshGridView) findViewById(R.id.expert_grid);
         gridView.setPullLoadEnabled(false);
         gridView.setPullRefreshEnabled(true);
         gridView.setScrollLoadEnabled(false);
         gridView.setHasMoreData(false);
 
-//        listView = (PullToRefreshListView) findViewById(R.id.expert_list);
-//        listView.setPullLoadEnabled(false);
-//        listView.setPullRefreshEnabled(true);
-//        listView.setScrollLoadEnabled(false);
-//        listView.setHasMoreData(false);
-
         adapter = new ExpertAdapter(this);
-   //     listView.getRefreshableView().setAdapter(adapter);
         gridView.getRefreshableView().setAdapter(adapter);
-//        listView.getRefreshableView().setOnItemClickListener(new DarenClick());
         gridView.getRefreshableView().setOnItemClickListener(new DarenClick());
         gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
             @Override
@@ -121,7 +105,6 @@ public class GuilderListActivity extends PeachBaseActivity {
             intent.setClass(GuilderListActivity.this, HisMainPageActivity.class);
             intent.putExtra("userId", xEb.userId);
             startActivity(intent);
-            //ToastUtil.getInstance(ExpertListActivity.this).showToast("点击进入达人详情页或聊天页,第"+(position+1)+"个达人");
         }
     }
 
@@ -152,16 +135,17 @@ public class GuilderListActivity extends PeachBaseActivity {
 
     public void bindView(List<ExpertBean> result) {
         if (mCurrentPage == 0) {
-            adapter = new ExpertAdapter(GuilderListActivity.this);
-            //mPoiList.clear();
-        //    listView.getRefreshableView().setAdapter(adapter);
-            gridView.getRefreshableView().setAdapter(adapter);
+            if (adapter == null) {
+                adapter = new ExpertAdapter(GuilderListActivity.this);
+                gridView.getRefreshableView().setAdapter(adapter);
+            } else {
+                adapter.reset();
+            }
         }
         adapter.getDataList().addAll(result);
         adapter.notifyDataSetChanged();
         if (result == null || result.size() < PAGE_SIZE) {
             gridView.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
         } else {
             gridView.setHasMoreData(true);
         }
@@ -170,26 +154,18 @@ public class GuilderListActivity extends PeachBaseActivity {
             gridView.setScrollLoadEnabled(true);
         }
 
-        if (result.size() == 0) {
-            if (mCurrentPage == 0) {
-                //mMyStrategyLv.getRefreshableView().setEmptyView(findViewById(R.id.empty_view));
-                //mMyStrategyLv.doPullRefreshing(true, 0);
-            } else {
-                ToastUtil.getInstance(this).showToast("已取完所有内容");
-            }
-            return;
-        }
     }
 
-    public class ExpertAdapter extends BaseAdapter {
+    private class ExpertAdapter extends BaseAdapter {
         protected ArrayList<ExpertBean> mItemDataList = new ArrayList<ExpertBean>();
         private Context context;
-        //        private String[] status={"空","忙","阻"};
-        public List<ExpertBean> expertBean;
         private DisplayImageOptions options;
+        private LayoutInflater inflater;
+        private int width;
+        private ImageLoader imgLoader;
 
-        public ExpertAdapter(Context context) {
-            this.context = context;
+        public ExpertAdapter(Context cxt) {
+            this.context = cxt;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
@@ -198,6 +174,16 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
+            width = CommonUtils.getScreenWidth((Activity)cxt) - LocalDisplay.dp2px(24);
+            inflater = LayoutInflater.from(cxt);
+
+            imgLoader = ImageLoader.getInstance();
+        }
+
+        public void reset() {
+            mItemDataList.clear();
+            notifyDataSetChanged();
         }
 
         public ArrayList<ExpertBean> getDataList() {
@@ -221,88 +207,67 @@ public class GuilderListActivity extends PeachBaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder vh;
             if (convertView == null) {
                 inflater = LayoutInflater.from(this.context);
                 convertView = inflater.inflate(R.layout.expert_list_cont, null);
+                int padding = LocalDisplay.dp2px(6);
+                RelativeLayout.LayoutParams lparms = new RelativeLayout.LayoutParams(width/2, width*39/54);
+                convertView.setLayoutParams(lparms);
+                convertView.setPadding(padding, padding, padding, padding);
+
+                vh = new ViewHolder();
+                vh.avatarView = (ImageView) convertView.findViewById(R.id.expert_pic);
+                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams((int)(0.41*width/2.0), (int)(0.41*41*width/74));
+                llp.gravity = Gravity.CENTER_HORIZONTAL;
+                llp.topMargin = 3*padding;
+                vh.avatarView.setLayoutParams(llp);
+                vh.avatarView.setPadding(padding, 2*padding, padding, padding);
+
+                vh.titleView = (TextView) convertView.findViewById(R.id.tv_track_summary);
+                vh.subTitleView = (TextView) convertView.findViewById(R.id.tv_track_area);
+                vh.residenceView = (TextView) convertView.findViewById(R.id.expert_location);
+                vh.nickView = (TextView) convertView.findViewById(R.id.expert_name);
+                vh.consView = (TextView) convertView.findViewById(R.id.expert_zod);
+                vh.ageView = (TextView) convertView.findViewById(R.id.expert_age);
+
+                convertView.setTag(vh);
+            } else {
+                vh = (ViewHolder) convertView.getTag();
             }
-            //初始化控件
-            user_pic = (ImageView) convertView.findViewById(R.id.expert_pic);
-            user_name = (TextView) convertView.findViewById(R.id.expert_name);
-            user_loc = (TextView) convertView.findViewById(R.id.expert_location);
-            places_layout = (TextView) convertView.findViewById(R.id.places_layout);
-            expert_age=(TextView)convertView.findViewById(R.id.expert_age);
-            expert_zod=(TextView)convertView.findViewById(R.id.expert_zod);
             //获取接口数据进行加载
             ExpertBean eb = (ExpertBean) getItem(position);
-            LogUtil.d(eb.gender + "================");
             if (eb.gender.equalsIgnoreCase("M")) {
-                user_pic.setBackgroundResource(R.drawable.expert_boy);
+                vh.avatarView.setBackgroundResource(R.drawable.expert_boy);
             } else if (eb.gender.equalsIgnoreCase("F")) {
-                user_pic.setBackgroundResource(R.drawable.expert_girl);
+                vh.avatarView.setBackgroundResource(R.drawable.expert_girl);
             } else {
-                user_pic.setBackgroundResource(R.drawable.expert_unknow);
+                vh.avatarView.setBackgroundResource(R.drawable.expert_unknow);
             }
-            ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
-            user_name.setText(eb.nickName);
-            user_loc.setText(eb.residence);
-            if (!TextUtils.isEmpty(eb.birthday)){
-                expert_age.setText(getAge(eb.birthday)+"岁");
+            imgLoader.displayImage(eb.avatarSmall, vh.avatarView, options);
+            vh.nickView.setText(eb.nickName);
+            if (!TextUtils.isEmpty(eb.residence)) {
+                vh.residenceView.setText(eb.residence);
+            } else {
+                vh.residenceView.setText("现住地");
             }
-
-         //   expert_zod.setText(eb.zodiac);
-           //控制达人的状态
-//            if (!eb.getRolesDescription().equals("")) {
-//                user_status_01.setText(eb.getRolesDescription());
-//            } else {
-//                user_status_01.setPadding(0, 0, 0, 0);
-//            }
-//            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
-//                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
-//            }else/* if(status[position]=="忙"){
-//                changeStatusBg(user_status_02,user_status_01,user_status_03,status[position]);
-//            }else if(status[position]=="阻")*/{
-//                changeStatusBg(user_status_03,user_status_02,user_status_01,"阻");
-//            }
-
-            places_layout.setText(eb.getTraceDescription());
-            //动态添加达人去过的地方
-            /*places_layout.removeAllViews();
-            layout_width=places_layout.getMeasuredWidth();
-            int all_views_width=0;
-            for(int i=0;i<places.length;i++){
-                View places_view=inflater.inflate(R.layout.expert_place_view,places_layout,false);
-                user_place=(TextView)places_view.findViewById(R.id.expert_places);
-                user_place.setText(places[i]);
-                int tv_width=user_place.getMeasuredWidth()+ LocalDisplay.dp2px(7);
-                all_views_width+=tv_width;
-                if(all_views_width<=layout_width){
-                    places_layout.addView(user_place);
-                }else{break;}
-            }*/
-
+            if (!TextUtils.isEmpty(eb.birthday)) {
+                vh.ageView.setText(getAge(eb.birthday) + "岁");
+            } else {
+                vh.ageView.setText("年龄");
+            }
+            if (!TextUtils.isEmpty(eb.birthday)) {
+                vh.consView.setText("射手座");
+            } else {
+                vh.consView.setText("星座");
+            }
+            vh.titleView.setText("99个城市");
+            vh.subTitleView.setText("泰国足迹");
             return convertView;
         }
     }
 
-    private void changeStatusBg(TextView v1, TextView v2, TextView v3, String value) {
-        v1.setVisibility(View.VISIBLE);
-        v2.setVisibility(View.GONE);
-        v3.setVisibility(View.GONE);
-        v1.setText(value);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     public void refreshView(String locId) {
-        // mCurrentPage=0;
         String[] strs = new String[1];
         strs[0] = locId;
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
@@ -310,22 +275,16 @@ public class GuilderListActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                //
-                //  listView.removeAllViews();
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
                     bindView(expertresult.result);
-                   /* adapter = new ExpertAdapter(ExpertListActivity.this, expertresult.result);
-                    expertBeans = expertresult.result;
-                    listView.getRefreshableView().setAdapter(adapter);*/
                 }
             }
-
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                ToastUtil.getInstance(GuilderListActivity.this).showToast("好像没有网络额~");
+                ToastUtil.getInstance(GuilderListActivity.this).showToast("好像没有网络~");
             }
         });
 
@@ -343,13 +302,22 @@ public class GuilderListActivity extends PeachBaseActivity {
         }
     }
 
-    public int getAge(String birth) {
-        int age = 0;
+    private int getAge(String birth) {
         String birthType = birth.substring(0, 4);
         int birthYear = Integer.parseInt(birthType);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         String date = sdf.format(new java.util.Date());
-        age = Integer.parseInt(date) - birthYear;
-        return age;
+        return Integer.parseInt(date) - birthYear;
+    }
+
+    private class ViewHolder {
+        ImageView avatarView;
+        TextView titleView;
+        TextView subTitleView;
+        TextView scoreView;
+        TextView residenceView;
+        TextView consView;
+        TextView nickView;
+        TextView ageView;
     }
 }
