@@ -38,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:drawableRight="@drawable/navigation_filter"
             android:paddingRight="13dp"
             android:paddingLeft="30dp"
             />
@@ -63,17 +62,28 @@
         android:textColor="@color/search_edit_text_hint_color"
         android:layout_gravity="center_horizontal"
         />-->
-
-    <com.aizou.core.widget.prv.PullToRefreshListView
-        android:id="@+id/expert_list"
+    <com.aizou.core.widget.prv.PullToRefreshGridView
+        android:id="@+id/expert_grid"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:cacheColorHint="@android:color/transparent"
         android:background="@color/app_backgroud"
         android:overScrollMode="never"
+        android:numColumns="2"
         android:divider="@null"
         android:fadingEdge="none"
         android:dividerHeight="0.8dp"
         />
+    <!--<com.aizou.core.widget.prv.PullToRefreshListView-->
+        <!--android:id="@+id/expert_list"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:cacheColorHint="@android:color/transparent"-->
+        <!--android:background="@color/app_backgroud"-->
+        <!--android:overScrollMode="never"-->
+        <!--android:divider="@null"-->
+        <!--android:fadingEdge="none"-->
+        <!--android:dividerHeight="0.8dp"-->
+        <!--/>-->
 
 </LinearLayout>

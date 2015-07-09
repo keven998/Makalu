@@ -1,28 +1,25 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
-import com.aizou.core.widget.section.SectionAdapter;
-import com.lidroid.xutils.util.LogUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.common.widget.freeflow.core.FreeFlowContainer;
-
-import org.w3c.dom.Text;
+import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
 import java.util.ArrayList;
 
@@ -53,6 +50,13 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         adapter=new TalentLocAdapter();
         listView.setAdapter(adapter);
         listView.setOnScrollListener(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent ExpertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
+                startActivity(ExpertIntent);
+            }
+        });
         getHeaderPos();
     }
 

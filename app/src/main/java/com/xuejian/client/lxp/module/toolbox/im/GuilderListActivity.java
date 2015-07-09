@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -18,7 +19,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.prv.PullToRefreshBase;
-import com.aizou.core.widget.prv.PullToRefreshListView;
+import com.aizou.core.widget.prv.PullToRefreshGridView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -32,6 +33,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.toolbox.ExpertFilterActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +42,14 @@ import java.util.List;
  */
 public class GuilderListActivity extends PeachBaseActivity {
 
-    private PullToRefreshListView listView;
+    //private PullToRefreshListView listView;
+    private PullToRefreshGridView gridView;
     private ImageView user_pic;
     private TextView user_name;
     private TextView user_status_01, user_status_02, user_status_03;
-    private TextView user_level;
+    private TextView expert_age;
     private TextView user_loc;
-    private TextView user_msg;
+    private TextView expert_zod;
     private ExpertAdapter adapter;
     private LayoutInflater inflater;
     private TextView places_layout;
@@ -78,24 +81,31 @@ public class GuilderListActivity extends PeachBaseActivity {
     }
 
     private void initList() {
-        listView = (PullToRefreshListView) findViewById(R.id.expert_list);
-        listView.setPullLoadEnabled(false);
-        listView.setPullRefreshEnabled(true);
-        listView.setScrollLoadEnabled(false);
-        listView.setHasMoreData(false);
+        gridView= (PullToRefreshGridView) findViewById(R.id.expert_grid);
+        gridView.setPullLoadEnabled(false);
+        gridView.setPullRefreshEnabled(true);
+        gridView.setScrollLoadEnabled(false);
+        gridView.setHasMoreData(false);
+
+//        listView = (PullToRefreshListView) findViewById(R.id.expert_list);
+//        listView.setPullLoadEnabled(false);
+//        listView.setPullRefreshEnabled(true);
+//        listView.setScrollLoadEnabled(false);
+//        listView.setHasMoreData(false);
 
         adapter = new ExpertAdapter(this);
-        listView.getRefreshableView().setAdapter(adapter);
-
-        listView.getRefreshableView().setOnItemClickListener(new DarenClick());
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+   //     listView.getRefreshableView().setAdapter(adapter);
+        gridView.getRefreshableView().setAdapter(adapter);
+//        listView.getRefreshableView().setOnItemClickListener(new DarenClick());
+        gridView.getRefreshableView().setOnItemClickListener(new DarenClick());
+        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
                 getExpertData(0, PAGE_SIZE);
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 getExpertData(mCurrentPage + 1, PAGE_SIZE);
             }
         });
@@ -126,14 +136,14 @@ public class GuilderListActivity extends PeachBaseActivity {
                     mCurrentPage = page;
                     bindView(expertresult.result);
                 }
-                listView.onPullUpRefreshComplete();
-                listView.onPullDownRefreshComplete();
+                gridView.onPullUpRefreshComplete();
+                gridView.onPullDownRefreshComplete();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                listView.onPullUpRefreshComplete();
-                listView.onPullDownRefreshComplete();
+                gridView.onPullUpRefreshComplete();
+                gridView.onPullDownRefreshComplete();
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 ToastUtil.getInstance(GuilderListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
@@ -144,19 +154,20 @@ public class GuilderListActivity extends PeachBaseActivity {
         if (mCurrentPage == 0) {
             adapter = new ExpertAdapter(GuilderListActivity.this);
             //mPoiList.clear();
-            listView.getRefreshableView().setAdapter(adapter);
+        //    listView.getRefreshableView().setAdapter(adapter);
+            gridView.getRefreshableView().setAdapter(adapter);
         }
         adapter.getDataList().addAll(result);
         adapter.notifyDataSetChanged();
         if (result == null || result.size() < PAGE_SIZE) {
-            listView.setHasMoreData(false);
+            gridView.setHasMoreData(false);
             // ptrLv.setScrollLoadEnabled(false);
         } else {
-            listView.setHasMoreData(true);
+            gridView.setHasMoreData(true);
         }
 
         if (adapter.getCount() >= PAGE_SIZE) {
-            listView.setScrollLoadEnabled(true);
+            gridView.setScrollLoadEnabled(true);
         }
 
         if (result.size() == 0) {
@@ -185,7 +196,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(4)))
+                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -217,29 +228,34 @@ public class GuilderListActivity extends PeachBaseActivity {
             //初始化控件
             user_pic = (ImageView) convertView.findViewById(R.id.expert_pic);
             user_name = (TextView) convertView.findViewById(R.id.expert_name);
-            user_status_01 = (TextView) convertView.findViewById(R.id.expert_status_01);
-            user_status_02 = (TextView) convertView.findViewById(R.id.expert_status_02);
-            user_status_03 = (TextView) convertView.findViewById(R.id.expert_status_03);
-            user_level = (TextView) convertView.findViewById(R.id.expert_level);
             user_loc = (TextView) convertView.findViewById(R.id.expert_location);
             places_layout = (TextView) convertView.findViewById(R.id.places_layout);
-            user_msg = (TextView) convertView.findViewById(R.id.expert_msg);
-
+            expert_age=(TextView)convertView.findViewById(R.id.expert_age);
+            expert_zod=(TextView)convertView.findViewById(R.id.expert_zod);
             //获取接口数据进行加载
             ExpertBean eb = (ExpertBean) getItem(position);
-            LogUtil.d(eb.nickName + "================");
+            LogUtil.d(eb.gender + "================");
+            if (eb.gender.equalsIgnoreCase("M")) {
+                user_pic.setBackgroundResource(R.drawable.expert_boy);
+            } else if (eb.gender.equalsIgnoreCase("F")) {
+                user_pic.setBackgroundResource(R.drawable.expert_girl);
+            } else {
+                user_pic.setBackgroundResource(R.drawable.expert_unknow);
+            }
             ImageLoader.getInstance().displayImage(eb.avatarSmall, user_pic, options);
             user_name.setText(eb.nickName);
-            user_msg.setText(eb.signature);
-            user_level.setText("V" + eb.level);
             user_loc.setText(eb.residence);
-
-            //控制达人的状态
-            if (!eb.getRolesDescription().equals("")) {
-                user_status_01.setText(eb.getRolesDescription());
-            } else {
-                user_status_01.setPadding(0, 0, 0, 0);
+            if (!TextUtils.isEmpty(eb.birthday)){
+                expert_age.setText(getAge(eb.birthday)+"岁");
             }
+
+         //   expert_zod.setText(eb.zodiac);
+           //控制达人的状态
+//            if (!eb.getRolesDescription().equals("")) {
+//                user_status_01.setText(eb.getRolesDescription());
+//            } else {
+//                user_status_01.setPadding(0, 0, 0, 0);
+//            }
 //            if(expertBean.get(position).travelStatus==null||expertBean.get(position).travelStatus.equals("")||expertBean.get(position).travelStatus.equals("null")){
 //                changeStatusBg(user_status_01,user_status_02,user_status_03,"空");
 //            }else/* if(status[position]=="忙"){
@@ -325,5 +341,15 @@ public class GuilderListActivity extends PeachBaseActivity {
                 refreshView(id);
             }
         }
+    }
+
+    public int getAge(String birth) {
+        int age = 0;
+        String birthType = birth.substring(0, 4);
+        int birthYear = Integer.parseInt(birthType);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String date = sdf.format(new java.util.Date());
+        age = Integer.parseInt(date) - birthYear;
+        return age;
     }
 }

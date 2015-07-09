@@ -14,7 +14,6 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
-import com.xuejian.client.lxp.module.toolbox.im.LXPGuiderDistributeListAcitivity;
 
 /**
  * Created by lxp_dqm07 on 2015/4/11.

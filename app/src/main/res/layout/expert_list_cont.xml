@@ -1,139 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@drawable/option_cell_selector"
-    android:padding="11dp"
-    >
+    android:layout_margin="16dp"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical"
+    android:padding="15dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/expert_bg_white">
 
     <ImageView
+        android:layout_marginTop="18dp"
         android:id="@+id/expert_pic"
-        android:layout_width="65dp"
+        android:layout_width="60dp"
         android:layout_height="65dp"
-        android:src="@drawable/expert_avater_bg"
-        android:scaleType="fitCenter"
-        />
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:background="@drawable/expert_unknow"
+        android:padding="5dp"
+        android:scaleType="center" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/iv_status"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-7dp"
+        android:background="@drawable/expert_free_online" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+    <TextView
+        android:id="@+id/places_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ellipsize="end"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/color_text_i"
+        android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/expert_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="@color/base_font_color"
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center_vertical"
-                />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="12sp"
+        android:textColor="@color/color_text_iii"
+        android:text="足迹" />
 
-            <TextView
-                android:id="@+id/expert_status_01"
-                android:layout_height="14dp"
-                android:layout_width="wrap_content"
-                android:background="@drawable/expert_status_1_bg"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:layout_toRightOf="@+id/expert_name"
-                android:layout_marginRight="5sp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/expert_level" />
 
-            <TextView
-                android:id="@+id/expert_status_02"
-                android:layout_height="14dp"
-                android:layout_width="wrap_content"
-                android:background="@drawable/expert_status_2_bg"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:layout_toRightOf="@+id/expert_name"
-                android:layout_marginRight="5sp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                />
+</LinearLayout>
 
-            <TextView
-                android:id="@+id/expert_status_03"
-                android:layout_height="14dp"
-                android:layout_width="wrap_content"
-                android:background="@drawable/expert_status_3_bg"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:layout_toRightOf="@+id/expert_name"
-                android:layout_marginRight="5sp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/expert_bg_green"
+        android:layout_marginTop="-2dp">
 
-            <TextView
-                android:id="@+id/expert_level"
-                android:layout_width="wrap_content"
-                android:layout_height="14dp"
-                android:background="@drawable/expert_level_bg"
-                android:textSize="10sp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:textColor="@color/base_color_white"
-                android:layout_toRightOf="@+id/expert_status"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                />
-
-            <TextView
-                android:id="@+id/expert_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:gravity="right"
-                android:textSize="12sp"
-                android:textColor="@color/fourth_text_color"
-                />
-
-        </LinearLayout>
+        <View
+            android:id="@+id/temp"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
 
         <TextView
-            android:id="@+id/places_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@color/base_font_color"
-            android:textSize="12sp"
-            />
-
-        <TextView
-            android:id="@+id/expert_msg"
+            android:id="@+id/expert_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginTop="6dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@color/fourth_text_color"
-            />
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@id/temp"
+            android:drawableLeft="@drawable/expert_address"
+            android:textColor="@color/base_color_white"
+            android:textSize="10sp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/expert_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/temp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/expert_zod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expert_location"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@id/temp"
+            android:drawableLeft="@drawable/expert_star"
+            android:text="天蝎座"
+            android:textColor="@color/base_color_white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/expert_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expert_location"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/temp"
+            android:textColor="@color/base_color_white"
+            android:textSize="10sp" />
+    </RelativeLayout>
 
 </LinearLayout>
