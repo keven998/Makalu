@@ -418,11 +418,11 @@ public class MessageDB {
 
     public synchronized void updateInventMessageStatus(long UserId, int status) {
         mdb = getDB();
-        Cursor cursor = mdb.rawQuery("select * from " + request_msg_table_name + " where Id=?", new String[]{String.valueOf(UserId)});
+        Cursor cursor = mdb.rawQuery("select * from " + request_msg_table_name + " where UserId=?", new String[]{String.valueOf(UserId)});
         if (cursor.getCount() > 0) {
             ContentValues values = new ContentValues();
             values.put("Status", status);
-            mdb.update(request_msg_table_name, values, "Id=?", new String[]{String.valueOf(UserId)});
+            mdb.update(request_msg_table_name, values, "UserId=?", new String[]{String.valueOf(UserId)});
         }
     }
 

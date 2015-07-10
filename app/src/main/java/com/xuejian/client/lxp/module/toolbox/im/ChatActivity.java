@@ -88,6 +88,7 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.group.ChatMenuFragment;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -427,7 +428,25 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
-            drawerLayout.setEnabled(false);
+            final Fragment fragment = new ChatMenuFragment();
+            Bundle args = new Bundle();
+            args.putString("userId", toChatUsername);
+            fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.add(fragment, "ChatMenuDrawer");
+            ft.replace(R.id.menu_frame, fragment).commit();
+            findViewById(R.id.iv_nav_menu).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //END即gravity.right 从右向左显示   START即left  从左向右弹出显示
+                    if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+                        drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
+                    } else {
+                        drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
+                    }
+                }
+            });
         } else {
             // 群聊
             final Fragment fragment = new GroupDetailFragment();
@@ -447,11 +466,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     } else {
                         drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                     }
-
                 }
             });
         }
-        // 把此会话的未读数置为0
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
         // 显示消息
         listView.setAdapter(adapter);

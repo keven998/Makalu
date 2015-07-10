@@ -78,7 +78,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
         }
 
         final InventMessage msg = getItem(position);
-        if (msg != null) {
+        if (msg.getStatus()==0 ) {
 //            if(msg.getGroupId() != null){ // 显示群聊提示
 //                holder.groupContainer.setVisibility(View.VISIBLE);
 //                holder.groupname.setText(msg.getGroupName());
@@ -91,21 +91,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             }else holder.reason.setText(msg.getRequestMsg());
             ImageLoader.getInstance().displayImage(msg.getAvatarSmall(),holder.avator,options);
             holder.name.setText(msg.getNickName());
-            // holder.time.setText(DateUtils.getTimestampString(new
-            // Date(msg.getTime())));
-//            if (msg.getStatus() == 1) {
-//                holder.status.setVisibility(View.GONE);
-//                holder.reason.setText("已同意你的好友请求");
-//            } else
-//                if (msg.getStatus() == 0) {
+
             holder.status.setVisibility(View.VISIBLE);
             holder.status.setText("同意");
-//                if(msg.getStatus() == 0){
-//                }else{ //入群申请
-            //                   if (TextUtils.isEmpty(msg.getRequestMsg())) {
-            //  holder.reason.setText("申请加入群：" + msg.getGroupName());
-//                    }
-//                }
+            holder.status.setBackgroundResource(0);
             // 设置点击事件
             holder.status.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,12 +108,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
             holder.status.setBackgroundResource(0);
             holder.status.setEnabled(false);
-//            } else if(msg.getStatus() ==  InviteStatus.REFUSED) {
-//                holder.status.setText("已拒绝");
-//                holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
-//                holder.status.setBackgroundResource(0);
-//                holder.status.setEnabled(false);
-//            }
             ImageLoader.getInstance().displayImage(msg.getAvatarSmall(), holder.avator, options);
 
             // 设置用户头像
@@ -158,7 +141,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                 imUser.setType(1);
                 UserDBManager.getInstance().saveContact(imUser);
                 AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
-                IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()), "你已添加" + imUser.getNickName() + "为好友，可以开始聊天", "single");
+                msg.setStatus(1);
+                IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()), "你已添加" + imUser.getNickName() + "为好友，现在可以开始聊天了", "single");
                 IMClient.getInstance().updateInventMsgStatus(imUser.getUserId(),1);
                 //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }

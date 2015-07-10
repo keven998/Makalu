@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_bar_height"
+            android:drawableLeft="@drawable/poi_bottom_dot_selected"
+            android:drawablePadding="5dp"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="10dp"
+            android:paddingTop="14dp"
+            android:singleLine="true"
+            android:text="设置"
+            android:textColor="@color/color_text_i"
+            android:textSize="12sp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="18dp"
+            android:background="@color/color_line" />
+
+
+        <CheckedTextView
+            android:id="@+id/ctv_msg_notify_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/option_cell_selector"
+            android:drawablePadding="10dp"
+            android:drawableRight="@drawable/checker_radio_btn_theme"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingBottom="11dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="12dp"
+            android:paddingTop="11dp"
+            android:singleLine="true"
+            android:text="消息免打扰"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="18dp"
+            android:background="@color/color_line" />
+
+        <TextView
+            android:id="@+id/clear_all_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/option_cell_selector"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="12dp"
+            android:paddingTop="15dp"
+            android:singleLine="true"
+            android:text="清空聊天记录"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="18dp"
+            android:background="@color/color_line" />
+
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+
+</LinearLayout>

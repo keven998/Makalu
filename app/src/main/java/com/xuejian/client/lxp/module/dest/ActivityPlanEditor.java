@@ -1,13 +1,24 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.widget.section.BaseSectionAdapter;
@@ -18,8 +29,11 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
+import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
+import com.xuejian.client.lxp.module.dest.fragment.RouteDayFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -28,27 +42,51 @@ import java.util.List;
 public class ActivityPlanEditor extends FragmentActivity {
 
     private DragSortListView mDragListView;
-
+    private DrawerLayout drawerLayout;
     private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
-
+    private List<Integer> sectionlist=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_editor_layout);
         TitleHeaderBar titleHeaderBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("修改行程");
+        titleHeaderBar.getRightTextView().setText("保存");
+        TextView menu= (TextView) findViewById(R.id.tv_menu);
         strategy = getIntent().getParcelableExtra("strategy");
         resizeData(strategy.itinerary);
-
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setEnabled(true);
         mDragListView = (DragSortListView) findViewById(R.id.listview_plan_editor);
         EditorAdapter editorAdapter = new EditorAdapter(this);
+        //EditAdapter editorAdapter = new EditAdapter(this,sectionlist);
         mDragListView.setDropListener(editorAdapter);
         SectionController c = new SectionController(mDragListView, editorAdapter);
         c.setSortEnabled(true);
         mDragListView.setFloatViewManager(c);
         mDragListView.setOnTouchListener(c);
         mDragListView.setAdapter(editorAdapter);
+        menu.setClickable(true);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("click");
+                if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);//关闭抽屉
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);//打开抽屉
+                }
+            }
+        });
+        final Fragment fragment = new EditPlanFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("data", strategy);
+        fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.add(fragment, "edit_menu");
+        ft.replace(R.id.menu_frame, fragment).commit();
     }
 
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
@@ -63,6 +101,10 @@ public class ActivityPlanEditor extends FragmentActivity {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
         }
+        int temp=0;
+        for (ArrayList<PoiDetailBean> list:routeDayMap){
+            sectionlist.add(temp+=list.size());
+        }
 
     }
 
@@ -73,9 +115,11 @@ public class ActivityPlanEditor extends FragmentActivity {
         private int origHeight = -1;
 
         public SectionController(DragSortListView dslv, EditorAdapter adapter) {
-            super(dslv, R.id.tv_plan_editor, DragSortController.ON_LONG_PRESS, 0);
+            super(dslv, R.id.tv_plan_editor, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
             setBackgroundColor(Color.TRANSPARENT);
             setRemoveEnabled(false);
+            //setRemoveMode(DragSortController.CLICK_REMOVE);
+           // setClickRemoveId(R.id.);
             mDSlv = dslv;
             mAdapter = adapter;
         }
@@ -169,17 +213,77 @@ public class ActivityPlanEditor extends FragmentActivity {
         }
 
         @Override
-        public View getHeaderView(int section, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+        public View getHeaderView(final int section, View convertView, ViewGroup parent) {
+            a_ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_plan_editor_headerview, null);
-                holder = new ViewHolder();
-                holder.poiNameTextView = (TextView) convertView.findViewById(R.id.tv_day_index);
+                holder = new a_ViewHolder();
+
+                holder.a_summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
+                holder.a_tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
+                holder.a_tv_schedule_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
+                holder.iv_add= (ImageView) convertView.findViewById(R.id.iv_add);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (a_ViewHolder) convertView.getTag();
             }
-            holder.poiNameTextView.setText(String.format("DAY%d", section));
+
+            List<PoiDetailBean> poiList = routeDayMap.get(section);
+
+            SpannableString planStr = new SpannableString("Day");
+            planStr.setSpan(new AbsoluteSizeSpan(11, true), 0, planStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            SpannableStringBuilder spb = new SpannableStringBuilder();
+            if (section < 9) {
+                spb.append(String.format("0%s.\n", (section + 1))).append(planStr);
+            } else {
+                spb.append(String.format("%s.\n", (section + 1))).append(planStr);
+            }
+            holder.a_tv_day_index.setText(spb);
+
+            int count = poiList.size();
+            String desc = "";
+            String descTitle = "";
+            HashSet<String> set = new HashSet<String>();
+            PoiDetailBean pdb;
+            for (int i = 0; i < count; ++i) {
+                pdb = poiList.get(i);
+                if (i == 0) {
+                    desc = String.format("%s", pdb.zhName);
+                } else {
+                    desc = String.format("%s → %s", desc, pdb.zhName);
+                }
+                if (pdb.locality != null) {
+                    set.add(pdb.locality.zhName);
+                }
+            }
+            for (String desName : set) {
+                if (descTitle.equals("")) {
+                    descTitle = desName;
+                } else {
+                    descTitle = String.format("%s > %s", descTitle, desName);
+                }
+            }
+            holder.a_summaryTextView.setText(desc);
+            holder.a_tv_schedule_title.setText(descTitle);
+            holder.iv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                            Intent intent = new Intent(ActivityPlanEditor.this, AddPoiActivity.class);
+                            intent.putParcelableArrayListExtra("locList", strategy.localities);
+                            intent.putExtra("dayIndex", section);
+                            intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
+                            startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
+//                            if (mOnEditModeChangeListener != null) {
+//                                if (!isInEditMode) {
+//                                    isInEditMode = true;
+//                                    mOnEditModeChangeListener.onEditModeChange(false);
+//                                    routeDayAdpater.setEditableMode(false);
+//                                    routeDayAdpater.notifyDataSetChanged();
+//                                }
+//                            }
+                }
+            });
+
             return convertView;
         }
 
@@ -236,10 +340,16 @@ public class ActivityPlanEditor extends FragmentActivity {
     private class ViewHolder {
         public TextView poiNameTextView;
     }
-
+    private class a_ViewHolder {
+        TextView a_summaryTextView;
+        TextView a_tv_schedule_title;
+        TextView a_tv_day_index;
+        ImageView iv_add;
+    }
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
+
 }

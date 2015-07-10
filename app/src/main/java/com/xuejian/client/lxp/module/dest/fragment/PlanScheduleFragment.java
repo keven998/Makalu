@@ -7,7 +7,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,8 +153,6 @@ public class PlanScheduleFragment extends Fragment {
             return convertView;
         }
     }
-
-
     private class ViewHolder {
         public TextView summaryTextView;
         public TextView tv_day_index;

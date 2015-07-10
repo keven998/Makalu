@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/ly_header_bar_title_wrap"
+
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+        android:layout_height="match_parent">
+
+        <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+            android:id="@+id/ly_header_bar_title_wrap"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_bar_height" />
 
         <com.xuejian.client.lxp.common.widget.dslv.DragSortListView
             xmlns:dslv="http://schemas.android.com/apk/res-auto"
             android:id="@+id/listview_plan_editor"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:dividerHeight="0dp"
-            android:divider="@null"
             android:layout_marginTop="@dimen/title_bar_height"
+            android:divider="@color/color_line"
+            android:dividerHeight="1px"
+            android:fastScrollEnabled="false"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
-            android:fastScrollEnabled="false"
             dslv:collapsed_height="2dp"
             dslv:drag_enabled="true"
             dslv:drag_scroll_start="0.33"
@@ -31,5 +41,24 @@
             dslv:sort_enabled="true"
             dslv:track_drag_sort="false"
             dslv:use_default_controller="false" />
-
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/menu_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginRight="0dp" />
+    </android.support.v4.widget.DrawerLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_menu"
+        android:ems="1"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/base_color_white"
+        android:background="@color/app_theme_color"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:text="按日修改"/>
+</RelativeLayout>
+</FrameLayout>

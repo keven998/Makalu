@@ -1,0 +1,84 @@
+package com.xuejian.client.lxp.module.toolbox.im.group;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.lv.im.IMClient;
+import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
+
+/**
+ * Created by yibiao.qin on 2015/7/10.
+ */
+public class ChatMenuFragment extends Fragment {
+    String userId;
+    public boolean isInDeleteMode;
+    private ChatActivity mActivity;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_chat_menu, container, false);
+    }
+    public Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+                    isInDeleteMode = false;
+                    break;
+            }
+        }
+    };
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (ChatActivity) activity;
+        mActivity.setHandler(mHandler);
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        userId = getArguments().getString("userId");
+        getView().findViewById(R.id.clear_all_history).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+                dialog.setTitle("提示");
+                dialog.setMessage("确定清空与此好友的聊天记录吗？");
+                dialog.setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearMessageHistory();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+    }
+
+    /**
+     * 清空群聊天记录
+     */
+    public void clearMessageHistory() {
+
+        IMClient.getInstance().cleanMessageHistory(userId);
+        // EMChatManager.getInstance().clearConversation(group.getGroupId());
+        //adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
+    }
+
+}
