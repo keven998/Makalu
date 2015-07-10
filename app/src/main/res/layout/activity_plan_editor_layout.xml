@@ -49,11 +49,11 @@
             android:layout_marginRight="0dp" />
     </android.support.v4.widget.DrawerLayout>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:id="@+id/tv_menu"
         android:ems="1"
-        android:layout_marginLeft="5dp"
+        android:gravity="right"
         android:textColor="@color/base_color_white"
         android:background="@color/app_theme_color"
         android:layout_marginBottom="100dp"

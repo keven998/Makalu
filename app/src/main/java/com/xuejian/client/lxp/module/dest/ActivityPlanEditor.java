@@ -22,16 +22,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.account.StrategyManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
 import com.xuejian.client.lxp.module.dest.fragment.RouteDayFragment;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,6 +56,7 @@ public class ActivityPlanEditor extends FragmentActivity {
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private List<Integer> sectionlist=new ArrayList<>();
     EditorAdapter editorAdapter;
+    Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,13 @@ public class ActivityPlanEditor extends FragmentActivity {
         TitleHeaderBar titleHeaderBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
         titleHeaderBar.getTitleTextView().setText("修改行程");
         titleHeaderBar.getRightTextView().setText("保存");
+        titleHeaderBar.enableBackKey(true);
+        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveStrategy();
+            }
+        });
         TextView menu= (TextView) findViewById(R.id.tv_menu);
         strategy = getIntent().getParcelableExtra("strategy");
         resizeData(strategy.itinerary);
@@ -81,7 +97,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                 }
             }
         });
-        final Fragment fragment = new EditPlanFragment();
+        fragment = new EditPlanFragment();
         Bundle args = new Bundle();
         args.putParcelable("data", strategy);
         fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
@@ -168,6 +184,10 @@ public class ActivityPlanEditor extends FragmentActivity {
                 int dayIndex = data.getIntExtra("dayIndex", -1);
                 routeDayMap.set(dayIndex, poiList);
                 editorAdapter.notifyDataSetChanged();
+                EditPlanFragment editFragment = (EditPlanFragment) getSupportFragmentManager().findFragmentByTag("edit_menu");
+                if (editFragment != null) {
+                    editFragment.update(routeDayMap);
+                }
             }
         }
     }
@@ -339,8 +359,11 @@ public class ActivityPlanEditor extends FragmentActivity {
             PoiDetailBean bean = fromList.get(fromPostion);
             fromList.remove(bean);
             toList.add(toPostion, bean);
-
             notifyDataSetChanged();
+            EditPlanFragment editFragment = (EditPlanFragment) getSupportFragmentManager().findFragmentByTag("edit_menu");
+            if (editFragment != null) {
+                editFragment.update(routeDayMap);
+            }
         }
 
         @Override
@@ -363,5 +386,42 @@ public class ActivityPlanEditor extends FragmentActivity {
         super.finish();
         overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
+    public void update(ArrayList<ArrayList<PoiDetailBean>> data){
+        routeDayMap.clear();
+        routeDayMap.addAll(data);
+        editorAdapter.notifyDataSetChanged();
+    }
+    private void saveStrategy( ) {
+        final JSONObject jsonObject = new JSONObject();
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, ActivityPlanEditor.this, strategy);
+      //  if (routeDayFragment != null) {
+           StrategyManager.putItineraryJson(ActivityPlanEditor.this, jsonObject, strategy, routeDayMap);
+     //   }
+//        if (shoppingFragment != null) {
+//            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
+//        }
+//        if (restFragment != null) {
+//            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
+//        }
+//        topTitle.setText("保存中...");
+//        loading_view.setVisibility(View.VISIBLE);
+//        ishideSomeIcons(true);
+        //DialogManager.getInstance().showLoadingDialog(mContext);
+        DialogManager.getInstance().showLoadingDialog(ActivityPlanEditor.this);
+        TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result.toString(), ModifyResult.class);
+                if (saveResult.code == 0) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    finish();
+                }
+            }
 
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
+        });
+    }
 }

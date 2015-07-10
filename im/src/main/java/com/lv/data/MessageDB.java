@@ -285,7 +285,7 @@ public class MessageDB {
             if (tipsType == 2001) {
                 addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
             } else if (tipsType == 2002) {
-                addTips(groupId, tag.toString() + "被" + operator.getString("nickName") + "移出讨论组", "group");
+                addTips(groupId, operator.getString("nickName") + "将" + tag.toString() + "移出讨论组", "group");
             } else return 1;
         } catch (Exception e) {
             e.printStackTrace();

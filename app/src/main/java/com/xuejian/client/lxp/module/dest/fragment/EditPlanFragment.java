@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
+import com.xuejian.client.lxp.module.dest.ActivityPlanEditor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,7 +34,7 @@ import java.util.List;
  */
 public class EditPlanFragment extends Fragment {
     private DragSortListView mDragListView;
-    private AMDragRateAdapter adapter;
+    private PlanEditAdapter adapter;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private StrategyBean strategy;
     @Override
@@ -48,6 +50,8 @@ public class EditPlanFragment extends Fragment {
                         ArrayList<PoiDetailBean> item = (ArrayList<PoiDetailBean>)adapter.getItem(from);//得到listview的适配器
                         adapter.remove(from);//在适配器中”原位置“的数据。
                         adapter.insert(item, to);//在目标位置中插入被拖动的控件。
+                        ActivityPlanEditor activityPlanEditor=(ActivityPlanEditor)getActivity();
+                        activityPlanEditor.update(routeDayMap);
                     }
                 }
             };
@@ -68,7 +72,7 @@ public class EditPlanFragment extends Fragment {
         resizeData(strategy.itinerary);
         mDragListView.setDropListener(onDrop);
         mDragListView.setRemoveListener(onRemove);
-        adapter = new AMDragRateAdapter( );
+        adapter = new PlanEditAdapter( );
         mDragListView.setDragEnabled(true);
         SectionController c = new SectionController(mDragListView, adapter);
         c.setSortEnabled(true);
@@ -77,15 +81,15 @@ public class EditPlanFragment extends Fragment {
         mDragListView.setAdapter(adapter);
     }
     private class SectionController extends DragSortController {
-        private AMDragRateAdapter mAdapter;
+        private PlanEditAdapter mAdapter;
         private DragSortListView mDSlv;
         private int mPos;
         private int origHeight = -1;
 
-        public SectionController(DragSortListView dslv, AMDragRateAdapter adapter) {
-            super(dslv, R.id.drag, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
+        public SectionController(DragSortListView dslv, PlanEditAdapter adapter) {
+            super(dslv, R.id.rl_drag, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
             setBackgroundColor(Color.TRANSPARENT);
-            setRemoveEnabled(true);
+            setRemoveEnabled(false);
             setRemoveMode(DragSortController.CLICK_REMOVE);
             setClickRemoveId(R.id.delete);
             mDSlv = dslv;
@@ -126,7 +130,13 @@ public class EditPlanFragment extends Fragment {
 //            super.onDestroyFloatView(floatView);
         }
     }
-    public class AMDragRateAdapter extends BaseAdapter {
+    public void update(ArrayList<ArrayList<PoiDetailBean>> data){
+        routeDayMap.clear();
+        routeDayMap.addAll(data);
+        adapter.notifyDataSetChanged();
+    }
+
+    public class PlanEditAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -159,6 +169,7 @@ public class EditPlanFragment extends Fragment {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.item_plan_edit_day, null);
                 viewHolder = new ViewHolder();
+                convertView.findViewById(R.id.rl_drag);
                 viewHolder.delete = (ImageView) convertView.findViewById(R.id.delete);
                 viewHolder.summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
                 viewHolder.tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
@@ -202,8 +213,15 @@ public class EditPlanFragment extends Fragment {
                     descTitle = String.format("%s > %s", descTitle, desName);
                 }
             }
-            viewHolder.summaryTextView.setText(desc);
-            viewHolder.tv_schedule_title.setText(descTitle);
+            if (TextUtils.isEmpty(desc)&&TextUtils.isEmpty(descTitle)){
+                viewHolder.tv_schedule_title.setText("没有安排");
+                viewHolder.summaryTextView.setVisibility(View.INVISIBLE);
+            }else {
+                viewHolder.summaryTextView.setVisibility(View.VISIBLE);
+                viewHolder.summaryTextView.setText(desc);
+                viewHolder.tv_schedule_title.setText(descTitle);
+            }
+
           //  viewHolder.ivCountryLogo.setImageResource(item.src);
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -226,6 +244,8 @@ public class EditPlanFragment extends Fragment {
 //                                    routeDayAdpater.notifyDataSetChanged();
 //                                }
 //                            }
+                            ActivityPlanEditor activityPlanEditor=(ActivityPlanEditor)getActivity();
+                            activityPlanEditor.update(routeDayMap);
                             deleteDialog.dismiss();
                         }
                     });

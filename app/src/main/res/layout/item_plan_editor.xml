@@ -10,7 +10,7 @@
         android:textColor="@color/color_text_ii"
         android:textSize="15sp"
         android:lineSpacingExtra="5dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="55dp"
         android:layout_marginRight="10dp"
         android:gravity="left|center_vertical"/>
 </RelativeLayout>
