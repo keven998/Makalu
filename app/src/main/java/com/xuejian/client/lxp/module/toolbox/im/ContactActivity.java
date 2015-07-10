@@ -30,16 +30,9 @@ public class ContactActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_contact);
         ButterKnife.inject(this);
         titleBar.getTitleTextView().setText("联系人");
-        titleBar.getLeftTextView().setCompoundDrawables(null,null,null,null);
-        titleBar.getLeftTextView().setText("取消");
-        titleBar.getLeftTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
-        titleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        titleBar.setRightViewImageRes(R.drawable.ic_add_friend);
+        titleBar.enableBackKey(true);
+
+        titleBar.setRightViewImageRes(R.drawable.ic_contact_list_add);
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

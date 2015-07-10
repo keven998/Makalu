@@ -36,6 +36,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.TripFragment;
@@ -379,7 +380,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        vibrator.vibrate(500);
+        if (!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this,m.getSenderId()+"")){
+            vibrator.vibrate(500);
+        }
         //  notifyNewMessage(m);
     }
 

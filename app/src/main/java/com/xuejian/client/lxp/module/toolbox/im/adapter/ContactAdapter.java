@@ -71,7 +71,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8)))
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -156,8 +156,9 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.nickView.setText("好友请求");
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
-            vh.talkView.setImageResource(R.drawable.icon_arrow_right);
-            vh.avatarView.setImageResource(R.drawable.ic_frend_request);
+        //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
+            vh.talkView.setVisibility(View.INVISIBLE);
+            vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
 //            if(user.getUnreadMsgCount() > 0){
 //                vh.unreadMsgView.setVisibility(View.VISIBLE);
 //                vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");

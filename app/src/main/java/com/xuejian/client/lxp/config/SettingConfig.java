@@ -25,7 +25,13 @@ public class SettingConfig {
     public void setLxqPushSetting(Context context,boolean lxqpush){
          SharePrefUtil.saveBoolean(context,LXQ_PREF,lxqpush);
     }
+    public boolean getLxpNoticeSetting(Context context,String chatId){
+        return SharePrefUtil.getBoolean(context,chatId,false);
+    }
 
+    public void setLxpNoticeSetting(Context context,String chatId,boolean value){
+        SharePrefUtil.saveBoolean(context,chatId,value);
+    }
     public boolean getAdPushSetting(Context context){
         return SharePrefUtil.getBoolean(context,AD_PREF,true);
     }

@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 /**
@@ -67,6 +69,15 @@ public class ChatMenuFragment extends Fragment {
                     }
                 });
                 dialog.show();
+            }
+        });
+        getView().findViewById(R.id.ctv_msg_notify_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckedTextView ctv = (CheckedTextView) v;
+                Boolean isOpen = ctv.isChecked();
+                ctv.setChecked(!isOpen);
+                SettingConfig.getInstance().setLxpNoticeSetting(getActivity(), userId, !isOpen);
             }
         });
     }

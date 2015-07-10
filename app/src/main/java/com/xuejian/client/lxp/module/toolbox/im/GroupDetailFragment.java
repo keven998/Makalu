@@ -38,6 +38,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.utils.AnimationSimple;
 import com.xuejian.client.lxp.config.PeachApplication;
+import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -129,12 +130,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 CheckedTextView ctv = (CheckedTextView) v;
                 Boolean isOpen = ctv.isChecked();
-                if (isOpen) {
-
-                } else {
-
-                }
                 ctv.setChecked(!isOpen);
+                SettingConfig.getInstance().setLxpNoticeSetting(getActivity(), groupId, !isOpen);
             }
         });
 
