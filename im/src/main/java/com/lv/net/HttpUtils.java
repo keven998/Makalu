@@ -50,11 +50,11 @@ public class HttpUtils {
 
     }
 
-    public static void postAck(final JSONArray array, FetchListener listener) {
-        final String url = Config.ACK_URL + IMClient.getInstance().getCurrentUserId() + "/ack";
+    public static void postAck(final long time, FetchListener listener) {
+        final String url = Config.ACK_URL + IMClient.getInstance().getCurrentUserId() + "/messages";
         final JSONObject obj = new JSONObject();
         try {
-            obj.put("msgList", array);
+            obj.put("purgeBefore", time);
             IMClient.getInstance().clearackList();
             if (Config.isDebug) {
                 Log.i(Config.TAG, url + " ack : " + obj.toString());
@@ -70,6 +70,7 @@ public class HttpUtils {
                     String s = response.body().string();
                     JSONObject object = new JSONObject(s);
                     JSONArray resultArray = object.getJSONArray("result");
+                    IMClient.lastSusseccFetch=object.getLong("timestamp");
                     List<Message> list = new ArrayList<>();
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "ack Result : " + s);

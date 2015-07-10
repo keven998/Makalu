@@ -177,11 +177,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
-    public Handler mHandler;
-
-    public void setHandler(Handler handler) {
-        mHandler = handler;
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -373,9 +368,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                Message msg = new Message();
-                msg.what = 1;
-                mHandler.sendMessage(msg);
+                GroupDetailFragment fragment= (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+                if (fragment!=null){
+                    fragment.closeDeleteMode();
+                }
             }
 
             @Override

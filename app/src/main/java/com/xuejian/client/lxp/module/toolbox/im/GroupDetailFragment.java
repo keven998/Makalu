@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,7 +68,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
     public boolean isInDeleteMode;
     public MemberAdapter memberAdapter;
     private User group;
-
     //清空所有聊天记录
     private ChatActivity mActivity;
 
@@ -82,23 +80,16 @@ public class GroupDetailFragment extends PeachBaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (ChatActivity) activity;
-        mActivity.setHandler(mHandler);
     }
 
-    public Handler mHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case 1:
-                    isInDeleteMode = false;
-                    memberAdapter.notifyDataSetChanged();
-                    break;
-            }
-        }
-    };
-
+    public void closeDeleteMode(){
+        isInDeleteMode = false;
+        memberAdapter.notifyDataSetChanged();
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        groupId = getArguments().getString("groupId");
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
         delGroupMember = (TextView) getView().findViewById(R.id.tv_del_to_group);
@@ -125,18 +116,19 @@ public class GroupDetailFragment extends PeachBaseFragment {
 
         groupNameTv = (TextView) getView().findViewById(R.id.tv_groupName);
 
-        getView().findViewById(R.id.ctv_msg_notify_setting).setOnClickListener(new View.OnClickListener() {
+        CheckedTextView ctv = (CheckedTextView) getView().findViewById(R.id.ctv_msg_notify_setting);
+        ctv.setChecked(SettingConfig.getInstance().getLxpNoticeSetting(getActivity().getApplicationContext(), groupId));
+        ctv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CheckedTextView ctv = (CheckedTextView) v;
                 Boolean isOpen = ctv.isChecked();
                 ctv.setChecked(!isOpen);
-                SettingConfig.getInstance().setLxpNoticeSetting(getActivity(), groupId, !isOpen);
+                SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), groupId, !isOpen);
             }
         });
 
         // 获取传过来的groupid
-        groupId = getArguments().getString("groupId");
         if (groupId != null) {
             group = UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
         }
@@ -429,7 +421,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
             });
 
 
-            if (isInDeleteMode&&itemData.getUserId()!=Long.parseLong(AccountManager.getCurrentUserId())) {
+            if (isInDeleteMode && itemData.getUserId() != Long.parseLong(AccountManager.getCurrentUserId())) {
                 Animation animation = AnimationSimple.expand(removeIv);
                 removeIv.startAnimation(animation);
                 animation = AnimationSimple.expand(removeIv);
@@ -485,7 +477,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
             });
         }
     }
-public static void refresh(){
 
-}
+    public static void refresh() {
+
+    }
 }

@@ -9,7 +9,7 @@ public class Config {
     public static final String HOST = "http://hedy-dev.lvxingpai.com";
     public static final String GET_GROUP = HOST+"/groups/";
     public static final String SEND_URL = HOST+"/chats";
-    public static final String ACK_URL = HOST+"/chats/";
+    public static final String ACK_URL = HOST+"/users/";
     public static final String MSG_DBNAME = "IM_SDK.db";
     public static final String USER_DBNAME = "USER.db";
     public static final String DB_PATH = "/data/data/com.xuejian.client.lxp/";
