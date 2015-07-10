@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.my;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.amap.api.maps2d.AMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -38,8 +40,10 @@ import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -59,6 +63,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
+    private Map<LatLng,AirMapMarker> markers;
 
     @Override
     public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
@@ -173,6 +178,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private void refreshMapView(final ArrayList<LocBean> bean) {
         if (mapView != null) {
             mapView.removeAllViews();
+           // mapView.clearMarkers();
         }
         if (bean.size() > 0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
@@ -182,6 +188,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                 public void onMapInitialized() {
                     for (int j = 0; j < bean.size(); j++) {
                         mapView.addMarker(new AirMapMarker(new LatLng(bean.get(j).location.coordinates[1], bean.get(j).location.coordinates[0]), MARKER));
+
                     }
                     mapView.animateCenterZoom(new LatLng(bean.get(0).location.coordinates[1], bean.get(0).location.coordinates[0]), 2);
                 }
@@ -197,7 +204,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             });
         }
         mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
@@ -237,6 +244,10 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                 finish();
             }
         });
+
+
+
+
         if (hasSelectLoc != null && hasSelectLoc.size() > 0) {
             for (LocBean locBean : hasSelectLoc) {
                 onDestAdded(locBean, false, null);
@@ -245,7 +256,30 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                 }
             }
         } else {
-            refreshMapView(allAddCityList);
+            //refreshMapView(allAddCityList);
+            if (allAddCityList.size() > 0) {
+                mapViewBuilder = new DefaultAirMapViewBuilder(this);
+                airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+                mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                    @Override
+                    public void onMapInitialized() {
+                        for (int j = 0; j < allAddCityList.size(); j++) {
+                            mapView.addMarker(new AirMapMarker(new LatLng(allAddCityList.get(j).location.coordinates[1], allAddCityList.get(j).location.coordinates[0]), MARKER));
+                        }
+                        mapView.animateCenterZoom(new LatLng(allAddCityList.get(0).location.coordinates[1], allAddCityList.get(0).location.coordinates[0]), 2);
+                    }
+                });
+            } else {
+                mapViewBuilder = new DefaultAirMapViewBuilder(this);
+                airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+                mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                    @Override
+                    public void onMapInitialized() {
+                        mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 2);
+                    }
+                });
+            }
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
         }
     }
 
