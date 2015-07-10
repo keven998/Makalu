@@ -102,32 +102,22 @@
         <TextView
             android:id="@+id/tv_track_summary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="5dp"
             android:ellipsize="end"
+            android:layout_weight="1"
             android:gravity="center"
-            android:singleLine="true"
+            android:lineSpacingExtra="2dp"
+            android:lines="2"
             android:textColor="@color/color_text_i"
             android:textSize="16sp" />
-
-        <TextView android:id="@+id/tv_track_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/color_text_iii"
-            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/expert_level" />
 

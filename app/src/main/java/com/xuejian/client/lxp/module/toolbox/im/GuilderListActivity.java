@@ -5,11 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -50,7 +56,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     private ExpertAdapter adapter;
     private int EXPERT_DES = 1;
     private int mCurrentPage = 0;
-    private  int PAGE_SIZE = 15;
+    private int PAGE_SIZE = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +181,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
-            width = CommonUtils.getScreenWidth((Activity)cxt) - LocalDisplay.dp2px(24);
+            width = CommonUtils.getScreenWidth((Activity) cxt) - LocalDisplay.dp2px(24);
             inflater = LayoutInflater.from(cxt);
 
             imgLoader = ImageLoader.getInstance();
@@ -212,20 +218,20 @@ public class GuilderListActivity extends PeachBaseActivity {
                 inflater = LayoutInflater.from(this.context);
                 convertView = inflater.inflate(R.layout.expert_list_cont, null);
                 int padding = LocalDisplay.dp2px(6);
-                RelativeLayout.LayoutParams lparms = new RelativeLayout.LayoutParams(width/2, width*39/54);
+                AbsListView.LayoutParams lparms = new AbsListView.LayoutParams(width / 2, width * 39 / 54);
                 convertView.setLayoutParams(lparms);
                 convertView.setPadding(padding, padding, padding, padding);
 
                 vh = new ViewHolder();
                 vh.avatarView = (ImageView) convertView.findViewById(R.id.expert_pic);
-                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams((int)(0.41*width/2.0), (int)(0.41*41*width/74));
+                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams((int) (0.41 * width / 2.0), (int) (0.41 * 41 * width / 74));
                 llp.gravity = Gravity.CENTER_HORIZONTAL;
-                llp.topMargin = 3*padding;
+                llp.topMargin = 5 * padding / 2;
                 vh.avatarView.setLayoutParams(llp);
-                vh.avatarView.setPadding(padding, 2*padding, padding, padding);
+                int dp = llp.width * 4 / 74;
+                vh.avatarView.setPadding(dp, dp * 34 / 12, dp, dp);
 
                 vh.titleView = (TextView) convertView.findViewById(R.id.tv_track_summary);
-                vh.subTitleView = (TextView) convertView.findViewById(R.id.tv_track_area);
                 vh.residenceView = (TextView) convertView.findViewById(R.id.expert_location);
                 vh.nickView = (TextView) convertView.findViewById(R.id.expert_name);
                 vh.consView = (TextView) convertView.findViewById(R.id.expert_zod);
@@ -249,20 +255,29 @@ public class GuilderListActivity extends PeachBaseActivity {
             if (!TextUtils.isEmpty(eb.residence)) {
                 vh.residenceView.setText(eb.residence);
             } else {
-                vh.residenceView.setText("现住地");
+                vh.residenceView.setText("");
             }
             if (!TextUtils.isEmpty(eb.birthday)) {
-                vh.ageView.setText(getAge(eb.birthday) + "岁");
+                vh.ageView.setText(String.valueOf(getAge(eb.birthday)));
             } else {
-                vh.ageView.setText("年龄");
+                vh.ageView.setText("");
             }
             if (!TextUtils.isEmpty(eb.birthday)) {
                 vh.consView.setText("射手座");
             } else {
-                vh.consView.setText("星座");
+                vh.consView.setText("");
             }
-            vh.titleView.setText("99个城市");
-            vh.subTitleView.setText("泰国足迹");
+
+            //足迹
+            String st1 = "99个城市\n";
+            String st2 = "泰国足迹";
+            SpannableString attrStr2 = new SpannableString(st2);
+            attrStr2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, st2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            attrStr2.setSpan(new AbsoluteSizeSpan(13, true), 0, attrStr2.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            SpannableStringBuilder spb = new SpannableStringBuilder();
+            spb.append(st1).append(attrStr2);
+            vh.titleView.setText(spb);
+
             return convertView;
         }
     }
@@ -313,7 +328,6 @@ public class GuilderListActivity extends PeachBaseActivity {
     private class ViewHolder {
         ImageView avatarView;
         TextView titleView;
-        TextView subTitleView;
         TextView scoreView;
         TextView residenceView;
         TextView consView;
