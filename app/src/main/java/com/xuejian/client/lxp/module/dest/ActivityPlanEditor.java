@@ -54,39 +54,42 @@ public class ActivityPlanEditor extends FragmentActivity {
     private DrawerLayout drawerLayout;
     private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
-    private List<Integer> sectionlist=new ArrayList<>();
+    private List<Integer> sectionlist = new ArrayList<>();
     EditorAdapter editorAdapter;
     Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_editor_layout);
-        TitleHeaderBar titleHeaderBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
-        titleHeaderBar.getTitleTextView().setText("修改行程");
-        titleHeaderBar.getRightTextView().setText("保存");
-        titleHeaderBar.enableBackKey(true);
-        titleHeaderBar.getRightTextView().setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveStrategy();
             }
         });
-        TextView menu= (TextView) findViewById(R.id.tv_menu);
+
         strategy = getIntent().getParcelableExtra("strategy");
         resizeData(strategy.itinerary);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setEnabled(true);
         mDragListView = (DragSortListView) findViewById(R.id.listview_plan_editor);
         editorAdapter = new EditorAdapter(this);
-        //EditAdapter editorAdapter = new EditAdapter(this,sectionlist);
         mDragListView.setDropListener(editorAdapter);
         SectionController c = new SectionController(mDragListView, editorAdapter);
         c.setSortEnabled(true);
         mDragListView.setFloatViewManager(c);
         mDragListView.setOnTouchListener(c);
         mDragListView.setAdapter(editorAdapter);
-        menu.setClickable(true);
-        menu.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.btn_edit_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("click");
@@ -97,6 +100,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                 }
             }
         });
+
         fragment = new EditPlanFragment();
         Bundle args = new Bundle();
         args.putParcelable("data", strategy);
@@ -105,6 +109,15 @@ public class ActivityPlanEditor extends FragmentActivity {
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(fragment, "edit_menu");
         ft.replace(R.id.menu_frame, fragment).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
@@ -119,9 +132,9 @@ public class ActivityPlanEditor extends FragmentActivity {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
         }
-        int temp=0;
-        for (ArrayList<PoiDetailBean> list:routeDayMap){
-            sectionlist.add(temp+=list.size());
+        int temp = 0;
+        for (ArrayList<PoiDetailBean> list : routeDayMap) {
+            sectionlist.add(temp += list.size());
         }
 
     }
@@ -136,8 +149,6 @@ public class ActivityPlanEditor extends FragmentActivity {
             super(dslv, R.id.tv_plan_editor, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
             setBackgroundColor(Color.TRANSPARENT);
             setRemoveEnabled(false);
-            //setRemoveMode(DragSortController.CLICK_REMOVE);
-           // setClickRemoveId(R.id.);
             mDSlv = dslv;
             mAdapter = adapter;
         }
@@ -157,7 +168,6 @@ public class ActivityPlanEditor extends FragmentActivity {
             if (origHeight == -1) {
                 origHeight = floatView.getHeight();
             }
-            //
             View div = mDSlv.getChildAt(mDSlv.getHeaderViewsCount());
             if (mPos > 0) {
                 // don't allow floating View to go above
@@ -176,6 +186,7 @@ public class ActivityPlanEditor extends FragmentActivity {
 //            super.onDestroyFloatView(floatView);
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -191,6 +202,7 @@ public class ActivityPlanEditor extends FragmentActivity {
             }
         }
     }
+
     private class EditorAdapter extends BaseSectionAdapter implements DragSortListView.DropListener {
         private LayoutInflater inflater;
 
@@ -235,12 +247,19 @@ public class ActivityPlanEditor extends FragmentActivity {
                 convertView = inflater.inflate(R.layout.item_plan_editor, null);
                 holder = new ViewHolder();
                 holder.poiNameTextView = (TextView) convertView.findViewById(R.id.tv_plan_editor);
+                holder.deleteIv = (ImageView) convertView.findViewById(R.id.iv_delete_item);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             PoiDetailBean poi = (PoiDetailBean) getItem(section, position);
             holder.poiNameTextView.setText(poi.zhName);
+            holder.deleteIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             return convertView;
         }
 
@@ -250,11 +269,9 @@ public class ActivityPlanEditor extends FragmentActivity {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_plan_editor_headerview, null);
                 holder = new a_ViewHolder();
-
-                holder.a_summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
                 holder.a_tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
                 holder.a_tv_schedule_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
-                holder.iv_add= (ImageView) convertView.findViewById(R.id.iv_add);
+                holder.iv_add = (ImageView) convertView.findViewById(R.id.iv_add);
                 convertView.setTag(holder);
             } else {
                 holder = (a_ViewHolder) convertView.getTag();
@@ -295,24 +312,15 @@ public class ActivityPlanEditor extends FragmentActivity {
                     descTitle = String.format("%s > %s", descTitle, desName);
                 }
             }
-            holder.a_summaryTextView.setText(desc);
             holder.a_tv_schedule_title.setText(descTitle);
             holder.iv_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                            Intent intent = new Intent(ActivityPlanEditor.this, AddPoiActivity.class);
-                            intent.putParcelableArrayListExtra("locList", strategy.localities);
-                            intent.putExtra("dayIndex", section);
-                            intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
-                            startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
-//                            if (mOnEditModeChangeListener != null) {
-//                                if (!isInEditMode) {
-//                                    isInEditMode = true;
-//                                    mOnEditModeChangeListener.onEditModeChange(false);
-//                                    routeDayAdpater.setEditableMode(false);
-//                                    routeDayAdpater.notifyDataSetChanged();
-//                                }
-//                            }
+                    Intent intent = new Intent(ActivityPlanEditor.this, AddPoiActivity.class);
+                    intent.putParcelableArrayListExtra("locList", strategy.localities);
+                    intent.putExtra("dayIndex", section);
+                    intent.putParcelableArrayListExtra("poiList", routeDayMap.get(section));
+                    startActivityForResult(intent, RouteDayFragment.ADD_POI_REQUEST_CODE);
                 }
             });
 
@@ -373,40 +381,33 @@ public class ActivityPlanEditor extends FragmentActivity {
     }
 
     private class ViewHolder {
-        public TextView poiNameTextView;
+        TextView poiNameTextView;
+        ImageView deleteIv;
     }
+
     private class a_ViewHolder {
-        TextView a_summaryTextView;
         TextView a_tv_schedule_title;
         TextView a_tv_day_index;
         ImageView iv_add;
     }
+
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
     }
-    public void update(ArrayList<ArrayList<PoiDetailBean>> data){
+
+    public void update(ArrayList<ArrayList<PoiDetailBean>> data) {
         routeDayMap.clear();
         routeDayMap.addAll(data);
         editorAdapter.notifyDataSetChanged();
     }
-    private void saveStrategy( ) {
+
+    private void saveStrategy() {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, ActivityPlanEditor.this, strategy);
-      //  if (routeDayFragment != null) {
-           StrategyManager.putItineraryJson(ActivityPlanEditor.this, jsonObject, strategy, routeDayMap);
-     //   }
-//        if (shoppingFragment != null) {
-//            StrategyManager.putShoppingJson(mContext, jsonObject, strategy);
-//        }
-//        if (restFragment != null) {
-//            StrategyManager.putRestaurantJson(mContext, jsonObject, strategy);
-//        }
-//        topTitle.setText("保存中...");
-//        loading_view.setVisibility(View.VISIBLE);
-//        ishideSomeIcons(true);
-        //DialogManager.getInstance().showLoadingDialog(mContext);
+        StrategyManager.putItineraryJson(ActivityPlanEditor.this, jsonObject, strategy, routeDayMap);
+
         DialogManager.getInstance().showLoadingDialog(ActivityPlanEditor.this);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
             @Override
@@ -414,7 +415,9 @@ public class ActivityPlanEditor extends FragmentActivity {
                 CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result.toString(), ModifyResult.class);
                 if (saveResult.code == 0) {
                     DialogManager.getInstance().dissMissLoadingDialog();
-                    finish();
+                    Intent intent = new Intent(ActivityPlanEditor.this, StrategyActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             }
 

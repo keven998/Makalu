@@ -37,20 +37,22 @@ public class EditPlanFragment extends Fragment {
     private PlanEditAdapter adapter;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private StrategyBean strategy;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_plan_edit_menu, container, false);
     }
+
     private DragSortListView.DropListener onDrop =
             new DragSortListView.DropListener() {
                 @Override
                 public void drop(int from, int to) {//from to 分别表示 被拖动控件原位置 和目标位置
                     if (from != to) {
-                        ArrayList<PoiDetailBean> item = (ArrayList<PoiDetailBean>)adapter.getItem(from);//得到listview的适配器
+                        ArrayList<PoiDetailBean> item = (ArrayList<PoiDetailBean>) adapter.getItem(from);//得到listview的适配器
                         adapter.remove(from);//在适配器中”原位置“的数据。
                         adapter.insert(item, to);//在目标位置中插入被拖动的控件。
-                        ActivityPlanEditor activityPlanEditor=(ActivityPlanEditor)getActivity();
+                        ActivityPlanEditor activityPlanEditor = (ActivityPlanEditor) getActivity();
                         activityPlanEditor.update(routeDayMap);
                     }
                 }
@@ -63,6 +65,7 @@ public class EditPlanFragment extends Fragment {
                     adapter.remove(which);
                 }
             };
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -72,7 +75,7 @@ public class EditPlanFragment extends Fragment {
         resizeData(strategy.itinerary);
         mDragListView.setDropListener(onDrop);
         mDragListView.setRemoveListener(onRemove);
-        adapter = new PlanEditAdapter( );
+        adapter = new PlanEditAdapter();
         mDragListView.setDragEnabled(true);
         SectionController c = new SectionController(mDragListView, adapter);
         c.setSortEnabled(true);
@@ -80,6 +83,7 @@ public class EditPlanFragment extends Fragment {
         mDragListView.setOnTouchListener(c);
         mDragListView.setAdapter(adapter);
     }
+
     private class SectionController extends DragSortController {
         private PlanEditAdapter mAdapter;
         private DragSortListView mDSlv;
@@ -130,7 +134,8 @@ public class EditPlanFragment extends Fragment {
 //            super.onDestroyFloatView(floatView);
         }
     }
-    public void update(ArrayList<ArrayList<PoiDetailBean>> data){
+
+    public void update(ArrayList<ArrayList<PoiDetailBean>> data) {
         routeDayMap.clear();
         routeDayMap.addAll(data);
         adapter.notifyDataSetChanged();
@@ -170,7 +175,7 @@ public class EditPlanFragment extends Fragment {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.item_plan_edit_day, null);
                 viewHolder = new ViewHolder();
                 convertView.findViewById(R.id.rl_drag);
-                viewHolder.delete = (ImageView) convertView.findViewById(R.id.delete);
+                viewHolder.delete = (ImageView) convertView.findViewById(R.id.iv_delete_day);
                 viewHolder.summaryTextView = (TextView) convertView.findViewById(R.id.tv_schedule_summary);
                 viewHolder.tv_day_index = (TextView) convertView.findViewById(R.id.tv_day_index);
                 viewHolder.tv_schedule_title = (TextView) convertView.findViewById(R.id.tv_schedule_title);
@@ -213,16 +218,15 @@ public class EditPlanFragment extends Fragment {
                     descTitle = String.format("%s > %s", descTitle, desName);
                 }
             }
-            if (TextUtils.isEmpty(desc)&&TextUtils.isEmpty(descTitle)){
+            if (TextUtils.isEmpty(desc) && TextUtils.isEmpty(descTitle)) {
                 viewHolder.tv_schedule_title.setText("没有安排");
                 viewHolder.summaryTextView.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 viewHolder.summaryTextView.setVisibility(View.VISIBLE);
                 viewHolder.summaryTextView.setText(desc);
                 viewHolder.tv_schedule_title.setText(descTitle);
             }
 
-          //  viewHolder.ivCountryLogo.setImageResource(item.src);
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -236,15 +240,7 @@ public class EditPlanFragment extends Fragment {
                             routeDayMap.remove(position);
                             strategy.itineraryDays--;
                             adapter.notifyDataSetChanged();
-//                            if (mOnEditModeChangeListener != null) {
-//                                if (!isInEditMode) {
-//                                    isInEditMode = true;
-//                                    mOnEditModeChangeListener.onEditModeChange(false);
-//                                    routeDayAdpater.setEditableMode(false);
-//                                    routeDayAdpater.notifyDataSetChanged();
-//                                }
-//                            }
-                            ActivityPlanEditor activityPlanEditor=(ActivityPlanEditor)getActivity();
+                            ActivityPlanEditor activityPlanEditor = (ActivityPlanEditor) getActivity();
                             activityPlanEditor.update(routeDayMap);
                             deleteDialog.dismiss();
                         }
@@ -269,6 +265,7 @@ public class EditPlanFragment extends Fragment {
             TextView tv_day_index;
         }
     }
+
     private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
         StrategyBean strategyBean = strategy;
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
