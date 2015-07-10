@@ -7,29 +7,29 @@ import java.io.Serializable;
 /**
  * Entity mapped to table MESSAGE.
  */
-public class Message implements Serializable{
+public class Message implements Serializable {
     /**
-     id
-     string
-     conversation
-     string	所属会话的ID
-     msgId
-     int
-     msgType
-     int	1: 普通消息
-     senderId
-     long	发送者ID
-     senderAvatar
-     string	发送者头像
-     senderName
-     string	发送者名称
-     contents
-     string	消息内容
-     timestamp
-     long	时间戳
-     int
-     sendType 0 发送 1 接受
-     **/
+     * id
+     * string
+     * conversation
+     * string	所属会话的ID
+     * msgId
+     * int
+     * msgType
+     * int	1: 普通消息
+     * senderId
+     * long	发送者ID
+     * senderAvatar
+     * string	发送者头像
+     * senderName
+     * string	发送者名称
+     * contents
+     * string	消息内容
+     * timestamp
+     * long	时间戳
+     * int
+     * sendType 0 发送 1 接受
+     */
     private String id;
     private String conversation;
     private int msgId;
@@ -43,6 +43,7 @@ public class Message implements Serializable{
     private String Url;
     private String LoaclPath;
     private long GroupId;
+    private String abbrev;
     private String ChatType;//聊天类型
 
     public int getStatus() {
@@ -54,6 +55,7 @@ public class Message implements Serializable{
     }
 
     private int status;
+
     public long getGroupId() {
         return GroupId;
     }
@@ -70,10 +72,10 @@ public class Message implements Serializable{
         ChatType = chatType;
     }
 
-    public Message (){
+    public Message() {
     }
 
-    public Message(String id, String conversation, int msgId, int msgType, long senderId, String senderAvatar, String senderName, String contents, long timestamp, int sendType,long groupId,String chatType) {
+    public Message(String id, String conversation, int msgId, int msgType, long senderId, String senderAvatar, String senderName, String contents, long timestamp, int sendType, long groupId, String chatType, String abbrev) {
         this.id = id;
         this.conversation = conversation;
         this.msgId = msgId;
@@ -84,8 +86,9 @@ public class Message implements Serializable{
         this.contents = contents;
         this.timestamp = timestamp;
         this.sendType = sendType;
-        this.GroupId=groupId;
-        this.ChatType=chatType;
+        this.GroupId = groupId;
+        this.ChatType = chatType;
+        this.abbrev = abbrev;
     }
 
     public String getId() {
@@ -184,5 +187,12 @@ public class Message implements Serializable{
         LoaclPath = loaclPath;
     }
 
+    public String getAbbrev() {
+        return abbrev;
+    }
+
+    public void setAbbrev(String abbrev) {
+        this.abbrev = abbrev;
+    }
 }
 

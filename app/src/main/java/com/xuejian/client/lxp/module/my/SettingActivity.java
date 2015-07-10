@@ -70,7 +70,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
     @Override
     public void finish() {
-        // TODO Auto-generated method stub
         super.finish();
     }
 

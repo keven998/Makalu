@@ -79,8 +79,6 @@ public class HandleImMessage {
     public void registerMessageListener(MessageHandler listener, String conversation) {
         if (!ehList.contains(listener)) {
             ehList.add(listener);
-        } else {
-            return;
         }
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
@@ -285,7 +283,7 @@ public class HandleImMessage {
     };
 
     private static MessageBean Msg2Bean(Message msg) {
-        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
+        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(),msg.getAbbrev());
     }
 
     public void notifyMsg(Context c, Message message) {
@@ -298,9 +296,9 @@ public class HandleImMessage {
         // if(message.getType() == EMMessage.Type.TXT)
         //    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
         //设置状态栏提示
-        mBuilder.setTicker(message.getSenderId() + ": 你有一条新消息");
-        mBuilder.setContentTitle("new message");
-        mBuilder.setContentText("你有一条新消息！");
+        mBuilder.setTicker(message.getAbbrev());
+        mBuilder.setContentTitle("旅行派");
+        mBuilder.setContentText(message.getAbbrev());
         //必须设置pendingintent，否则在2.3的机器上会有bug
         Intent intent = new Intent("android.intent.action.notify");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

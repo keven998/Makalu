@@ -226,15 +226,15 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 cityNameTv.setText(bean.zhName);
                 ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
                 if (!bean.isAdded) {
-                    if(isClickable) {
+                   // if(isClickable) {
                         addIcon.setVisibility(View.GONE);
                         //cityNameTv.setCompoundDrawables(add, null, null, null);
-                    }
+                   // }
                 } else {
-                    if(isClickable) {
+                   // if(isClickable) {
                         addIcon.setVisibility(View.VISIBLE);
                         // cityNameTv.setCompoundDrawables(selected, null, null, null);
-                    }
+                   // }
                 }
                 contentView.setOnClickListener(new View.OnClickListener() {
                     @Override
