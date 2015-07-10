@@ -14,6 +14,7 @@ import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -160,6 +161,8 @@ public class MessageDB {
          */
         if (entity.getType() == 100) {
             return handleCMD(entity);
+        } else if (entity.getType() == 200) {
+            return handleTips(entity);
         }
         /**
          * 单聊
@@ -188,7 +191,7 @@ public class MessageDB {
         /**
          * 屏蔽欢迎回来
          */
-        if (entity.getSenderId()==0)return 1;
+        if (entity.getSenderId() == 0) return 1;
         switch (entity.getType()) {
             case Config.AUDIO_MSG:
                 try {
@@ -262,6 +265,34 @@ public class MessageDB {
         return 0;
     }
 
+    private int handleTips(MessageBean entity) {
+        try {
+            String cmd = entity.getMessage();
+            JSONObject tips = new JSONObject(cmd);
+            String groupId = tips.getString("chatGroupId");
+            int tipsType = tips.getInt("tipType");
+            JSONObject operator = tips.getJSONObject("operator");
+            JSONArray targets = tips.getJSONArray("targets");
+            StringBuilder tag = new StringBuilder();
+            for (int i = 0; i < targets.length(); i++) {
+                if (i > 0) tag.append("、");
+                if (targets.getJSONObject(i).getInt("userId")==Integer.parseInt(IMClient.getInstance().getCurrentUserId())){
+                    tag.append("你");
+                }else {
+                    tag.append(targets.getJSONObject(i).getString("nickName"));
+                }
+            }
+            if (tipsType == 2001) {
+                addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
+            } else if (tipsType == 2002) {
+                addTips(groupId, tag.toString() + "被" + operator.getString("nickName") + "移出讨论组", "group");
+            } else return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     private int handleCMD(MessageBean entity) {
         mdb = getDB();
         try {
@@ -308,6 +339,8 @@ public class MessageDB {
                 }
             } else if ("F_AGREE".equals(action)) {
                 long userId = object.getLong("userId");
+                if (String.valueOf(userId).equals(IMClient.getInstance().getCurrentUserId()))
+                    return 1;
                 String nickName = object.getString("nickName");
                 addTips(String.valueOf(userId), nickName + "已同意你的好友请求，现在可以开始聊天", "single");
                 closeDB();
@@ -365,12 +398,12 @@ public class MessageDB {
     }
 
     public int getUnAcceptMsg() {
-        mdb=getDB();
+        mdb = getDB();
         Cursor cursor = mdb.rawQuery("select status from " + request_msg_table_name, null);
-        int num=0;
-        while (cursor.moveToNext()){
-            int c=cursor.getInt(0);
-            if (c==0)num++;
+        int num = 0;
+        while (cursor.moveToNext()) {
+            int c = cursor.getInt(0);
+            if (c == 0) num++;
         }
         return num;
     }

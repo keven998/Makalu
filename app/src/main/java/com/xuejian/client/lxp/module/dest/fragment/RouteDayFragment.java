@@ -115,18 +115,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         mEditDslv.setAdapter(routeDayAdpater);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ADD_POI_REQUEST_CODE) {
-                ArrayList<PoiDetailBean> poiList = data.getParcelableArrayListExtra("poiList");
-                int dayIndex = data.getIntExtra("dayIndex", -1);
-                routeDayMap.set(dayIndex, poiList);
-                routeDayAdpater.notifyDataSetChanged();
-            }
-        }
-    }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

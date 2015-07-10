@@ -97,6 +97,7 @@ public class HandleImMessage {
             super.handleMessage(message);
             switch (message.what) {
                 case Config.CMD_MSG:
+                case Config.TIP_MSG:
                     Message newCMDMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
                         handler.onCMDMessageArrive(Msg2Bean(newCMDMessage));

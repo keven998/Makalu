@@ -247,6 +247,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 for (User user : toBeAddContacts) {
                     ids.put(user.getUserId());
                 }
+                DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
                 GroupManager.getGroupManager().createGroup(ChatName.toString(), null, null, ids, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
@@ -266,6 +267,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             if (Config.isDebug) {
                                 Log.i(Config.TAG, "群组更新成功");
                             }
+                            DialogManager.getInstance().dissMissLoadingDialog();
                             Intent intent = new Intent();
                                 intent.putExtra("chatType", "group");
                                 intent.putExtra("toId", Long.parseLong(groupId));

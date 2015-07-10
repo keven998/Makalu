@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -46,6 +47,7 @@ public class ActivityPlanEditor extends FragmentActivity {
     private StrategyBean strategy;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private List<Integer> sectionlist=new ArrayList<>();
+    EditorAdapter editorAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setEnabled(true);
         mDragListView = (DragSortListView) findViewById(R.id.listview_plan_editor);
-        EditorAdapter editorAdapter = new EditorAdapter(this);
+        editorAdapter = new EditorAdapter(this);
         //EditAdapter editorAdapter = new EditAdapter(this,sectionlist);
         mDragListView.setDropListener(editorAdapter);
         SectionController c = new SectionController(mDragListView, editorAdapter);
@@ -158,7 +160,17 @@ public class ActivityPlanEditor extends FragmentActivity {
 //            super.onDestroyFloatView(floatView);
         }
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 101) {
+                ArrayList<PoiDetailBean> poiList = data.getParcelableArrayListExtra("poiList");
+                int dayIndex = data.getIntExtra("dayIndex", -1);
+                routeDayMap.set(dayIndex, poiList);
+                editorAdapter.notifyDataSetChanged();
+            }
+        }
+    }
     private class EditorAdapter extends BaseSectionAdapter implements DragSortListView.DropListener {
         private LayoutInflater inflater;
 

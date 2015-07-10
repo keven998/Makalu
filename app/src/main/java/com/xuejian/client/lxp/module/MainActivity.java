@@ -397,28 +397,30 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     public void onCMDMessageArrive(MessageBean m) {
         try {
-            String cmd = m.getMessage();
-            JSONObject object = new JSONObject(cmd);
-            String action = object.getString("action");
-            switch (action) {
-                case "F_AGREE":
-                    long userId = object.getLong("userId");
-                    String avatar = object.getString("avatar");
-                    String nickName = object.getString("nickName");
-                    User user = new User();
-                    user.setUserId(userId);
-                    user.setNickName(nickName);
-                    user.setAvatar(avatar);
-                    user.setType(1);
-                    UserDBManager.getInstance().saveContact(user);
-                    AccountManager.getInstance().getContactList(MainActivity.this).put(user.getUserId(), user);
-                    break;
-                case "F_ADD":
-                    updateUnreadMsgCount();
-                    updateUnreadAddressLable();
-                    break;
-                default:
-                    break;
+            if (m.getType()==100) {
+                String cmd = m.getMessage();
+                JSONObject object = new JSONObject(cmd);
+                String action = object.getString("action");
+                switch (action) {
+                    case "F_AGREE":
+                        long userId = object.getLong("userId");
+                        String avatar = object.getString("avatar");
+                        String nickName = object.getString("nickName");
+                        User user = new User();
+                        user.setUserId(userId);
+                        user.setNickName(nickName);
+                        user.setAvatar(avatar);
+                        user.setType(1);
+                        UserDBManager.getInstance().saveContact(user);
+                        AccountManager.getInstance().getContactList(MainActivity.this).put(user.getUserId(), user);
+                        break;
+                    case "F_ADD":
+                        updateUnreadMsgCount();
+                        updateUnreadAddressLable();
+                        break;
+                    default:
+                        break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
