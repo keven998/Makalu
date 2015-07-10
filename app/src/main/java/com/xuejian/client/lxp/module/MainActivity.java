@@ -141,17 +141,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             });
             getInLocList();
             getOutCountryList();
-//            GroupApi.editGroupName("123123", new HttpCallBack() {
-//                @Override
-//                public void doSuccess(Object result, String method) {
-//
-//                }
-//
-//                @Override
-//                public void doFailure(Exception error, String msg, String method) {
-//
-//                }
-//            });
         }
     }
 

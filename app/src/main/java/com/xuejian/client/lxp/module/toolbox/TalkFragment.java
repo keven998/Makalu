@@ -219,7 +219,7 @@ public class TalkFragment extends PeachBaseFragment {
             adapter.notifyDataSetChanged();
         }
         updateUnreadAddressLable();
-
+        ((MainActivity) getActivity()).updateUnreadMsgCount();
     }
 
     public void loadConversation() {

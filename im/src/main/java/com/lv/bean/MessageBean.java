@@ -17,6 +17,7 @@ public class MessageBean {
     private int SendType;//0：发送，   1：接收
     private String Metadata;   //如果消息不是文本消息，是语音等其他富媒体信息，储存修饰富媒体信息的 json 体。
     private long SenderId;//如果是群聊显示发送者的 id，单聊不显示
+    private String abbrev;
 
     public int getProgress() {
         return progress;
@@ -27,9 +28,12 @@ public class MessageBean {
     }
 
     private int progress; //进度
-    public MessageBean(){}
-    public MessageBean(String content){
-        this(0,0,1,content, TimeUtils.getTimestamp(),0,null,Long.parseLong(IMClient.getInstance().getCurrentUserId()));
+
+    public MessageBean() {
+    }
+
+    public MessageBean(String content) {
+        this(0, 0, 1, content, TimeUtils.getTimestamp(), 0, null, Long.parseLong(IMClient.getInstance().getCurrentUserId()),null);
     }
     public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
         ServerId = serverId;
@@ -40,10 +44,22 @@ public class MessageBean {
         SendType = sendType;
         Metadata = metadata;
         SenderId = senderId;
-
     }
-    public MessageBean(long localId,int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
-        LocalId=localId;
+
+    public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId, String abbrev) {
+        ServerId = serverId;
+        Status = status;
+        Type = type;
+        Message = message;
+        CreateTime = createTime;
+        SendType = sendType;
+        Metadata = metadata;
+        SenderId = senderId;
+        this.abbrev = abbrev;
+    }
+
+    public MessageBean(long localId, int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
+        LocalId = localId;
         ServerId = serverId;
         Status = status;
         Type = type;
