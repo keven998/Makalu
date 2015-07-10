@@ -1,8 +1,12 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.android.airmapview.AirMapInterface;
 import com.airbnb.android.airmapview.AirMapMarker;
@@ -21,7 +27,11 @@ import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.AirMapViewTypes;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.GoogleChinaMapType;
+import com.airbnb.android.airmapview.listeners.OnCameraChangeListener;
+import com.airbnb.android.airmapview.listeners.OnCameraMoveListener;
 import com.airbnb.android.airmapview.listeners.OnInfoWindowClickListener;
+import com.airbnb.android.airmapview.listeners.OnLatLngScreenLocationCallback;
+import com.airbnb.android.airmapview.listeners.OnMapClickListener;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.airbnb.android.airmapview.listeners.OnMapMarkerClickListener;
 import com.aizou.core.dialog.ToastUtil;
@@ -29,6 +39,7 @@ import com.aizou.core.utils.LocalDisplay;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -42,8 +53,8 @@ import java.util.List;
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
-public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener,OnMapMarkerClickListener
-           ,OnInfoWindowClickListener{
+public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener
+           {
     private AirMapView mapView;
    // private AMap aMap;
 
@@ -80,7 +91,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
                 titleHeaderBar.getRightTextView().setText("确定");
                 titleHeaderBar.getLeftTextView().setText("第1天");
-                titleHeaderBar.getLeftTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+                titleHeaderBar.getLeftTextView().setTextColor(getResources().getColor(R.color.white));
                 titleHeaderBar.setLeftDrawableToNull();
                 titleHeaderBar.enableBackKey(true);
                 titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
@@ -177,7 +188,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     mapView.animateCenterZoom(new LatLng(mCoords.get(0)[1], mCoords.get(0)[0]), 2);
                 }
             });
-            mapView.initialize(getSupportFragmentManager(), airMapInterface);
+            mapView.initialize(getSupportFragmentManager(),airMapInterface);
             mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }else{
             refreshNullMap();
@@ -225,6 +236,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
             airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+           // airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).build();
             mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
                 @Override
                 public void onMapInitialized() {
@@ -235,21 +247,25 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     }
                     airMapPolyline=new AirMapPolyline(points,POLY_LINE);
                     mapView.addPolyline(airMapPolyline);
-                    mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 10);
+                    mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 13);
                 }
             });
-            mapView.initialize(getSupportFragmentManager(), airMapInterface);
-            mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            mapView.initialize(getSupportFragmentManager(),airMapInterface);
+            //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
             //aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
-            /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+
+/* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                         .position(new LatLng(coor.get(k)[1], coor.get(k)[0])).title(names.get(k))
-                        .draggable(true));*/
-            /*com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
+                        .draggable(true));*//*
+
+            */
+/*com.amap.api.maps2d.model.LatLngBounds.Builder llBound=new com.amap.api.maps2d.model.LatLngBounds.Builder();
             for(com.amap.api.maps2d.model.LatLng ll:latLngs){
                 llBound.include(ll);
             }
             bounds=llBound.build();*/
+
         }else{
             refreshNullMap();
         }
@@ -266,7 +282,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 10);
             }
         });
-        mapView.initialize(getSupportFragmentManager(), airMapInterface);
+        mapView.initialize(getSupportFragmentManager(),airMapInterface);
         mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
@@ -289,11 +305,13 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
 
 
-   /* private void initMapView() {
+
+/* private void initMapView() {
         if (aMap == null) {
             aMap = mapView.getMap();
         }
     }*/
+
 
     @Override
     protected void onResume() {
@@ -324,41 +342,6 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         super.finish();
     }
 
-    @Override
-    public void onMapMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-        if(!isShow){
-            ToastUtil.getInstance(this).showToast(marker.getTitle());
-            spinnet.setText(marker.getTitle());
-            spinnet.setVisibility(View.VISIBLE);
-            isShow=true;
-        }else{
-            isShow=false;
-            spinnet.setText("");
-            spinnet.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onInfoWindowClick(long l) {
-
-    }
-
-    @Override
-    public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
-        ToastUtil.getInstance(this).showToast("123");
-    }
-
-    @Override
-    public void onMapMarkerClick(long l) {
-        if(!isShow){
-            ToastUtil.getInstance(this).showToast("hfhd");
-
-            isShow=true;
-        }else{
-            isShow=false;
-
-        }
-    }
 
 
 
