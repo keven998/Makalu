@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -114,20 +114,21 @@ public class CommonUtils {
         DecimalFormat df = new DecimalFormat(".0");
         double distance = getDistance(lat1, lon1, lat2, lon2);
         if (distance > 1000) {
-            return df.format(distance / 1000d)+"km";
+            return df.format(distance / 1000d) + "km";
         } else {
             return (int) distance + "m";
         }
 
     }
+
     public static String getNearbyDistance(double lat1, double lon1, double lat2, double lon2) {
         DecimalFormat df = new DecimalFormat(".0");
         double distance = getDistance(lat1, lon1, lat2, lon2);
         if (distance > 1000) {
-            if(distance>10000){
+            if (distance > 10000) {
                 return ">10km";
-            }else{
-                return df.format(distance / 1000d)+"km";
+            } else {
+                return df.format(distance / 1000d) + "km";
             }
 
         } else {
@@ -136,7 +137,7 @@ public class CommonUtils {
 
     }
 
-    public static boolean checkIntent(Context context,Intent intent){
+    public static boolean checkIntent(Context context, Intent intent) {
         PackageManager packageManager = context.getPackageManager();
         //在系统中查询指定的Activity Action
         List resolveInfo = packageManager.queryIntentActivities(intent, PackageManager.GET_INTENT_FILTERS);
@@ -144,9 +145,9 @@ public class CommonUtils {
     }
 
 
-    public static String getLastModifyForHeader(Header[] headers){
-        for(Header header:headers){
-            if(header.getName().equals("Last-Modify")){
+    public static String getLastModifyForHeader(Header[] headers) {
+        for (Header header : headers) {
+            if (header.getName().equals("Last-Modify")) {
                 return header.getValue();
             }
         }
@@ -163,7 +164,7 @@ public class CommonUtils {
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
                     Log.i("后台", appProcess.processName);
                     return true;
-                }else{
+                } else {
                     Log.i("前台", appProcess.processName);
                     return false;
                 }
@@ -172,10 +173,10 @@ public class CommonUtils {
         return false;
     }
 
-    public static Parcelable clone(Parcelable parcelable){
+    public static Parcelable clone(Parcelable parcelable) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("clone",parcelable);
-        return  bundle.getParcelable("clone");
+        bundle.putParcelable("clone", parcelable);
+        return bundle.getParcelable("clone");
     }
 
     public static ArrayList<StartCity> parserStartCityJson(Context context) {
@@ -214,12 +215,12 @@ public class CommonUtils {
         if (imm == null) {
             return;
         }
-        String [] arr = new String[]{"mCurRootView", "mServedView", "mNextServedView"};
+        String[] arr = new String[]{"mCurRootView", "mServedView", "mNextServedView"};
         Field f = null;
         Object obj_get = null;
-        for (int i = 0;i < arr.length;i ++) {
+        for (int i = 0; i < arr.length; i++) {
             String param = arr[i];
-            try{
+            try {
                 f = imm.getClass().getDeclaredField(param);
                 if (!f.isAccessible()) {
                     f.setAccessible(true);
@@ -234,28 +235,29 @@ public class CommonUtils {
                         break;
                     }
                 }
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
+
     public static String getTimestampString(Date var0) {
         String var1 = null;
         long var2 = var0.getTime();
-        if(isSameDay(var2)) {
+        if (isSameDay(var2)) {
             Calendar var4 = GregorianCalendar.getInstance();
             var4.setTime(var0);
             int var5 = var4.get(11);
-            if(var5 > 17) {
+            if (var5 > 17) {
                 var1 = "晚上 hh:mm";
-            } else if(var5 >= 0 && var5 <= 6) {
+            } else if (var5 >= 0 && var5 <= 6) {
                 var1 = "凌晨 hh:mm";
-            } else if(var5 > 11 && var5 <= 17) {
+            } else if (var5 > 11 && var5 <= 17) {
                 var1 = "下午 hh:mm";
             } else {
                 var1 = "上午 hh:mm";
             }
-        } else if(isYesterday(var2)) {
+        } else if (isYesterday(var2)) {
             var1 = "昨天 HH:mm";
         } else {
             var1 = "M月d日 HH:mm";
@@ -263,6 +265,7 @@ public class CommonUtils {
 
         return (new SimpleDateFormat(var1, Locale.CHINA)).format(var0);
     }
+
     private static boolean isSameDay(long var0) {
         com.xuejian.client.lxp.common.utils.TimeInfo var2 = getTodayStartAndEndTime();
         return var0 > var2.getStartTime() && var0 < var2.getEndTime();
@@ -272,6 +275,7 @@ public class CommonUtils {
         TimeInfo var2 = getYesterdayStartAndEndTime();
         return var0 > var2.getStartTime() && var0 < var2.getEndTime();
     }
+
     public static TimeInfo getTodayStartAndEndTime() {
         Calendar var0 = Calendar.getInstance();
         var0.set(11, 0);
@@ -293,6 +297,7 @@ public class CommonUtils {
         var9.setEndTime(var7);
         return var9;
     }
+
     public static TimeInfo getYesterdayStartAndEndTime() {
         Calendar var0 = Calendar.getInstance();
         var0.add(5, -1);
@@ -315,9 +320,10 @@ public class CommonUtils {
         var8.setEndTime(var6);
         return var8;
     }
+
     public static boolean isCloseEnough(long var0, long var2) {
         long var4 = var0 - var2;
-        if(var4 < 0L) {
+        if (var4 < 0L) {
             var4 = -var4;
         }
 
