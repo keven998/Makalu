@@ -2,15 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/base_color_white">
+    android:background="@drawable/option_cell_selector">
 
-    <TextView android:id="@+id/tv_plan_editor"
+    <ImageView android:id="@+id/iv_delete_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/ic_member_delete"
+        android:paddingLeft="13dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="12dp"/>
+
+    <TextView
+        android:id="@+id/tv_plan_editor"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:textColor="@color/color_text_ii"
-        android:textSize="15sp"
-        android:lineSpacingExtra="5dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginRight="10dp"
-        android:gravity="left|center_vertical"/>
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:gravity="left"
+        android:textColor="@color/color_text_i"
+        android:layout_toRightOf="@id/iv_delete_item"
+        android:layout_centerVertical="true"
+        android:textSize="15sp" />
 </RelativeLayout>

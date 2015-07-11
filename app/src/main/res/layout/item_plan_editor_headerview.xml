@@ -1,61 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/app_backgroud"
-    android:padding="5dp">
+    android:layout_height="wrap_content">
+
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
         android:id="@+id/iv_add"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/messages_icon_plus_default"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="5dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="14dp"
+        android:paddingTop="10dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_agenda_add" />
+
     <TextView
         android:id="@+id/tv_day_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/plan_02_bg_day"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:gravity="center"
-        android:textColor="@color/base_color_white"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:layout_marginLeft="12dp"
+        android:paddingBottom="5dp"
+        android:singleLine="true"
+        android:textColor="@color/app_theme_color"
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/tv_schedule_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_toLeftOf="@id/iv_add"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@id/tv_day_index"
-        android:gravity="left"
-        android:singleLine="true"
-        android:textColor="@color/color_text_iii"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_schedule_summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_schedule_title"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="3dp"
-        android:singleLine="true"
-        android:ellipsize="end"
         android:layout_toLeftOf="@id/iv_add"
         android:layout_toRightOf="@id/tv_day_index"
         android:gravity="left"
-        android:lineSpacingExtra="3dp"
-        android:textColor="@color/color_text_iii"
-        android:textSize="11sp" />
-
+        android:paddingBottom="5dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="28dp"
+        android:singleLine="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/color_text_ii"
+        android:textSize="12sp" />
 
 </RelativeLayout>

@@ -56,7 +56,7 @@ import butterknife.InjectView;
 /**
  * Created by Rjm on 2014/11/24.
  */
-public class StrategyActivity extends PeachBaseActivity implements OnStrategyModeChangeListener {
+public class StrategyActivity extends PeachBaseActivity {
     public final static int EDIT_LOC_REQUEST_CODE = 110;
     @InjectView(R.id.strategy_title)
     TextView topTitle;
@@ -72,13 +72,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     @InjectView(R.id.strategy_indicator)
     FixedIndicatorView mStrategyIndicator;
     private String id;
-    private StrategyBean strategy, originalStrategy;
+    private StrategyBean strategy;
     private List<String> cityIdList;
     private ArrayList<LocBean> destinations;
     private int curIndex = 0;
     PlanScheduleFragment routeDayFragment;
     CollectionFragment collectionFragment;
-    private Set<OnStrategyModeChangeListener> mOnEditModeChangeListeners = new HashSet<>();
     private ImageView iv_location;
     private View loading_view;
     private ListView draw_list;
@@ -114,12 +113,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private void initView() {
         setContentView(R.layout.activity_strategy);
         loading_view = findViewById(R.id.loading_view);
-        loading_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //啥也不执行
-            }
-        });
         iv_location = (ImageView) findViewById(R.id.iv_location);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
 
@@ -190,43 +183,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
         mStrategyIndicator = null;
         routeDayFragment = null;
         collectionFragment = null;
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-//        try {
-//            OnStrategyModeChangeListener listener = (OnStrategyModeChangeListener)fragment;
-//            mOnEditModeChangeListeners.add(listener);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        super.onAttachFragment(fragment);
-    }
-
-    private void gotoEditMode() {
-        for (OnStrategyModeChangeListener onEditModeChangeListener : mOnEditModeChangeListeners) {
-            onEditModeChangeListener.onEditModeChange(true);
-        }
-    }
-
-    public void onEditModeChange(boolean inEditMode) {
-//        isInEditMode = inEditMode;
-//        if(inEditMode){
-//            mTvTitleBack.setVisibility(View.GONE);
-//            mTvTitleComplete.setVisibility(View.VISIBLE);
-//            mIvEdit.setVisibility(View.GONE);
-//        }else{
-//            mTvTitleBack.setVisibility(View.VISIBLE);
-//            mTvTitleComplete.setVisibility(View.GONE);
-//            mIvEdit.setVisibility(View.VISIBLE);
-//        }
-
-        //gotoEditMode();
-    }
-
-    @Override
-    public void onCopyStrategy() {
-
     }
 
     public StrategyBean getStrategy() {
@@ -305,7 +261,8 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
                     bindView(strategyResult.result);
-//                    StrategyActivity.this.po
+                } else {
+                    ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
 
             }
@@ -361,7 +318,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
     private void bindView(final StrategyBean result) {
         destinations = result.localities;
         strategy = result;
-        originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
         TextView dtv = (TextView) findViewById(R.id.jh_title);
         dtv.setText(result.title);
         dtv.setOnClickListener(new View.OnClickListener() {
@@ -500,14 +456,12 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             if (position == 0) {
                 if (routeDayFragment == null) {
                     routeDayFragment = new PlanScheduleFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return routeDayFragment;
             } else {
                 if (collectionFragment == null) {
                     collectionFragment = new CollectionFragment();
-//                    routeDayFragment.onEditModeChange(mIvEdit.isChecked());
                 }
 
                 return collectionFragment;
@@ -527,7 +481,6 @@ public class StrategyActivity extends PeachBaseActivity implements OnStrategyMod
             if (requestCode == EDIT_LOC_REQUEST_CODE) {
                 destinations = data.getParcelableArrayListExtra("destinations");
                 strategy.localities = destinations;
-                originalStrategy = (StrategyBean) CommonUtils.clone(strategy);
                 adapter.notifyDataSetChanged();
             }
         }
