@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -37,7 +36,6 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
@@ -46,9 +44,7 @@ import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -97,6 +93,7 @@ public class StrategyActivity extends PeachBaseActivity {
         super.onResume();
 //        MobclickAgent.onPageStart("page_plan_detail");
     }
+
 
     @Override
     protected void onPause() {

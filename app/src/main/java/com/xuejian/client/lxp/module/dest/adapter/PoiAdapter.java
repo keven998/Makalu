@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -108,7 +107,7 @@ public class PoiAdapter extends BaseAdapter {
         final Context context = mContext;
         if (convertView == null) {
             if (type == SPOT) {
-                convertView = View.inflate(context, R.layout.row_spot_list, null);
+                convertView = View.inflate(context, R.layout.item_plan_day_detil, null);
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
@@ -118,7 +117,7 @@ public class PoiAdapter extends BaseAdapter {
                     //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 }
             } else {
-                convertView = View.inflate(context, R.layout.row_poi_list, null);
+                convertView = View.inflate(context, R.layout.item_plan_day_detil, null);
                 poiViewHolder = new PoiViewHolder(convertView);
                 convertView.setTag(poiViewHolder);
                 if (!mIsCanAdd) {
@@ -142,7 +141,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
-            spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
+           // spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
             if(TextUtils.isEmpty(poiDetailBean.timeCostDesc)){
                 spotViewHolder.mSpotCosttimeTv.setText("");
             }else{
@@ -151,7 +150,7 @@ public class PoiAdapter extends BaseAdapter {
 
             //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
-                spotViewHolder.mSpotRankTv.setText("景点排名 "+poiDetailBean.getFormatRank());
+                spotViewHolder.mSpotRankTv.setText(poiDetailBean.getFormatRank());
             }
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
@@ -241,16 +240,16 @@ public class PoiAdapter extends BaseAdapter {
 //                });
             }
             poiViewHolder.mPoiPriceTv.setText(poiDetailBean.priceDesc);
-            poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
+//            poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mPoiImageIv, picOptions);
             } else {
                 poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
-            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
+//            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
 //                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
-                poiViewHolder.mPoiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
+                poiViewHolder.mPoiRankTv.setText(poiDetailBean.getFormatRank());
             }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
 ////                poiViewHolder.mRlComment.setVisibility(View.GONE);
@@ -274,19 +273,19 @@ public class PoiAdapter extends BaseAdapter {
 
     class SpotViewHolder {
 
-        @InjectView(R.id.tv_spot_name)
+        @InjectView(R.id.tv_poi_title)
         TextView mTvSpotName;
-        @InjectView(R.id.btn_add)
+        @InjectView(R.id.btn_send)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.spot_image_iv)
+        @InjectView(R.id.iv_poi_img)
         ImageView mSpotImageIv;
-        @InjectView(R.id.spot_address_tv)
-        TextView mSpotAddressTv;
-        @InjectView(R.id.spot_costtime_tv)
+//        @InjectView(R.id.spot_address_tv)
+//        TextView mSpotAddressTv;
+        @InjectView(R.id.tv_poi_time)
         TextView mSpotCosttimeTv;
         /*@InjectView(R.id.spot_rating)
         RatingBar mSpotRating;*/
-        @InjectView(R.id.spot_rank_tv)
+        @InjectView(R.id.tv_poi_level)
         TextView mSpotRankTv;
 
         public SpotViewHolder(View view) {
@@ -298,20 +297,19 @@ public class PoiAdapter extends BaseAdapter {
 
     class PoiViewHolder {
 
-
-        @InjectView(R.id.tv_poi_name)
+        @InjectView(R.id.tv_poi_title)
         TextView mTvPoiName;
-        @InjectView(R.id.btn_add)
+        @InjectView(R.id.btn_send)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.poi_image_iv)
+        @InjectView(R.id.iv_poi_img)
         ImageView mPoiImageIv;
-        @InjectView(R.id.poi_address_tv)
-        TextView mPoiAddressTv;
-        @InjectView(R.id.poi_costtime_tv)
+//        @InjectView(R.id.poi_address_tv)
+//        TextView mPoiAddressTv;
+        @InjectView(R.id.tv_poi_time)
         TextView mPoiPriceTv;
-        @InjectView(R.id.poi_rating)
-        RatingBar mPoiRating;
-        @InjectView(R.id.poi_rank_tv)
+//        @InjectView(R.id.poi_rating)
+//        RatingBar mPoiRating;
+        @InjectView(R.id.tv_poi_level)
         TextView mPoiRankTv;
 //        @InjectView(R.id.poi_comment_username)
 //        TextView mPoiCommentUsername;

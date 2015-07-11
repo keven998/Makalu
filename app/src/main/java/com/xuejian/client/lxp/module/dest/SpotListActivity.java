@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,10 +40,10 @@ public class SpotListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-    @InjectView(R.id.et_search)
-    EditText mEtSearch;
-    @InjectView(R.id.btn_search)
-    Button mBtnSearch;
+//    @InjectView(R.id.et_search)
+//    EditText mEtSearch;
+//    @InjectView(R.id.btn_search)
+//    Button mBtnSearch;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTitle;
     private PullToRefreshListView mPoiListLv;
@@ -174,18 +172,18 @@ public class SpotListActivity extends PeachBaseActivity {
 
             }
         });
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mKeyWord = mEtSearch.getText().toString().trim();
-                Intent intent = new Intent(mContext, SearchPoiActivity.class);
-                intent.putExtra("keyword", mKeyWord);
-                intent.putExtra("type", type);
-                intent.putParcelableArrayListExtra("poiList", hasAddList);
-                intent.putExtra("loc", curLoc);
-                startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
-            }
-        });
+//        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mKeyWord = mEtSearch.getText().toString().trim();
+//                Intent intent = new Intent(mContext, SearchPoiActivity.class);
+//                intent.putExtra("keyword", mKeyWord);
+//                intent.putExtra("type", type);
+//                intent.putParcelableArrayListExtra("poiList", hasAddList);
+//                intent.putExtra("loc", curLoc);
+//                startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
+//            }
+//        });
 //        ImageLoader.getInstance().displayImage(result.images.get(0).url, mIvCityPoi, UILUtils.getDefaultOption());
 //        mTvCityName.setText(result.zhName);
 //        mTvCityPoiDesc.setText(result.desc);
@@ -245,7 +243,7 @@ public class SpotListActivity extends PeachBaseActivity {
             }
         });
 
-        mEtSearch.clearFocus();
+//        mEtSearch.clearFocus();
     }
 
     private void bindView(List<PoiDetailBean> result) {

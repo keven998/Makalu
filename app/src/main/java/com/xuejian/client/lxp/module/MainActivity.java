@@ -402,6 +402,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     default:
                         break;
                 }
+            }else if (m.getType()==200){
+
             }
         } catch (Exception e) {
             e.printStackTrace();

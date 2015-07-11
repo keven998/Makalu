@@ -33,7 +33,6 @@ import com.xuejian.client.lxp.common.account.StrategyManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
@@ -92,7 +91,6 @@ public class ActivityPlanEditor extends FragmentActivity {
         findViewById(R.id.btn_edit_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("click");
                 if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);//关闭抽屉
                 } else {
@@ -100,7 +98,12 @@ public class ActivityPlanEditor extends FragmentActivity {
                 }
             }
         });
-
+        findViewById(R.id.btn_add_day).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewDayRouter(routeDayMap.size(),false);
+            }
+        });
         fragment = new EditPlanFragment();
         Bundle args = new Bundle();
         args.putParcelable("data", strategy);
@@ -416,6 +419,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                 if (saveResult.code == 0) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     Intent intent = new Intent(ActivityPlanEditor.this, StrategyActivity.class);
+                    intent.putExtra("id",strategy.id);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
@@ -427,4 +431,22 @@ public class ActivityPlanEditor extends FragmentActivity {
             }
         });
     }
+
+    public void addNewDayRouter(int position, boolean isBefore) {
+        final int sectionPos;
+        if (isBefore) {
+            routeDayMap.add(position, new ArrayList<PoiDetailBean>());
+            sectionPos = position;
+        } else {
+            routeDayMap.add(new ArrayList<PoiDetailBean>());
+            sectionPos = position + 1;
+        }
+        strategy.itineraryDays++;
+        editorAdapter.notifyDataSetChanged();
+        EditPlanFragment editFragment = (EditPlanFragment) getSupportFragmentManager().findFragmentByTag("edit_menu");
+        if (editFragment != null) {
+            editFragment.update(routeDayMap);
+        }
+    }
+
 }
