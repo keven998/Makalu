@@ -27,6 +27,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
+import com.baidu.mapapi.map.Text;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -57,6 +58,7 @@ import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
@@ -160,12 +162,13 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     jsonObject = new JSONObject(result);
                     if (jsonObject.getInt("code") == 0) {
                         JSONArray object = jsonObject.getJSONArray("result");
-                        for (int i = 0; i < object.length(); i++) {
+                        /*for (int i = 0; i < object.length(); i++) {
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             pics.add(imgArray.getJSONObject(0).getString("url"));
                             pic_ids.add(object.getJSONObject(i).getString("id"));
                         }
-                        initScrollView(pics, pic_ids);
+                        initScrollView(pics, pic_ids);*/
+                        tv_photo.setText(object.length()+"张");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -285,6 +288,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else {
             tv_resident.setText(user.getResidence());
         }
+        if(TextUtils.isEmpty(user.getBirthday())){
+            tv_zodiac.setText("未设置");
+        } else {
+            tv_zodiac.setText(user.getBirthday());
+        }
 
         SpannableString planStr = new SpannableString("");
         planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -336,7 +344,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 startActivity(intent);
             }
         });
-        tv_photo.setText("99张");
+
+        if(!TextUtils.isEmpty(user.getTel())){
+            tv_bind_phone.setText("已绑定");
+        }
+
+        getUserPics(user.getUserId());
 
     }
 
@@ -425,6 +438,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 MobclickAgent.onEvent(mContext, "event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivityForResult(bindPhoneIntent, BINDPHONE);
+                break;
+
+            case R.id.ll_photo:
+                Intent intent2 = new Intent(AccountActvity.this, CityPictureActivity.class);
+                intent2.putExtra("id", String.valueOf(user.getUserId()));
+                intent2.putExtra("user_name", user.getNickName());
+                intent2.putExtra("isUserPics", true);
+                startActivity(intent2);
                 break;
 
             case R.id.btn_logout:
