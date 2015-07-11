@@ -79,7 +79,6 @@ public class StrategyActivity extends PeachBaseActivity {
     PlanScheduleFragment routeDayFragment;
     CollectionFragment collectionFragment;
     private ImageView iv_location;
-    private View loading_view;
     private ListView draw_list;
     private DrawAdapter adapter;
 
@@ -112,7 +111,6 @@ public class StrategyActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_strategy);
-        loading_view = findViewById(R.id.loading_view);
         iv_location = (ImageView) findViewById(R.id.iv_location);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
 
