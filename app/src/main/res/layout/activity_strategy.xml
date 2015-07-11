@@ -50,13 +50,6 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:id="@+id/loading_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/base_color_white_trans"
-                    android:visibility="gone" />
-
             </FrameLayout>
 
             <RelativeLayout
@@ -184,7 +177,7 @@
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
                 android:singleLine="true"
-                android:text="修改计划"
+                android:text="调整"
                 android:textColor="@color/color_text_ii"
                 android:textSize="16sp" />
 
