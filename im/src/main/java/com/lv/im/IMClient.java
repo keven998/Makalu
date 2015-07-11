@@ -474,6 +474,7 @@ public class IMClient {
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
+        IMClient.lastSusseccFetch=message.getTimestamp();
         add2ackList(message.getId());
         return result;
     }
