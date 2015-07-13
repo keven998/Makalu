@@ -21,8 +21,7 @@
         android:layout_height="@dimen/tools_search_bar_height"
         android:layout_below="@id/title_view"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/selector_home_tools_entry_card">
+        android:layout_marginRight="10dp">
 
         <ImageView
             android:layout_width="match_parent"

@@ -45,7 +45,7 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/9.
  */
 public class SearchAllActivity extends PeachBaseActivity {
-//    @InjectView(R.id.title_bar)
+    //    @InjectView(R.id.title_bar)
 //    TitleHeaderBar mTitleBar;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
@@ -64,29 +64,15 @@ public class SearchAllActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
         ButterKnife.inject(this);
-//        if (!TextUtils.isEmpty(toId)) {
-//            mTitleBar.getTitleTextView().setText("发送攻略");
-//        } else {
-//            mTitleBar.getTitleTextView().setText("旅行搜搜");
-//        }
-//
-//        mTitleBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finishWithNoAnim();
-//                overridePendingTransition(0, android.R.anim.fade_out);
-//            }
-//        });
+
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBtnSearch.getText().toString().trim().equals("取消")){
+                if (mBtnSearch.getText().toString().trim().equals("取消")) {
                     finishWithNoAnim();
-                    overridePendingTransition(0, android.R.anim.fade_out);
-                }
-                else {
+                    overridePendingTransition(R.anim.slide_stay, android.R.anim.fade_out);
+                } else {
                     if (TextUtils.isEmpty(mEtSearch.getText())) {
-//                    ToastUtil.getInstance(mContext).showToast("你要找什么");
                         return;
                     } else {
                         searchAll(mEtSearch.getText().toString().trim());
@@ -125,7 +111,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                     mSearchAllLv.setAdapter(null);
                     mBtnSearch.setText("取消");
                 }
-                if (s.length()>0){
+                if (s.length() > 0) {
                     mBtnSearch.setText("搜索");
                 }
             }
@@ -168,7 +154,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 //        MobclickAgent.onPageEnd("page_search_destination");
     }
 
-    private void searchAll(final String keyword){
+    private void searchAll(final String keyword) {
         DialogManager.getInstance().showLoadingDialog(this);
         TravelApi.searchAll(keyword, new HttpCallBack<String>() {
             @Override
@@ -191,33 +177,33 @@ public class SearchAllActivity extends PeachBaseActivity {
 
     }
 
-    private void bindView(final String keyword,SearchAllBean result) {
+    private void bindView(final String keyword, SearchAllBean result) {
         ArrayList<SearchTypeBean> typeBeans = new ArrayList<SearchTypeBean>();
-        if(result.locality!=null&&result.locality.size()>0){
+        if (result.locality != null && result.locality.size() > 0) {
             SearchTypeBean searchTypeBean = new SearchTypeBean();
             searchTypeBean.type = "loc";
             searchTypeBean.resultList = result.locality;
             typeBeans.add(searchTypeBean);
         }
-        if(result.vs!=null&&result.vs.size()>0){
+        if (result.vs != null && result.vs.size() > 0) {
             SearchTypeBean searchTypeBean = new SearchTypeBean();
             searchTypeBean.type = "vs";
             searchTypeBean.resultList = result.vs;
             typeBeans.add(searchTypeBean);
         }
-        if(result.hotel!=null&&result.hotel.size()>0){
+        if (result.hotel != null && result.hotel.size() > 0) {
             SearchTypeBean searchTypeBean = new SearchTypeBean();
             searchTypeBean.type = "hotel";
             searchTypeBean.resultList = result.hotel;
             typeBeans.add(searchTypeBean);
         }
-        if(result.restaurant!=null&&result.restaurant.size()>0){
+        if (result.restaurant != null && result.restaurant.size() > 0) {
             SearchTypeBean searchTypeBean = new SearchTypeBean();
             searchTypeBean.type = "restaurant";
             searchTypeBean.resultList = result.restaurant;
             typeBeans.add(searchTypeBean);
         }
-        if(result.shopping!=null&&result.shopping.size()>0){
+        if (result.shopping != null && result.shopping.size() > 0) {
             SearchTypeBean searchTypeBean = new SearchTypeBean();
             searchTypeBean.type = "shopping";
             searchTypeBean.resultList = result.shopping;
@@ -225,7 +211,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         }
         boolean isSend;
         isSend = !TextUtils.isEmpty(toId);
-        SearchAllAdapter searchAllAdapter = new SearchAllAdapter(mContext, typeBeans, true,isSend);
+        SearchAllAdapter searchAllAdapter = new SearchAllAdapter(mContext, typeBeans, true, isSend);
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
@@ -247,42 +233,42 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void onSendClick(String type, String id, Object object) {
                 IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
-                    @Override
-                    public void onDialogShareOk(Dialog dialog, int type, String content) {
-                        DialogManager.getInstance().showLoadingDialog(mContext);
-                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId, chatType, content, type, new SendMsgListener() {
                             @Override
-                            public void onSuccess() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        ToastUtil.getInstance(mContext).showToast("已发送~");
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new SendMsgListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailed(int code) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+
+                                            }
+                                        });
+
                                     }
                                 });
                             }
 
                             @Override
-                            public void onFailed(int code) {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        ToastUtil.getInstance(mContext).showToast("好像发送失败了");
-
-                                    }
-                                });
-
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
                             }
-                        });
-                }
+                        }
 
-                @Override
-                public void onDialogShareCancle (Dialog dialog,int type, String content){
-                }
+                );
             }
-
-            );
-        }
-    });
+        });
         mSearchAllLv.setAdapter(searchAllAdapter);
     }
 
