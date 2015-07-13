@@ -192,30 +192,40 @@ public class HttpUtils {
         });
 
     }
-    public static void login(final String username, final HttpCallback callback){
+
+    public static void login(final String username, final HttpCallback callback) {
         JSONObject obj = new JSONObject();
         try {
-            String cid = null;
-            while (true) {
-                if (IMClient.getInstance().getCid() != null) {
-                    cid = IMClient.getInstance().getCid();
-                    break;
+            exec.execute(() -> {
+                try {
+                    String cid = null;
+                    while (true) {
+                        if (IMClient.getInstance().getCid() != null) {
+                            cid = IMClient.getInstance().getCid();
+                            break;
+                        }
+                    }
+                    obj.put("userId", Long.parseLong(username));
+                    obj.put("regId", cid);
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "login:" + obj.toString());
+                    }
+                    Response response = HttpRequest_Post(Config.LOGIN_URL, obj.toString());
+                    if (Config.isDebug) {
+                        Log.i(Config.TAG, "login code:" + response.code());
+                    }
+                    if (response.isSuccessful()) {
+                        callback.onSuccess();
+                    } else callback.onFailed(response.code());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-            obj.put("userId", Long.parseLong(username));
-            obj.put("regId", cid);
-            if (Config.isDebug) {
-                Log.i(Config.TAG, "login:" + obj.toString());
-            }
-            Response response=HttpRequest_Post(Config.LOGIN_URL,obj.toString());
-            if (response.isSuccessful()){
-                callback.onSuccess();
-            }else callback.onFailed(response.code());
-
-        }catch (Exception e){
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public static void NetSpeedTest() {
         List<String> urlList = new ArrayList<>();
         urlList.add("202.108.22.5");
@@ -227,7 +237,6 @@ public class HttpUtils {
         final long[] temp = {9999};
         for (String url : urlList) {
             exec.execute(() -> {
-
                 long start = 0;
                 long end = 0;
                 try {
