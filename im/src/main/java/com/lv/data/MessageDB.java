@@ -160,8 +160,10 @@ public class MessageDB {
          * CMD消息
          */
         if (entity.getType() == 100) {
+            closeDB();
             return handleCMD(entity);
         } else if (entity.getType() == 200) {
+            closeDB();
             return handleTips(entity);
         }
         /**
@@ -191,7 +193,10 @@ public class MessageDB {
         /**
          * 屏蔽欢迎回来
          */
-        if (entity.getSenderId() == 0) return 1;
+        if (entity.getSenderId() == 0){
+            closeDB();
+            return 1;
+        }
         switch (entity.getType()) {
             case Config.AUDIO_MSG:
                 try {
@@ -245,6 +250,7 @@ public class MessageDB {
         int count = cursor.getCount();
 
         if (count > 0) {
+            cursor.close();
             closeDB();
             return 1;
         }
@@ -339,8 +345,10 @@ public class MessageDB {
                 }
             } else if ("F_AGREE".equals(action)) {
                 long userId = object.getLong("userId");
-                if (String.valueOf(userId).equals(IMClient.getInstance().getCurrentUserId()))
+                if (String.valueOf(userId).equals(IMClient.getInstance().getCurrentUserId())){
+                    closeDB();
                     return 1;
+                }
                 String nickName = object.getString("nickName");
                 addTips(String.valueOf(userId), nickName + "已同意你的好友请求，现在可以开始聊天", "single");
                 closeDB();
@@ -405,6 +413,7 @@ public class MessageDB {
             int c = cursor.getInt(0);
             if (c == 0) num++;
         }
+        closeDB();
         return num;
     }
 
@@ -457,6 +466,7 @@ public class MessageDB {
             values.put("Status", status);
             mdb.update(request_msg_table_name, values, "UserId=?", new String[]{String.valueOf(UserId)});
         }
+        closeDB();
     }
 
     public List<MessageBean> getAllMsg(String Friend_Id, int pager) {
@@ -471,8 +481,11 @@ public class MessageDB {
                 + MSG_SCHEMA);
         Cursor c = mdb.rawQuery("SELECT * from " + table_name
                 + " ORDER BY LocalId DESC LIMIT " + from + "," + to, null);
-        if (c.getCount() == 0)
+        if (c.getCount() == 0){
+            c.close();
+            closeDB();
             return list;
+        }
         c.moveToLast();
         if (c.getCount() > 0) {
             list.add(Curson2Message(c));
@@ -653,6 +666,8 @@ public class MessageDB {
             mdb.update(table_name, values, "LocalId=?", new String[]{String.valueOf(msgId)});
         } catch (Exception e) {
             e.printStackTrace();
+            cursor.close();
+            closeDB();
         }
         cursor.close();
         closeDB();

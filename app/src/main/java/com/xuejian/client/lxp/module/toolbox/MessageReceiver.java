@@ -57,11 +57,14 @@ static {
                             /**
                              * 分发消息
                              */
-                            String routeKey = object.getString("routeKey");
+                            String routeKey = object.getString("routingKey");
                             String message=object.getString("message");
                             for (String key : routeMap.keySet()) {
                                if (key.equals(routeKey)){
                                    for (MsgListener listener : routeMap.get(routeKey)) {
+                                       if (Config.isDebug) {
+                                           Log.i(Config.TAG, "patch Message "+routeKey);
+                                       }
                                        listener.OnMessage(context, message);
                                    }
                                    break;
