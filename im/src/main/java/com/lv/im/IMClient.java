@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.igexin.sdk.PushManager;
 import com.lv.Listener.FetchListener;
-import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
@@ -292,7 +292,7 @@ public class IMClient {
     }
 
 
-    public void sendTextMessage(MessageBean message, String friendId, String conversation, SendMsgListener listen, String chatType) {
+    public void sendTextMessage(MessageBean message, String friendId, String conversation, HttpCallback listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
         if (Config.isDebug) {
@@ -418,7 +418,7 @@ public class IMClient {
         return m;
     }
 
-    public void sendExtMessage(String UserId, String friendId, String chatType, String contentJson, int type, SendMsgListener listen) {
+    public void sendExtMessage(String UserId, String friendId, String chatType, String contentJson, int type, HttpCallback listen) {
         if (TextUtils.isEmpty(contentJson)) return;
         SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type + 9, contentJson);
         MessageBean messageBean = imessage2Bean(message);
@@ -535,6 +535,12 @@ public class IMClient {
     }
     public void updateInventMsgStatus(long userId,int status){
         db.updateInventMessageStatus(userId,status);
+    }
+    public void muteConversation(String conversation,boolean value,HttpCallback callback){
+        HttpUtils.muteConversation(conversation, value, callback);
+    }
+    public static void login(String  UserId,HttpCallback callback){
+        HttpUtils.login(UserId,callback);
     }
     public void logout() {
         isLogin = false;

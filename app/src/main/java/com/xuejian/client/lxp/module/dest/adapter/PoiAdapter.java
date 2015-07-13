@@ -153,6 +153,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotRankTv.setText(poiDetailBean.getFormatRank());
             }
             if (mIsCanAdd) {
+                spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 if (poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已" + mAddStr);
                     spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_has_add);

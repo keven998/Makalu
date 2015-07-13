@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
-import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
 import com.lv.Utils.Config;
 import com.lv.Utils.CryptUtils;
@@ -1436,7 +1436,7 @@ public class MessageAdapter extends BaseAdapter {
     public void sendMsgInBackground(final MessageBean message, final ViewHolder holder) {
         holder.staus_iv.setVisibility(View.GONE);
         holder.pb.setVisibility(View.VISIBLE);
-        IMClient.getInstance().sendTextMessage(message, friendId, conversation, new SendMsgListener() {
+        IMClient.getInstance().sendTextMessage(message, friendId, conversation, new HttpCallback() {
             @Override
             public void onSuccess() {
                 message.setStatus(0);

@@ -88,7 +88,6 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
-import com.xuejian.client.lxp.module.toolbox.im.group.ChatMenuFragment;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

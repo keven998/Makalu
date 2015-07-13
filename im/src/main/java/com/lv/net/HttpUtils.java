@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.FetchListener;
-import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.HttpCallback;
 import com.lv.Utils.Config;
 import com.lv.bean.Message;
 import com.lv.bean.SendMessageBean;
@@ -40,14 +40,48 @@ public class HttpUtils {
     public static final MediaType json
             = MediaType.parse("application/json; charset=utf-8");
 
-    public static Response HttpRequest(String url, String postBody) throws Exception {
+    public static Response HttpRequest_Post(String url, String postBody) throws Exception {
         RequestBody body = RequestBody.create(json, postBody);
         Request request = new Request.Builder()
+                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("Accept", "application/vnd.hedylogos.v1+json")
                 .url(url)
                 .post(body)
                 .build();
         return client.newCall(request).execute();
 
+    }
+
+    public static Response HttpRequest_Put(String url, String postBody) throws Exception {
+        RequestBody body = RequestBody.create(json, postBody);
+        Request request = new Request.Builder()
+                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .url(url)
+                .put(body)
+                .build();
+        return client.newCall(request).execute();
+
+    }
+
+    public static void muteConversation(String conversation, boolean value, HttpCallback callback) {
+        final String url = Config.HOST + "/users/" + IMClient.getInstance().getCurrentUserId() + "/" + conversation;
+        final JSONObject object = new JSONObject();
+        try {
+            object.put("mute", value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        exec.execute(() -> {
+            try {
+                Response response = HttpRequest_Put(url, object.toString());
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                } else callback.onFailed(response.code());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void postAck(final long time, FetchListener listener) {
@@ -65,12 +99,12 @@ public class HttpUtils {
         }
         exec.execute(() -> {
             try {
-                Response response = HttpRequest(url, obj.toString());
+                Response response = HttpRequest_Post(url, obj.toString());
                 if (response.isSuccessful()) {
                     String s = response.body().string();
                     JSONObject object = new JSONObject(s);
                     JSONArray resultArray = object.getJSONArray("result");
-                    IMClient.lastSusseccFetch=object.getLong("timestamp");
+                    IMClient.lastSusseccFetch = object.getLong("timestamp");
                     List<Message> list = new ArrayList<>();
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "ack Result : " + s);
@@ -93,10 +127,9 @@ public class HttpUtils {
                 e.printStackTrace();
             }
         });
-
     }
 
-    public static void sendMessage(final String conversation, final String currentFri, final SendMessageBean msg, final long localId, final SendMsgListener listen, final String chatType) {
+    public static void sendMessage(final String conversation, final String currentFri, final SendMessageBean msg, final long localId, final HttpCallback listen, final String chatType) {
         if (IMClient.taskMap.containsKey(currentFri)) {
             if (IMClient.taskMap.get(currentFri).contains(localId)) return;
             else IMClient.taskMap.get(currentFri).add(localId);
@@ -108,9 +141,9 @@ public class HttpUtils {
         try {
             object.put("chatType", chatType);
             object.put("sender", msg.getSender());
-            if (conversation != null && !"".equals(conversation)) {
-                object.put("conversation", conversation);
-            }
+//            if (conversation != null && !"".equals(conversation)) {
+//                object.put("conversation", conversation);
+//            }
             object.put("receiver", Long.parseLong(currentFri));
             object.put("msgType", msg.getMsgType());
             object.put("contents", msg.getContents());
@@ -123,7 +156,7 @@ public class HttpUtils {
         }
         exec.execute(() -> {
             try {
-                Response response = HttpRequest(Config.SEND_URL, str);
+                Response response = HttpRequest_Post(Config.SEND_URL, str);
                 if (response.isSuccessful()) {
                     String result = response.body().string();
                     IMClient.taskMap.get(currentFri).remove(localId);
@@ -159,7 +192,30 @@ public class HttpUtils {
         });
 
     }
+    public static void login(final String username, final HttpCallback callback){
+        JSONObject obj = new JSONObject();
+        try {
+            String cid = null;
+            while (true) {
+                if (IMClient.getInstance().getCid() != null) {
+                    cid = IMClient.getInstance().getCid();
+                    break;
+                }
+            }
+            obj.put("userId", Long.parseLong(username));
+            obj.put("regId", cid);
+            if (Config.isDebug) {
+                Log.i(Config.TAG, "login:" + obj.toString());
+            }
+            Response response=HttpRequest_Post(Config.LOGIN_URL,obj.toString());
+            if (response.isSuccessful()){
+                callback.onSuccess();
+            }else callback.onFailed(response.code());
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void NetSpeedTest() {
         List<String> urlList = new ArrayList<>();
         urlList.add("202.108.22.5");
@@ -207,15 +263,16 @@ public class HttpUtils {
 
     public interface tokenGet {
         public void OnSuccess(String key, String token);
+
         public void OnFailed();
     }
 
-    public static void getToken(final int msgType,final tokenGet listener) {
+    public static void getToken(final int msgType, final tokenGet listener) {
         exec.execute(() -> {
             JSONObject object = new JSONObject();
             try {
                 object.put("msgType", msgType);
-                Response response = HttpRequest(Config.HOST+"/upload/token-generator", object.toString());
+                Response response = HttpRequest_Post(Config.HOST + "/upload/token-generator", object.toString());
                 if (response.isSuccessful()) {
                     String result = response.body().string();
                     JSONObject res = new JSONObject(result);

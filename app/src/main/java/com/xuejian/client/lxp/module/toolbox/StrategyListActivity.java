@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.toolbox;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,6 +28,8 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
+import com.lv.Listener.HttpCallback;
+import com.lv.im.IMClient;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.umeng.analytics.MobclickAgent;
@@ -43,6 +47,7 @@ import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -106,7 +111,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        mMyStrategyLv.doPullRefreshing(true, 0);
+         mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_plan_lists");
     }
 
@@ -438,30 +443,57 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    haveBeenVisited(itemData);
-                    mStrategyListAdapter.notifyDataSetChanged();
-                    final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
-                    cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-                    cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-                    cdialog.setTitle("完成签到");
-                    cdialog.setMessage("旅历＋1");
-                    cdialog.setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cdialog.dismiss();
-                        }
-                    });
-                    final Handler handler = new Handler() {
-                        public void handleMessage(Message msg) {
-                            switch (msg.what) {
-                                case 1:
-                                    cdialog.show();
+                    if (itemData.status.equals("planned")) {
+                        haveBeenVisited(itemData);
+                        mStrategyListAdapter.notifyDataSetChanged();
+                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
+                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                        cdialog.setTitle("完成签到");
+                        cdialog.setMessage("旅历＋1");
+                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cdialog.dismiss();
                             }
-                            super.handleMessage(msg);
-                        }
-                    };
-                    Message message = handler.obtainMessage(1);
-                    handler.sendMessageDelayed(message, 300);
+                        });
+                        final Handler handler = new Handler() {
+                            public void handleMessage(Message msg) {
+                                switch (msg.what) {
+                                    case 1:
+                                        cdialog.show();
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message = handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message, 300);
+                    } else {
+                        cancleVisited(itemData);
+                        mStrategyListAdapter.notifyDataSetChanged();
+                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
+                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                        cdialog.setTitle("取消签到");
+                        cdialog.setMessage("旅历-1");
+                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cdialog.dismiss();
+                            }
+                        });
+                        final Handler handler = new Handler() {
+                            public void handleMessage(Message msg) {
+                                switch (msg.what) {
+                                    case 1:
+                                        cdialog.show();
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message = handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message, 300);
+                    }
                 }
             });
         }
@@ -585,6 +617,31 @@ public class StrategyListActivity extends PeachBaseActivity {
         });
     }
 
+    private void cancleVisited(final StrategyBean beenBean) {
+        DialogManager.getInstance().showLoadingDialog(mContext);
+        String planned = "planned";
+        TravelApi.modifyGuideVisited(beenBean.id, planned, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
+                if (visitedResult.code == 0) {
+                    deleteThisItem(beenBean);
+                } else {
+                    DialogManager.getInstance().showLoadingDialog(mContext);
+                    if (!isFinishing())
+                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+        });
+    }
 
     private class MenuAdapter extends BaseAdapter {
         private final String[] CONTENT_TYPE = {"全部", "只看计划", "只看已签到"};

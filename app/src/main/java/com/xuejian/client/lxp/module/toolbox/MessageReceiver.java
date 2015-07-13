@@ -70,6 +70,10 @@ static {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }else {
+                        if (Config.isDebug){
+                            System.out.println("format error");
+                        }
                     }
                 }
                 break;

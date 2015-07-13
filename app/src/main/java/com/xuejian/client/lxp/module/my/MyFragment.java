@@ -41,9 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Rjm on 2014/10/9.
@@ -269,7 +268,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
         AccountManager.getInstance().saveLoginAccount(getActivity(), user);
 
-        final Map<Long, User> userlist = new HashMap<Long, User>();
+        final ConcurrentHashMap<Long, User> userlist = new ConcurrentHashMap<Long, User>();
 
         UserApi.getContact(new HttpCallBack<String>() {
             @Override
@@ -285,7 +284,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
                 }
-
             }
 
             @Override

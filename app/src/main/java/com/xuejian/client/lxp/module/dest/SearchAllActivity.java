@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -233,10 +233,10 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void onSendClick(String type, String id, Object object) {
                 IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
-                            @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content) {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new SendMsgListener() {
+                    @Override
+                    public void onDialogShareOk(Dialog dialog, int type, String content) {
+                        DialogManager.getInstance().showLoadingDialog(mContext);
+                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId, chatType, content, type, new HttpCallback() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
