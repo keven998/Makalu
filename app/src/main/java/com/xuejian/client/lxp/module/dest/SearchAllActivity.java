@@ -70,7 +70,7 @@ public class SearchAllActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 if (mBtnSearch.getText().toString().trim().equals("取消")) {
                     finishWithNoAnim();
-                    overridePendingTransition(R.anim.slide_stay, android.R.anim.fade_out);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     if (TextUtils.isEmpty(mEtSearch.getText())) {
                         return;
@@ -139,7 +139,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     public void onBackPressed() {
         finishWithNoAnim();
-        overridePendingTransition(0, android.R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
