@@ -103,7 +103,6 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        titleTv.setText("更多结果");
         cityFilterTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,27 +124,32 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBean.type = "loc";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
+            titleTv.setText("更多相关城市");
         } else if (type.equals("vs")) {
             cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
+            titleTv.setText("更多相关景点");
         } else if (type.equals("hotel")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "hotel";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
+            titleTv.setText("更多相关酒店");
         } else if (type.equals("restaurant")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "restaurant";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
+            titleTv.setText("更多相关美食");
         } else if (type.equals("shopping")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "shopping";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
+            titleTv.setText("更多相关购物");
         }
         DialogManager.getInstance().showLoadingDialog(this);
         searchSearchTypeData(0);

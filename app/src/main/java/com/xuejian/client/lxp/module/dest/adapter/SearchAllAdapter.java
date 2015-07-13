@@ -34,13 +34,14 @@ public class SearchAllAdapter extends BaseSectionAdapter {
     private boolean mIsSend;
     private OnSearchResultClickListener mOnSearchResultClickListener;
 
-    public SearchAllAdapter(Context context, ArrayList<SearchTypeBean> searchList, boolean isShowMore,boolean isSend) {
+    public SearchAllAdapter(Context context, ArrayList<SearchTypeBean> searchList, boolean isShowMore, boolean isSend) {
         mContext = context;
         mSearchList = searchList;
         mIsShowMore = isShowMore;
         mIsSend = isSend;
     }
-    public void setOnSearchResultClickListener(OnSearchResultClickListener onSearchResultClickListener){
+
+    public void setOnSearchResultClickListener(OnSearchResultClickListener onSearchResultClickListener) {
         mOnSearchResultClickListener = onSearchResultClickListener;
     }
 
@@ -71,85 +72,87 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     @Override
     public long getItemId(int section, int position) {
-        return getGlobalPositionForItem(section,position);
+        return getGlobalPositionForItem(section, position);
     }
 
     @Override
     public View getItemView(int section, int position, View convertView, ViewGroup parent) {
         ContentViewHolder holder;
-        if(convertView==null){
+        if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.row_search_all, null);
-            holder =new ContentViewHolder(convertView);
+            holder = new ContentViewHolder(convertView);
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ContentViewHolder) convertView.getTag();
         }
         final SearchTypeBean typeBean = mSearchList.get(section);
-        LocBean locBean=null;
+        LocBean locBean = null;
         final PoiDetailBean poiBean;
-        final Object itemObject =typeBean.resultList.get(position);
-        if(itemObject instanceof LocBean){
+        final Object itemObject = typeBean.resultList.get(position);
+        if (itemObject instanceof LocBean) {
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
             holder.mAddressTv.setText(locBean.zhName);
-           // holder.mAddressTv.setVisibility(View.GONE);
-            if(locBean.images!=null&&locBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(locBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
-            }else{
+            // holder.mAddressTv.setVisibility(View.GONE);
+            if (locBean.images != null && locBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(locBean.images.get(0).url, holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+            } else {
                 holder.mImageIv.setImageResource(R.drawable.bg_common_default);
             }
             final LocBean finalLocBean = locBean;
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mOnSearchResultClickListener!=null){
+                    if (mOnSearchResultClickListener != null) {
                         mOnSearchResultClickListener.onItemOnClick(TravelApi.PeachType.LOC, finalLocBean.id, finalLocBean);
                     }
                 }
             });
-            if(mIsSend){
+            if (mIsSend) {
                 holder.mSendTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mOnSearchResultClickListener != null) {
-                            mOnSearchResultClickListener.onSendClick(TravelApi.PeachType.LOC,finalLocBean.id,finalLocBean);
+                        if (mOnSearchResultClickListener != null) {
+                            mOnSearchResultClickListener.onSendClick(TravelApi.PeachType.LOC, finalLocBean.id, finalLocBean);
                         }
                     }
                 });
                 holder.mSendTv.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.mSendTv.setVisibility(View.GONE);
             }
 
-        }else if(itemObject instanceof PoiDetailBean){
+        } else if (itemObject instanceof PoiDetailBean) {
             poiBean = (PoiDetailBean) itemObject;
             holder.mAddressTv.setText(poiBean.address);
             holder.mNameTv.setText(poiBean.zhName);
-            if(poiBean.address.equals("")||poiBean.address==null){holder.mAddressTv.setText(poiBean.zhName);}
-            if(poiBean.images!=null&&poiBean.images.size()>0){
-                ImageLoader.getInstance().displayImage(poiBean.images.get(0).url,holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
-            }else{
+            if (poiBean.address.equals("") || poiBean.address == null) {
+                holder.mAddressTv.setText(poiBean.zhName);
+            }
+            if (poiBean.images != null && poiBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(poiBean.images.get(0).url, holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+            } else {
                 holder.mImageIv.setImageDrawable(null);
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mOnSearchResultClickListener!=null){
-                        mOnSearchResultClickListener.onItemOnClick(typeBean.type,poiBean.id,poiBean);
+                    if (mOnSearchResultClickListener != null) {
+                        mOnSearchResultClickListener.onItemOnClick(typeBean.type, poiBean.id, poiBean);
                     }
                 }
             });
-            if(mIsSend){
+            if (mIsSend) {
                 holder.mSendTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mOnSearchResultClickListener != null) {
-                            mOnSearchResultClickListener.onSendClick(typeBean.type,poiBean.id,poiBean);
+                        if (mOnSearchResultClickListener != null) {
+                            mOnSearchResultClickListener.onSendClick(typeBean.type, poiBean.id, poiBean);
                         }
                     }
                 });
                 holder.mSendTv.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.mSendTv.setVisibility(View.GONE);
             }
         }
@@ -158,46 +161,46 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     @Override
     public View getHeaderView(int section, View convertView, ViewGroup parent) {
-        if(convertView==null){
-            convertView = View.inflate(mContext,R.layout.row_search_all_section,null);
+        if (convertView == null) {
+            convertView = View.inflate(mContext, R.layout.row_search_all_section, null);
         }
         TextView typeName = (TextView) convertView.findViewById(R.id.type_name_tv);
         TextView searchMore = (TextView) convertView.findViewById(R.id.tv_search_more);
         final SearchTypeBean typeBean = mSearchList.get(section);
-        if(typeBean.type.equals("loc")){
+        if (typeBean.type.equals("loc")) {
             typeName.setText("城市");
-        }else if(typeBean.type.equals("vs")){
+        } else if (typeBean.type.equals("vs")) {
             typeName.setText("景点");
-        }else if(typeBean.type.equals("hotel")){
+        } else if (typeBean.type.equals("hotel")) {
             typeName.setText("酒店");
-        }else if(typeBean.type.equals("restaurant")){
+        } else if (typeBean.type.equals("restaurant")) {
             typeName.setText("美食");
-        }else if(typeBean.type.equals("shopping")){
+        } else if (typeBean.type.equals("shopping")) {
             typeName.setText("购物");
         }
-        if(mIsShowMore){
-            if(typeBean.type.equals("loc")){
+        if (mIsShowMore) {
+            if (typeBean.type.equals("loc")) {
                 searchMore.setText("查看全部城市");
-            }else if(typeBean.type.equals("vs")){
+            } else if (typeBean.type.equals("vs")) {
                 searchMore.setText("查看全部景点");
-            }else if(typeBean.type.equals("hotel")){
+            } else if (typeBean.type.equals("hotel")) {
                 searchMore.setText("查看全部酒店");
-            }else if(typeBean.type.equals("restaurant")){
+            } else if (typeBean.type.equals("restaurant")) {
                 searchMore.setText("查看全部美食");
-            }else if(typeBean.type.equals("shopping")){
+            } else if (typeBean.type.equals("shopping")) {
                 searchMore.setText("查看全部购物");
             }
             SpannableStringBuilder builder = new SpannableStringBuilder(searchMore.getText().toString());
             ForegroundColorSpan Span = new ForegroundColorSpan(mContext.getResources().getColor(R.color.app_theme_color_highlight));
             builder.setSpan(Span, 4, 6, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             searchMore.setText(builder);
-        }else {
+        } else {
             searchMore.setVisibility(View.INVISIBLE);
         }
         searchMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mOnSearchResultClickListener != null) {
+                if (mOnSearchResultClickListener != null) {
                     mOnSearchResultClickListener.onMoreResultClick(typeBean.type);
                 }
             }
@@ -213,14 +216,14 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     @Override
     public int getCountInSection(int section) {
-        int size=mSearchList.get(section).resultList.size();
-        if(mIsShowMore){
-            if(size>=5){
+        int size = mSearchList.get(section).resultList.size();
+        if (mIsShowMore) {
+            if (size >= 5) {
                 return 5;
-            }else{
+            } else {
                 return size;
             }
-        }else{
+        } else {
             return size;
         }
 
@@ -255,7 +258,9 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     public interface OnSearchResultClickListener {
         void onMoreResultClick(String type);
+
         void onItemOnClick(String type, String id, Object object);
+
         void onSendClick(String type, String id, Object object);
     }
 }
