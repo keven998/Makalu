@@ -2,10 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
 
 
     <android.support.v4.widget.DrawerLayout
@@ -13,52 +9,120 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-            android:id="@+id/ly_header_bar_title_wrap"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/title_bar_height" />
+            android:layout_height="match_parent"
+            android:background="@color/app_backgroud">
 
-        <com.xuejian.client.lxp.common.widget.dslv.DragSortListView
-            xmlns:dslv="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/listview_plan_editor"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="@dimen/title_bar_height"
-            android:divider="@color/color_line"
-            android:dividerHeight="1px"
-            android:fastScrollEnabled="false"
-            android:listSelector="@android:color/transparent"
-            android:overScrollMode="never"
-            dslv:collapsed_height="2dp"
-            dslv:drag_enabled="true"
-            dslv:drag_scroll_start="0.33"
-            dslv:drag_start_mode="onDown"
-            dslv:float_alpha="0.8"
-            dslv:max_drag_scroll_speed="0.5"
-            dslv:remove_enabled="true"
-            dslv:remove_mode="flingRemove"
-            dslv:slide_shuffle_speed="0.3"
-            dslv:sort_enabled="true"
-            dslv:track_drag_sort="false"
-            dslv:use_default_controller="false" />
+            <com.xuejian.client.lxp.common.widget.dslv.DragSortListView xmlns:dslv="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/listview_plan_editor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="44dp"
+                android:layout_marginTop="@dimen/content_top_margin"
+                android:divider="@color/color_line"
+                android:dividerHeight="1px"
+                android:fastScrollEnabled="false"
+                android:listSelector="@android:color/transparent"
+                android:overScrollMode="never"
+                dslv:collapsed_height="2dp"
+                dslv:drag_enabled="true"
+                dslv:drag_scroll_start="0.33"
+                dslv:drag_start_mode="onDown"
+                dslv:float_alpha="0.8"
+                dslv:max_drag_scroll_speed="0.5"
+                dslv:remove_enabled="true"
+                dslv:remove_mode="flingRemove"
+                dslv:slide_shuffle_speed="0.3"
+                dslv:sort_enabled="true"
+                dslv:track_drag_sort="false"
+                dslv:use_default_controller="false" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_bar_height"
+                android:background="@drawable/bg_navigation_bar">
+
+                <TextView
+                    android:id="@+id/tv_title_bar_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center_vertical"
+                    android:minWidth="60dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="30dp"
+                    android:text="取消"
+                    android:textColor="@color/color_text_titlebar"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_title_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:maxWidth="108dp"
+                    android:singleLine="true"
+                    android:text="调整"
+                    android:textColor="@color/color_text_titlebar"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_title_bar_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:duplicateParentState="true"
+                    android:gravity="center"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="12dp"
+                    android:singleLine="true"
+                    android:text="保存"
+                    android:textColor="@color/color_text_titlebar"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/base_color_white"
+                android:paddingBottom="3dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="3dp">
+
+                <Button
+                    android:id="@+id/btn_edit_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="10dp"
+                    android:text="按日调整"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btn_add_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="加一天"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
         <FrameLayout
             android:id="@+id/menu_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_marginRight="0dp" />
+            android:layout_gravity="start"/>
     </android.support.v4.widget.DrawerLayout>
-    <TextView
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_menu"
-        android:ems="1"
-        android:gravity="right"
-        android:textColor="@color/base_color_white"
-        android:background="@color/app_theme_color"
-        android:layout_marginBottom="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:text="按日修改"/>
-</RelativeLayout>
+
 </FrameLayout>

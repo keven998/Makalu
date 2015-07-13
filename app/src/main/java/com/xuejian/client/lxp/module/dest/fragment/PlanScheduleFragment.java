@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,8 +149,13 @@ public class PlanScheduleFragment extends Fragment {
                     descTitle = String.format("%s > %s", descTitle, desName);
                 }
             }
-            holder.summaryTextView.setText(desc);
-            holder.tv_schedule_title.setText(descTitle);
+            if (TextUtils.isEmpty(desc)) {
+                holder.tv_schedule_title.setText("无安排");
+                holder.summaryTextView.setText("");
+            } else {
+                holder.summaryTextView.setText(desc);
+                holder.tv_schedule_title.setText(descTitle);
+            }
             return convertView;
         }
     }

@@ -203,14 +203,20 @@ public class IMClient {
             return convercationList;
         }
         convercationList = db.getConversationList();
-        count = 0;
-        for (ConversationBean c : convercationList) {
-            count += c.getIsRead();
-        }
+//        count = 0;
+//        for (ConversationBean c : convercationList) {
+//            count += c.getIsRead();
+//        }
         return convercationList;
     }
 
     public int getUnReadCount() {
+        count=0;
+        if (convercationList!=null){
+            for (ConversationBean c : convercationList) {
+                count += c.getIsRead();
+            }
+        }
         return count;
     }
 
@@ -468,6 +474,7 @@ public class IMClient {
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
+        IMClient.lastSusseccFetch=message.getTimestamp();
         add2ackList(message.getId());
         return result;
     }

@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.dest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -97,8 +98,6 @@ public class DayAgendaActivity extends FragmentActivity {
     }
 
     private void setupTitle() {
-        mTitleView.setText(String.format("第%d天", currentDay + 1));
-
         List<PoiDetailBean> poiList = routeDayMap.get(currentDay);
         String descTitle = "";
         HashSet<String> set = new HashSet<String>();
@@ -110,6 +109,7 @@ public class DayAgendaActivity extends FragmentActivity {
                 set.add(pdb.locality.zhName);
             }
         }
+
         for (String desName : set) {
             if (descTitle.equals("")) {
                 descTitle = desName;
@@ -118,7 +118,17 @@ public class DayAgendaActivity extends FragmentActivity {
             }
         }
 
-        mSubTitleView.setText(descTitle);
+        if (!TextUtils.isEmpty(descTitle)) {
+            mSubTitleView.setText(descTitle);
+        } else {
+            mSubTitleView.setText("无安排");
+        }
+
+        if (currentDay < 9) {
+            mTitleView.setText(String.format("0%s.Day详情", currentDay + 1));
+        } else {
+            mTitleView.setText(String.format("%s.Day详情", currentDay + 1));
+        }
 
     }
 

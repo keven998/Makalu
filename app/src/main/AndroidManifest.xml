@@ -434,6 +434,10 @@
             android:name=".module.toolbox.ExpertFilterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"></activity>
+        <activity
+            android:name=".module.dest.ReadMoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent"></activity>
         <!--去过页面-->
         <!--攻略地图-->
         <activity

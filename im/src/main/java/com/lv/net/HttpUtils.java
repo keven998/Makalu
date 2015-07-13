@@ -215,7 +215,7 @@ public class HttpUtils {
             JSONObject object = new JSONObject();
             try {
                 object.put("msgType", msgType);
-                Response response = HttpRequest("http://hedy.zephyre.me/upload/token-generator", object.toString());
+                Response response = HttpRequest(Config.HOST+"/upload/token-generator", object.toString());
                 if (response.isSuccessful()) {
                     String result = response.body().string();
                     JSONObject res = new JSONObject(result);

@@ -5,10 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,14 +47,14 @@ public class PoiListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-    @InjectView(R.id.et_search)
-    EditText mEtSearch;
-    @InjectView(R.id.btn_search)
-    Button mBtnSearch;
+//    @InjectView(R.id.et_search)
+//    EditText mEtSearch;
+//    @InjectView(R.id.btn_search)
+//    Button mBtnSearch;
+    @InjectView(R.id.tv_search)
+    TextView tv_search;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTitle;
-    @InjectView(R.id.tv_poi_want_type)
-    ImageView mTvPoiWantType;
     private PullToRefreshListView mPoiListLv;
     private View headerView;
     private String type;
@@ -106,11 +102,11 @@ public class PoiListActivity extends PeachBaseActivity {
         isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail",false);
         value = getIntent().getStringExtra("value");
 
-        if (locList.size() > 1) {
-            mLocSpinner.setVisibility(View.VISIBLE);
-        } else {
-            mLocSpinner.setVisibility(View.GONE);
-        }
+//        if (locList.size() > 1) {
+//            mLocSpinner.setVisibility(View.VISIBLE);
+//        } else {
+//            mLocSpinner.setVisibility(View.GONE);
+//        }
         if (canAdd) {
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,53 +160,53 @@ public class PoiListActivity extends PeachBaseActivity {
         }
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
         curLoc = locList.get(0);
-        mLocSpinner.setAdapter(mLocSpinnerAdapter);
-        mLocSpinner.setSelection(0, true);
-        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                curLoc = locList.get(position);
-                mPoiListLv.onPullUpRefreshComplete();
-                mPoiListLv.onPullDownRefreshComplete();
-//                mPoiListLv.doPullRefreshing(true, 200);
-                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
-                    mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
-                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    mTitle.setText(String.format("%s购物", curLoc.zhName));
-                    mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
-                }
-                loadPageData();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mKeyWord = mEtSearch.getText().toString().trim();
-                if(TextUtils.isEmpty(mKeyWord)){
-                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
-                    return;
-                }
-                Intent intent = new Intent(mContext, SearchPoiActivity.class);
-                intent.putExtra("keyword", mKeyWord);
-                intent.putExtra("type", type);
-                intent.putParcelableArrayListExtra("poiList", hasAddList);
-                intent.putExtra("loc", curLoc);
-                startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
-            }
-        });
+//        mLocSpinner.setAdapter(mLocSpinnerAdapter);
+//        mLocSpinner.setSelection(0, true);
+//        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
+//                curLoc = locList.get(position);
+//                mPoiListLv.onPullUpRefreshComplete();
+//                mPoiListLv.onPullDownRefreshComplete();
+////                mPoiListLv.doPullRefreshing(true, 200);
+//                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+//                    mTitle.setText(String.format("吃在%s", curLoc.zhName));
+//                    mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
+//                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+//                    mTitle.setText(String.format("%s购物", curLoc.zhName));
+//                    mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
+//                }
+//                loadPageData();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mKeyWord = mEtSearch.getText().toString().trim();
+//                if(TextUtils.isEmpty(mKeyWord)){
+//                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
+//                    return;
+//                }
+//                Intent intent = new Intent(mContext, SearchPoiActivity.class);
+//                intent.putExtra("keyword", mKeyWord);
+//                intent.putExtra("type", type);
+//                intent.putParcelableArrayListExtra("poiList", hasAddList);
+//                intent.putExtra("loc", curLoc);
+//                startActivityForResult(intent, AddPoiActivity.REQUEST_CODE_SEARCH_POI);
+//            }
+//        });
 
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
-            mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
+          //  mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-            mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
+         //   mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
         }
 
         loadPageData();
@@ -247,6 +243,13 @@ public class PoiListActivity extends PeachBaseActivity {
                 getPoiListData(type, curLoc.id, curPage + 1);
             }
         });
+        tv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sear_intent = new Intent(PoiListActivity.this, SearchAllActivity.class);
+                startActivityWithNoAnim(sear_intent);
+            }
+        });
     }
 
     private void loadPageData() {
@@ -281,11 +284,11 @@ public class PoiListActivity extends PeachBaseActivity {
                 headerView.setVisibility(View.GONE);
             } else {
                 headerView.setVisibility(View.VISIBLE);
-                if(isFromCityDetail) {
-                    mTvCityPoiDesc.setText(value);
-                }else{
+//                if(isFromCityDetail) {
+//                    mTvCityPoiDesc.setText(value);
+//                }else{
                     mTvCityPoiDesc.setText(result.desc);
-                }
+       //         }
             }
             findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -338,7 +341,7 @@ public class PoiListActivity extends PeachBaseActivity {
             }
         });
 
-        mEtSearch.clearFocus();
+//        mEtSearch.clearFocus();
     }
 
     private void bindView(List<PoiDetailBean> result) {

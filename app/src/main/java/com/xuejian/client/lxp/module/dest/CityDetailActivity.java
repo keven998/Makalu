@@ -206,7 +206,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         locDetailBean = detailBean;
         if (isFromStrategy) {
-          //  findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
+            //  findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
         }
 //        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -316,7 +316,15 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 }
             }
         });
-
+        mCityDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent();
+                intent.putExtra("content",desc);
+                intent.setClass(CityDetailActivity.this,ReadMoreActivity.class);
+                startActivityWithNoAnim(intent);
+            }
+        });
     }
 
     private String getCityName(String name) {
