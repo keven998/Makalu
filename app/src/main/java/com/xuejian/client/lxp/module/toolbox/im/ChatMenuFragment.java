@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.module.toolbox.im.group;
+package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.config.SettingConfig;
-import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 /**
  * Created by yibiao.qin on 2015/7/10.

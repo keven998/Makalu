@@ -19,10 +19,10 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
+import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
-import com.lv.user.LoginSuccessListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -48,9 +48,8 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
@@ -99,23 +98,22 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (!FromBounce) {
-            com.lv.user.User.login(AccountManager.getCurrentUserId(), new LoginSuccessListener() {
+            IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
                 @Override
-                public void OnSuccess() {
+                public void onSuccess() {
                     IMClient.getInstance().initAckAndFetch();
                 }
 
                 @Override
-                public void OnFailed(int code) {
+                public void onFailed(int code) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ToastUtil.getInstance(MainActivity.this).showToast("登录失败");
+                            ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
                         }
                     });
                 }
             });
-
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
             if (talkFragment != null) {
                 talkFragment.loadConversation();
@@ -164,7 +162,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
                 if (contactResult.code == 0) {
                     AccountManager.getInstance().setContactList(null);
-                    Map<Long, User> userlist = new HashMap<Long, User>();
+                    ConcurrentHashMap<Long, User> userlist = new ConcurrentHashMap<Long, User>();
                     // 存入内存
                     for (User myUser : contactResult.result.contacts) {
                         myUser.setType(1);

@@ -13,7 +13,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.lv.Listener.SendMsgListener;
+import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -245,7 +245,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
                         @Override
                         public void onDialogShareOk(Dialog dialog, int type, String content) {
                             DialogManager.getInstance().showLoadingDialog(mContext);
-                            IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId,chatType,content,type,new SendMsgListener() {
+                            IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId,chatType,content,type,new HttpCallback() {
                                 @Override
                                 public void onSuccess() {
                                     DialogManager.getInstance().dissMissLoadingDialog();

@@ -9,17 +9,16 @@ import com.lv.im.IMClient;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AccountManager {
     public static final String ACCOUNT_LOGOUT_ACTION = "com.aizou.peathtravel.ACTION_LOGOUT";
     public static final String LOGIN_USER_PREF = "login_user";
     public static User user;
     public static String CurrentUserId;
-    private static Map<Long, User> contactList=new Hashtable<>();
+    private static ConcurrentHashMap<Long, User> contactList;
     private boolean isLogin;
     private User userInfo;
     /**
@@ -36,20 +35,22 @@ public class AccountManager {
 
     }
 
-    public void setLogin(boolean isLogin){
-        this.isLogin=isLogin;
+    public void setLogin(boolean isLogin) {
+        this.isLogin = isLogin;
     }
 
-    public boolean isLogin(){
+    public boolean isLogin() {
         return isLogin;
     }
 
-    public static String getCurrentUserId(){
+    public static String getCurrentUserId() {
         return CurrentUserId;
     }
-    public static void setCurrentUserId(String currentUserId){
-        CurrentUserId=currentUserId;
+
+    public static void setCurrentUserId(String currentUserId) {
+        CurrentUserId = currentUserId;
     }
+
     public User getLoginAccount(Context context) {
         String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
         if (TextUtils.isEmpty(userJson)) {
@@ -61,10 +62,11 @@ public class AccountManager {
         }
         return user;
     }
-    public void logout(final Context context){
+
+    public void logout(final Context context) {
         SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
         AccountManager.getInstance().setContactList(null);
-        this.isLogin=false;
+        this.isLogin = false;
         IMClient.getInstance().logout();
         UserDBManager.getInstance().disconnectDB();
     }
@@ -121,12 +123,15 @@ public class AccountManager {
         AccountManager.user = user;
         SharePrefUtil.saveString(context, LOGIN_USER_PREF, GsonTools.createGsonString(user));
     }
-    public User getLoginAccountInfo(){
+
+    public User getLoginAccountInfo() {
         return userInfo;
     }
-    public void setLoginAccountInfo(User user){
-        this.userInfo=user;
+
+    public void setLoginAccountInfo(User user) {
+        this.userInfo = user;
     }
+
     /**
      * 获取内存中好友user list
      *
@@ -134,11 +139,14 @@ public class AccountManager {
      */
     public Map<Long, User> getContactList(Context context) {
         // 获取本地好友user list到内存,方便以后获取好友list
-        if (contactList.size()==0){
+        if (contactList == null) contactList = new ConcurrentHashMap<>();
+        if (contactList.size() == 0) {
             List<User> userList = UserDBManager.getInstance().getContactListWithoutGroup();
-            contactList = new HashMap<Long, User>();
-            for (User user : userList) {
-                contactList.put(user.getUserId(), user);
+            if (userList != null) {
+                contactList.clear();
+                for (User user : userList) {
+                    contactList.put(user.getUserId(), user);
+                }
             }
         }
         return contactList;
@@ -146,14 +154,13 @@ public class AccountManager {
 
     /**
      * 设置好友user list到内存中
-     *
-     * @param contactList
      */
-    public void setContactList(Map<Long, User> contactList) {
-        this.contactList = contactList;
+    public void setContactList(ConcurrentHashMap<Long, User> _contactList) {
+        if (contactList == null) contactList = new ConcurrentHashMap<>();
+        contactList = _contactList;
     }
 
-    public Map<Long, User> getCacheContactList(){
+    public Map<Long, User> getCacheContactList() {
         return contactList;
     }
 }
