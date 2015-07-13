@@ -79,15 +79,15 @@ public class CommonUtils {
         return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
 
-    public static String getTopActivity(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
-
-        if (runningTaskInfos != null)
-            return runningTaskInfos.get(0).topActivity.getClassName();
-        else
-            return "";
-    }
+//    public static String getTopActivity(Context context) {
+//        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        List<RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+//
+//        if (runningTaskInfos != null)
+//            return runningTaskInfos.get(0).topActivity.getClassName();
+//        else
+//            return "";
+//    }
 
     public static int getScreenWidth(Activity context) {
 
@@ -156,22 +156,22 @@ public class CommonUtils {
     }
 
 
-    public static boolean isBackground(Context context) {
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
-                    Log.i("后台", appProcess.processName);
-                    return true;
-                } else {
-                    Log.i("前台", appProcess.processName);
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
+//    public static boolean isBackground(Context context) {
+//        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+//        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+//            if (appProcess.processName.equals(context.getPackageName())) {
+//                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
+//                    Log.i("后台", appProcess.processName);
+//                    return true;
+//                } else {
+//                    Log.i("前台", appProcess.processName);
+//                    return false;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     public static Parcelable clone(Parcelable parcelable) {
         Bundle bundle = new Bundle();
