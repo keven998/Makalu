@@ -390,7 +390,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/selecter_theme_btn_radius_4"
+                android:background="@drawable/chat_drawer_leave"
                 android:gravity="center"
                 android:text="退出登录"
                 android:textColor="@color/base_color_white"

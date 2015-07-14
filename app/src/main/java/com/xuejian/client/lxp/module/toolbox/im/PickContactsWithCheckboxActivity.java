@@ -182,7 +182,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         titleHeaderBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
         titleHeaderBar.getRightTextView().setText("确定");
-        titleHeaderBar.getRightTextView().setTextColor(getResources().getColor(R.color.app_theme_color));
+        titleHeaderBar.getRightTextView().setTextColor(getResources().getColor(R.color.base_color_white));
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

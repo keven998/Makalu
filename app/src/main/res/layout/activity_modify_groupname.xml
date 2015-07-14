@@ -9,7 +9,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/main_color" />
+        android:background="@color/app_theme_color" />
 
 
     <EditText

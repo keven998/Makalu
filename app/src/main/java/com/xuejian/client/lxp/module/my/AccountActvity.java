@@ -2,7 +2,9 @@ package com.xuejian.client.lxp.module.my;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -19,8 +21,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -65,6 +69,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,7 +109,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @ViewInject(R.id.btn_logout)
     private Button btn_logout;
 
+    public String getBirthDay() {
+        return birthDay;
+    }
 
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    private String birthDay;
     private File tempImage;
     private User user;
     DisplayImageOptions options;
@@ -380,7 +393,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
-                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog =makeDatePicker(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -392,7 +405,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                 if (date.after(new Date())) {
                                     ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
                                 } else {
-                                    editBirthdayToInterface(dateString);
+                                    setBirthDay(dateString);
                                 }
                             } catch (ParseException e) {
                                 // TODO Auto-generated catch block
@@ -403,9 +416,45 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             birthTimeFlag = false;
                         }
                     }
-                }, 1990, 0, 0);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setTitle("设置生日");
+                },1990, 0, 0);
+//                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        if (!birthTimeFlag) {
+//                            monthOfYear++;
+//                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+//                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                            try {
+//                                Date date = format.parse(dateString);
+//                                if (date.after(new Date())) {
+//                                    ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+//                                } else {
+//                                    setBirthDay(dateString);
+//                                }
+//                            } catch (ParseException e) {
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                            birthTimeFlag = true;
+//                        } else {
+//                            birthTimeFlag = false;
+//                        }
+//                    }
+//                }, 1990, 0, 0);
+               // dialog.setTitle("设置生日");
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        editBirthdayToInterface(getBirthDay());
+                    }
+                });
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.setCancelable(true);
                 dialog.show();
@@ -1025,5 +1074,69 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         age = Integer.parseInt(date) - birthYear;
         return age;
     }
+    public DatePickerDialog makeDatePicker(DatePickerDialog.OnDateSetListener listener, int y,int m,int day) {
+//        Calendar c;
+//        if (cal == null) {
+//            c = Calendar.getInstance();
+//        } else {
+//            c = cal;
+//        }
+//        int year = c.get(Calendar.YEAR);
+//        int month = c.get(Calendar.MONTH);
+//        int day = c.get(Calendar.DAY_OF_MONTH);
+//        int year = y;
+//        int month = m;
+//        int day =day;
+        DatePickerDialog newFragment = new DatePickerDialog(this, listener, y, m, day);
 
+        // removes the original topbar:
+        newFragment.setTitle("");
+
+        // Divider changing:
+        DatePicker dpView = newFragment.getDatePicker();
+        LinearLayout llFirst = (LinearLayout) dpView.getChildAt(0);
+        LinearLayout llSecond = (LinearLayout) llFirst.getChildAt(0);
+        for (int i = 0; i < llSecond.getChildCount(); i++) {
+            NumberPicker picker = (NumberPicker) llSecond.getChildAt(i);
+            Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+            for (Field pf : pickerFields) {
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    try {
+                        pf.set(picker, getResources().getDrawable(R.drawable.divider));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
+        // New top:
+        int titleHeight = 90;
+        // Container:
+        LinearLayout llTitleBar = new LinearLayout(this);
+        llTitleBar.setOrientation(LinearLayout.VERTICAL);
+        llTitleBar.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, titleHeight));
+
+        // TextView Title:
+        TextView tvTitle = new TextView(this);
+        tvTitle.setText("设置生日");
+        tvTitle.setGravity(Gravity.CENTER);
+        tvTitle.setPadding(10, 10, 10, 10);
+        tvTitle.setTextSize(18);
+        tvTitle.setTextColor(Color.BLACK);
+        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, titleHeight-2));
+        llTitleBar.addView(tvTitle);
+
+        // View line:
+        View vTitleDivider = new View(this);
+        vTitleDivider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 4));
+        vTitleDivider.setBackgroundColor(getResources().getColor(R.color.app_theme_color));
+        llTitleBar.addView(vTitleDivider);
+
+        dpView.addView(llTitleBar);
+        FrameLayout.LayoutParams lp = (android.widget.FrameLayout.LayoutParams) llFirst.getLayoutParams();
+        lp.setMargins(0, titleHeight, 0, 0);
+        return newFragment;
+    }
 }
