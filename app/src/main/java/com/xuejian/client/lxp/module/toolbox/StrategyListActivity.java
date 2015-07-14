@@ -176,7 +176,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         TextView textView = (TextView) findViewById(R.id.tv_title_bar_title);
         if (isOwner) {
-            textView.setText(String.format("%s的计划", AccountManager.getInstance().getLoginAccount(this).getNickName()));
+            textView.setText("我的计划");
         } else if (user != null) {
             textView.setText(String.format("%s的计划", user.getNickName()));
         } else {

@@ -338,9 +338,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)) {
                     btnMore.setVisibility(View.GONE);
+//                    iv_emoticons_normal.setVisibility(View.GONE);
                     buttonSend.setVisibility(View.VISIBLE);
                 } else {
                     btnMore.setVisibility(View.VISIBLE);
+//                    iv_emoticons_normal.setVisibility(View.VISIBLE);
                     buttonSend.setVisibility(View.GONE);
                 }
             }
@@ -363,14 +365,16 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                GroupDetailFragment fragment= (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
-                if (fragment!=null){
+                GroupDetailFragment fragment = (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+                if (fragment != null) {
                     fragment.closeDeleteMode();
                 }
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
 
             @Override
@@ -378,6 +382,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             }
         });
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
