@@ -21,7 +21,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="20dp"
             android:duplicateParentState="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+            android:drawableLeft="@drawable/login_back_defaut"/>
 
         <TextView
             android:layout_width="wrap_content"

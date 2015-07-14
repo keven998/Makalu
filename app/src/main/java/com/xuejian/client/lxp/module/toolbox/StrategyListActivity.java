@@ -1,6 +1,5 @@
 package com.xuejian.client.lxp.module.toolbox;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,8 +26,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
-import com.lv.Listener.HttpCallback;
-import com.lv.im.IMClient;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.umeng.analytics.MobclickAgent;
@@ -47,7 +43,6 @@ import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -455,6 +450,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onClick(View v) {
                                 cdialog.dismiss();
+                                mMyStrategyLv.doPullRefreshing(true, 0);
                             }
                         });
                         final Handler handler = new Handler() {
@@ -480,6 +476,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                             @Override
                             public void onClick(View v) {
                                 cdialog.dismiss();
+                                mMyStrategyLv.doPullRefreshing(true, 0);
                             }
                         });
                         final Handler handler = new Handler() {

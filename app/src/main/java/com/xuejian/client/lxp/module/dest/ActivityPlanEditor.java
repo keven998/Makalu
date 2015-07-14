@@ -244,7 +244,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         }
 
         @Override
-        public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+        public View getItemView(final int section,final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_plan_editor, null);
@@ -260,7 +260,8 @@ public class ActivityPlanEditor extends FragmentActivity {
             holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    routeDayMap.get(section).remove(position);
+                    notifyDataSetChanged();
                 }
             });
             return convertView;
