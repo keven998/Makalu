@@ -37,7 +37,7 @@ public class SelectResidentActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_resident);
         TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
-        titleView.setText("地区设置");
+        titleView.setText("选择现住地");
         findViewById(R.id.tv_confirm).setVisibility(View.GONE);
         findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -380,7 +380,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
-                DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -404,6 +404,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         }
                     }
                 }, 1990, 0, 0);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setTitle("设置生日");
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.setCancelable(true);
                 dialog.show();
