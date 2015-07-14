@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -187,6 +188,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user1 == null) {
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
+                }else{
+                    ArrayList<String> pic=new ArrayList<>();
+                    pic.add(user1.getAvatar());
+                    showSelectedPics(pic);
                 }
                 break;
 
@@ -262,6 +267,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             default:
                 break;
         }
+    }
+
+    private void showSelectedPics(ArrayList<String> pics){
+        IntentUtils.intentToPicGallery2(getActivity(), pics, 0);
     }
 
     private void imLogin(final User user) {

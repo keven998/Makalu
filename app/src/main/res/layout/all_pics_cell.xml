@@ -17,9 +17,9 @@
 
     <ImageView
         android:id="@+id/all_pics_cell_del"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_edit_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/delete2"
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="10dp"

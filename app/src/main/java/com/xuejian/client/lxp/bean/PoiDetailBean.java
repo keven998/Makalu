@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/22.
  */
-public class PoiDetailBean implements Parcelable, ICreateShareDialog {
+public class PoiDetailBean implements Parcelable, ICreateShareDialog,Comparable {
     public final static String RESTAURANT = "restaurant";
     public final static String SHOPPING = "shopping";
     public String distance = "";
@@ -39,7 +39,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
     public List<RecommendBean> recommends = new ArrayList<RecommendBean>();
     public List<CommentBean> comments = new ArrayList<CommentBean>();
     public String moreCommentsUrl;
-    private int rank;
+    public int rank;
     public String lyPoiUrl;
     public String openTime;
 
@@ -179,4 +179,10 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog {
             return new PoiDetailBean[size];
         }
     };
+
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }

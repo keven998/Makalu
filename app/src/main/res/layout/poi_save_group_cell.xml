@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/base_color_white"
+    android:layout_height="68dp"
+    android:minHeight="68dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/tv_save_group_palce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/color_text_i"
+            android:layout_gravity="center_horizontal"
+            android:text="北京"
+            />
+
+        <TextView
+            android:id="@+id/tv_save_group_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/color_text_i"
+            android:text="5个收藏"
+            />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_group_arrow"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:src="@drawable/collect_bar_open"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="19dp"
+        android:visibility="gone"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_line"
+        android:layout_marginTop="10dp"/>
+
+
+
+
+</RelativeLayout>
