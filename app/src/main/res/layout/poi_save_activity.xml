@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud">
+
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/poi_save_titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        />
+
+    <ExpandableListView
+        android:id="@+id/poi_save_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:groupIndicator="@drawable/expandable_arrow"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/base_color_white">
+
+        <LinearLayout
+            android:id="@+id/save_btn"
+            android:layout_width="98dp"
+            android:layout_height="26dp"
+            android:orientation="horizontal"
+            android:background="@drawable/save_type_border"
+            android:gravity="center"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textColor="@color/fourth_font_color"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/save_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/fourth_font_color"
+                android:textSize="10sp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

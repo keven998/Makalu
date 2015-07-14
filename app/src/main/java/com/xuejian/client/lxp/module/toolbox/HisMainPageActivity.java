@@ -38,6 +38,7 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -83,11 +84,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showActionDialog();
+                        showActionDialog(1);
                     }
                 });
             } else {
-                handleView.setVisibility(View.GONE);
+                handleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showActionDialog(2);
+                    }
+                });
             }
         } else {
             handleView.setVisibility(View.GONE);
@@ -198,38 +204,67 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         getUserInfo(id);
     }
 
-    private void showActionDialog() {
+    private void showActionDialog(int style) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
         Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
         btn.setTextColor(getResources().getColor(R.color.color_checked));
-        btn.setText("删除");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_delete_it");
-                final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
-                deleteDialog.setTitle("提示");
-                deleteDialog.setMessage("删除确认");
-                deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteContact(imUser);
-                        deleteDialog.dismiss();
-                    }
-                });
-                deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteDialog.dismiss();
-                    }
-                });
-                deleteDialog.show();
+        if (style==1){
+            btn.setText("删除");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                    deleteDialog.setTitle("提示");
+                    deleteDialog.setMessage("删除确认");
+                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteContact(imUser);
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.show();
 
-                dialog.dismiss();
-            }
-        });
+                    dialog.dismiss();
+                }
+            });
+        }else {
+            btn.setText("屏蔽");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                    deleteDialog.setTitle("提示");
+                    deleteDialog.setMessage("确认屏蔽");
+                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                         // deleteContact(imUser);
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.show();
+
+                    dialog.dismiss();
+                }
+            });
+        }
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -453,7 +488,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+                intent2.putExtra("id", String.valueOf(userId));
+                intent2.putExtra("title", imUser.getNickName());
+                intent2.putExtra("isTalentAlbum",true);
+                startActivity(intent2);
             }
         });
     }

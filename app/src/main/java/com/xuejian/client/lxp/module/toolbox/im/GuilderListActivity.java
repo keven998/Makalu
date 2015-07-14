@@ -52,16 +52,19 @@ import java.util.List;
  * Created by lxp_dqm07 on 2015/4/14.
  */
 public class GuilderListActivity extends PeachBaseActivity {
-    private final int PAGE_SIZE = 16;
+    //private final int PAGE_SIZE = 16;
 
     private PullToRefreshGridView gridView;
     private ExpertAdapter adapter;
     private int EXPERT_DES = 1;
     private int mCurrentPage = 0;
+    private int PAGE_SIZE = 15;
+    private String countryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        countryId=getIntent().getStringExtra("countryId");
         setContentView(R.layout.activity_expert);
 
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
@@ -116,8 +119,9 @@ public class GuilderListActivity extends PeachBaseActivity {
     }
 
     public void getExpertData(final int page, final int pageSize) {
+        String[] countryIds={countryId};
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.searchExpertContact("expert", "roles", page, pageSize, new HttpCallBack<String>() {
+        UserApi.getExpertById(countryIds, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();

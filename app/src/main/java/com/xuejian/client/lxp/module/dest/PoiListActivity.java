@@ -17,8 +17,11 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.PoiGuideBean;
+import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.account.StrategyManager;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -28,6 +31,8 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.PoiAdapter;
 import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +66,14 @@ public class PoiListActivity extends PeachBaseActivity {
     private boolean canAdd;
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
+    private ArrayList<PoiDetailBean> originAddList=new ArrayList<PoiDetailBean>();
+    private StrategyBean strategy;
     private int curPage = 0;
     private LocBean curLoc;
     private String mKeyWord;
     private boolean isFromCityDetail;
     private String value;
+
 
 
     @Override
@@ -97,8 +105,16 @@ public class PoiListActivity extends PeachBaseActivity {
     private void initData() {
         type = getIntent().getStringExtra("type");
         canAdd = getIntent().getBooleanExtra("canAdd", false);
-        locList = getIntent().getParcelableArrayListExtra("locList");
-        hasAddList = getIntent().getParcelableArrayListExtra("poiList");
+        strategy = getIntent().getParcelableExtra("strategy");
+
+        locList = strategy.localities;
+        if(type.equals(TravelApi.PeachType.SHOPPING)){
+            hasAddList = strategy.shopping;
+        }else if(type.equals(TravelApi.PeachType.RESTAURANTS)){
+            hasAddList = strategy.restaurant;
+        }
+
+        originAddList.addAll(hasAddList);
         isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail",false);
         value = getIntent().getStringExtra("value");
 
@@ -111,10 +127,14 @@ public class PoiListActivity extends PeachBaseActivity {
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putParcelableArrayListExtra("poiList", hasAddList);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    if(checkAddDiff()){
+                        savePoiStrategy();
+                    }else {
+                        Intent intent = new Intent();
+                        intent.putParcelableArrayListExtra("poiList", hasAddList);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 }
             });
         } else {
@@ -214,10 +234,56 @@ public class PoiListActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("poiList", hasAddList);
-        setResult(RESULT_OK, intent);
-        finish();
+        if(checkAddDiff()){
+            savePoiStrategy();
+        }else {
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra("poiList", hasAddList);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    private void savePoiStrategy(){
+        final JSONObject jsonObject = new JSONObject();
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, PoiListActivity.this, strategy);
+        StrategyManager.putRestaurantJson(PoiListActivity.this, jsonObject, strategy);
+        StrategyManager.putShoppingJson(PoiListActivity.this, jsonObject ,strategy);
+
+        DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
+        TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson<ModifyResult> saveResult = CommonJson.fromJson(result.toString(), ModifyResult.class);
+                if (saveResult.code == 0) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    Intent intent = new Intent();
+                    intent.putParcelableArrayListExtra("poiList", hasAddList);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
+        });
+    }
+
+    private boolean checkAddDiff(){
+        boolean flag=false;
+        if(originAddList.size()==hasAddList.size()){
+            for(int i=0;i<originAddList.size();i++){
+                if(!originAddList.get(i).id.equals(hasAddList.get(i).id)){
+                    flag=true;
+                }
+            }
+            return flag;
+        }else{
+            flag=true;
+            return flag;
+        }
     }
 
     private void initView() {
