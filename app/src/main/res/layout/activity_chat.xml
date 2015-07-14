@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp"
                         android:layout_marginLeft="50dp"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginRight="80dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/editor_with_border"
                         android:gravity="bottom">
@@ -105,35 +105,32 @@
                             android:textColor="@color/color_text_i"
                             android:textSize="14sp" />
 
-
-                        <ImageView
-                            android:id="@+id/iv_emoticons_normal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_alignBottom="@+id/et_sendmessage"
-                            android:layout_alignParentRight="true"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="10dp"
-                            android:scaleType="center"
-                            android:src="@drawable/selector_ic_chat_expression" />
-
-                        <ImageView
-                            android:id="@+id/iv_emoticons_checked"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_alignBottom="@+id/et_sendmessage"
-                            android:layout_alignParentRight="true"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="10dp"
-                            android:scaleType="center"
-                            android:src="@drawable/selector_ic_chat_keyboard"
-                            android:visibility="gone" />
-
                     </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_emoticons_normal"
+                        android:layout_width="34dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="right"
+                        android:paddingLeft="2dp"
+                        android:layout_marginRight="40dp"
+                        android:scaleType="center"
+                        android:src="@drawable/selector_ic_chat_expression" />
+
+                    <ImageView
+                        android:id="@+id/iv_emoticons_checked"
+                        android:layout_width="34dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="right"
+                        android:paddingLeft="2dp"
+                        android:layout_marginRight="40dp"
+                        android:scaleType="center"
+                        android:src="@drawable/selector_ic_chat_keyboard"
+                        android:visibility="gone" />
 
                     <ImageButton
                         android:id="@+id/btn_more"
-                        android:layout_width="50dp"
+                        android:layout_width="46dp"
                         android:layout_height="48dp"
                         android:layout_gravity="right"
                         android:background="@null"
@@ -143,15 +140,14 @@
 
                     <Button
                         android:id="@+id/btn_send"
-                        android:layout_width="40dp"
-                        android:layout_height="28dp"
+                        android:layout_width="38dp"
+                        android:layout_height="32dp"
                         android:layout_gravity="right|bottom"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginRight="3dp"
                         android:background="@drawable/chat_send_btn_selector"
                         android:onClick="onClick"
-                        android:text="@string/button_send"
+                        android:text="发送"
                         android:textColor="@color/base_color_white"
                         android:textSize="12sp"
                         android:visibility="gone" />
