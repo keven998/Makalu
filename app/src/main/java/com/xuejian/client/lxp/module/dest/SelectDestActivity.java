@@ -141,6 +141,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                citysLl.setVisibility(View.VISIBLE);
                 if(allAddCityList.size()>0){
                     for(int i=0;i<allAddCityList.size();i++){
                         allSelectedPics.add("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960");

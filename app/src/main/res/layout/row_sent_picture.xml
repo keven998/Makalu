@@ -25,6 +25,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
+            android:padding="1dp"
             android:scaleType="fitCenter"
             android:src="@drawable/messages_bg_useravatar" />
 

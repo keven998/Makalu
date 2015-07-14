@@ -264,7 +264,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:scaleType="center"
-            android:src="@drawable/add_contact"
+            android:src="@drawable/selector_ic_create_plan"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"/>
 
@@ -273,7 +273,7 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/iv_create_plan"
             android:scaleType="center"
-            android:src="@drawable/ic_talk_normal"
+            android:src="@drawable/selector_ic_talk_share"
             android:paddingLeft="24dp"
             android:paddingRight="12dp"/>
 
