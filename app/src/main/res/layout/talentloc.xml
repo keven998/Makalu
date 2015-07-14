@@ -12,9 +12,31 @@
         android:divider="@null"
         android:dividerHeight="0dp" />
 
-    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
-        android:id="@+id/talent_loc_title_bar"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height" />
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
+
+        <ImageView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="32dp"
+            android:scaleType="center"
+            android:src="@drawable/selector_ic_nav_back" />
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
 </FrameLayout>

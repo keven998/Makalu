@@ -52,11 +52,12 @@ import java.util.List;
  * Created by lxp_dqm07 on 2015/4/14.
  */
 public class GuilderListActivity extends PeachBaseActivity {
+    private final int PAGE_SIZE = 16;
+
     private PullToRefreshGridView gridView;
     private ExpertAdapter adapter;
     private int EXPERT_DES = 1;
     private int mCurrentPage = 0;
-    private int PAGE_SIZE = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
