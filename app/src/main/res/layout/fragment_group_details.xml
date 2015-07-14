@@ -124,38 +124,37 @@
             android:textColor="@color/color_text_i"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/tv_add_to_group"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/section_2_title"
-            android:gravity="center"
-            android:paddingBottom="3dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="16dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingTop="3dp"
-            android:text="邀请朋友"
-            android:textColor="@color/color_text_ii"
-            android:textSize="13sp" />
+            android:layout_below="@+id/section_2_title"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_del_to_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/tv_add_to_group"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-            android:gravity="center"
-            android:paddingBottom="3dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingTop="3dp"
-            android:text="移除成员"
-            android:textColor="@color/color_text_ii"
-            android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tv_add_to_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="邀请朋友"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_del_to_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="移除成员"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 
