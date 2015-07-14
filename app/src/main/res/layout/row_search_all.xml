@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="65dp"
-        android:background="@drawable/selector_frame_white_card">
+        android:background="@drawable/option_cell_selector">
 
         <ImageView
             android:id="@+id/image_iv"

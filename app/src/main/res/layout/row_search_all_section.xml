@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
+    android:background="@color/base_color_white_trans"
     android:layout_height="wrap_content">
 
     <TextView
@@ -12,16 +13,19 @@
         android:layout_height="wrap_content"
         android:textSize="13sp"
         android:paddingLeft="15dp"
-        android:paddingTop="15dp"
+        android:background="@color/base_color_white_trans"
+        android:clickable="false"
+        android:paddingTop="20dp"
         android:paddingBottom="15dp"
         android:textColor="@color/color_text_i"/>
     <TextView
         android:id="@+id/tv_search_more"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textSize="12sp"
         android:gravity="center_vertical"
         android:drawablePadding="5dp"
+        android:background="@drawable/option_header_title_selector"
         android:layout_gravity="right|center_vertical"
         android:paddingRight="10dp"
         android:paddingTop="5dp"

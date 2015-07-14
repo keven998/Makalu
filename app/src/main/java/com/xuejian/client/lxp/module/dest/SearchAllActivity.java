@@ -12,7 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,7 +50,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
-    Button mBtnSearch;
+    TextView mBtnSearch;
     @InjectView(R.id.search_all_lv)
     ListView mSearchAllLv;
     String toId;
@@ -124,7 +124,20 @@ public class SearchAllActivity extends PeachBaseActivity {
 
         View emptyView = findViewById(R.id.empty_text);
         mSearchAllLv.setEmptyView(emptyView);
+        mSearchAllLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState==SCROLL_STATE_TOUCH_SCROLL){
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
