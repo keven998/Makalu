@@ -3,7 +3,7 @@
 
     <item android:drawable="@drawable/common_icon_navigationback_highlight" android:state_pressed="true"/>
     <item android:drawable="@drawable/common_icon_navigationback_highlight" android:state_focused="true"/>
-    <item android:drawable="@drawable/login_back_defaut"/>
+    <item android:drawable="@drawable/common_icon_navigaiton_back_dark"/>
    
 
 </selector>

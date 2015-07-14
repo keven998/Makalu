@@ -12,10 +12,10 @@
         android:layout_marginTop="@dimen/content_top_margin"
         android:background="@color/app_backgroud"
         android:cacheColorHint="@android:color/transparent"
-        android:listSelector="@android:color/transparent"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
+        android:listSelector="@android:color/transparent"
         android:overScrollMode="never" />
 
     <RelativeLayout
@@ -48,23 +48,23 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:src="@drawable/plan_10_dashboard_add"
             android:background="@null"
-            android:scaleType="center"
+            android:paddingLeft="6dp"
             android:paddingRight="13dp"
-            android:paddingLeft="6dp"/>
+            android:scaleType="center"
+            android:src="@drawable/plan_10_dashboard_add" />
 
         <ImageButton
             android:id="@+id/ivb_content_filter"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/edit_btn"
             android:layout_alignWithParentIfMissing="true"
-            android:src="@drawable/plan_10_dashboard_sift"
+            android:layout_toLeftOf="@id/edit_btn"
             android:background="@null"
-            android:scaleType="center"
+            android:paddingLeft="32dp"
             android:paddingRight="6dp"
-            android:paddingLeft="32dp"/>
+            android:scaleType="center"
+            android:src="@drawable/plan_10_dashboard_sift" />
     </RelativeLayout>
 
 </RelativeLayout>
