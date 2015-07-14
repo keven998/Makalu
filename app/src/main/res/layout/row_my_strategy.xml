@@ -7,8 +7,7 @@
         android:id="@+id/rl_plan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="14dp"
+        android:paddingBottom="10dp"
         android:background="@drawable/selector_plan_item">
 
         <TextView
