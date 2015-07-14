@@ -214,6 +214,7 @@ public class TalkFragment extends PeachBaseFragment {
      * 刷新页面
      */
     public void refresh() {
+        if (!AccountManager.getInstance().isLogin())return;
         // loadConversationsWithRecentChat();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
