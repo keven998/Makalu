@@ -180,15 +180,15 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         }
         if (mIsShowMore) {
             if (typeBean.type.equals("loc")) {
-                searchMore.setText("查看全部城市");
+                searchMore.setText("查看全部城市>");
             } else if (typeBean.type.equals("vs")) {
-                searchMore.setText("查看全部景点");
+                searchMore.setText("查看全部景点>");
             } else if (typeBean.type.equals("hotel")) {
-                searchMore.setText("查看全部酒店");
+                searchMore.setText("查看全部酒店>");
             } else if (typeBean.type.equals("restaurant")) {
-                searchMore.setText("查看全部美食");
+                searchMore.setText("查看全部美食>");
             } else if (typeBean.type.equals("shopping")) {
-                searchMore.setText("查看全部购物");
+                searchMore.setText("查看全部购物>");
             }
             SpannableStringBuilder builder = new SpannableStringBuilder(searchMore.getText().toString());
             ForegroundColorSpan Span = new ForegroundColorSpan(mContext.getResources().getColor(R.color.app_theme_color_highlight));

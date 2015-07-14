@@ -13,9 +13,12 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentLeft="true"
+        android:padding="3dp"
         android:layout_centerVertical="true"
+        android:src="@drawable/ic_home_talklist_default_avatar"
+        android:background="@drawable/messages_bg_useravatar"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_home_talklist_default_avatar" />
+        />
 
     <LinearLayout
         android:id="@+id/top"
