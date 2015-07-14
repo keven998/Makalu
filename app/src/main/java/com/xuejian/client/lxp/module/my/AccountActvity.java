@@ -602,13 +602,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
     public void delThisPic(String picId, final int pic_index) {
-        if (!CommonUtils.isNetWorkConnected(mContext)) {
-            ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
+        if (!CommonUtils.isNetWorkConnected(this)) {
+            ToastUtil.getInstance(this).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        DialogManager.getInstance().showLoadingDialog(this, "请稍后");
         UserApi.delUserAlbumPic(String.valueOf(user.getUserId()), picId, new HttpCallBack<String>() {
-
 
             @Override
             public void doSuccess(String result, String method) {

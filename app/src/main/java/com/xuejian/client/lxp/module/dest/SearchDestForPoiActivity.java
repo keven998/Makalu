@@ -43,8 +43,6 @@ import butterknife.InjectView;
  */
 public class SearchDestForPoiActivity extends PeachBaseActivity {
 
-    @InjectView(R.id.ly_header_bar_title_wrap)
-    TitleHeaderBar mTitleBar;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.search_result_lv)
@@ -65,8 +63,14 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_search_dest_for_poi);
         ButterKnife.inject(this);
-        mTitleBar.getTitleTextView().setText("选择所在城市");
-        mTitleBar.enableBackKey(true);
+
+        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mSearchResultLv.setPullLoadEnabled(false);
         mSearchResultLv.setPullRefreshEnabled(false);
         mSearchResultLv.setScrollLoadEnabled(false);
