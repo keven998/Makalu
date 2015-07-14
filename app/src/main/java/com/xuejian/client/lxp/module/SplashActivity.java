@@ -219,6 +219,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             imLogin(user);
         } else {
             finish();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
@@ -237,6 +238,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
     }

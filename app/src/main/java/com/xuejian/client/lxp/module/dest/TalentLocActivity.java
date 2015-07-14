@@ -31,10 +31,8 @@ import butterknife.InjectView;
  */
 public class TalentLocActivity extends PeachBaseActivity implements AbsListView.OnScrollListener {
 
-    @InjectView(R.id.talent_loc_list)
-    ListView listView;
-    @InjectView(R.id.talent_loc_title_bar)
-    TitleHeaderBar titleHeaderBar;
+    private ListView listView;
+    private TextView titleTextView;
 
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
@@ -45,9 +43,17 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talentloc);
-        ButterKnife.inject(this);
-        titleHeaderBar.getTitleTextView().setText("");
-        titleHeaderBar.enableBackKey(true);
+
+        findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        titleTextView = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleTextView.setText(delta[0]);
+
+        listView = (ListView) findViewById(R.id.talent_loc_list);
         adapter = new TalentLocAdapter(this);
         listView.setAdapter(adapter);
         listView.setOnScrollListener(this);
@@ -87,21 +93,21 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         for (int j = 0; j < headerPos.size(); j++) {
             if (j < headerPos.size() - 1) {
                 if (pos > headerPos.get(j) && pos < headerPos.get(j + 1)) {
-                    if (!titleHeaderBar.getTitleTextView().getText().equals(delta[j])) {
-                        titleHeaderBar.getTitleTextView().setText(delta[j]);
+                    if (!titleTextView.getText().equals(delta[j])) {
+                        titleTextView.setText(delta[j]);
                         if (pos > lastPos) {
-                            titleHeaderBar.getTitleTextView().startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
+                            titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
                         } else {
-                            titleHeaderBar.getTitleTextView().startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_top));
+                            titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_top));
                         }
                         lastPos = pos;
                     }
                 }
             } else {
                 if (pos > headerPos.get(j)) {
-                    if (!titleHeaderBar.getTitleTextView().getText().equals(delta[j])) {
-                        titleHeaderBar.getTitleTextView().setText(delta[j]);
-                        titleHeaderBar.getTitleTextView().startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
+                    if (!titleTextView.getText().equals(delta[j])) {
+                        titleTextView.setText(delta[j]);
+                        titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
                         lastPos = pos;
                     }
                 }
