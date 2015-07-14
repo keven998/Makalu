@@ -55,6 +55,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent ExpertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
+                ExpertIntent.putExtra("countryId","5434d70e10114e684bb1b4ee");
                 startActivity(ExpertIntent);
             }
         });
