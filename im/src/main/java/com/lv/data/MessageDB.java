@@ -435,7 +435,7 @@ public class MessageDB {
     public synchronized void deleteInventMessage(String Id) {
         mdb = getDB();
         mdb.delete(request_msg_table_name, "Id=?", new String[]{Id});
-
+        closeDB();
     }
 
     public List<InventMessage> getInventMessages() {

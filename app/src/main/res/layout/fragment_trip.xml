@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/lxp_search_bg_normal" />
+            android:background="@drawable/selector_lxp_search_bg" />
 
         <ImageView
             android:layout_width="match_parent"

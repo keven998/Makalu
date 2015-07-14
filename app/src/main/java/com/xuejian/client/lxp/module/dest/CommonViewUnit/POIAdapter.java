@@ -57,7 +57,9 @@ public class POIAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         PoiDetailBean poi = mPOIs.get(position);
-        ImageLoader.getInstance().displayImage(poi.images.get(0).url, holder.iv_poi, UILUtils.getDefaultOption());
+        if (poi.images.size()>0){
+            ImageLoader.getInstance().displayImage(poi.images.get(0).url, holder.iv_poi, UILUtils.getDefaultOption());
+        }
         holder.tv_poi_time.setText(String.format("建议游玩 %s", poi.timeCostDesc));
         holder.tv_poi_level.setText(String.valueOf(poi.commentCnt));
         holder.tv_poi_title.setText(poi.zhName);

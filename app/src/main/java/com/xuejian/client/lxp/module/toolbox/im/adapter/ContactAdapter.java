@@ -14,7 +14,6 @@
 package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -35,7 +34,6 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,10 +121,8 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh = new ViewHolder1();
             vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
             vh.nickView = (TextView) convertView.findViewById(R.id.name);
-            vh.talkView = (ImageView) convertView.findViewById(R.id.iv_talk);
             vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
             vh.dividerView = convertView.findViewById(R.id.vw_divider);
-            vh.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
             convertView.setTag(vh);
         } else {
             vh = (ViewHolder1) convertView.getTag();
@@ -157,45 +153,29 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
         //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
-            vh.talkView.setVisibility(View.INVISIBLE);
             vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
-//            if(user.getUnreadMsgCount() > 0){
-//                vh.unreadMsgView.setVisibility(View.VISIBLE);
-//                vh.unreadMsgView.setText(user.getUnreadMsgCount()+"");
-//            }else{
-            vh.unreadMsgView.setVisibility(View.GONE);
-//            }
-//                vh.avatarView.setVisibility(View.GONE);
         } else if (username.equals(Constant.GROUP_USERNAME)) {
             //群聊item
             vh.nickView.setText(user.getNickName());
             vh.avatarView.setImageResource(R.drawable.my_group);
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            vh.talkView.setImageResource(R.drawable.icon_arrow_right);
-            vh.unreadMsgView.setVisibility(View.GONE);
-//                vh.avatarView.setVisibility(View.VISIBLE);
         } else {
-//                vh.avatarView.setVisibility(View.VISIBLE);
-            vh.talkView.setImageResource(R.drawable.ic_begin_talk);
             vh.nickView.setText(user.getNickName());
-//				if(unreadMsgView != null)
-//					unreadMsgView.setVisibility(View.INVISIBLE);
-//                vh.avatarView.setBackgroundResource(R.drawable.default_avatar);
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
-            vh.talkView.setVisibility(View.VISIBLE);
-            vh.talkView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("name", user.getNickName());
-                    intent.putExtra("chatType", "single");
-                    intent.putExtra("friend_id", String.valueOf(user.getUserId()));
-                    intent.setClass(getContext(), ChatActivity.class);
-                    getContext().startActivity(intent);
-                }
-            });
-            vh.unreadMsgView.setVisibility(View.GONE);
+//            vh.talkView.setVisibility(View.VISIBLE);
+//            vh.talkView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent();
+//                    intent.putExtra("name", user.getNickName());
+//                    intent.putExtra("chatType", "single");
+//                    intent.putExtra("friend_id", String.valueOf(user.getUserId()));
+//                    intent.setClass(getContext(), ChatActivity.class);
+//                    getContext().startActivity(intent);
+//                }
+//            });
+//            vh.unreadMsgView.setVisibility(View.GONE);
         }
 //
 //
@@ -339,8 +319,8 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         public ImageView avatarView;
         public View dividerView;
         public TextView nickView;
-        public ImageView talkView;
-        public TextView unreadMsgView;
+ //       public ImageView talkView;
+ //       public TextView unreadMsgView;
     }
 
 }

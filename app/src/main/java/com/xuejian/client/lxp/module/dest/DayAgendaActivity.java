@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.CommonViewUnit.POIAdapter;
 
 import java.util.ArrayList;
@@ -32,13 +33,15 @@ public class DayAgendaActivity extends FragmentActivity {
     private int currentDay;
     private TextView mTitleView;
     private TextView mSubTitleView;
+    private TextView tv_editplan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_agenda_layout);
 
-        findViewById(R.id.tv_edit_schedule).setOnClickListener(new View.OnClickListener() {
+        tv_editplan= (TextView) findViewById(R.id.tv_edit_schedule);
+        tv_editplan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DayAgendaActivity.this, ActivityPlanEditor.class);
@@ -57,6 +60,10 @@ public class DayAgendaActivity extends FragmentActivity {
         mSubTitleView = (TextView) findViewById(R.id.tv_subtitle);
 
         strategy = getIntent().getParcelableExtra("strategy");
+        User user= AccountManager.getInstance().getLoginAccount(this);
+        if (user!=null&&user.getUserId()== strategy.userId){
+            tv_editplan.setVisibility(View.VISIBLE);
+        }
         resizeData(strategy.itinerary);
         currentDay = getIntent().getIntExtra("current_day", 0);
 

@@ -231,7 +231,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(this, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
-
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {
