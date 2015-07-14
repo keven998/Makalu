@@ -177,7 +177,7 @@
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
                 android:singleLine="true"
-                android:text="调整"
+                android:text="调整计划"
                 android:textColor="@color/color_text_ii"
                 android:textSize="16sp" />
 

@@ -40,7 +40,7 @@ public class DayAgendaActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_agenda_layout);
 
-        tv_editplan= (TextView) findViewById(R.id.tv_edit_schedule);
+        tv_editplan = (TextView) findViewById(R.id.tv_edit_schedule);
         tv_editplan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +60,10 @@ public class DayAgendaActivity extends FragmentActivity {
         mSubTitleView = (TextView) findViewById(R.id.tv_subtitle);
 
         strategy = getIntent().getParcelableExtra("strategy");
-        User user= AccountManager.getInstance().getLoginAccount(this);
-        if (user!=null&&user.getUserId()== strategy.userId){
-            tv_editplan.setVisibility(View.VISIBLE);
-        }
+//        User user = AccountManager.getInstance().getLoginAccount(this);
+//        if (user != null && user.getUserId() == strategy.userId) {
+//            tv_editplan.setVisibility(View.VISIBLE);
+//        }
         resizeData(strategy.itinerary);
         currentDay = getIntent().getIntExtra("current_day", 0);
 
