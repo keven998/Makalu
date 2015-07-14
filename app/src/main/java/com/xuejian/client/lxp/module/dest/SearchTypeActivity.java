@@ -124,32 +124,32 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBean.type = "loc";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-            titleTv.setText("全部相关城市");
+            titleTv.setText("全部城市");
         } else if (type.equals("vs")) {
             cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-            titleTv.setText("全部相关景点");
+            titleTv.setText("全部景点");
         } else if (type.equals("hotel")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "hotel";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-            titleTv.setText("全部相关酒店");
+            titleTv.setText("全部酒店");
         } else if (type.equals("restaurant")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "restaurant";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-            titleTv.setText("全部相关美食");
+            titleTv.setText("全部美食");
         } else if (type.equals("shopping")) {
             typeBean = new SearchTypeBean();
             typeBean.type = "shopping";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
-            titleTv.setText("全部相关购物");
+            titleTv.setText("全部购物");
         }
         DialogManager.getInstance().showLoadingDialog(this);
         searchSearchTypeData(0);
