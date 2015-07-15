@@ -25,7 +25,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/base_color_white">
+        android:background="@color/base_color_white"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/save_btn"

@@ -545,9 +545,7 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, HisMainPageActivity.class);
-                    User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
-                    intent.putExtra("userId", user.getUserId());
-                    intent.putExtra("userNick", user.getNickName());
+                    intent.putExtra("userId", Long.parseLong(friendId));
                     context.startActivity(intent);
                 }
             });

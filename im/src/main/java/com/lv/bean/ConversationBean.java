@@ -72,7 +72,11 @@ public class ConversationBean {
         this.conversation = conversation;
     }
 
-
+    public ConversationBean(int friendId, int isRead  ,String chatType) {
+        FriendId = friendId;
+        this.isRead = isRead;
+        this.chatType=chatType;
+    }
 
     public ConversationBean(int friendId, long lastChatTime, String HASH, int Last_rev_msgId, int isRead,String conversation,String lastMessage,String chatType,int type,int status,int sendType) {
         LastChatTime = lastChatTime;

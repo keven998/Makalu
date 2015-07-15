@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -43,17 +44,22 @@ public class PoiSaveActivity extends PeachBaseActivity {
     private ExpandableListView eListView;
     private PoiSaveAdapter adapter;
     private StrategyBean strategy;
+    private ArrayList<LocBean> destinations;
     private TitleHeaderBar bar;
     private LinearLayout add_btn;
     private TextView saveTypeName;
     private ArrayList<String> groupIndicator=new ArrayList<String>();
     private ArrayList<ArrayList<PoiDetailBean>> content=new ArrayList<ArrayList<PoiDetailBean>>();
+    private ArrayList<ArrayList<PoiDetailBean>> newContent=new ArrayList<ArrayList<PoiDetailBean>>();
+
+    ArrayList<PoiDetailBean> pubChildTitle = new ArrayList<PoiDetailBean>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strategy = getIntent().getParcelableExtra("strategy");
+        destinations = getIntent().getParcelableArrayListExtra("destinations");
         setContentView(R.layout.poi_save_activity);
         bar = (TitleHeaderBar)findViewById(R.id.poi_save_titleBar);
         saveTypeName = (TextView)findViewById(R.id.save_type_name);
@@ -65,6 +71,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         if(getIntent().getStringExtra("title").equals("购物")){
             resizeData(strategy.shopping);
+            newSizeData();
             add_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -87,6 +94,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         }else {
             resizeData(strategy.restaurant);
+            newSizeData();
             add_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -108,12 +116,13 @@ public class PoiSaveActivity extends PeachBaseActivity {
             });
         }
         eListView = (ExpandableListView) findViewById(R.id.poi_save_list);
-        int width = getWindowManager().getDefaultDisplay().getWidth();
+        eListView.setGroupIndicator(null);
+        /*int width = getWindowManager().getDefaultDisplay().getWidth();
         if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             eListView.setIndicatorBounds(width-60, width-20);
         } else {
             eListView.setIndicatorBoundsRelative(width-60, width-20);
-        }
+        }*/
         adapter = new PoiSaveAdapter();
         eListView.setAdapter(adapter);
     }
@@ -125,10 +134,12 @@ public class PoiSaveActivity extends PeachBaseActivity {
             if(requestCode==ADD_SHOPPING_REQUEST_CODE){
                 strategy.shopping = data.getParcelableArrayListExtra("poiList");
                 resizeData(strategy.shopping);
+                newSizeData();
                 adapter.notifyDataSetChanged();
             }else if(requestCode==ADD_REST_REQUEST_CODE){
                 strategy.restaurant = data.getParcelableArrayListExtra("poiList");
                 resizeData(strategy.restaurant);
+                newSizeData();
                 adapter.notifyDataSetChanged();
             }
         }
@@ -160,10 +171,35 @@ public class PoiSaveActivity extends PeachBaseActivity {
         }else {return;}
     }
 
+    private void newSizeData(){
+        for(int i=0;i<destinations.size();i++){
+            if(isInSaveItem(destinations.get(i).zhName)){
+                newContent.add(pubChildTitle);
+            }else{
+                ArrayList<PoiDetailBean> nullEg = new ArrayList<PoiDetailBean>();
+                newContent.add(nullEg);
+            }
+        }
+
+    }
+
+    private boolean isInSaveItem(String value){
+        boolean flag=false;
+        for(int j=0;j<groupIndicator.size();j++){
+            if(value.equals(groupIndicator.get(j))){
+                flag=true;
+                pubChildTitle.clear();
+                pubChildTitle=content.get(j);
+                break;
+            }
+        }
+        return flag;
+    }
+
 
     private class PoiSaveAdapter extends BaseExpandableListAdapter{
 
-        private TextView groupTitle,groupSum;
+        private TextView groupTitle,groupSum,save_btn;
         private ImageView childCellImage;
         private TextView childTitle,childLevel,childTime;
         private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
@@ -180,22 +216,22 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         @Override
         public int getGroupCount() {
-            return groupIndicator.size();
+            return destinations.size();
         }
 
         @Override
         public int getChildrenCount(int i) {
-            return content.get(i).size();
+            return newContent.get(i).size();
         }
 
         @Override
         public Object getGroup(int i) {
-            return groupIndicator.get(i);
+            return destinations.get(i);
         }
 
         @Override
         public Object getChild(int i, int i1) {
-            return content.get(i).get(i1);
+            return newContent.get(i).get(i1);
         }
 
         @Override
@@ -207,7 +243,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
         public long getChildId(int i, int i1) {
             int sum=0;
             for(int j=0;j<i;j++){
-                sum+=content.get(j).size();
+                sum+=newContent.get(j).size();
             }
             return sum+i1;
         }
@@ -224,24 +260,24 @@ public class PoiSaveActivity extends PeachBaseActivity {
             }
             groupTitle = (TextView) view.findViewById(R.id.tv_save_group_palce);
             groupSum = (TextView) view.findViewById(R.id.tv_save_group_num);
+            save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
-
-            groupTitle.setText(groupIndicator.get(i));
-            groupSum.setText(content.get(i).size() + "个收藏");
+            groupTitle.setText(destinations.get(i).zhName);
+            groupSum.setText("("+newContent.get(i).size() + ")");
             return view;
         }
 
         @Override
         public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
             if(view==null){
-                view= View.inflate(mContext,R.layout.poi_save_child_cell,null);
+                view= View.inflate(mContext,R.layout.item_plan_day_detil,null);
             }
-            childCellImage = (ImageView) view.findViewById(R.id.iv_poi_save_img);
-            childTitle = (TextView) view.findViewById(R.id.tv_poi_save_title);
-            childLevel = (TextView) view.findViewById(R.id.tv_poi_save_level);
-            childTime = (TextView) view.findViewById(R.id.tv_poi_save_time);
+            childCellImage = (ImageView) view.findViewById(R.id.iv_poi_img);
+            childTitle = (TextView) view.findViewById(R.id.tv_poi_title);
+            childLevel = (TextView) view.findViewById(R.id.tv_poi_level);
+            childTime = (TextView) view.findViewById(R.id.tv_poi_time);
 
-            value=content.get(i);
+            value=newContent.get(i);
             /*if(pos!=i){
                 value=map1.entrySet().iterator().next().getValue();
                 pos=i;

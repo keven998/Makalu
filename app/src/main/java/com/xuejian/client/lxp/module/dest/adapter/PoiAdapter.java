@@ -115,6 +115,8 @@ public class PoiAdapter extends BaseAdapter {
                     spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
+                }else {
+                    spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 }
             } else {
                 convertView = View.inflate(context, R.layout.item_plan_day_detil, null);
@@ -124,6 +126,8 @@ public class PoiAdapter extends BaseAdapter {
                     poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
                     poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
+                }else {
+                    poiViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 }
             }
         } else {

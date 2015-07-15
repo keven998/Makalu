@@ -106,15 +106,17 @@ public class PoiListActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         strategy = getIntent().getParcelableExtra("strategy");
-
-        locList = strategy.localities;
-        if(type.equals(TravelApi.PeachType.SHOPPING)){
-            hasAddList = strategy.shopping;
-        }else if(type.equals(TravelApi.PeachType.RESTAURANTS)){
-            hasAddList = strategy.restaurant;
+        if (!canAdd){
+            locList=getIntent().getParcelableArrayListExtra("locList");
+        }else {
+            locList = strategy.localities;
+            if(type.equals(TravelApi.PeachType.SHOPPING)){
+                hasAddList = strategy.shopping;
+            }else if(type.equals(TravelApi.PeachType.RESTAURANTS)){
+                hasAddList = strategy.restaurant;
+            }
+            originAddList.addAll(hasAddList);
         }
-
-        originAddList.addAll(hasAddList);
         isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail",false);
         value = getIntent().getStringExtra("value");
 

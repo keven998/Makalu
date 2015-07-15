@@ -138,18 +138,15 @@
                         android:scaleType="center"
                         android:src="@drawable/selector_ic_chat_extra" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_send"
-                        android:layout_width="39dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="right|bottom"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@drawable/chat_send_btn_selector"
+                        android:layout_width="44dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="right"
+                        android:background="@null"
                         android:onClick="onClick"
-                        android:text="发送"
-                        android:textColor="@color/base_color_white"
-                        android:textSize="12sp"
+                        android:scaleType="center"
+                        android:src="@drawable/messages_icon_plus_sent_default"
                         android:visibility="gone" />
                 </FrameLayout>
 
