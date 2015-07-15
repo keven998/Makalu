@@ -47,7 +47,7 @@
                 android:paddingRight="10dp"
                 android:paddingLeft="20dp"
                 android:gravity="center"
-                android:text="删除"
+                android:text="编辑"
                 />
 
         </RelativeLayout>

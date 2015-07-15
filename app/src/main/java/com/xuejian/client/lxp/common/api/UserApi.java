@@ -455,7 +455,7 @@ public class UserApi extends BaseApi {
     }
     /**
      * 添加好友
-     * @param uid
+     * @param requestId
      * @param callback
      * @return
      */
@@ -536,6 +536,7 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request,callback);
     }
+
 
 
     /**
@@ -640,7 +641,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + EXPERT_BY_TRACK);
+        request.setUrl(SystemConfig.DEV_URL + EXPERT_BY_TRACK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();

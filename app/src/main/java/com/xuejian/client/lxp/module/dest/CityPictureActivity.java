@@ -38,16 +38,19 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.LocAlbum;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.CustomLoadingDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageZoomAnimator2;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
+import com.xuejian.client.lxp.module.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +78,7 @@ public class CityPictureActivity extends PeachBaseActivity {
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
     private boolean isUserPics;
+    private boolean isTalentAlbum;
     private ArrayList<ImageBean> userPics= new ArrayList<ImageBean>();
     private boolean isEditStatus=false;
     private File tempImage;
@@ -92,6 +96,7 @@ public class CityPictureActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_city_picture);
         ViewUtils.inject(this);
         isUserPics = getIntent().getBooleanExtra("isUserPics",false);
+        isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum",false);
         TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
         if(isUserPics){
             titleView.setText(getIntent().getStringExtra("user_name"));
@@ -100,8 +105,10 @@ public class CityPictureActivity extends PeachBaseActivity {
                 public void onClick(View view) {
                     if(!isEditStatus){
                         isEditStatus=true;
+                        editPics.setText("完成");
                     }else{
                         isEditStatus=false;
+                        editPics.setText("编辑");
                     }
                     picAdapter.notifyDataSetChanged();
                 }
@@ -126,7 +133,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 //            bean.url="http://img0.bdstatic.com/img/image/shouye/taiwanlvyou1117.jpg";
 //            imageList.add(bean);
 //        }
-        if(isUserPics){
+        if(isUserPics||isTalentAlbum){
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
@@ -145,7 +152,9 @@ public class CityPictureActivity extends PeachBaseActivity {
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
                             ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                            newUserPics.add(new ImageBean());
+                            if(isUserPics) {
+                                newUserPics.add(new ImageBean());
+                            }
                             for(int k=0;k<userPics.size();k++){
                                 newUserPics.add(userPics.get(k));
                             }
@@ -256,7 +265,8 @@ public class CityPictureActivity extends PeachBaseActivity {
 
             if(isUserPics){
                 if(position==0){
-                    cell_pic.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_to_list));
+                    cell_pic.setBackgroundResource(R.drawable.add_pictuer);
+                    //cell_pic.setImageDrawable(getResources().getDrawable(R.drawable.add_pictuer));
                     del_cell_pic.setVisibility(View.GONE);
                 }else{
                     ImageBean itemData = imageBeanList.get(position-1);
@@ -275,7 +285,24 @@ public class CityPictureActivity extends PeachBaseActivity {
             del_cell_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    delThisPic(pic_ids.get(position-1),position-1);
+                    final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("确定删除该图片吗？");
+                    dialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            delThisPic(pic_ids.get(position-1),position-1);
+
+                        }
+                    });
+                    dialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
             });
 

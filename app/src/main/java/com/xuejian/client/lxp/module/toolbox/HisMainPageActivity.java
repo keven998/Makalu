@@ -38,6 +38,7 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -487,7 +488,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+                intent2.putExtra("id", String.valueOf(userId));
+                intent2.putExtra("title", imUser.getNickName());
+                intent2.putExtra("isTalentAlbum",true);
+                startActivity(intent2);
             }
         });
     }

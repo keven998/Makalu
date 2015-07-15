@@ -78,6 +78,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private ArrayList<LocBean> all_print_print;
     private ArrayList<double[]> coords=new ArrayList<double[]>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,23 +160,31 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         }
     }
 
-    private void loadExpertFootPrintMap(ArrayList<LocBean> footPrint){
+    private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint){
         all_locations.removeAllViews();
         layout.removeAllViews();
         for(int k=0;k<footPrint.size();k++){
             View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
             TextView location=(TextView)view.findViewById(R.id.map_places);
             location.setText(footPrint.get(k).zhName);
+            final int pos=k;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mapView.animateCenterZoom(new LatLng(footPrint.get(pos).location.coordinates[1]
+                    ,footPrint.get(pos).location.coordinates[0]),8);
+                }
+            });
             layout.addView(view);
             coords.add(footPrint.get(k).location.coordinates);
         }
         all_locations.addView(layout);
-        setUpExpertFootPrintMap(coords);
+        setUpExpertFootPrintMap(coords,footPrint);
     }
 
 
 
-    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords){
+    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords,final ArrayList<LocBean> prints){
         if(mCoords.size()>0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
             airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
@@ -183,13 +192,14 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 @Override
                 public void onMapInitialized() {
                     for(int k=0;k<mCoords.size();k++){
-                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k+1));
+                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k+1)
+                                .setTitle(prints.get(k).zhName));
                     }
                     mapView.animateCenterZoom(new LatLng(mCoords.get(0)[1], mCoords.get(0)[0]), 2);
                 }
             });
             mapView.initialize(getSupportFragmentManager(),airMapInterface);
-            mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }else{
             refreshNullMap();
         }
@@ -209,6 +219,14 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
                 TextView location=(TextView)view.findViewById(R.id.map_places);
                 location.setText(flag+" "+allBeans.get(0).itinerary.get(i).poi.zhName);
+                final int position=i;
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mapView.animateCenterZoom(new LatLng(allBeans.get(0).itinerary.get(position).poi.location.coordinates[1]
+                                ,allBeans.get(0).itinerary.get(position).poi.location.coordinates[0]),15 );
+                    }
+                });
                 layout.addView(view);
                 coordinates.add(allBeans.get(0).itinerary.get(i).poi.location.coordinates);
                 names.add(allBeans.get(0).itinerary.get(i).poi.zhName);
@@ -283,7 +301,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
             }
         });
         mapView.initialize(getSupportFragmentManager(),airMapInterface);
-        mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+       // mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
