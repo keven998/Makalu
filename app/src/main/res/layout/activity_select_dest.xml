@@ -101,9 +101,10 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="@drawable/plan_country_down"
-        android:visibility="visible">
+        android:visibility="gone">
 
-       <HorizontalScrollView android:id="@+id/scroll_panel"
+       <HorizontalScrollView
+            android:id="@+id/scroll_panel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
@@ -116,13 +117,13 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="75dp"
+                android:layout_marginLeft="5dp"
                 android:paddingRight="10dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_marginBottom="0dp"/>
         </HorizontalScrollView>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/des_pic_preview"
             android:layout_width="54dp"
             android:layout_height="26dp"
@@ -144,7 +145,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            />
+            />-->
 
     </RelativeLayout>
 

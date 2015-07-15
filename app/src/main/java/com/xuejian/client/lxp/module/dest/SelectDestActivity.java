@@ -46,7 +46,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     //    private RadioGroup inOutRg;
     private int requestCode;
-   // private LinearLayout citysLl;
+    //private LinearLayout citysLl;
     private RelativeLayout mBottomPanel;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
@@ -55,13 +55,12 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private ArrayList<LocBean> hasSelectLoc;
     private String guideId;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
-  //  private HorizontalScrollView mScrollPanel;
+    //private HorizontalScrollView mScrollPanel;
     private TextView next;
-    private TextView preview;
-    private TextView selectNum;
     private ArrayList<String> allSelectedPics = new ArrayList<String>();
     HorizontalScrollView mScrollPanel;
     LinearLayout citysLl;
+
     @Override
     public void onDestAdded(final LocBean locBean,boolean isEdit,String type) {
         MobclickAgent.onEvent(mContext,"event_select_city");
@@ -70,33 +69,32 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             return;
         }
         View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
-         citysLl.addView(cityView);
+        citysLl.addView(cityView);
         allAddCityList.add(locBean);
-        if(allAddCityList.size()>0) {
-            selectNum.setText("已选：" + allAddCityList.size());
-        }
         TextView cityNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
         cityNameTv.setText(locBean.zhName);
-        cityNameTv.setOnClickListener(new View.OnClickListener() {
+        /*cityNameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int index = allAddCityList.indexOf(locBean);
-             //   citysLl.removeViewAt(index);
+                citysLl.removeViewAt(index);
                 allAddCityList.remove(locBean);
                 if (allAddCityList.size() == 0) {
-                    //mBottomPanel.setVisibility(View.GONE);
+                    mBottomPanel.setVisibility(View.GONE);
                     next.setVisibility(View.GONE);
                 }
                 for(OnDestActionListener onDestActionListener:mOnDestActionListeners){
                     onDestActionListener.onDestRemoved(locBean,null);
                 }
+                autoScrollPanel();
             }
-        });
+        });*/
 
         if (allAddCityList.size() > 0) {
-            //mBottomPanel.setVisibility(View.VISIBLE);
+            mBottomPanel.setVisibility(View.VISIBLE);
             next.setVisibility(View.VISIBLE);
         }
+        autoScrollPanel();
     }
 
     @Override
@@ -105,22 +103,20 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
          citysLl.removeViewAt(index);
         allAddCityList.remove(locBean);
         if (allAddCityList.size() == 0) {
-           // mBottomPanel.setVisibility(View.GONE);
+            mBottomPanel.setVisibility(View.GONE);
             next.setVisibility(View.GONE);
-            selectNum.setText("");
-        }else{
-            selectNum.setText("已选："+allAddCityList.size());
         }
+        autoScrollPanel();
     }
 
-   /* private void autoScrollPanel() {
+    private void autoScrollPanel() {
         mScrollPanel.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mScrollPanel.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
             }
         }, 100);
-    }*/
+    }
 
     @Override
     public void finish() {
@@ -133,25 +129,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         View rootView = View.inflate(mContext, R.layout.activity_select_dest, null);
         setContentView(rootView);
         initTitleBar();
-       citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
+        citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (RelativeLayout) rootView.findViewById(R.id.bottom_panel);
-        preview = (TextView) rootView.findViewById(R.id.des_pic_preview);
-        selectNum = (TextView) rootView.findViewById(R.id.des_selected_num);
-        preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                citysLl.setVisibility(View.VISIBLE);
-                if(allAddCityList.size()>0){
-                    for(int i=0;i<allAddCityList.size();i++){
-                        allSelectedPics.add("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960");
-                    }
-                    showSelectedPics(allSelectedPics);
-                }else{
-                    ToastUtil.getInstance(SelectDestActivity.this).showToast("您还没有选择目的地~");
-                }
-            }
-        });
 
         next = (TextView) rootView.findViewById(R.id.tv_start);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
@@ -271,10 +251,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 finish();
             }
         });
-    }
-
-    private void showSelectedPics(ArrayList<String> pics){
-        IntentUtils.intentToPicGallery2(SelectDestActivity.this, pics, 0);
     }
 
     private void initData() {

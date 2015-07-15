@@ -74,10 +74,16 @@ public class MoreDialog extends Dialog {
                 tv4.setText(names[1]);
                 break;
 
-            case 3:more_tv1.setVisibility(View.GONE);
-                tv2.setText(names[0]);
+            case 3:more_tv2.setVisibility(View.GONE);
+                tv1.setText(names[0]);
                 tv3.setText(names[1]);
                 tv4.setText(names[2]);
+                break;
+
+            case 13:more_tv4.setVisibility(View.GONE);
+                tv1.setText(names[0]);
+                tv2.setText(names[1]);
+                tv3.setText(names[2]);
                 break;
 
             case 4:

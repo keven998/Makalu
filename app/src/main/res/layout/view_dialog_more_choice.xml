@@ -1,10 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_marginLeft="24dp"
-    android:layout_marginRight="24dp"
+    android:layout_width="270dp"
     android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
     android:layout_centerInParent="true"
-    android:background="@color/base_color_white_trans"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -12,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/base_color_white_trans"
+        android:layout_marginBottom="1dp"
         >
 
     <TextView
@@ -36,11 +36,6 @@
         android:paddingBottom="10dp"
         android:textColor="@color/base_font_color"/>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.8dp"
-        android:background="#DBDBDB" />
-
 
     </LinearLayout>
 
@@ -48,27 +43,22 @@
     <LinearLayout
         android:id="@+id/more_tv1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:orientation="vertical"
+        android:layout_marginBottom="1dp"
         >
 
     <TextView
         android:id="@+id/dia_tv1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/btn_blue_normal"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:textColor="@color/dialog_press_text_color"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="@drawable/option_cell_selector"
+        android:background="@drawable/chat_add_top"
         android:gravity="center"
         />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.8dp"
-        android:layout_marginRight="1dp"
-        android:background="#DBDBDB" />
 
 
     </LinearLayout>
@@ -77,27 +67,22 @@
     <LinearLayout
         android:id="@+id/more_tv2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:orientation="vertical"
+        android:layout_marginBottom="1dp"
         >
 
     <TextView
         android:id="@+id/dia_tv2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/btn_blue_normal"
-        android:background="@drawable/option_cell_selector"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:textColor="@color/dialog_press_text_color"
+        android:background="@drawable/chat_add_middle_copy"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center"
         />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.8dp"
-        android:layout_marginRight="1dp"
-        android:background="#DBDBDB" />
 
 
     </LinearLayout>
@@ -106,28 +91,23 @@
     <LinearLayout
         android:id="@+id/more_tv3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:orientation="vertical"
+        android:layout_marginBottom="1dp"
         >
 
     <TextView
         android:id="@+id/dia_tv3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/btn_blue_normal"
-        android:background="@drawable/option_cell_selector"
+        android:textSize="20sp"
+        android:textColor="@color/dialog_press_text_color"
+        android:background="@drawable/chat_add_middle"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center"
         />
 
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.8dp"
-            android:layout_marginRight="1dp"
-            android:background="#DBDBDB" />
 
     </LinearLayout>
 
@@ -135,20 +115,20 @@
     <LinearLayout
         android:id="@+id/more_tv4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="9dp"
         android:orientation="vertical"
         >
 
         <TextView
             android:id="@+id/dia_tv4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/btn_blue_normal"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/dialog_press_text_color"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="@drawable/option_cell_selector"
+            android:background="@drawable/chat_add_down"
             android:gravity="center"
             />
 

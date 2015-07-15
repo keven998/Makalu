@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
@@ -64,6 +66,8 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private Map<LatLng,AirMapMarker> markers;
+    private TitleHeaderBar titleHeaderBar;
+    private String printInfo;
 
     @Override
     public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
@@ -211,8 +215,16 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        printInfo=getIntent().getStringExtra("printInfo");
         View rootView = View.inflate(mContext, R.layout.activity_my_footprinter, null);
         setContentView(rootView);
+        titleHeaderBar=(TitleHeaderBar)rootView.findViewById(R.id.my_footprinter_title);
+        titleHeaderBar.getLeftTextView().setText("取消");
+        titleHeaderBar.setLeftDrawableToNull();
+        titleHeaderBar.getRightTextView().setText("确定");
+        String html=printInfo+"\\n足迹";
+        titleHeaderBar.getTitleTextView().setText(html);
+
         mapView = (AirMapView) rootView.findViewById(R.id.my_footprinter_map);
         hasSelectLoc = getIntent().getParcelableArrayListExtra("myfootprint");
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.my_footprinter_in_out_indicator);

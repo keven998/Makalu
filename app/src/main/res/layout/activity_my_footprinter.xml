@@ -9,10 +9,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+        <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+            android:id="@+id/my_footprinter_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_bar_height">
+
+        </com.xuejian.client.lxp.common.widget.TitleHeaderBar>
+
+
         <com.airbnb.android.airmapview.AirMapView
             android:id="@+id/my_footprinter_map"
             android:layout_width="match_parent"
-            android:layout_height="195dp" />
+            android:layout_height="195dp"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -42,7 +52,8 @@
         android:layout_height="@dimen/title_bar_height"
         android:drawableLeft="@drawable/selector_ic_nav_back"
         android:paddingLeft="10dp"
-        android:paddingRight="30dp" />
+        android:paddingRight="30dp"
+        android:visibility="gone"/>
 
 
 </FrameLayout>
