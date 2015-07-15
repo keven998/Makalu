@@ -138,7 +138,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (RelativeLayout) rootView.findViewById(R.id.bottom_panel);
 
-        next = (TextView) rootView.findViewById(R.id.tv_start);
+        next = (TextView) rootView.findViewById(R.id.tv_confirm);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
         next.setOnClickListener(new View.OnClickListener() {
@@ -190,10 +190,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         });
         indicatorViewPager = new IndicatorViewPager(inOutIndicator, mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
-       /* ColorBar colorBar = new ColorBar(mContext, getResources().getColor(R.color.home_title_color), LocalDisplay.dp2px(32));
-        colorBar.setWidth(LocalDisplay.dp2px(98));
-        indicatorViewPager.setIndicatorScrollBar(colorBar);*/
-//        indicatorViewPager.setIndicatorScrollBar(new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), 5));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
         mSelectDestVp.setOffscreenPageLimit(2);
@@ -219,7 +215,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             }
 
         }
-//        initData();
     }
 
     @Override
