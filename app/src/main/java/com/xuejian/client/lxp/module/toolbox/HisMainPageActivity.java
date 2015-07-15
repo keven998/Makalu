@@ -57,7 +57,7 @@ import java.util.List;
  */
 public class HisMainPageActivity extends PeachBaseActivity implements View.OnClickListener {
 
-    private int userId;
+    private long userId;
     private ArrayList<String> all_pics = new ArrayList<String>();
     User me;
     private User imUser;
@@ -68,7 +68,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
-        userId = getIntent().getExtras().getInt("userId");
+        userId = getIntent().getLongExtra("userId",0);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         imUser = UserDBManager.getInstance().getContactByUserId(userId);
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
@@ -77,10 +77,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
-
+        isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
         View handleView = findViewById(R.id.tv_handle_action);
         if (me != null) {
-            if (userId != 10000 && UserDBManager.getInstance().isMyFriend((long) userId)) {
+            if (userId != 10000 && isMyFriend) {
                 handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -107,7 +107,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
 
         tv_send_action = (TextView) findViewById(R.id.tv_send_action);
-        isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
+
         if (isMyFriend) {
             tv_send_action.setText("备注");
         }
@@ -200,7 +200,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
     }
 
-    public void initData(int id) {
+    public void initData(long id) {
         getUserInfo(id);
     }
 
@@ -438,7 +438,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         return age;
     }
 
-    public void getUserInfo(int userid) {
+    public void getUserInfo(long userid) {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override

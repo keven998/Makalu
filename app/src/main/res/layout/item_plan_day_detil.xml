@@ -37,6 +37,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/selecter_theme_btn_radius_4"
         android:text="收藏"
+        android:visibility="gone"
         android:textColor="@color/base_color_white"
         android:textSize="13sp"/>
     <TextView

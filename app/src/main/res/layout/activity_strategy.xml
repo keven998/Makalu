@@ -95,7 +95,7 @@
                     android:paddingLeft="32dp"
                     android:paddingRight="4dp"
                     android:scaleType="center"
-                    android:src="@drawable/plan_02_dashboard_map" />
+                    android:src="@drawable/selector_ic_map_plan" />
 
                 <TextView
                     android:id="@+id/tv_copy_guide"

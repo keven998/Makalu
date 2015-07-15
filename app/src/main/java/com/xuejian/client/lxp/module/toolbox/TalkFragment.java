@@ -58,7 +58,7 @@ public class TalkFragment extends PeachBaseFragment {
     private ChatAllHistoryAdapter adapter;
     private boolean hidden;
     private List<ConversationBean> conversations = new ArrayList<>();
-
+    private List<ConversationBean> tempConversations = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_talk, null);
@@ -224,9 +224,22 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     public void loadConversation() {
+        List<ConversationBean>del=new ArrayList<>();
         conversations.clear();
-        conversations.addAll(IMClient.getInstance().getConversationList());
-        sortConversationByLastChatTime(conversations);
+        tempConversations.clear();
+        tempConversations.addAll(IMClient.getInstance().getConversationList());
+        for (ConversationBean bean:tempConversations){
+            if (bean.getFriendId()==10000){
+                conversations.add(0,bean);
+                del.add(bean);
+            }
+        }
+        tempConversations.removeAll(del);
+        sortConversationByLastChatTime(tempConversations);
+        if (conversations.size()==0){
+            conversations.add(0,new ConversationBean(10000,0,"single"));
+        }
+        conversations.addAll(tempConversations);
         refresh();
     }
 

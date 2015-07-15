@@ -31,7 +31,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.baidu.mapapi.map.Text;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -1095,18 +1094,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         return age;
     }
     public DatePickerDialog makeDatePicker(DatePickerDialog.OnDateSetListener listener, int y,int m,int day) {
-//        Calendar c;
-//        if (cal == null) {
-//            c = Calendar.getInstance();
-//        } else {
-//            c = cal;
-//        }
-//        int year = c.get(Calendar.YEAR);
-//        int month = c.get(Calendar.MONTH);
-//        int day = c.get(Calendar.DAY_OF_MONTH);
-//        int year = y;
-//        int month = m;
-//        int day =day;
         DatePickerDialog newFragment = new DatePickerDialog(this, listener, y, m, day);
 
         // removes the original topbar:

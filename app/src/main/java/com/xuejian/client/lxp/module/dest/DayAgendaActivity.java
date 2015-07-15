@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
-import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.CommonViewUnit.POIAdapter;
 
 import java.util.ArrayList;
@@ -72,7 +70,12 @@ public class DayAgendaActivity extends FragmentActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                PoiDetailBean bean=routeDayMap.get(currentDay).get(position);
+                Intent intent=new Intent();
+                intent.putExtra("id",bean.id);
+                intent.putExtra("type",bean.type);
+                intent.setClass(DayAgendaActivity.this,PoiDetailActivity.class);
+                startActivity(intent);
             }
         });
 
