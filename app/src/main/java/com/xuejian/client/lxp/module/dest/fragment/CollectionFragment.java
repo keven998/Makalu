@@ -16,9 +16,12 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.module.dest.PoiSaveActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by yibiao.qin on 2015/7/4.
@@ -27,6 +30,7 @@ public class CollectionFragment extends Fragment{
 
     private ListView mListView;
     private StrategyBean strategy;
+    private ArrayList<LocBean> destinations;
     private int FOR_FOOD_COLLECTION=201;
     private int FOR_SHOP_COLLECTION=202;
     private StrategySaveAdapter adapter;
@@ -35,6 +39,7 @@ public class CollectionFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strategy = getStrategy();
+        destinations = getDestinations();
     }
 
     @Nullable
@@ -50,11 +55,13 @@ public class CollectionFragment extends Fragment{
                 if(i==0){
                     Intent foodIntent=new Intent(getActivity(), PoiSaveActivity.class);
                     foodIntent.putExtra("title","美食");
+                    foodIntent.putParcelableArrayListExtra("destinations",destinations);
                     foodIntent.putExtra("strategy",strategy);
                     getActivity().startActivityForResult(foodIntent, FOR_FOOD_COLLECTION);
                 }else if(i==1){
                     Intent shopIntent=new Intent(getActivity(), PoiSaveActivity.class);
                     shopIntent.putExtra("title","购物");
+                    shopIntent.putParcelableArrayListExtra("destinations",destinations);
                     shopIntent.putExtra("strategy",strategy);
                     getActivity().startActivityForResult(shopIntent, FOR_SHOP_COLLECTION);
                 }
@@ -79,6 +86,8 @@ public class CollectionFragment extends Fragment{
     private StrategyBean getStrategy() {
         return ((StrategyActivity) getActivity()).getStrategy();
     }
+
+    private ArrayList<LocBean> getDestinations() {return ((StrategyActivity)getActivity()).getDestinations();}
 
     private class StrategySaveAdapter extends BaseAdapter{
 

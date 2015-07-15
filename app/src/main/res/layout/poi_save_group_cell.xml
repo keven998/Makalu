@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        />
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/base_color_white"
-    android:layout_height="68dp"
-    android:minHeight="68dp">
+    android:layout_height="44dp"
+    android:minHeight="44dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_theme_color"
+        android:layout_alignParentTop="true"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_save_group_palce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textColor="@color/color_text_i"
-            android:layout_gravity="center_horizontal"
-            android:text="北京"
+            android:layout_gravity="center_vertical"
             />
 
         <TextView
@@ -28,24 +45,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
             android:textColor="@color/color_text_i"
-            android:text="5个收藏"
             />
 
     </LinearLayout>
 
 
-    <ImageView
-        android:id="@+id/iv_group_arrow"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
-        android:src="@drawable/collect_bar_open"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="19dp"
-        android:visibility="gone"
-        />
+   <TextView
+       android:id="@+id/poi_save_btn"
+       android:layout_width="54dp"
+       android:layout_height="26dp"
+       android:background="@drawable/save_type_border"
+       android:layout_alignParentRight="true"
+       android:layout_marginRight="20dp"
+       android:layout_marginTop="8dp"
+       android:textSize="12sp"
+       android:gravity="center"
+       android:textColor="@color/color_text_iii"
+       android:text="收藏"
+       />
 
 
     <View
@@ -58,4 +78,5 @@
 
 
 
-</RelativeLayout>
+   </RelativeLayout>
+</LinearLayout>
