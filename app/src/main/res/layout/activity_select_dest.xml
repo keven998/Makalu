@@ -4,61 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <RelativeLayout
-        android:id="@+id/title_bar"
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/bg_navigation_bar">
 
-        <RelativeLayout
-            android:id="@+id/ly_title_bar_left"
+        <TextView
+            android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true">
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp"
+            android:text="取消"
+            android:textColor="@color/selector_white_text_color" />
 
-            <TextView
-                android:id="@+id/tv_title_bar_left"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:paddingRight="20dp"
-                android:paddingLeft="11dp"
-                android:singleLine="true"
-                android:duplicateParentState="true"
-                android:gravity="center"
-                android:textColor="@color/base_color_white"
-                android:textSize="14sp"
-                android:text="取消"/>
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_titlebar"
+            android:text="选择目的地"
+            android:textSize="18sp" />
 
-        </RelativeLayout>
-
-
-
-        <RelativeLayout
-            android:id="@+id/ly_title_bar_right"
+        <TextView
+            android:id="@+id/tv_confirm"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true">
-
-            <TextView
-                android:id="@+id/tv_start"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="6dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="6dp"
-                android:duplicateParentState="true"
-                android:gravity="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="5dp"
-                android:singleLine="true"
-                android:textColor="@color/base_color_white"
-                android:textSize="14sp"
-                android:text="确定"
-                android:visibility="gone"/>
-
-        </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="12dp"
+            android:text="下一步"
+            android:textColor="@color/selector_white_text_color" />
 
     </RelativeLayout>
 
@@ -67,8 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_below="@+id/title_bar"
-        android:background="@drawable/plan_country_top"
-        >
+        android:background="@drawable/plan_country_top">
 
         <RelativeLayout
             android:id="@+id/ly_title_bar_center"
@@ -82,8 +64,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="29dp"
                 android:layout_marginBottom="4dp"
-                android:background="@drawable/in_out_indicator"
-                />
+                android:background="@drawable/in_out_indicator" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -92,18 +73,19 @@
         android:id="@+id/select_dest_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/des_selector"/>
+        android:layout_below="@id/des_selector" />
 
     <RelativeLayout
         android:id="@+id/bottom_panel"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="@drawable/plan_country_down"
+        android:orientation="horizontal"
         android:visibility="visible">
 
-       <HorizontalScrollView android:id="@+id/scroll_panel"
+        <HorizontalScrollView
+            android:id="@+id/scroll_panel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
@@ -114,37 +96,35 @@
                 android:id="@+id/ll_citys"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginLeft="75dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
                 android:paddingRight="10dp"
-                android:visibility="invisible"
-                android:layout_marginBottom="0dp"/>
+                android:visibility="invisible" />
         </HorizontalScrollView>
 
         <TextView
             android:id="@+id/des_pic_preview"
             android:layout_width="54dp"
             android:layout_height="26dp"
-            android:textColor="@color/color_text_iii"
-            android:textSize="12sp"
-            android:text="预览"
             android:layout_centerVertical="true"
-            android:gravity="center"
             android:layout_marginLeft="18dp"
             android:background="@drawable/gray_line_round_bg"
-            />
+            android:gravity="center"
+            android:text="预览"
+            android:textColor="@color/color_text_iii"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/des_selected_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/color_text_iii"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            />
+            android:textColor="@color/color_text_iii"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
