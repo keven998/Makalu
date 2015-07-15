@@ -185,6 +185,8 @@ public class StrategyActivity extends PeachBaseActivity {
         return strategy;
     }
 
+    public ArrayList<LocBean> getDestinations(){ return destinations;}
+
     private void initData(Bundle savedInstanceState) {
         id = getIntent().getStringExtra("id");
         if (id == null) {
