@@ -4,10 +4,13 @@ package com.xuejian.client.lxp.module.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -118,6 +121,18 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_FIND_PASSWD);
             }
         });
+        pwdEt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+
+            @Override
+
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO)
+                {
+                    signIn();
+                }
+                return false;
+            }
+    });
     }
 
     @Override

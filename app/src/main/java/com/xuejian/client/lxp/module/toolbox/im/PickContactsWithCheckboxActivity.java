@@ -177,8 +177,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
     private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-//        titleHeaderBar.setRightViewImageRes(R.drawable.add);
-        titleHeaderBar.getLeftTextView().setText(" 取消");
+        titleHeaderBar.getLeftTextView().setText("取消");
         titleHeaderBar.getLeftTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
         titleHeaderBar.getRightTextView().setText("确定");
@@ -195,7 +194,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(0, R.anim.push_bottom_out);
+                overridePendingTransition(R.anim.slide_stay, R.anim.push_bottom_out);
             }
         });
     }
@@ -211,7 +210,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             return;
         }
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
-
             if (toBeAddContacts.size() == 1) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -242,8 +240,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 ChatName.append("...");
             }
             if (toBeAddContacts.size() > 1) {
-              //  List<Long> ids = new ArrayList<>();
-             final JSONArray ids=new JSONArray();
+                final JSONArray ids = new JSONArray();
                 for (User user : toBeAddContacts) {
                     ids.put(user.getUserId());
                 }
@@ -260,20 +257,20 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             jsonObject.remove("groupId");
                             jsonObject.remove("name");
                             jsonObject.remove("avatar");
-                            jsonObject.put("GroupMember",ids);
-                           // long creator = jsonObject.getLong("creator");
+                            jsonObject.put("GroupMember", ids);
+                            // long creator = jsonObject.getLong("creator");
                             IMClient.getInstance().addGroup2Conversation(groupId, null);
-                            UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8,avatar));
+                            UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8, avatar));
                             if (Config.isDebug) {
                                 Log.i(Config.TAG, "群组更新成功");
                             }
                             DialogManager.getInstance().dissMissLoadingDialog();
                             Intent intent = new Intent();
-                                intent.putExtra("chatType", "group");
-                                intent.putExtra("toId", Long.parseLong(groupId));
-                                setResult(RESULT_OK, intent);
-                                finishWithNoAnim();
-                        }catch (Exception e){
+                            intent.putExtra("chatType", "group");
+                            intent.putExtra("toId", Long.parseLong(groupId));
+                            setResult(RESULT_OK, intent);
+                            finishWithNoAnim();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -281,36 +278,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                                ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+                        ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
 
                     }
                 });
-//                GroupManager.getGroupManager().createGroup(ChatName.toString(), null, true, ids, new CreateSuccessListener() {
-//                    @Override
-//                    public void OnSuccess(final String groupId, String conversation) {
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Intent intent = new Intent();
-//                                intent.putExtra("chatType", "group");
-//                                intent.putExtra("toId", Long.parseLong(groupId));
-//                                setResult(RESULT_OK, intent);
-//                                finishWithNoAnim();
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void OnFailed() {
-//                        runOnUiThread(new Runnable() {
-//                            public void run() {
-//                                DialogManager.getInstance().dissMissLoadingDialog();
-//                                ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
-//                            }
-//                        });
-//                    }
-//                });
-
             }
         }
         //增加成员
@@ -327,7 +298,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                             Intent intent = new Intent();
                             intent.putExtra("chatType", "group");
                             intent.putExtra("toId", groupId + "");
-                         //   intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
+                            //   intent.putExtra("Id", toBeAddContacts.get(0).getUserId());
                             setResult(RESULT_OK, intent);
                             finishWithNoAnim();
                         }
@@ -352,7 +323,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             error.printStackTrace();
-                            System.out.println("error "+msg+" method "+method);
+                            System.out.println("error " + msg + " method " + method);
                         }
                     });
 //                    GroupManager.getGroupManager().addMembers(groupId, ids, true, new CallBack() {
@@ -388,7 +359,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 //
 //                    }
 //                });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (toBeAddContacts.size() == 1) {
@@ -415,7 +386,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             if (toBeAddContacts.size() > 3) {
                 ChatName.append("...");
             }
-           final JSONArray ids=new JSONArray();
+            final JSONArray ids = new JSONArray();
             for (User user : toBeAddContacts) {
                 ids.put(user.getUserId());
             }
@@ -434,7 +405,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         jsonObject.put("GroupMember", ids);
                         // long creator = jsonObject.getLong("creator");
                         IMClient.getInstance().addGroup2Conversation(groupId, null);
-                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8,avatar));
+                        UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, jsonObject.toString(), 8, avatar));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }
@@ -443,7 +414,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         intent.putExtra("toId", Long.parseLong(groupId));
                         setResult(RESULT_OK, intent);
                         finishWithNoAnim();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

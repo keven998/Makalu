@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
         android:background="@drawable/plan_02_bg_day"
         android:gravity="center"
         android:textColor="@color/base_color_white"
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@id/tv_schedule_summary"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="7dp"
         android:layout_marginTop="10dp"
         android:background="@color/color_line" />
 

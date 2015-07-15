@@ -150,7 +150,7 @@ public class TalkFragment extends PeachBaseFragment {
         String[] names = {"新建聊天", "添加好友", "取消"};
         final MoreDialog dialog = new MoreDialog(getActivity());
         dialog.setMoreStyle(false, 3, names);
-        dialog.getTv2().setOnClickListener(new View.OnClickListener() {
+        dialog.getTv1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent(getActivity(), "event_create_new_talk");

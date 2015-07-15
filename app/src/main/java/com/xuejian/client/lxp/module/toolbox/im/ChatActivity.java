@@ -936,7 +936,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 btnMore.setVisibility(View.VISIBLE);
                 buttonPressToSpeak.setVisibility(View.VISIBLE);
 
-                iv_emoticons_normal.setVisibility(View.GONE);
+                iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
                 btnContainer.setVisibility(View.GONE);
                 expressionContainer.setVisibility(View.GONE);
@@ -1049,7 +1049,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     /**
      * 按住说话listener
      */
-    class PressToSpeakListen implements OnTouchListener {
+    private class PressToSpeakListen implements OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {

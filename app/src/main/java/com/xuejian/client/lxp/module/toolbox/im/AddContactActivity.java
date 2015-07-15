@@ -101,7 +101,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //            }
 //        });
 
-        titleHeaderBar.getTitleTextView().setText("加好友");
+        titleHeaderBar.getTitleTextView().setText("添加好友");
         titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
