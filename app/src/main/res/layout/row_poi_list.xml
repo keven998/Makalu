@@ -105,7 +105,7 @@
             android:layout_marginTop="7dp"
             android:layout_toRightOf="@id/poi_image_iv"
             android:singleLine="true"
-            android:text="参考游玩时间"
+            android:text="参考游玩"
             android:textColor="@color/green_text_color"
             android:textSize="12sp" />
 

@@ -64,7 +64,7 @@
                     android:gravity="center"
                     android:maxWidth="108dp"
                     android:singleLine="true"
-                    android:text="计划调整"
+                    android:text="调整计划"
                     android:textColor="@color/color_text_titlebar"
                     android:textSize="18sp" />
 
