@@ -259,9 +259,16 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.fl_tracks_entry:
-                Intent tracks_intent = new Intent(getActivity(), MyFootPrinterActivity.class);
-                tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
-                startActivityForResult(tracks_intent, CODE_FOOTPRINT);
+                User user3 = AccountManager.getInstance().getLoginAccount(getActivity());
+                if (user3 == null) {
+                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(logIntent);
+                } else {
+                    Intent tracks_intent = new Intent(getActivity(), MyFootPrinterActivity.class);
+                    tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
+                    tracks_intent.putExtra("printInfo", tvTracksCount.getText().toString());
+                    startActivityForResult(tracks_intent, CODE_FOOTPRINT);
+                }
                 break;
 
             default:

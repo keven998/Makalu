@@ -33,6 +33,7 @@ import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -191,33 +192,7 @@ public class StrategyActivity extends PeachBaseActivity {
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            final PeachMessageDialog dialog = new PeachMessageDialog(this);
-            dialog.setTitle("提示");
-            dialog.setMessage("是否需要为你创建行程模版");
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setNegativeButton("不需要", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    MobclickAgent.onEvent(mContext, "event_unuse_template");
-                    createStrategyByCityIds(cityIdList, false);
-                }
-            });
-            dialog.setPositiveButton("需要", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    MobclickAgent.onEvent(mContext, "event_use_template");
-                    createStrategyByCityIds(cityIdList, true);
-                }
-            });
-            dialog.show();
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    createStrategyByCityIds(cityIdList, false);
-                }
-            });
+            createStrategyByCityIds(cityIdList,true);
 
         } else {
             if (savedInstanceState != null) {
@@ -282,7 +257,28 @@ public class StrategyActivity extends PeachBaseActivity {
                 if (strategyResult.code == 0) {
                     bindView(strategyResult.result);
                     if (recommend) {
-                        ToastUtil.getInstance(StrategyActivity.this).showToast(String.format("已为你创建%d行程", strategyResult.result.itineraryDays));
+                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyActivity.this);
+                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                        cdialog.setTitle("提示");
+                        cdialog.setMessage(String.format("已为你创建%d行程", strategyResult.result.itineraryDays));
+                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cdialog.dismiss();
+                            }
+                        });
+                        final Handler handler = new Handler() {
+                            public void handleMessage(Message msg) {
+                                switch (msg.what) {
+                                    case 1:
+                                        cdialog.show();
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message = handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message, 1000);
                     } else {
                         new Handler() {
                             @Override

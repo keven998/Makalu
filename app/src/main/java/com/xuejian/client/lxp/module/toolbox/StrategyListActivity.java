@@ -39,6 +39,7 @@ import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -48,6 +49,8 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
+import com.xuejian.client.lxp.module.toolbox.im.PickContactsWithCheckboxActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -192,7 +195,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.ivb_content_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogPlus.Builder(StrategyListActivity.this)
+                /*new DialogPlus.Builder(StrategyListActivity.this)
                         .setAdapter(new MenuAdapter())
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
@@ -208,7 +211,43 @@ public class StrategyListActivity extends PeachBaseActivity {
                         .setGravity(Gravity.CENTER)
                         .setOutAnimation(R.anim.fade_out)
                         .create()
-                        .show();
+                        .show();*/
+
+                String[] names = {"全部", "只看计划", "只看已签到"};
+                final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
+                dialog.setMoreStyle(false, 13, names);
+                dialog.getTv1().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        mContentType = 0;
+                        mMyStrategyLv.onPullDownRefreshComplete();
+                        mMyStrategyLv.onPullUpRefreshComplete();
+                        mMyStrategyLv.doPullRefreshing(true, 0);
+                    }
+                });
+                dialog.getTv2().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        mContentType = 1;
+                        mMyStrategyLv.onPullDownRefreshComplete();
+                        mMyStrategyLv.onPullUpRefreshComplete();
+                        mMyStrategyLv.doPullRefreshing(true, 0);
+                    }
+                });
+                dialog.getTv3().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        mContentType = 2;
+                        mMyStrategyLv.onPullDownRefreshComplete();
+                        mMyStrategyLv.onPullUpRefreshComplete();
+                        mMyStrategyLv.doPullRefreshing(true, 0);
+                    }
+                });
+                dialog.show();
+
             }
         });
     }
