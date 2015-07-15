@@ -467,29 +467,29 @@ public class StrategyListActivity extends PeachBaseActivity {
                     } else {
                         cancleVisited(itemData);
                         mStrategyListAdapter.notifyDataSetChanged();
-                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
-                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-                        cdialog.setTitle("取消签到");
-                        cdialog.setMessage("旅历-1");
-                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                cdialog.dismiss();
-                                mMyStrategyLv.doPullRefreshing(true, 0);
-                            }
-                        });
-                        final Handler handler = new Handler() {
-                            public void handleMessage(Message msg) {
-                                switch (msg.what) {
-                                    case 1:
-                                        cdialog.show();
-                                }
-                                super.handleMessage(msg);
-                            }
-                        };
-                        Message message = handler.obtainMessage(1);
-                        handler.sendMessageDelayed(message, 300);
+//                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
+//                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+//                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+//                        cdialog.setTitle("取消签到");
+//                        cdialog.setMessage("旅历-1");
+//                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                cdialog.dismiss();
+//                                mMyStrategyLv.doPullRefreshing(true, 0);
+//                            }
+//                        });
+//                        final Handler handler = new Handler() {
+//                            public void handleMessage(Message msg) {
+//                                switch (msg.what) {
+//                                    case 1:
+//                                        cdialog.show();
+//                                }
+//                                super.handleMessage(msg);
+//                            }
+//                        };
+//                        Message message = handler.obtainMessage(1);
+//                        handler.sendMessageDelayed(message, 300);
                     }
                 }
             });
