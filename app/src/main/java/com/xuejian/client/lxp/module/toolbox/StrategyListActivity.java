@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnItemClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -40,7 +37,6 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
-import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
@@ -49,8 +45,6 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
-import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
-import com.xuejian.client.lxp.module.toolbox.im.PickContactsWithCheckboxActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -383,9 +377,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView mTimeTv;
         ImageView mDelete;
         ImageView mCheck;
-        ImageView mModify;
         RelativeLayout rl_plan;
         ImageView mCheckStatus;
+        RelativeLayout rl_send;
+        RelativeLayout rl_action;
         boolean isOwner;
 
         public StrategyAdapter(boolean isOwner) {
@@ -400,11 +395,12 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
             mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
             mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
-            mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
             mCheck = (ImageView) convertView.findViewById(R.id.iv_check);
-            mModify = (ImageView) convertView.findViewById(R.id.iv_modify_name);
+            mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
             mCheckStatus = (ImageView) convertView.findViewById(R.id.iv_check_status);
             rl_plan = (RelativeLayout) convertView.findViewById(R.id.rl_plan);
+            rl_send= (RelativeLayout) convertView.findViewById(R.id.rl_send);
+            rl_action= (RelativeLayout) convertView.findViewById(R.id.rl_action);
             return convertView;
         }
 
@@ -423,51 +419,13 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
 
             if (!isOwner) {
-                mModify.setVisibility(View.INVISIBLE);
                 mDelete.setVisibility(View.INVISIBLE);
                 mCheck.setVisibility(View.INVISIBLE);
             }
-
-            mModify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final PeachEditDialog editDialog = new PeachEditDialog(mContext);
-                    editDialog.setTitle("修改计划名");
-                    editDialog.setMessage(itemData.title);
-                    editDialog.setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            editDialog.dismiss();
-                            DialogManager.getInstance().showLoadingDialog(mContext);
-                            TravelApi.modifyGuideTitle(itemData.id, editDialog.getMessage(), new HttpCallBack<String>() {
-                                @Override
-                                public void doSuccess(String result, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
-                                    if (modifyResult.code == 0) {
-                                        itemData.title = editDialog.getMessage();
-                                        mStrategyListAdapter.notifyDataSetChanged();
-                                        cachePage();
-                                    } else {
-                                        if (!isFinishing()) {
-                                            ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void doFailure(Exception error, String msg, String method) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    if (!isFinishing()) {
-                                        ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    editDialog.show();
-                }
-            });
+            if (isShare){
+                rl_action.setVisibility(View.GONE);
+                rl_send.setVisibility(View.VISIBLE);
+            }
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

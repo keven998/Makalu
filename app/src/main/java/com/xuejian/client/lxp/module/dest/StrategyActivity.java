@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,11 +29,13 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
@@ -169,7 +170,6 @@ public class StrategyActivity extends PeachBaseActivity {
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
-
     }
 
     @Override
@@ -309,14 +309,8 @@ public class StrategyActivity extends PeachBaseActivity {
     private void bindView(final StrategyBean result) {
         destinations = result.localities;
         strategy = result;
-        TextView dtv = (TextView) findViewById(R.id.jh_title);
+       final TextView dtv = (TextView) findViewById(R.id.jh_title);
         dtv.setText(result.title);
-        dtv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
         final User user = AccountManager.getInstance().getLoginAccount(this);
@@ -384,6 +378,44 @@ public class StrategyActivity extends PeachBaseActivity {
                 mIvMore.setVisibility(View.VISIBLE);
                 iv_location.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setVisibility(View.GONE);
+                dtv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final PeachEditDialog editDialog = new PeachEditDialog(mContext);
+                        editDialog.setTitle("修改计划名");
+                        editDialog.setMessage(result.title);
+                        editDialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                editDialog.dismiss();
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                TravelApi.modifyGuideTitle(result.id, editDialog.getMessage(), new HttpCallBack<String>() {
+                                    @Override
+                                    public void doSuccess(String result, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+                                        if (modifyResult.code == 0) {
+                                            dtv.setText(editDialog.getMessage());
+                                        } else {
+                                            if (!isFinishing()) {
+                                                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        if (!isFinishing()) {
+                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        editDialog.show();
+                    }
+                });
                 mIvMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

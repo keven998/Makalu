@@ -435,7 +435,7 @@ public class UserApi extends BaseApi {
        // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
         request.setUrl(SystemConfig.DEV_URL + "/users/"+ AccountManager.getCurrentUserId()+"/contact-requests");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,uid);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("contactId", Long.parseLong(uid));

@@ -300,7 +300,7 @@ public class FavListActivity extends PeachBaseActivity {
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
                             @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                            public void onDialogShareOk(Dialog dialog, int type, String content,String leave_msg) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
                                 IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId, chatType, content, type, new HttpCallback() {
                                     @Override

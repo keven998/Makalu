@@ -68,7 +68,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
-        userId = getIntent().getLongExtra("userId",0);
+        userId = getIntent().getLongExtra("userId", 0);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         imUser = UserDBManager.getInstance().getContactByUserId(userId);
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {

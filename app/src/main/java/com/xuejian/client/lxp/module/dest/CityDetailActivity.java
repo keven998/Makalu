@@ -57,6 +57,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private TextView mCityDesc;
     private TextView mCostTimeTv;
     private TextView bestMonthTv;
+    private ImageView iv_share;
     private ImageView foodTv, shoppingTv, spotsTv, travelTv;
     private ListViewDataAdapter travelAdapter;
     private LocBean locDetailBean;
@@ -110,7 +111,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         spotsTv = (ImageView) findViewById(R.id.tv_spots);
         foodTv = (ImageView) findViewById(R.id.tv_restaurant);
         shoppingTv = (ImageView) findViewById(R.id.tv_shopping);
-
+        iv_share= (ImageView) findViewById(R.id.iv_talk_share);
+        iv_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMUtils.onClickImShare(CityDetailActivity.this);
+            }
+        });
 
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override

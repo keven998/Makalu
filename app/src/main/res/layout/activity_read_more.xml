@@ -4,17 +4,23 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
 
-    <TextView
-        android:id="@+id/tv_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="44dp"
-        android:padding="15dp"
-        android:textColor="@color/color_text_ii"
-        android:textSize="15sp" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="44dp"
+            android:padding="15dp"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+    </ScrollView>
 
     <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"></com.xuejian.client.lxp.common.widget.TitleHeaderBar>
+
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -143,19 +144,45 @@ public class IMUtils {
                 final String toId = "" + data.getLongExtra("toId", 0);
                 showImShareDialog(context, iCreateShareDialog, new OnDialogShareCallBack() {
                     @Override
-                    public void onDialogShareOk(Dialog dialog, int type, String content) {
+                    public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
                         DialogManager.getInstance().showLoadingDialog(context);
                         IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
-
                             @Override
                             public void onSuccess() {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity) context).runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        ToastUtil.getInstance(context).showToast("已发送~");
+                                if (TextUtils.isEmpty(leave_msg)) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(context).showToast("已发送~");
 
-                                    }
-                                });
+                                        }
+                                    });
+                                } else {
+                                    MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), leave_msg, toId, chatType);
+                                    IMClient.getInstance().sendTextMessage(messageBean, toId, null, new HttpCallback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                            ((Activity) context).runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    ToastUtil.getInstance(context).showToast("已发送~");
+
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onFailed(int code) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                            ((Activity) context).runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                                                }
+                                            });
+                                        }
+                                    }, chatType);
+                                }
                             }
 
                             @Override
@@ -169,6 +196,30 @@ public class IMUtils {
                                 });
                             }
                         });
+//                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+//
+//                            @Override
+//                            public void onSuccess() {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("已发送~");
+//
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onFailed(int code) {
+//                                DialogManager.getInstance().dissMissLoadingDialog();
+//                                ((Activity) context).runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+//
+//                                    }
+//                                });
+//                            }
+                        //                       });
 //                        sendExtMessage(context, type, content, chatType, toId, new EMCallBack() {
 //                            @Override
 //                            public void onSuccess() {
@@ -199,7 +250,7 @@ public class IMUtils {
 //                            }
 //                        });
                         if (callback != null) {
-                            callback.onDialogShareOk(dialog, type, content);
+                            callback.onDialogShareOk(dialog, type, content, leave_msg);
                         }
                     }
 
@@ -228,6 +279,7 @@ public class IMUtils {
         TextView descTv = (TextView) contentView.findViewById(R.id.tv_desc);
         Button okBtn = (Button) contentView.findViewById(R.id.btn_ok);
         Button cancleBtn = (Button) contentView.findViewById(R.id.btn_cancle);
+        final EditText msg = (EditText) contentView.findViewById(R.id.leave_msg);
         titleTv.setText(dialogBean.getTitle());
         nameTv.setText(dialogBean.getName());
         if (TextUtils.isEmpty(dialogBean.getAttr())) {
@@ -247,7 +299,7 @@ public class IMUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                callback.onDialogShareOk(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()));
+                callback.onDialogShareOk(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()), msg.getText().toString());
             }
         });
         cancleBtn.setOnClickListener(new View.OnClickListener() {
@@ -349,7 +401,7 @@ public class IMUtils {
 
 
     public interface OnDialogShareCallBack {
-        void onDialogShareOk(Dialog dialog, int type, String content);
+        void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg);
 
         void onDialogShareCancle(Dialog dialog, int type, String content);
     }

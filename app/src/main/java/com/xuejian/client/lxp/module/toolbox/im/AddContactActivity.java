@@ -158,14 +158,14 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                                 AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(), imUser);
                                 IMUserRepository.saveContact(mContext, imUser);*/
                                 Intent intent = new Intent(mContext, HisMainPageActivity.class);
-                                intent.putExtra("userId", user.getUserId().intValue());
+                                intent.putExtra("userId", user.getUserId());
                                 // intent.putExtra("userNick", user.nickName);
                                 startActivity(intent);
                                 return;
                             }
                             Intent intent = new Intent(mContext, HisMainPageActivity.class);
                             //intent.putExtra("isSeach",true);
-                            intent.putExtra("userId", user.getUserId().intValue());
+                            intent.putExtra("userId", user.getUserId());
                             startActivity(intent);
                         } else {
                             ToastUtil.getInstance(mContext).showToast("查无此用户~");
