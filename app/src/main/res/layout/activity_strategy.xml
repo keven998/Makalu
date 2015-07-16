@@ -82,10 +82,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:paddingLeft="6dp"
+                    android:paddingLeft="8dp"
                     android:paddingRight="14dp"
                     android:scaleType="center"
-                    android:src="@drawable/plan_02_dashboard_drawer" />
+                    android:src="@drawable/selector_ic_common_navigation_menu" />
 
                 <ImageView
                     android:id="@+id/iv_location"
@@ -93,7 +93,7 @@
                     android:layout_height="match_parent"
                     android:layout_toLeftOf="@id/iv_more"
                     android:paddingLeft="32dp"
-                    android:paddingRight="4dp"
+                    android:paddingRight="7dp"
                     android:scaleType="center"
                     android:src="@drawable/selector_ic_map_plan" />
 

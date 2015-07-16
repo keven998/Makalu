@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
+import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONArray;
@@ -264,9 +265,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    Intent tracks_intent = new Intent(getActivity(), MyFootPrinterActivity.class);
+                    Intent tracks_intent = new Intent(getActivity(), StrategyMapActivity.class);
+                    tracks_intent.putExtra("isMyFootPrint",true);
                     tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
-                    tracks_intent.putExtra("printInfo", tvTracksCount.getText().toString());
+                    tracks_intent.putExtra("title", tvTracksCount.getText().toString());
                     startActivityForResult(tracks_intent, CODE_FOOTPRINT);
                 }
                 break;

@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.dest.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
@@ -44,7 +46,14 @@ public class PoiAdapter extends BaseAdapter {
     public PoiAdapter(Context context, boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
-        picOptions = UILUtils.getRadiusOption();
+        picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.empty_photo)
+                .showImageOnLoading(R.drawable.empty_photo)
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
     public void setAddStr(String addStr) {
@@ -142,7 +151,8 @@ public class PoiAdapter extends BaseAdapter {
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, spotViewHolder.mSpotImageIv, picOptions);
             } else {
-                spotViewHolder.mSpotImageIv.setImageDrawable(null);
+                ImageLoader.getInstance().displayImage(null, spotViewHolder.mSpotImageIv, picOptions);
+                //spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
            // spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
@@ -251,7 +261,8 @@ public class PoiAdapter extends BaseAdapter {
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mPoiImageIv, picOptions);
             } else {
-                poiViewHolder.mPoiImageIv.setImageDrawable(null);
+                ImageLoader.getInstance().displayImage(null, poiViewHolder.mPoiImageIv, picOptions);
+                //poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
 //            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){

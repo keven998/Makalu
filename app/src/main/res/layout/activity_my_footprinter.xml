@@ -10,12 +10,67 @@
         android:orientation="vertical">
 
 
-        <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        <RelativeLayout
             android:id="@+id/my_footprinter_title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/title_bar_height">
+            android:layout_height="@dimen/title_bar_height"
+            android:background="@drawable/bg_navigation_bar">
 
-        </com.xuejian.client.lxp.common.widget.TitleHeaderBar>
+            <TextView
+                android:id="@+id/title_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:gravity="center"
+                android:text="取消"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_white"
+                />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/color_text_titlebar"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="-2dp"
+                android:text="足迹"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/color_text_titlebar"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/title_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
+                android:text="确定"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_white"
+                />
+
+        </RelativeLayout>
 
 
         <com.airbnb.android.airmapview.AirMapView

@@ -136,7 +136,6 @@
         android:paddingBottom="30dp"
         android:text="微信登录"
         android:textColor="@color/selector_white_text_color"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textSize="18sp"/>
 
 </LinearLayout>
