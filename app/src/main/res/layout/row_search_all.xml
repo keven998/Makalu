@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/option_cell_selector">
+
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="65dp"
-        android:background="@drawable/option_cell_selector">
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
 
         <ImageView
             android:id="@+id/image_iv"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="13dp"
-            android:layout_centerVertical="true"
             android:background="@drawable/bg_common_default"
             android:scaleType="centerCrop" />
 
@@ -39,32 +38,33 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/image_iv"
-            android:layout_toLeftOf="@id/btn_send"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/btn_send"
+            android:layout_toRightOf="@id/image_iv"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
                 android:ellipsize="end"
+                android:paddingTop="6dp"
+                android:singleLine="true"
                 android:textColor="@color/color_text_i"
-                android:textSize="16sp"
-                android:gravity="center_vertical"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/address_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:layout_marginTop="2dp"
                 android:ellipsize="end"
-                android:layout_marginTop="3dp"
+                android:singleLine="true"
                 android:textColor="@color/color_text_iii"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -76,12 +76,20 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:singleLine="true"
             android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/third_font_color"
-            android:textSize="13sp"
-            android:visibility="gone"/>
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:background="@color/color_line" />
 
     </RelativeLayout>
 
-</LinearLayout>
+
+</FrameLayout>

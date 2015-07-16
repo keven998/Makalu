@@ -6,56 +6,10 @@
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@color/app_theme_color"
-        android:focusable="true"
-        android:id="@+id/search_bar"
-        android:focusableInTouchMode="true"
-        android:padding="11dp">
-
-        <!--android:background="@drawable/mm_listitem"-->
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
-            android:inputType="text"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:textSize="14sp"
-            android:textColorHint="@color/base_text_color_text_hint"
-            android:hint="城市/景点/美食/购物"
-            android:textColor="@color/base_text_color_title"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:drawablePadding="10dp"
-            android:background="@drawable/button_normal_shape"
-            android:drawableLeft="@drawable/ic_search" />
-
-        <TextView
-            android:id="@+id/btn_search"
-            android:layout_width="50dp"
-            android:paddingLeft="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="bottom|center_horizontal"
-            android:background="@drawable/btn_theme_secondary_selector"
-            android:layout_height="match_parent"
-            android:textSize="14sp"
-            android:textColor="@color/base_color_white"
-            android:text="取消" />
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_bar">
+        android:layout_marginTop="@dimen/content_top_margin">
 
         <ListView
             android:id="@+id/search_all_lv"
@@ -67,14 +21,55 @@
             android:fadingEdge="none"
             android:visibility="gone" />
 
-        <ImageView android:id="@+id/empty_text"
+        <ImageView
+            android:id="@+id/empty_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/search_bg_default"
             android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="36dp"
+            android:background="@drawable/search_bg_default"
             android:scaleType="centerCrop"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_shape"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:hint="城市/景点/美食/购物"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:textColor="@color/base_text_color_title"
+            android:textColorHint="@color/base_text_color_text_hint"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:text="取消"
+            android:textColor="@color/selector_white_text_color"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 </RelativeLayout>

@@ -45,8 +45,6 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/12/9.
  */
 public class SearchAllActivity extends PeachBaseActivity {
-    //    @InjectView(R.id.title_bar)
-//    TitleHeaderBar mTitleBar;
     @InjectView(R.id.et_search)
     EditText mEtSearch;
     @InjectView(R.id.btn_search)
@@ -127,7 +125,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         mSearchAllLv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (scrollState==SCROLL_STATE_TOUCH_SCROLL){
+                if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
@@ -246,10 +244,10 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void onSendClick(String type, String id, Object object) {
                 IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
-                    @Override
-                    public void onDialogShareOk(Dialog dialog, int type, String content) {
-                        DialogManager.getInstance().showLoadingDialog(mContext);
-                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId, chatType, content, type, new HttpCallback() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content) {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
