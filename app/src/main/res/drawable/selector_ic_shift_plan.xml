@@ -3,7 +3,7 @@
 
     <item android:drawable="@drawable/plan_10_dashboard_sift_hilighted" android:state_pressed="true"/>
     <item android:drawable="@drawable/plan_10_dashboard_sift_hilighted" android:state_focused="true"/>
-    <item android:drawable="@drawable/plan_10_dashboard_sift"/>
+    <item android:drawable="@drawable/plan_10_dashboard_sift_default"/>
    
 
 </selector>

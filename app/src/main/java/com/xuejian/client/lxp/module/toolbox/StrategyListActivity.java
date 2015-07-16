@@ -105,7 +105,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-         mMyStrategyLv.doPullRefreshing(true, 0);
+        mMyStrategyLv.doPullRefreshing(true, 0);
 //        MobclickAgent.onPageStart("page_plan_lists");
     }
 
@@ -191,24 +191,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.ivb_content_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*new DialogPlus.Builder(StrategyListActivity.this)
-                        .setAdapter(new MenuAdapter())
-                        .setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
-                                dialog.dismiss();
-                                mContentType = position;
-                                mMyStrategyLv.onPullDownRefreshComplete();
-                                mMyStrategyLv.onPullUpRefreshComplete();
-                                mMyStrategyLv.doPullRefreshing(true, 0);
-                            }
-                        })
-                        .setExpanded(false)  // This will enable the expand feature, (similar to android L share dialog)
-                        .setGravity(Gravity.CENTER)
-                        .setOutAnimation(R.anim.fade_out)
-                        .create()
-                        .show();*/
-
                 String[] names = {"全部", "只看计划", "只看已签到"};
                 final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
                 dialog.setMoreStyle(false, 13, names);
@@ -408,9 +390,9 @@ public class StrategyListActivity extends PeachBaseActivity {
             mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
             mCheckStatus = (ImageView) convertView.findViewById(R.id.iv_check_status);
             rl_plan = (RelativeLayout) convertView.findViewById(R.id.rl_plan);
-            rl_send= (RelativeLayout) convertView.findViewById(R.id.rl_send);
-            rl_action= (RelativeLayout) convertView.findViewById(R.id.rl_action);
-            ctv= (CheckedTextView) convertView.findViewById(R.id.btn_send);
+            rl_send = (RelativeLayout) convertView.findViewById(R.id.rl_send);
+            rl_action = (RelativeLayout) convertView.findViewById(R.id.rl_action);
+            ctv = (CheckedTextView) convertView.findViewById(R.id.btn_send);
             return convertView;
         }
 
@@ -432,19 +414,19 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mDelete.setVisibility(View.INVISIBLE);
                 mCheck.setVisibility(View.INVISIBLE);
             }
-            if (isShare){
+            if (isShare) {
                 rl_action.setVisibility(View.GONE);
                 rl_send.setVisibility(View.VISIBLE);
                 if (!itemData.status.equals("traveled")) {
                     ctv.setBackgroundResource(R.color.app_theme_color);
-                }else {
+                } else {
                     ctv.setBackgroundResource(R.color.light_grey);
                 }
             }
             rl_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    temp=itemData;
+                    temp = itemData;
                     IMUtils.onClickImShare(StrategyListActivity.this);
                 }
             });
@@ -677,35 +659,6 @@ public class StrategyListActivity extends PeachBaseActivity {
 
             }
         });
-    }
-
-    private class MenuAdapter extends BaseAdapter {
-        private final String[] CONTENT_TYPE = {"全部", "只看计划", "只看已签到"};
-
-        @Override
-        public int getCount() {
-            return CONTENT_TYPE.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return CONTENT_TYPE[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.spinner_item_dropdown, null);
-            }
-            TextView ttv = (TextView) convertView.findViewById(R.id.tv_title);
-            ttv.setText(CONTENT_TYPE[position]);
-            return convertView;
-        }
     }
 
 }
