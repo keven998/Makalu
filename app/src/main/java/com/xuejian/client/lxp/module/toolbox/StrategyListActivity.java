@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -426,6 +427,12 @@ public class StrategyListActivity extends PeachBaseActivity {
                 rl_action.setVisibility(View.GONE);
                 rl_send.setVisibility(View.VISIBLE);
             }
+            rl_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IMUtils.onClickImShare(StrategyListActivity.this);
+                }
+            });
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

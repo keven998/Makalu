@@ -94,7 +94,7 @@
                 android:layout_toLeftOf="@id/iv_check"
                 android:paddingBottom="24dp"
                 android:paddingLeft="24dp"
-                android:paddingRight="17dp"
+                android:paddingRight="15dp"
                 android:paddingTop="14dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/selector_ic_plan_delete" />
@@ -104,20 +104,20 @@
             android:layout_width="50dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:visibility="gone"
             android:gravity="center"
+            android:visibility="gone"
             android:layout_marginTop="20dp"
             android:layout_marginRight="25dp"
             android:padding="2.5dp"
             android:paddingBottom="1dp"
             android:paddingTop="1dp"
-            android:background="@drawable/plan_icon_send_bg">
+            android:background="@drawable/plan_send_bg">
             <CheckedTextView
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="32dp"
                 android:gravity="center"
-                android:background="@drawable/selecter_theme_btn_radius_4"
+                android:background="@color/app_theme_color"
                 android:text="发送"
                 android:textColor="@color/base_color_white"
                 android:textSize="13sp"/>

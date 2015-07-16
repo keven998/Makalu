@@ -30,7 +30,7 @@
             android:textSize="17sp"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:textColor="@color/base_text_color_title"/>
+            android:textColor="@color/base_color_white"/>
         <TextView
             android:id="@+id/tv_search"
             android:layout_width="wrap_content"
