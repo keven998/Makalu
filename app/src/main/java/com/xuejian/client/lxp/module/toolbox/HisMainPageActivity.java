@@ -377,7 +377,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-        TextView tvTrack = (TextView) findViewById(R.id.tv_profile_track);
+        final TextView tvTrack = (TextView) findViewById(R.id.tv_profile_track);
         SpannableString trackStr = new SpannableString("足迹");
         trackStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, trackStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         trackStr.setSpan(new AbsoluteSizeSpan(14, true), 0, trackStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -408,6 +408,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
+                intent.putExtra("title",tvTrack.getText().toString());
                 intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
                 startActivity(intent);
             }

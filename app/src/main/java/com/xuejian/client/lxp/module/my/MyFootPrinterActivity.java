@@ -9,6 +9,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.android.airmapview.AirMapInterface;
@@ -41,6 +42,8 @@ import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +56,6 @@ import java.util.Set;
  */
 public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestActionListener {
 
-    private TextView titleBack;
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
@@ -63,11 +65,13 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private AirMapInterface airMapInterface;
     private long MARKER = 1;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
+    private ArrayList<LocBean> originalAllAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     private Map<LatLng,AirMapMarker> markers;
-    private TitleHeaderBar titleHeaderBar;
+    private RelativeLayout titleHeaderBar;
     private String printInfo;
+    private TextView tv_title,title_back,title_confirm;
 
     @Override
     public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
@@ -75,7 +79,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             return;
         }
         allAddCityList.add(locBean);
-        refreshMapView(allAddCityList);
+        //refreshMapView(allAddCityList);
         if (isEdit) {
             updataUserFootPrint("add", locBean, type);
         }
@@ -84,7 +88,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     public void onDestRemoved(LocBean locBean, String type) {
         allAddCityList.remove(locBean);
-        refreshMapView(allAddCityList);
+       // refreshMapView(allAddCityList);
         updataUserFootPrint("del", locBean, type);
     }
 
@@ -92,7 +96,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         String[] ids = new String[1];
         ids[0] = locBean.id;
         User user = AccountManager.getInstance().getLoginAccount(this);
-
         UserApi.updateUserFootPrint(user.getUserId() + "", type, ids, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -215,18 +218,19 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        printInfo=getIntent().getStringExtra("printInfo");
+        printInfo=getIntent().getStringExtra("title");
         View rootView = View.inflate(mContext, R.layout.activity_my_footprinter, null);
         setContentView(rootView);
-        titleHeaderBar=(TitleHeaderBar)rootView.findViewById(R.id.my_footprinter_title);
-        titleHeaderBar.getLeftTextView().setText("取消");
-        titleHeaderBar.setLeftDrawableToNull();
-        titleHeaderBar.getRightTextView().setText("确定");
-        String html=printInfo+"\\n足迹";
-        titleHeaderBar.getTitleTextView().setText(html);
+
+        titleHeaderBar=(RelativeLayout)rootView.findViewById(R.id.my_footprinter_title);
+        tv_title=(TextView)rootView.findViewById(R.id.tv_title);
+        title_back=(TextView)rootView.findViewById(R.id.title_back);
+        title_confirm=(TextView)rootView.findViewById(R.id.title_confirm);
+        tv_title.setText(printInfo);
 
         mapView = (AirMapView) rootView.findViewById(R.id.my_footprinter_map);
         hasSelectLoc = getIntent().getParcelableArrayListExtra("myfootprint");
+        originalAllAddCityList.addAll(hasSelectLoc);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.my_footprinter_in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.my_footprinter_select_dest_viewPager);
         indicatorViewPager = new IndicatorViewPager(inOutIndicator, mSelectDestVp);
@@ -245,8 +249,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             }
         });
 
-        titleBack = (TextView) rootView.findViewById(R.id.my_footprinter_back);
-        titleBack.setOnClickListener(new View.OnClickListener() {
+        title_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateFootPrint(allAddCityList);
@@ -256,7 +259,16 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                 finish();
             }
         });
-
+        title_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateFootPrint(originalAllAddCityList);
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("footprint", originalAllAddCityList);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
 
 
@@ -267,7 +279,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                     onDestActionListener.onDestAdded(locBean, false, null);
                 }
             }
-        } else {
+        } /*else {
             //refreshMapView(allAddCityList);
             if (allAddCityList.size() > 0) {
                 mapViewBuilder = new DefaultAirMapViewBuilder(this);
@@ -292,7 +304,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                 });
             }
             mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        }
+        }*/
     }
 
     private void updateFootPrint(ArrayList<LocBean> allAddCityList) {

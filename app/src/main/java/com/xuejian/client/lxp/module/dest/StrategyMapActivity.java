@@ -1,5 +1,7 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -46,6 +48,9 @@ import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +63,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private AirMapView mapView;
    // private AMap aMap;
 
-    private TitleHeaderBar titleHeaderBar;
+   // private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
     private ArrayList<StrategyBean> allBeans;
     private MarkerOptions markerOption;
@@ -73,10 +78,14 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private AirMapPolyline airMapPolyline;
     private long POLY_LINE = 1;
     boolean isShow=false;
-    private TextView spinnet;
-    private boolean isExpertFootPrint;
+    private TextView tv_title,tv_subTitle,tv_select_day;
+    private ImageView title_back,map_more;
+    private boolean isExpertFootPrint,isMyFootPrint;
     private ArrayList<LocBean> all_print_print;
     private ArrayList<double[]> coords=new ArrayList<double[]>();
+    private LinearLayout day_select;
+    private String allDesString;
+    private int SET_FOOTPRINT=200;
 
 
     @Override
@@ -85,27 +94,36 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         setContentView(R.layout.activity_strategy_map);
         allBeans=getIntent().getParcelableArrayListExtra("strategy");
         isExpertFootPrint=getIntent().getBooleanExtra("isExpertFootPrint",false);
-        titleHeaderBar = (TitleHeaderBar) findViewById(R.id.map_title_bar);
-        titleHeaderBar.getTitleTextView().setText("地图");
-        if(!isExpertFootPrint){
+        isMyFootPrint=getIntent().getBooleanExtra("isMyFootPrint",false);
+        title_back = (ImageView) findViewById(R.id.map_title_back);
+        map_more = (ImageView) findViewById(R.id.map_more);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_subTitle = (TextView) findViewById(R.id.tv_subtitle);
+        tv_select_day = (TextView) findViewById(R.id.tv_select_day);
+        day_select = (LinearLayout) findViewById(R.id.day_select);
+
+        title_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isMyFootPrint){
+                    Intent intent = new Intent();
+                    intent.putParcelableArrayListExtra("footprint", all_print_print);
+                    setResult(RESULT_OK, intent);
+                }
+                finish();
+                overridePendingTransition(0, R.anim.slide_out_to_right);
+            }
+        });
+
+        //titleHeaderBar.getTitleTextView().setText("地图");
+        if(!isExpertFootPrint&&!isMyFootPrint){
             if(allBeans.size()>0) {
                 final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
-                titleHeaderBar.getRightTextView().setText("确定");
-                titleHeaderBar.getLeftTextView().setText("第1天");
-                titleHeaderBar.getLeftTextView().setTextColor(getResources().getColor(R.color.white));
-                titleHeaderBar.setLeftDrawableToNull();
-                titleHeaderBar.enableBackKey(true);
-                titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
+                tv_title.setText("第1天");
+                tv_select_day.setText("01");
+                day_select.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
-                        overridePendingTransition(0, R.anim.slide_out_to_right);
-                    }
-                });
-                titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
                         LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 //自定义布局
                         ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
@@ -113,7 +131,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                         TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
 
                         ListView lv = (ListView) menuView.findViewById(R.id.map_days_list);
-                        adapter = new MapsDayAdapter(day_sums, DealWithDays(titleHeaderBar.getLeftTextView().getText().toString()));
+                        adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
                         lv.setAdapter(adapter);
                         mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
                                 FlowLayout.LayoutParams.MATCH_PARENT, true);
@@ -131,7 +149,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                titleHeaderBar.getLeftTextView().setText("第" + (position + 1) + "天");
+                                tv_title.setText("第" + (position + 1) + "天");
+                                tv_select_day.setText(normalizeNumber(position + 1));
                                 initData(position);
                                 mPop.dismiss();
                             }
@@ -139,11 +158,11 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     }
                 });
             }
-        }else{
-            titleHeaderBar.enableBackKey(true);
+        }else {
+            tv_subTitle.setText("足迹");
+            tv_title.setText(getIntent().getStringExtra("title"));
         }
         mapView = (AirMapView) findViewById(R.id.strategy_map);
-        spinnet = (TextView) findViewById(R.id.spinnet);
         //mapView.onCreate(savedInstanceState);
         //initMapView();
         all_locations = (HorizontalScrollView) findViewById(R.id.map_days_name_list);
@@ -151,8 +170,23 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LocalDisplay.dp2px(50)));
         layout.setGravity(Gravity.CENTER_VERTICAL);
         if(isExpertFootPrint){
+            day_select.setVisibility(View.GONE);
             all_print_print=getIntent().getParcelableArrayListExtra("ExpertFootPrintBean");
             loadExpertFootPrintMap(all_print_print);
+        }else if(isMyFootPrint){
+            day_select.setVisibility(View.GONE);
+            all_print_print=getIntent().getParcelableArrayListExtra("myfootprint");
+            loadExpertFootPrintMap(all_print_print);
+            map_more.setVisibility(View.VISIBLE);
+            map_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent tracks_intent = new Intent(StrategyMapActivity.this, MyFootPrinterActivity.class);
+                    tracks_intent.putParcelableArrayListExtra("myfootprint", all_print_print);
+                    tracks_intent.putExtra("title", tv_title.getText().toString());
+                    startActivityForResult(tracks_intent, SET_FOOTPRINT);
+                }
+            });
         }else {
             if(allBeans.size()>0) {
                 initData(0);
@@ -160,12 +194,39 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== Activity.RESULT_OK){
+            if(requestCode==SET_FOOTPRINT){
+                //ArrayList<LocBean> result=new ArrayList<LocBean>();
+                all_print_print=data.getParcelableArrayListExtra("footprint");
+                loadExpertFootPrintMap(all_print_print);
+            }
+        }
+    }
+
+    private String normalizeNumber(int pos){
+        String value;
+        if(pos<10){
+            value="0"+pos;
+        }else if(pos<100){
+            value=pos+"";
+        }else{
+            value="99+";
+        }
+        return value;
+    }
+
     private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint){
         all_locations.removeAllViews();
         layout.removeAllViews();
+        coords.clear();
         for(int k=0;k<footPrint.size();k++){
             View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
             TextView location=(TextView)view.findViewById(R.id.map_places);
+            TextView r_arrow=(TextView)view.findViewById(R.id.right_arrow);
+            r_arrow.setVisibility(View.GONE);
             location.setText(footPrint.get(k).zhName);
             final int pos=k;
             view.setOnClickListener(new View.OnClickListener() {
@@ -214,10 +275,15 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         all_locations.removeAllViews();
         layout.removeAllViews();
         int flag=1;
+        allDesString="";
+        if(allBeans.get(0).itinerary.size()==0){
+            allDesString="无";
+        }
         for(int i=0;i<allBeans.get(0).itinerary.size();i++){
             if(allBeans.get(0).itinerary.get(i).dayIndex==pos){
                 View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
                 TextView location=(TextView)view.findViewById(R.id.map_places);
+                TextView r_arrow=(TextView)view.findViewById(R.id.right_arrow);
                 location.setText(flag+" "+allBeans.get(0).itinerary.get(i).poi.zhName);
                 final int position=i;
                 view.setOnClickListener(new View.OnClickListener() {
@@ -230,9 +296,16 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 layout.addView(view);
                 coordinates.add(allBeans.get(0).itinerary.get(i).poi.location.coordinates);
                 names.add(allBeans.get(0).itinerary.get(i).poi.zhName);
+                if(flag==1){
+                    allDesString=allBeans.get(0).itinerary.get(0).poi.zhName;
+                    r_arrow.setVisibility(View.GONE);
+                }else {
+                    allDesString=String.format("%s>%s",allDesString,allBeans.get(0).itinerary.get(i).poi.zhName);
+                }
                 flag++;
             }
         }
+        tv_subTitle.setText(allDesString);
         all_locations.addView(layout);
         ArrayList<com.amap.api.maps2d.model.LatLng> mLatLngs =new ArrayList<>();
         for(int j=0;j<coordinates.size();j++){

@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/map_places_ll"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text=">"
+        android:textColor="#FA5064"
+        />
+
+
+    <TextView
     android:id="@+id/map_places"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:layout_gravity="center_vertical"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
     android:textSize="16sp"
-    android:textColor="@color/back_blue_color"
+    android:textColor="@color/color_text_ii"
     android:text="fdsa"
         />
+
+
+</LinearLayout>

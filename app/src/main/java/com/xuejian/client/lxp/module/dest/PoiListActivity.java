@@ -109,7 +109,8 @@ public class PoiListActivity extends PeachBaseActivity {
         if (!canAdd){
             locList=getIntent().getParcelableArrayListExtra("locList");
         }else {
-            locList = strategy.localities;
+            locList = getIntent().getParcelableArrayListExtra("locList");
+            //locList = strategy.localities;
             if(type.equals(TravelApi.PeachType.SHOPPING)){
                 hasAddList = strategy.shopping;
             }else if(type.equals(TravelApi.PeachType.RESTAURANTS)){
@@ -334,7 +335,6 @@ public class PoiListActivity extends PeachBaseActivity {
                 if (poiGuideResult.code == 0) {
                     bindGuideView(poiGuideResult.result,value);
                 }
-
             }
 
             @Override
