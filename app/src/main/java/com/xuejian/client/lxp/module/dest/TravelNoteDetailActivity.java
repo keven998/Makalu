@@ -63,7 +63,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         if (noteBean != null) {
             ImageView txtView2 = (ImageView) findViewById(R.id.tv_title_bar_right);
             txtView2.setVisibility(View.VISIBLE);
-            txtView2.setImageResource(R.drawable.ic_note_share_selector);
+            txtView2.setImageResource(R.drawable.selector_ic_talk_share);
             txtView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
