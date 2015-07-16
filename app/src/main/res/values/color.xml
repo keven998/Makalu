@@ -11,8 +11,8 @@
     <color name="color_link">#469bff</color>
     <color name="color_disable">#e2e2e2</color>
     <color name="color_line">#e2e2e2</color>
-
     <color name="color_text_i">#323232</color>
+    <color name="light_grey">#7f969696</color>
     <color name="color_text_ii">#646464</color>
     <color name="color_text_iii">#969696</color>
     <color name="color_text_iv">#c8c8c8</color>

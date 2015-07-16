@@ -123,7 +123,7 @@ public class IMUtils {
 
     public static void onClickImShare(Context context) {
         User user = AccountManager.getInstance().getLoginAccount(context);
-        if (user != null) {  //&& !TextUtils.isEmpty(user.easemobUser)
+        if (user != null) {
             Intent intent = new Intent(context, IMShareActivity.class);
             ((Activity) context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
 

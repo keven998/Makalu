@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -61,7 +62,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     PullToRefreshListView mMyStrategyLv;
     ImageButton mEditBtn;
-
+    StrategyBean temp;
     ListViewDataAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
@@ -301,6 +302,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
         }
+        IMUtils.onShareResult(mContext, temp, requestCode, resultCode, data, null);
     }
 
     private void initData() {
@@ -382,6 +384,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         ImageView mCheckStatus;
         RelativeLayout rl_send;
         RelativeLayout rl_action;
+        CheckedTextView ctv;
         boolean isOwner;
 
         public StrategyAdapter(boolean isOwner) {
@@ -402,6 +405,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             rl_plan = (RelativeLayout) convertView.findViewById(R.id.rl_plan);
             rl_send= (RelativeLayout) convertView.findViewById(R.id.rl_send);
             rl_action= (RelativeLayout) convertView.findViewById(R.id.rl_action);
+            ctv= (CheckedTextView) convertView.findViewById(R.id.btn_send);
             return convertView;
         }
 
@@ -426,10 +430,16 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (isShare){
                 rl_action.setVisibility(View.GONE);
                 rl_send.setVisibility(View.VISIBLE);
+                if (!itemData.status.equals("traveled")) {
+                    ctv.setBackgroundResource(R.color.app_theme_color);
+                }else {
+                    ctv.setBackgroundResource(R.color.light_grey);
+                }
             }
             rl_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    temp=itemData;
                     IMUtils.onClickImShare(StrategyListActivity.this);
                 }
             });
