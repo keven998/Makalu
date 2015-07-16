@@ -12,6 +12,16 @@
         <item>restaurant</item>
         <item>shopping</item>
     </string-array>
+    <string-array name="poi_type_values_name">
+        <item>景点</item>
+        <item>美食</item>
+        <item>购物</item>
+    </string-array>
+    <string-array name="poi_type_values">
+        <item>vs</item>
+        <item>restaurant</item>
+        <item>shopping</item>
+    </string-array>
     <string-array name="sns">
         <item>QQ</item>
         <item>新浪微博</item>

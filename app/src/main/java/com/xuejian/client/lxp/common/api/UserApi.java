@@ -40,9 +40,13 @@ public class UserApi extends BaseApi {
     public final static String SEND_VALIDATION = "/users/validation-codes";
 
     //验证验证码换取token
-    public final static String CHECK_VALIDATION = "/users/check-validation";
+   // public final static String CHECK_VALIDATION = "/users/check-validation";
+    public final static String CHECK_VALIDATION = "/users/tokens";
+
+
     //第三方登录
     public final static String AUTH_SIGNUP = "/users/auth-signup";
+
     //  注册
     // public final static String SIGNUP = "/users/signup";
     public final static String SIGNUP = "/users";
@@ -51,9 +55,9 @@ public class UserApi extends BaseApi {
     //获取个人信息
     public final static String USERINFO = "/users/";
     //绑定手机号
-    public final static String BIND_PHONE = "/users/bind";
+    public final static String BIND_PHONE = "/users/%s/tel";
     //密码
-    public final static String MODIFY_PWD = "/users/pwd";
+    public final static String MODIFY_PWD = "/users/%s/password";
     //重设密码
     public final static String RESET_PWD = "/users/reset-pwd";
 
@@ -64,6 +68,9 @@ public class UserApi extends BaseApi {
     public final static String REQUEST_ADD_CONTACTS = "/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
+    public final static String SEACH_CONTACT_BY_TEL = "/users?tel=";
+    public final static String SEACH_CONTACT_BY_NICKNAME = "/user?nickName=";
+
     //搜索达人足迹
     public final static String SEARCH_EXPERT_FOOTPRINT = "/users/expert/tracks";
     //根据环信ID获取用户信息
@@ -132,20 +139,21 @@ public class UserApi extends BaseApi {
     }
 
     public static PTRequestHandler checkValidation
-            (String phone, String captcha, String actionCode, String uid, HttpCallBack callback) {
+            (String phone, String captcha, String actionCode, long uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + CHECK_VALIDATION);
+        request.setUrl(SystemConfig.DEV_URL + CHECK_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("tel", phone);
-            jsonObject.put("captcha", captcha);
-            jsonObject.put("actionCode", actionCode);
-            if (!TextUtils.isEmpty(uid)) {
-                jsonObject.put("userId", uid);
-            }
+           // jsonObject.put("tel", phone);
+            jsonObject.put("validationCode", captcha);
+            jsonObject.put("action", Integer.parseInt(actionCode));
+          //  if (!TextUtils.isEmpty(uid)) {
+             if (uid!=0)
+                jsonObject.put("userId",uid);
+        //    }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -187,18 +195,17 @@ public class UserApi extends BaseApi {
 
     public static PTRequestHandler bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + BIND_PHONE);
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL +String.format(BIND_PHONE,uid) );
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
-            jsonObject.put("userId", uid);
             jsonObject.put("token", token);
-            if (!TextUtils.isEmpty(pwd)) {
-                jsonObject.put("pwd", pwd);
-            }
+//            if (!TextUtils.isEmpty(pwd)) {
+//                jsonObject.put("pwd", pwd);
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -215,15 +222,14 @@ public class UserApi extends BaseApi {
 
     public static PTRequestHandler resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + RESET_PWD);
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD,AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("tel", tel);
             jsonObject.put("token", token);
-            jsonObject.put("pwd", pwd);
+            jsonObject.put("newPassword", pwd);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -240,15 +246,14 @@ public class UserApi extends BaseApi {
 
     public static PTRequestHandler modifyPwd(String oldPwd, String newPwd, String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + MODIFY_PWD);
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL +String.format(MODIFY_PWD,uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("oldPwd", oldPwd);
-            jsonObject.put("newPwd", newPwd);
-            jsonObject.put("userId", uid);
+            jsonObject.put("oldPassword", oldPwd);
+            jsonObject.put("newPassword", newPwd);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -318,7 +323,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getUserInfo(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId);
+        request.setUrl(SystemConfig.DEV_URL + USERINFO + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -518,8 +523,13 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler seachContact(String key, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + SEACH_CONTACT);
-        request.putUrlParams("keyword", key);
+//        if ( RegexUtils.isMobileNO(key)) {
+//           request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_TEL+key);
+//        }else {
+//            request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
+//        }
+        request.setUrl(SystemConfig.BASE_URL + CONTACTS );
+        request.putUrlParams("Keyword",key);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

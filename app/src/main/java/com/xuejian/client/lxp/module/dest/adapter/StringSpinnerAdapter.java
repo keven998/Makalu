@@ -28,7 +28,9 @@ public class StringSpinnerAdapter implements SpinnerAdapter {
             view = ((Activity)mContext).getLayoutInflater().inflate(R.layout.spinner_item_dropdown, parent, false);
             view.setTag("DROPDOWN");
         }
-        ((TextView) view.findViewById(android.R.id.text1)).setText(getItem(position).toString());
+        System.out.print("hhhh  "+getItem(position).toString());
+            TextView textView= (TextView) view.findViewById(R.id.tv_title);
+        textView .setText(getItem(position).toString());
         return view;
     }
 

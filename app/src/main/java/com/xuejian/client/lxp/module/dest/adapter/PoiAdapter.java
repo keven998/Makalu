@@ -155,6 +155,8 @@ public class PoiAdapter extends BaseAdapter {
             //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if(!poiDetailBean.getFormatRank().equals("0")){
                 spotViewHolder.mSpotRankTv.setText(poiDetailBean.getFormatRank());
+            }else {
+                spotViewHolder.mSpotRankTv.setText("N");
             }
             if (mIsCanAdd) {
                 spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
@@ -255,6 +257,8 @@ public class PoiAdapter extends BaseAdapter {
             if(!poiDetailBean.getFormatRank().equals("0")){
 //                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 poiViewHolder.mPoiRankTv.setText(poiDetailBean.getFormatRank());
+            }else {
+                poiViewHolder.mPoiRankTv.setText("N");
             }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
 ////                poiViewHolder.mRlComment.setVisibility(View.GONE);

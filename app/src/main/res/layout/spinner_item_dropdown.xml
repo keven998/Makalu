@@ -6,15 +6,16 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:gravity="center"
-        android:paddingBottom="14dp"
-        android:paddingLeft="12dp"
-        android:paddingTop="14dp"
+        android:background="@color/base_color_white"
+        android:paddingBottom="17dp"
+        android:padding="5dp"
+        android:paddingTop="17dp"
         android:singleLine="true"
-        android:textColor="@color/color_text_i"
+        android:textColor="@color/color_text_ii"
         android:textSize="17sp" />
 
     <View

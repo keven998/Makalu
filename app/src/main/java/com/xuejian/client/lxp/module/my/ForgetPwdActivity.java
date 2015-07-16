@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -102,12 +103,18 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
 
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        System.out.println(code);
+                        if (code== HttpManager.PERMISSION_ERROR){
+                            if (!isFinishing())
+                                ToastUtil.getInstance(ForgetPwdActivity.this).showToast("发送短信过于频繁！");
+                        }
+                        else if (!isFinishing())
+                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
 
                     }
                 });
@@ -128,7 +135,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     return;
                 }
                 DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
-                UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
+                UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.FIND_PWD, 0, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -145,14 +152,18 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        if (!isFinishing())
-                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+
                     }
 
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
-
+                        System.out.println("code " + code);
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (code == HttpManager.PWD_ERROR) {
+                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast("验证失败");
+                        }
+                        else if (!isFinishing())
+                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });
 
