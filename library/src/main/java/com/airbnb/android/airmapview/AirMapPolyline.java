@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class AirMapPolyline<T> {
 
-  private static final int STROKE_WIDTH = 10;
-  private static final int STROKE_COLOR = Color.parseColor("#99cc66");
+  private static final int STROKE_WIDTH = 5;
+  private static final int STROKE_COLOR = Color.parseColor("#FA5064");
 
   private T object;
   private int strokeWidth;
