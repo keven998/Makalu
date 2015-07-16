@@ -148,6 +148,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void doFailure(Exception error, String msg, String method) {
 
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -174,6 +179,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //                            error.printStackTrace();
                             DialogManager.getInstance().dissMissLoadingDialog();
                             ToastUtil.getInstance(HisMainPageActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
                         }
                     });
                 }
@@ -304,6 +314,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(HisMainPageActivity.this).showToast("删除失败");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 
@@ -455,6 +470,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络~");
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
@@ -473,6 +493,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }
@@ -533,6 +558,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 ToastUtil.getInstance(HisMainPageActivity.this).showToast("好像没有网络额~");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }

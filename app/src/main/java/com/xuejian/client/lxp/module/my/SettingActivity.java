@@ -147,6 +147,11 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

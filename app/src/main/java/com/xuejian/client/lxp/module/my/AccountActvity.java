@@ -192,6 +192,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void doFailure(Exception error, String msg, String method) {
                 ToastUtil.getInstance(AccountActvity.this).showToast("好像没有网络额~");
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -532,6 +537,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 public void doFailure(Exception error, String msg, String method) {
 
                 }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
             });
         }
     }
@@ -646,6 +656,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
 
             @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+
+            @Override
             public void onStart() {
             }
         });
@@ -736,6 +751,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
 
             @Override
@@ -842,6 +862,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (!isFinishing())
                     ToastUtil.getInstance(AccountActvity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -871,6 +896,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
 
             @Override
@@ -1011,6 +1041,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
 
             @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+
+            @Override
             public void onStart() {
             }
         });
@@ -1045,6 +1080,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
 
             @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+
+            @Override
             public void onStart() {
             }
         });
@@ -1075,6 +1115,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
 
             @Override

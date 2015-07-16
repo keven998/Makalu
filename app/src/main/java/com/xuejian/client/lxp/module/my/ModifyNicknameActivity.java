@@ -96,6 +96,11 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     }
 
                     @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+
+                    @Override
                     public void onStart() {
 
                     }

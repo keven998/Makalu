@@ -467,6 +467,11 @@ public class AddPoiActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

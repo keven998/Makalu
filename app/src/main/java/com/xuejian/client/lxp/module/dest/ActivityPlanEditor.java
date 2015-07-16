@@ -430,6 +430,11 @@ public class ActivityPlanEditor extends FragmentActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

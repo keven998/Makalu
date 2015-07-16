@@ -339,6 +339,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
 
     }
@@ -543,6 +548,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                         if (!isFinishing())
                             ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
             }
         });
@@ -594,6 +604,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -625,6 +640,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -650,6 +670,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }

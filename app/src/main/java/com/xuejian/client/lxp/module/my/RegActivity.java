@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.xuejian.client.lxp.R;
@@ -100,8 +101,18 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        if (!isFinishing())
+                        System.out.println(code);
+                        if (code== HttpManager.PERMISSION_ERROR){
+                            if (!isFinishing())
+                                ToastUtil.getInstance(RegActivity.this).showToast("发送短信过于频繁！");
+                        }
+                       else if (!isFinishing())
                             ToastUtil.getInstance(RegActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

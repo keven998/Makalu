@@ -89,6 +89,11 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                             if (!isFinishing())
                                 ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
                     });
                 }
                 break;

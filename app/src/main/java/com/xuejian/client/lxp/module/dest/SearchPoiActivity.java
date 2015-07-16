@@ -150,6 +150,11 @@ public class SearchPoiActivity extends PeachBaseActivity {
                 mLvPoiList.onPullUpRefreshComplete();
                 mLvPoiList.onPullDownRefreshComplete();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

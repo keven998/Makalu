@@ -239,6 +239,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(PeachApplication.getContext()).showToast("呃~网络有些问题");
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -311,6 +316,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 public void doFailure(Exception error, String msg, String method) {
 
                 }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
             });
 
         } else {
@@ -353,6 +363,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
 
             }
         });
@@ -473,6 +488,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 public void doFailure(Exception error, String msg, String method) {
                     deleteDialog.dismiss();
                     ToastUtil.getInstance(PeachApplication.getContext()).showToast("请求失败");
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
                 }
             });
         }

@@ -88,6 +88,11 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                         if (!isFinishing())
                             ToastUtil.getInstance(SetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
                 break;
         }

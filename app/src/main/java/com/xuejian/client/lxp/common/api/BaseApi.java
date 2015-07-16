@@ -29,6 +29,11 @@ public class BaseApi {
             public void doFailure(Exception error, String msg, String method) {
 
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

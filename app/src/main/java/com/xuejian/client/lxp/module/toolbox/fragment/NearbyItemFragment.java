@@ -163,6 +163,11 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
                 }
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
 
 

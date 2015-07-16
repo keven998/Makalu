@@ -246,6 +246,11 @@ public class StrategyActivity extends PeachBaseActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -305,6 +310,11 @@ public class StrategyActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -363,6 +373,11 @@ public class StrategyActivity extends PeachBaseActivity {
                                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
                                     }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                                    }
                                 });
                             }
                         });
@@ -411,6 +426,11 @@ public class StrategyActivity extends PeachBaseActivity {
                                         if (!isFinishing()) {
                                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
+                                    }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method, int code) {
+
                                     }
                                 });
                             }

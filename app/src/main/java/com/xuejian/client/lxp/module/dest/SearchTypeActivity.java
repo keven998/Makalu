@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -189,6 +188,11 @@ public class SearchTypeActivity extends PeachBaseActivity {
                     mSearchTypeLv.onPullDownRefreshComplete();
                     ToastUtil.getInstance(SearchTypeActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.http.HttpManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
@@ -139,8 +140,18 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 
                             @Override
                             public void doFailure(Exception error, String msg, String method) {
+
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method,int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                if (code== HttpManager.PERMISSION_ERROR){
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("验证码错误");
+                                }else if (code==HttpManager.RESOURSE_CONFLICT){
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("手机号已存在");
+                                }
+                                else ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                     } else if (actionCode.equals(UserApi.ValidationCode.FIND_PWD)) {
@@ -179,6 +190,11 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
                             ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
                     }
                 });
 

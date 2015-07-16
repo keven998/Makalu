@@ -83,7 +83,12 @@ public class FeedbackActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     ToastUtil.getInstance(FeedbackActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
-        });
+
+			@Override
+			public void doFailure(Exception error, String msg, String method, int code) {
+
+			}
+		});
 	}
 
 }

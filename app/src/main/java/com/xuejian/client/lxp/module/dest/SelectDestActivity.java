@@ -26,7 +26,6 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
@@ -170,6 +169,11 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 if (!isFinishing())
                                     ToastUtil.getInstance(mContext).showToast(getResources().getString(R.string.request_network_failed));
+
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method, int code) {
 
                             }
                         });

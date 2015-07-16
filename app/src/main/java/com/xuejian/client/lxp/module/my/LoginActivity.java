@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.http.HttpManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
@@ -315,10 +316,18 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
 //                error.printStackTrace();
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!isFinishing())
-                    ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
 
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (code== HttpManager.PWD_ERROR){
+                    ToastUtil.getInstance(LoginActivity.this).showToast("用户名或密码错误");
+                }
+                else if (!isFinishing())
+                    ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });
     }
@@ -349,6 +358,11 @@ public class LoginActivity extends PeachBaseActivity {
                     public void doFailure(Exception error, String msg, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
                     }
                 });
             }

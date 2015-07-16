@@ -35,14 +35,17 @@ public class UserApi extends BaseApi {
         public final static String BIND_PHONE = "3";
     }
 
-    //发送验证码
-    public final static String SEND_VALIDATION = "/users/send-validation";
+    // 发送验证码
+//    public final static String SEND_VALIDATION = "/users/send-validation";
+    public final static String SEND_VALIDATION = "/users/validation-codes";
+
     //验证验证码换取token
     public final static String CHECK_VALIDATION = "/users/check-validation";
     //第三方登录
     public final static String AUTH_SIGNUP = "/users/auth-signup";
-    //注册
-    public final static String SIGNUP = "/users/signup";
+    //  注册
+    // public final static String SIGNUP = "/users/signup";
+    public final static String SIGNUP = "/users";
     //登录
     public final static String SIGNIN = "/users/signin";
     //获取个人信息
@@ -58,7 +61,7 @@ public class UserApi extends BaseApi {
     //联系人
     public final static String CONTACTS = "/users/contacts";
     //请求添加好友
-    public final static String REQUEST_ADD_CONTACTS="/users/request-contacts";
+    public final static String REQUEST_ADD_CONTACTS = "/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
     //搜索达人足迹
@@ -88,7 +91,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -102,13 +105,14 @@ public class UserApi extends BaseApi {
             (String phone, String actionCode, String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + SEND_VALIDATION);
+        request.setUrl(SystemConfig.DEV_URL + SEND_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
-            jsonObject.put("actionCode", actionCode);
+            jsonObject.put("dialCode", 86);
+            jsonObject.put("actionCode", Integer.parseInt(actionCode));
             if (!TextUtils.isEmpty(uid)) {
                 jsonObject.put("userId", uid);
             }
@@ -117,7 +121,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -146,7 +150,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -159,19 +163,19 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler signUp(String phone, String pwd, String captcha, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + SIGNUP);
+        request.setUrl(SystemConfig.DEV_URL + SIGNUP);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
-            jsonObject.put("pwd", pwd);
-            jsonObject.put("captcha", captcha);
+            jsonObject.put("password", pwd);
+            jsonObject.put("validationCode", captcha);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -199,7 +203,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -224,7 +228,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -273,7 +277,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -301,7 +305,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -321,31 +325,31 @@ public class UserApi extends BaseApi {
     }
 
     public static PTRequestHandler editUserAvatar(User user, String avatar, HttpCallBack callBack) {
-        return editUserInfo(user, avatar, null, null, null,null,null,null, callBack);
+        return editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
     }
 
     public static PTRequestHandler editUserNickName(User user, String nickname, HttpCallBack callBack) {
-        return editUserInfo(user, null, nickname, null, null,null,null,null, callBack);
+        return editUserInfo(user, null, nickname, null, null, null, null, null, callBack);
     }
 
     public static PTRequestHandler editUserSignature(User user, String signature, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, signature, null,null,null,null, callBack);
+        return editUserInfo(user, null, null, signature, null, null, null, null, callBack);
     }
 
     public static PTRequestHandler editUserGender(User user, String gender, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, gender, null,null,null,callBack);
+        return editUserInfo(user, null, null, null, gender, null, null, null, callBack);
     }
 
     public static PTRequestHandler editUserResidence(User user, String residence, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, residence,null,null,callBack);
+        return editUserInfo(user, null, null, null, null, residence, null, null, callBack);
     }
 
     public static PTRequestHandler editUserBirthday(User user, String birthday, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, null,birthday,null,callBack);
+        return editUserInfo(user, null, null, null, null, null, birthday, null, callBack);
     }
 
     public static PTRequestHandler editUserStatus(User user, String status, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, null,null,status,callBack);
+        return editUserInfo(user, null, null, null, null, null, null, status, callBack);
     }
 
 
@@ -385,7 +389,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -423,28 +427,30 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.aysnRequest(request);
     }*/
+
     /**
      * 请求添加好友
+     *
      * @param uid
      * @param callback
      * @return
      */
-    public static PTRequestHandler requestAddContact(String uid,String message, HttpCallBack callback) {
+    public static PTRequestHandler requestAddContact(String uid, String message, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-       // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
-        request.setUrl(SystemConfig.DEV_URL + "/users/"+ AccountManager.getCurrentUserId()+"/contact-requests");
+        // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
+        request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request,uid);
+        setDefaultParams(request, uid);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("contactId", Long.parseLong(uid));
-            jsonObject.put("message",message);
+            jsonObject.put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -453,16 +459,18 @@ public class UserApi extends BaseApi {
 
         return HttpManager.request(request, callback);
     }
+
     /**
      * 添加好友
+     *
      * @param requestId
      * @param callback
      * @return
      */
-    public static PTRequestHandler addContact( String requestId, String message,HttpCallBack callback) {
+    public static PTRequestHandler addContact(String requestId, String message, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL + "/users/"+ AccountManager.getCurrentUserId()+"/contact-requests/"+requestId);
+        request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests/" + requestId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -473,7 +481,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -525,18 +533,17 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchExpertContact(String key,String field,int page,int pageSize,HttpCallBack callback){
+    public static PTRequestHandler searchExpertContact(String key, String field, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL+ SEACH_CONTACT);
-        request.putUrlParams("keyword",key);
+        request.setUrl(SystemConfig.BASE_URL + SEACH_CONTACT);
+        request.putUrlParams("keyword", key);
         request.putUrlParams("field", field);
         request.putUrlParams("page", page + "");
-        request.putUrlParams("pageSize",pageSize+"");
+        request.putUrlParams("pageSize", pageSize + "");
         setDefaultParams(request);
-        return HttpManager.request(request,callback);
+        return HttpManager.request(request, callback);
     }
-
 
 
     /**
@@ -547,13 +554,13 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchExpertFootPrint(boolean abroad,HttpCallBack callback){
+    public static PTRequestHandler searchExpertFootPrint(boolean abroad, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_EXPERT_FOOTPRINT);
-        request.putUrlParams("abroad",String.valueOf(abroad));
+        request.putUrlParams("abroad", String.valueOf(abroad));
         setDefaultParams(request);
-        return HttpManager.request(request,callback);
+        return HttpManager.request(request, callback);
     }
 
 
@@ -565,12 +572,12 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getUserPicAlbumn(String userId,HttpCallBack callback){
+    public static PTRequestHandler getUserPicAlbumn(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/albums");
         setDefaultParams(request);
-        return HttpManager.request(request,callback);
+        return HttpManager.request(request, callback);
     }
 
 
@@ -583,16 +590,13 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler delUserAlbumPic(String userId,String picId,HttpCallBack callback){
+    public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.BASE_URL+ USERINFO + userId + "/albums/" + picId);
+        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/albums/" + picId);
         setDefaultParams(request);
-        return HttpManager.request(request,callback);
+        return HttpManager.request(request, callback);
     }
-
-
-
 
 
     /**
@@ -620,7 +624,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -655,7 +659,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -693,7 +697,7 @@ public class UserApi extends BaseApi {
             }
             rootObject.put("contacts", jsonArray);
             try {
-                StringEntity entity = new StringEntity(rootObject.toString(),"utf-8");
+                StringEntity entity = new StringEntity(rootObject.toString(), "utf-8");
 //                request.setBodyEntity( entity);
                 request.setBodyEntity(new GzipCompressingEntity(entity));
             } catch (UnsupportedEncodingException e) {
@@ -705,12 +709,13 @@ public class UserApi extends BaseApi {
         }
         return HttpManager.request(request, callback);
     }
+
     public static PTRequestHandler editMemo
             (String userId, String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + "/users/"+userId+"/memo");
-                request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        request.setUrl(SystemConfig.BASE_URL + "/users/" + userId + "/memo");
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
@@ -719,7 +724,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         try {
-            StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
             request.setBodyEntity(entity);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

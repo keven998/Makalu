@@ -181,6 +181,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 }
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -203,6 +208,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
 //                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }

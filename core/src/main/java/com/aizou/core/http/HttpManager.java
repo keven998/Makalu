@@ -43,6 +43,10 @@ import java.util.Map.Entry;
 public class HttpManager {
     private static final String TAG = "httplog";
     private static HashMap<String, HttpHandler> downloadsMap = new HashMap<String, HttpHandler>();
+    public static final int PWD_ERROR = 401;
+    public static final int PERMISSION_ERROR = 403;
+    public static final int RESOURSE_CONFLICT = 409;
+    public static final int PARAMETER_ERROR = 422;
     private static final int TIMEOUT_SECOND =1000000;
 
     private static void requestFilter(Map<String, ? extends Object> map) {
@@ -135,11 +139,14 @@ public class HttpManager {
                 @Override
                 public void onFailure(HttpException error, String msg) {
 //					DialogManager.getInstance().dissMissProgressDialog();
-                    LogUtil.e(TAG, "error Code = " + error.getExceptionCode()
+                    int code =  error.getExceptionCode();
+                    LogUtil.e(TAG, "error Code = " + code
                             + "error msg= " + msg);
                     if (callBack != null) {
                         callBack.doFailure(error, msg,
                                 url);
+                        callBack.doFailure(error, msg,
+                                url,code);
                     }
                 }
 

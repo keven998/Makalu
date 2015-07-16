@@ -307,6 +307,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (!getActivity().isFinishing())
                     ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
         // 进入主页面
         getActivity().runOnUiThread(new Runnable() {
@@ -340,6 +345,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             public void doFailure(Exception error, String msg, String method) {
                 tvPictureCount.setText(picsNum + "图");
                 ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

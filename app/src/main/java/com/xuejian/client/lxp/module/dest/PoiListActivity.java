@@ -270,6 +270,11 @@ public class PoiListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -343,6 +348,11 @@ public class PoiListActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -406,6 +416,11 @@ public class PoiListActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(PoiListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

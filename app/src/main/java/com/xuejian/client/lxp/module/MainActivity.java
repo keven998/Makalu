@@ -136,6 +136,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 public void doFailure(Exception error, String msg, String method) {
 
                 }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
             });
             getInLocList();
             getOutCountryList();
@@ -180,6 +185,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 ToastUtil.getInstance(MainActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }
@@ -519,6 +529,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
 //                }
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -542,6 +557,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void doFailure(Exception error, String msg, String method) {
 //                if (isAdded())
 //                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }

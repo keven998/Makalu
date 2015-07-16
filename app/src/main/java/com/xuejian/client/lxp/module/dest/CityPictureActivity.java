@@ -38,7 +38,6 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.LocAlbum;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
@@ -50,7 +49,6 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageZoomAnimator2;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
-import com.xuejian.client.lxp.module.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -170,6 +168,11 @@ public class CityPictureActivity extends PeachBaseActivity {
                 public void doFailure(Exception error, String msg, String method) {
                     ToastUtil.getInstance(CityPictureActivity.this).showToast("好像没有网络额~");
                 }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
             });
         }else {
             TravelApi.getCityGalley(id, new HttpCallBack<String>() {
@@ -189,6 +192,11 @@ public class CityPictureActivity extends PeachBaseActivity {
                     if (!isFinishing()) {
                         ToastUtil.getInstance(CityPictureActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
                 }
             });
         }
@@ -400,6 +408,11 @@ public class CityPictureActivity extends PeachBaseActivity {
             }
 
             @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+
+            @Override
             public void onStart() {
             }
         });
@@ -480,6 +493,11 @@ public class CityPictureActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 if (!isFinishing())
                     ToastUtil.getInstance(CityPictureActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }

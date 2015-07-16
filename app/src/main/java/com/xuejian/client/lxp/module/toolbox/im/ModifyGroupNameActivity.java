@@ -62,6 +62,11 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
                         setResult(RESULT_OK);
                         finish();
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
 //                GroupManager.getGroupManager().editGroupName(groupId, groupNameEt.getText().toString().trim(), new CallBack() {
 //                    @Override

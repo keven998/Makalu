@@ -18,11 +18,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -41,7 +39,6 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.module.toolbox.ExpertFilterActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.text.SimpleDateFormat;
@@ -140,6 +137,11 @@ public class GuilderListActivity extends PeachBaseActivity {
                 gridView.onPullDownRefreshComplete();
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 ToastUtil.getInstance(GuilderListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }
@@ -305,6 +307,11 @@ public class GuilderListActivity extends PeachBaseActivity {
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 ToastUtil.getInstance(GuilderListActivity.this).showToast("好像没有网络~");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

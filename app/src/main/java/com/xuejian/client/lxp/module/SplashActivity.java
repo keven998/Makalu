@@ -151,6 +151,11 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             @Override
             public void doFailure(Exception error, String msg, String method) {
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
         handler.postDelayed(runnable, SPLASH_DISPLAY_LENGHT);
     }

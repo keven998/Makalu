@@ -3,8 +3,6 @@ package com.aizou.core.http;
 
 import org.apache.http.Header;
 
-import java.util.Map;
-
 /**
  * 描述：通信回调类
  * @author  xby
@@ -36,7 +34,9 @@ public abstract class HttpCallBack<T> {
 	 * @return
 	 */
 	public abstract void doFailure(Exception error, String msg, String method);
-	
+
+    public abstract void doFailure(Exception error, String msg, String method,int code);
+
 	/**
 	 * 描述: 通讯回调前拦截
 	 * @param result 回调数据

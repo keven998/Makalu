@@ -119,6 +119,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissLoadingDialog();
                         ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
 
                 break;
@@ -171,6 +176,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                     public void doFailure(Exception error, String msg, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                     }
+
+                                    @Override
+                                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                                    }
                                 });
                             }
                         } else {
@@ -185,6 +195,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
                             ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
                     }
                 });
                 break;

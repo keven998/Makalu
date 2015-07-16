@@ -2,10 +2,8 @@ package com.xuejian.client.lxp.module.my;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.amap.api.maps2d.AMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -42,7 +39,6 @@ import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -170,6 +166,11 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 ToastUtil.getInstance(MyFootPrinterActivity.this).showToast("更改足迹失败");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

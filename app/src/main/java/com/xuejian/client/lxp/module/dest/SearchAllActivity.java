@@ -1,6 +1,5 @@
 package com.xuejian.client.lxp.module.dest;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,18 +18,14 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.lv.Listener.HttpCallback;
-import com.lv.im.IMClient;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.SearchAllBean;
 import com.xuejian.client.lxp.bean.SearchTypeBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
@@ -183,6 +178,11 @@ public class SearchAllActivity extends PeachBaseActivity {
                 if (!isFinishing()) {
                     ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
 

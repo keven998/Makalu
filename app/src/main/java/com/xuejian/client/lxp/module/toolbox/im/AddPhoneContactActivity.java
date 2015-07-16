@@ -103,6 +103,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(AddPhoneContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
 
 //        // 初始化搜索引擎
@@ -187,6 +192,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 if (!isFinishing())
                                     ToastUtil.getInstance(mContext).showToast("获取用户信息失败");
+                            }
+
+                            @Override
+                            public void doFailure(Exception error, String msg, String method, int code) {
+
                             }
                         });
                     }

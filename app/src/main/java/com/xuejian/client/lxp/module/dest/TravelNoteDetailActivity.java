@@ -154,6 +154,11 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                             if (isAdded())
                                 ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                         }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
                     });
 
                 }

@@ -105,6 +105,11 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissLoadingDialog();
                         ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
 
                 break;
@@ -143,6 +148,11 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (!isFinishing())
                             ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
                     }
                 });
 

@@ -241,6 +241,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 

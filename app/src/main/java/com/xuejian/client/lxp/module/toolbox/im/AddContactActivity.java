@@ -183,6 +183,11 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                     if (!isFinishing())
                         ToastUtil.getInstance(AddContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
             });
 
 //        }

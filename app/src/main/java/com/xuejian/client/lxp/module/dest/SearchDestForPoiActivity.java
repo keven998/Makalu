@@ -31,7 +31,6 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
 import java.util.List;
 
@@ -174,6 +173,11 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                     mProgressBar.setVisibility(View.INVISIBLE);
                 }
             }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
         });
     }
 
@@ -199,6 +203,10 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                     mSearchResultLv.onPullDownRefreshComplete();
                     ToastUtil.getInstance(SearchDestForPoiActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                 }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
             }
         });
 

@@ -281,6 +281,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
 
                     }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
                 });
             }
         }
@@ -307,6 +312,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         public void doFailure(Exception error, String msg, String method) {
 
                         }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
                     });
                 } else {
                     GroupApi.editGroupMembers(groupId, ids, 1, new HttpCallBack() {
@@ -324,6 +334,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                         public void doFailure(Exception error, String msg, String method) {
                             error.printStackTrace();
                             System.out.println("error " + msg + " method " + method);
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
                         }
                     });
 //                    GroupManager.getGroupManager().addMembers(groupId, ids, true, new CallBack() {
@@ -423,6 +438,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
                 }
             });
