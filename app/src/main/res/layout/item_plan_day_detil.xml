@@ -56,17 +56,17 @@
         <!--/>-->
     <CheckedTextView
         android:id="@+id/btn_send"
-        android:layout_width="46dp"
-        android:layout_height="32dp"
+        android:layout_width="54dp"
+        android:layout_height="26dp"
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:background="@drawable/selecter_theme_btn_radius_4"
+        android:background="@drawable/cell_selecter_btn"
         android:text="收藏"
         android:visibility="gone"
-        android:textColor="@color/base_color_white"
-        android:textSize="13sp"/>
+        android:textColor="@color/app_theme_color"
+        android:textSize="10sp"/>
     <TextView
         android:id="@+id/tv_poi_title"
         android:layout_width="match_parent"
