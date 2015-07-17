@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.dest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.HorizontalScrollView;
@@ -46,6 +48,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
@@ -126,33 +129,40 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     public void onClick(View v) {
                         LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 //自定义布局
+                        final XDialog xDialog=new XDialog(StrategyMapActivity.this);
+                        WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
+                        wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
+                        ListView lv=xDialog.getListView();
+                        adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
+                        lv.setAdapter(adapter);
+                        xDialog.show();
+/*
                         ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
                                 R.layout.map_day_select, null, true);
-                        TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+                        //TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
 
                         ListView lv = (ListView) menuView.findViewById(R.id.map_days_list);
                         adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
                         lv.setAdapter(adapter);
-                        mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-                                FlowLayout.LayoutParams.MATCH_PARENT, true);
+                        mPop = new PopupWindow(menuView,FlowLayout.LayoutParams.MATCH_PARENT,
+                                FlowLayout.LayoutParams.WRAP_CONTENT, true);
                         mPop.setContentView(menuView);//设置包含视图
                         mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-                        mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-                        mPop.setAnimationStyle(R.style.PopAnimation);
-                        mPop.showAtLocation(findViewById(R.id.parent), Gravity.BOTTOM, 0, 0);
-                        pop_dismiss.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mPop.dismiss();
-                            }
-                        });
+                        mPop.setHeight(FlowLayout.LayoutParams.WRAP_CONTENT);
+                        mPop.setAnimationStyle(android.R.style.Animation_Dialog);
+                        //mPop.showAsDropDown(day_select,-30,20);
+                        mPop.setOutsideTouchable(true);
+                        mPop.showAtLocation(findViewById(R.id.parent), Gravity.CENTER, 0, 0);*/
+                       /* WindowManager.LayoutParams params=StrategyMapActivity.this.getWindow().getAttributes();
+                        params.alpha=0.7f;
+                        StrategyMapActivity.this.getWindow().setAttributes(params);*/
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 tv_title.setText("第" + (position + 1) + "天");
                                 tv_select_day.setText(normalizeNumber(position + 1));
                                 initData(position);
-                                mPop.dismiss();
+                                xDialog.dismiss();
                             }
                         });
                     }
@@ -472,9 +482,9 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
             }
             TextView days_title=(TextView)convertView.findViewById(R.id.days_title);
-            days_title.setText("第"+(position+1)+"天");
-            selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
-            if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
+            days_title.setText(normalizeNumber(position+1)+".Day");
+            //selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
+            //if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
             return convertView;
         }
     }
