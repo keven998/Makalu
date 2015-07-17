@@ -21,6 +21,8 @@ import com.aizou.core.http.HttpCallBack;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SearchAllBean;
 import com.xuejian.client.lxp.bean.SearchTypeBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -48,8 +50,8 @@ public class SearchAllActivity extends PeachBaseActivity {
     ListView mSearchAllLv;
     String toId;
     String chatType;
-
-
+    Object temp;
+    String currentType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,6 +190,17 @@ public class SearchAllActivity extends PeachBaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            if ("locality".equals(currentType)){
+                IMUtils.onShareResult(mContext, (LocBean)temp, requestCode, resultCode, data, null);
+            }else  IMUtils.onShareResult(mContext, (PoiDetailBean)temp, requestCode, resultCode, data, null);
+
+        }
+    }
+
     private void bindView(final String keyword, SearchAllBean result) {
         ArrayList<SearchTypeBean> typeBeans = new ArrayList<SearchTypeBean>();
         if (result.locality != null && result.locality.size() > 0) {
@@ -243,6 +256,9 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onSendClick(String type, String id, Object object) {
+                System.out.print(type);
+                    currentType=type;
+                    temp=object;
                 IMUtils.onClickImShare(mContext);
 //                IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
 //                            @Override

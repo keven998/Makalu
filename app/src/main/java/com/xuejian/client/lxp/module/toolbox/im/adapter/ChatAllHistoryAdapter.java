@@ -76,14 +76,15 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     DisplayImageOptions options;
     private Handler handler;
     private ImageSize avatarSize;
-
+    private Context mContext;
     public ChatAllHistoryAdapter(Context context, int textViewResourceId, List<ConversationBean> objects) {
         super(context, textViewResourceId, objects);
+        mContext=context;
         inflater = LayoutInflater.from(context);
         handler = new Handler();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+              //  .showImageOnLoading()
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -120,14 +121,6 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         String username = String.valueOf(conversation.getFriendId());
         boolean isGroup = "group".equals(conversation.getChatType());
         if (isGroup) {
-            //           contact = EMGroupManager.getInstance().getGroup(username);
-//            if (contact != null) {
-//                final EMGroup group = (EMGroup) contact;
-//                List<String> members = group.getMembers();
-//                if (members == null) {
-//                    members = new ArrayList<>();
-//                }
-//                final List<Bitmap> membersAvatars = new ArrayList<>();
             final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(username));
             final List<Bitmap> membersAvatars = new ArrayList<>();
             int membersize;
@@ -177,8 +170,14 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
+                if (user.getUserId()==10001){
+                    holder.avatar.setImageResource(R.drawable.icon_avatar_wenwen);
+                } else if (user.getUserId()==10000){
+                    holder.avatar.setImageResource(R.drawable.icon_avatar_paipai);
+                } else{
                 finalHolder.avatar.setTag(user.getAvatarSmall());
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
+                }
 //                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
 //                    @Override
 //                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

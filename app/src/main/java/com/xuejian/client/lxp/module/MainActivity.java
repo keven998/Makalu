@@ -175,6 +175,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         userlist.put(myUser.getUserId(), myUser);
                     }
                     // 存入db
+                    User wenwen=new User();
+                    wenwen.setNickName("旅行问问");
+                    wenwen.setUserId(10001l);
+                    wenwen.setType(1);
+                    UserDBManager.getInstance().saveContact(wenwen);
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);

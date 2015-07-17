@@ -463,7 +463,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
                 des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
-                ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
+                if (bean.images.size()>0)
+                ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
                 if (!bean.isAdded) {
                     //if(isClickable) {
                     addIcon.setVisibility(View.GONE);
