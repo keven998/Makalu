@@ -58,12 +58,11 @@ import java.util.List;
 /**
  * Created by lxp_dqm07 on 2015/4/27.
  */
-public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener
-           {
+public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener {
     private AirMapView mapView;
-   // private AMap aMap;
+    // private AMap aMap;
 
-   // private TitleHeaderBar titleHeaderBar;
+    // private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
     private ArrayList<StrategyBean> allBeans;
     private MarkerOptions markerOption;
@@ -77,24 +76,24 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private AirMapInterface airMapInterface;
     private AirMapPolyline airMapPolyline;
     private long POLY_LINE = 1;
-    boolean isShow=false;
-    private TextView tv_title,tv_subTitle,tv_select_day;
-    private ImageView title_back,map_more;
-    private boolean isExpertFootPrint,isMyFootPrint;
+    boolean isShow = false;
+    private TextView tv_title, tv_subTitle, tv_select_day;
+    private ImageView title_back, map_more;
+    private boolean isExpertFootPrint, isMyFootPrint;
     private ArrayList<LocBean> all_print_print;
-    private ArrayList<double[]> coords=new ArrayList<double[]>();
+    private ArrayList<double[]> coords = new ArrayList<double[]>();
     private LinearLayout day_select;
     private String allDesString;
-    private int SET_FOOTPRINT=200;
+    private int SET_FOOTPRINT = 200;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_strategy_map);
-        allBeans=getIntent().getParcelableArrayListExtra("strategy");
-        isExpertFootPrint=getIntent().getBooleanExtra("isExpertFootPrint",false);
-        isMyFootPrint=getIntent().getBooleanExtra("isMyFootPrint",false);
+        allBeans = getIntent().getParcelableArrayListExtra("strategy");
+        isExpertFootPrint = getIntent().getBooleanExtra("isExpertFootPrint", false);
+        isMyFootPrint = getIntent().getBooleanExtra("isMyFootPrint", false);
         title_back = (ImageView) findViewById(R.id.map_title_back);
         map_more = (ImageView) findViewById(R.id.map_more);
         tv_title = (TextView) findViewById(R.id.tv_title);
@@ -105,7 +104,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         title_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isMyFootPrint){
+                if (isMyFootPrint) {
                     Intent intent = new Intent();
                     intent.putParcelableArrayListExtra("footprint", all_print_print);
                     setResult(RESULT_OK, intent);
@@ -116,8 +115,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         });
 
         //titleHeaderBar.getTitleTextView().setText("地图");
-        if(!isExpertFootPrint&&!isMyFootPrint){
-            if(allBeans.size()>0) {
+        if (!isExpertFootPrint && !isMyFootPrint) {
+            if (allBeans.size() > 0) {
                 final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
                 tv_title.setText("第1天");
                 tv_select_day.setText("01");
@@ -158,7 +157,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     }
                 });
             }
-        }else {
+        } else {
             tv_subTitle.setText("足迹");
             tv_title.setText(getIntent().getStringExtra("title"));
         }
@@ -166,16 +165,16 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         //mapView.onCreate(savedInstanceState);
         //initMapView();
         all_locations = (HorizontalScrollView) findViewById(R.id.map_days_name_list);
-        layout=new LinearLayout(getApplicationContext());
+        layout = new LinearLayout(getApplicationContext());
         layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LocalDisplay.dp2px(50)));
         layout.setGravity(Gravity.CENTER_VERTICAL);
-        if(isExpertFootPrint){
+        if (isExpertFootPrint) {
             day_select.setVisibility(View.GONE);
-            all_print_print=getIntent().getParcelableArrayListExtra("ExpertFootPrintBean");
+            all_print_print = getIntent().getParcelableArrayListExtra("ExpertFootPrintBean");
             loadExpertFootPrintMap(all_print_print);
-        }else if(isMyFootPrint){
+        } else if (isMyFootPrint) {
             day_select.setVisibility(View.GONE);
-            all_print_print=getIntent().getParcelableArrayListExtra("myfootprint");
+            all_print_print = getIntent().getParcelableArrayListExtra("myfootprint");
             loadExpertFootPrintMap(all_print_print);
             map_more.setVisibility(View.VISIBLE);
             map_more.setOnClickListener(new View.OnClickListener() {
@@ -187,8 +186,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     startActivityForResult(tracks_intent, SET_FOOTPRINT);
                 }
             });
-        }else {
-            if(allBeans.size()>0) {
+        } else {
+            if (allBeans.size() > 0) {
                 initData(0);
             }
         }
@@ -197,151 +196,149 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==SET_FOOTPRINT){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SET_FOOTPRINT) {
                 //ArrayList<LocBean> result=new ArrayList<LocBean>();
-                all_print_print=data.getParcelableArrayListExtra("footprint");
+                all_print_print = data.getParcelableArrayListExtra("footprint");
                 loadExpertFootPrintMap(all_print_print);
             }
         }
     }
 
-    private String normalizeNumber(int pos){
+    private String normalizeNumber(int pos) {
         String value;
-        if(pos<10){
-            value="0"+pos;
-        }else if(pos<100){
-            value=pos+"";
-        }else{
-            value="99+";
+        if (pos < 10) {
+            value = "0" + pos;
+        } else if (pos < 100) {
+            value = pos + "";
+        } else {
+            value = "99+";
         }
         return value;
     }
 
-    private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint){
+    private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint) {
         all_locations.removeAllViews();
         layout.removeAllViews();
         coords.clear();
-        for(int k=0;k<footPrint.size();k++){
-            View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
-            TextView location=(TextView)view.findViewById(R.id.map_places);
-            TextView r_arrow=(TextView)view.findViewById(R.id.right_arrow);
+        for (int k = 0; k < footPrint.size(); k++) {
+            View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
+            TextView location = (TextView) view.findViewById(R.id.map_places);
+            TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
             r_arrow.setVisibility(View.GONE);
             location.setText(footPrint.get(k).zhName);
-            final int pos=k;
+            final int pos = k;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mapView.animateCenterZoom(new LatLng(footPrint.get(pos).location.coordinates[1]
-                    ,footPrint.get(pos).location.coordinates[0]),8);
+                            , footPrint.get(pos).location.coordinates[0]), 8);
                 }
             });
             layout.addView(view);
             coords.add(footPrint.get(k).location.coordinates);
         }
         all_locations.addView(layout);
-        setUpExpertFootPrintMap(coords,footPrint);
+        setUpExpertFootPrintMap(coords, footPrint);
     }
 
 
-
-    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords,final ArrayList<LocBean> prints){
-        if(mCoords.size()>0) {
+    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords, final ArrayList<LocBean> prints) {
+        if (mCoords.size() > 0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
             airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
             mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
                 @Override
                 public void onMapInitialized() {
-                    for(int k=0;k<mCoords.size();k++){
-                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k+1)
+                    for (int k = 0; k < mCoords.size(); k++) {
+                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k + 1)
                                 .setTitle(prints.get(k).zhName));
                     }
                     mapView.animateCenterZoom(new LatLng(mCoords.get(0)[1], mCoords.get(0)[0]), 2);
                 }
             });
-            mapView.initialize(getSupportFragmentManager(),airMapInterface);
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
             //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }else{
+        } else {
             refreshNullMap();
         }
     }
 
-    private void initData(int pos){
-        if(mapView!=null){
+    private void initData(int pos) {
+        if (mapView != null) {
             mapView.removeAllViews();
         }
-        ArrayList<double[]> coordinates=new ArrayList<double[]>();
-        ArrayList<String> names=new ArrayList<String>();
+        ArrayList<double[]> coordinates = new ArrayList<double[]>();
+        ArrayList<String> names = new ArrayList<String>();
         all_locations.removeAllViews();
         layout.removeAllViews();
-        int flag=1;
-        allDesString="";
-        if(allBeans.get(0).itinerary.size()==0){
-            allDesString="无";
+        int flag = 1;
+        allDesString = "";
+        if (allBeans.get(0).itinerary.size() == 0) {
+            allDesString = "无";
         }
-        for(int i=0;i<allBeans.get(0).itinerary.size();i++){
-            if(allBeans.get(0).itinerary.get(i).dayIndex==pos){
-                View view=View.inflate(StrategyMapActivity.this,R.layout.strategy_map_locations_item,null);
-                TextView location=(TextView)view.findViewById(R.id.map_places);
-                TextView r_arrow=(TextView)view.findViewById(R.id.right_arrow);
-                location.setText(flag+" "+allBeans.get(0).itinerary.get(i).poi.zhName);
-                final int position=i;
+        for (int i = 0; i < allBeans.get(0).itinerary.size(); i++) {
+            if (allBeans.get(0).itinerary.get(i).dayIndex == pos) {
+                View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
+                TextView location = (TextView) view.findViewById(R.id.map_places);
+                TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
+                location.setText(flag + " " + allBeans.get(0).itinerary.get(i).poi.zhName);
+                final int position = i;
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mapView.animateCenterZoom(new LatLng(allBeans.get(0).itinerary.get(position).poi.location.coordinates[1]
-                                ,allBeans.get(0).itinerary.get(position).poi.location.coordinates[0]),15 );
+                                , allBeans.get(0).itinerary.get(position).poi.location.coordinates[0]), 15);
                     }
                 });
                 layout.addView(view);
                 coordinates.add(allBeans.get(0).itinerary.get(i).poi.location.coordinates);
                 names.add(allBeans.get(0).itinerary.get(i).poi.zhName);
-                if(flag==1){
-                    allDesString=allBeans.get(0).itinerary.get(0).poi.zhName;
+                if (flag == 1) {
+                    allDesString = allBeans.get(0).itinerary.get(0).poi.zhName;
                     r_arrow.setVisibility(View.GONE);
-                }else {
-                    allDesString=String.format("%s>%s",allDesString,allBeans.get(0).itinerary.get(i).poi.zhName);
+                } else {
+                    allDesString = String.format("%s>%s", allDesString, allBeans.get(0).itinerary.get(i).poi.zhName);
                 }
                 flag++;
             }
         }
         tv_subTitle.setText(allDesString);
         all_locations.addView(layout);
-        ArrayList<com.amap.api.maps2d.model.LatLng> mLatLngs =new ArrayList<>();
-        for(int j=0;j<coordinates.size();j++){
-            mLatLngs.add(new com.amap.api.maps2d.model.LatLng(coordinates.get(j)[1],coordinates.get(j)[0]));
+        ArrayList<com.amap.api.maps2d.model.LatLng> mLatLngs = new ArrayList<>();
+        for (int j = 0; j < coordinates.size(); j++) {
+            mLatLngs.add(new com.amap.api.maps2d.model.LatLng(coordinates.get(j)[1], coordinates.get(j)[0]));
         }
-        int size=mLatLngs.size();
-        com.amap.api.maps2d.model.LatLng[] mLatLngsArr = new  com.amap.api.maps2d.model.LatLng[size];
-        for(int j=0;j<size;j++){
-            mLatLngsArr[j]=mLatLngs.get(j);
+        int size = mLatLngs.size();
+        com.amap.api.maps2d.model.LatLng[] mLatLngsArr = new com.amap.api.maps2d.model.LatLng[size];
+        for (int j = 0; j < size; j++) {
+            mLatLngsArr[j] = mLatLngs.get(j);
         }
-        setUpMap(names,coordinates, pos);
+        setUpMap(names, coordinates, pos);
     }
 
 
-
-    private void setUpMap(final ArrayList<String> names, final ArrayList<double[]> coor,int pos){
-        if(coor.size()>0) {
-            final List<LatLng> points=new ArrayList<LatLng>();
+    private void setUpMap(final ArrayList<String> names, final ArrayList<double[]> coor, int pos) {
+        if (coor.size() > 0) {
+            final List<LatLng> points = new ArrayList<LatLng>();
 
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
             airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-           // airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).build();
+            // airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).build();
             mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
                 @Override
                 public void onMapInitialized() {
-                    for(int k=0;k<names.size();k++){
-                        mapView.addMarker(new AirMapMarker(new LatLng(coor.get(k)[1], coor.get(k)[0]), k+1)
+                    for (int k = 0; k < names.size(); k++) {
+                        mapView.addMarker(new AirMapMarker(new LatLng(coor.get(k)[1], coor.get(k)[0]), k + 1)
                                 .setTitle(names.get(k)));
                         points.add(new LatLng(coor.get(k)[1], coor.get(k)[0]));
                     }
-                    airMapPolyline=new AirMapPolyline(points,POLY_LINE);
+                    airMapPolyline = new AirMapPolyline(points, POLY_LINE);
                     mapView.addPolyline(airMapPolyline);
                     mapView.animateCenterZoom(new LatLng(coor.get(0)[1], coor.get(0)[0]), 13);
                 }
             });
-            mapView.initialize(getSupportFragmentManager(),airMapInterface);
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
             //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
             //aMap.addPolyline((new PolylineOptions()).add(latLngs).width(5).color(Color.RED));
@@ -357,14 +354,14 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
             }
             bounds=llBound.build();*/
 
-        }else{
+        } else {
             refreshNullMap();
         }
-      //  aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+        //  aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
     }
 
 
-    private void refreshNullMap(){
+    private void refreshNullMap() {
         mapViewBuilder = new DefaultAirMapViewBuilder(this);
         airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
         mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
@@ -373,20 +370,21 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 10);
             }
         });
-        mapView.initialize(getSupportFragmentManager(),airMapInterface);
-       // mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mapView.initialize(getSupportFragmentManager(), airMapInterface);
+        // mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
-    private int DealWithDays(String days){
-        String[] deal1=days.split("第");
-        String[] deal2=deal1[1].split("天");
-        int value=Integer.valueOf(deal2[0]);
+    private int DealWithDays(String days) {
+        String[] deal1 = days.split("第");
+        String[] deal2 = deal1[1].split("天");
+        int value = Integer.valueOf(deal2[0]);
         return value;
     }
 
 
-    @Override public void onMapInitialized() {
+    @Override
+    public void onMapInitialized() {
     }
 
     private void addMarker(String title, LatLng latLng) {
@@ -407,25 +405,25 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     @Override
     protected void onResume() {
         super.onResume();
-       // mapView.onResume();
+        // mapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-       // mapView.onPause();
+        // mapView.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       // mapView.onSaveInstanceState(outState);
+        // mapView.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // mapView.onDestroy();
+        // mapView.onDestroy();
     }
 
     @Override
@@ -434,18 +432,15 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
 
-
-
-
     public class MapsDayAdapter extends BaseAdapter {
 
-        int days,whichDay;
+        int days, whichDay;
 
 
-        public MapsDayAdapter(int days,int whichDay){
+        public MapsDayAdapter(int days, int whichDay) {
             super();
-            this.days=days;
-            this.whichDay=whichDay;
+            this.days = days;
+            this.whichDay = whichDay;
         }
 
 
@@ -467,14 +462,18 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            if(convertView==null){
-                 convertView=View.inflate(StrategyMapActivity.this,R.layout.maps_days_cell,null);
+            if (convertView == null) {
+                convertView = View.inflate(StrategyMapActivity.this, R.layout.maps_days_cell, null);
 
             }
-            TextView days_title=(TextView)convertView.findViewById(R.id.days_title);
-            days_title.setText("第"+(position+1)+"天");
-            selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
-            if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
+            TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
+            days_title.setText("第" + (position + 1) + "天");
+            selected = (ImageView) convertView.findViewById(R.id.map_days_selected);
+            if (position == (whichDay - 1)) {
+                selected.setVisibility(View.VISIBLE);
+            } else {
+                selected.setVisibility(View.GONE);
+            }
             return convertView;
         }
     }

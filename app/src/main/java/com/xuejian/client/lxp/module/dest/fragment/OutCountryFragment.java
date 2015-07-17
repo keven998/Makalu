@@ -55,25 +55,25 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     ListViewDataAdapter<CountryBean> outCountryAdapter;
     OnDestActionListener mOnDestActionListener;
     DynamicBox box;
-    private Drawable add,selected;
+    private Drawable add, selected;
     private boolean isClickable;
 
-    public OutCountryFragment(boolean isClickable){
-        this.isClickable=isClickable;
+    public OutCountryFragment(boolean isClickable) {
+        this.isClickable = isClickable;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_out_country, container, false);
         ButterKnife.inject(this, rootView);
-        box = new DynamicBox(getActivity(),mLvOutCountry);
+        box = new DynamicBox(getActivity(), mLvOutCountry);
         outCountryAdapter = new ListViewDataAdapter<CountryBean>(new ViewHolderCreator<CountryBean>() {
             @Override
             public ViewHolderBase<CountryBean> createViewHolder() {
                 return new OutCountryViewHolder();
             }
         });
-        if(isClickable) {
+        if (isClickable) {
             View view = new View(getActivity());
             view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(70)));
             mLvOutCountry.addFooterView(view);
@@ -91,14 +91,14 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             if (countryListResult.code == 0) {
                 bindOutView(countryListResult.result);
             }
-        }else{
+        } else {
             box.showLoadingLayout();
         }
         getOutCountryList();
     }
 
-    private void getOutCountryList(){
-        String lastModify= PreferenceUtils.getCacheData(getActivity(), "outcountry_last_modify");
+    private void getOutCountryList() {
+        String lastModify = PreferenceUtils.getCacheData(getActivity(), "outcountry_last_modify");
         TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -142,15 +142,15 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private void bindOutView(List<CountryBean> result) {
         outCountryAdapter.getDataList().clear();
         ArrayList<LocBean> allSelectLoc = null;
-        if(getActivity()!=null&&isClickable){
-            allSelectLoc = ((SelectDestActivity)getActivity()).getAllSelectedLoc();
-        }else if(getActivity() != null && !isClickable){
+        if (getActivity() != null && isClickable) {
+            allSelectLoc = ((SelectDestActivity) getActivity()).getAllSelectedLoc();
+        } else if (getActivity() != null && !isClickable) {
             allSelectLoc = ((MyFootPrinterActivity) getActivity()).getAllSelectedLoc();
         }
-        if(allSelectLoc!=null){
-            for(CountryBean countryBean:result){
-                for(LocBean kLocBean :countryBean.destinations ){
-                    if(allSelectLoc.contains(kLocBean)){
+        if (allSelectLoc != null) {
+            for (CountryBean countryBean : result) {
+                for (LocBean kLocBean : countryBean.destinations) {
+                    if (allSelectLoc.contains(kLocBean)) {
                         kLocBean.isAdded = true;
                     }
 
@@ -162,20 +162,20 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         mLvOutCountry.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mLvOutCountry.performItemClick(mLvOutCountry.getChildAt(0),0,0);
+                mLvOutCountry.performItemClick(mLvOutCountry.getChildAt(0), 0, 0);
             }
-        },200);
+        }, 200);
 
 
     }
 
     @Override
-    public void onDestAdded(LocBean locBean,boolean isEdit,String type) {
-        if(outCountryAdapter!=null){
-            for(CountryBean countryBean:outCountryAdapter.getDataList()){
-                for(LocBean kLocBean :countryBean.destinations ){
-                    if(locBean.id.equals(kLocBean.id)){
-                        kLocBean.isAdded=true;
+    public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
+        if (outCountryAdapter != null) {
+            for (CountryBean countryBean : outCountryAdapter.getDataList()) {
+                for (LocBean kLocBean : countryBean.destinations) {
+                    if (locBean.id.equals(kLocBean.id)) {
+                        kLocBean.isAdded = true;
                     }
                 }
             }
@@ -185,12 +185,12 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     }
 
     @Override
-    public void onDestRemoved(LocBean locBean,String type) {
-        if(outCountryAdapter!=null){
-            for(CountryBean countryBean:outCountryAdapter.getDataList()){
-                for(LocBean kLocBean :countryBean.destinations ){
-                    if(locBean.id.equals(kLocBean.id)){
-                        kLocBean.isAdded=false;
+    public void onDestRemoved(LocBean locBean, String type) {
+        if (outCountryAdapter != null) {
+            for (CountryBean countryBean : outCountryAdapter.getDataList()) {
+                for (LocBean kLocBean : countryBean.destinations) {
+                    if (locBean.id.equals(kLocBean.id)) {
+                        kLocBean.isAdded = false;
                     }
                 }
             }
@@ -231,15 +231,15 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 cityNameTv.setText(bean.zhName);
                 ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
                 if (!bean.isAdded) {
-                   // if(isClickable) {
-                        addIcon.setVisibility(View.GONE);
-                        //cityNameTv.setCompoundDrawables(add, null, null, null);
-                   // }
+                    // if(isClickable) {
+                    addIcon.setVisibility(View.GONE);
+                    //cityNameTv.setCompoundDrawables(add, null, null, null);
+                    // }
                 } else {
-                   // if(isClickable) {
-                        addIcon.setVisibility(View.VISIBLE);
-                        // cityNameTv.setCompoundDrawables(selected, null, null, null);
-                   // }
+                    // if(isClickable) {
+                    addIcon.setVisibility(View.VISIBLE);
+                    // cityNameTv.setCompoundDrawables(selected, null, null, null);
+                    // }
                 }
                 contentView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -250,12 +250,12 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                                 addIcon.setVisibility(View.VISIBLE);
                                 //cityNameTv.setCompoundDrawables(selected, null, null, null);
 
-                                mOnDestActionListener.onDestAdded(bean,true,"in");
+                                mOnDestActionListener.onDestAdded(bean, true, "in");
                             } else {
                                 addIcon.setVisibility(View.GONE);
                                 //cityNameTv.setCompoundDrawables(add, null, null, null);
 
-                                mOnDestActionListener.onDestRemoved(bean,"in");
+                                mOnDestActionListener.onDestRemoved(bean, "in");
                             }
                         }
                         outCountryAdapter.notifyDataSetChanged();

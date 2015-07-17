@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ public class ImageUtils {
 //        return path;
 //    }
 
-    public static Bitmap getMaskImage(Bitmap mask,Bitmap source){
+    public static Bitmap getMaskImage(Bitmap mask, Bitmap source) {
         Bitmap result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas mCanvas = new Canvas(result);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -51,8 +51,9 @@ public class ImageUtils {
         mCanvas.drawBitmap(source, 0, 0, null);
         mCanvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(null);
-        return result ;
+        return result;
     }
+
     public static Bitmap getRoundedCornerBitmap(Bitmap var0) {
         return getRoundedCornerBitmap(var0, 6.0F);
     }
@@ -127,7 +128,7 @@ public class ImageUtils {
         Bitmap var5 = BitmapFactory.decodeFile(var0, var3);
         int var6 = readPictureDegree(var0);
         Bitmap var7 = null;
-        if(var5 != null && var6 != 0) {
+        if (var5 != null && var6 != 0) {
             var7 = rotaingImageView(var6, var5);
             var5.recycle();
             var5 = null;
@@ -152,10 +153,10 @@ public class ImageUtils {
         int var3 = var0.outHeight;
         int var4 = var0.outWidth;
         int var5 = 1;
-        if(var3 > var2 || var4 > var1) {
-            int var6 = Math.round((float)var3 / (float)var2);
-            int var7 = Math.round((float)var4 / (float)var1);
-            var5 = var6 > var7?var6:var7;
+        if (var3 > var2 || var4 > var1) {
+            int var6 = Math.round((float) var3 / (float) var2);
+            int var7 = Math.round((float) var4 / (float) var1);
+            var5 = var6 > var7 ? var6 : var7;
         }
 
         return var5;
@@ -179,12 +180,12 @@ public class ImageUtils {
 
     public static String getScaledImage(Context var0, String var1) {
         File var2 = new File(var1);
-        if(!var2.exists()) {
+        if (!var2.exists()) {
             return var1;
         } else {
             long var3 = var2.length();
             Log.d("img", "original img size:" + var3);
-            if(var3 <= 102400L) {
+            if (var3 <= 102400L) {
                 Log.d("img", "use original small image");
                 return var1;
             } else {
@@ -207,10 +208,10 @@ public class ImageUtils {
 
     public static String getScaledImage(Context var0, String var1, int var2) {
         File var3 = new File(var1);
-        if(var3.exists()) {
+        if (var3.exists()) {
             long var4 = var3.length();
             Log.d("img", "original img size:" + var4);
-            if(var4 > 102400L) {
+            if (var4 > 102400L) {
                 Bitmap var6 = decodeScaleImage(var1, 640, 960);
 
                 try {
@@ -235,7 +236,7 @@ public class ImageUtils {
         var4.drawColor(-3355444);
         Log.d("img", "merge images to size:" + var0 + "*" + var1 + " with images:" + var2.size());
         byte var5;
-        if(var2.size() <= 4) {
+        if (var2.size() <= 4) {
             var5 = 2;
         } else {
             var5 = 3;
@@ -244,16 +245,16 @@ public class ImageUtils {
         int var6 = 0;
         int var7 = (var0 - 4) / var5;
 
-        for(int var8 = 0; var8 < var5; ++var8) {
-            for(int var9 = 0; var9 < var5; ++var9) {
+        for (int var8 = 0; var8 < var5; ++var8) {
+            for (int var9 = 0; var9 < var5; ++var9) {
                 Bitmap var10 = var2.get(var6);
                 Bitmap var11 = Bitmap.createScaledBitmap(var10, var7, var7, true);
                 Bitmap var12 = getRoundedCornerBitmap(var11, 2.0F);
                 var11.recycle();
-                var4.drawBitmap(var12, (float)(var9 * var7 + var9 + 2), (float)(var8 * var7 + var8 + 2), null);
+                var4.drawBitmap(var12, (float) (var9 * var7 + var9 + 2), (float) (var8 * var7 + var8 + 2), null);
                 var12.recycle();
                 ++var6;
-                if(var6 == var2.size()) {
+                if (var6 == var2.size()) {
                     return var3;
                 }
             }
@@ -268,7 +269,7 @@ public class ImageUtils {
         try {
             ExifInterface var2 = new ExifInterface(var0);
             int var3 = var2.getAttributeInt("Orientation", 1);
-            switch(var3) {
+            switch (var3) {
                 case 3:
                     var1 = 180;
                     break;
@@ -287,7 +288,7 @@ public class ImageUtils {
 
     public static Bitmap rotaingImageView(int var0, Bitmap var1) {
         Matrix var2 = new Matrix();
-        var2.postRotate((float)var0);
+        var2.postRotate((float) var0);
         Bitmap var3 = Bitmap.createBitmap(var1, 0, 0, var1.getWidth(), var1.getHeight(), var2, true);
         return var3;
     }
@@ -298,12 +299,14 @@ public class ImageUtils {
         BitmapFactory.decodeFile(var0, var1);
         return var1;
     }
+
     public static int dip2px(Context var0, float var1) {
         float var2 = var0.getResources().getDisplayMetrics().density;
-        return (int)(var1 * var2 + 0.5F);
+        return (int) (var1 * var2 + 0.5F);
     }
+
     public static int sp2px(Context var0, float var1) {
         float var2 = var0.getResources().getDisplayMetrics().scaledDensity;
-        return (int)(var1 * var2 + 0.5F);
+        return (int) (var1 * var2 + 0.5F);
     }
 }

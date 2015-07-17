@@ -70,11 +70,11 @@ public class DayAgendaActivity extends FragmentActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PoiDetailBean bean=routeDayMap.get(currentDay).get(position);
-                Intent intent=new Intent();
-                intent.putExtra("id",bean.id);
-                intent.putExtra("type",bean.type);
-                intent.setClass(DayAgendaActivity.this,PoiDetailActivity.class);
+                PoiDetailBean bean = routeDayMap.get(currentDay).get(position);
+                Intent intent = new Intent();
+                intent.putExtra("id", bean.id);
+                intent.putExtra("type", bean.type);
+                intent.setClass(DayAgendaActivity.this, PoiDetailActivity.class);
                 startActivity(intent);
             }
         });

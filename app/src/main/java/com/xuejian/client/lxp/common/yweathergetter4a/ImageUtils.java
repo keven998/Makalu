@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 class ImageUtils {
-	public static Bitmap getBitmapFromWeb(String src) {
+    public static Bitmap getBitmapFromWeb(String src) {
         try {
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

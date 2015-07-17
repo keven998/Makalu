@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,26 +23,26 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 
 public class ContextMenu extends ChatBaseActivity {
 
-	private int position;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		int type = getIntent().getIntExtra("type", -1);
-		if (type ==0) {
-		    setContentView(R.layout.context_menu_for_text);
-		} else if (type == 4) {
-		    setContentView(R.layout.context_menu_for_location);
-		} else if (type == 2) {
-		    setContentView(R.layout.context_menu_for_image);
-		} else if (type == 1) {
-		    setContentView(R.layout.context_menu_for_voice);
+    private int position;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int type = getIntent().getIntExtra("type", -1);
+        if (type == 0) {
+            setContentView(R.layout.context_menu_for_text);
+        } else if (type == 4) {
+            setContentView(R.layout.context_menu_for_location);
+        } else if (type == 2) {
+            setContentView(R.layout.context_menu_for_image);
+        } else if (type == 1) {
+            setContentView(R.layout.context_menu_for_voice);
 //		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
 //			setContentView(R.layout.context_menu_for_video);
-		}else{
+        } else {
             setContentView(R.layout.context_menu_for_ext);
         }
-		    
+
 		/*    
 		switch (getIntent().getIntExtra("type", -1)) {
 		case txtValue:
@@ -68,44 +68,48 @@ public class ContextMenu extends ChatBaseActivity {
 			break;
 		}
 		*/
-		position = getIntent().getIntExtra("position", -1);
-	}
+        position = getIntent().getIntExtra("position", -1);
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		finish();
-		return true;
-	}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        finish();
+        return true;
+    }
 
-	public void copy(View view){
-		setResult(ChatActivity.RESULT_CODE_COPY, new Intent().putExtra("position", position));
-		finish();
-	}
-	public void delete(View view){
-		setResult(ChatActivity.RESULT_CODE_DELETE, new Intent().putExtra("position", position));
-		finish();
-	}
-	public void forward(View view){
-		setResult(ChatActivity.RESULT_CODE_FORWARD, new Intent().putExtra("position", position));
-		finish();
-	}
-	
-	public void open(View v){
-	    setResult(ChatActivity.RESULT_CODE_OPEN, new Intent().putExtra("position", position));
+    public void copy(View view) {
+        setResult(ChatActivity.RESULT_CODE_COPY, new Intent().putExtra("position", position));
         finish();
-	}
-	public void download(View v){
-	    setResult(ChatActivity.RESULT_CODE_DWONLOAD, new Intent().putExtra("position", position));
+    }
+
+    public void delete(View view) {
+        setResult(ChatActivity.RESULT_CODE_DELETE, new Intent().putExtra("position", position));
         finish();
-	}
-	public void toCloud(View v){
-	    setResult(ChatActivity.RESULT_CODE_TO_CLOUD, new Intent().putExtra("position", position));
+    }
+
+    public void forward(View view) {
+        setResult(ChatActivity.RESULT_CODE_FORWARD, new Intent().putExtra("position", position));
         finish();
-	}
+    }
+
+    public void open(View v) {
+        setResult(ChatActivity.RESULT_CODE_OPEN, new Intent().putExtra("position", position));
+        finish();
+    }
+
+    public void download(View v) {
+        setResult(ChatActivity.RESULT_CODE_DWONLOAD, new Intent().putExtra("position", position));
+        finish();
+    }
+
+    public void toCloud(View v) {
+        setResult(ChatActivity.RESULT_CODE_TO_CLOUD, new Intent().putExtra("position", position));
+        finish();
+    }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0,R.anim.fade_out);
+        overridePendingTransition(0, R.anim.fade_out);
     }
 }

@@ -55,7 +55,7 @@ import butterknife.InjectView;
  */
 public class ShoppingFragment extends PeachBaseFragment implements OnStrategyModeChangeListener {
 
-    public final static int ADD_SHOPPING_REQUEST_CODE=103;
+    public final static int ADD_SHOPPING_REQUEST_CODE = 103;
     private OnStrategyModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
@@ -75,6 +75,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         initData();
         return rootView;
     }
+
     @Override
     public void onAttach(Activity activity) {
         try {
@@ -84,8 +85,9 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         }
         super.onAttach(activity);
     }
-    public boolean  isEditableMode(){
-        if(mShoppingAdapter !=null){
+
+    public boolean isEditableMode() {
+        if (mShoppingAdapter != null) {
             return mShoppingAdapter.isEditableMode;
         }
         return false;
@@ -95,11 +97,12 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         return ((StrategyActivity) getActivity()).getStrategy();
 
     }
-    private void setAddView(StrategyBean strategyBean){
+
+    private void setAddView(StrategyBean strategyBean) {
         final User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
-        if(user == null){
+        if (user == null) {
             addFooter.setVisibility(View.GONE);
-        }else {
+        } else {
             if (addFooter != null) {
                 if (user.getUserId() != strategyBean.userId) {
                     addFooter.setVisibility(View.GONE);
@@ -131,20 +134,20 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(getActivity(),"event_add_shopping_schedule");
-                if(mOnEditModeChangeListener!=null){
-                    if(!isInEditMode){
+                MobclickAgent.onEvent(getActivity(), "event_add_shopping_schedule");
+                if (mOnEditModeChangeListener != null) {
+                    if (!isInEditMode) {
                         isInEditMode = true;
                         mShoppingAdapter.setEditableMode(false);
                         mShoppingAdapter.notifyDataSetChanged();
                         mOnEditModeChangeListener.onEditModeChange(false);
-                   }
+                    }
                 }
                 Intent intent = new Intent(getActivity(), PoiListActivity.class);
                 intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                 intent.putExtra("canAdd", true);
                 intent.putParcelableArrayListExtra("locList", strategyBean.localities);
-                intent.putParcelableArrayListExtra("poiList",strategyBean.shopping);
+                intent.putParcelableArrayListExtra("poiList", strategyBean.shopping);
                 getActivity().startActivityForResult(intent, ADD_SHOPPING_REQUEST_CODE);
             }
         });
@@ -153,8 +156,8 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==ADD_SHOPPING_REQUEST_CODE){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ADD_SHOPPING_REQUEST_CODE) {
                 getStrategy().shopping = data.getParcelableArrayListExtra("poiList");
                 mShoppingAdapter.notifyDataSetChanged();
             }
@@ -180,25 +183,28 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             DragSortListView.DropListener {
         public boolean isEditableMode;
         private DisplayImageOptions picOptions;
-        private boolean isAnimationEnd=true;
+        private boolean isAnimationEnd = true;
         private StrategyBean strategy;
+
         public ShoppingAdapter(boolean isEditableMode) {
             this.isEditableMode = isEditableMode;
             picOptions = UILUtils.getDefaultOption();
             strategy = getStrategy();
         }
-        public void setEditableMode(boolean mode){
-            isAnimationEnd =false;
+
+        public void setEditableMode(boolean mode) {
+            isAnimationEnd = false;
             isEditableMode = mode;
         }
+
         @Override
         public int getCount() {
-            return  strategy.shopping.size();
+            return strategy.shopping.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return  strategy.shopping.get(position);
+            return strategy.shopping.get(position);
         }
 
         @Override
@@ -208,14 +214,14 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final PoiDetailBean poiDetailBean =  strategy.shopping.get(position);
+            final PoiDetailBean poiDetailBean = strategy.shopping.get(position);
             final ItemViewHolder holder;
             if (convertView == null) {
                 holder = new ItemViewHolder();
                 convertView = View.inflate(getActivity(), R.layout.row_poi_list, null);
                 holder.contentRl = (RelativeLayout) convertView.findViewById(R.id.rl_content);
                 holder.deleteIv = (ImageView) convertView.findViewById(R.id.poi_delete_iv);
-               // holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.poi_drag_handle);
+                // holder.dragHandleIv = (ImageView) convertView.findViewById(R.id.poi_drag_handle);
                 holder.nearByTv = (CheckedTextView) convertView.findViewById(R.id.btn_add);
                 holder.poiImageIv = (ImageView) convertView.findViewById(R.id.poi_image_iv);
                 holder.poiNameTv = (TextView) convertView.findViewById(R.id.tv_poi_name);
@@ -228,18 +234,18 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             } else {
                 holder = (ItemViewHolder) convertView.getTag();
             }
-            if(poiDetailBean.images!=null&&poiDetailBean.images.size()>0){
+            if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, holder.poiImageIv, picOptions);
-            }else{
+            } else {
                 holder.poiImageIv.setImageDrawable(null);
             }
             holder.nearByTv.setText("地图");
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.costTimeDesc.setText(poiDetailBean.timeCostDesc);
 
-            String locName="";
-            if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
-                locName="["+poiDetailBean.locality.zhName+"]";
+            String locName = "";
+            if (poiDetailBean.locality != null && !TextUtils.isEmpty(poiDetailBean.locality.zhName)) {
+                locName = "[" + poiDetailBean.locality.zhName + "]";
             }
             SpannableString ss = new SpannableString(locName);
 //            ss.setSpan(new StyleSpan(Typeface.BOLD), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -249,7 +255,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             holder.poiAddressTv.append(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
-            if(!poiDetailBean.getFormatRank().equals("0")){
+            if (!poiDetailBean.getFormatRank().equals("0")) {
 //                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 holder.poiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
             }
@@ -291,7 +297,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                                 dialog.dismiss();
                             }
                         });
-                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                        dialog.setNegativeButton("取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
@@ -321,7 +327,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                                 dialog.dismiss();
                             }
                         });
-                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                        dialog.setNegativeButton("取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
@@ -339,11 +345,11 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                     @Override
                     public void onClick(View v) {
                         if (poiDetailBean.location != null && poiDetailBean.location.coordinates != null) {
-                            Uri mUri = Uri.parse("geo:"+poiDetailBean.location.coordinates[1]+","+poiDetailBean.location.coordinates[0]+"?q="+poiDetailBean.zhName);
-                            Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                            if (CommonUtils.checkIntent(getActivity(), mIntent)){
+                            Uri mUri = Uri.parse("geo:" + poiDetailBean.location.coordinates[1] + "," + poiDetailBean.location.coordinates[0] + "?q=" + poiDetailBean.zhName);
+                            Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                            if (CommonUtils.checkIntent(getActivity(), mIntent)) {
                                 startActivity(mIntent);
-                            }else{
+                            } else {
                                 ToastUtil.getInstance(getActivity()).showToast("没有找到地图应用");
                             }
 

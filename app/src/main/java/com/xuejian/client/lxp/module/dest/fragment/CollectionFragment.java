@@ -26,13 +26,13 @@ import java.util.ArrayList;
 /**
  * Created by yibiao.qin on 2015/7/4.
  */
-public class CollectionFragment extends Fragment{
+public class CollectionFragment extends Fragment {
 
     private ListView mListView;
     private StrategyBean strategy;
     private ArrayList<LocBean> destinations;
-    private int FOR_FOOD_COLLECTION=201;
-    private int FOR_SHOP_COLLECTION=202;
+    private int FOR_FOOD_COLLECTION = 201;
+    private int FOR_SHOP_COLLECTION = 202;
     private StrategySaveAdapter adapter;
 
     @Override
@@ -52,17 +52,17 @@ public class CollectionFragment extends Fragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
-                    Intent foodIntent=new Intent(getActivity(), PoiSaveActivity.class);
-                    foodIntent.putExtra("title","美食");
-                    foodIntent.putParcelableArrayListExtra("destinations",destinations);
-                    foodIntent.putExtra("strategy",strategy);
+                if (i == 0) {
+                    Intent foodIntent = new Intent(getActivity(), PoiSaveActivity.class);
+                    foodIntent.putExtra("title", "美食");
+                    foodIntent.putParcelableArrayListExtra("destinations", destinations);
+                    foodIntent.putExtra("strategy", strategy);
                     getActivity().startActivityForResult(foodIntent, FOR_FOOD_COLLECTION);
-                }else if(i==1){
-                    Intent shopIntent=new Intent(getActivity(), PoiSaveActivity.class);
-                    shopIntent.putExtra("title","购物");
-                    shopIntent.putParcelableArrayListExtra("destinations",destinations);
-                    shopIntent.putExtra("strategy",strategy);
+                } else if (i == 1) {
+                    Intent shopIntent = new Intent(getActivity(), PoiSaveActivity.class);
+                    shopIntent.putExtra("title", "购物");
+                    shopIntent.putParcelableArrayListExtra("destinations", destinations);
+                    shopIntent.putExtra("strategy", strategy);
                     getActivity().startActivityForResult(shopIntent, FOR_SHOP_COLLECTION);
                 }
             }
@@ -72,12 +72,12 @@ public class CollectionFragment extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode==FOR_FOOD_COLLECTION){
-                strategy.restaurant=data.getParcelableArrayListExtra("newStrategy");
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == FOR_FOOD_COLLECTION) {
+                strategy.restaurant = data.getParcelableArrayListExtra("newStrategy");
                 adapter.notifyDataSetChanged();
-            }else if(requestCode==FOR_SHOP_COLLECTION){
-                strategy.shopping=data.getParcelableArrayListExtra("newStrategy");
+            } else if (requestCode == FOR_SHOP_COLLECTION) {
+                strategy.shopping = data.getParcelableArrayListExtra("newStrategy");
                 adapter.notifyDataSetChanged();
             }
         }
@@ -87,9 +87,11 @@ public class CollectionFragment extends Fragment{
         return ((StrategyActivity) getActivity()).getStrategy();
     }
 
-    private ArrayList<LocBean> getDestinations() {return ((StrategyActivity)getActivity()).getDestinations();}
+    private ArrayList<LocBean> getDestinations() {
+        return ((StrategyActivity) getActivity()).getDestinations();
+    }
 
-    private class StrategySaveAdapter extends BaseAdapter{
+    private class StrategySaveAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -109,24 +111,24 @@ public class CollectionFragment extends Fragment{
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
-            if(view==null){
+            if (view == null) {
                 view = getActivity().getLayoutInflater().inflate(R.layout.strategy_save_list_cell, null);
                 viewHolder = new ViewHolder();
                 viewHolder.saveType = (ImageView) view.findViewById(R.id.iv_save_type);
                 viewHolder.saveTypeTitle = (TextView) view.findViewById(R.id.tv_save_title);
                 viewHolder.saveNumber = (TextView) view.findViewById(R.id.tv_save_summary);
                 view.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)view.getTag();
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
             }
-            if (i==0){
+            if (i == 0) {
                 viewHolder.saveTypeTitle.setText("美食");
                 viewHolder.saveType.setImageResource(R.drawable.collect_food);
-                viewHolder.saveNumber.setText(strategy.restaurant.size()+"个收藏");
-            } else if (i==1) {
+                viewHolder.saveNumber.setText(strategy.restaurant.size() + "个收藏");
+            } else if (i == 1) {
                 viewHolder.saveTypeTitle.setText("购物");
                 viewHolder.saveType.setImageResource(R.drawable.collect_shopping);
-                viewHolder.saveNumber.setText(strategy.shopping.size()+"个收藏");
+                viewHolder.saveNumber.setText(strategy.shopping.size() + "个收藏");
             }
 
             return view;

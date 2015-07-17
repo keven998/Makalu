@@ -75,6 +75,7 @@ public class NearbyActivity extends PeachBaseActivity {
         mLocationManagerProxy.setGpsEnable(false);
         startLocation();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -99,12 +100,12 @@ public class NearbyActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_nearby);
         ButterKnife.inject(this);
         mTvAddress.setText("正在定位...");
-        ColorBar cBar=new ColorBar(mContext,getResources().getColor(R.color.app_theme_color),LocalDisplay.dp2px(2));
+        ColorBar cBar = new ColorBar(mContext, getResources().getColor(R.color.app_theme_color), LocalDisplay.dp2px(2));
         mNearbyIndicator.setScrollBar(cBar);
         indicatorViewPager = new IndicatorViewPager(mNearbyIndicator, mNearbyViewPager);
         indicatorViewPager.setPageOffscreenLimit(2);
         indicatorViewPager.setAdapter(mNAdapter = new NearbyAdapter(getSupportFragmentManager()));
-        indicatorViewPager.setCurrentItem(0,false);
+        indicatorViewPager.setCurrentItem(0, false);
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
@@ -122,7 +123,7 @@ public class NearbyActivity extends PeachBaseActivity {
         mBtnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext,"event_refresh_location");
+                MobclickAgent.onEvent(mContext, "event_refresh_location");
                 startLocation();
             }
         });
@@ -228,7 +229,7 @@ public class NearbyActivity extends PeachBaseActivity {
 
     private void updateContent() {
         if (mLat == -1 && mLng == -1) return;
-        for(OnLocationChangeListener onLocationChangeListener:onLocationChangeListenerList){
+        for (OnLocationChangeListener onLocationChangeListener : onLocationChangeListenerList) {
             onLocationChangeListener.onLocationChange(mLat, mLng);
         }
         int item = indicatorViewPager.getCurrentItem();
@@ -238,7 +239,7 @@ public class NearbyActivity extends PeachBaseActivity {
 
 
     private class NearbyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        HashMap<String,NearbyItemFragment> fragmentMap;
+        HashMap<String, NearbyItemFragment> fragmentMap;
 
         public NearbyAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -260,19 +261,19 @@ public class NearbyActivity extends PeachBaseActivity {
             }
             CheckedTextView textView = (CheckedTextView) convertView;
             textView.setText(tabTitles[position]);
-          //  textView.setCompoundDrawablesWithIntrinsicBounds(0, tabRes[position], 0, 0);
+            //  textView.setCompoundDrawablesWithIntrinsicBounds(0, tabRes[position], 0, 0);
             return convertView;
         }
 
         @Override
         public Fragment getFragmentForPage(int position) {
             NearbyItemFragment fragment = fragmentMap.get(tabTypes[position]);
-            if(fragment == null) {
+            if (fragment == null) {
                 fragment = new NearbyItemFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", tabTypes[position]);
                 fragment.setArguments(bundle);
-                fragment.updateLocation(mLat,mLng);
+                fragment.updateLocation(mLat, mLng);
                 try {
                     OnLocationChangeListener listener = fragment;
                     onLocationChangeListenerList.add(listener);

@@ -50,24 +50,16 @@ public class AddPoiActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_POI = 101;
     @InjectView(R.id.lv_poi_list)
     PullToRefreshListView mLvPoiList;
-    /*@InjectView(R.id.loc_spinner)
-    Spinner mLocSpinner;
-//    @InjectView(R.id.btn_ok)
-//    Button mBtnOk;*/
     @InjectView(R.id.loc_spinner)
     Spinner loc_spinner;
     @InjectView(R.id.type_spinner)
     Spinner type_spinner;
     @InjectView(R.id.tv_back)
     TextView tv_back;
-    //    @InjectView(R.id.et_search)
-//    EditText mEtSearch;
-//    @InjectView(R.id.btn_search)
-//    Button mBtnSearch;
-//    @InjectView(R.id.tv_title_bar_title)
-//    TextView mTilteView;
-//    @InjectView(R.id.filter_icon)
-//    ImageView filter_icon;
+    @InjectView(R.id.iv_location)
+    ImageView iv_map;
+    @InjectView(R.id.iv_search)
+    ImageView iv_search;
     @InjectView(R.id.add_poi_bottom_panel)
     FrameLayout bottomFrame;
     @InjectView(R.id.add_poi_scroll_panel)
@@ -78,7 +70,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
     private int dayIndex;
-    private String[] poiTypeArray, poiTypeValueArray,poiTypeValueArrays;
+    private String[] poiTypeArray, poiTypeValueArray, poiTypeValueArrays;
 
     private int curPage = 0;
     private LocBean curLoc;
@@ -168,7 +160,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             }
         });
-        findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+        tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -178,13 +170,18 @@ public class AddPoiActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        tv_back.setOnClickListener(new View.OnClickListener() {
+        iv_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
             }
         });
+        iv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 //        mBtnSearch.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

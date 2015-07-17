@@ -151,7 +151,7 @@ public class AnimationSimple {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().width = (interpolatedTime == 1) ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) (targetWidth * interpolatedTime);
-                LogUtil.d(v.toString()+"---width="+v.getLayoutParams().width);
+                LogUtil.d(v.toString() + "---width=" + v.getLayoutParams().width);
                 v.requestLayout();
             }
 

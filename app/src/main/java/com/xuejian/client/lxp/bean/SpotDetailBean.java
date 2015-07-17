@@ -22,7 +22,7 @@ public class SpotDetailBean implements ICreateShareDialog {
     public String travelMonth;
     public float rating;
     public LocationBean location;
-    public ArrayList<ImageBean> images=new ArrayList<>();
+    public ArrayList<ImageBean> images = new ArrayList<>();
     public String openTime;
     public String timeCostDesc;
     public String address;
@@ -32,26 +32,29 @@ public class SpotDetailBean implements ICreateShareDialog {
     public String descUrl;
     public String lyPoiUrl;
     private int rank;
+
     public float getRating() {
-        if(rating>1){
+        if (rating > 1) {
             return rating;
         }
         return rating * 5;
     }
+
     public String getRank() {
-        if(rank>100){
+        if (rank > 100) {
             return ">100";
         }
-        return rank+"";
+        return rank + "";
     }
+
     @Override
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.id = id;
         extMessageBean.type = TravelApi.PeachType.SPOT;
-        extMessageBean.image = images.size()>0?images.get(0).url:"";
+        extMessageBean.image = images.size() > 0 ? images.get(0).url : "";
         extMessageBean.name = zhName;
-        extMessageBean.desc =  (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
+        extMessageBean.desc = (!TextUtils.isEmpty(desc)) ? desc.substring(0, 50) : "";
         extMessageBean.timeCost = timeCostDesc;
         return new ShareDialogBean(extMessageBean);
     }

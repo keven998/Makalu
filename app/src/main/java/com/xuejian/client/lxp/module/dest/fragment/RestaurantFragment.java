@@ -55,7 +55,7 @@ import butterknife.InjectView;
  */
 public class RestaurantFragment extends PeachBaseFragment implements OnStrategyModeChangeListener {
 
-    public final static int ADD_REST_REQUEST_CODE=102;
+    public final static int ADD_REST_REQUEST_CODE = 102;
     private OnStrategyModeChangeListener mOnEditModeChangeListener;
     @InjectView(R.id.edit_dslv)
     DragSortListView mEditDslv;
@@ -75,6 +75,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         initData();
         return rootView;
     }
+
     @Override
     public void onAttach(Activity activity) {
         try {
@@ -85,21 +86,23 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         super.onAttach(activity);
     }
 
-    public boolean  isEditableMode(){
-        if(mRestAdapter!=null){
+    public boolean isEditableMode() {
+        if (mRestAdapter != null) {
             return mRestAdapter.isEditableMode;
         }
         return false;
     }
+
     private StrategyBean getStrategy() {
         return ((StrategyActivity) getActivity()).getStrategy();
 
     }
-    private void setAddView(StrategyBean strategyBean){
+
+    private void setAddView(StrategyBean strategyBean) {
         final User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
-        if(user == null){
+        if (user == null) {
             addFooter.setVisibility(View.GONE);
-        }else {
+        } else {
             if (addFooter != null) {
                 if (user.getUserId() != strategyBean.userId) {
                     addFooter.setVisibility(View.GONE);
@@ -110,6 +113,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         }
 
     }
+
     private void initData() {
         final StrategyBean strategyBean = getStrategy();
         setAddView(strategyBean);
@@ -129,9 +133,9 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(getActivity(),"event_add_delicacy_schedule");
-                if(mOnEditModeChangeListener!=null){
-                    if(!isInEditMode){
+                MobclickAgent.onEvent(getActivity(), "event_add_delicacy_schedule");
+                if (mOnEditModeChangeListener != null) {
+                    if (!isInEditMode) {
                         isInEditMode = true;
                         mRestAdapter.setEditableMode(false);
                         mRestAdapter.notifyDataSetChanged();
@@ -151,8 +155,8 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==ADD_REST_REQUEST_CODE){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ADD_REST_REQUEST_CODE) {
                 StrategyBean strategyBean = getStrategy();
                 strategyBean.restaurant = data.getParcelableArrayListExtra("poiList");
                 mRestAdapter.notifyDataSetChanged();
@@ -179,7 +183,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             DragSortListView.DropListener {
         private boolean isEditableMode;
         private DisplayImageOptions picOptions;
-        private boolean isAnimationEnd=true;
+        private boolean isAnimationEnd = true;
         private StrategyBean strategy;
 
         public RestAdapter(boolean isEditableMode) {
@@ -188,7 +192,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             strategy = getStrategy();
         }
 
-        public void setEditableMode(boolean mode){
+        public void setEditableMode(boolean mode) {
             isAnimationEnd = false;
             isEditableMode = mode;
         }
@@ -238,9 +242,9 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             holder.nearByTv.setText("地图");
             holder.poiNameTv.setText(poiDetailBean.zhName);
             holder.costTimeDesc.setText(poiDetailBean.timeCostDesc);
-            String locName="";
-            if(poiDetailBean.locality!=null&&!TextUtils.isEmpty(poiDetailBean.locality.zhName)){
-                locName="["+poiDetailBean.locality.zhName+"]";
+            String locName = "";
+            if (poiDetailBean.locality != null && !TextUtils.isEmpty(poiDetailBean.locality.zhName)) {
+                locName = "[" + poiDetailBean.locality.zhName + "]";
             }
             SpannableString ss = new SpannableString(locName);
 //            ss.setSpan(new StyleSpan(Typeface.BOLD), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -249,10 +253,10 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             holder.poiAddressTv.setText(ss);
             holder.poiAddressTv.append(poiDetailBean.address);
             holder.poiRating.setRating(poiDetailBean.getRating());
-            if(!TextUtils.isEmpty(poiDetailBean.priceDesc)) {
-                holder.poiPriceTv.setText(poiDetailBean.priceDesc+"");
+            if (!TextUtils.isEmpty(poiDetailBean.priceDesc)) {
+                holder.poiPriceTv.setText(poiDetailBean.priceDesc + "");
             }
-            if(!poiDetailBean.getFormatRank().equals("0")){
+            if (!poiDetailBean.getFormatRank().equals("0")) {
 //                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 holder.poiRankTv.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
             }
@@ -268,7 +272,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                            isAnimationEnd = true;
+                        isAnimationEnd = true;
                     }
 
                     @Override
@@ -294,7 +298,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
                                 dialog.dismiss();
                             }
                         });
-                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                        dialog.setNegativeButton("取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
@@ -324,7 +328,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
                                 dialog.dismiss();
                             }
                         });
-                        dialog.setNegativeButton("取消",new View.OnClickListener() {
+                        dialog.setNegativeButton("取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
@@ -335,17 +339,17 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
                 });
             } else {
                 holder.deleteIv.setVisibility(View.GONE);
-               // holder.dragHandleIv.setVisibility(View.GONE);
+                // holder.dragHandleIv.setVisibility(View.GONE);
                 holder.nearByTv.setVisibility(View.VISIBLE);
                 holder.nearByTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (poiDetailBean.location != null && poiDetailBean.location.coordinates != null) {
-                            Uri mUri = Uri.parse("geo:"+poiDetailBean.location.coordinates[1]+","+poiDetailBean.location.coordinates[0]+"?q="+poiDetailBean.zhName);
-                            Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                            if (CommonUtils.checkIntent(getActivity(), mIntent)){
+                            Uri mUri = Uri.parse("geo:" + poiDetailBean.location.coordinates[1] + "," + poiDetailBean.location.coordinates[0] + "?q=" + poiDetailBean.zhName);
+                            Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                            if (CommonUtils.checkIntent(getActivity(), mIntent)) {
                                 startActivity(mIntent);
-                            }else{
+                            } else {
                                 ToastUtil.getInstance(getActivity()).showToast("没有找到地图应用");
                             }
 
@@ -361,7 +365,6 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
             });
             return convertView;
         }
-
 
 
         @Override

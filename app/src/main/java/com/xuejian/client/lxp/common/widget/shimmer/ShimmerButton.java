@@ -11,7 +11,7 @@ import android.widget.Button;
  * User: romainpiel
  * Date: 06/03/2014
  * Time: 10:19
- *
+ * <p>
  * Shimmering Button
  * Dumb class wrapping a ShimmerViewHelper
  */

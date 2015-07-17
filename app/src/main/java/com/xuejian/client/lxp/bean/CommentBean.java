@@ -16,14 +16,14 @@ public class CommentBean implements Parcelable {
     public float rating;
     public String contents;
     public long publishTime;
-    public List<ImageBean> images=new ArrayList<ImageBean>();
+    public List<ImageBean> images = new ArrayList<ImageBean>();
 
 
-    public float getRating(){
-        if(rating>1){
+    public float getRating() {
+        if (rating > 1) {
             return rating;
         }
-        return rating*5;
+        return rating * 5;
     }
 
     @Override

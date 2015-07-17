@@ -78,7 +78,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
         }
 
         final InventMessage msg = getItem(position);
-        if (msg.getStatus()==0 ) {
+        if (msg.getStatus() == 0) {
 //            if(msg.getGroupId() != null){ // 显示群聊提示
 //                holder.groupContainer.setVisibility(View.VISIBLE);
 //                holder.groupname.setText(msg.getGroupName());
@@ -88,8 +88,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             if (TextUtils.isEmpty(msg.getRequestMsg())) {
                 // 如果没写理由
                 holder.reason.setText("请求加你为好友");
-            }else holder.reason.setText(msg.getRequestMsg());
-            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(),holder.avator,options);
+            } else holder.reason.setText(msg.getRequestMsg());
+            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(), holder.avator, options);
             holder.name.setText(msg.getNickName());
 
             holder.status.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
      */
     private void acceptInvitation(final Button button, final InventMessage msg) {
         DialogManager.getInstance().showLoadingDialog((Activity) context);
-        UserApi.addContact(msg.getRequestId(),null,new HttpCallBack<String>() {
+        UserApi.addContact(msg.getRequestId(), null, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -143,7 +143,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                 AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
                 msg.setStatus(1);
                 IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()), "你已添加" + imUser.getNickName() + "为好友，现在可以开始聊天了", "single");
-                IMClient.getInstance().updateInventMsgStatus(imUser.getUserId(),1);
+                IMClient.getInstance().updateInventMsgStatus(imUser.getUserId(), 1);
                 //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }
 

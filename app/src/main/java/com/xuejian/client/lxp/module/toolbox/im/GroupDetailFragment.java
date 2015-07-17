@@ -82,10 +82,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
         mActivity = (ChatActivity) activity;
     }
 
-    public void closeDeleteMode(){
+    public void closeDeleteMode() {
         isInDeleteMode = false;
         memberAdapter.notifyDataSetChanged();
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

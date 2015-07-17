@@ -146,7 +146,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 if (TextUtils.isEmpty(s)) {
                     mSearchResultAdapter.getDataList().clear();
                     mSearchResultAdapter.notifyDataSetChanged();
-                }else{
+                } else {
                     mProgressBar.setVisibility(View.VISIBLE);
                     suggestSearchLocData(s.toString().trim());
                 }
@@ -154,7 +154,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
         });
     }
 
-    private void suggestSearchLocData(String keyWord){
+    private void suggestSearchLocData(String keyWord) {
         TravelApi.suggestLoc(keyWord, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -181,7 +181,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
         });
     }
 
-    private void searchSearchLocData(String keyWord, final int page){
+    private void searchSearchLocData(String keyWord, final int page) {
         TravelApi.searchLoc(keyWord, page, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -211,6 +211,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
         });
 
     }
+
     private void bindView(List<LocBean> result) {
         mSearchResultAdapter.getDataList().clear();
         mSearchResultAdapter.getDataList().addAll(result);
@@ -218,7 +219,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
     }
 
     private class SearchResultForPoiViewHolder extends ViewHolderBase<LocBean> {
-//        private ImageView destIv;
+        //        private ImageView destIv;
         private TextView destNameTv;
         private View contentView;
 
@@ -240,8 +241,8 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.putExtra("loc",itemData);
-                    setResult(RESULT_OK,intent);
+                    intent.putExtra("loc", itemData);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });

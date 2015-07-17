@@ -19,8 +19,9 @@ package com.xuejian.client.lxp.common.yweathergetter4a;
 
 /**
  * A callback when querying is completed.
+ *
  * @author Zhenghong Wang
  */
 public interface YahooWeatherInfoListener {
-	void gotWeatherInfo(WeatherInfo weatherInfo);
+    void gotWeatherInfo(WeatherInfo weatherInfo);
 }

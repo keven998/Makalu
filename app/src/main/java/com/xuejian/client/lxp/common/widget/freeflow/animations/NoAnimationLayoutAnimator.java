@@ -13,42 +13,42 @@ import com.xuejian.client.lxp.common.widget.freeflow.core.LayoutChangeset;
 
 public class NoAnimationLayoutAnimator implements FreeFlowLayoutAnimator {
 
-	private LayoutChangeset changes;
-	
-	@Override
-	public LayoutChangeset getChangeSet() {
-		return changes;
-	}
+    private LayoutChangeset changes;
 
-	@Override
-	public void cancel() {
-		
-	}
+    @Override
+    public LayoutChangeset getChangeSet() {
+        return changes;
+    }
 
-	@Override
-	public void animateChanges(LayoutChangeset changes,
-			FreeFlowContainer callback) {
-		this.changes = changes;
-		for(Pair<FreeFlowItem, Rect> item : changes.getMoved()){
-			Rect r = item.first.frame;
-			View v = item.first.view;
-			int wms = MeasureSpec.makeMeasureSpec(r.right-r.left, MeasureSpec.EXACTLY);
-			int hms = MeasureSpec.makeMeasureSpec(r.bottom-r.top, MeasureSpec.EXACTLY);
-			v.measure(wms,hms );
-			v.layout(r.left, r.top, r.right, r.bottom);	
-		}
-		callback.onLayoutChangeAnimationsCompleted(this);
-		
-	}
+    @Override
+    public void cancel() {
 
-	@Override
-	public boolean isRunning() {
-		return false;
-	}
+    }
 
-	@Override
-	public void onContainerTouchDown(MotionEvent event) {
-		cancel();
-	}
+    @Override
+    public void animateChanges(LayoutChangeset changes,
+                               FreeFlowContainer callback) {
+        this.changes = changes;
+        for (Pair<FreeFlowItem, Rect> item : changes.getMoved()) {
+            Rect r = item.first.frame;
+            View v = item.first.view;
+            int wms = MeasureSpec.makeMeasureSpec(r.right - r.left, MeasureSpec.EXACTLY);
+            int hms = MeasureSpec.makeMeasureSpec(r.bottom - r.top, MeasureSpec.EXACTLY);
+            v.measure(wms, hms);
+            v.layout(r.left, r.top, r.right, r.bottom);
+        }
+        callback.onLayoutChangeAnimationsCompleted(this);
+
+    }
+
+    @Override
+    public boolean isRunning() {
+        return false;
+    }
+
+    @Override
+    public void onContainerTouchDown(MotionEvent event) {
+        cancel();
+    }
 
 }

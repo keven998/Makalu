@@ -220,7 +220,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         View contentView = View.inflate(act, R.layout.dialog_home_confirm_action, null);
         Button btn = (Button) contentView.findViewById(R.id.btn_go_plan);
         btn.setTextColor(getResources().getColor(R.color.color_checked));
-        if (style==1){
+        if (style == 1) {
             btn.setText("删除");
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -247,7 +247,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        }else {
+        } else {
             btn.setText("屏蔽");
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -259,7 +259,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                         // deleteContact(imUser);
+                            // deleteContact(imUser);
                             deleteDialog.dismiss();
                         }
                     });
@@ -326,7 +326,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     public void updateView(final User bean) {
         TextView nameTv = (TextView) findViewById(R.id.tv_title);
-        nameTv.setText(bean.getNickName());
+        if (TextUtils.isEmpty(bean.getMemo())){
+            nameTv.setText(bean.getNickName());
+        }else {
+            nameTv.setText(bean.getMemo()+"("+bean.getNickName()+")");
+        }
+
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
@@ -357,12 +362,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
 
         TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
-        if (!TextUtils.isEmpty(bean.getMemo())) {
+        if (!TextUtils.isEmpty(bean.getSignature())) {
             tvMemo.setText(bean.getMemo());
         } else {
             tvMemo.setText("~什么都没写~");
         }
-
         TextView tvLocation = (TextView) findViewById(R.id.tv_location);
         if (TextUtils.isEmpty(bean.getResidence())) {
             tvLocation.setText("未设置");
@@ -423,7 +427,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
-                intent.putExtra("title",tvTrack.getText().toString());
+                intent.putExtra("title", tvTrack.getText().toString());
                 intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
                 startActivity(intent);
             }
@@ -517,7 +521,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
                 intent2.putExtra("id", String.valueOf(userId));
                 intent2.putExtra("title", imUser.getNickName());
-                intent2.putExtra("isTalentAlbum",true);
+                intent2.putExtra("isTalentAlbum", true);
                 startActivity(intent2);
             }
         });

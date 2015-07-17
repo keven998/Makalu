@@ -159,6 +159,7 @@ public class PlanScheduleFragment extends Fragment {
             return convertView;
         }
     }
+
     private class ViewHolder {
         public TextView summaryTextView;
         public TextView tv_day_index;

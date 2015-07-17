@@ -5,5 +5,6 @@ package com.xuejian.client.lxp.module.dest;
  */
 public interface OnStrategyModeChangeListener {
     void onEditModeChange(boolean isInEditMode);
+
     void onCopyStrategy();
 }

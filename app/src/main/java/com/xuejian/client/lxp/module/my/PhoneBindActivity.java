@@ -123,11 +123,10 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         System.out.println(code);
-                        if (code== HttpManager.PERMISSION_ERROR){
+                        if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(PhoneBindActivity.this).showToast("发送短信过于频繁！");
-                        }
-                        else if (!isFinishing())
+                        } else if (!isFinishing())
                             ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

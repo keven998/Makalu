@@ -43,8 +43,9 @@ public class PeachMessageDialog extends Dialog {
             mTitleTv.setVisibility(View.VISIBLE);
         }
     }
+
     public void setTitleIcon(int res) {
-        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(res,0,0,0);
+        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(res, 0, 0, 0);
     }
 
     private void initView() {
@@ -63,8 +64,8 @@ public class PeachMessageDialog extends Dialog {
         mOkBtn.setOnClickListener(listener);
     }
 
-    public void isCancle(boolean isCancle){
-        if(!isCancle){
+    public void isCancle(boolean isCancle) {
+        if (!isCancle) {
             mCancleBtn.setVisibility(View.GONE);
             midView.setVisibility(View.GONE);
         }

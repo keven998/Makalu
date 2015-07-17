@@ -46,7 +46,7 @@ public class UserDBManager {
                 + fri_table_name
                 + " (userId INTEGER PRIMARY KEY,nickName TEXT,avatar TEXT,avatarSmall TEXT,gender TEXT,signature TEXT,tel TEXT,secToken TEXT,countryCode TEXT,email TEXT,memo TEXT,travelStatus TEXT,residence TEXT,level TEXT,zodiac TEXT,birthday TEXT," +
                 "tracks TEXT,guideCnt INTEGER,Type INTEGER,ext TEXT,header TEXT)");
-        }
+    }
 
     public static UserDBManager getInstance() {
         if (instance == null) {
@@ -54,11 +54,13 @@ public class UserDBManager {
         }
         return instance;
     }
-    public void disconnectDB(){
+
+    public void disconnectDB() {
         //db.close();
-        db=null;
-        instance=null;
+        db = null;
+        instance = null;
     }
+
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
@@ -109,8 +111,8 @@ public class UserDBManager {
             try {
                 JSONArray userlist = new JSONArray((new JSONObject(data).get("GroupMember")).toString());
                 for (int i = 0; i < userlist.length(); i++) {
-                    User user=getContactByUserId(userlist.getLong(i));
-                    if (user==null)return null;
+                    User user = getContactByUserId(userlist.getLong(i));
+                    if (user == null) return null;
                     list.add(user);
                 }
                 cursor.close();
@@ -130,9 +132,11 @@ public class UserDBManager {
         mdb.delete(fri_table_name, "userId=?", new String[]{String.valueOf(userId)});
         closeDB();
     }
-    public synchronized void updateUserType(long userId,int type,String action){
+
+    public synchronized void updateUserType(long userId, int type, String action) {
 
     }
+
     public User getContactByUserId(long _id) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
@@ -169,7 +173,7 @@ public class UserDBManager {
     public boolean isMyFriend(long userId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
-        if (cursor.getCount()==0)return false;
+        if (cursor.getCount() == 0) return false;
         cursor.moveToLast();
         int type = cursor.getInt(0);
         cursor.close();
@@ -203,7 +207,7 @@ public class UserDBManager {
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
             String header = cursor.getString(20);
-            if (((Type & 1) == 1) && ((Type & 8) != 8)&&userId!=2) {
+            if (((Type & 1) == 1) && ((Type & 8) != 8) && userId != 2) {
                 list.add(new User(userId, nickName, avatar, avatarSmall, gender, signature, tel, secToken, countryCode,
                         email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext, header));
             }
@@ -221,6 +225,7 @@ public class UserDBManager {
         closeDB();
         return (type & 8) == 8;
     }
+
     public boolean isMaster(long userId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
@@ -232,48 +237,46 @@ public class UserDBManager {
 
     public synchronized void saveContact(User user) {
         mdb = getDB();
-                if(user.getNickName()==null||"".equals(user.getNickName())){
-                    user.setHeader("#");
-                }else if (" ".equals(user.getNickName().substring(0, 1))){
-                    user.setHeader("#");
-                }
-                else{
-                    String headerName = user.getNickName();
-                    user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
-                            0, 1).toUpperCase());
-                    char header = user.getHeader().toLowerCase().charAt(0);
-                    if (header < 'a' || header > 'z') {
-                        user.setHeader("#");
-                    }
-                }
+        if (user.getNickName() == null || "".equals(user.getNickName())) {
+            user.setHeader("#");
+        } else if (" ".equals(user.getNickName().substring(0, 1))) {
+            user.setHeader("#");
+        } else {
+            String headerName = user.getNickName();
+            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                    0, 1).toUpperCase());
+            char header = user.getHeader().toLowerCase().charAt(0);
+            if (header < 'a' || header > 'z') {
+                user.setHeader("#");
+            }
+        }
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
-        if (cursor.getCount()>0){
+        if (cursor.getCount() > 0) {
             ContentValues values = new ContentValues();
-            if (user.getUserId()!=null)values.put("userId", user.getUserId());
-            if (user.getNickName()!=null)values.put("nickName", user.getNickName());
-            if (user.getAvatar()!=null)values.put("avatar", user.getAvatar());
-            if (user.getAvatarSmall()!=null)values.put("avatarSmall", user.getAvatarSmall());
-            if (user.getGender()!=null)values.put("gender", user.getGender());
-            if (user.getSignature()!=null)values.put("signature", user.getSignature());
-            if (user.getTel()!=null)values.put("tel", user.getTel());
-            if (user.getSecToken()!=null)values.put("secToken", user.getSecToken());
-            if (user.getCountryCode()!=null)values.put("countryCode", user.getCountryCode());
-            if (user.getEmail()!=null)values.put("email", user.getEmail());
-            if (user.getMemo()!=null)values.put("memo", user.getMemo());
-            if (user.getTravelStatus()!=null)values.put("travelStatus", user.getTravelStatus());
-            if (user.getResidence()!=null)values.put("residence", user.getResidence());
-            if (user.getLevel()!=null)values.put("level", user.getLevel());
-            if (user.getZodiac()!=null)values.put("zodiac", user.getZodiac());
-            if (user.getBirthday()!=null)values.put("birthday", user.getBirthday());
+            if (user.getUserId() != null) values.put("userId", user.getUserId());
+            if (user.getNickName() != null) values.put("nickName", user.getNickName());
+            if (user.getAvatar() != null) values.put("avatar", user.getAvatar());
+            if (user.getAvatarSmall() != null) values.put("avatarSmall", user.getAvatarSmall());
+            if (user.getGender() != null) values.put("gender", user.getGender());
+            if (user.getSignature() != null) values.put("signature", user.getSignature());
+            if (user.getTel() != null) values.put("tel", user.getTel());
+            if (user.getSecToken() != null) values.put("secToken", user.getSecToken());
+            if (user.getCountryCode() != null) values.put("countryCode", user.getCountryCode());
+            if (user.getEmail() != null) values.put("email", user.getEmail());
+            if (user.getMemo() != null) values.put("memo", user.getMemo());
+            if (user.getTravelStatus() != null) values.put("travelStatus", user.getTravelStatus());
+            if (user.getResidence() != null) values.put("residence", user.getResidence());
+            if (user.getLevel() != null) values.put("level", user.getLevel());
+            if (user.getZodiac() != null) values.put("zodiac", user.getZodiac());
+            if (user.getBirthday() != null) values.put("birthday", user.getBirthday());
 //            values.put("tracks",tracksToString(user.getTracks()));
-            if (user.getGuideCnt()!=0)values.put("guideCnt", user.getGuideCnt());
-            if (user.getType()!=null)values.put("Type", user.getType());
-            if (user.getExt()!=null)values.put("ext", user.getExt());
-            if (user.getHeader()!=null)values.put("header", user.getHeader());
+            if (user.getGuideCnt() != 0) values.put("guideCnt", user.getGuideCnt());
+            if (user.getType() != null) values.put("Type", user.getType());
+            if (user.getExt() != null) values.put("ext", user.getExt());
+            if (user.getHeader() != null) values.put("header", user.getHeader());
             mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
             cursor.close();
-        }
-        else {
+        } else {
             ContentValues values = new ContentValues();
             values.put("userId", user.getUserId());
             values.put("nickName", user.getNickName());
@@ -303,18 +306,18 @@ public class UserDBManager {
     }
 
     public synchronized void saveContactList(List<User> list) {
-        if (list.size()==0)return;
+        if (list.size() == 0) return;
         mdb = getDB();
         ContentValues values1 = new ContentValues();
-        values1.put("Type",0);
-        mdb.update(fri_table_name,values1,null,null);
+        values1.put("Type", 0);
+        mdb.update(fri_table_name, values1, null, null);
         mdb.beginTransaction();
         for (User user : list) {
-            if(user.getNickName()==null||"".equals(user.getNickName())){
+            if (user.getNickName() == null || "".equals(user.getNickName())) {
                 user.setHeader("#");
-            }else if (" ".equals(user.getNickName().substring(0, 1))){
+            } else if (" ".equals(user.getNickName().substring(0, 1))) {
                 user.setHeader("#");
-            }else{
+            } else {
                 String headerName = user.getNickName();
                 user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
                         0, 1).toUpperCase());
@@ -350,27 +353,28 @@ public class UserDBManager {
                 mdb.insert(fri_table_name, null, values);
             } else {
                 ContentValues values = new ContentValues();
-                if (user.getUserId()!=null)values.put("userId", user.getUserId());
-                if (user.getNickName()!=null)values.put("nickName", user.getNickName());
-                if (user.getAvatar()!=null)values.put("avatar", user.getAvatar());
-                if (user.getAvatarSmall()!=null)values.put("avatarSmall", user.getAvatarSmall());
-                if (user.getGender()!=null)values.put("gender", user.getGender());
-                if (user.getSignature()!=null)values.put("signature", user.getSignature());
-                if (user.getTel()!=null)values.put("tel", user.getTel());
-                if (user.getSecToken()!=null)values.put("secToken", user.getSecToken());
-                if (user.getCountryCode()!=null)values.put("countryCode", user.getCountryCode());
-                if (user.getEmail()!=null)values.put("email", user.getEmail());
-                if (user.getMemo()!=null)values.put("memo", user.getMemo());
-                if (user.getTravelStatus()!=null)values.put("travelStatus", user.getTravelStatus());
-                if (user.getResidence()!=null)values.put("residence", user.getResidence());
-                if (user.getLevel()!=null)values.put("level", user.getLevel());
-                if (user.getZodiac()!=null)values.put("zodiac", user.getZodiac());
-                if (user.getBirthday()!=null)values.put("birthday", user.getBirthday());
+                if (user.getUserId() != null) values.put("userId", user.getUserId());
+                if (user.getNickName() != null) values.put("nickName", user.getNickName());
+                if (user.getAvatar() != null) values.put("avatar", user.getAvatar());
+                if (user.getAvatarSmall() != null) values.put("avatarSmall", user.getAvatarSmall());
+                if (user.getGender() != null) values.put("gender", user.getGender());
+                if (user.getSignature() != null) values.put("signature", user.getSignature());
+                if (user.getTel() != null) values.put("tel", user.getTel());
+                if (user.getSecToken() != null) values.put("secToken", user.getSecToken());
+                if (user.getCountryCode() != null) values.put("countryCode", user.getCountryCode());
+                if (user.getEmail() != null) values.put("email", user.getEmail());
+                if (user.getMemo() != null) values.put("memo", user.getMemo());
+                if (user.getTravelStatus() != null)
+                    values.put("travelStatus", user.getTravelStatus());
+                if (user.getResidence() != null) values.put("residence", user.getResidence());
+                if (user.getLevel() != null) values.put("level", user.getLevel());
+                if (user.getZodiac() != null) values.put("zodiac", user.getZodiac());
+                if (user.getBirthday() != null) values.put("birthday", user.getBirthday());
 //            values.put("tracks",tracksToString(user.getTracks()));
-                if (user.getGuideCnt()!=0)values.put("guideCnt", user.getGuideCnt());
-                if (user.getType()!=null)values.put("Type", user.getType());
-                if (user.getExt()!=null)values.put("ext", user.getExt());
-                if (user.getHeader()!=null)values.put("header", user.getHeader());
+                if (user.getGuideCnt() != 0) values.put("guideCnt", user.getGuideCnt());
+                if (user.getType() != null) values.put("Type", user.getType());
+                if (user.getExt() != null) values.put("ext", user.getExt());
+                if (user.getHeader() != null) values.put("header", user.getHeader());
                 mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
             }
             cursor.close();
@@ -379,20 +383,21 @@ public class UserDBManager {
         mdb.endTransaction();
         closeDB();
     }
-    public synchronized void updateGroupInfo(User user,String groupId){
+
+    public synchronized void updateGroupInfo(User user, String groupId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
-        if (cursor.getCount()==0)return;
+        if (cursor.getCount() == 0) return;
         cursor.moveToLast();
-        String ext=cursor.getString(0);
+        String ext = cursor.getString(0);
         cursor.close();
         try {
-            JSONObject o1=new JSONObject(ext);
-            JSONObject o2=new JSONObject(user.getExt());
-            Iterator it=o2.keys();
-            while (it.hasNext()){
-                String key=it.next().toString();
-                o1.put(key,o2.get(key));
+            JSONObject o1 = new JSONObject(ext);
+            JSONObject o2 = new JSONObject(user.getExt());
+            Iterator it = o2.keys();
+            while (it.hasNext()) {
+                String key = it.next().toString();
+                o1.put(key, o2.get(key));
             }
             user.setExt(o1.toString());
             user.setUserId(Long.parseLong(groupId));
@@ -403,17 +408,18 @@ public class UserDBManager {
         }
         closeDB();
     }
-    public synchronized void updateGroupMemberInfo(List<User> list,String groupId){
-        JSONArray array=new JSONArray();
-        for (User user:list){
+
+    public synchronized void updateGroupMemberInfo(List<User> list, String groupId) {
+        JSONArray array = new JSONArray();
+        for (User user : list) {
             array.put(user.getUserId());
             saveContact(user);
         }
-        User user=new User();
+        User user = new User();
         user.setType(8);
         user.setUserId(Long.parseLong(groupId));
         try {
-            user.setExt(new JSONObject().put("GroupMember",array.toString()).toString());
+            user.setExt(new JSONObject().put("GroupMember", array.toString()).toString());
             saveContact(user);
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class TravelNoteBean implements Parcelable,ICreateShareDialog {
+public class TravelNoteBean implements Parcelable, ICreateShareDialog {
     public String id;
     public String title;
     public String summary;
-//    public String cover;
-    public List<ImageBean> images= new ArrayList<>();
+    //    public String cover;
+    public List<ImageBean> images = new ArrayList<>();
     public String authorName;
     public String authorAvatar;
     public String source;
@@ -30,15 +30,15 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
     public TravelNoteBean() {
     }
 
-    public String getNoteImage(){
-        if(images!=null&&images.size()>0){
-           return images.get(0).url;
+    public String getNoteImage() {
+        if (images != null && images.size() > 0) {
+            return images.get(0).url;
         }
         return "";
     }
 
-    public void setFieldFromExtMessageBean(ExtMessageBean messageBean){
-        this.id=messageBean.id;
+    public void setFieldFromExtMessageBean(ExtMessageBean messageBean) {
+        this.id = messageBean.id;
         ArrayList<ImageBean> imageBeanList = new ArrayList<ImageBean>();
         ImageBean imageBean = new ImageBean();
         imageBean.url = messageBean.image;
@@ -48,8 +48,9 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         this.summary = messageBean.desc;
         this.detailUrl = messageBean.detailUrl;
     }
-    public void setFieldFromRecBean(RecDestBean.RecDestItem recBean){
-        this.id=recBean.itemId;
+
+    public void setFieldFromRecBean(RecDestBean.RecDestItem recBean) {
+        this.id = recBean.itemId;
         ArrayList<ImageBean> imageBeanList = new ArrayList<ImageBean>();
         ImageBean imageBean = new ImageBean();
         imageBean.url = recBean.cover;
@@ -59,8 +60,9 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         this.summary = recBean.desc;
         this.detailUrl = recBean.linkUrl;
     }
-    public void setFieldFromFavBean(FavoritesBean favBean){
-        this.id=favBean.itemId;
+
+    public void setFieldFromFavBean(FavoritesBean favBean) {
+        this.id = favBean.itemId;
         this.images = favBean.images;
         this.title = favBean.zhName;
         this.summary = favBean.desc;
@@ -71,16 +73,16 @@ public class TravelNoteBean implements Parcelable,ICreateShareDialog {
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.type = TravelApi.PeachType.NOTE;
         extMessageBean.id = id;
-        if(images.size()>0){
-            extMessageBean.image= images.get(0).url;
+        if (images.size() > 0) {
+            extMessageBean.image = images.get(0).url;
         }
         extMessageBean.name = title;
-        if(!TextUtils.isEmpty(summary)){
-            String[] strArray=summary.split("\n");
-            String maxLengthStr=strArray[0];
-            for(String str:strArray){
-                if(str.length()>maxLengthStr.length()){
-                    maxLengthStr=str;
+        if (!TextUtils.isEmpty(summary)) {
+            String[] strArray = summary.split("\n");
+            String maxLengthStr = strArray[0];
+            for (String str : strArray) {
+                if (str.length() > maxLengthStr.length()) {
+                    maxLengthStr = str;
                 }
             }
             extMessageBean.desc = maxLengthStr;

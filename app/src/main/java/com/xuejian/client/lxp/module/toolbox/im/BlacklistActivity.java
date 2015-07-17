@@ -21,106 +21,104 @@ import java.util.List;
 
 /**
  * 黑名单列表页面
- * 
  */
 public class BlacklistActivity extends Activity {
-	private ListView listView;
-	private BlacklistAdapater adapter;
+    private ListView listView;
+    private BlacklistAdapater adapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_black_list);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_black_list);
 
-		listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.list);
 
-		List<String> blacklist = null;
-		try {
-			// 获取黑名单
-		//	blacklist = EMContactManager.getInstance().getBlackListUsernames();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        List<String> blacklist = null;
+        try {
+            // 获取黑名单
+            //	blacklist = EMContactManager.getInstance().getBlackListUsernames();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// 显示黑名单列表
-		if (blacklist != null) {
-			Collections.sort(blacklist);
-			adapter = new BlacklistAdapater(this, 1, blacklist);
-			listView.setAdapter(adapter);
-		}
+        // 显示黑名单列表
+        if (blacklist != null) {
+            Collections.sort(blacklist);
+            adapter = new BlacklistAdapater(this, 1, blacklist);
+            listView.setAdapter(adapter);
+        }
 
-		// 注册上下文菜单
-		registerForContextMenu(listView);
+        // 注册上下文菜单
+        registerForContextMenu(listView);
 
-	}
+    }
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		getMenuInflater().inflate(R.menu.remove_from_blacklist, menu);
-	}
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.remove_from_blacklist, menu);
+    }
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.remove) {
-			final String tobeRemoveUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-			// 把目标user移出黑名单
-			removeOutBlacklist(tobeRemoveUser);
-			return true;
-		}
-		return super.onContextItemSelected(item);
-	}
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.remove) {
+            final String tobeRemoveUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+            // 把目标user移出黑名单
+            removeOutBlacklist(tobeRemoveUser);
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
-	/**
-	 * 移出黑民单
-	 * 
-	 * @param tobeRemoveUser
-	 */
-	void removeOutBlacklist(final String tobeRemoveUser) {
-		try {
-			// 移出黑民单
-		//	EMContactManager.getInstance().deleteUserFromBlackList(tobeRemoveUser);
-			adapter.remove(tobeRemoveUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(), "移出失败", Toast.LENGTH_SHORT).show();
-				}
-			});
-		}
-	}
+    /**
+     * 移出黑民单
+     *
+     * @param tobeRemoveUser
+     */
+    void removeOutBlacklist(final String tobeRemoveUser) {
+        try {
+            // 移出黑民单
+            //	EMContactManager.getInstance().deleteUserFromBlackList(tobeRemoveUser);
+            adapter.remove(tobeRemoveUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "移出失败", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
-	/**
-	 * adapter
-	 * 
-	 */
-	private class BlacklistAdapater extends ArrayAdapter<String> {
+    /**
+     * adapter
+     */
+    private class BlacklistAdapater extends ArrayAdapter<String> {
 
-		public BlacklistAdapater(Context context, int textViewResourceId, List<String> objects) {
-			super(context, textViewResourceId, objects);
-		}
+        public BlacklistAdapater(Context context, int textViewResourceId, List<String> objects) {
+            super(context, textViewResourceId, objects);
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = View.inflate(getContext(), R.layout.row_contact, null);
-			}
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = View.inflate(getContext(), R.layout.row_contact, null);
+            }
 
-			TextView name = (TextView) convertView.findViewById(R.id.name);
-			name.setText(getItem(position));
+            TextView name = (TextView) convertView.findViewById(R.id.name);
+            name.setText(getItem(position));
 
-			return convertView;
-		}
+            return convertView;
+        }
 
-	}
+    }
 
-	/**
-	 * 返回
-	 * 
-	 * @param view
-	 */
-	public void back(View view) {
-		finish();
-	}
+    /**
+     * 返回
+     *
+     * @param view
+     */
+    public void back(View view) {
+        finish();
+    }
 }

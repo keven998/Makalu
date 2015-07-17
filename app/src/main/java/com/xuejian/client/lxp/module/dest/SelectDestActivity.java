@@ -258,7 +258,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     }
 
 
-
     private class InOutFragmentAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         private String[] tabNames = {"国内", "国外"};
         private LayoutInflater inflater;

@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,102 +29,102 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
 public class NewGroupActivity extends ChatBaseActivity {
-	private EditText groupNameEditText;
-	private ProgressDialog progressDialog;
-	private EditText introductionEditText;
-	private CheckBox checkBox;
-	private CheckBox memberCheckbox;
-	private LinearLayout openInviteContainer;
+    private EditText groupNameEditText;
+    private ProgressDialog progressDialog;
+    private EditText introductionEditText;
+    private CheckBox checkBox;
+    private CheckBox memberCheckbox;
+    private LinearLayout openInviteContainer;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_new_group);
-		groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
-		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
-		checkBox = (CheckBox) findViewById(R.id.cb_public);
-		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
-		openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
-		
-		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked){
-					openInviteContainer.setVisibility(View.INVISIBLE);
-				}else{
-					openInviteContainer.setVisibility(View.VISIBLE);
-				}
-			}
-		});
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_group);
+        groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
+        introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
+        checkBox = (CheckBox) findViewById(R.id.cb_public);
+        memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
+        openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
 
-	/**
-	 * @param v
-	 */
-	public void save(View v) {
-		String name = groupNameEditText.getText().toString();
-		if (TextUtils.isEmpty(name)) {
-			Intent intent = new Intent(this, IMAlertDialog.class);
-			intent.putExtra("msg", "群组名称不能为空");
-			startActivity(intent);
-		} else {
-			// 进通讯录选人
-			startActivityForResult(new Intent(this, PickContactsWithCheckboxActivity.class).putExtra("groupName", name), 0);
-		}
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
-			//新建群组
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("正在创建群聊...");
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.show();
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					// 调用sdk创建群组方法
-					String groupName = groupNameEditText.getText().toString().trim();
-					String desc = introductionEditText.getText().toString();
-					String[] members = data.getStringArrayExtra("newmembers");
-					try {
-						if(checkBox.isChecked()){
-							//创建公开群，此种方式创建的群，可以自由加入
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    openInviteContainer.setVisibility(View.INVISIBLE);
+                } else {
+                    openInviteContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    /**
+     * @param v
+     */
+    public void save(View v) {
+        String name = groupNameEditText.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            Intent intent = new Intent(this, IMAlertDialog.class);
+            intent.putExtra("msg", "群组名称不能为空");
+            startActivity(intent);
+        } else {
+            // 进通讯录选人
+            startActivityForResult(new Intent(this, PickContactsWithCheckboxActivity.class).putExtra("groupName", name), 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            //新建群组
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在创建群聊...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // 调用sdk创建群组方法
+                    String groupName = groupNameEditText.getText().toString().trim();
+                    String desc = introductionEditText.getText().toString();
+                    String[] members = data.getStringArrayExtra("newmembers");
+                    try {
+                        if (checkBox.isChecked()) {
+                            //创建公开群，此种方式创建的群，可以自由加入
 //							EMGroupManager.getInstance().createPublicGroup(groupName, desc, members, false);
-							//创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
+                            //创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
 //							EMGroup group =EMGroupManager.getInstance().createPublicGroup(groupName, desc, members, true);
-						}else{
-							//创建不公开群
+                        } else {
+                            //创建不公开群
 //							EMGroupManager.getInstance().createPrivateGroup(groupName, desc, members, memberCheckbox.isChecked());
-						}
-						runOnUiThread(new Runnable() {
-							public void run() {
-								progressDialog.dismiss();
-								setResult(RESULT_OK);
-								finish();
-							}
-						});
-					} catch (final Exception e) {
+                        }
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                progressDialog.dismiss();
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                    } catch (final Exception e) {
                         if (!isFinishing())
-						runOnUiThread(new Runnable() {
-							public void run() {
-								progressDialog.dismiss();
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    progressDialog.dismiss();
 //								Toast.makeText(NewGroupActivity.this, "创建群组失败:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                ToastUtil.getInstance(NewGroupActivity.this).showToast("呃~好像找不到网络");
-							}
-						});
-					}
-					
-				}
-			}).start();
-		}
-	}
+                                    ToastUtil.getInstance(NewGroupActivity.this).showToast("呃~好像找不到网络");
+                                }
+                            });
+                    }
 
-	public void back(View view) {
-		finish();
-	}
+                }
+            }).start();
+        }
+    }
+
+    public void back(View view) {
+        finish();
+    }
 }

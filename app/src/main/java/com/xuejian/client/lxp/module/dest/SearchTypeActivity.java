@@ -249,7 +249,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 public void onSendClick(String type, String id, Object object) {
                     IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
                         @Override
-                        public void onDialogShareOk(Dialog dialog, int type, String content,String leave_msg) {
+                        public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
                             DialogManager.getInstance().showLoadingDialog(mContext);
                             IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                                 @Override

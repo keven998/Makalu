@@ -30,7 +30,7 @@ public class StrategyManager {
 
     }
 
-    public static String putItineraryJson(Context context,JSONObject rootJson, StrategyBean strategy, ArrayList<ArrayList<PoiDetailBean>> routeDayMap) {
+    public static String putItineraryJson(Context context, JSONObject rootJson, StrategyBean strategy, ArrayList<ArrayList<PoiDetailBean>> routeDayMap) {
         try {
             int i = 0;
             JSONArray itineraryArray = new JSONArray();
@@ -58,7 +58,7 @@ public class StrategyManager {
 
     }
 
-    public static String putRestaurantJson(Context context,JSONObject rootJson, StrategyBean strategy) {
+    public static String putRestaurantJson(Context context, JSONObject rootJson, StrategyBean strategy) {
         try {
             JSONArray restaurantArray = new JSONArray();
             JSONObject poiObject;
@@ -76,7 +76,8 @@ public class StrategyManager {
         return null;
 
     }
-    public static String putShoppingJson(Context context,JSONObject rootJson, StrategyBean strategy) {
+
+    public static String putShoppingJson(Context context, JSONObject rootJson, StrategyBean strategy) {
         try {
             JSONArray shoppingArray = new JSONArray();
             JSONObject poiObject;
@@ -95,7 +96,7 @@ public class StrategyManager {
 
     }
 
-    public static void putSaveGuideBaseInfo(JSONObject rootJson, Context context, StrategyBean strategy){
+    public static void putSaveGuideBaseInfo(JSONObject rootJson, Context context, StrategyBean strategy) {
 
         try {
             rootJson.put("id", strategy.id);

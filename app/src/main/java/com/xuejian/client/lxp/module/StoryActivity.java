@@ -37,10 +37,10 @@ public class StoryActivity extends SwipeBackActivity {
         initData();
     }
 
-    private void initView(){
+    private void initView() {
         setContentView(R.layout.activity_story);
         storyIv = (ImageView) findViewById(R.id.iv_story);
-        start = (ShimmerTextView)findViewById(R.id.start);
+        start = (ShimmerTextView) findViewById(R.id.start);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +59,7 @@ public class StoryActivity extends SwipeBackActivity {
         swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_RIGHT);
     }
 
-    private void initData(){
+    private void initData() {
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)

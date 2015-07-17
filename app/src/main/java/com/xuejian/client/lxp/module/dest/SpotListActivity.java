@@ -40,7 +40,7 @@ public class SpotListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-//    @InjectView(R.id.et_search)
+    //    @InjectView(R.id.et_search)
 //    EditText mEtSearch;
 //    @InjectView(R.id.btn_search)
 //    Button mBtnSearch;

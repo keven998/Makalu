@@ -70,15 +70,15 @@ public class CityPictureActivity extends PeachBaseActivity {
     private HackyViewPager zoomPicVp;
     @ViewInject(R.id.tv_title_bar_edit)
     private TextView editPics;
-//    @ViewInject(R.id.ll_container)
+    //    @ViewInject(R.id.ll_container)
 //    private LinearLayout containView;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
     private boolean isUserPics;
     private boolean isTalentAlbum;
-    private ArrayList<ImageBean> userPics= new ArrayList<ImageBean>();
-    private boolean isEditStatus=false;
+    private ArrayList<ImageBean> userPics = new ArrayList<ImageBean>();
+    private boolean isEditStatus = false;
     private File tempImage;
     private ArrayList<String> pic_ids = new ArrayList<String>();
 
@@ -93,25 +93,25 @@ public class CityPictureActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_city_picture);
         ViewUtils.inject(this);
-        isUserPics = getIntent().getBooleanExtra("isUserPics",false);
-        isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum",false);
+        isUserPics = getIntent().getBooleanExtra("isUserPics", false);
+        isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum", false);
         TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
-        if(isUserPics){
+        if (isUserPics) {
             titleView.setText(getIntent().getStringExtra("user_name"));
             editPics.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!isEditStatus){
-                        isEditStatus=true;
+                    if (!isEditStatus) {
+                        isEditStatus = true;
                         editPics.setText("完成");
-                    }else{
-                        isEditStatus=false;
+                    } else {
+                        isEditStatus = false;
                         editPics.setText("编辑");
                     }
                     picAdapter.notifyDataSetChanged();
                 }
             });
-        }else{
+        } else {
             editPics.setVisibility(View.GONE);
             titleView.setText(getIntent().getStringExtra("title") + "画册");
         }
@@ -131,7 +131,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 //            bean.url="http://img0.bdstatic.com/img/image/shouye/taiwanlvyou1117.jpg";
 //            imageList.add(bean);
 //        }
-        if(isUserPics||isTalentAlbum){
+        if (isUserPics || isTalentAlbum) {
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
@@ -143,17 +143,17 @@ public class CityPictureActivity extends PeachBaseActivity {
                             for (int i = 0; i < object.length(); i++) {
                                 JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                                 pic_ids.add(object.getJSONObject(i).getString("id"));
-                                ImageBean ib=new ImageBean();
-                                ib.url=imgArray.getJSONObject(0).getString("url");
+                                ImageBean ib = new ImageBean();
+                                ib.url = imgArray.getJSONObject(0).getString("url");
                                 userPics.add(ib);
                             }
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
                             ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                            if(isUserPics) {
+                            if (isUserPics) {
                                 newUserPics.add(new ImageBean());
                             }
-                            for(int k=0;k<userPics.size();k++){
+                            for (int k = 0; k < userPics.size(); k++) {
                                 newUserPics.add(userPics.get(k));
                             }
                             zoomAnimator = new ImageZoomAnimator2(mContext, mCityPicGv, zoomContainer, newUserPics);
@@ -174,7 +174,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
                 }
             });
-        }else {
+        } else {
             TravelApi.getCityGalley(id, new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
@@ -227,20 +227,20 @@ public class CityPictureActivity extends PeachBaseActivity {
         }
     }
 
-    private class PicAdapter extends BaseAdapter{
+    private class PicAdapter extends BaseAdapter {
         private List<ImageBean> imageBeanList;
         private DisplayImageOptions picOptions;
 
-        public PicAdapter(List<ImageBean> imageBeanList){
-            this.imageBeanList= imageBeanList;
+        public PicAdapter(List<ImageBean> imageBeanList) {
+            this.imageBeanList = imageBeanList;
             picOptions = UILUtils.getDefaultOption();
         }
 
         @Override
         public int getCount() {
-            if(isUserPics) {
-                return imageBeanList.size()+1;
-            }else{
+            if (isUserPics) {
+                return imageBeanList.size() + 1;
+            } else {
                 return imageBeanList.size();
             }
         }
@@ -261,31 +261,31 @@ public class CityPictureActivity extends PeachBaseActivity {
             AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(4)) / 3,
                     (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(4)) / 3);
 
-            FrameLayout cell_fl= (FrameLayout) view.findViewById(R.id.all_pics_cell_fl);
-            ImageView cell_pic= (ImageView) view.findViewById(R.id.all_pics_cell_id);
-            ImageView del_cell_pic= (ImageView) view.findViewById(R.id.all_pics_cell_del);
+            FrameLayout cell_fl = (FrameLayout) view.findViewById(R.id.all_pics_cell_fl);
+            ImageView cell_pic = (ImageView) view.findViewById(R.id.all_pics_cell_id);
+            ImageView del_cell_pic = (ImageView) view.findViewById(R.id.all_pics_cell_del);
 
             cell_fl.setLayoutParams(lytp);
-            cell_fl.setPadding(1,1,1,1);
+            cell_fl.setPadding(1, 1, 1, 1);
             cell_pic.setBackgroundResource(R.drawable.frame_cell_image_frame);
             cell_pic.setScaleType(ImageView.ScaleType.CENTER_CROP);
             cell_pic.setImageDrawable(null);
 
-            if(isUserPics){
-                if(position==0){
+            if (isUserPics) {
+                if (position == 0) {
                     cell_pic.setBackgroundResource(R.drawable.add_pictuer);
                     //cell_pic.setImageDrawable(getResources().getDrawable(R.drawable.add_pictuer));
                     del_cell_pic.setVisibility(View.GONE);
-                }else{
-                    ImageBean itemData = imageBeanList.get(position-1);
+                } else {
+                    ImageBean itemData = imageBeanList.get(position - 1);
                     ImageLoader.getInstance().displayImage(itemData.url, cell_pic, picOptions);
-                    if(isEditStatus){
+                    if (isEditStatus) {
                         del_cell_pic.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         del_cell_pic.setVisibility(View.GONE);
                     }
                 }
-            }else{
+            } else {
                 ImageBean itemData = imageBeanList.get(position);
                 ImageLoader.getInstance().displayImage(itemData.url, cell_pic, picOptions);
             }
@@ -300,7 +300,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
-                            delThisPic(pic_ids.get(position-1),position-1);
+                            delThisPic(pic_ids.get(position - 1), position - 1);
 
                         }
                     });
@@ -321,7 +321,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                     if (isUserPics) {
                         if (position == 0) {
                             showSelectPicDialog();
-                        }else{
+                        } else {
                             zoomAnimator.transformIn(position);
                         }
                     } else {
@@ -441,7 +441,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
                                         //上传图片，最新的图片置首位显示处理
                                         ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                                        for(int i=0;i<userPics.size();i++){
+                                        for (int i = 0; i < userPics.size(); i++) {
                                             newUserPics.add(userPics.get(i));
                                         }
                                         userPics.clear();
@@ -449,34 +449,34 @@ public class CityPictureActivity extends PeachBaseActivity {
                                             if (j == 0) {
                                                 userPics.add(ib);
                                             } else {
-                                                userPics.add(newUserPics.get(j-1));
+                                                userPics.add(newUserPics.get(j - 1));
                                             }
                                         }
-                                    //userPics.add(ib);
-                                    try {
-                                        //上传图片，最新的图片置首位显示处理
-                                        ArrayList<String> newPicId = new ArrayList<String>();
-                                        for(int i=0;i <pic_ids.size();i++){
-                                            newPicId.add(pic_ids.get(i));
-                                        }
-                                        pic_ids.clear();
-                                        for (int j = 0; j <= newPicId.size(); j++) {
-                                            if (j == 0) {
-                                                pic_ids.add(response.getString("id"));
-                                            } else {
-                                                pic_ids.add(newPicId.get(j - 1));
+                                        //userPics.add(ib);
+                                        try {
+                                            //上传图片，最新的图片置首位显示处理
+                                            ArrayList<String> newPicId = new ArrayList<String>();
+                                            for (int i = 0; i < pic_ids.size(); i++) {
+                                                newPicId.add(pic_ids.get(i));
                                             }
-                                        }
+                                            pic_ids.clear();
+                                            for (int j = 0; j <= newPicId.size(); j++) {
+                                                if (j == 0) {
+                                                    pic_ids.add(response.getString("id"));
+                                                } else {
+                                                    pic_ids.add(newPicId.get(j - 1));
+                                                }
+                                            }
 
-                                        //pic_ids.add(response.getString("id"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                            //pic_ids.add(response.getString("id"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        picAdapter.notifyDataSetChanged();
                                     }
-                                    picAdapter.notifyDataSetChanged();
-                                }
 
-                            }
-                }, new UploadOptions(null, null, false,
+                                }
+                            }, new UploadOptions(null, null, false,
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
                                             progressDialog.setContent((int) (percent * 100) + "%");

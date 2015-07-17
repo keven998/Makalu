@@ -69,7 +69,7 @@ public class ChatAllHistoryFragment extends Fragment {
         loadConversationsWithRecentChat();
         updateGroupsInfo();
         listView = (ListView) getView().findViewById(R.id.list);
-      //  adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+        //  adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
         // 设置adapter
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -151,10 +151,10 @@ public class ChatAllHistoryFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
             MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
-          //  PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-          //  EMConversation tobeDeleteCons = peachConversation.emConversation;
+            //  PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+            //  EMConversation tobeDeleteCons = peachConversation.emConversation;
             // 删除此会话
-         //   InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
+            //   InviteMsgRepository.deleteInviteMsg(getActivity(), tobeDeleteCons.getUserName());
             refresh();
 
             // 更新消息未读数
@@ -187,7 +187,7 @@ public class ChatAllHistoryFragment extends Fragment {
     private List<ConversationBean> loadConversationsWithRecentChat() {
         // 获取所有会话，包括陌生人
         conversationList.clear();
-        conversationList= IMClient.getInstance().getConversationList();
+        conversationList = IMClient.getInstance().getConversationList();
         //过滤掉messages seize为0的conversation
 
 

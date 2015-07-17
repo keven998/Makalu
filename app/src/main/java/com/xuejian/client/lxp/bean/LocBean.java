@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class LocBean implements Parcelable,ICreateShareDialog {
+public class LocBean implements Parcelable, ICreateShareDialog {
     public boolean isAdded;
     public String header;
     public String id;
@@ -26,7 +26,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
     public float timeCost;
     public String timeCostDesc;
     public String travelMonth;
-    public List<ImageBean> images =new ArrayList<ImageBean>();
+    public List<ImageBean> images = new ArrayList<ImageBean>();
     public int imageCnt;
     public boolean isFavorite;
     public String playGuide;
@@ -40,10 +40,10 @@ public class LocBean implements Parcelable,ICreateShareDialog {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof LocBean){
+        if (o instanceof LocBean) {
             LocBean bean = (LocBean) o;
             return bean.id.equals(this.id);
-        }else{
+        } else {
             return false;
         }
 
@@ -51,7 +51,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
 
     @Override
     public int hashCode() {
-        if(!TextUtils.isEmpty(id)){
+        if (!TextUtils.isEmpty(id)) {
             return id.hashCode();
         }
         return super.hashCode();
@@ -62,11 +62,11 @@ public class LocBean implements Parcelable,ICreateShareDialog {
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.name = zhName;
         extMessageBean.timeCost = timeCostDesc;
-        extMessageBean.type= TravelApi.PeachType.LOC;
+        extMessageBean.type = TravelApi.PeachType.LOC;
         extMessageBean.id = id;
-        extMessageBean.desc =  (!TextUtils.isEmpty(desc))?desc.substring(0,50):"";
-        if(images!=null&&images.size()>0)
-        extMessageBean.image =images.get(0).url;
+        extMessageBean.desc = (!TextUtils.isEmpty(desc)) ? desc.substring(0, 50) : "";
+        if (images != null && images.size() > 0)
+            extMessageBean.image = images.get(0).url;
         return new ShareDialogBean(extMessageBean);
     }
 
@@ -116,6 +116,7 @@ public class LocBean implements Parcelable,ICreateShareDialog {
         public LocBean createFromParcel(Parcel source) {
             return new LocBean(source);
         }
+
         public LocBean[] newArray(int size) {
             return new LocBean[size];
         }

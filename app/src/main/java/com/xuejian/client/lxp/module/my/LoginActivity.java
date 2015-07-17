@@ -127,13 +127,12 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
 
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO)
-                {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
                     signIn();
                 }
                 return false;
             }
-    });
+        });
     }
 
     @Override
@@ -163,8 +162,8 @@ public class LoginActivity extends PeachBaseActivity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityWithNoAnim(intent);
-               // setResult(RESULT_OK);
-               // finishWithNoAnim();
+                // setResult(RESULT_OK);
+                // finishWithNoAnim();
             }
         });
 
@@ -323,10 +322,9 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                if (code== HttpManager.PWD_ERROR){
+                if (code == HttpManager.PWD_ERROR) {
                     ToastUtil.getInstance(LoginActivity.this).showToast("用户名或密码错误");
-                }
-                else if (!isFinishing())
+                } else if (!isFinishing())
                     ToastUtil.getInstance(LoginActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
         });

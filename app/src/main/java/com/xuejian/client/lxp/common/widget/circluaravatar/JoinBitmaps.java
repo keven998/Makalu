@@ -20,12 +20,12 @@ public class JoinBitmaps {
     }
 
     public static final void join(Canvas canvas, int dimension, List<Bitmap> bitmaps, int count,
-            float[] size) {
+                                  float[] size) {
         join(canvas, dimension, bitmaps, count, size, 0.15f);
     }
 
     public static final void join(Canvas canvas, int dimension, List<Bitmap> bitmaps,
-            float gapSize) {
+                                  float gapSize) {
         if (bitmaps == null)
             return;
         int count = Math.min(bitmaps.size(), JoinLayout.max());
@@ -34,7 +34,7 @@ public class JoinBitmaps {
     }
 
     public static final void join(Canvas canvas, int dimension, List<Bitmap> bitmaps, int count,
-            float[] size, float gapSize) {
+                                  float[] size, float gapSize) {
         if (bitmaps == null)
             return;
         // 旋转角度
@@ -81,7 +81,7 @@ public class JoinBitmaps {
     }
 
     public static final Bitmap createMaskBitmap(Bitmap bitmap, int viewBoxW, int viewBoxH,
-            int rotation, float gapSize) {
+                                                int rotation, float gapSize) {
 
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
                 Bitmap.Config.ARGB_8888);
@@ -112,12 +112,12 @@ public class JoinBitmaps {
     }
 
     public static final Bitmap createBitmap(int width, int height, List<Bitmap> bitmaps,
-            int count, float[] size) {
+                                            int count, float[] size) {
         return createBitmap(width, height, bitmaps, count, size, 0.15f);
     }
 
     public static final Bitmap createBitmap(int width, int height, List<Bitmap> bitmaps,
-            int count, float[] size, float gapSize) {
+                                            int count, float[] size, float gapSize) {
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         int dimen = Math.min(width, height);

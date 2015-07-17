@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
  */
 public class PeachBaseFragment extends Fragment {
     private Context mContext;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -120,7 +120,7 @@ public class HttpManager {
                         o.put("groupType", groupType);
                         o.put("isPublic", isPublic);
                         o.put("creator", creator);
-                    //    UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
+                        //    UserDBManager.getInstance().saveContact(new User(Long.parseLong(groupId), name, o.toString(), 8));
                         if (Config.isDebug) {
                             Log.i(Config.TAG, "群组更新成功");
                         }
@@ -378,7 +378,7 @@ public class HttpManager {
             for (long member : participants) {
                 array.put(member);
             }
-           // array.put(Long.parseLong(AccountManager.getCurrentUserId()));
+            // array.put(Long.parseLong(AccountManager.getCurrentUserId()));
             obj.put("name", name);
             obj.put("avatar", "");
             obj.put("desc", "");
@@ -426,8 +426,8 @@ public class HttpManager {
 //                    }
 //                });
                 HttpPost post = new HttpPost("http://api-dev.lvxingpai.com/app/chatgroups");
-               // post.addHeader("Accept","application/vnd.lvxingpai.v1+json");
-                post.addHeader("UserId","100014");
+                // post.addHeader("Accept","application/vnd.lvxingpai.v1+json");
+                post.addHeader("UserId", "100014");
                 HttpResponse httpResponse = null;
                 try {
                     StringEntity entity = new StringEntity(obj.toString(),
@@ -459,8 +459,7 @@ public class HttpManager {
 //                            Log.i(Config.TAG, "群组更新成功");
 //                        }
                         listener.OnSuccess("0", null);
-                    }
-                    else listener.OnFailed();
+                    } else listener.OnFailed();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

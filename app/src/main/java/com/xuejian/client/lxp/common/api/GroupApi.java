@@ -30,7 +30,7 @@ public class GroupApi {
     public final static int ADD_MEMBER = 1;
     public final static int DELETE_MEMBER = 2;
 
-    public static PTRequestHandler createGroup(String requestBody,HttpCallBack callback){
+    public static PTRequestHandler createGroup(String requestBody, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CreateGroup);
@@ -45,38 +45,41 @@ public class GroupApi {
         request.setBodyEntity(entity);
         return HttpManager.request(request, callback);
     }
-    public static void editGroupDesc(String desc,String GroupId,HttpCallBack callBack){
-        JSONObject object=new JSONObject();
+
+    public static void editGroupDesc(String desc, String GroupId, HttpCallBack callBack) {
+        JSONObject object = new JSONObject();
         try {
-            object.put("desc",desc);
+            object.put("desc", desc);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        editGroup(object.toString(),GroupId,callBack);
-    }
-    public static void editGroupName(String name,String GroupId,HttpCallBack callBack){
-        JSONObject object=new JSONObject();
-        try {
-            object.put("name",name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        editGroup(object.toString(),GroupId ,callBack);
-    }
-    public static void editGroupAvatar(String avatar,String GroupId,HttpCallBack callBack){
-        JSONObject object=new JSONObject();
-        try {
-            object.put("avatar",avatar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        editGroup(object.toString(),GroupId ,callBack);
+        editGroup(object.toString(), GroupId, callBack);
     }
 
-    public static PTRequestHandler editGroup(String requestBody,String GroupId,HttpCallBack callback){
+    public static void editGroupName(String name, String GroupId, HttpCallBack callBack) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name", name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        editGroup(object.toString(), GroupId, callBack);
+    }
+
+    public static void editGroupAvatar(String avatar, String GroupId, HttpCallBack callBack) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("avatar", avatar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        editGroup(object.toString(), GroupId, callBack);
+    }
+
+    public static PTRequestHandler editGroup(String requestBody, String GroupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/"+GroupId);
+        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + GroupId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         StringEntity entity = null;
@@ -89,15 +92,16 @@ public class GroupApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getGroupInfo(String groupId,HttpCallBack callback){
+    public static PTRequestHandler getGroupInfo(String groupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId);
-                request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-    public static PTRequestHandler getGroupMemberInfo(String groupId,HttpCallBack callback){
+
+    public static PTRequestHandler getGroupMemberInfo(String groupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
@@ -105,16 +109,17 @@ public class GroupApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-    public static PTRequestHandler addGroupMember(String groupId,long userId,HttpCallBack callback){
-        JSONObject object=new JSONObject();
+
+    public static PTRequestHandler addGroupMember(String groupId, long userId, HttpCallBack callback) {
+        JSONObject object = new JSONObject();
         try {
-            object.put("member",userId);
+            object.put("member", userId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId+"/members");
+        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         StringEntity entity = null;
@@ -127,29 +132,30 @@ public class GroupApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler deleteGroupMember(String groupId,long userId,HttpCallBack callback){
+    public static PTRequestHandler deleteGroupMember(String groupId, long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId+"/members/"+userId);
+        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members/" + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-    public static PTRequestHandler editGroupMembers(String groupId ,JSONArray members,int action,HttpCallBack callback){
-        JSONObject object=new JSONObject();
+
+    public static PTRequestHandler editGroupMembers(String groupId, JSONArray members, int action, HttpCallBack callback) {
+        JSONObject object = new JSONObject();
         try {
-            object.put("members",members);
-            object.put("action",action);
+            object.put("members", members);
+            object.put("action", action);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         PTRequest request = new PTRequest();
-        if (action==ADD_MEMBER){
+        if (action == ADD_MEMBER) {
             request.setHttpMethod(PTRequest.TRACE);
-        }else {
+        } else {
             request.setHttpMethod(PTRequest.DELETE);
         }
-        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/"+groupId+"/members");
+        request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         StringEntity entity = null;
@@ -162,12 +168,12 @@ public class GroupApi {
         return HttpManager.request(request, callback);
     }
 
-    public static void setDefaultParams(PTRequest request){
-        if(AccountManager.getCurrentUserId()!=null){
+    public static void setDefaultParams(PTRequest request) {
+        if (AccountManager.getCurrentUserId() != null) {
             request.setHeader("UserId", AccountManager.getCurrentUserId());
         }
-        request.setHeader("Accept","application/vnd.lvxingpai.v1+json");
-        request.setHeader("Platform", "Android "+android.os.Build.VERSION.RELEASE);
+        request.setHeader("Accept", "application/vnd.lvxingpai.v1+json");
+        request.setHeader("Platform", "Android " + android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);
     }
 }

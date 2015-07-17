@@ -4,28 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class PeachUser implements Serializable{
-    public static final String M="M";
-    public static final String F="F";
-	public long userId;
-	public String nickName="";
-	public String avatar="";
-    public String avatarSmall="";
-    public String gender="";
-    public String signature="";
-	public String tel;
+public class PeachUser implements Serializable {
+    public static final String M = "M";
+    public static final String F = "F";
+    public long userId;
+    public String nickName = "";
+    public String avatar = "";
+    public String avatarSmall = "";
+    public String gender = "";
+    public String signature = "";
+    public String tel;
     public String secToken;
     public String countryCode;
     public String email;
     public String easemobUser;
     public String easemobPwd;
-    public String memo="";
+    public String memo = "";
     public String travelStatus;
     public String residence;
     public String level;
     public String zodiac;
     public String birthday;
-    public Map<String,ArrayList<LocBean>> tracks;
+    public Map<String, ArrayList<LocBean>> tracks;
     public int guideCnt;
 
     public static String getF() {

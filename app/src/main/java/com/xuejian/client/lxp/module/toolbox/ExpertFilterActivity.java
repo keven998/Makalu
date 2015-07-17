@@ -40,7 +40,7 @@ public class ExpertFilterActivity extends PeachBaseActivity {
         titleHeaderBar.enableBackKey(true);
         inOutIndicator = (FixedIndicatorView) findViewById(R.id.expert_in_out_indicator);
         mSelectDestVp = (FixedViewPager) findViewById(R.id.expert_select_dest_viewPager);
-        indicatorViewPager = new IndicatorViewPager(inOutIndicator,mSelectDestVp);
+        indicatorViewPager = new IndicatorViewPager(inOutIndicator, mSelectDestVp);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -50,7 +50,7 @@ public class ExpertFilterActivity extends PeachBaseActivity {
     }
 
     private class InOutFragmentAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = { "国内", "国外"};
+        private String[] tabNames = {"国内", "国外"};
         private LayoutInflater inflater;
 
         public InOutFragmentAdapter(FragmentManager fragmentManager) {
@@ -70,9 +70,9 @@ public class ExpertFilterActivity extends PeachBaseActivity {
             }
             TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
             textView.setText(tabNames[position]);
-            if(position==0){
+            if (position == 0) {
                 textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
-            }else if(position==1){
+            } else if (position == 1) {
                 textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
             }
             return convertView;

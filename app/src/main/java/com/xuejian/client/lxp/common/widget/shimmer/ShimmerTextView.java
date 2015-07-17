@@ -11,7 +11,7 @@ import android.widget.TextView;
  * User: romainpiel
  * Date: 06/03/2014
  * Time: 10:19
- *
+ * <p>
  * Shimmering TextView
  * Dumb class wrapping a ShimmerViewHelper
  */

@@ -18,11 +18,11 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     public String title;
     public String summary;
     public long updateTime;
-    public ArrayList<ImageBean> images=new ArrayList<>();
-    public ArrayList<LocBean> localities=new ArrayList<>();
-    public ArrayList<IndexPoi> itinerary=new ArrayList<>();
-    public ArrayList<PoiDetailBean> shopping=new ArrayList<>();
-    public ArrayList<PoiDetailBean> restaurant=new ArrayList<>();
+    public ArrayList<ImageBean> images = new ArrayList<>();
+    public ArrayList<LocBean> localities = new ArrayList<>();
+    public ArrayList<IndexPoi> itinerary = new ArrayList<>();
+    public ArrayList<PoiDetailBean> shopping = new ArrayList<>();
+    public ArrayList<PoiDetailBean> restaurant = new ArrayList<>();
     public long userId;
     public Integer dayCnt;
     public Integer itineraryDays;
@@ -33,21 +33,21 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.type = TravelApi.PeachType.GUIDE;
-        extMessageBean.id=id;
+        extMessageBean.id = id;
         extMessageBean.name = title;
-        extMessageBean.image =images.size()>0?images.get(0).url:"";
-        if(dayCnt==null){
-            extMessageBean.timeCost = itineraryDays+"天";
-        }else{
-            extMessageBean.timeCost = dayCnt+"天";
+        extMessageBean.image = images.size() > 0 ? images.get(0).url : "";
+        if (dayCnt == null) {
+            extMessageBean.timeCost = itineraryDays + "天";
+        } else {
+            extMessageBean.timeCost = dayCnt + "天";
         }
-        if(TextUtils.isEmpty(summary)){
-            StringBuilder sb=new StringBuilder();
-            for(LocBean loc:localities){
-                sb.append(loc.zhName+" ");
+        if (TextUtils.isEmpty(summary)) {
+            StringBuilder sb = new StringBuilder();
+            for (LocBean loc : localities) {
+                sb.append(loc.zhName + " ");
             }
             extMessageBean.desc = sb.toString();
-        }else{
+        } else {
             extMessageBean.desc = summary;
         }
 

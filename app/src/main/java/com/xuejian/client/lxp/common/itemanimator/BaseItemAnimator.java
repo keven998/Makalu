@@ -40,7 +40,7 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
      */
     protected RecyclerView mRecyclerView;
 
-    public BaseItemAnimator(RecyclerView recyclerView){
+    public BaseItemAnimator(RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
     }
 
@@ -189,6 +189,7 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
                     ViewCompat.setTranslationY(view, 0);
                 }
             }
+
             @Override
             public void onAnimationEnd(View view) {
                 dispatchMoveFinished(holder);
@@ -321,13 +322,18 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
 
     protected static class VpaListenerAdapter implements ViewPropertyAnimatorListener {
         @Override
-        public void onAnimationStart(View view) {}
+        public void onAnimationStart(View view) {
+        }
 
         @Override
-        public void onAnimationEnd(View view) {}
+        public void onAnimationEnd(View view) {
+        }
 
         @Override
-        public void onAnimationCancel(View view) {}
-    };
+        public void onAnimationCancel(View view) {
+        }
+    }
+
+    ;
 }
 

@@ -13,12 +13,12 @@ public class AddressBookbean {
     public long userId;
 
 
-    public int getSort(){
-        if(isContact){
+    public int getSort() {
+        if (isContact) {
             return 0;
-        }else if(isUser){
+        } else if (isUser) {
             return 2;
-        }else{
+        } else {
             return 1;
         }
     }

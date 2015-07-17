@@ -50,16 +50,16 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_ok:
-                if(TextUtils.isEmpty(pwdEt.getText())){
-                    if(!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())){
+                if (TextUtils.isEmpty(pwdEt.getText())) {
+                    if (!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())) {
                         ToastUtil.getInstance(this).showToast("请正确输入6-12位密码");
                         return;
                     }
                     return;
                 }
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }

@@ -18,6 +18,6 @@ public class ReadMoreActivity extends PeachBaseActivity {
         TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.title_bar);
         titleHeaderBar.enableBackKey(true);
         String content = getIntent().getStringExtra("content");
-        ((TextView) findViewById(R.id.tv_content)).setText("\u3000\u3000"+content);
+        ((TextView) findViewById(R.id.tv_content)).setText("\u3000\u3000" + content);
     }
 }

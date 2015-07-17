@@ -52,7 +52,6 @@ public class FlowLayout extends ViewGroup {
     }
 
 
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.getPaddingRight() - this.getPaddingLeft();
@@ -217,7 +216,6 @@ public class FlowLayout extends ViewGroup {
     }
 
 
-
     private void fillLine(List<View> row, int size, int prevLineLength, int prevLineThickness) {
         int lineCount = row.size();
         float totalWeight = 0;
@@ -302,7 +300,7 @@ public class FlowLayout extends ViewGroup {
                     } else {
                         offsetX += (extraSecondary * moveSecondary) / 2;
                     }
-                    if (!centerJustified){
+                    if (!centerJustified) {
                         plp.setPosition(plp.x + accOffsetX + offsetX, plp.y + accOffsetY + offsetY);
                     }
                     if (scalePrimary) {
@@ -331,7 +329,7 @@ public class FlowLayout extends ViewGroup {
                         accOffsetY += extraPrimary;
                     }
                 }
-                if(centerJustified) {
+                if (centerJustified) {
                     for (View prev : row) {
                         LayoutParams plp = (LayoutParams) prev.getLayoutParams();
                         plp.setPosition(plp.x + accOffsetX / 2, plp.y + accOffsetY / 2);
@@ -447,7 +445,6 @@ public class FlowLayout extends ViewGroup {
     }
 
 
-
     public int getHorizontalSpacing() {
         return this.horizontalSpacing;
     }
@@ -542,7 +539,6 @@ public class FlowLayout extends ViewGroup {
     }
 
 
-
     public enum FillLines {
         NONE(FILL_LINES_NONE),
         EXCEPT_LAST(FILL_LINES_EXCEPT_LAST),
@@ -581,7 +577,7 @@ public class FlowLayout extends ViewGroup {
         public int verticalSpacing = NO_SPACING;
 
         public int gravity = Gravity.NO_GRAVITY;
-        public float weight = - 1.0f;
+        public float weight = -1.0f;
         public boolean newLine = false;
         public boolean centerJustified;
 

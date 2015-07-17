@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 /**
  * Created by Rjm on 2015/1/22.
  */
-public class PhotoViewPager  extends ViewPager{
+public class PhotoViewPager extends ViewPager {
     public PhotoViewPager(Context context) {
         super(context);
         // TODO Auto-generated constructor stub

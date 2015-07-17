@@ -33,6 +33,7 @@ public class SmoothPhotoView extends PhotoView {
     private final int mBgColor = 0xFF000000;
     private int mBgAlpha = 0;
     private Paint mPaint;
+
     public SmoothPhotoView(Context context) {
         super(context);
         init();
@@ -42,6 +43,7 @@ public class SmoothPhotoView extends PhotoView {
         super(context, attrs);
         init();
     }
+
     public SmoothPhotoView(Context context, AttributeSet attr, int defStyle) {
         super(context, attr, defStyle);
         init();
@@ -49,11 +51,12 @@ public class SmoothPhotoView extends PhotoView {
 
     private void init() {
         mSmoothMatrix = new Matrix();
-        mPaint=new Paint();
+        mPaint = new Paint();
         mPaint.setColor(mBgColor);
         mPaint.setStyle(Paint.Style.FILL);
 //		setBackgroundColor(mBgColor);
     }
+
     public void setOriginalInfo(int width, int height, int locationX, int locationY) {
         mOriginalWidth = width;
         mOriginalHeight = height;
@@ -86,6 +89,7 @@ public class SmoothPhotoView extends PhotoView {
         }
         return statusBarHeight;
     }
+
     /**
      * 用于开始进入的方法。 调用此方前，需已经调用过setOriginalInfo
      */
@@ -113,7 +117,7 @@ public class SmoothPhotoView extends PhotoView {
         LocationSizeF rect;// 属性ValueAnimator计算出来的值
 
         void initStartIn() {
-            mBgAlpha=0;
+            mBgAlpha = 0;
             scale = startScale;
             try {
                 rect = (LocationSizeF) startRect.clone();
@@ -123,7 +127,7 @@ public class SmoothPhotoView extends PhotoView {
         }
 
         void initStartOut() {
-            mBgAlpha=255;
+            mBgAlpha = 255;
             scale = endScale;
             try {
                 rect = (LocationSizeF) endRect.clone();
@@ -154,7 +158,7 @@ public class SmoothPhotoView extends PhotoView {
         mTransfrom = new Transfrom();
 
         /** 下面为缩放的计算 */
-		/* 计算初始的缩放值，初始值因为是CENTR_CROP效果，所以要保证图片的宽和高至少1个能匹配原始的宽和高，另1个大于 */
+        /* 计算初始的缩放值，初始值因为是CENTR_CROP效果，所以要保证图片的宽和高至少1个能匹配原始的宽和高，另1个大于 */
         float xSScale = mOriginalWidth / ((float) mBitmap.getWidth());
         float ySScale = mOriginalHeight / ((float) mBitmap.getHeight());
         float startScale = xSScale > ySScale ? xSScale : ySScale;
@@ -189,14 +193,15 @@ public class SmoothPhotoView extends PhotoView {
         mTransfrom.rect = new LocationSizeF();
     }
 
-    private class LocationSizeF implements Cloneable{
+    private class LocationSizeF implements Cloneable {
         float left;
         float top;
         float width;
         float height;
+
         @Override
         public String toString() {
-            return "[left:"+left+" top:"+top+" width:"+width+" height:"+height+"]";
+            return "[left:" + left + " top:" + top + " width:" + width + " height:" + height + "]";
         }
 
         @Override
@@ -206,6 +211,7 @@ public class SmoothPhotoView extends PhotoView {
         }
 
     }
+
     /* 下面实现了CENTER_CROP的功能 的Matrix，在优化的过程中，已经不用了 */
     private void getCenterCropMatrix() {
         if (getDrawable() == null) {
@@ -242,7 +248,7 @@ public class SmoothPhotoView extends PhotoView {
     @Override
     protected void onDraw(Canvas canvas) {
         if (getDrawable() == null) {
-            if(mTransformListener!=null){
+            if (mTransformListener != null) {
                 mTransformListener.onTransformComplete(mState);
             }
             return;
@@ -265,7 +271,7 @@ public class SmoothPhotoView extends PhotoView {
                 }
             }
 
-            if(mTransformStart){
+            if (mTransformStart) {
             }
 
             mPaint.setAlpha(mBgAlpha);
@@ -281,7 +287,7 @@ public class SmoothPhotoView extends PhotoView {
             getDrawable().draw(canvas);
             canvas.restoreToCount(saveCount);
             if (mTransformStart) {
-                mTransformStart=false;
+                mTransformStart = false;
                 startTransform(mState);
             }
         } else {
@@ -327,8 +333,8 @@ public class SmoothPhotoView extends PhotoView {
                 mTransfrom.rect.height = (Float) animation.getAnimatedValue("height");
                 mBgAlpha = (Integer) animation.getAnimatedValue("alpha");
                 invalidate();
-                if(mTransformListener!=null){
-                    mTransformListener.onTransformProcess(state,mBgAlpha);
+                if (mTransformListener != null) {
+                    mTransformListener.onTransformProcess(state, mBgAlpha);
                 }
 //                ((Activity)getContext()).getWindow().getDecorView().invalidate();
             }
@@ -378,15 +384,12 @@ public class SmoothPhotoView extends PhotoView {
 
     public interface TransformListener {
         /**
-         *
-         * @param mode
-         *            STATE_TRANSFORM_IN 1 ,STATE_TRANSFORM_OUT 2
+         * @param mode STATE_TRANSFORM_IN 1 ,STATE_TRANSFORM_OUT 2
          */
         void onTransformComplete(int mode);// mode 1
+
         void onTransformProcess(int mode, int alpha);
     }
-
-
 
 
 }

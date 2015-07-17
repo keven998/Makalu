@@ -33,7 +33,7 @@ public class PicPagerActivity2 extends PeachBaseActivity {
         setContentView(R.layout.activity_view_pager);
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         imageUrls = getIntent().getStringArrayListExtra("imageStringUrlList");
-        int pos = getIntent().getIntExtra("pos",0);
+        int pos = getIntent().getIntExtra("pos", 0);
         mViewPager.setAdapter(new ImagePagerAdapter());
         mViewPager.setCurrentItem(pos);
         if (savedInstanceState != null) {
@@ -43,7 +43,7 @@ public class PicPagerActivity2 extends PeachBaseActivity {
     @Override
     public void onBackPressed() {
         PicPagerActivity2.this.finishWithNoAnim();
-        overridePendingTransition(0,R.anim.fade_out);
+        overridePendingTransition(0, R.anim.fade_out);
     }
 
     class ImagePagerAdapter extends PagerAdapter {
@@ -62,9 +62,9 @@ public class PicPagerActivity2 extends PeachBaseActivity {
             // Now just add PhotoView to ViewPager and return it
             View contentView = View.inflate(mContext, R.layout.item_view_pic, null);
 
-            PhotoView photeView =(PhotoView) contentView.findViewById(R.id.pv_view);
+            PhotoView photeView = (PhotoView) contentView.findViewById(R.id.pv_view);
             final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-            ImageLoader.getInstance().displayImage(imageUrls.get(position), photeView, UILUtils.getDefaultOption(),new ImageLoadingListener() {
+            ImageLoader.getInstance().displayImage(imageUrls.get(position), photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
 
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -96,7 +96,7 @@ public class PicPagerActivity2 extends PeachBaseActivity {
                 @Override
                 public void onViewTap(View view, float x, float y) {
                     PicPagerActivity2.this.finishWithNoAnim();
-                    overridePendingTransition(0,R.anim.fade_out);
+                    overridePendingTransition(0, R.anim.fade_out);
 
                 }
             });

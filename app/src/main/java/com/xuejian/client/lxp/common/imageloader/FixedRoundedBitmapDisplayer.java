@@ -29,17 +29,18 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
     protected final int margin;
 
     public FixedRoundedBitmapDisplayer(int radius) {
-        this(radius,radius,radius,radius, 0);
-    }
-    public FixedRoundedBitmapDisplayer(int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius) {
-        this(topLeftRadius,topRightRadius,bottomLeftRadius,bottomRightRadius, 0);
+        this(radius, radius, radius, radius, 0);
     }
 
-    public FixedRoundedBitmapDisplayer(int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius,int marginPixels) {
+    public FixedRoundedBitmapDisplayer(int topLeftRadius, int topRightRadius, int bottomLeftRadius, int bottomRightRadius) {
+        this(topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, 0);
+    }
+
+    public FixedRoundedBitmapDisplayer(int topLeftRadius, int topRightRadius, int bottomLeftRadius, int bottomRightRadius, int marginPixels) {
         this.topLeftRadius = topLeftRadius;
-        this.topRightRadius=topRightRadius;
+        this.topRightRadius = topRightRadius;
         this.bottomLeftRadius = bottomLeftRadius;
-        this.bottomRightRadius= bottomRightRadius;
+        this.bottomRightRadius = bottomRightRadius;
         this.margin = marginPixels;
     }
 
@@ -49,7 +50,7 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
             throw new IllegalArgumentException("ImageAware should wrap ImageView. ImageViewAware is expected.");
         }
 
-        imageAware.setImageDrawable(new RoundedDrawable(bitmap, topLeftRadius,topRightRadius,bottomLeftRadius,bottomRightRadius, margin));
+        imageAware.setImageDrawable(new RoundedDrawable(bitmap, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, margin));
     }
 
     public static class RoundedDrawable extends Drawable {
@@ -66,15 +67,15 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
         private RoundRectShape mRoundRectShape;
         protected final Paint paint;
 
-        public RoundedDrawable(Bitmap bitmap,int topLeftRadius, int topRightRadius,int bottomLeftRadius, int bottomRightRadius, int margin) {
+        public RoundedDrawable(Bitmap bitmap, int topLeftRadius, int topRightRadius, int bottomLeftRadius, int bottomRightRadius, int margin) {
             this.topLeftRadius = topLeftRadius;
-            this.topRightRadius=topRightRadius;
+            this.topRightRadius = topRightRadius;
             this.bottomLeftRadius = bottomLeftRadius;
-            this.bottomRightRadius= bottomRightRadius;
+            this.bottomRightRadius = bottomRightRadius;
             this.margin = margin;
 
             bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            mBitmapRect = new RectF (margin, margin, bitmap.getWidth() - margin, bitmap.getHeight() - margin);
+            mBitmapRect = new RectF(margin, margin, bitmap.getWidth() - margin, bitmap.getHeight() - margin);
             mRoundRectShape = new RoundRectShape(new float[]{
                     topLeftRadius, topLeftRadius,
                     topRightRadius, topRightRadius,
@@ -104,7 +105,7 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
         @Override
         public void draw(Canvas canvas) {
 
-            canvas.drawRect(mRect,paint);
+            canvas.drawRect(mRect, paint);
             drawLeftBottom(canvas);
             drawLeftTop(canvas);
             drawRightBottom(canvas);
@@ -119,8 +120,8 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
             path.arcTo(new RectF(
                             0,
                             0,
-                            topLeftRadius*2,
-                            topLeftRadius*2),
+                            topLeftRadius * 2,
+                            topLeftRadius * 2),
                     -90,
                     -90);
             path.close();
@@ -129,13 +130,13 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
 
         private void drawLeftBottom(Canvas canvas) {
             Path path = new Path();
-            path.moveTo(0, mRect.height()-bottomLeftRadius);
+            path.moveTo(0, mRect.height() - bottomLeftRadius);
             path.lineTo(0, mRect.height());
             path.lineTo(bottomLeftRadius, mRect.height());
             path.arcTo(new RectF(
                             0,
-                            mRect.height()-bottomLeftRadius*2,
-                            bottomLeftRadius*2,
+                            mRect.height() - bottomLeftRadius * 2,
+                            bottomLeftRadius * 2,
                             mRect.height()),
                     90,
                     90);
@@ -145,12 +146,12 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
 
         private void drawRightBottom(Canvas canvas) {
             Path path = new Path();
-            path.moveTo(mRect.width()-bottomRightRadius,  mRect.height());
+            path.moveTo(mRect.width() - bottomRightRadius, mRect.height());
             path.lineTo(mRect.width(), mRect.height());
-            path.lineTo(mRect.width(),  mRect.height()-bottomRightRadius);
+            path.lineTo(mRect.width(), mRect.height() - bottomRightRadius);
             path.arcTo(new RectF(
-                    mRect.width()-bottomRightRadius*2,
-                    mRect.height()-bottomRightRadius*2,
+                    mRect.width() - bottomRightRadius * 2,
+                    mRect.height() - bottomRightRadius * 2,
                     mRect.width(),
                     mRect.height()), 0, 90);
             path.close();
@@ -161,12 +162,12 @@ public class FixedRoundedBitmapDisplayer implements BitmapDisplayer {
             Path path = new Path();
             path.moveTo(mRect.width(), topRightRadius);
             path.lineTo(mRect.width(), 0);
-            path.lineTo(mRect.width()-topRightRadius, 0);
+            path.lineTo(mRect.width() - topRightRadius, 0);
             path.arcTo(new RectF(
-                            mRect.width()-topRightRadius*2,
+                            mRect.width() - topRightRadius * 2,
                             0,
                             mRect.width(),
-                            topRightRadius*2),
+                            topRightRadius * 2),
                     -90,
                     90);
             path.close();

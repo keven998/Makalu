@@ -180,7 +180,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             pic_ids.add(object.getJSONObject(i).getString("id"));
                         }
                         initScrollView(pics, pic_ids);*/
-                        tv_photo.setText(object.length()+"张");
+                        tv_photo.setText(object.length() + "张");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -305,7 +305,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else {
             tv_resident.setText(user.getResidence());
         }
-        if(TextUtils.isEmpty(user.getBirthday())){
+        if (TextUtils.isEmpty(user.getBirthday())) {
             tv_zodiac.setText("未设置");
         } else {
             tv_zodiac.setText(user.getBirthday());
@@ -362,7 +362,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             }
         });
 
-        if(!TextUtils.isEmpty(user.getTel())){
+        if (!TextUtils.isEmpty(user.getTel())) {
             tv_bind_phone.setText("已绑定");
         }
 
@@ -410,7 +410,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
-                DatePickerDialog dialog =makeDatePicker(new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -433,7 +433,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             birthTimeFlag = false;
                         }
                     }
-                },1990, 0, 0);
+                }, 1990, 0, 0);
 //                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 //                    @Override
 //                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -458,7 +458,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                        }
 //                    }
 //                }, 1990, 0, 0);
-               // dialog.setTitle("设置生日");
+                // dialog.setTitle("设置生日");
                 dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1138,7 +1138,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         age = Integer.parseInt(date) - birthYear;
         return age;
     }
-    public DatePickerDialog makeDatePicker(DatePickerDialog.OnDateSetListener listener, int y,int m,int day) {
+
+    public DatePickerDialog makeDatePicker(DatePickerDialog.OnDateSetListener listener, int y, int m, int day) {
         DatePickerDialog newFragment = new DatePickerDialog(this, listener, y, m, day);
 
         // removes the original topbar:
@@ -1177,7 +1178,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         tvTitle.setPadding(10, 10, 10, 10);
         tvTitle.setTextSize(18);
         tvTitle.setTextColor(Color.BLACK);
-        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, titleHeight-2));
+        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, titleHeight - 2));
         llTitleBar.addView(tvTitle);
 
         // View line:

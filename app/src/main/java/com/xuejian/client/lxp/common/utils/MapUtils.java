@@ -43,13 +43,13 @@ public class MapUtils {
     }
 
 
-    private static boolean isInstallByread(Context context,String packageName) {
-        boolean isInstall=false;
+    private static boolean isInstallByread(Context context, String packageName) {
+        boolean isInstall = false;
         try {
-            PackageInfo packageInfo=context.getPackageManager().getPackageInfo(packageName, 0);
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
             isInstall = packageInfo != null;
         } catch (Exception e) {
-            isInstall=false;
+            isInstall = false;
         }
         return isInstall;
     }
@@ -60,8 +60,8 @@ public class MapUtils {
         // b.setIcon(R.drawable.tools);
         // 设置对话框的标题
         b.setTitle("请选择您地图客户端：");
-        boolean baidumap = isInstallByread(context,"com.baidu.BaiduMap");
-        boolean gaodemap = isInstallByread(context,"com.autonavi.minimap");
+        boolean baidumap = isInstallByread(context, "com.baidu.BaiduMap");
+        boolean gaodemap = isInstallByread(context, "com.autonavi.minimap");
         final ArrayList<String> typeList = new ArrayList<>();
         int tag = 0;
         if (baidumap) {
@@ -74,7 +74,7 @@ public class MapUtils {
             ToastUtil.getInstance(context).showToast("请先安装百度地图或高德地图");
             return;
         }
-        String[] typeArray=new String[typeList.size()];
+        String[] typeArray = new String[typeList.size()];
         typeList.toArray(typeArray);
         b.setItems(typeArray, new DialogInterface.OnClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class MapUtils {
                         // Intent.getIntent("intent://map/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving®ion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
                         Intent intent = Intent.getIntent(getBDMapNaviUri(startLat, startLng, startName, endLat, endLng, endName));
 
-                        if (isInstallByread(context,"com.baidu.BaiduMap")) {
+                        if (isInstallByread(context, "com.baidu.BaiduMap")) {
                             context.startActivity(intent); // 启动调用
                             Log.e("GasStation", "百度地图客户端已经安装");
                         } else {

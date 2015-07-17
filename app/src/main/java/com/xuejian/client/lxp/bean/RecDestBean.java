@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class RecDestBean {
     public String title;
-    public List<RecDestItem> contents =new ArrayList<>();
+    public List<RecDestItem> contents = new ArrayList<>();
 
-    public class RecDestItem{
+    public class RecDestItem {
         public String id;
         public String itemType;
         public String itemId;

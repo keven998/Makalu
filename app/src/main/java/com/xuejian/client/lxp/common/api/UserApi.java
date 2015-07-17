@@ -40,7 +40,7 @@ public class UserApi extends BaseApi {
     public final static String SEND_VALIDATION = "/users/validation-codes";
 
     //验证验证码换取token
-   // public final static String CHECK_VALIDATION = "/users/check-validation";
+    // public final static String CHECK_VALIDATION = "/users/check-validation";
     public final static String CHECK_VALIDATION = "/users/tokens";
 
 
@@ -147,13 +147,13 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-           // jsonObject.put("tel", phone);
+            // jsonObject.put("tel", phone);
             jsonObject.put("validationCode", captcha);
             jsonObject.put("action", Integer.parseInt(actionCode));
-          //  if (!TextUtils.isEmpty(uid)) {
-             if (uid!=0)
-                jsonObject.put("userId",uid);
-        //    }
+            //  if (!TextUtils.isEmpty(uid)) {
+            if (uid != 0)
+                jsonObject.put("userId", uid);
+            //    }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -196,7 +196,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL +String.format(BIND_PHONE,uid) );
+        request.setUrl(SystemConfig.DEV_URL + String.format(BIND_PHONE, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -223,7 +223,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD,AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -247,7 +247,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler modifyPwd(String oldPwd, String newPwd, String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL +String.format(MODIFY_PWD,uid));
+        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -528,8 +528,8 @@ public class UserApi extends BaseApi {
 //        }else {
 //            request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
 //        }
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS );
-        request.putUrlParams("Keyword",key);
+        request.setUrl(SystemConfig.BASE_URL + CONTACTS);
+        request.putUrlParams("Keyword", key);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

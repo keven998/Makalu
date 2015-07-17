@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,23 +25,23 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 
 public class PublicGroupsActivity extends ChatBaseActivity {
-	private ProgressBar pb;
-	private ListView listView;
-	private EditText query;
-	private ImageButton clearSearch;
-	//private GroupsAdapter adapter;
+    private ProgressBar pb;
+    private ListView listView;
+    private EditText query;
+    private ImageButton clearSearch;
+    //private GroupsAdapter adapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_public_groups);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_public_groups);
 
-		pb = (ProgressBar) findViewById(R.id.progressBar);
-		listView = (ListView) findViewById(R.id.list);
+        pb = (ProgressBar) findViewById(R.id.progressBar);
+        listView = (ListView) findViewById(R.id.list);
 
-		new Thread(new Runnable() {
-			public void run() {
-				try {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
 //					// 从服务器获取所用公开的群聊
 //					final List<EMGroupInfo> groupsList = EMGroupManager.getInstance().getAllPublicGroupsFromServer();
 //					runOnUiThread(new Runnable() {
@@ -91,19 +91,19 @@ public class PublicGroupsActivity extends ChatBaseActivity {
 //							});
 //						}
 //					});
-				} catch (Exception e) {
-					e.printStackTrace();
-					runOnUiThread(new Runnable() {
-						public void run() {
-							pb.setVisibility(View.INVISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            pb.setVisibility(View.INVISIBLE);
 
-						}
-					});
-				}
-			}
-		}).start();
+                        }
+                    });
+                }
+            }
+        }).start();
 
-	}
+    }
 
 //	private class GroupsAdapter extends ArrayAdapter<EMGroupInfo> {
 //
@@ -125,8 +125,8 @@ public class PublicGroupsActivity extends ChatBaseActivity {
 //			return convertView;
 //		}
 //	}
-	
-	public void back(View view){
-		finish();
-	}
+
+    public void back(View view) {
+        finish();
+    }
 }

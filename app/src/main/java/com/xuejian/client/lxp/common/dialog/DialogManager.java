@@ -46,7 +46,6 @@ public class DialogManager {
     }
 
 
-
     /**
      * 描述: 定义弹出框的宽高，弹出对话框
      */
@@ -83,7 +82,7 @@ public class DialogManager {
      */
     public CustomLoadingDialog showLoadingDialog(Context context) {
         mLoadingDialog = createLoadingDialog(context, null, null);
-        return  mLoadingDialog;
+        return mLoadingDialog;
     }
 
     /**
@@ -95,7 +94,7 @@ public class DialogManager {
                 mLoadingDialog.dismiss();
 
         }
-        mLoadingDialog =null;
+        mLoadingDialog = null;
     }
 
     /**
@@ -109,7 +108,7 @@ public class DialogManager {
                 .getAttributes();
         lp.flags = lp.flags | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         mModelessLoadingDialog.getWindow().setAttributes(lp);
-        return  mLoadingDialog;
+        return mLoadingDialog;
     }
 
     /**
@@ -121,7 +120,7 @@ public class DialogManager {
                 mModelessLoadingDialog.dismiss();
 
         }
-        mModelessLoadingDialog =null;
+        mModelessLoadingDialog = null;
 
     }
 
@@ -145,7 +144,7 @@ public class DialogManager {
                 mProgressDialog.dismiss();
 
         }
-        mProgressDialog =null;
+        mProgressDialog = null;
 
     }
 
@@ -153,12 +152,13 @@ public class DialogManager {
     /**
      * 创建通讯提示框
      */
-    private CustomLoadingDialog createLoadingDialog( Context con, String message, OnCancelListener cancleListener) {
+    private CustomLoadingDialog createLoadingDialog(Context con, String message, OnCancelListener cancleListener) {
         CustomLoadingDialog dlg = new CustomLoadingDialog(con, message);
         dlg.show();
         dlg.setCancelable(true);
         return dlg;
     }
+
     /**
      * 创建通讯提示框
      */
@@ -176,10 +176,11 @@ public class DialogManager {
         });
         return dlg;
     }
+
     /**
      * 创建进度框
      */
-    private CustomProgressDialog createProgressDialog( Context con) {
+    private CustomProgressDialog createProgressDialog(Context con) {
         CustomProgressDialog dlg = new CustomProgressDialog(con);
         dlg.show();
         dlg.setMax(100);

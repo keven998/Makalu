@@ -25,7 +25,7 @@ public class FavoritesBean implements ICreateShareDialog {
     public String zhName;
     public String enName;
     public String desc;
-    public List<ImageBean> images=new ArrayList<>();
+    public List<ImageBean> images = new ArrayList<>();
     public LocBean locality;
     public long createTime;
     public String timeCostDesc;
@@ -35,34 +35,34 @@ public class FavoritesBean implements ICreateShareDialog {
     public String telephone;
 
     public int getType() {
-          if ("hotel".equals(type)) {
+        if ("hotel".equals(type)) {
             return CONST_TYPE_STAY;
-          } else if ("restaurant".equals(type)) {
-              return CONST_TYPE_FOOD;
-          } else if ("shopping".equals(type)) {
-              return CONST_TYPE_SHOP;
-          } else if ("travelNote".equals(type)) {
-              return CONST_TYPE_NOTE;
-          } else if ("vs".equals(type)) {
-              return CONST_TYPE_SPOT;
-          } else {
-              return CONST_TYPE_CITY;
-          }
+        } else if ("restaurant".equals(type)) {
+            return CONST_TYPE_FOOD;
+        } else if ("shopping".equals(type)) {
+            return CONST_TYPE_SHOP;
+        } else if ("travelNote".equals(type)) {
+            return CONST_TYPE_NOTE;
+        } else if ("vs".equals(type)) {
+            return CONST_TYPE_SPOT;
+        } else {
+            return CONST_TYPE_CITY;
+        }
     }
 
     @Override
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();
-        extMessageBean.type =type;
-        extMessageBean.image = images.size()>0?images.get(0).url:"";
+        extMessageBean.type = type;
+        extMessageBean.image = images.size() > 0 ? images.get(0).url : "";
         extMessageBean.desc = desc;
         extMessageBean.id = itemId;
         extMessageBean.timeCost = timeCostDesc;
-        extMessageBean.address =address;
+        extMessageBean.address = address;
         extMessageBean.name = zhName;
         extMessageBean.price = priceDesc;
         DecimalFormat df = new DecimalFormat("#.#");
-        extMessageBean.rating=df.format(rating*5);
+        extMessageBean.rating = df.format(rating * 5);
         return new ShareDialogBean(extMessageBean);
     }
 }

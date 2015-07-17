@@ -17,9 +17,10 @@ public class ShareDialogBean {
     private int extType;
     private ExtMessageBean extMessageBean;
 
-    public ShareDialogBean(ExtMessageBean extMessageBean){
+    public ShareDialogBean(ExtMessageBean extMessageBean) {
         setExtMessageBean(extMessageBean);
     }
+
     public int getExtType() {
         return extType;
     }
@@ -32,47 +33,47 @@ public class ShareDialogBean {
         return extMessageBean;
     }
 
-    private void setExtMessageBean(ExtMessageBean extMessageBean){
+    private void setExtMessageBean(ExtMessageBean extMessageBean) {
         this.extMessageBean = extMessageBean;
         this.type = extMessageBean.type;
         this.name = extMessageBean.name;
         this.image = extMessageBean.image;
-        if(extMessageBean.type.equals(TravelApi.PeachType.GUIDE)){
+        if (extMessageBean.type.equals(TravelApi.PeachType.GUIDE)) {
             title = "计划";
             attr = extMessageBean.timeCost;
             desc = extMessageBean.desc;
-            extType=1;
+            extType = 1;
 
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.RESTAURANTS)){
-            title="美食";
-            attr=extMessageBean.rating+" "+extMessageBean.price;
-            desc =extMessageBean.address;
-            extType =5;
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.SHOPPING)){
-            title="购物";
-            attr ="";
-            desc =extMessageBean.address;
-            extType =6;
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.HOTEL)){
-            title ="酒店";
-            attr=extMessageBean.rating+" "+extMessageBean.price;
-            desc =extMessageBean.address;
-            extType =7;
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.LOC)){
-            title ="城市";
-            attr=extMessageBean.timeCost;
-            desc =extMessageBean.desc;
-            extType =2;
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.NOTE)){
-            title ="游记";
-            attr= "";
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            title = "美食";
+            attr = extMessageBean.rating + " " + extMessageBean.price;
+            desc = extMessageBean.address;
+            extType = 5;
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.SHOPPING)) {
+            title = "购物";
+            attr = "";
+            desc = extMessageBean.address;
+            extType = 6;
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.HOTEL)) {
+            title = "酒店";
+            attr = extMessageBean.rating + " " + extMessageBean.price;
+            desc = extMessageBean.address;
+            extType = 7;
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.LOC)) {
+            title = "城市";
+            attr = extMessageBean.timeCost;
             desc = extMessageBean.desc;
-            extType =3;
-        }else if(extMessageBean.type.equals(TravelApi.PeachType.SPOT)){
-            title="景点";
-            attr=extMessageBean.timeCost;
+            extType = 2;
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.NOTE)) {
+            title = "游记";
+            attr = "";
             desc = extMessageBean.desc;
-            extType =4;
+            extType = 3;
+        } else if (extMessageBean.type.equals(TravelApi.PeachType.SPOT)) {
+            title = "景点";
+            attr = extMessageBean.timeCost;
+            desc = extMessageBean.desc;
+            extType = 4;
         }
     }
 

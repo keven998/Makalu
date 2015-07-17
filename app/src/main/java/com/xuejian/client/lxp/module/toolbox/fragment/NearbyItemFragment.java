@@ -74,13 +74,13 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
 
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
-                if(poi.location!=null&&poi.location.coordinates!=null){
-                    MobclickAgent.onEvent(getActivity(),"event_go_navigation");
-                    Uri mUri = Uri.parse("geo:"+poi.location.coordinates[1]+","+poi.location.coordinates[0]+"?q="+poi.zhName);
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW,mUri);
-                    if (CommonUtils.checkIntent(getActivity(), mIntent)){
+                if (poi.location != null && poi.location.coordinates != null) {
+                    MobclickAgent.onEvent(getActivity(), "event_go_navigation");
+                    Uri mUri = Uri.parse("geo:" + poi.location.coordinates[1] + "," + poi.location.coordinates[0] + "?q=" + poi.zhName);
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
+                    if (CommonUtils.checkIntent(getActivity(), mIntent)) {
                         startActivity(mIntent);
-                    }else{
+                    } else {
                         ToastUtil.getInstance(getActivity()).showToast("没有找到地图应用");
                     }
 
@@ -122,7 +122,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         mLat = lat;
         mLng = lng;
         mPage = 0;
-        if(mPoiList!=null&&poiAdapter!=null){
+        if (mPoiList != null && poiAdapter != null) {
             mPoiList.clear();
             poiAdapter.reset();
         }
@@ -130,13 +130,13 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
     }
 
     public void requestDataUpdate() {
-        mListView.doPullRefreshing(true,0);
+        mListView.doPullRefreshing(true, 0);
     }
 
     public void requestDataForInit() {
         if (mPoiList.size() == 0) {
             if (mLat != -1 && mLng != -1) {
-                mListView.doPullRefreshing(true,0);
+                mListView.doPullRefreshing(true, 0);
             }
         }
     }
@@ -209,7 +209,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
         }
 
         for (PoiDetailBean poi : poiList) {
-            if(poi.location!=null){
+            if (poi.location != null) {
                 String distance = CommonUtils.getNearbyDistance(mLat, mLng, poi.location.coordinates[1], poi.location.coordinates[0]);
                 poi.distance = distance;
             }

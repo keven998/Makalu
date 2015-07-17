@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,10 +30,10 @@ import com.xuejian.client.lxp.module.toolbox.im.IMAlertDialog;
  * 自定义的textview，用来处理复制粘贴的消息
  *
  */
-public class PasteEditText extends EditText{
+public class PasteEditText extends EditText {
     private Context context;
-    
-    
+
+
     public PasteEditText(Context context) {
         super(context);
         this.context = context;
@@ -49,33 +49,32 @@ public class PasteEditText extends EditText{
         super(context, attrs, defStyle);
         this.context = context;
     }
-    
+
     @SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	@Override
+    @SuppressWarnings("deprecation")
+    @Override
     public boolean onTextContextMenuItem(int id) {
-        if(id == android.R.id.paste){
-            ClipboardManager clip = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        if (id == android.R.id.paste) {
+            ClipboardManager clip = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             String text = clip.getText().toString();
-            if(text.startsWith(ChatActivity.COPY_IMAGE)){
+            if (text.startsWith(ChatActivity.COPY_IMAGE)) {
 //                intent.setDataAndType(Uri.fromFile(new File("/sdcard/mn1.jpg")), "image/*");     
                 text = text.replace(ChatActivity.COPY_IMAGE, "");
-                Intent intent = new Intent(context,IMAlertDialog.class);
+                Intent intent = new Intent(context, IMAlertDialog.class);
                 intent.putExtra("title", "发送以下图片？");
                 intent.putExtra("forwardImage", text);
                 intent.putExtra("cancel", true);
-                ((Activity)context).startActivityForResult(intent, ChatActivity.REQUEST_CODE_COPY_AND_PASTE);
+                ((Activity) context).startActivityForResult(intent, ChatActivity.REQUEST_CODE_COPY_AND_PASTE);
 //                clip.setText("");
             }
         }
         return super.onTextContextMenuItem(id);
     }
-    
-    
-    
+
+
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        if(!TextUtils.isEmpty(text) && text.toString().startsWith(ChatActivity.COPY_IMAGE)){
+        if (!TextUtils.isEmpty(text) && text.toString().startsWith(ChatActivity.COPY_IMAGE)) {
             setText("");
         }
 //        else if(!TextUtils.isEmpty(text)){
@@ -83,6 +82,6 @@ public class PasteEditText extends EditText{
 //        }
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
     }
-    
+
 
 }

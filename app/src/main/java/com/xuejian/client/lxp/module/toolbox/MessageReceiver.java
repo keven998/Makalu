@@ -36,9 +36,11 @@ public class MessageReceiver extends BroadcastReceiver {
         }
         routeMap.get(routeKey).add(listener);
     }
-static {
-    registerListener(HandleImMessage.getInstance().listener,"IM");
-}
+
+    static {
+        registerListener(HandleImMessage.getInstance().listener, "IM");
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -58,23 +60,23 @@ static {
                              * 分发消息
                              */
                             String routeKey = object.getString("routingKey");
-                            String message=object.getString("message");
+                            String message = object.getString("message");
                             for (String key : routeMap.keySet()) {
-                               if (key.equals(routeKey)){
-                                   for (MsgListener listener : routeMap.get(routeKey)) {
-                                       if (Config.isDebug) {
-                                           Log.i(Config.TAG, "patch Message "+routeKey);
-                                       }
-                                       listener.OnMessage(context, message);
-                                   }
-                                   break;
-                               }
+                                if (key.equals(routeKey)) {
+                                    for (MsgListener listener : routeMap.get(routeKey)) {
+                                        if (Config.isDebug) {
+                                            Log.i(Config.TAG, "patch Message " + routeKey);
+                                        }
+                                        listener.OnMessage(context, message);
+                                    }
+                                    break;
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }else {
-                        if (Config.isDebug){
+                    } else {
+                        if (Config.isDebug) {
                             System.out.println("format error");
                         }
                     }

@@ -152,7 +152,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.nickView.setText("好友请求");
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
-        //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
+            //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
             vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
         } else if (username.equals(Constant.GROUP_USERNAME)) {
             //群聊item
@@ -319,8 +319,8 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         public ImageView avatarView;
         public View dividerView;
         public TextView nickView;
- //       public ImageView talkView;
- //       public TextView unreadMsgView;
+        //       public ImageView talkView;
+        //       public TextView unreadMsgView;
     }
 
 }

@@ -22,49 +22,49 @@ public class FeedbackActivity extends PeachBaseActivity {
 //	private View mTitlebar;
 
     private EditText contentEt;
-	private Button okBtn;
+    private Button okBtn;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		initView();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView();
+    }
 
-	private void initView() {
-		setContentView(R.layout.activity_feedback);
-		initTitlebar();
-		contentEt = (EditText) findViewById(R.id.et_content);
+    private void initView() {
+        setContentView(R.layout.activity_feedback);
+        initTitlebar();
+        contentEt = (EditText) findViewById(R.id.et_content);
 //		emailEt = (EditText) findViewById(R.id.et_email);
 //		phoneEt = (EditText) findViewById(R.id.et_phone);
-		okBtn = (Button) findViewById(R.id.btn_ok);
-		okBtn.setOnClickListener(new OnClickListener() {
+        okBtn = (Button) findViewById(R.id.btn_ok);
+        okBtn.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if(TextUtils.isEmpty(contentEt.getText())){
-					ToastUtil.getInstance(mContext).showToast("说点什么吧");
-				} else {
-					feedback();
-				}
-				
-			}
-		});
-	}
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(contentEt.getText())) {
+                    ToastUtil.getInstance(mContext).showToast("说点什么吧");
+                } else {
+                    feedback();
+                }
 
-	private void initTitlebar() {
+            }
+        });
+    }
+
+    private void initTitlebar() {
 //		mTitlebar = findViewById(R.id.title_bar);
-        TitleHeaderBar titleBar = (TitleHeaderBar)findViewById(R.id.ly_header_bar_title_wrap);
+        TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("意见反馈");
         titleBar.enableBackKey(true);
-	}
-	
-	@Override
-	public void finish() {
-		super.finish();
-	}
+    }
 
-	private void feedback() {
-        DialogManager.getInstance().showLoadingDialog(mContext,"正在发送");
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+    private void feedback() {
+        DialogManager.getInstance().showLoadingDialog(mContext, "正在发送");
         OtherApi.feedback(contentEt.getText().toString().trim(), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -84,11 +84,11 @@ public class FeedbackActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(FeedbackActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
 
-			@Override
-			public void doFailure(Exception error, String msg, String method, int code) {
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
 }

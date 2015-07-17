@@ -50,7 +50,7 @@ public class SwipeItemAdapterMangerImpl extends SwipeItemMangerImpl {
     }
 
     @Override
-    public void bindView(View target, int position){
+    public void bindView(View target, int position) {
 
     }
 

@@ -5,5 +5,6 @@ package com.xuejian.client.lxp.module.toolbox.im.group;
  */
 public interface CallBack {
     void onSuccess();
+
     void onFailed();
 }

@@ -9,19 +9,19 @@ import java.io.File;
  */
 public class PathUtils {
     private static PathUtils instance;
-    public static PathUtils getInstance(){
-        if(instance==null){
+
+    public static PathUtils getInstance() {
+        if (instance == null) {
             instance = new PathUtils();
         }
-        return  instance;
+        return instance;
     }
 
-    public String getLocalImageCachePath(){
+    public String getLocalImageCachePath() {
         String sdcardpath = android.os.Environment
-                .getExternalStorageDirectory()  + File.separator + SystemConfig.LOCAL_IMAGE_CACHE_DIR;
+                .getExternalStorageDirectory() + File.separator + SystemConfig.LOCAL_IMAGE_CACHE_DIR;
         return sdcardpath;
     }
-
 
 
 }
