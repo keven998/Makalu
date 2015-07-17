@@ -445,6 +445,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         loc_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!((CheckedTextView)view).isChecked())((CheckedTextView)view).setChecked(true);
                 curLoc = locList.get(position);
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
@@ -465,6 +466,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!((CheckedTextView)view).isChecked())((CheckedTextView)view).setChecked(true);
                 mType = poiTypeValueArrays[position];
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();

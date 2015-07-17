@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 
@@ -30,8 +30,7 @@ public class StringSpinnerAdapter implements SpinnerAdapter {
             view = ((Activity) mContext).getLayoutInflater().inflate(R.layout.spinner_item_dropdown, parent, false);
             view.setTag("DROPDOWN");
         }
-        System.out.print("hhhh  " + getItem(position).toString());
-        TextView textView = (TextView) view.findViewById(R.id.tv_title);
+        CheckedTextView textView = (CheckedTextView) view.findViewById(R.id.tv_title);
         textView.setText(getItem(position).toString());
         return view;
     }
@@ -42,7 +41,7 @@ public class StringSpinnerAdapter implements SpinnerAdapter {
             view = ((Activity) mContext).getLayoutInflater().inflate(R.layout.spinner_item_actionbar, parent, false);
             view.setTag("NON_DROPDOWN");
         }
-        ((TextView) view).setText(getItem(position).toString());
+        ((CheckedTextView) view).setText(getItem(position).toString());
         return view;
     }
 

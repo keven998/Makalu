@@ -4,15 +4,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <CheckedTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:ellipsize="end"
         android:gravity="center"
         android:background="@color/base_color_white"
         android:paddingBottom="17dp"
         android:padding="5dp"
+        android:drawableRight="@drawable/checker_spinner_dropdown"
         android:paddingTop="17dp"
         android:singleLine="true"
         android:textColor="@color/color_text_ii"
